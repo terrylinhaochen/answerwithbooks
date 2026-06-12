@@ -1,0 +1,111 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Path beginning with /, used for canonical + OG URLs */
+  path?: string;
+  ogType?: 'website' | 'article' | 'book';
+  jsonLd?: object;
+}
+
+const { title, description, path = Astro.url.pathname, ogType = 'website', jsonLd } = Astro.props;
+const site = 'https://answerwithbooks.com';
+const canonical = new URL(path, site).href;
+const fullTitle = path === '/' ? title : `${title} — Answer with Books`;
+
+const nav = [
+  { href: '/books/', label: 'Books' },
+  { href: '/answers/', label: 'Answers' },
+  { href: '/about/', label: 'About' },
+];
+const current = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Answer with Books" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap"
+    />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class="min-h-screen flex flex-col bg-paper text-ink">
+    <header class="border-b border-line">
+      <div class="mx-auto max-w-3xl px-5 py-5 flex items-baseline justify-between gap-4">
+        <a href="/" class="font-serif text-lg font-semibold tracking-tight hover:text-accent">
+          Answer<span class="text-accent">&nbsp;with&nbsp;</span>Books
+        </a>
+        <nav aria-label="Main" class="flex items-baseline gap-5 text-[0.95rem]">
+          {
+            nav.map((item) => (
+              <a
+                href={item.href}
+                aria-current={current.startsWith(item.href) ? 'page' : undefined}
+                class={`hover:text-accent ${current.startsWith(item.href) ? 'text-accent' : 'text-soft'}`}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+          <a
+            href="/library/"
+            data-auth-link
+            class={`hover:text-accent ${current.startsWith('/library') || current.startsWith('/login') ? 'text-accent' : 'text-soft'}`}
+          >
+            Log&nbsp;in
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1 w-full">
+      <slot />
+    </main>
+
+    <footer class="border-t border-line mt-20">
+      <div class="mx-auto max-w-3xl px-5 py-10 text-sm text-soft flex flex-col sm:flex-row justify-between gap-3">
+        <p>
+          Answer with Books — a reading library that answers questions.
+        </p>
+        <p>
+          By <a href="https://terrylinhaochen.github.io" class="underline underline-offset-2 hover:text-accent">Terry Chen</a>
+          · <a href="/about/" class="underline underline-offset-2 hover:text-accent">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      import { supabase } from '../lib/supabase';
+      // Swap the "Log in" nav link to "Library" when a session exists.
+      const link = document.querySelector('[data-auth-link]');
+      if (link) {
+        supabase.auth.getSession().then(({ data }) => {
+          if (data.session) link.textContent = 'Library';
+        });
+      }
+    </script>
+  </body>
+</html>

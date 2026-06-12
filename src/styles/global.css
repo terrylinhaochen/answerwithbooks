@@ -1,0 +1,105 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-serif: "Newsreader", "Iowan Old Style", "Palatino", Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+  --color-paper: #faf8f3;
+  --color-ink: #221e1a;
+  --color-soft: #6f6557;
+  --color-faint: #9b9080;
+  --color-accent: #8c3b2a;
+  --color-accent-dark: #6f2e20;
+  --color-line: #e6dfd2;
+  --color-wash: #f3efe6;
+}
+
+html {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: #e9d9c8;
+}
+
+/* Editorial prose styling for markdown bodies */
+.prose-awb {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: var(--color-ink);
+  max-width: 65ch;
+}
+.prose-awb h2 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 1.25;
+  margin-top: 2.75rem;
+  margin-bottom: 0.9rem;
+  letter-spacing: -0.01em;
+}
+.prose-awb h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+}
+.prose-awb p {
+  margin-top: 0;
+  margin-bottom: 1.15rem;
+}
+.prose-awb a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.prose-awb a:hover {
+  color: var(--color-accent-dark);
+}
+.prose-awb ul,
+.prose-awb ol {
+  margin: 0 0 1.15rem 0;
+  padding-left: 1.4rem;
+}
+.prose-awb ul { list-style: disc; }
+.prose-awb ol { list-style: decimal; }
+.prose-awb li {
+  margin-bottom: 0.45rem;
+}
+.prose-awb li::marker {
+  color: var(--color-faint);
+}
+.prose-awb blockquote {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1.25rem;
+  margin: 1.75rem 0;
+  font-style: italic;
+  color: var(--color-soft);
+}
+.prose-awb blockquote p {
+  margin-bottom: 0.5rem;
+}
+.prose-awb strong {
+  font-weight: 600;
+}
+.prose-awb hr {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 2.5rem 0;
+}
+.prose-awb code {
+  font-size: 0.9em;
+  background: var(--color-wash);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
