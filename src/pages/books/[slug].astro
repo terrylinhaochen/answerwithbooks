@@ -56,7 +56,7 @@ const jsonLd = {
           data-title={book.data.title}
           class="text-sm border border-line px-4 py-1.5 rounded-sm text-soft hover:border-accent hover:text-accent transition-colors cursor-pointer"
         >
-          Save to library
+          Save this book
         </button>
         {book.data.tags.map((tag) => (
           <span class="text-xs uppercase tracking-wider text-faint font-sans">{tag}</span>
@@ -112,7 +112,7 @@ const jsonLd = {
       };
       const paint = () => {
         const saved = read().includes(slug);
-        btn.textContent = saved ? 'Saved ✓ — remove' : 'Save to library';
+        btn.textContent = saved ? 'Saved ✓ — remove' : 'Save this book';
       };
       btn.addEventListener('click', () => {
         const list = read();

@@ -71,9 +71,9 @@ const current = Astro.url.pathname;
             ))
           }
           <a
-            href="/library/"
+            href="/my-books/"
             data-auth-link
-            class={`hover:text-accent ${current.startsWith('/library') || current.startsWith('/login') ? 'text-accent' : 'text-soft'}`}
+            class={`hover:text-accent ${current.startsWith('/my-books') || current.startsWith('/login') ? 'text-accent' : 'text-soft'}`}
           >
             Log&nbsp;in
           </a>
@@ -88,7 +88,7 @@ const current = Astro.url.pathname;
     <footer class="border-t border-line mt-20">
       <div class="mx-auto max-w-3xl px-5 py-10 text-sm text-soft flex flex-col sm:flex-row justify-between gap-3">
         <p>
-          Answer with Books — a reading library that answers questions.
+          Answer with Books — books distilled into usable answers.
         </p>
         <p>
           By <a href="https://terrylinhaochen.github.io" class="underline underline-offset-2 hover:text-accent">Terry Chen</a>
@@ -99,11 +99,11 @@ const current = Astro.url.pathname;
 
     <script>
       import { supabase } from '../lib/supabase';
-      // Swap the "Log in" nav link to "Library" when a session exists.
+      // Swap the "Log in" nav link to "My books" when a session exists.
       const link = document.querySelector('[data-auth-link]');
       if (link) {
         supabase.auth.getSession().then(({ data }) => {
-          if (data.session) link.textContent = 'Library';
+          if (data.session) link.textContent = 'My books';
         });
       }
     </script>

@@ -10,15 +10,15 @@ const bookMeta = Object.fromEntries(
 ---
 
 <Base
-  title="Your library"
+  title="My books"
   description="Your saved books on Answer with Books."
-  path="/library/"
+  path="/my-books/"
 >
   <section class="mx-auto max-w-3xl px-5 pt-16 pb-24">
     <div id="library-loading" class="text-soft">Checking your session…</div>
 
     <div id="library-content" class="hidden">
-      <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Your library</p>
+      <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">My books</p>
       <h1 class="mt-3 font-serif text-4xl font-semibold tracking-tight">
         Welcome back<span id="user-name"></span>.
       </h1>
@@ -29,7 +29,7 @@ const bookMeta = Object.fromEntries(
       <ul id="saved-list" class="divide-y divide-line"></ul>
       <p id="saved-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
         Nothing saved yet. Browse <a href="/books/" class="text-accent underline underline-offset-4 decoration-1">the shelf</a>
-        and hit “Save to library” on any book.
+        and hit “Save this book” on any book.
       </p>
 
       <div class="mt-12 py-5 px-5 bg-wash rounded-sm text-[0.95rem] text-soft leading-relaxed max-w-prose">

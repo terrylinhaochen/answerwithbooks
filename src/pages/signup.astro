@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 
 <Base
   title="Create an account"
-  description="Create a free Answer with Books account to save books to your personal library."
+  description="Create a free Answer with Books account to save books and answers for later."
   path="/signup/"
 >
   <section class="mx-auto max-w-sm px-5 pt-20 pb-24">
@@ -69,7 +69,7 @@ import Base from '../layouts/Base.astro';
     };
 
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) window.location.href = '/library/';
+      if (data.session) window.location.href = '/my-books/';
     });
 
     form.addEventListener('submit', async (e) => {
@@ -93,7 +93,7 @@ import Base from '../layouts/Base.astro';
 
       if (data.session) {
         // Email confirmation disabled in this project: signed in immediately.
-        window.location.href = '/library/';
+        window.location.href = '/my-books/';
       } else {
         // Email confirmation required.
         show(
