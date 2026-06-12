@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Create an account"
+  description="Create a free Answer with Books account to save books to your personal library."
+  path="/signup/"
+>
+  <section class="mx-auto max-w-sm px-5 pt-20 pb-24">
+    <h1 class="font-serif text-3xl font-semibold tracking-tight">Create an account</h1>
+    <p class="mt-3 text-soft text-[0.95rem]">
+      Free, and takes a minute. Save books to your own shelf.
+    </p>
+
+    <form id="signup-form" class="mt-8 space-y-5" novalidate>
+      <div>
+        <label for="email" class="block text-sm font-sans text-soft mb-1.5">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          class="w-full border border-line bg-white px-3 py-2 rounded-sm focus:outline-none focus:border-accent"
+        />
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-sans text-soft mb-1.5">
+          Password <span class="text-faint">(8+ characters)</span>
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          minlength="8"
+          autocomplete="new-password"
+          class="w-full border border-line bg-white px-3 py-2 rounded-sm focus:outline-none focus:border-accent"
+        />
+      </div>
+      <p id="form-message" role="alert" aria-live="polite" class="text-sm hidden"></p>
+      <button
+        type="submit"
+        id="submit-btn"
+        class="w-full bg-ink text-paper py-2.5 rounded-sm hover:bg-accent transition-colors cursor-pointer"
+      >
+        Create account
+      </button>
+    </form>
+
+    <p class="mt-6 text-sm text-soft">
+      Already have one?
+      <a href="/login/" class="text-accent underline underline-offset-4 decoration-1">Log in</a>.
+    </p>
+  </section>
+
+  <script>
+    import { supabase } from '../lib/supabase';
+
+    const form = document.getElementById('signup-form') as HTMLFormElement;
+    const message = document.getElementById('form-message') as HTMLParagraphElement;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+    const show = (text: string, kind: 'error' | 'ok') => {
+      message.textContent = text;
+      message.classList.remove('hidden', 'text-accent', 'text-soft');
+      message.classList.add(kind === 'error' ? 'text-accent' : 'text-soft');
+    };
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) window.location.href = '/library/';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      message.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account…';
+
+      const formData = new FormData(form);
+      const { data, error } = await supabase.auth.signUp({
+        email: String(formData.get('email')).trim(),
+        password: String(formData.get('password')),
+      });
+
+      if (error) {
+        show(error.message, 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create account';
+        return;
+      }
+
+      if (data.session) {
+        // Email confirmation disabled in this project: signed in immediately.
+        window.location.href = '/library/';
+      } else {
+        // Email confirmation required.
+        show(
+          'Almost there — check your email for a confirmation link, then log in.',
+          'ok'
+        );
+        submitBtn.textContent = 'Confirmation email sent';
+      }
+    });
+  </script>
+</Base>

@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BookRow from '../../components/BookRow.astro';
+
+const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="Books"
+  description="The shelf: every book on this site, distilled into mental models, frameworks, and the situations they're built for."
+  path="/books/"
+>
+  <section class="mx-auto max-w-3xl px-5 pt-16 pb-8">
+    <h1 class="font-serif text-4xl font-semibold tracking-tight">The shelf</h1>
+    <p class="mt-4 text-soft leading-relaxed max-w-xl">
+      Each page distills one book into its load-bearing ideas: the mental models worth keeping, the
+      frameworks worth using, and the moments when you should reach for it.
+    </p>
+  </section>
+  <section class="mx-auto max-w-3xl px-5 pb-16 border-t border-line">
+    {books.map((book) => <BookRow book={book} />)}
+  </section>
+</Base>

@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AnswerRow from '../../components/AnswerRow.astro';
+
+const answers = (await getCollection('answers')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const books = await getCollection('books');
+const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
+---
+
+<Base
+  title="Answers"
+  description="Real questions, answered with books: startup validation, team decisions, failed plans, pivots, and intuition — each answer grounded in distilled reading."
+  path="/answers/"
+>
+  <section class="mx-auto max-w-3xl px-5 pt-16 pb-8">
+    <h1 class="font-serif text-4xl font-semibold tracking-tight">Answers</h1>
+    <p class="mt-4 text-soft leading-relaxed max-w-xl">
+      Practical questions answered by putting books to work — each one draws on one to three titles
+      from <a href="/books/" class="text-accent underline underline-offset-4 decoration-1">the shelf</a>,
+      plus what happened when I applied them.
+    </p>
+  </section>
+  <section class="mx-auto max-w-3xl px-5 pb-16 border-t border-line">
+    {answers.map((answer) => <AnswerRow answer={answer} bookTitles={bookTitles} />)}
+  </section>
+</Base>
