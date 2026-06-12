@@ -82,6 +82,7 @@ import Base from '../layouts/Base.astro';
       const { data, error } = await supabase.auth.signUp({
         email: String(formData.get('email')).trim(),
         password: String(formData.get('password')),
+        options: { emailRedirectTo: 'https://answerwithbooks.com/login/' },
       });
 
       if (error) {
