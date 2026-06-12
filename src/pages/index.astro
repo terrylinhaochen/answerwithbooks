@@ -29,26 +29,62 @@ const jsonLd = {
   path="/"
   jsonLd={jsonLd}
 >
-  <section class="mx-auto max-w-3xl px-5 pt-20 pb-16 sm:pt-28">
-    <h1 class="font-serif text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.12]">
-      Every book you've read,<br />
-      <span class="italic font-medium text-accent">ready to answer.</span>
-    </h1>
-    <p class="mt-6 text-lg text-soft leading-relaxed max-w-xl">
-      Most books decay into a vague feeling of having read them. This site is the alternative: each
-      book I read becomes a distilled page of mental models and frameworks — and real questions get
-      answered by putting those books to work.
-    </p>
-    <div class="mt-8 flex flex-wrap items-center gap-5 text-[0.95rem]">
-      <a
-        href="/answers/"
-        class="bg-ink text-paper px-5 py-2.5 rounded-sm hover:bg-accent transition-colors"
+  <section class="mx-auto max-w-3xl px-5 pt-20 pb-16 sm:pt-24">
+    <div class="sm:flex sm:items-center sm:gap-10">
+      <div class="sm:flex-1">
+        <h1 class="font-serif text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.12]">
+          Every book you've read,<br />
+          <span class="italic font-medium text-accent">ready to answer.</span>
+        </h1>
+        <p class="mt-6 text-lg text-soft leading-relaxed max-w-xl">
+          Most books decay into a vague feeling of having read them. Here, each book becomes a
+          distilled set of mental models — a skill you can call on when a real question shows up.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-5 text-[0.95rem]">
+          <a
+            href="/signup/"
+            class="bg-ink text-paper px-5 py-2.5 rounded-sm hover:bg-accent transition-colors"
+          >
+            Add your books
+          </a>
+          <a href="/answers/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
+            See answers in action
+          </a>
+        </div>
+      </div>
+      <!-- Books-to-spark illustration -->
+      <svg
+        viewBox="0 0 220 200"
+        class="hidden sm:block w-48 shrink-0 text-ink"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
       >
-        Browse the answers
-      </a>
-      <a href="/books/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
-        Or start with the books
-      </a>
+        <!-- book stack -->
+        <rect x="30" y="128" width="110" height="22" rx="2" />
+        <rect x="42" y="106" width="92" height="22" rx="2" />
+        <rect x="36" y="84" width="100" height="22" rx="2" />
+        <line x1="48" y1="139" x2="118" y2="139" stroke-width="1.4" class="text-faint" />
+        <line x1="58" y1="117" x2="116" y2="117" stroke-width="1.4" class="text-faint" />
+        <line x1="52" y1="95" x2="114" y2="95" stroke-width="1.4" class="text-faint" />
+        <!-- distilled spark -->
+        <g class="text-accent">
+          <circle cx="160" cy="52" r="13" />
+          <line x1="160" y1="26" x2="160" y2="34" />
+          <line x1="160" y1="70" x2="160" y2="78" />
+          <line x1="134" y1="52" x2="142" y2="52" />
+          <line x1="178" y1="52" x2="186" y2="52" />
+          <line x1="142" y1="34" x2="148" y2="40" />
+          <line x1="172" y1="64" x2="178" y2="70" />
+          <line x1="178" y1="34" x2="172" y2="40" />
+          <line x1="148" y1="64" x2="142" y2="70" />
+        </g>
+        <!-- flow from books to spark -->
+        <path d="M 110 84 C 118 68 134 62 145 58" stroke-dasharray="3 5" class="text-soft" />
+      </svg>
     </div>
   </section>
 
@@ -56,24 +92,68 @@ const jsonLd = {
     <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">How it works</h2>
     <div class="mt-6 grid gap-8 sm:grid-cols-3">
       <div>
-        <p class="font-serif text-lg font-semibold">1. Read</p>
+        <svg viewBox="0 0 48 48" class="w-9 h-9 text-accent" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M24 12 C 20 8 12 8 8 10 V 38 C 12 36 20 36 24 40 C 28 36 36 36 40 38 V 10 C 36 8 28 8 24 12 Z" />
+          <line x1="24" y1="12" x2="24" y2="40" />
+        </svg>
+        <p class="font-serif text-lg font-semibold mt-3">1. Add a book</p>
         <p class="mt-2 text-soft text-[0.95rem] leading-relaxed">
-          A book earns a page here only after a real reading — no summaries of summaries.
+          A title is enough to start. Books earn their page through a real reading — no summaries
+          of summaries.
         </p>
       </div>
       <div>
-        <p class="font-serif text-lg font-semibold">2. Distill</p>
+        <svg viewBox="0 0 48 48" class="w-9 h-9 text-accent" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8 H 30 M 21 8 V 20 L 12 36 A 4 4 0 0 0 16 42 H 32 A 4 4 0 0 0 36 36 L 27 20 V 8" />
+          <line x1="17" y1="32" x2="31" y2="32" />
+        </svg>
+        <p class="font-serif text-lg font-semibold mt-3">2. Distill into a skill</p>
         <p class="mt-2 text-soft text-[0.95rem] leading-relaxed">
-          Each book is reduced to its load-bearing ideas: mental models, frameworks, and when to
-          reach for them.
+          Each book is reduced to its load-bearing ideas — mental models, frameworks, when to reach
+          for them — packaged as a callable skill.
         </p>
       </div>
       <div>
-        <p class="font-serif text-lg font-semibold">3. Answer</p>
+        <svg viewBox="0 0 48 48" class="w-9 h-9 text-accent" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 16 L 8 24 L 16 32" />
+          <path d="M32 16 L 40 24 L 32 32" />
+          <line x1="27" y1="12" x2="21" y2="36" />
+        </svg>
+        <p class="font-serif text-lg font-semibold mt-3">3. Call it anywhere</p>
         <p class="mt-2 text-soft text-[0.95rem] leading-relaxed">
-          Real questions — about startups, decisions, systems — answered by combining books with
-          lived experience.
+          Ask a real question and the right books answer — on this site, as an agent skill, or over
+          a REST API.
         </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-5 py-12 border-t border-line">
+    <div class="sm:flex sm:items-start sm:gap-10">
+      <div class="sm:flex-1">
+        <h2 class="font-serif text-2xl font-semibold tracking-tight">Your shelf, callable</h2>
+        <p class="mt-3 text-soft leading-relaxed">
+          Add the books you've read and they become skills you can query — from this site, from
+          your agent of choice, or programmatically. Create a free account to add your first
+          books; API and skill access is rolling out to early accounts.
+        </p>
+        <p class="mt-5">
+          <a
+            href="/signup/"
+            class="bg-accent text-paper px-5 py-2.5 rounded-sm hover:bg-ink transition-colors text-[0.95rem]"
+          >
+            Add a book
+          </a>
+        </p>
+      </div>
+      <div class="mt-8 sm:mt-0 sm:w-[19rem] shrink-0">
+        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">API preview</p>
+        <pre class="mt-2 bg-ink text-paper text-[0.78rem] leading-relaxed rounded-sm p-4 overflow-x-auto"><code>POST /v1/answers
+{`{
+  "books": ["the-mom-test"],
+  "question": "Is my startup
+    idea any good?"
+}`}</code></pre>
       </div>
     </div>
   </section>
