@@ -1,0 +1,117 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  book: CollectionEntry<'books'>;
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { book, size = 'md' } = Astro.props;
+const className = Astro.props.class ?? '';
+
+const palettes = [
+  { cover: '#243b53', band: '#f0b35d', ink: '#fff7e8', line: '#102338' },
+  { cover: '#5c2f45', band: '#8fc6a3', ink: '#fff3ec', line: '#341727' },
+  { cover: '#214a43', band: '#d7a84d', ink: '#f8f2df', line: '#102a25' },
+  { cover: '#533a24', band: '#7fb3d5', ink: '#fff5e7', line: '#2d1d12' },
+  { cover: '#31345f', band: '#e08d78', ink: '#f5f1ff', line: '#191b38' },
+  { cover: '#6a342f', band: '#c8cf7a', ink: '#fff4e6', line: '#341714' },
+];
+
+const paletteIndex = [...book.id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % palettes.length;
+const palette = palettes[paletteIndex];
+const style = `--cover:${palette.cover};--cover-band:${palette.band};--cover-ink:${palette.ink};--cover-line:${palette.line};`;
+const sizeClass = {
+  sm: 'w-16 sm:w-20',
+  md: 'w-20 sm:w-28',
+  lg: 'w-24 sm:w-36',
+}[size];
+---
+
+<a
+  href={`/books/${book.id}/`}
+  class={`book-cover ${sizeClass} ${className}`}
+  style={style}
+  aria-label={`Open ${book.data.title}`}
+>
+  <span class="book-cover__shine" aria-hidden="true"></span>
+  <span class="book-cover__band" aria-hidden="true"></span>
+  <span class="book-cover__meta">{book.data.author}</span>
+  <span class="book-cover__title">{book.data.title}</span>
+  <span class="book-cover__year">{book.data.year}</span>
+</a>
+
+<style>
+  .book-cover {
+    position: relative;
+    display: flex;
+    aspect-ratio: 2 / 3;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--cover);
+    color: var(--cover-ink);
+    border: 1px solid color-mix(in srgb, var(--cover-line) 82%, white);
+    box-shadow:
+      0 18px 35px rgb(34 30 26 / 0.16),
+      inset 10px 0 0 rgb(0 0 0 / 0.12),
+      inset 11px 0 0 rgb(255 255 255 / 0.08);
+    padding: 0.8rem 0.8rem 0.72rem 0.95rem;
+    text-decoration: none;
+    transform: translateZ(0);
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .book-cover:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 24px 45px rgb(34 30 26 / 0.2),
+      inset 10px 0 0 rgb(0 0 0 / 0.12),
+      inset 11px 0 0 rgb(255 255 255 / 0.08);
+  }
+
+  .book-cover__shine {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(120deg, transparent 0 42%, rgb(255 255 255 / 0.13) 42% 49%, transparent 49%),
+      radial-gradient(circle at 78% 18%, rgb(255 255 255 / 0.16), transparent 26%);
+    pointer-events: none;
+  }
+
+  .book-cover__band {
+    position: absolute;
+    inset: auto 0 23% 0;
+    height: 11%;
+    background: var(--cover-band);
+    opacity: 0.95;
+  }
+
+  .book-cover__meta,
+  .book-cover__year {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-sans);
+    font-size: clamp(0.48rem, 0.75vw, 0.56rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .book-cover__title {
+    position: relative;
+    z-index: 1;
+    display: block;
+    max-width: 11ch;
+    font-family: var(--font-serif);
+    font-size: clamp(0.82rem, 1.05vw, 1.12rem);
+    font-weight: 700;
+    line-height: 0.98;
+  }
+</style>

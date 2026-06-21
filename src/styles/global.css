@@ -13,6 +13,9 @@
   --color-accent-dark: #6f2e20;
   --color-line: #e6dfd2;
   --color-wash: #f3efe6;
+  --answer-spine-1: #243b53;
+  --answer-spine-2: #8c3b2a;
+  --answer-spine-3: #214a43;
 }
 
 html {
@@ -22,10 +25,15 @@ html {
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 ::selection {
   background-color: #e9d9c8;
+}
+
+body {
+  overflow-x: clip;
 }
 
 /* Editorial prose styling for markdown bodies */

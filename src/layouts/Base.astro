@@ -54,11 +54,11 @@ const current = Astro.url.pathname;
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink">
     <header class="border-b border-line">
-      <div class="mx-auto max-w-3xl px-5 py-5 flex items-baseline justify-between gap-4">
+      <div class="mx-auto flex max-w-[1440px] flex-col gap-3 px-5 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 sm:px-8 lg:px-20 xl:px-[120px]">
         <a href="/" class="font-serif text-lg font-semibold tracking-tight hover:text-accent">
           Answer<span class="text-accent">&nbsp;with&nbsp;</span>Books
         </a>
-        <nav aria-label="Main" class="flex items-baseline gap-5 text-[0.95rem]">
+        <nav aria-label="Main" class="flex flex-wrap items-baseline gap-x-5 gap-y-2 text-[0.95rem]">
           {
             nav.map((item) => (
               <a
@@ -86,7 +86,7 @@ const current = Astro.url.pathname;
     </main>
 
     <footer class="border-t border-line mt-20">
-      <div class="mx-auto max-w-3xl px-5 py-10 text-sm text-soft flex flex-col sm:flex-row justify-between gap-3">
+      <div class="mx-auto flex max-w-[1440px] flex-col justify-between gap-3 px-5 py-10 text-sm text-soft sm:flex-row sm:px-8 lg:px-20 xl:px-[120px]">
         <p>
           Answer with Books — books distilled into usable answers.
         </p>
