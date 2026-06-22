@@ -14,7 +14,7 @@ const topics = topicsForTags(book.data.tags);
   <div class="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-4 sm:grid-cols-[5rem_minmax(0,1fr)]">
     <BookCover book={book} size="sm" class="shrink-0" />
     <div class="min-w-0 flex-1">
-      <p class="text-xs uppercase tracking-[0.16em] text-faint font-sans">Source book</p>
+      <p class="text-xs uppercase tracking-[0.16em] text-faint font-sans">Global source book</p>
       <h3 class="mt-1 text-wrap font-serif text-2xl font-semibold tracking-tight leading-snug">
         <a href={`/books/${book.id}/`} class="hover:text-accent">{book.data.title}</a>
       </h3>

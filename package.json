@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "build:local": "PATH=$HOME/.nvm/versions/node/v22.12.0/bin:$PATH astro build",
+    "audit:seo": "node scripts/seo-audit.mjs",
     "test:auth": "PATH=$HOME/.nvm/versions/node/v22.12.0/bin:$PATH node scripts/auth-smoke-test.mjs",
     "preview": "astro preview",
     "astro": "astro"

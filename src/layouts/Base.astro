@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { glocal } from '../lib/glocal';
 
 export interface Props {
   title: string;
@@ -59,6 +60,8 @@ const current = Astro.url.pathname;
 
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <meta property="og:locale:alternate" content="ko_KR" />
     <meta property="og:site_name" content="Answer with Books" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -115,7 +118,7 @@ const current = Astro.url.pathname;
     <footer class="border-t border-line mt-20">
       <div class="mx-auto flex max-w-6xl flex-col justify-between gap-3 px-5 py-10 text-sm text-soft sm:flex-row">
         <p>
-          Answer with Books — books distilled into usable answers.
+          Answer with Books — {glocal.footer}
         </p>
         <p>
           By <a href="https://terrylinhaochen.github.io" class="underline underline-offset-2 hover:text-accent">Terry Chen</a>

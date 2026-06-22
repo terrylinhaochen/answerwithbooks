@@ -1,11 +1,11 @@
 # Answer with Books
 
-> Every book you've read, ready to answer.
+> Global books, local questions for Japan and Korea.
 
-A content-first site that distills books into actionable answers. Each book becomes a distilled
-"insight page" with the visible reader-facing material, and question-led articles answer real
-problems by drawing on 1-3 books. The heavier book text lives in the core backend corpus for
-matching and generation, not as visible UI copy.
+A content-first site that distills books into actionable answers for Japanese and Korean readers.
+Each book becomes a distilled "insight page" with the visible reader-facing material, and
+question-led articles answer local problems by drawing on 1-3 global books. The heavier book text
+lives in the core backend corpus for matching and generation, not as visible UI copy.
 
 Live at **[answerwithbooks.com](https://answerwithbooks.com)**.
 
@@ -36,6 +36,8 @@ uses the known-good Node 22 path.
   `books` (array of book slugs), `date`, `featured`, `tags`.
 - `src/lib/topics.ts` — canonical topic grouping for browse pages. Keep this intentionally broad:
   Career, Relationships, Health, Technology, Business, Negotiation, Productivity, and Decisions.
+- `src/lib/glocal.ts` — shared Japan/Korea positioning copy. Update this first when changing the
+  site-wide glocalization lens.
 
 Add a markdown file, push to `main`, and the Actions workflow rebuilds and deploys.
 
@@ -49,8 +51,8 @@ layers:
    book corpus.
 3. The web app publishes the selected books and answers as static pages.
 
-Visible topic pages should stay small and familiar. Detailed concern clusters, evidence trails, and
-full book text belong in the backend/research layer.
+Visible topic pages should stay small, familiar, and Japan/Korea-aware. Detailed concern clusters,
+evidence trails, and full book text belong in the backend/research layer.
 
 ## Deployment
 

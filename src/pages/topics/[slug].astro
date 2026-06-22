@@ -1,9 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import FaqList from '../../components/FaqList.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookRow from '../../components/BookRow.astro';
 import { collectTopics } from '../../lib/topics';
+import { glocal } from '../../lib/glocal';
+import { faqJsonLd } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const answers = await getCollection('answers');
@@ -17,12 +20,27 @@ export async function getStaticPaths() {
 const { topic, books } = Astro.props;
 const bookTitles = new Map(books.map((book) => [book.id, book.data.title]));
 const url = `https://answerwithbooks.com/topics/${topic.slug}/`;
+const faqs = [
+  {
+    question: `What does the ${topic.label} topic cover?`,
+    answer: topic.description,
+  },
+  {
+    question: `How many ${topic.label.toLowerCase()} guides and books are available?`,
+    answer: `This topic currently includes ${topic.answers.length} localized ${topic.answers.length === 1 ? 'guide' : 'guides'} and ${topic.books.length} global source ${topic.books.length === 1 ? 'book' : 'books'}.`,
+  },
+  {
+    question: `Why is ${topic.label.toLowerCase()} localized for Japan and Korea?`,
+    answer:
+      'The topic uses familiar global language, but the content is selected and framed around Japanese and Korean reader demand, local constraints, and practical use cases.',
+  },
+];
 const jsonLd = [
   {
     '@type': 'CollectionPage',
     '@id': `${url}#webpage`,
     url,
-    name: `${topic.label} guides and books`,
+    name: `${topic.label} guides and books for Japan and Korea`,
     description: topic.description,
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
@@ -55,6 +73,9 @@ const jsonLd = [
       { '@type': 'ListItem', position: 3, name: topic.label, item: url },
     ],
   },
+  {
+    ...faqJsonLd(url, faqs),
+  },
 ];
 ---
 
@@ -72,34 +93,38 @@ const jsonLd = [
         <li><a href="/topics/" class="hover:text-accent">Topics</a></li>
       </ol>
     </nav>
-    <p class="text-xs uppercase tracking-[0.18em] text-accent font-sans">Topic</p>
+    <p class="text-xs uppercase tracking-[0.18em] text-accent font-sans">Localized topic</p>
     <h1 class="mt-3 font-serif text-5xl font-semibold tracking-tight">{topic.label}</h1>
     <p class="mt-4 text-soft leading-relaxed max-w-2xl">
       {topic.description}
+      This topic is curated for {glocal.audience}, using global books as source material while keeping
+      local constraints visible.
     </p>
   </section>
 
   <section class="mx-auto max-w-6xl px-5 pb-16 pt-6 border-t border-line">
     {topic.answers.length > 0 ? (
       <>
-        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Guides</h2>
+        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Localized guides</h2>
         <div class="mt-4 grid gap-4 md:grid-cols-2">
           {topic.answers.map((answer) => <AnswerRow answer={answer} bookTitles={bookTitles} />)}
         </div>
       </>
     ) : (
       <div class="rounded-md border border-line bg-white/55 p-5 text-soft">
-        No published guides here yet. This category is part of the content map, but it needs stronger demand evidence and book-source fit before publishing.
+        No published guides here yet. This category is part of the Japan/Korea content map, but it
+        needs stronger local demand evidence and book-source fit before publishing.
       </div>
     )}
 
     {topic.books.length > 0 && (
       <div class={topic.answers.length > 0 ? 'mt-12' : ''}>
-        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Source books</h2>
+        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Global source books</h2>
         <div class="mt-4 grid gap-4 md:grid-cols-2">
           {topic.books.map((book) => <BookRow book={book} />)}
         </div>
       </div>
     )}
   </section>
+  <FaqList items={faqs} eyebrow="Topic Q&A" title={`Questions about ${topic.label}`} />
 </Base>

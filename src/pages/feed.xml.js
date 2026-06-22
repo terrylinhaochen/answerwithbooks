@@ -27,7 +27,7 @@ export async function GET() {
       <channel>
         <title>Answer with Books</title>
         <link>${site}/</link>
-        <description>Practical questions answered with books.</description>
+        <description>Japan/Korea-aware practical questions answered with books.</description>
         <language>en-us</language>
         <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
         ${items}

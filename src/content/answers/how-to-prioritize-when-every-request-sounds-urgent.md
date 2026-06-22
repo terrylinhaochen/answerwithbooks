@@ -1,6 +1,6 @@
 ---
 question: "How to prioritize when every request sounds urgent"
-description: "Customer requests, stakeholder pressure, and roadmap goals all sound reasonable in isolation. Use Good Strategy Bad Strategy to name the constraint, then use The Wisdom of Crowds to collect independent evidence before ranking the work."
+description: "When every request sounds urgent, use Good Strategy Bad Strategy to name the constraint, then collect independent evidence before ranking the work."
 books: ["good-strategy-bad-strategy", "the-wisdom-of-crowds"]
 date: 2026-06-21
 featured: false

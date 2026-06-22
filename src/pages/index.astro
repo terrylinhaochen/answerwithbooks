@@ -4,6 +4,9 @@ import Base from '../layouts/Base.astro';
 import BookCover from '../components/BookCover.astro';
 import BookRow from '../components/BookRow.astro';
 import AnswerRow from '../components/AnswerRow.astro';
+import FaqList from '../components/FaqList.astro';
+import { glocal } from '../lib/glocal';
+import { audienceJsonLd, faqJsonLd } from '../lib/seo';
 
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 const answers = (await getCollection('answers')).sort(
@@ -13,6 +16,23 @@ const featuredBooks = books.filter((b) => b.data.featured).slice(0, 4);
 const featuredAnswers = answers.filter((a) => a.data.featured).slice(0, 3);
 const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
 const installCommand = 'npx answer-with-books install --skill --api';
+const homeFaqs = [
+  {
+    question: 'What is Answer with Books?',
+    answer:
+      'Answer with Books turns recurring reader questions into practical answers grounded in books, with Japanese and Korean contexts treated as first-class demand signals.',
+  },
+  {
+    question: 'Why focus on Japan and Korea?',
+    answer:
+      'Many book-based advice sites default to American examples. This site keeps the source books global while adapting the questions, constraints, and examples to Japanese and Korean readers.',
+  },
+  {
+    question: 'How are answers chosen?',
+    answer:
+      'CrowdListen-style demand research identifies repeated questions, then Answer with Books matches those concerns to the books that can answer them better than generic advice.',
+  },
+];
 
 const jsonLd = [
   {
@@ -21,11 +41,11 @@ const jsonLd = [
     name: 'Answer with Books',
     alternateName: 'answerwithbooks.com',
     url: 'https://answerwithbooks.com/',
-    description:
-      "The internet's top questions, answered with books. Turn source books into a collective skill for your chat AI and apps.",
+    description: glocal.description,
     author: { '@id': 'https://answerwithbooks.com/#person' },
     publisher: { '@id': 'https://answerwithbooks.com/#person' },
     inLanguage: 'en',
+    audience: audienceJsonLd(),
   },
   {
     '@type': 'Person',
@@ -38,9 +58,8 @@ const jsonLd = [
     '@type': 'WebPage',
     '@id': 'https://answerwithbooks.com/#webpage',
     url: 'https://answerwithbooks.com/',
-    name: "Answer with Books — the internet's top questions, answered with books",
-    description:
-      "The internet's top questions, answered with books. Turn source books into a collective skill for your chat AI and apps.",
+    name: `Answer with Books — ${glocal.promise}`,
+    description: glocal.description,
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     mainEntity: {
       '@type': 'ItemList',
@@ -52,6 +71,9 @@ const jsonLd = [
         url: `https://answerwithbooks.com/answers/${answer.id}/`,
       })),
     },
+  },
+  {
+    ...faqJsonLd('https://answerwithbooks.com/', homeFaqs),
   },
   {
     '@type': 'SiteNavigationElement',
@@ -67,8 +89,8 @@ const jsonLd = [
 ---
 
 <Base
-  title="Answer with Books — the internet's top questions, answered with books"
-  description="The internet's top questions, answered with books. Turn source books into a collective skill for your chat AI and apps."
+  title={`Answer with Books — ${glocal.promise}`}
+  description={glocal.description}
   path="/"
   jsonLd={jsonLd}
 >
@@ -76,32 +98,32 @@ const jsonLd = [
     <div class="grid min-w-0 grid-cols-1 items-center gap-12 xl:grid-cols-[0.95fr_1.05fr] xl:gap-20">
       <div class="min-w-0">
         <p class="max-w-[20rem] font-sans text-xs uppercase leading-relaxed tracking-[0.18em] text-accent sm:max-w-none">
-          Internet questions, book-grounded answers.
+          {glocal.promise}
         </p>
         <h1 class="mt-5 max-w-[12ch] break-words font-serif text-[2.75rem] font-semibold leading-[1.03] tracking-tight sm:max-w-4xl sm:text-6xl lg:text-7xl">
-          The internet's top questions, answered with books.
+          Book answers for the questions people actually live with.
         </h1>
         <p class="mt-6 max-w-2xl text-lg leading-relaxed text-soft">
-          Answer with Books compiles the questions people keep asking online, then turns them into
-          grounded answers using durable ideas, quotes, and frameworks from books. Bring your own
-          shelf to make the books you have read callable inside your chat AI.
+          Answer with Books turns recurring questions from Japanese and Korean readers into practical
+          guides grounded in durable books. The books stay global; the problems, examples, and
+          demand signals stay local.
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-4 text-[0.95rem]">
           <a
             href="/answers/"
             class="bg-ink text-paper px-5 py-2.5 rounded-sm hover:bg-accent transition-colors"
           >
-            Explore answers
+            Explore localized answers
           </a>
           <a href="/books/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
-            Browse source books
+            Browse global source books
           </a>
         </div>
       </div>
 
       <div class="min-w-0 rounded-lg border border-line bg-white/55 p-4 shadow-sm sm:p-6">
         <div class="rounded-md border border-line bg-paper p-5">
-          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Internet question</p>
+          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Local question</p>
           <h2 class="mt-3 font-serif text-2xl font-semibold leading-tight sm:text-3xl">
             Am I validating this idea or just collecting compliments?
           </h2>
@@ -109,7 +131,7 @@ const jsonLd = [
 
         <div class="mt-5 grid min-w-0 grid-cols-1 gap-4">
           <div class="rounded-md border border-line bg-wash/80 p-5">
-            <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Book synthesis</p>
+          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Global book synthesis</p>
             <div class="mt-4 grid gap-5">
               <div class="flex items-end justify-center gap-3">
                 {featuredBooks.slice(0, 3).map((book, index) => (
@@ -122,7 +144,8 @@ const jsonLd = [
               </div>
               <p class="max-w-2xl text-base leading-relaxed text-soft">
                 The Mom Test, Thinking, Fast and Slow, and The Wisdom of Crowds become lenses for
-                separating real demand from politeness, optimism, and groupthink.
+                separating real demand from politeness, optimism, and groupthink in Japan/Korea-aware
+                startup and work contexts.
               </p>
             </div>
           </div>
@@ -150,8 +173,8 @@ const jsonLd = [
           <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Book-grounded answer</p>
           <p class="mt-3 text-base leading-relaxed text-soft">
             The answer is not "trust your gut" or "ask users if they like it." It is to use books as
-            lenses: test for real behavior, compare against base rates, and make the next move small
-            enough that reality can answer back.
+            lenses, then adapt the method to local customer behavior, workplace norms, and decision
+            pressure in Japan and Korea.
           </p>
         </div>
       </div>
@@ -161,16 +184,16 @@ const jsonLd = [
   <section class="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-20 xl:px-[120px]">
     <div class="grid grid-cols-1 gap-4 border-y border-line bg-wash/70 px-5 py-8 sm:px-6 md:grid-cols-3">
       <div class="rounded-md bg-paper p-5">
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Ask</p>
-        <p class="mt-2 font-serif text-2xl font-semibold">Compile the questions people keep asking.</p>
+        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Listen locally</p>
+        <p class="mt-2 font-serif text-2xl font-semibold">Find questions Japanese and Korean readers keep asking.</p>
       </div>
       <div class="rounded-md bg-paper p-5">
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Synthesize</p>
+        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Synthesize globally</p>
         <p class="mt-2 font-serif text-2xl font-semibold">Pull the strongest ideas across books.</p>
       </div>
       <div class="rounded-md bg-paper p-5">
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Apply</p>
-        <p class="mt-2 font-serif text-2xl font-semibold">Turn insight into your next useful move.</p>
+        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Apply locally</p>
+        <p class="mt-2 font-serif text-2xl font-semibold">Turn insight into the next useful move in context.</p>
       </div>
     </div>
   </section>
@@ -191,8 +214,8 @@ const jsonLd = [
             <div>
               <h2 class="font-serif text-2xl font-semibold leading-tight tracking-tight">1. Add a book</h2>
               <p class="mt-2 max-w-xl leading-relaxed text-soft">
-                A title is enough to start. Books earn their page through a real reading - no
-                summaries of summaries.
+                A title is enough to start. Books earn their page through a real reading, then get
+                tested against questions coming from Japan and Korea.
               </p>
             </div>
           </div>
@@ -208,8 +231,8 @@ const jsonLd = [
             <div>
               <h2 class="font-serif text-2xl font-semibold leading-tight tracking-tight">2. Distill into a skill</h2>
               <p class="mt-2 max-w-xl leading-relaxed text-soft">
-                Each book is reduced to its load-bearing ideas - mental models, frameworks, when to
-                reach for them - packaged as a callable skill.
+                Each book is reduced to its load-bearing ideas, mental models, frameworks, and when
+                to reach for them, then packaged as a callable skill.
               </p>
             </div>
           </div>
@@ -225,8 +248,8 @@ const jsonLd = [
             <div>
               <h2 class="font-serif text-2xl font-semibold leading-tight tracking-tight">3. Call it anywhere</h2>
               <p class="mt-2 max-w-xl leading-relaxed text-soft">
-                Ask a real question and the right books answer - on this site, as a chat AI skill, or
-                over the REST API.
+                Ask a real question and the right books answer on this site, as a chat AI skill, or
+                over the REST API, with the Japanese/Korean context preserved.
               </p>
             </div>
           </div>
@@ -236,12 +259,12 @@ const jsonLd = [
       <div class="rounded-md border border-line bg-wash p-6 sm:p-8">
         <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Your shelf, callable</p>
         <h2 class="mt-3 font-serif text-4xl font-semibold leading-tight tracking-tight">
-          Turn your books into one collective chat skill.
+          Turn your books into one localized chat skill.
         </h2>
         <p class="mt-4 max-w-2xl leading-relaxed text-soft">
-          Add the books you've read and they become skills you can query - from this site, from your
-          chat AI, from your agent of choice, or programmatically. Create a free account to add your
-          first books; skill and REST API access is rolling out to early accounts.
+          Add the books you've read and they become skills you can query from this site, your chat AI,
+          your agent of choice, or programmatically. The goal is not translation alone; it is answers
+          that understand the questions Japanese and Korean readers bring to the shelf.
         </p>
         <p class="mt-6">
           <a
@@ -264,12 +287,12 @@ const jsonLd = [
       <div>
         <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">The shelf</p>
         <h2 class="mt-3 max-w-lg font-serif text-4xl font-semibold leading-tight tracking-tight">
-          A library that works backwards from your questions.
+          A library that works backwards from local demand.
         </h2>
         <p class="mt-4 max-w-lg leading-relaxed text-soft">
           Each book page extracts the useful machinery: concepts, stories, frameworks, failure modes,
-          and when to apply them. That lets each answer point back to real source material instead of
-          stopping at surface-level advice.
+          and when to apply them. That lets each answer point back to real source material while still
+          speaking to the local situations readers are trying to solve.
         </p>
         <p class="mt-6">
           <a href="/books/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
@@ -288,17 +311,17 @@ const jsonLd = [
       <div>
         <p class="text-xs uppercase tracking-[0.18em] text-paper/55 font-sans">Internet question engine</p>
         <h2 class="mt-3 max-w-lg font-serif text-4xl font-semibold leading-tight tracking-tight">
-          The questions people click become better book-grounded answers.
+          Japanese and Korean demand becomes better book-grounded answers.
         </h2>
         <p class="mt-4 max-w-lg leading-relaxed text-paper/70">
           CrowdListen can reveal what people are asking, saving, debating, and getting stuck on across
-          the internet. Answer with Books uses that demand signal to choose what to synthesize next,
-          while books supply the deeper judgment.
+          Japanese and Korean communities. Answer with Books uses that demand signal to choose what to
+          synthesize next, while books supply the deeper judgment.
         </p>
       </div>
       <div class="grid gap-3">
         {[
-          ['Top of mind', 'Am I validating this idea or just collecting compliments?'],
+          ['Local demand', 'Am I validating this idea or just collecting compliments?'],
           ['Source lenses', 'The Mom Test + Thinking, Fast and Slow'],
           ['Digestible answer', 'Past behavior beats polite feedback; base rates beat founder optimism.'],
         ].map(([label, text]) => (
@@ -314,11 +337,11 @@ const jsonLd = [
   <section class="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 lg:px-20 xl:px-[120px]">
     <div class="mb-7 flex items-end justify-between gap-5">
       <div>
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Featured answers</p>
-        <h2 class="mt-3 font-serif text-4xl font-semibold tracking-tight">Answers from the shelf</h2>
+        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Featured localized answers</p>
+        <h2 class="mt-3 font-serif text-4xl font-semibold tracking-tight">Answers from the global shelf</h2>
       </div>
       <a href="/answers/" class="hidden text-sm text-accent underline underline-offset-4 decoration-1 sm:inline">
-        All answers
+        All localized answers
       </a>
     </div>
     <div class="grid gap-4 lg:grid-cols-3">
@@ -326,13 +349,19 @@ const jsonLd = [
     </div>
   </section>
 
+  <FaqList
+    items={homeFaqs}
+    eyebrow="Site Q&A"
+    title="How the glocal book engine works"
+  />
+
   <section class="mx-auto max-w-[1440px] px-5 pb-16 sm:px-8 lg:px-20 xl:px-[120px]">
     <div class="grid grid-cols-1 gap-8 rounded-md border border-line bg-wash p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
       <div>
-        <h2 class="font-serif text-3xl font-semibold tracking-tight">Build a shelf around what you care about</h2>
+        <h2 class="font-serif text-3xl font-semibold tracking-tight">Build a shelf around the questions you actually have</h2>
         <p class="mt-3 max-w-2xl leading-relaxed text-soft">
-          Save books, follow answers, and turn your recurring questions into a living library of ideas
-          you can call on.
+          Save books, follow answers, and turn your recurring Japan/Korea-specific questions into a
+          living library of ideas you can call on.
         </p>
       </div>
       <div class="flex flex-wrap gap-3">
