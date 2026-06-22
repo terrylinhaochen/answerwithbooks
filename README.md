@@ -3,8 +3,9 @@
 > Every book you've read, ready to answer.
 
 A content-first site that distills books into actionable answers. Each book becomes a distilled
-"insight page" (core mental models, key frameworks, when to reach for it, how it's been applied),
-and question-led articles answer real problems by drawing on 1-3 books.
+"insight page" with the visible reader-facing material, and question-led articles answer real
+problems by drawing on 1-3 books. The heavier book text lives in the core backend corpus for
+matching and generation, not as visible UI copy.
 
 Live at **[answerwithbooks.com](https://answerwithbooks.com)**.
 
@@ -24,7 +25,8 @@ npm run dev            # http://localhost:4321
 npm run build          # static build into dist/
 ```
 
-Requires Node 18.17+ (Node 22 recommended).
+Requires Node 18.17+ (Node 22 recommended). On the desktop workspace, `npm run build:local`
+uses the known-good Node 22 path.
 
 ## Content
 
@@ -32,8 +34,23 @@ Requires Node 18.17+ (Node 22 recommended).
   `oneLiner`, `readIf`, `tags`, `featured`, `order`.
 - `src/content/answers/*.md` — question-led articles. Frontmatter: `question`, `description`,
   `books` (array of book slugs), `date`, `featured`, `tags`.
+- `src/lib/topics.ts` — canonical topic grouping for browse pages. Keep this intentionally broad:
+  Career, Relationships, Health, Technology, Business, Negotiation, Productivity, and Decisions.
 
 Add a markdown file, push to `main`, and the Actions workflow rebuilds and deploys.
+
+## Demand and Matching
+
+The public site is the publishing layer. CrowdListen and the core API are the demand and matching
+layers:
+
+1. CrowdListen researches topics people repeatedly ask about and exports demand packets.
+2. The core API syncs those packets, turns them into concerns, and matches them against the hidden
+   book corpus.
+3. The web app publishes the selected books and answers as static pages.
+
+Visible topic pages should stay small and familiar. Detailed concern clusters, evidence trails, and
+full book text belong in the backend/research layer.
 
 ## Deployment
 

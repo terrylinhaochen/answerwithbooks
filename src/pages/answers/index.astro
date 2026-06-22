@@ -8,12 +8,45 @@ const answers = (await getCollection('answers')).sort(
 );
 const books = await getCollection('books');
 const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
+const url = 'https://answerwithbooks.com/answers/';
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: 'Answer with Books guides',
+    description:
+      'Practical how-to guides that answer recurring internet questions with frameworks from books.',
+    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+    mainEntity: { '@id': `${url}#itemlist` },
+  },
+  {
+    '@type': 'ItemList',
+    '@id': `${url}#itemlist`,
+    itemListElement: answers.map((answer, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: answer.data.question,
+      url: `https://answerwithbooks.com/answers/${answer.id}/`,
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Answer with Books', item: 'https://answerwithbooks.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Answers', item: url },
+    ],
+  },
+];
 ---
 
 <Base
   title="Answers"
   description="Real questions, answered with books: startup validation, team decisions, failed plans, pivots, and intuition — each answer grounded in distilled reading."
   path="/answers/"
+  jsonLd={jsonLd}
 >
   <section class="mx-auto max-w-6xl px-5 pt-16 pb-8">
     <p class="text-xs uppercase tracking-[0.18em] text-accent font-sans">Second-order synthesis</p>

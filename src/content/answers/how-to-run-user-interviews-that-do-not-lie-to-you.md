@@ -1,11 +1,13 @@
 ---
-question: "What does The Mom Test teach about user interviews?"
-description: "The complete method: three rules for questions that can't be answered with polite lies, a taxonomy of bad data and how to deflect it, and the commitment test that separates real interest from kindness."
+question: "How to run user interviews that do not lie to you"
+description: "A compact field guide to user interviews that produce evidence instead of polite encouragement: past behavior, specific incidents, bad-data detection, and commitment tests from The Mom Test."
 books: ["the-mom-test"]
 date: 2026-05-05
 featured: false
 tags: ["customer research", "interviews", "product"]
 ---
+
+CrowdListen-style Reddit discovery found the same user-research pain from several angles: PMs asking how to do research when compliance limits access, founders asking where to find early interviewees, and researchers saying interviews are mentally exhausting because staying focused is hard. The shared problem is not "what is the book about?" It is: *How do I get real signal from conversations that are socially, operationally, and cognitively messy?*
 
 Rob Fitzpatrick's [*The Mom Test*](/books/the-mom-test/) is the rare business book that is actually a method — short enough to read in an evening, specific enough to use the next morning. Here is the whole apparatus.
 

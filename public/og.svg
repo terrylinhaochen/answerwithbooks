@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#faf8f3"/>
+  <rect x="76" y="78" width="1048" height="474" rx="12" fill="#fffdf8" stroke="#e4dbcd" stroke-width="2"/>
+  <text x="118" y="148" fill="#8c3b2a" font-family="Georgia, serif" font-size="28" font-weight="700">Answer with Books</text>
+  <text x="118" y="250" fill="#221e1a" font-family="Georgia, serif" font-size="72" font-weight="700">The internet's top</text>
+  <text x="118" y="332" fill="#221e1a" font-family="Georgia, serif" font-size="72" font-weight="700">questions, answered</text>
+  <text x="118" y="414" fill="#221e1a" font-family="Georgia, serif" font-size="72" font-weight="700">with books.</text>
+  <text x="118" y="492" fill="#756d64" font-family="Georgia, serif" font-size="28">Short guides grounded in source books, frameworks, and practical judgment.</text>
+  <g transform="translate(887 144)">
+    <rect x="0" y="0" width="114" height="170" rx="6" fill="#243b53"/>
+    <rect x="0" y="118" width="114" height="18" fill="#f0b35d"/>
+    <rect x="15" y="23" width="65" height="64" fill="none" stroke="#fff7e8" stroke-width="6"/>
+    <rect x="45" y="34" width="65" height="64" fill="none" stroke="#fff7e8" stroke-width="6" opacity="0.8"/>
+    <rect x="62" y="74" width="114" height="170" rx="6" fill="#5c2f45"/>
+    <rect x="62" y="192" width="114" height="18" fill="#8fc6a3"/>
+    <rect x="83" y="101" width="93" height="170" rx="6" fill="#214a43"/>
+    <rect x="83" y="219" width="93" height="18" fill="#d7a84d"/>
+  </g>
+</svg>

@@ -1,11 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const url = 'https://answerwithbooks.com/about/';
+const jsonLd = [
+  {
+    '@type': 'AboutPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: 'About Answer with Books',
+    description:
+      "Answer with Books is Terry Chen's bookshelf, distilled into usable answers from real books.",
+    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+    mainEntity: { '@id': 'https://answerwithbooks.com/#person' },
+  },
+  {
+    '@type': 'Person',
+    '@id': 'https://answerwithbooks.com/#person',
+    name: 'Terry Chen',
+    url: 'https://terrylinhaochen.github.io',
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Answer with Books', item: 'https://answerwithbooks.com/' },
+      { '@type': 'ListItem', position: 2, name: 'About', item: url },
+    ],
+  },
+];
 ---
 
 <Base
   title="About"
   description="Answer with Books is Terry Chen's bookshelf, distilled into usable answers — mental models and frameworks from real books, applied to real questions."
   path="/about/"
+  jsonLd={jsonLd}
 >
   <article class="mx-auto max-w-3xl px-5 pt-16 pb-16">
     <h1 class="font-serif text-4xl font-semibold tracking-tight">About</h1>
@@ -24,8 +54,8 @@ import Base from '../layouts/Base.astro';
       </p>
       <p>
         Then the books get put to work. The <a href="/answers/">answers</a> take real, practical
-        questions — <em>How do I know if my startup idea is any good? Why do smart teams make dumb
-        decisions? When should I abandon my current approach?</em> — and answer them by combining
+        questions — <em>How to validate an idea without fooling yourself, how to keep a smart team
+        from making a dumb decision, how to tell whether to pivot or keep going</em> — and answer them by combining
         one to three books with first-hand experience. Every answer cites its sources and links
         back to the shelf, so you can go as deep as the question deserves.
       </p>

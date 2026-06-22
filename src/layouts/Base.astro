@@ -7,17 +7,32 @@ export interface Props {
   /** Path beginning with /, used for canonical + OG URLs */
   path?: string;
   ogType?: 'website' | 'article' | 'book';
-  jsonLd?: object;
+  image?: string;
+  robots?: string;
+  jsonLd?: object | object[];
 }
 
-const { title, description, path = Astro.url.pathname, ogType = 'website', jsonLd } = Astro.props;
+const {
+  title,
+  description,
+  path = Astro.url.pathname,
+  ogType = 'website',
+  image = '/og.svg',
+  robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+  jsonLd,
+} = Astro.props;
 const site = 'https://answerwithbooks.com';
 const canonical = new URL(path, site).href;
 const fullTitle = path === '/' ? title : `${title} — Answer with Books`;
+const imageUrl = new URL(image, site).href;
+const structuredData = Array.isArray(jsonLd)
+  ? { '@context': 'https://schema.org', '@graph': jsonLd }
+  : jsonLd;
 
 const nav = [
   { href: '/books/', label: 'Books' },
   { href: '/answers/', label: 'Answers' },
+  { href: '/topics/', label: 'Topics' },
   { href: '/about/', label: 'About' },
 ];
 const current = Astro.url.pathname;
@@ -30,18 +45,30 @@ const current = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Terry Chen" />
+    <meta name="application-name" content="Answer with Books" />
+    <meta name="apple-mobile-web-app-title" content="Answer with Books" />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
+    <meta name="theme-color" content="#faf8f3" />
+    <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Answer with Books" href="/feed.xml" />
 
     <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="Answer with Books" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content="Answer with Books" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,11 +77,11 @@ const current = Astro.url.pathname;
       href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap"
     />
 
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink">
     <header class="border-b border-line">
-      <div class="mx-auto flex max-w-[1440px] flex-col gap-3 px-5 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 sm:px-8 lg:px-20 xl:px-[120px]">
+      <div class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
         <a href="/" class="font-serif text-lg font-semibold tracking-tight hover:text-accent">
           Answer<span class="text-accent">&nbsp;with&nbsp;</span>Books
         </a>
@@ -86,7 +113,7 @@ const current = Astro.url.pathname;
     </main>
 
     <footer class="border-t border-line mt-20">
-      <div class="mx-auto flex max-w-[1440px] flex-col justify-between gap-3 px-5 py-10 text-sm text-soft sm:flex-row sm:px-8 lg:px-20 xl:px-[120px]">
+      <div class="mx-auto flex max-w-6xl flex-col justify-between gap-3 px-5 py-10 text-sm text-soft sm:flex-row">
         <p>
           Answer with Books — books distilled into usable answers.
         </p>

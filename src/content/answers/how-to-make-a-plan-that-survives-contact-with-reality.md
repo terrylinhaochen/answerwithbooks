@@ -1,11 +1,13 @@
 ---
-question: "Why do top-down plans fail?"
-description: "From Soviet collectivization to your company's grand replatforming, top-down plans fail in the same way: they replace working local knowledge with a tidy abstraction, then mistake the abstraction for reality. Seeing Like a State is the autopsy manual."
+question: "How to make a plan that survives contact with reality"
+description: "Plans fail when they delete local knowledge and mistake a clean map for the territory. Seeing Like a State and The Wisdom of Crowds show how to plan without flattening reality."
 books: ["seeing-like-a-state", "the-wisdom-of-crowds"]
 date: 2026-05-26
 featured: true
 tags: ["planning", "systems", "organizations"]
 ---
+
+The discovery engine found a practical version of this question in operations and engineering communities: sprint planning blown up by hidden dependencies, GitHub issues falling out of sync with real work, stakeholders bypassing change processes. The common thread is not that people need prettier plans. It is that the plan keeps deleting the messy local facts that make the work real.
 
 Top-down plans don't fail because planners are stupid. They fail because planning *requires simplification* — and the things deleted in the simplification turn out to have been doing the actual work.
 

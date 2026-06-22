@@ -2,7 +2,12 @@
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="Page not found" description="This page doesn't exist." path="/404/">
+<Base
+  title="Page not found"
+  description="This page doesn't exist."
+  path="/404/"
+  robots="noindex, follow"
+>
   <section class="mx-auto max-w-3xl px-5 pt-24 pb-24">
     <h1 class="font-serif text-4xl font-semibold tracking-tight">Not every question has a page.</h1>
     <p class="mt-4 text-soft leading-relaxed max-w-prose">

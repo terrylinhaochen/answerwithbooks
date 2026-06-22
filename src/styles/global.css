@@ -39,10 +39,12 @@ body {
 /* Editorial prose styling for markdown bodies */
 .prose-awb {
   font-family: var(--font-serif);
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   line-height: 1.75;
   color: var(--color-ink);
+  width: 100%;
   max-width: 65ch;
+  overflow-wrap: break-word;
 }
 .prose-awb h2 {
   font-family: var(--font-serif);
@@ -110,4 +112,10 @@ body {
   background: var(--color-wash);
   padding: 0.1em 0.35em;
   border-radius: 3px;
+}
+
+@media (min-width: 640px) {
+  .prose-awb {
+    font-size: 1.125rem;
+  }
 }

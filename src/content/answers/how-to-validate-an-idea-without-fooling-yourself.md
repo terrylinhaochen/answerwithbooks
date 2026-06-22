@@ -1,11 +1,13 @@
 ---
-question: "How do I know if my startup idea is any good?"
-description: "You can't ask people if your idea is good — they'll lie politely. What you can do is collect evidence about past behavior and real commitments. A field guide drawing on The Mom Test and Thinking, Fast and Slow."
+question: "How to validate an idea without fooling yourself"
+description: "A practical validation guide for founders who keep asking whether an idea is good. Use The Mom Test and Thinking, Fast and Slow to replace enthusiasm with past behavior, commitments, and base rates."
 books: ["the-mom-test", "thinking-fast-and-slow"]
 date: 2026-05-12
 featured: true
 tags: ["startups", "validation"]
 ---
+
+This question keeps showing up in founder forums in almost the same shape: *How do I validate an idea without accidentally building the whole thing first?* One Reddit founder described the trap as starting with "validate first" and somehow ending up with landing pages, payments, and copy before talking to a single real user. Another asked how to validate when the target users are outside their immediate network.
 
 The honest answer: you can't know in advance. But you can replace the question you *can't* answer ("is this idea good?") with questions you can — and most founders never make that swap.
 

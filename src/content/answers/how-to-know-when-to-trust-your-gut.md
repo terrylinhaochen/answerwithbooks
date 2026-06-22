@@ -1,13 +1,15 @@
 ---
-question: "When can I trust my intuition?"
-description: "Intuition is pattern recognition, and patterns can only be learned where they exist. Kahneman's two-condition test tells you which of your gut feelings are expertise and which are noise wearing confidence."
+question: "How to know when to trust your gut"
+description: "Gut feeling can be expertise or noise. Kahneman's two-condition test shows when intuition deserves trust, when it needs structure, and why confidence is the wrong signal."
 books: ["thinking-fast-and-slow"]
 date: 2026-06-09
 featured: false
 tags: ["decision-making", "judgment", "intuition"]
 ---
 
-There's a precise answer to this question, and it comes from an unlikely collaboration: Daniel Kahneman — the great skeptic of expert judgment — and Gary Klein, the great defender of expert intuition, spent years adversarially working out when they were each right. The result, reported in [*Thinking, Fast and Slow*](/books/thinking-fast-and-slow/), is a two-condition test.
+People ask this as a career question, a product question, and a leadership question: should I trust the bad gut feeling about this company, this hire, this feature, this strategy? Reddit discovery surfaced both personal versions ("bad gut feeling about company") and organizational versions, like a product designer dealing with a PM who launches features from intuition without data.
+
+There's a precise answer, and it comes from an unlikely collaboration: Daniel Kahneman — the great skeptic of expert judgment — and Gary Klein, the great defender of expert intuition, spent years adversarially working out when they were each right. The result, reported in [*Thinking, Fast and Slow*](/books/thinking-fast-and-slow/), is a two-condition test.
 
 ## What intuition actually is
 

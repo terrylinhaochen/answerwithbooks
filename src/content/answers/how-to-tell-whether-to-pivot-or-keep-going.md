@@ -1,11 +1,13 @@
 ---
-question: "When should I abandon my current approach?"
-description: "Persistence and pivoting are both virtues, which makes the decision genuinely hard. Kuhn's Structure of Scientific Revolutions gives you the diagnostic — crisis looks like multiplying patches — and Kahneman explains why you'll see it later than you should."
+question: "How to tell whether to pivot or keep going"
+description: "A guide for founders and teams stuck between persistence and denial. Kuhn gives the crisis diagnostic; Kahneman explains why sunk costs make the truth hard to see."
 books: ["the-structure-of-scientific-revolutions", "thinking-fast-and-slow"]
 date: 2026-06-02
 featured: true
 tags: ["strategy", "pivots", "decision-making"]
 ---
+
+The Reddit version is painfully concrete: founders asking whether to pivot after spending serious money with no revenue, whether no users means the product is wrong, or how many pivots it usually takes before product-market fit. The emotional shape is always the same: quitting feels premature, continuing feels expensive, and every data point can be explained both ways.
 
 The hard part isn't the abandoning. It's that *both* persistence and pivoting are correct strategies, depending on something you can't directly observe: whether your problems are puzzles or anomalies.
 

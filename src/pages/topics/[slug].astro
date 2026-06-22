@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AnswerRow from '../../components/AnswerRow.astro';
+import BookRow from '../../components/BookRow.astro';
+import { collectTopics } from '../../lib/topics';
+
+export async function getStaticPaths() {
+  const answers = await getCollection('answers');
+  const books = await getCollection('books');
+  return collectTopics(answers, books, { includeEmpty: true }).map((topic) => ({
+    params: { slug: topic.slug },
+    props: { topic, books },
+  }));
+}
+
+const { topic, books } = Astro.props;
+const bookTitles = new Map(books.map((book) => [book.id, book.data.title]));
+const url = `https://answerwithbooks.com/topics/${topic.slug}/`;
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: `${topic.label} guides and books`,
+    description: topic.description,
+    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+    mainEntity: { '@id': `${url}#itemlist` },
+  },
+  {
+    '@type': 'ItemList',
+    '@id': `${url}#itemlist`,
+    itemListElement: [
+      ...topic.answers.map((answer, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: answer.data.question,
+        url: `https://answerwithbooks.com/answers/${answer.id}/`,
+      })),
+      ...topic.books.map((book, index) => ({
+        '@type': 'ListItem',
+        position: topic.answers.length + index + 1,
+        name: book.data.title,
+        url: `https://answerwithbooks.com/books/${book.id}/`,
+      })),
+    ],
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Answer with Books', item: 'https://answerwithbooks.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Topics', item: 'https://answerwithbooks.com/topics/' },
+      { '@type': 'ListItem', position: 3, name: topic.label, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={`${topic.label} guides and books`}
+  description={topic.description}
+  path={`/topics/${topic.slug}/`}
+  jsonLd={jsonLd}
+>
+  <section class="mx-auto max-w-6xl px-5 pt-16 pb-8">
+    <nav aria-label="Breadcrumb" class="mb-8 text-sm text-soft">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><a href="/" class="hover:text-accent">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href="/topics/" class="hover:text-accent">Topics</a></li>
+      </ol>
+    </nav>
+    <p class="text-xs uppercase tracking-[0.18em] text-accent font-sans">Topic</p>
+    <h1 class="mt-3 font-serif text-5xl font-semibold tracking-tight">{topic.label}</h1>
+    <p class="mt-4 text-soft leading-relaxed max-w-2xl">
+      {topic.description}
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 pb-16 pt-6 border-t border-line">
+    {topic.answers.length > 0 ? (
+      <>
+        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Guides</h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-2">
+          {topic.answers.map((answer) => <AnswerRow answer={answer} bookTitles={bookTitles} />)}
+        </div>
+      </>
+    ) : (
+      <div class="rounded-md border border-line bg-white/55 p-5 text-soft">
+        No published guides here yet. This category is part of the content map, but it needs stronger demand evidence and book-source fit before publishing.
+      </div>
+    )}
+
+    {topic.books.length > 0 && (
+      <div class={topic.answers.length > 0 ? 'mt-12' : ''}>
+        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Source books</h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-2">
+          {topic.books.map((book) => <BookRow book={book} />)}
+        </div>
+      </div>
+    )}
+  </section>
+</Base>

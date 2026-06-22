@@ -14,15 +14,56 @@ const featuredAnswers = answers.filter((a) => a.data.featured).slice(0, 3);
 const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
 const installCommand = 'npx answer-with-books install --skill --api';
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Answer with Books',
-  url: 'https://answerwithbooks.com/',
-  description:
-    "The internet's top questions, answered with books. Turn source books into a collective skill for your chat AI and apps.",
-  author: { '@type': 'Person', name: 'Terry Chen', url: 'https://terrylinhaochen.github.io' },
-};
+const jsonLd = [
+  {
+    '@type': 'WebSite',
+    '@id': 'https://answerwithbooks.com/#website',
+    name: 'Answer with Books',
+    alternateName: 'answerwithbooks.com',
+    url: 'https://answerwithbooks.com/',
+    description:
+      "The internet's top questions, answered with books. Turn source books into a collective skill for your chat AI and apps.",
+    author: { '@id': 'https://answerwithbooks.com/#person' },
+    publisher: { '@id': 'https://answerwithbooks.com/#person' },
+    inLanguage: 'en',
+  },
+  {
+    '@type': 'Person',
+    '@id': 'https://answerwithbooks.com/#person',
+    name: 'Terry Chen',
+    url: 'https://terrylinhaochen.github.io',
+    sameAs: ['https://terrylinhaochen.github.io'],
+  },
+  {
+    '@type': 'WebPage',
+    '@id': 'https://answerwithbooks.com/#webpage',
+    url: 'https://answerwithbooks.com/',
+    name: "Answer with Books — the internet's top questions, answered with books",
+    description:
+      "The internet's top questions, answered with books. Turn source books into a collective skill for your chat AI and apps.",
+    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Featured book-grounded answers',
+      itemListElement: featuredAnswers.map((answer, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: answer.data.question,
+        url: `https://answerwithbooks.com/answers/${answer.id}/`,
+      })),
+    },
+  },
+  {
+    '@type': 'SiteNavigationElement',
+    name: ['Books', 'Answers', 'Topics', 'About'],
+    url: [
+      'https://answerwithbooks.com/books/',
+      'https://answerwithbooks.com/answers/',
+      'https://answerwithbooks.com/topics/',
+      'https://answerwithbooks.com/about/',
+    ],
+  },
+];
 ---
 
 <Base
@@ -117,8 +158,8 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="border-y border-line bg-wash/70">
-    <div class="mx-auto grid max-w-[1440px] grid-cols-1 gap-4 px-5 py-8 sm:px-8 md:grid-cols-3 lg:px-20 xl:px-[120px]">
+  <section class="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-20 xl:px-[120px]">
+    <div class="grid grid-cols-1 gap-4 border-y border-line bg-wash/70 px-5 py-8 sm:px-6 md:grid-cols-3">
       <div class="rounded-md bg-paper p-5">
         <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Ask</p>
         <p class="mt-2 font-serif text-2xl font-semibold">Compile the questions people keep asking.</p>
@@ -242,8 +283,8 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="border-y border-line bg-ink text-paper">
-    <div class="mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-20 xl:px-[120px]">
+  <section class="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-20 xl:px-[120px]">
+    <div class="grid grid-cols-1 gap-10 border-y border-line bg-ink px-5 py-16 text-paper sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-10">
       <div>
         <p class="text-xs uppercase tracking-[0.18em] text-paper/55 font-sans">Internet question engine</p>
         <h2 class="mt-3 max-w-lg font-serif text-4xl font-semibold leading-tight tracking-tight">

@@ -1,13 +1,15 @@
 ---
-question: "Why do smart teams make dumb decisions?"
-description: "Groups of intelligent people routinely underperform their dumbest member's private judgment. The Wisdom of Crowds explains the broken machinery; Thinking, Fast and Slow explains the biases it amplifies — and both point to the same fixes."
+question: "How to keep a smart team from making a dumb decision"
+description: "Smart people still make bad group decisions when the process destroys independence, diversity, decentralization, and aggregation. Here is the meeting design that fixes it."
 books: ["the-wisdom-of-crowds", "thinking-fast-and-slow"]
 date: 2026-05-19
 featured: true
 tags: ["teams", "decision-making"]
 ---
 
-Because intelligence is a property of individuals, and decisions made in rooms are a property of *process*. A team of brilliant people with a broken aggregation process will reliably lose to a team of average people with a good one. The bug is almost never "we weren't smart enough." It's one of four specific failures.
+Managers and founders keep asking versions of this problem: how to handle decision fatigue, how to rebuild trust after a bad leadership decision, how to stop AI or senior opinion from becoming the answer before the team has thought. Those are not abstract leadership questions. They are failures of decision process.
+
+Intelligence is a property of individuals, and decisions made in rooms are a property of *process*. A team of brilliant people with a broken aggregation process will reliably lose to a team of average people with a good one. The bug is almost never "we weren't smart enough." It's one of four specific failures.
 
 ## The four conditions, and how meetings break them
 

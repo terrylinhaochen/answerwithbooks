@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { topicsForTags } from '../../lib/topics';
 
 export async function getStaticPaths() {
   const books = await getCollection('books');
@@ -9,25 +10,65 @@ export async function getStaticPaths() {
 
 const { book } = Astro.props;
 const { Content } = await render(book);
+const topics = topicsForTags(book.data.tags);
 
 const answers = (await getCollection('answers'))
   .filter((a) => a.data.books.includes(book.id))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: `${book.data.title} — distilled`,
-  description: book.data.oneLiner,
-  author: { '@type': 'Person', name: 'Terry Chen', url: 'https://terrylinhaochen.github.io' },
-  about: {
+const url = `https://answerwithbooks.com/books/${book.id}/`;
+const breadcrumbs = [
+  { name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
+  { name: 'Books', url: 'https://answerwithbooks.com/books/' },
+  { name: book.data.title, url },
+];
+const jsonLd = [
+  {
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: `${book.data.title} by ${book.data.author}`,
+    description: book.data.oneLiner,
+    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+  },
+  {
+    '@type': 'Article',
+    '@id': `${url}#article`,
+    mainEntityOfPage: { '@id': `${url}#webpage` },
+    headline: `${book.data.title} by ${book.data.author}, distilled into usable ideas`,
+    description: book.data.oneLiner,
+    author: { '@type': 'Person', name: 'Terry Chen', url: 'https://terrylinhaochen.github.io' },
+    publisher: { '@id': 'https://answerwithbooks.com/#person' },
+    keywords: book.data.tags,
+    about: { '@id': `${url}#book` },
+    url,
+  },
+  {
     '@type': 'Book',
+    '@id': `${url}#book`,
     name: book.data.title,
     author: { '@type': 'Person', name: book.data.author },
     datePublished: String(book.data.year),
+    description: book.data.oneLiner,
+    url,
+    workExample: answers.map((answer) => ({
+      '@type': 'CreativeWork',
+      name: answer.data.question,
+      url: `https://answerwithbooks.com/answers/${answer.id}/`,
+    })),
   },
-  url: `https://answerwithbooks.com/books/${book.id}/`,
-};
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: breadcrumbs.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  },
+];
 ---
 
 <Base
@@ -38,9 +79,17 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <article class="mx-auto max-w-3xl px-5 pt-16 pb-10">
+    <nav aria-label="Breadcrumb" class="mb-8 text-sm text-soft">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><a href="/" class="hover:text-accent">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href="/books/" class="hover:text-accent">Books</a></li>
+      </ol>
+    </nav>
+
     <header class="pb-8 border-b border-line">
       <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Book · distilled</p>
-      <h1 class="mt-3 font-serif text-4xl font-semibold tracking-tight leading-tight">
+      <h1 class="mt-3 text-wrap break-words font-serif text-3xl font-semibold tracking-tight leading-tight sm:text-4xl">
         {book.data.title}
       </h1>
       <p class="mt-2 text-soft">
@@ -58,16 +107,23 @@ const jsonLd = {
         >
           Save this book
         </button>
-        {book.data.tags.map((tag) => (
-          <span class="text-xs uppercase tracking-wider text-faint font-sans">{tag}</span>
+        {topics.map((topic) => (
+          <a
+            href={`/topics/${topic.slug}/`}
+            class="text-xs uppercase tracking-wider text-faint font-sans hover:text-accent"
+          >
+            {topic.label}
+          </a>
         ))}
       </div>
     </header>
 
-    <div class="mt-4 py-4 px-5 bg-wash rounded-sm text-[0.95rem] text-soft leading-relaxed">
-      <span class="font-semibold text-ink">Read this if:</span>
-      {book.data.readIf}
-    </div>
+    <section class="mt-4 py-4 px-5 bg-white/60 border border-line rounded-sm text-[0.95rem] text-soft leading-relaxed">
+      <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans mb-2">
+        Useful for
+      </h2>
+      <p>{book.data.readIf}</p>
+    </section>
 
     <div class="prose-awb mt-8">
       <Content />

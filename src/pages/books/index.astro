@@ -4,12 +4,45 @@ import Base from '../../layouts/Base.astro';
 import BookRow from '../../components/BookRow.astro';
 
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
+const url = 'https://answerwithbooks.com/books/';
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: 'Answer with Books source library',
+    description:
+      'A source library of books distilled into mental models, frameworks, and practical applications.',
+    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+    mainEntity: { '@id': `${url}#itemlist` },
+  },
+  {
+    '@type': 'ItemList',
+    '@id': `${url}#itemlist`,
+    itemListElement: books.map((book, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: book.data.title,
+      url: `https://answerwithbooks.com/books/${book.id}/`,
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Answer with Books', item: 'https://answerwithbooks.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Books', item: url },
+    ],
+  },
+];
 ---
 
 <Base
   title="Books"
   description="The shelf: every book on this site, distilled into mental models, frameworks, and the situations they're built for."
   path="/books/"
+  jsonLd={jsonLd}
 >
   <section class="mx-auto max-w-6xl px-5 pt-16 pb-8">
     <p class="text-xs uppercase tracking-[0.18em] text-accent font-sans">Source library</p>
