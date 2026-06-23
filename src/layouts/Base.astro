@@ -29,6 +29,7 @@ const imageUrl = new URL(image, site).href;
 const structuredData = Array.isArray(jsonLd)
   ? { '@context': 'https://schema.org', '@graph': jsonLd }
   : jsonLd;
+const gaMeasurementId = 'G-FNWRC3EMV4';
 
 const nav = [
   { href: '/books/', label: 'Books' },
@@ -81,6 +82,11 @@ const current = Astro.url.pathname;
     />
 
     {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} />
+    <script
+      is:inline
+      set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaMeasurementId}');`}
+    />
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink">
     <header class="border-b border-line">
