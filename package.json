@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "build:local": "PATH=$HOME/.nvm/versions/node/v22.12.0/bin:$PATH astro build",
+    "build:local": "rm -rf .astro dist node_modules/.astro && PATH=$HOME/.nvm/versions/node/v22.12.0/bin:$PATH astro build",
     "covers": "node scripts/generate-cover-assets.mjs --provider=gemini",
     "covers:svg": "node scripts/generate-cover-assets.mjs --provider=svg",
     "covers:prompts": "node scripts/generate-cover-assets.mjs --provider=prompts",

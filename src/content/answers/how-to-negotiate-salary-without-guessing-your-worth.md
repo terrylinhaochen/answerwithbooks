@@ -65,3 +65,15 @@ Then stop talking. The silence is uncomfortable, but filling it usually means ne
 ## The working rule
 
 Negotiate from evidence and curiosity, not self-worth. Your worth is not the number. The number is a deal term inside a labor market.
+
+## Why this matters now
+
+Salary negotiation gets emotionally loaded because the number feels like a judgment of personal worth. That makes people either over-explain, under-ask, or anchor themselves to the first number that feels socially safe. The better frame is colder: compensation is a deal term inside a market with constraints.
+
+[*Never Split the Difference*](/books/never-split-the-difference/) helps you uncover what is movable without turning the conversation into a fight. [*Thinking, Fast and Slow*](/books/thinking-fast-and-slow/) explains why the first number matters so much: anchors shape what feels reasonable even when they are arbitrary.
+
+## How to use this answer
+
+Before replying to an offer, write your evidence: market range, scope, alternatives, and what parts of the package can move. Then ask a calibrated question that exposes constraints instead of making a speech.
+
+The goal is not to feel fearless. It is to negotiate from evidence, let silence work, and avoid accidentally bargaining against yourself.

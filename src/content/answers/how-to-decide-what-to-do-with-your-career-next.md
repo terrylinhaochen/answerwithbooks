@@ -60,3 +60,15 @@ This prevents career design from becoming pure mood tracking.
 ## The working rule
 
 Do not ask your anxious brain to solve your whole career in one sitting. Create evidence. Then let the next step become obvious enough to take.
+
+## Why this matters now
+
+Career advice gets shallow when it treats work as identity theater: find your passion, make the leap, become the person you were meant to be. The hard version is more practical. You need to learn what kind of work gives you energy, what kind of work builds durable skill, and what current obligations make certain options more expensive than they look.
+
+[*Designing Your Life*](/books/designing-your-life/) keeps the question experimental: build small prototypes instead of demanding one perfect answer. [*So Good They Can't Ignore You*](/books/so-good-they-cant-ignore-you/) keeps the experiment honest by asking what career capital each path builds. Together, they turn "what should I do with my life?" into a sequence of cheap tests.
+
+## How to use this answer
+
+Pick one career option you keep replaying and write the unknowns beneath it. Then choose the cheapest unknown to test this week: one conversation, one small project, one portfolio piece, one day shadowing someone, or one honest audit of the skill gap.
+
+The goal is not certainty. The goal is to make the next move informed enough that your future self has better evidence than your current anxiety.

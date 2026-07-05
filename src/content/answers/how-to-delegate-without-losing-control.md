@@ -60,3 +60,15 @@ Then let the person work inside the box. If the box was unclear, fix the box bef
 ## The working rule
 
 Delegation is not losing control. It is moving control from your hands into a clear operating system: output, context, checkpoints, and trust calibrated to the task.
+
+## Why this matters now
+
+Delegation advice often says "trust your team," but the practical problem is usually not trust in the abstract. It is that the work was handed off without a shared definition of output, decision rights, quality bar, escalation path, or checkpoint rhythm. The manager then feels forced to choose between micromanaging and disappearing.
+
+[*High Output Management*](/books/high-output-management/) makes delegation a leverage system, not a personality trait. [*The Effective Executive*](/books/the-effective-executive/) adds the standard that work should be defined by contribution, not activity. Together, they make the handoff concrete enough that control lives in the system instead of in constant manager intervention.
+
+## How to use this answer
+
+Choose one task you are reluctant to delegate and write the handoff before assigning it: outcome, context, constraints, decision rights, checkpoint, and escalation rule. If any part is vague, the delegation is not ready yet.
+
+The practical test is simple: can the other person make progress without guessing what you meant, and can you stay informed without taking the work back?

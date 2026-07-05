@@ -89,3 +89,15 @@ Now the team can test the bet. Maybe the answer is an export. Maybe it is a sche
 7. Test the bet before building the full requested solution.
 
 Messy feedback is not bad. It is raw material. The mistake is treating raw material as a roadmap.
+
+## Why this matters now
+
+Feedback feels abundant but often behaves like noise. One loud customer can sound like a market, one vivid complaint can pull a roadmap off course, and one feature request can hide three different jobs. The work is not to collect more comments; it is to preserve evidence while stripping away accidental volume.
+
+[*The Mom Test*](/books/the-mom-test/) keeps individual comments grounded in behavior: what happened, what did it cost, what did the customer try? [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) keeps the aggregate honest: independent repeats matter more than one persuasive voice.
+
+## How to use this answer
+
+Take a batch of feedback and rewrite each item as request, evidence, and bet. Then sort by repeated pain, segment, consequence, and current workaround before deciding what to build.
+
+The answer is useful only if the roadmap changes because the evidence got clearer, not because the feedback got louder.

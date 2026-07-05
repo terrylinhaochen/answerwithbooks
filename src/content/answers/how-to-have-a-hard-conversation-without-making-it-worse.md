@@ -56,3 +56,15 @@ Example: "The last two handoffs came two days late. My concern is that the plan 
 ## The working rule
 
 A hard conversation succeeds when both people leave with more accurate shared meaning than they entered with. If you preserve that condition, the conversation can be direct without becoming destructive.
+
+## Why this matters now
+
+Hard conversations go wrong when the real issue is mixed with threat. The other person hears accusation, you hear defensiveness, and both sides start protecting identity instead of improving the shared facts. Avoiding the conversation preserves comfort but lets the bad pattern compound.
+
+[*Crucial Conversations*](/books/crucial-conversations/) gives the operating sequence: restore safety, separate facts from stories, and invite the other person's view. [*Thinking, Fast and Slow*](/books/thinking-fast-and-slow/) explains why that sequence matters: under pressure, both people substitute a simpler story for a more accurate one.
+
+## How to use this answer
+
+Before the conversation, write three lines: the observable facts, the story you are telling yourself, and the outcome you want for both people. Start with the facts and ask for their view before arguing your interpretation.
+
+The win condition is not that they immediately agree. It is that the conversation ends with a more accurate shared pool of meaning than it started with.

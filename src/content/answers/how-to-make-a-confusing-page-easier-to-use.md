@@ -77,3 +77,15 @@ Before shipping, verify:
 6. The next step says what happens next.
 
 If users are confused, do not start by writing a help paragraph. Start by making the page need less help.
+
+## Why this matters now
+
+Confusing pages rarely fail because users are incapable. They fail because the page makes people spend scarce attention decoding purpose, audience, proof, and next step. Every extra interpretation tax creates a moment where the user can leave.
+
+[*Don't Make Me Think*](/books/dont-make-me-think/) gives the core usability standard: the page should explain itself before the user starts reasoning. [*Thinking, Fast and Slow*](/books/thinking-fast-and-slow/) explains why that matters: people scan, substitute, satisfice, and follow the most fluent path.
+
+## How to use this answer
+
+Open the page cold and ask five-second questions: what is this, who is it for, why should I believe it, and what happens if I click? Fix the first answer that requires explanation.
+
+Do not add a help paragraph until you have removed the ambiguity that made the help paragraph necessary.

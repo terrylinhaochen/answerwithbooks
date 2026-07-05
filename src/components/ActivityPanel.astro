@@ -27,7 +27,7 @@ const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
   <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div class="min-w-0">
       <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">{eyebrow}</p>
-      <h2 class="mt-3 max-w-xl font-serif text-3xl leading-tight tracking-[-0.015em]">
+      <h2 class="mt-3 max-w-xl font-serif text-3xl leading-tight">
         {title}
       </h2>
       <p class="mt-3 max-w-2xl leading-relaxed text-soft">
@@ -36,7 +36,7 @@ const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
     </div>
     {
       showLink && (
-        <a href="/profile/" class="shrink-0 font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
+        <a href="/profile/" class="inline-flex min-h-8 shrink-0 items-center font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
           Open profile
         </a>
       )

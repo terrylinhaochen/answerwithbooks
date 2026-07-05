@@ -9,16 +9,16 @@ import ActivityPanel from '../components/ActivityPanel.astro';
   path="/profile/"
   robots="noindex, follow"
 >
-  <section data-profile-loading class="mx-auto max-w-6xl px-5 pb-16 pt-16">
-    <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Profile</p>
-    <p class="mt-3 font-serif text-4xl font-semibold leading-tight">Checking your session...</p>
+  <section data-profile-loading class="awb-section pb-16 pt-16">
+    <p class="awb-eyebrow">Profile</p>
+    <p class="mt-3 font-serif text-4xl leading-tight">Checking your session...</p>
   </section>
 
-  <section data-profile-shell class="mx-auto hidden max-w-6xl px-5 pb-16 pt-16">
+  <section data-profile-shell class="awb-section hidden pb-16 pt-16">
     <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
       <div>
-        <p class="font-sans text-xs uppercase tracking-[0.18em] text-accent">Profile</p>
-        <h1 class="mt-3 max-w-3xl font-serif text-5xl font-semibold leading-tight tracking-tight">
+        <p class="awb-eyebrow">Profile</p>
+        <h1 class="mt-3 max-w-3xl font-serif text-5xl leading-tight">
           Your insight trail.
         </h1>
         <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">
@@ -29,24 +29,24 @@ import ActivityPanel from '../components/ActivityPanel.astro';
         <a
           href="/my-books/"
           data-profile-primary
-          class="bg-ink px-5 py-2.5 text-[0.95rem] text-paper transition-colors hover:bg-accent"
+          class="awb-pill awb-pill-primary"
         >
           Open dashboard
         </a>
         <a
           href="/answers/"
-          class="border border-line px-5 py-2.5 text-[0.95rem] text-soft transition-colors hover:border-accent hover:text-accent"
+          class="awb-pill awb-pill-outline"
         >
           Explore insights
         </a>
       </div>
     </div>
 
-    <section data-onboarding-summary class="mt-8 hidden border-y border-line bg-wash/60 px-5 py-6 sm:px-6">
+    <section data-onboarding-summary class="awb-panel mt-8 hidden px-5 py-6 sm:px-6">
       <div class="grid gap-5 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
         <div>
-          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Personalization setup</p>
-          <h2 class="mt-3 font-serif text-3xl font-semibold leading-tight">
+          <p class="awb-eyebrow">Personalization setup</p>
+          <h2 class="mt-3 font-serif text-3xl leading-tight">
             Your shelf has a starting point.
           </h2>
           <p class="mt-3 text-sm leading-relaxed text-soft" data-onboarding-sync>
@@ -54,19 +54,19 @@ import ActivityPanel from '../components/ActivityPanel.astro';
           </p>
         </div>
         <div class="grid gap-3 sm:grid-cols-3">
-          <div class="border border-line bg-paper p-4">
+          <div class="awb-card-link p-4">
             <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Focus</p>
-            <p class="mt-2 font-serif text-xl font-semibold leading-tight" data-onboarding-focus></p>
+            <p class="mt-2 font-serif text-xl leading-tight" data-onboarding-focus></p>
           </div>
-          <div class="border border-line bg-paper p-4">
+          <div class="awb-card-link p-4">
             <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Shelf</p>
-            <p class="mt-2 font-serif text-xl font-semibold leading-tight" data-onboarding-shelf></p>
+            <p class="mt-2 font-serif text-xl leading-tight" data-onboarding-shelf></p>
           </div>
-          <div class="border border-line bg-paper p-4">
+          <div class="awb-card-link p-4">
             <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Top of mind</p>
             <p class="mt-2 text-sm leading-relaxed text-soft" data-onboarding-goal></p>
           </div>
-          <div class="border border-line bg-paper p-4 sm:col-span-3">
+          <div class="awb-card-link p-4 sm:col-span-3">
             <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">ChatGPT</p>
             <p class="mt-2 text-sm leading-relaxed text-soft" data-onboarding-chatgpt></p>
           </div>

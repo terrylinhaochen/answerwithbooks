@@ -22,7 +22,7 @@ const url = `https://answerwithbooks.com/topics/${topic.slug}/`;
 const faqs = [
   {
     question: `What does the ${topic.label} topic cover?`,
-    answer: topic.description,
+    answer: `${topic.description} ${topic.body}`,
   },
   {
     question: `How many ${topic.label.toLowerCase()} guides and books are available?`,
@@ -40,7 +40,7 @@ const jsonLd = [
     '@id': `${url}#webpage`,
     url,
     name: `${topic.label} guides and books`,
-    description: topic.description,
+    description: `${topic.description} ${topic.body}`,
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
     mainEntity: { '@id': `${url}#itemlist` },
@@ -84,7 +84,7 @@ const jsonLd = [
   path={`/topics/${topic.slug}/`}
   jsonLd={jsonLd}
 >
-  <section class="mx-auto max-w-6xl px-5 pt-16 pb-8">
+  <section class="awb-section pt-16 pb-8">
     <nav aria-label="Breadcrumb" class="mb-8 text-sm text-soft">
       <ol class="flex flex-wrap items-center gap-2">
         <li><a href="/" class="hover:text-accent">Home</a></li>
@@ -92,23 +92,26 @@ const jsonLd = [
         <li><a href="/topics/" class="hover:text-accent">Topics</a></li>
       </ol>
     </nav>
-    <p class="text-xs uppercase tracking-[0.18em] text-accent font-sans">Topic</p>
-    <h1 class="mt-3 font-serif text-5xl font-semibold tracking-tight">{topic.label}</h1>
-    <p class="mt-4 text-soft leading-relaxed max-w-2xl">
+    <p class="awb-eyebrow">Topic</p>
+    <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">{topic.label}</h1>
+    <p class="awb-copy mt-4 max-w-2xl">
       {topic.description}
+    </p>
+    <p class="mt-5 max-w-3xl text-lg leading-relaxed text-soft">
+      {topic.body}
     </p>
   </section>
 
-  <section class="mx-auto max-w-6xl px-5 pb-16 pt-6 border-t border-line">
+  <section class="awb-section border-t border-line pb-16 pt-6">
     {topic.answers.length > 0 ? (
       <>
-        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Guides</h2>
-        <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <h2 class="awb-eyebrow">Guides</h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {topic.answers.map((answer) => <AnswerRow answer={answer} bookTitles={bookTitles} />)}
         </div>
       </>
     ) : (
-      <div class="rounded-md border border-line bg-white/55 p-5 text-soft">
+      <div class="awb-panel p-5 text-soft">
         No published guides here yet. This category is part of the content map, but it needs stronger
         demand evidence and book-source fit before publishing.
       </div>
@@ -116,8 +119,8 @@ const jsonLd = [
 
     {topic.books.length > 0 && (
       <div class={topic.answers.length > 0 ? 'mt-12' : ''}>
-        <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Source books</h2>
-        <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <h2 class="awb-eyebrow">Source books</h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {topic.books.map((book) => <BookRow book={book} />)}
         </div>
       </div>

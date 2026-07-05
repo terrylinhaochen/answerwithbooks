@@ -65,3 +65,15 @@ Show the explanation to five target users separately. Ask each to explain it bac
 6. Keep the version that survives independent retelling.
 
 The goal is not to make the idea smaller. It is to make the handle smaller, so the full idea can be picked up.
+
+## Why this matters now
+
+A confusing idea usually fails before anyone reaches the nuance. People do not reject it after careful analysis; they forget it, misrepeat it, or remember the least important part. That is especially costly for products, essays, launches, and internal strategy because distribution depends on other people being able to carry the idea accurately.
+
+[*Made to Stick*](/books/made-to-stick/) supplies the packaging discipline: find the core, make it concrete, and give the listener a handle. [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) supplies the test: do not trust one reaction. See whether independent people repeat the same meaning back.
+
+## How to use this answer
+
+Take the thing you are explaining and reduce it to one memorable sentence plus one concrete example. Show it to five people separately, ask them to explain it back, and keep revising until the version that comes back is the version you meant to send.
+
+The goal is not clever copy. It is transmission: the idea should survive being carried by someone who is not you.

@@ -60,3 +60,15 @@ Use this sequence:
 5. Delete or decline what should not be carried.
 
 The goal is not to become perfectly organized. It is to stop using your nervous system as the task manager.
+
+## Why this matters now
+
+Task overwhelm is often misdiagnosed as an app problem. The real problem is that every open loop is still asking for attention, and the system has no trusted place to hold what is real but not active. Reorganizing the whole life can become another avoidance project.
+
+[*Getting Things Done*](/books/getting-things-done/) supplies the capture discipline: get the open loops out of your head and define next actions. [*Four Thousand Weeks*](/books/four-thousand-weeks/) supplies the constraint: not everything deserves to stay active just because it is real.
+
+## How to use this answer
+
+Do a 20-minute reset: capture everything, define the next action for the few items that matter this week, park the legitimate later items, and delete or decline what should not keep renting space in your attention.
+
+The aim is not a perfect system. It is a nervous system that no longer has to remember every promise at once.

@@ -59,8 +59,6 @@ During the call, replace future-tense reactions with past-tense specifics. Ask w
 
 End by asking for a next step that fits the evidence. Early on, that may be another example, an introduction, or permission to inspect a sanitized artifact. Later, it may be a pilot, a paid test, or a commitment from the actual buyer. The next step is part of the evidence.
 
-> "Opinions are worthless."
-
 That short line is the book's operating standard. Treat opinions as conversation texture, not decision evidence.
 
 ## When this lens breaks

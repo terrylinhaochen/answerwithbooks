@@ -31,14 +31,14 @@ const previewParagraphs = compact
     : [answer.data.description];
 ---
 
-<article class={`group flex h-full flex-col rounded-2xl border border-line bg-card shadow-sm transition-colors hover:border-ink/25 ${compact ? 'p-4' : 'p-5'}`}>
+<article class={`awb-card-link group flex h-full flex-col ${compact ? 'p-4' : 'p-5'}`}>
   <AnswerCover answer={answer} class={compact ? 'mb-4' : 'mb-5'} />
   <div class="flex min-w-0 flex-1 flex-col self-stretch">
     <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">
       Answer · {sourceCount} {sourceCount === 1 ? 'book' : 'books'}
     </p>
-    <h3 class={`mt-2 font-serif tracking-[-0.01em] leading-snug ${compact ? 'text-xl' : 'text-2xl'}`}>
-      <a href={`/answers/${answer.id}/`} class="hover:text-soft">{answer.data.question}</a>
+    <h3 class={`mt-2 font-serif leading-snug ${compact ? 'text-xl' : 'text-2xl'}`}>
+      <a href={`/answers/${answer.id}/`} class="inline-flex min-h-8 items-center hover:text-soft">{answer.data.question}</a>
     </h3>
     {
       sourceBooks.length > 0 && !compact && (
@@ -49,7 +49,7 @@ const previewParagraphs = compact
           {sourceBooks.map((book) => (
             <a
               href={`/books/${book.slug}/`}
-              class="max-w-full rounded-full border border-line px-2.5 py-1 font-sans text-xs text-soft transition-colors hover:border-ink hover:text-ink"
+              class="inline-flex min-h-8 max-w-full items-center rounded-full border border-line px-2.5 py-1 font-sans text-xs text-soft transition-colors hover:border-ink hover:text-ink"
             >
               {book.title}
             </a>
@@ -61,7 +61,7 @@ const previewParagraphs = compact
       {previewParagraphs.map((paragraph) => <p>{paragraph}</p>)}
     </div>
     <p class="mt-auto pt-4 text-sm font-sans">
-      <a href={`/answers/${answer.id}/`} class="font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
+      <a href={`/answers/${answer.id}/`} class="inline-flex min-h-8 items-center font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
         Read the answer
       </a>
     </p>

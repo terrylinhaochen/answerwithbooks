@@ -17,32 +17,39 @@ The book's title is the standard it sets: your interview questions should be des
 
 ## The three rules
 
-1. **Talk about their life, not your idea.** The interview is about their workflow, their costs, their attempts to fix things. The moment you pitch, every subsequent answer measures niceness, not need.
-2. **Ask about specifics in the past, not generics or the future.** "Would you ever...?", "Do you usually...?", "Would you pay for...?" all invite hypothetical selves who are more organized, more diligent, and freer with money than any real human. The corrective: "When did this last happen? Walk me through it. What did it cost? What did you try?"
-3. **Talk less, listen more.** You cannot learn while you are talking. Every minute you spend explaining is a minute of data you didn't collect.
+First, talk about their life, not your idea. The interview is about their workflow, their costs, their attempts to fix things, and the constraints already shaping their behavior. The moment you pitch, every answer after that measures niceness and imagination more than need.
+
+Second, ask about specifics in the past, not generics or the future. "Would you ever...?", "Do you usually...?", and "Would you pay for...?" all invite hypothetical selves who are more organized, more diligent, and freer with money than any real human. The corrective is concrete: "When did this last happen? Walk me through it. What did it cost? What did you try?"
+
+Third, talk less and listen more. You cannot learn while you are explaining. Every minute spent defending the idea is a minute of evidence you did not collect.
 
 ## The taxonomy of bad data
 
-Three contaminants show up in every interview, and each has a standard response:
+Three contaminants show up in almost every interview, and each needs a different response.
 
-- **Compliments** ("This is so cool!") — worthless. Deflect and redirect: don't write them down, don't repeat them to your team, get back to their life.
-- **Fluff** — generic claims ("I *always*..."), future promises ("I *would definitely*..."), hypotheticals ("I *might*..."). Anchor fluff to reality: "When did that last actually happen?"
-- **Ideas** ("You should add...!") — flattering, dangerous, and not your roadmap. Dig for the motivation underneath: "Why do you want that? What would it let you do? How are you coping without it?" The request is rarely the requirement.
+Compliments are the easiest to collect and the least useful. "This is cool" can feel like progress because it lowers the emotional temperature of the meeting. Treat it as social texture, not evidence. Do not write it in the product notes, do not repeat it to the team as validation, and do not let it replace the next behavioral question.
+
+Fluff is more subtle: generic claims, future promises, and statements that sound decisive but are not attached to a real incident. When someone says they always do something, definitely would buy something, or might use something, anchor the statement to reality. Ask when it last happened and what they actually did.
+
+Ideas are flattering because they make the conversation feel collaborative. They are also dangerous because a requested feature is not necessarily the real requirement. When someone says you should add something, dig underneath it: why do they want it, what would it let them do, and how are they coping without it today?
 
 There's a fourth contaminant the book is blunt about: **you**. Founders fish for validation, pitch when nervous, and talk formally when they should be casual. The data is only as good as your discipline.
 
 ## Signals that actually mean something
 
-- **They've already tried to solve it.** Googled, built a spreadsheet, paid for a workaround. This is the strongest single signal in the method — people with burning problems leave evidence. Its absence is disqualifying: "If they haven't looked for ways of solving it already, they're not going to look for yours."
-- **Specificity and emotion.** Real frustration over a specific recent incident beats agreeable generalities about "pain points."
-- **Commitment.** The interview's exit measurement. A meeting "went well" only if it ended with the other person giving up something of value: scheduled time with an agenda, an introduction to someone with budget, or money (pre-order, LOI, deposit). "Sounds great, keep me posted" is a rejection delivered politely.
+The strongest signal is that they have already tried to solve the problem. They googled, built a spreadsheet, paid for a workaround, asked peers, or created a manual process. People with burning problems leave evidence. If there is no evidence of prior effort, the problem may be real but not urgent enough to support a product.
+
+Specificity and emotion are the next signal. A real story about last Thursday's failure is more valuable than a general statement about a "pain point." The useful detail is not only that they were frustrated; it is what triggered the frustration, what it interrupted, and what it cost.
+
+Commitment is the exit measurement. A meeting went well only if the other person gave up something of value: scheduled time with a clear agenda, an introduction to someone with budget, access to a real artifact, or money in the form of a deposit, pilot, pre-order, or letter of intent. "Sounds great, keep me posted" is often a rejection delivered politely.
 
 ## Practical mechanics
 
-- **Prep three big questions.** Before any conversation, decide with your team the three things you most need to learn. Terrifying questions — the ones that could kill the idea — go first, not last.
-- **Keep it casual.** Early learning conversations don't need a lab and a consent form; the best ones feel like normal conversation about their work. Formality invites performance.
-- **Take notes in their words**, not your interpretations. "Spends ~3 hrs/week reconciling exports by hand" is data; "loves the idea" is not.
-- **Review with the team.** An interview that isn't shared and acted on is a coffee chat.
+Before any conversation, decide the three things you most need to learn. The frightening questions, the ones that could kill the idea, should come first rather than being saved for the end after everyone is already invested in a pleasant call.
+
+Keep early learning conversations casual when the context allows it. A good conversation about someone's workflow can happen in a support thread, at a conference, or in a normal customer call. Formality can make people perform as interview subjects instead of describing how they actually work.
+
+Take notes in their words, not in your interpretation. "Spends three hours a week reconciling exports by hand" is data. "Loves the idea" is not. Afterward, review the notes with the team and decide what changed. An interview that never alters a decision was only a coffee chat.
 
 ## The one-line summary
 
