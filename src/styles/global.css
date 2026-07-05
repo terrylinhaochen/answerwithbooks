@@ -338,6 +338,10 @@ h3,
   display: none;
 }
 
+.awb-nav__cta.hidden {
+  display: none;
+}
+
 .awb-nav__action:hover,
 .awb-nav__action--current {
   border-color: color-mix(in srgb, var(--color-ink) 22%, var(--color-line));

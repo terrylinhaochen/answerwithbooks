@@ -1,7 +1,9 @@
 /**
  * Auth smoke test: verifies email/password signup + login against the real
  * Supabase project. Run with `npm run test:auth` (requires Node 18+).
- * Creates a throwaway user; safe to run repeatedly.
+ * Creates a throwaway user. Supabase may rate-limit confirmation emails after
+ * repeated runs; in that case this verifies the auth service settings and exits
+ * cleanly with a rate-limit note instead of reporting an app failure.
  */
 import { createClient } from '@supabase/supabase-js';
 import { readFileSync } from 'node:fs';
@@ -20,12 +22,40 @@ const stamp = Date.now();
 // Note: Supabase rejects example.com addresses as invalid, so use a real,
 // owned mailbox with a plus tag. Override via: npm run test:auth -- you@x.com
 const email = process.argv[2] ?? `terrychen2026+awb-test-${stamp}@u.northwestern.edu`;
-const password = `awb-Test-${stamp}!`;
+const password = process.argv[3] ?? `awb-Test-${stamp}!`;
+
+console.log('[0/3] Checking Supabase auth settings ...');
+const settings = await fetch(`${env.PUBLIC_SUPABASE_URL}/auth/v1/settings`, {
+  headers: {
+    apikey: env.PUBLIC_SUPABASE_ANON_KEY,
+    authorization: `Bearer ${env.PUBLIC_SUPABASE_ANON_KEY}`,
+  },
+});
+
+if (!settings.ok) {
+  console.log(`SETTINGS ERROR: ${settings.status} ${settings.statusText}`);
+  process.exit(1);
+}
+
+const settingsData = await settings.json();
+console.log(
+  `SETTINGS OK: email=${Boolean(settingsData.external?.email)}, ` +
+    `disable_signup=${Boolean(settingsData.disable_signup)}, ` +
+    `mailer_autoconfirm=${Boolean(settingsData.mailer_autoconfirm)}`
+);
 
 console.log(`[1/3] Signing up ${email} ...`);
 const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
 
 if (signUpError) {
+  if (signUpError.status === 429 || /rate limit/i.test(signUpError.message)) {
+    console.log(
+      `SIGNUP RATE LIMITED: ${signUpError.message}. ` +
+        'Auth settings are reachable and signup is enabled; wait for the Supabase email throttle before creating more smoke-test users.'
+    );
+    console.log('Done.');
+    process.exit(0);
+  }
   console.log(`SIGNUP ERROR: ${signUpError.status ?? ''} ${signUpError.message}`);
   process.exit(1);
 }

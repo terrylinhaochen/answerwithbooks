@@ -1,0 +1,369 @@
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { extname, join, normalize, resolve } from 'node:path';
+import { chromium } from 'playwright';
+
+const root = resolve(new URL('..', import.meta.url).pathname);
+const distRoot = join(root, 'dist');
+const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const supabaseRequests = [];
+let activeUser = null;
+
+if (!existsSync(join(distRoot, 'index.html'))) {
+  throw new Error('Missing dist/index.html. Run npm run build:local before npm run test:ui.');
+}
+
+const server = createStaticServer(distRoot);
+await new Promise((resolveListen) => server.listen(0, '127.0.0.1', resolveListen));
+const { port } = server.address();
+const baseURL = `http://127.0.0.1:${port}`;
+
+let browser;
+try {
+  browser = await chromium.launch({
+    headless: true,
+    ...(existsSync(chromePath) ? { executablePath: chromePath } : {}),
+  });
+
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 3,
+    isMobile: true,
+    permissions: ['clipboard-read', 'clipboard-write'],
+  });
+
+  await context.route('https://*.supabase.co/**', handleSupabaseRoute);
+  const page = await context.newPage();
+
+  await testHomeInteractions(page);
+  await testFilters(page);
+  await testAuthRedirects(page);
+  await testOnboardingSignupProfileAndShelf(page);
+  await testLoginAndSignout(page);
+
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'signup'),
+    'signup flow should call Supabase signup'
+  );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'login'),
+    'login flow should call Supabase password token endpoint'
+  );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'update-user'),
+    'onboarding sync should update Supabase user metadata'
+  );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'profile-upsert'),
+    'onboarding sync should attempt profiles upsert'
+  );
+
+  await context.close();
+  console.log('UI smoke test passed: mobile nav, carousel, filters, saved books, onboarding, signup, profile sync, login, signout, and install copy verified.');
+} finally {
+  if (browser) await browser.close();
+  server.closeAllConnections();
+  await new Promise((resolveClose) => server.close(resolveClose));
+}
+
+async function testHomeInteractions(page) {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await assertNoMobileHeaderOverlap(page);
+
+  await page.locator('[data-carousel-slide]:visible [data-carousel-dot="1"]').click();
+  await assertVisibleText(page, '[data-carousel-slide]:visible', 'How to tell whether to pivot or keep going');
+
+  await page.locator('[data-copy-install]').scrollIntoViewIfNeeded();
+  await page.locator('[data-copy-install]').click();
+  await expectText(page.locator('[data-copy-install]'), /Copied/);
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  assert.equal(copied, 'npx answer-with-books install --skill --api');
+}
+
+async function testFilters(page) {
+  await page.goto('/answers/', { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-filter-search]').fill('pivot');
+  await expectText(page.locator('[data-filter-count]'), /insight/);
+  await assertVisibleText(page, '[data-filter-list]', 'pivot');
+  await page.locator('[data-filter-search]').fill('zzzz-no-answer');
+  await expectText(page.locator('[data-filter-empty]'), /No insights match/);
+
+  await page.goto('/books/', { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-filter-search]').fill('deep work');
+  await expectText(page.locator('[data-filter-count]'), /1 book/);
+  await assertVisibleText(page, '[data-filter-list]', 'Deep Work');
+  await page.locator('[data-filter-search]').fill('zzzz-no-book');
+  await expectText(page.locator('[data-filter-count]'), /0 books/);
+}
+
+async function testAuthRedirects(page) {
+  activeUser = null;
+  await page.goto('/profile/', { waitUntil: 'domcontentloaded' });
+  await page.waitForURL('**/onboarding/start/?from=profile');
+  assert.match(page.url(), /\/onboarding\/start\/\?from=profile$/);
+}
+
+async function testOnboardingSignupProfileAndShelf(page) {
+  await page.goto('/onboarding/start/', { waitUntil: 'domcontentloaded' });
+  await page.locator('label').filter({ hasText: 'Business' }).click();
+  await page.locator('label').filter({ hasText: 'Career' }).click();
+  await page.locator('[data-step-next]').click();
+  await page.locator('label').filter({ hasText: 'Use books I already care about' }).click();
+  await page.locator('[data-step-next]').click();
+  await page.locator('textarea[name="goal"]').fill('I need better customer interviews and career decisions.');
+  await page.locator('[data-chatgpt-connect]').click();
+  await page.locator('input[name="chatgptUseCase"]').fill('Use my shelf while planning product content.');
+  await page.locator('[data-step-submit]').click();
+  await page.waitForURL('**/signup/?from=onboarding');
+  assert.equal(await page.evaluate(() => localStorage.getItem('awb:onboarding:pending')), '1');
+  await assertVisibleText(page, '[data-signup-copy]', 'Create an account to sync it to your profile');
+
+  await page.locator('#email').fill('reader@example.test');
+  await page.locator('#password').fill('awb-Test-Password-123!');
+  await page.locator('#submit-btn').click();
+  await page.waitForURL('**/profile/?onboarded=1');
+  await page.waitForSelector('[data-profile-shell]:not(.hidden)');
+  await assertVisibleText(page, '[data-onboarding-focus]', 'business, career');
+  await assertVisibleText(page, '[data-onboarding-shelf]', 'owned');
+  await assertVisibleText(page, '[data-onboarding-goal]', 'customer interviews');
+  await assertVisibleText(page, '[data-onboarding-chatgpt]', 'Use my shelf while planning product content.');
+  await assertVisibleText(page, '[data-onboarding-sync]', 'Synced to your account.');
+  assert.equal(await page.evaluate(() => localStorage.getItem('awb:onboarding:pending')), null);
+
+  await page.goto('/books/atomic-habits/', { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-save-book]').click();
+  await expectText(page.locator('[data-save-book]'), /Saved - remove/);
+  await page.goto('/my-books/', { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#library-content:not(.hidden)');
+  await assertVisibleText(page, '#saved-list', 'Atomic Habits');
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expectText(page.locator('[data-auth-link]'), /Profile/);
+  assert.equal(await page.locator('[data-onboarding-link]').isHidden(), true);
+}
+
+async function testLoginAndSignout(page) {
+  await page.goto('/my-books/', { waitUntil: 'domcontentloaded' });
+  await page.locator('#signout-btn').click();
+  await page.waitForURL('**/');
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'logout'),
+    'signout flow should call Supabase logout'
+  );
+  activeUser = null;
+  await clearSupabaseBrowserState(page);
+
+  await page.goto('/login/', { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#login-form');
+  await page.locator('#email').fill('reader@example.test');
+  await page.locator('#password').fill('awb-Test-Password-123!');
+  await page.locator('#submit-btn').click();
+  await page.waitForURL('**/my-books/');
+  await page.waitForSelector('#library-content:not(.hidden)');
+  await assertVisibleText(page, '#library-content', 'Welcome back, reader');
+}
+
+async function clearSupabaseBrowserState(page) {
+  await page.evaluate(() => {
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith('sb-')) localStorage.removeItem(key);
+    }
+    for (const key of Object.keys(sessionStorage)) {
+      if (key.startsWith('sb-')) sessionStorage.removeItem(key);
+    }
+  });
+}
+
+async function assertNoMobileHeaderOverlap(page) {
+  const result = await page.evaluate(() => {
+    const pick = (selector) => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return {
+        x: rect.x,
+        y: rect.y,
+        right: rect.right,
+        bottom: rect.bottom,
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
+      };
+    };
+    const overlap = (a, b) => Boolean(a && b && a.x < b.right && a.right > b.x && a.y < b.bottom && a.bottom > b.y);
+    const brand = pick('.awb-brand');
+    const cta = pick('.awb-nav__cta');
+    const nav = pick('.awb-nav');
+    return {
+      brand,
+      cta,
+      nav,
+      overlaps: {
+        brandCta: overlap(brand, cta),
+        brandNav: overlap(brand, nav),
+        ctaNav: overlap(cta, nav),
+      },
+      scrollWidth: document.documentElement.scrollWidth,
+      viewportWidth: window.innerWidth,
+    };
+  });
+
+  assert.equal(result.overlaps.brandCta, false, 'brand and CTA should not overlap');
+  assert.equal(result.overlaps.brandNav, false, 'brand and nav should not overlap');
+  assert.equal(result.overlaps.ctaNav, false, 'CTA and nav should not overlap');
+  assert.ok(result.scrollWidth <= result.viewportWidth, 'mobile page should not horizontally overflow');
+}
+
+async function assertVisibleText(page, selector, text) {
+  const locator = page.locator(selector);
+  await locator.waitFor({ state: 'visible' });
+  await expectText(locator, text instanceof RegExp ? text : new RegExp(escapeRegExp(text), 'i'));
+}
+
+async function expectText(locator, pattern) {
+  await locator.waitFor({ state: 'visible' });
+  const deadline = Date.now() + 3000;
+  let value = '';
+  while (Date.now() < deadline) {
+    value = ((await locator.textContent()) ?? '').trim();
+    if (pattern.test(value)) return;
+    await new Promise((resolveWait) => setTimeout(resolveWait, 50));
+  }
+  assert.match(value, pattern);
+}
+
+async function handleSupabaseRoute(route) {
+  const request = route.request();
+  const url = new URL(request.url());
+  const method = request.method();
+  const body = parseJson(request.postData() || '{}');
+
+  if (url.pathname === '/auth/v1/signup' && method === 'POST') {
+    activeUser = makeUser(body.email);
+    supabaseRequests.push({ kind: 'signup', email: body.email });
+    return fulfillJson(route, makeSessionPayload(activeUser));
+  }
+
+  if (url.pathname === '/auth/v1/token' && method === 'POST') {
+    activeUser = makeUser(body.email || 'reader@example.test');
+    supabaseRequests.push({ kind: 'login', email: activeUser.email });
+    return fulfillJson(route, makeSessionPayload(activeUser));
+  }
+
+  if (url.pathname === '/auth/v1/user' && method === 'GET') {
+    return activeUser ? fulfillJson(route, activeUser) : fulfillJson(route, { msg: 'missing session' }, 401);
+  }
+
+  if (url.pathname === '/auth/v1/user' && method === 'PUT') {
+    activeUser = {
+      ...(activeUser ?? makeUser('reader@example.test')),
+      user_metadata: body.data ?? body,
+    };
+    supabaseRequests.push({ kind: 'update-user', metadata: activeUser.user_metadata });
+    return fulfillJson(route, activeUser);
+  }
+
+  if (url.pathname === '/auth/v1/logout') {
+    activeUser = null;
+    supabaseRequests.push({ kind: 'logout' });
+    return fulfillJson(route, {});
+  }
+
+  if (url.pathname === '/rest/v1/profiles') {
+    supabaseRequests.push({ kind: 'profile-upsert', method, body });
+    return fulfillJson(route, Array.isArray(body) ? body : [body], 201);
+  }
+
+  return fulfillJson(route, { ok: true });
+}
+
+function makeSessionPayload(user) {
+  return {
+    access_token: 'mock-access-token',
+    token_type: 'bearer',
+    expires_in: 3600,
+    expires_at: Math.floor(Date.now() / 1000) + 3600,
+    refresh_token: 'mock-refresh-token',
+    user,
+  };
+}
+
+function makeUser(email) {
+  return {
+    id: '00000000-0000-4000-8000-000000000001',
+    aud: 'authenticated',
+    role: 'authenticated',
+    email,
+    email_confirmed_at: new Date().toISOString(),
+    phone: '',
+    confirmed_at: new Date().toISOString(),
+    app_metadata: { provider: 'email', providers: ['email'] },
+    user_metadata: {},
+    identities: [],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+}
+
+function fulfillJson(route, payload, status = 200) {
+  return route.fulfill({
+    status,
+    contentType: 'application/json',
+    body: JSON.stringify(payload),
+    headers: {
+      'access-control-allow-origin': '*',
+      'access-control-allow-headers': '*',
+      'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+    },
+  });
+}
+
+function parseJson(raw) {
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+function createStaticServer(directory) {
+  return createServer((request, response) => {
+    try {
+      const url = new URL(request.url ?? '/', 'http://localhost');
+      let pathname = decodeURIComponent(url.pathname);
+      if (pathname.endsWith('/')) pathname += 'index.html';
+      let filePath = normalize(join(directory, pathname));
+      if (!filePath.startsWith(directory)) {
+        response.writeHead(403).end('Forbidden');
+        return;
+      }
+      if (!existsSync(filePath) && !extname(filePath)) filePath = join(filePath, 'index.html');
+      if (!existsSync(filePath) || statSync(filePath).isDirectory()) {
+        response.writeHead(404).end('Not found');
+        return;
+      }
+      response.writeHead(200, { 'content-type': mimeType(filePath) });
+      response.end(readFileSync(filePath));
+    } catch (error) {
+      response.writeHead(500).end(error instanceof Error ? error.message : 'Server error');
+    }
+  });
+}
+
+function mimeType(filePath) {
+  const ext = extname(filePath);
+  if (ext === '.html') return 'text/html; charset=utf-8';
+  if (ext === '.js') return 'text/javascript; charset=utf-8';
+  if (ext === '.css') return 'text/css; charset=utf-8';
+  if (ext === '.svg') return 'image/svg+xml';
+  if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
+  if (ext === '.png') return 'image/png';
+  if (ext === '.json') return 'application/json; charset=utf-8';
+  if (ext === '.xml') return 'application/xml; charset=utf-8';
+  if (ext === '.txt') return 'text/plain; charset=utf-8';
+  return 'application/octet-stream';
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

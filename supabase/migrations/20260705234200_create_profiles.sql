@@ -1,5 +1,5 @@
 -- Answer with Books user profile setup.
--- Apply this in Supabase SQL editor before relying on the optional profiles upsert.
+-- Stores optional onboarding/profile state for authenticated users.
 
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
