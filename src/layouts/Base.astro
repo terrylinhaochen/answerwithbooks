@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import { glocal } from '../lib/glocal';
 
 export interface Props {
   title: string;
@@ -29,13 +28,19 @@ const imageUrl = new URL(image, site).href;
 const structuredData = Array.isArray(jsonLd)
   ? { '@context': 'https://schema.org', '@graph': jsonLd }
   : jsonLd;
-const gaMeasurementId = 'G-FNWRC3EMV4';
+const gaMeasurementIds = (
+  import.meta.env.PUBLIC_GA_MEASUREMENT_IDS ||
+  import.meta.env.PUBLIC_GA_MEASUREMENT_ID ||
+  'G-FNWRC3EMV4'
+)
+  .split(',')
+  .map((id) => id.trim())
+  .filter(Boolean);
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const nav = [
   { href: '/books/', label: 'Books' },
   { href: '/answers/', label: 'Answers' },
-  { href: '/topics/', label: 'Topics' },
-  { href: '/about/', label: 'About' },
 ];
 const current = Astro.url.pathname;
 ---
@@ -52,7 +57,8 @@ const current = Astro.url.pathname;
     <meta name="apple-mobile-web-app-title" content="Answer with Books" />
     <meta name="robots" content={robots} />
     <meta name="googlebot" content={robots} />
-    <meta name="theme-color" content="#faf8f3" />
+    {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+    <meta name="theme-color" content="#f5f5f5" />
     <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -78,42 +84,61 @@ const current = Astro.url.pathname;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&display=swap"
     />
 
     {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} />
-    <script
-      is:inline
-      set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaMeasurementId}');`}
-    />
+    {
+      gaMeasurementIds.length > 0 && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementIds[0]}`} />
+          <script
+            is:inline
+            set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());${gaMeasurementIds
+              .map((id) => `gtag('config','${id}');`)
+              .join('')}`}
+          />
+        </>
+      )
+    }
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink">
-    <header class="border-b border-line">
-      <div class="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-        <a href="/" class="font-serif text-lg font-semibold tracking-tight hover:text-accent">
-          Answer<span class="text-accent">&nbsp;with&nbsp;</span>Books
+    <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
+      <div class="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
+        <a href="/" class="awb-brand" aria-label="Answer with Books home">
+          <span>Answer</span>
+          <span class="awb-brand__with">with</span>
+          <span>Books</span>
         </a>
-        <nav aria-label="Main" class="flex flex-wrap items-baseline gap-x-5 gap-y-2 text-[0.95rem]">
-          {
-            nav.map((item) => (
-              <a
-                href={item.href}
-                aria-current={current.startsWith(item.href) ? 'page' : undefined}
-                class={`hover:text-accent ${current.startsWith(item.href) ? 'text-accent' : 'text-soft'}`}
-              >
-                {item.label}
-              </a>
-            ))
-          }
+        <div class="flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
+          <nav aria-label="Main" class="awb-nav">
+            {
+              nav.map((item) => (
+                <a
+                  href={item.href}
+                  aria-current={current.startsWith(item.href) ? 'page' : undefined}
+                  class={`awb-nav__link ${current.startsWith(item.href) ? 'awb-nav__link--current' : ''}`}
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+          </nav>
           <a
-            href="/my-books/"
+            href="/profile/"
             data-auth-link
-            class={`hover:text-accent ${current.startsWith('/my-books') || current.startsWith('/login') ? 'text-accent' : 'text-soft'}`}
+            class={`awb-nav__action hidden ${current.startsWith('/profile') || current.startsWith('/my-books') || current.startsWith('/login') ? 'awb-nav__action--current' : ''}`}
           >
-            Log&nbsp;in
+            Profile
           </a>
-        </nav>
+          <a
+            href="/onboarding/start/"
+            data-onboarding-link
+            class="awb-nav__cta"
+          >
+            Get started
+          </a>
+        </div>
       </div>
     </header>
 
@@ -121,25 +146,59 @@ const current = Astro.url.pathname;
       <slot />
     </main>
 
-    <footer class="border-t border-line mt-20">
+    <footer class="border-t border-line mt-20 bg-paper">
       <div class="mx-auto flex max-w-6xl flex-col justify-between gap-3 px-5 py-10 text-sm text-soft sm:flex-row">
         <p>
-          Answer with Books — {glocal.footer}
+          Answer with Books — books distilled into usable answers.
         </p>
         <p>
           By <a href="https://terrylinhaochen.github.io" class="underline underline-offset-2 hover:text-accent">Terry Chen</a>
-          · <a href="/about/" class="underline underline-offset-2 hover:text-accent">About</a>
         </p>
       </div>
     </footer>
 
     <script>
       import { supabase } from '../lib/supabase';
-      // Swap the "Log in" nav link to "My books" when a session exists.
+      const activityKey = 'awb:activity';
+      const today = new Date().toISOString().slice(0, 10);
+      const path = window.location.pathname;
+      const section = path.startsWith('/answers/')
+        ? 'answers'
+        : path.startsWith('/books/')
+          ? 'books'
+          : path.startsWith('/topics/')
+            ? 'topics'
+            : path.startsWith('/onboarding/')
+              ? 'onboarding'
+            : path.startsWith('/profile') || path.startsWith('/my-books')
+              ? 'profile'
+              : 'home';
+
+      try {
+        const activity = JSON.parse(localStorage.getItem(activityKey) ?? '{}');
+        activity.days ||= {};
+        activity.sections ||= {};
+        activity.days[today] = (activity.days[today] || 0) + 1;
+        activity.sections[section] = (activity.sections[section] || 0) + 1;
+        activity.total = (activity.total || 0) + 1;
+        activity.lastPath = path;
+        activity.lastSeenAt = new Date().toISOString();
+        localStorage.setItem(activityKey, JSON.stringify(activity));
+        window.dispatchEvent(new CustomEvent('awb:activity-updated'));
+      } catch {
+        localStorage.removeItem(activityKey);
+      }
+
+      // Keep the account nav state client-side because this site is statically rendered.
       const link = document.querySelector('[data-auth-link]');
+      const onboardingLink = document.querySelector('[data-onboarding-link]');
       if (link) {
         supabase.auth.getSession().then(({ data }) => {
-          if (data.session) link.textContent = 'My books';
+          if (data.session) {
+            link.textContent = 'Profile';
+            link.classList.remove('hidden');
+            onboardingLink?.classList.add('hidden');
+          }
         });
       }
     </script>

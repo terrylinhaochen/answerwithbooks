@@ -9,7 +9,7 @@ featured: true
 order: 2
 ---
 
-## Core mental models
+## Core lessons
 
 **1. System 1 and System 2.**
 System 1 is fast, automatic, effortless, and always on: it reads faces, completes "bread and...", and generates impressions before you ask for them. System 2 is slow, deliberate, and lazy: it does logic, comparison, and self-control, but only when summoned — and it tires. The central drama of the book is that System 2 believes it is the hero while mostly rubber-stamping System 1's suggestions.
@@ -49,7 +49,7 @@ Exceptional performance is partly luck, so it is usually followed by something c
 - When designing anything that involves other people's choices: pricing, defaults, framing.
 - When evaluating performance that might just be regression to the mean.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 > "Nothing in life is as important as you think it is, while you are thinking about it."
 
@@ -58,7 +58,3 @@ Exceptional performance is partly luck, so it is usually followed by something c
 > "The premortem's main virtue: it legitimizes doubts."
 
 And the quiet thesis of the whole book: it is easier to recognize other people's mistakes than your own — so build *procedures* (checklists, base rates, premortems) rather than relying on willpower to debias yourself.
-
-## How I've applied it
-
-Two habits earn their keep. First, the outside view as a standing question in planning: "what happened to the last ten teams who tried this?" — my time estimates for shipping features were inside-view fantasies until I started anchoring on how long past features actually took. Second, separating evaluation dimensions when judging anything (candidates, product directions, my own ideas): score each dimension before forming a verdict, because the halo effect otherwise lets one vivid strength color everything. And when user numbers spike or crater in a single week, I now wait for regression to the mean before writing the causal story.

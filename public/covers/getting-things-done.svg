@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1536" viewBox="0 0 512 768" role="img" aria-labelledby="title desc">
+  <title id="title">Getting Things Done cover</title>
+  <desc id="desc">Generated editorial cover for Getting Things Done by David Allen.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#5d4a32" offset="0"/>
+      <stop stop-color="#2c2115" offset="1"/>
+    </linearGradient>
+    <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer></filter>
+  </defs>
+  <rect width="512" height="768" fill="url(#g)"/>
+  <rect x="0" y="0" width="76" height="768" fill="#000" opacity=".18"/>
+  <rect x="78" y="0" width="2" height="768" fill="#fff" opacity=".09"/>
+  <rect width="512" height="768" filter="url(#paper)" opacity=".55"/>
+  <path d="M430-20c-70 110-60 224 22 342 48 68 54 146 18 234" fill="none" stroke="#fbf3e5" stroke-width="24" opacity=".06"/>
+  
+      <path d="M132 345 238 260l128 86-54 132-150-8Z" fill="none" stroke="#fbf3e5" stroke-width="8" opacity=".3"/>
+      <circle cx="132" cy="345" r="24" fill="#d8c28d"/><circle cx="238" cy="260" r="22" fill="#fbf3e5" opacity=".78"/>
+      <circle cx="366" cy="346" r="24" fill="#d8c28d"/><circle cx="312" cy="478" r="22" fill="#fbf3e5" opacity=".78"/><circle cx="162" cy="470" r="20" fill="#d8c28d"/>
+  <g transform="translate(102 92)">
+    <text x="0" y="0" fill="#fbf3e5" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="5" opacity=".76">DAVID ALLEN</text>
+  </g>
+  <g transform="translate(102 150)">
+    <text x="0" y="0" fill="#fbf3e5" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700">Getting Things</text><text x="0" y="50" fill="#fbf3e5" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700">Done</text>
+  </g>
+  <rect x="102" y="612" width="196" height="34" fill="#d8c28d" opacity=".95"/>
+  <text x="102" y="696" fill="#fbf3e5" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="6" opacity=".76">2001</text>
+</svg>

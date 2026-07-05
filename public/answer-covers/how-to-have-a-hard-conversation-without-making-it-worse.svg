@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to have a hard conversation without making it worse visual">
+  <rect width="1280" height="720" fill="#ffc21a"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#d69300" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#211a00" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#211a00" opacity=".22"/>
+  <path d="M84 168h254" stroke="#211a00" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#211a00" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">COMMUNICATION</text>
+  <text x="84" y="418" fill="#211a00" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="0" opacity=".98">Hard Talk</text>
+  <text x="86" y="486" fill="#211a00" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">06</text>
+  
+      <path d="M432 174h222c30 0 54 24 54 54v70c0 30-24 54-54 54h-80l-72 58 18-58h-88c-30 0-54-24-54-54v-70c0-30 24-54 54-54Z" fill="#211a00" opacity=".18"/>
+      <path d="M506 224h220c26 0 48 22 48 48v60c0 26-22 48-48 48h-52l-54 54 8-54H506c-26 0-48-22-48-48v-60c0-26 22-48 48-48Z" fill="#1647d9"/>
+      <circle cx="548" cy="303" r="12" fill="#d69300"/><circle cx="616" cy="303" r="12" fill="#d69300"/><circle cx="684" cy="303" r="12" fill="#d69300"/>
+</svg>

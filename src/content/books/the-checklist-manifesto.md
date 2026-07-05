@@ -9,7 +9,7 @@ featured: false
 order: 18
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Failure has two kinds.**
 Gawande distinguishes ignorance, where we do not know enough, from ineptitude, where we know enough but fail to apply it reliably.
@@ -38,10 +38,6 @@ The value is not bureaucracy. It is a small structure that catches known failure
 - When quality depends on repeated complex execution.
 - When the team needs reliability without heavy process.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The strongest lesson is that expertise and discipline are complements, not substitutes.
-
-## How I've applied it
-
-Answer with Books can use this book for concerns about operational mistakes, launch checklists, review processes, and teams that want safety without suffocating the work.

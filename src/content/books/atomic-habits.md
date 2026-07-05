@@ -9,7 +9,7 @@ featured: false
 order: 12
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Habits compound.**
 Clear frames habits as small actions that matter because they repeat. A single action is tiny; the trajectory is the point.
@@ -38,10 +38,6 @@ Make good behaviors obvious, attractive, easy, and satisfying. Make bad behavior
 - When the current environment makes the bad behavior frictionless.
 - When a team wants a behavior change, not just a new rule.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The practical test is whether the environment makes the desired action easy to start on a normal day, not an inspired one.
-
-## How I've applied it
-
-Answer with Books can use Atomic Habits for concerns where the user's problem is not knowledge but repeatability: writing, focusing, reviewing, exercising, saving, studying, or shipping.

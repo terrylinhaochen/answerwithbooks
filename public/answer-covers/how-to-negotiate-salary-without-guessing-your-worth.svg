@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to negotiate salary without guessing your worth visual">
+  <rect width="1280" height="720" fill="#0b6bdc"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#083b78" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#fffaf0" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#fffaf0" opacity=".22"/>
+  <path d="M84 168h254" stroke="#fffaf0" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#fffaf0" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">CAREER</text>
+  <text x="84" y="418" fill="#fffaf0" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="0" opacity=".98">Salary Ask</text>
+  <text x="86" y="486" fill="#fffaf0" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">07</text>
+  
+      <circle cx="610" cy="260" r="126" fill="#083b78" opacity=".48"/>
+      <circle cx="610" cy="260" r="94" fill="none" stroke="#fffaf0" stroke-width="13" opacity=".72"/>
+      <path d="m610 176 34 104-118 64 50-120Z" fill="#43f5ff"/>
+      <circle cx="610" cy="260" r="14" fill="#ffd447"/>
+</svg>

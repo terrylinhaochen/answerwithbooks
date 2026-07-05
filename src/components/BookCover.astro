@@ -1,64 +1,127 @@
 ---
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   book: CollectionEntry<'books'>;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   class?: string;
 }
 
 const { book, size = 'md' } = Astro.props;
 const className = Astro.props.class ?? '';
 
-const palettes = [
-  { cover: '#243b53', band: '#f0b35d', ink: '#fff7e8', line: '#102338' },
-  { cover: '#5c2f45', band: '#8fc6a3', ink: '#fff3ec', line: '#341727' },
-  { cover: '#214a43', band: '#d7a84d', ink: '#f8f2df', line: '#102a25' },
-  { cover: '#533a24', band: '#7fb3d5', ink: '#fff5e7', line: '#2d1d12' },
-  { cover: '#31345f', band: '#e08d78', ink: '#f5f1ff', line: '#191b38' },
-  { cover: '#6a342f', band: '#c8cf7a', ink: '#fff4e6', line: '#341714' },
-];
+const palettes: Record<string, { cover: string; band: string; ink: string; line: string }> = {
+  'atomic-habits': { cover: '#0f8f5f', band: '#d7ff3f', ink: '#fffaf0', line: '#071d17' },
+  'crucial-conversations': { cover: '#d8326f', band: '#ff7a1a', ink: '#fff8ee', line: '#2a0716' },
+  'deep-work': { cover: '#082f8f', band: '#00d9ff', ink: '#fff8df', line: '#031334' },
+  'designing-your-life': { cover: '#1458e8', band: '#ff8a1f', ink: '#f7fffb', line: '#06235f' },
+  'dont-make-me-think': { cover: '#6a24d8', band: '#b7ff1f', ink: '#fffefa', line: '#220855' },
+  'four-thousand-weeks': { cover: '#7a1f77', band: '#21d6ff', ink: '#fff7e7', line: '#2d0a2c' },
+  'getting-things-done': { cover: '#008c8c', band: '#ff8a1f', ink: '#fffefa', line: '#052d2d' },
+  'good-strategy-bad-strategy': { cover: '#f23a1f', band: '#15d0c8', ink: '#fff9ea', line: '#4d0d03' },
+  'high-output-management': { cover: '#18206f', band: '#c8ff2d', ink: '#fff8e8', line: '#080b2a' },
+  'made-to-stick': { cover: '#ffc21a', band: '#1647d9', ink: '#211a00', line: '#4a3200' },
+  'never-split-the-difference': { cover: '#8f1249', band: '#00d9ff', ink: '#fff6ea', line: '#330719' },
+  'seeing-like-a-state': { cover: '#006bff', band: '#ff6b1a', ink: '#fff8e4', line: '#00265c' },
+  'so-good-they-cant-ignore-you': { cover: '#2341ff', band: '#ff8a1f', ink: '#fffefa', line: '#071178' },
+  'the-checklist-manifesto': { cover: '#0c7f3a', band: '#ff5f57', ink: '#fff9ea', line: '#042412' },
+  'the-effective-executive': { cover: '#2f3238', band: '#ffbd2e', ink: '#fff8e8', line: '#111317' },
+  'the-lean-startup': { cover: '#7c2cff', band: '#aaff24', ink: '#fffefa', line: '#2a0a68' },
+  'the-mom-test': { cover: '#0096a6', band: '#ffd51f', ink: '#fffbea', line: '#053940' },
+  'the-structure-of-scientific-revolutions': { cover: '#3432c7', band: '#7dffcf', ink: '#fff8ea', line: '#12115a' },
+  'the-wisdom-of-crowds': { cover: '#0877d9', band: '#ffbd2e', ink: '#fffefa', line: '#062b4f' },
+  'thinking-fast-and-slow': { cover: '#9c114c', band: '#ffd51f', ink: '#fff8e8', line: '#35071b' },
+};
 
-const paletteIndex = [...book.id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % palettes.length;
-const palette = palettes[paletteIndex];
+const palette = palettes[book.id] ?? { cover: '#263747', band: '#e7d7b8', ink: '#fbf4e8', line: '#102338' };
 const style = `--cover:${palette.cover};--cover-band:${palette.band};--cover-ink:${palette.ink};--cover-line:${palette.line};`;
+const coverTitles: Record<string, string> = {
+  'good-strategy-bad-strategy': 'Good Strategy',
+  'the-structure-of-scientific-revolutions': 'Scientific Revolutions',
+  'never-split-the-difference': 'Never Split',
+  'so-good-they-cant-ignore-you': 'So Good',
+};
+const coverTitle = coverTitles[book.id] ?? book.data.title;
+const longTitleClass = coverTitle.length > 24 ? 'book-cover--long-title' : '';
 const sizeClass = {
+  xs: 'w-14 sm:w-16',
   sm: 'w-16 sm:w-20',
   md: 'w-20 sm:w-28',
   lg: 'w-24 sm:w-36',
 }[size];
+const jpgPath = fileURLToPath(new URL(`../../public/covers/${book.id}.jpg`, import.meta.url));
+const jpegPath = fileURLToPath(new URL(`../../public/covers/${book.id}.jpeg`, import.meta.url));
+const pngPath = fileURLToPath(new URL(`../../public/covers/${book.id}.png`, import.meta.url));
+const svgPath = fileURLToPath(new URL(`../../public/covers/${book.id}.svg`, import.meta.url));
+const coverAsset = existsSync(jpgPath)
+  ? `/covers/${book.id}.jpg`
+  : existsSync(jpegPath)
+    ? `/covers/${book.id}.jpeg`
+    : existsSync(pngPath)
+      ? `/covers/${book.id}.png`
+      : existsSync(svgPath)
+        ? `/covers/${book.id}.svg`
+        : null;
 ---
 
-<a
-  href={`/books/${book.id}/`}
-  class={`book-cover ${sizeClass} ${className}`}
-  style={style}
-  aria-label={`Open ${book.data.title}`}
->
-  <span class="book-cover__shine" aria-hidden="true"></span>
-  <span class="book-cover__band" aria-hidden="true"></span>
-  <span class="book-cover__meta">{book.data.author}</span>
-  <span class="book-cover__title">{book.data.title}</span>
-  <span class="book-cover__year">{book.data.year}</span>
-</a>
+{
+  coverAsset ? (
+    <a
+      href={`/books/${book.id}/`}
+      class={`book-cover book-cover--${size} ${longTitleClass} book-cover--asset ${sizeClass} ${className}`}
+      style={style}
+      aria-label={`Open ${book.data.title}`}
+    >
+      <img src={coverAsset} alt={`${book.data.title} cover`} class="book-cover__image" loading="lazy" />
+      <span class="book-cover__overlay" aria-hidden="true">
+        <span class="book-cover__title">{coverTitle}</span>
+        <span class="book-cover__year">{book.data.year}</span>
+      </span>
+    </a>
+  ) : (
+    <a
+      href={`/books/${book.id}/`}
+      class={`book-cover book-cover--${size} ${longTitleClass} ${sizeClass} ${className}`}
+      style={style}
+      aria-label={`Open ${book.data.title}`}
+    >
+      <span class="book-cover__shine" aria-hidden="true"></span>
+      <span class="book-cover__band" aria-hidden="true"></span>
+      <span class="book-cover__meta">{book.data.author}</span>
+      <span class="book-cover__title">{coverTitle}</span>
+      <span class="book-cover__year">{book.data.year}</span>
+    </a>
+  )
+}
 
 <style>
   .book-cover {
     position: relative;
+    --cover-pad-x: 0.98rem;
+    --cover-pad-y: 0.82rem;
+    --cover-plate-height: 34%;
+    --cover-meta-size: 0.54rem;
+    --cover-title-size: 1.08rem;
+    --cover-title-ch: 10ch;
+    --cover-title-lines: 4;
     display: flex;
     aspect-ratio: 2 / 3;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
-    border-radius: 6px;
-    background: var(--cover);
+    border-radius: 8px;
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 0.22), transparent 9%, rgb(255 255 255 / 0.05) 12%, transparent 16%),
+      var(--cover);
     color: var(--cover-ink);
     border: 1px solid color-mix(in srgb, var(--cover-line) 82%, white);
     box-shadow:
-      0 18px 35px rgb(34 30 26 / 0.16),
-      inset 10px 0 0 rgb(0 0 0 / 0.12),
-      inset 11px 0 0 rgb(255 255 255 / 0.08);
-    padding: 0.8rem 0.8rem 0.72rem 0.95rem;
+      0 14px 28px rgb(34 30 26 / 0.14),
+      inset 8px 0 0 rgb(0 0 0 / 0.14),
+      inset 9px 0 0 rgb(255 255 255 / 0.08);
+    padding: var(--cover-pad-y) calc(var(--cover-pad-x) * 0.8) calc(var(--cover-pad-y) * 0.88) var(--cover-pad-x);
     text-decoration: none;
     transform: translateZ(0);
     transition:
@@ -66,29 +129,72 @@ const sizeClass = {
       box-shadow 160ms ease;
   }
 
+  .book-cover--asset {
+    display: block;
+    padding: 0;
+    background: transparent;
+  }
+
+  .book-cover--asset::after {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.02) 0%, transparent 34%, transparent 62%, rgb(0 0 0 / 0.1) 100%),
+      linear-gradient(90deg, rgb(0 0 0 / 0.16), transparent 10%, rgb(255 255 255 / 0.04) 13%, transparent 18%);
+    content: '';
+    opacity: 1;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .book-cover__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    object-position: center;
+  }
+
+  .book-cover__overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    display: flex;
+    min-height: var(--cover-plate-height);
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(180deg, transparent 0%, var(--cover) 18%, var(--cover) 100%);
+    padding: var(--cover-pad-y) calc(var(--cover-pad-x) * 0.8) calc(var(--cover-pad-y) * 0.86) var(--cover-pad-x);
+    color: var(--cover-ink);
+    pointer-events: none;
+  }
+
   .book-cover:hover {
     transform: translateY(-3px);
     box-shadow:
-      0 24px 45px rgb(34 30 26 / 0.2),
-      inset 10px 0 0 rgb(0 0 0 / 0.12),
-      inset 11px 0 0 rgb(255 255 255 / 0.08);
+      0 20px 38px rgb(34 30 26 / 0.18),
+      inset 8px 0 0 rgb(0 0 0 / 0.14),
+      inset 9px 0 0 rgb(255 255 255 / 0.08);
   }
 
   .book-cover__shine {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(120deg, transparent 0 42%, rgb(255 255 255 / 0.13) 42% 49%, transparent 49%),
-      radial-gradient(circle at 78% 18%, rgb(255 255 255 / 0.16), transparent 26%);
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.035) 0 1px, transparent 1px 5px),
+      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.04) 0 1px, transparent 1px 7px);
+    mix-blend-mode: soft-light;
     pointer-events: none;
   }
 
   .book-cover__band {
     position: absolute;
-    inset: auto 0 23% 0;
-    height: 11%;
+    inset: auto 12% 21% 18%;
+    height: 18%;
     background: var(--cover-band);
-    opacity: 0.95;
+    border: 1px solid rgb(0 0 0 / 0.08);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.28) inset;
+    opacity: 0.96;
   }
 
   .book-cover__meta,
@@ -96,22 +202,83 @@ const sizeClass = {
     position: relative;
     z-index: 1;
     font-family: var(--font-sans);
-    font-size: clamp(0.48rem, 0.75vw, 0.56rem);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: var(--cover-meta-size);
     font-weight: 700;
     letter-spacing: 0.12em;
     line-height: 1.2;
     text-transform: uppercase;
-    opacity: 0.8;
+    opacity: 0.74;
   }
 
   .book-cover__title {
     position: relative;
     z-index: 1;
     display: block;
-    max-width: 11ch;
+    max-width: var(--cover-title-ch);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: var(--cover-title-lines);
+    -webkit-box-orient: vertical;
+    overflow-wrap: anywhere;
     font-family: var(--font-serif);
-    font-size: clamp(0.82rem, 1.05vw, 1.12rem);
-    font-weight: 700;
-    line-height: 0.98;
+    font-size: var(--cover-title-size);
+    font-weight: 500;
+    margin-top: 0;
+    line-height: 1;
+  }
+
+  .book-cover__year {
+    margin-top: calc(var(--cover-pad-y) * 0.34);
+    color: var(--cover-ink);
+    opacity: 1;
+  }
+
+  .book-cover--xs {
+    --cover-pad-x: 0.32rem;
+    --cover-pad-y: 0.34rem;
+    --cover-plate-height: 42%;
+    --cover-meta-size: 0.24rem;
+    --cover-title-size: 0.38rem;
+    --cover-title-ch: 10.5ch;
+    --cover-title-lines: 4;
+  }
+
+  .book-cover--sm {
+    --cover-pad-x: 0.58rem;
+    --cover-pad-y: 0.54rem;
+    --cover-plate-height: 40%;
+    --cover-meta-size: 0.34rem;
+    --cover-title-size: 0.66rem;
+    --cover-title-ch: 9ch;
+    --cover-title-lines: 3;
+  }
+
+  .book-cover--md {
+    --cover-pad-x: 0.78rem;
+    --cover-pad-y: 0.72rem;
+    --cover-plate-height: 39%;
+    --cover-meta-size: 0.44rem;
+    --cover-title-size: 0.88rem;
+    --cover-title-ch: 9.5ch;
+    --cover-title-lines: 3;
+  }
+
+  .book-cover--lg {
+    --cover-pad-x: 1rem;
+    --cover-pad-y: 0.92rem;
+    --cover-plate-height: 38%;
+    --cover-meta-size: 0.54rem;
+    --cover-title-size: 1.12rem;
+    --cover-title-ch: 10ch;
+    --cover-title-lines: 3;
+  }
+
+  .book-cover--long-title {
+    --cover-title-size: calc(var(--cover-title-size) * 0.86);
+    --cover-title-lines: 4;
   }
 </style>

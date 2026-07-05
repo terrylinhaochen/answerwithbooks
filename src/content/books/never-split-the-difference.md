@@ -9,7 +9,7 @@ featured: false
 order: 15
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Negotiation is information discovery.**
 Voss treats negotiation less as argument and more as finding the constraints, fears, incentives, and hidden no's that shape the other side.
@@ -38,10 +38,6 @@ People feel safer when they can reject, clarify, or set boundaries. A forced yes
 - When you need information more than a dramatic pitch.
 - When the relationship has to continue after the negotiation.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The book's useful move is to slow down and draw out constraints before bargaining over terms.
-
-## How I've applied it
-
-For Answer with Books, this is a strong fit for salary, pricing, sales, and stakeholder negotiation concerns where the user's real need is a conversation path, not a clever line.

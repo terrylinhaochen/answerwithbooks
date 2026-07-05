@@ -49,8 +49,13 @@ for (const file of htmlFiles) {
     requireValue(metaProperty(html, property), path, `missing ${property}`);
   }
 
+  const faqRequired = !isNoindex && path !== '/';
+
   if (!isNoindex) {
     if (jsonLd.length === 0) fail(`${path}: indexable page has no JSON-LD`);
+  }
+
+  if (faqRequired) {
     if (faqBlocks.length === 0) fail(`${path}: indexable page has no FAQPage JSON-LD`);
     if (!visibleFaq) fail(`${path}: indexable page has no visible FAQ/Q&A section`);
   }

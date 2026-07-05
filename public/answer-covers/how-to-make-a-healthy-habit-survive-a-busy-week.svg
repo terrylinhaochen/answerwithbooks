@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to make a healthy habit survive a busy week visual">
+  <rect width="1280" height="720" fill="#d8326f"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#8f1249" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#fff8ee" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#fff8ee" opacity=".22"/>
+  <path d="M84 168h254" stroke="#fff8ee" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#fff8ee" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">HEALTH</text>
+  <text x="84" y="418" fill="#fff8ee" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="0" opacity=".98">Busy Habit</text>
+  <text x="86" y="486" fill="#fff8ee" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">02</text>
+  
+      <path d="M480 320c0-106 134-160 214-88" fill="none" stroke="#fff8ee" stroke-width="19" opacity=".58"/>
+      <path d="M732 258h-86v-86" fill="none" stroke="#ffd447" stroke-width="19"/>
+      <path d="M730 316c0 106-134 160-214 88" fill="none" stroke="#fff8ee" stroke-width="19" opacity=".58"/>
+      <path d="M478 378h86v86" fill="none" stroke="#ff8a1f" stroke-width="19"/>
+</svg>

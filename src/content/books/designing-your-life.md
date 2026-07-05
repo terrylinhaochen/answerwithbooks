@@ -9,7 +9,7 @@ featured: false
 order: 20
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Designers build their way forward.**
 Burnett and Evans treat life choices as design problems. You do not need a perfect answer before trying a prototype.
@@ -38,10 +38,6 @@ Conversations, small projects, shadowing, and experiments let you learn about a 
 - When a change should be tested before becoming a leap.
 - When the user needs experiments, not motivational advice.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The core move is to turn "What should I do with my life?" into prototypes that create new evidence.
-
-## How I've applied it
-
-Designing Your Life gives Answer with Books a practical lens for career questions where the user needs motion and information, not a single grand answer.

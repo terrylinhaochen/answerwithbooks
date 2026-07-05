@@ -9,7 +9,7 @@ featured: true
 order: 3
 ---
 
-## Core mental models
+## Core lessons
 
 **1. The crowd is smart only under conditions.**
 The famous opener — Francis Galton's 1906 ox-weighing contest, where the median of 787 villagers' guesses landed within a pound of the ox's true weight — is not a claim that groups are always wise. Surowiecki's whole book is about the *conditions*: diversity of opinion, independence of judgment, decentralization of knowledge, and a mechanism for aggregation. Remove any one and the crowd degrades into a mob, a committee, or an echo.
@@ -47,14 +47,10 @@ Cognition problems (questions with answers: how much does the ox weigh, will thi
 - When deciding whether to trust "the market," "the poll," or "what everyone is saying."
 - Pairs naturally with *Thinking, Fast and Slow*: Kahneman explains individual error; Surowiecki explains when groups cancel it versus compound it.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 > "The best collective decisions are the product of disagreement and contest, not consensus or compromise."
 
 > "Paradoxically, the best way for a group to be smart is for each person in it to think and act as independently as possible."
 
 The ox is the image to keep: 787 amateurs, one number each, no discussion — and the truth falls out of the median. Every smart-crowd system is an attempt to recreate that fairground; every dumb-crowd failure is a story about which of the four conditions broke.
-
-## How I've applied it
-
-CrowdListen is, in a real sense, an attempt to engineer Surowiecki's conditions into software: collect audience reactions independently (before commenters see each other's takes), preserve diversity by sampling beyond the loudest voices, and aggregate mechanically instead of letting a comment section's early replies cascade. The book also changed how I run meetings: estimates and opinions go into writing before anyone speaks. The first time I did this, the silent median of the room disagreed with the person who would have spoken first — and the median was right.

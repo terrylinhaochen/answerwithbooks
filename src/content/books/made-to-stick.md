@@ -9,7 +9,7 @@ featured: false
 order: 9
 ---
 
-## Core mental models
+## Core lessons
 
 **1. The Curse of Knowledge.**
 Once you know something deeply, it becomes hard to imagine not knowing it. Experts skip steps, use abstractions, and assume the audience sees the same structure they do. Most unclear messaging starts here.
@@ -41,10 +41,6 @@ Stories let people rehearse action. A good example does more than decorate an ar
 - When a product page explains features but not the idea.
 - When research has many themes and needs a sharp public takeaway.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The most reusable warning is the Curse of Knowledge: the better you understand the thing, the more likely you are to explain it from the wrong starting point.
-
-## How I've applied it
-
-Made to Stick is directly relevant to Answer with Books: a digest should not merely compress a book. It should extract the portable idea, give it a memorable handle, and show where to use it.

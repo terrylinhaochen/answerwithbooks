@@ -9,7 +9,7 @@ featured: false
 order: 13
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Time is finite.**
 Burkeman's title is the provocation: a human life is roughly four thousand weeks. The point is not despair. It is that finitude makes choice unavoidable.
@@ -38,10 +38,6 @@ What you attend to is not a side issue. It is the substance of how finite time i
 - When burnout comes from trying to honor every possible obligation.
 - When the real question is what to stop, not how to do more.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The useful reframe: the problem is not that you have failed to fit everything in. The problem is that everything was never going to fit.
-
-## How I've applied it
-
-This book is a corrective lens for Answer with Books topics about overwhelm. Some questions need a task system; others need permission to admit that prioritization means loss.

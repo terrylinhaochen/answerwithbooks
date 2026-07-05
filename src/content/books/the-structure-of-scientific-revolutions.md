@@ -9,7 +9,7 @@ featured: true
 order: 5
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Paradigms and normal science.**
 A paradigm is more than a theory — it's the whole package a scientific community shares: exemplary problems and solutions, instruments, standards for what counts as a question and a good answer. "Normal science" is the highly productive puzzle-solving that happens *inside* a paradigm: the framework isn't being tested, it's being applied. This is a feature — paradigms let a field stop relitigating foundations and dig deep.
@@ -43,7 +43,7 @@ The decision to abandon a paradigm is *simultaneously* the decision to accept an
 - When two smart groups can't even agree on what the problem is.
 - When evaluating a radical alternative that "explains everything" — Kuhn explains both why it might be right and why it can't be proven yet.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 > "The decision to reject one paradigm is always simultaneously the decision to accept another."
 
@@ -52,7 +52,3 @@ The decision to abandon a paradigm is *simultaneously* the decision to accept an
 > Quoting Max Planck: "A new scientific truth does not triumph by convincing its opponents... but rather because its opponents eventually die, and a new generation grows up that is familiar with it."
 
 The image to keep: epicycles. Every system in decline produces them — patches that save the data while the framework quietly dies.
-
-## How I've applied it
-
-Kuhn gave me a test for pivots. A struggling product direction generates anomalies — users who churn for reasons the strategy says shouldn't exist. The inside-the-paradigm move is to patch: one more feature, one more onboarding fix. Kuhn's triage made me ask instead: are the patches multiplying? Are the anomalies hitting the core thesis or the edges? With CrowdListen, one strategy accumulated exactly this epicycle pattern — every retention fix added a special case — and recognizing it as *crisis*, not insufficient effort, is what licensed the reframe. The other half I try to honor: never abandon an approach for criticism alone. I wait until there's a candidate paradigm that explains the old wins *and* the anomalies.

@@ -1,0 +1,168 @@
+---
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  answer: CollectionEntry<'answers'>;
+  class?: string;
+}
+
+const { answer } = Astro.props;
+const className = Astro.props.class ?? '';
+
+const labelByAnswer: Record<string, string> = {
+  'how-to-decide-what-to-do-with-your-career-next': 'Career Move',
+  'how-to-delegate-without-losing-control': 'Delegate',
+  'how-to-explain-an-idea-so-people-remember-it': 'Make It Stick',
+  'how-to-fix-user-interviews-that-are-not-teaching-you-anything': 'User Interviews',
+  'how-to-get-out-of-task-overwhelm-without-reorganizing-your-whole-life': 'Open Loops',
+  'how-to-have-a-hard-conversation-without-making-it-worse': 'Hard Talk',
+  'how-to-keep-a-smart-team-from-making-a-dumb-decision': 'Team Decisions',
+  'how-to-know-when-to-trust-your-gut': 'Trust Your Gut',
+  'how-to-know-whether-your-metrics-are-lying-to-you': 'Bad Metrics',
+  'how-to-make-a-confusing-page-easier-to-use': 'Clear Pages',
+  'how-to-make-a-healthy-habit-survive-a-busy-week': 'Busy Habit',
+  'how-to-make-a-plan-that-survives-contact-with-reality': 'Reality Plan',
+  'how-to-make-project-estimates-less-fictional': 'Real Estimates',
+  'how-to-negotiate-salary-without-guessing-your-worth': 'Salary Ask',
+  'how-to-prioritize-when-every-request-sounds-urgent': 'Prioritize',
+  'how-to-run-user-interviews-that-do-not-lie-to-you': 'Better Research',
+  'how-to-tell-whether-to-pivot-or-keep-going': 'Pivot?',
+  'how-to-test-a-risky-idea-before-you-build-too-much': 'Risk Test',
+  'how-to-turn-a-vague-goal-into-an-actual-strategy': 'Strategy',
+  'how-to-turn-messy-feedback-into-a-real-signal': 'Feedback Signal',
+  'how-to-validate-an-idea-without-fooling-yourself': 'Idea Validation',
+};
+
+const assetCandidates = ['jpg', 'jpeg', 'png', 'svg'].map((extension) => ({
+  extension,
+  href: `/answer-covers/${answer.id}.${extension}`,
+  filePath: fileURLToPath(new URL(`../../public/answer-covers/${answer.id}.${extension}`, import.meta.url)),
+}));
+const coverAsset = assetCandidates.find((asset) => existsSync(asset.filePath)) ?? null;
+const isBitmap = Boolean(coverAsset && coverAsset.extension !== 'svg');
+const coverTitle = labelByAnswer[answer.id] ?? 'Insight';
+const darkLabelAnswers = new Set([
+  'how-to-have-a-hard-conversation-without-making-it-worse',
+  'how-to-make-a-confusing-page-easier-to-use',
+]);
+const useDarkLabel = darkLabelAnswers.has(answer.id);
+const topicLabel = (answer.data.tags?.[0] ?? 'Insight')
+  .replaceAll('-', ' ')
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+---
+
+<a
+  href={`/answers/${answer.id}/`}
+  class={`answer-cover ${isBitmap ? 'answer-cover--bitmap' : ''} ${useDarkLabel ? 'answer-cover--dark-label' : ''} ${className}`}
+  aria-label={`Open ${answer.data.question}`}
+>
+  {
+    coverAsset ? (
+      <img src={coverAsset.href} alt="" class="answer-cover__image" loading="eager" aria-hidden="true" />
+    ) : (
+      <span class="answer-cover__fallback" aria-hidden="true">
+        <span></span>
+      </span>
+    )
+  }
+  {
+    isBitmap ? (
+      <span class="answer-cover__label" aria-hidden="true">
+        <span class="answer-cover__topic">{topicLabel}</span>
+        <span class="answer-cover__title">{coverTitle}</span>
+      </span>
+    ) : null
+  }
+</a>
+
+<style>
+  .answer-cover {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    background: var(--color-wash);
+    box-shadow: 0 12px 24px rgb(34 30 26 / 0.08);
+    transition:
+      transform 160ms ease,
+      border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .answer-cover:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-accent) 52%, var(--color-line));
+    box-shadow: 0 16px 30px rgb(34 30 26 / 0.12);
+  }
+
+  .answer-cover__image,
+  .answer-cover__fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .answer-cover__image {
+    object-fit: cover;
+  }
+
+  .answer-cover__label {
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 2;
+    display: flex;
+    width: min(54%, 21rem);
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(0.9rem, 2.2vw, 1.45rem);
+    color: #fffaf0;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.22);
+    pointer-events: none;
+  }
+
+  .answer-cover--dark-label .answer-cover__label {
+    color: #211a00;
+    text-shadow: 0 1px 0 rgb(255 255 255 / 0.3);
+  }
+
+  .answer-cover__topic {
+    margin-bottom: 0.55rem;
+    font-family: var(--font-sans);
+    font-size: clamp(0.56rem, 1vw, 0.72rem);
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    opacity: 0.76;
+  }
+
+  .answer-cover__title {
+    max-width: 9.5ch;
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 3vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 0.96;
+    text-wrap: balance;
+  }
+
+  .answer-cover__fallback {
+    position: relative;
+    background: var(--color-ink);
+  }
+
+  .answer-cover__fallback span {
+    position: absolute;
+    inset: 24% 36%;
+    border-radius: 999px;
+    background: var(--color-accent);
+  }
+</style>

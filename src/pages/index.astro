@@ -4,33 +4,93 @@ import Base from '../layouts/Base.astro';
 import BookCover from '../components/BookCover.astro';
 import BookRow from '../components/BookRow.astro';
 import AnswerRow from '../components/AnswerRow.astro';
+import ActivityPanel from '../components/ActivityPanel.astro';
 import FaqList from '../components/FaqList.astro';
-import { glocal } from '../lib/glocal';
-import { audienceJsonLd, faqJsonLd } from '../lib/seo';
+import { faqJsonLd } from '../lib/seo';
 
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 const answers = (await getCollection('answers')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
-const featuredBooks = books.filter((b) => b.data.featured).slice(0, 4);
-const featuredAnswers = answers.filter((a) => a.data.featured).slice(0, 3);
+const featuredBooks = books.filter((b) => b.data.featured);
+const featuredAnswers = answers.filter((a) => a.data.featured);
+const shelfBooks = [
+  ...featuredBooks,
+  ...books.filter((book) => !featuredBooks.some((featuredBook) => featuredBook.id === book.id)),
+].slice(0, 8);
+const shelfAnswers = [
+  ...featuredAnswers,
+  ...answers.filter((answer) => !featuredAnswers.some((featuredAnswer) => featuredAnswer.id === answer.id)),
+].slice(0, 6);
 const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
+const bookById = new Map(books.map((b) => [b.id, b]));
+const carouselIds = [
+  'how-to-fix-user-interviews-that-are-not-teaching-you-anything',
+  'how-to-tell-whether-to-pivot-or-keep-going',
+  'how-to-make-a-plan-that-survives-contact-with-reality',
+];
+const carouselCopy = new Map([
+  [
+    'how-to-fix-user-interviews-that-are-not-teaching-you-anything',
+    {
+      title: 'Ask about recent behavior.',
+      body: 'The Mom Test turns vague praise into evidence you can act on.',
+    },
+  ],
+  [
+    'how-to-tell-whether-to-pivot-or-keep-going',
+    {
+      title: 'Separate puzzles from anomalies.',
+      body: 'Kuhn helps you tell normal iteration from evidence that the whole frame is wrong.',
+    },
+  ],
+  [
+    'how-to-make-a-plan-that-survives-contact-with-reality',
+    {
+      title: 'Keep local facts in the plan.',
+      body: 'Seeing Like a State shows why plans fail when messy ground truth gets deleted.',
+    },
+  ],
+]);
+const carouselItems = carouselIds
+  .map((id) => answers.find((answer) => answer.id === id))
+  .filter(Boolean)
+  .map((answer) => ({
+    answer,
+    books: answer.data.books.map((slug) => bookById.get(slug)).filter(Boolean).slice(0, 3),
+    copy: carouselCopy.get(answer.id) ?? {
+      title: answer.data.question,
+      body: answer.data.description,
+    },
+  }));
 const installCommand = 'npx answer-with-books install --skill --api';
+const siteDescription =
+  'The best way to learn from books using AI. Start with what is on your mind, then get book-backed insights that help you ask better questions and make better moves.';
 const homeFaqs = [
   {
-    question: 'What is Answer with Books?',
+    question: 'How does Answer with Books work?',
     answer:
-      'Answer with Books turns recurring reader questions into practical answers grounded in books, with Japanese and Korean contexts treated as first-class demand signals.',
+      'You start with what is on your mind. Answer with Books turns that into sharper questions, then finds book-backed insights that match the situation.',
   },
   {
-    question: 'Why focus on Japan and Korea?',
+    question: 'What makes this different from normal book summaries?',
     answer:
-      'Many book-based advice sites default to American examples. This site keeps the source books global while adapting the questions, constraints, and examples to Japanese and Korean readers.',
+      'The unit is not a chapter summary. Each answer starts from a real problem, then uses one to three books as lenses for judgment, tradeoffs, and next moves.',
   },
   {
-    question: 'How are answers chosen?',
+    question: 'What is included in the public shelf?',
     answer:
-      'CrowdListen-style demand research identifies repeated questions, then Answer with Books matches those concerns to the books that can answer them better than generic advice.',
+      'The public shelf includes source book pages, book-grounded answers, search, categories, and examples of how books can be applied to work and life decisions.',
+  },
+  {
+    question: 'What would a paid subscription unlock?',
+    answer:
+      'The paid version should unlock a fuller catalog, personal saved books, custom books, private shelves, community demand signals, and agent/API access.',
+  },
+  {
+    question: 'Can I use this with my AI tools?',
+    answer:
+      'Yes. The agent skill is the direction: give your chat AI a book-grounded shelf it can call while you are working through real questions.',
   },
 ];
 
@@ -41,11 +101,10 @@ const jsonLd = [
     name: 'Answer with Books',
     alternateName: 'answerwithbooks.com',
     url: 'https://answerwithbooks.com/',
-    description: glocal.description,
+    description: siteDescription,
     author: { '@id': 'https://answerwithbooks.com/#person' },
     publisher: { '@id': 'https://answerwithbooks.com/#person' },
     inLanguage: 'en',
-    audience: audienceJsonLd(),
   },
   {
     '@type': 'Person',
@@ -58,13 +117,13 @@ const jsonLd = [
     '@type': 'WebPage',
     '@id': 'https://answerwithbooks.com/#webpage',
     url: 'https://answerwithbooks.com/',
-    name: `Answer with Books — ${glocal.promise}`,
-    description: glocal.description,
+    name: 'The Best Way to Learn From Books Using AI',
+    description: siteDescription,
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     mainEntity: {
       '@type': 'ItemList',
       name: 'Featured book-grounded answers',
-      itemListElement: featuredAnswers.map((answer, index) => ({
+      itemListElement: shelfAnswers.map((answer, index) => ({
         '@type': 'ListItem',
         position: index + 1,
         name: answer.data.question,
@@ -73,311 +132,264 @@ const jsonLd = [
     },
   },
   {
-    ...faqJsonLd('https://answerwithbooks.com/', homeFaqs),
-  },
-  {
     '@type': 'SiteNavigationElement',
-    name: ['Books', 'Answers', 'Topics', 'About'],
+    name: ['Books', 'Answers', 'Get started'],
     url: [
       'https://answerwithbooks.com/books/',
       'https://answerwithbooks.com/answers/',
-      'https://answerwithbooks.com/topics/',
-      'https://answerwithbooks.com/about/',
+      'https://answerwithbooks.com/onboarding/start/',
     ],
+  },
+  {
+    ...faqJsonLd('https://answerwithbooks.com/', homeFaqs),
   },
 ];
 ---
 
 <Base
-  title={`Answer with Books — ${glocal.promise}`}
-  description={glocal.description}
+  title="The Best Way to Learn From Books Using AI"
+  description={siteDescription}
   path="/"
   jsonLd={jsonLd}
 >
-  <section class="mx-auto max-w-[1440px] px-5 pb-16 pt-14 sm:px-8 sm:pt-18 lg:px-20 lg:pb-24 lg:pt-24 xl:px-[120px]">
-    <div class="grid min-w-0 grid-cols-1 items-center gap-12 xl:grid-cols-[0.95fr_1.05fr] xl:gap-20">
-      <div class="min-w-0">
-        <p class="max-w-[20rem] font-sans text-xs uppercase leading-relaxed tracking-[0.18em] text-accent sm:max-w-none">
-          {glocal.promise}
+  <section class="mx-auto max-w-6xl px-5 pb-14 pt-12 sm:pt-16 lg:pb-20 lg:pt-20">
+    <div class="grid min-w-0 grid-cols-1 items-stretch gap-10 xl:grid-cols-[0.95fr_1.05fr] xl:gap-16">
+      <div class="flex min-w-0 flex-col justify-center">
+        <p class="max-w-[20rem] font-sans text-xs font-semibold uppercase leading-relaxed tracking-[0.08em] text-faint sm:max-w-none">
+          Learn from books with AI
         </p>
-        <h1 class="mt-5 max-w-[12ch] break-words font-serif text-[2.75rem] font-semibold leading-[1.03] tracking-tight sm:max-w-4xl sm:text-6xl lg:text-7xl">
-          Book answers for the questions people actually live with.
+        <h1 class="mt-5 max-w-[13ch] break-words font-serif text-[2.85rem] leading-[1.03] tracking-[-0.025em] sm:max-w-3xl sm:text-6xl xl:text-[4.75rem]">
+          The best way to learn from books using AI.
         </h1>
-        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-soft">
-          Answer with Books turns recurring questions from Japanese and Korean readers into practical
-          guides grounded in durable books. The books stay global; the problems, examples, and
-          demand signals stay local.
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-soft">
+          Start with what you are trying to solve. Get the question behind it, the book lens that fits, and a useful next move.
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-4 text-[0.95rem]">
           <a
-            href="/answers/"
-            class="bg-ink text-paper px-5 py-2.5 rounded-sm hover:bg-accent transition-colors"
+            href="/onboarding/start/"
+            class="awb-pill awb-pill-primary transition-colors"
           >
-            Explore localized answers
+            Get started
           </a>
-          <a href="/books/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
-            Browse global source books
+          <a href="/answers/" class="awb-pill awb-pill-outline transition-colors">
+            Explore answers
           </a>
         </div>
       </div>
 
-      <div class="min-w-0 rounded-lg border border-line bg-white/55 p-4 shadow-sm sm:p-6">
-        <div class="rounded-md border border-line bg-paper p-5">
-          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Local question</p>
-          <h2 class="mt-3 font-serif text-2xl font-semibold leading-tight sm:text-3xl">
-            Am I validating this idea or just collecting compliments?
+      <div class="awb-card flex min-w-0 flex-col justify-center p-4 sm:p-5">
+        <div class="rounded-2xl border border-line bg-card p-5" data-insight-carousel>
+          {carouselItems.map((item, slideIndex) => (
+            <article data-carousel-slide={slideIndex} class={slideIndex === 0 ? '' : 'hidden'}>
+              <div class="flex items-center justify-between gap-3">
+                <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Insight carousel</p>
+                <p class="font-sans text-xs text-faint">{slideIndex + 1} / {carouselItems.length}</p>
+              </div>
+
+              <div class="mt-5 rounded-2xl border border-line bg-wash p-5">
+                <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Demand signal</p>
+                <h2 class="mt-3 font-serif text-2xl leading-tight sm:text-[1.85rem]">
+                  {item.answer.data.question}
+                </h2>
+              </div>
+
+              <div class="mt-5 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
+                <div class="flex min-w-0 flex-col justify-between rounded-2xl border border-line bg-card p-4">
+                  <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Books</p>
+                  <div class="mt-4 flex items-end justify-center gap-2">
+                    {item.books.map((book, index) => (
+                      <BookCover
+                        book={book}
+                        size={index === 1 ? 'md' : 'sm'}
+                        class={index === 1 ? 'relative z-10' : 'relative'}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div class="rounded-2xl border border-line bg-ink p-4 text-white">
+                  <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-white/55">Useful takeaway</p>
+                  <p class="mt-4 font-serif text-2xl leading-tight">
+                    {item.copy.title}
+                  </p>
+                  <p class="mt-3 text-sm leading-relaxed text-white/65">
+                    {item.copy.body}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-5 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                  {carouselItems.map((_, dotIndex) => (
+                    <button
+                      type="button"
+                      class={`h-1.5 rounded-full transition-all ${dotIndex === slideIndex ? 'w-6 bg-ink' : 'w-1.5 bg-line hover:bg-faint'}`}
+                      aria-label={`Show insight ${dotIndex + 1}`}
+                      data-carousel-dot={dotIndex}
+                    ></button>
+                  ))}
+                </div>
+                <a href={`/answers/${item.answer.id}/`} class="font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
+                  Open insight
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 pb-16">
+    <div class="awb-card overflow-hidden px-5 py-10 sm:px-7 lg:px-10 lg:py-12">
+      <div class="grid gap-7 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+          <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Question-first reading</p>
+          <h2 class="mt-3 max-w-2xl font-serif text-4xl leading-tight tracking-[-0.015em] lg:text-[2.85rem]">
+            The shelf starts working when it knows what you are stuck on.
           </h2>
         </div>
-
-        <div class="mt-5 grid min-w-0 grid-cols-1 gap-4">
-          <div class="rounded-md border border-line bg-wash/80 p-5">
-          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Global book synthesis</p>
-            <div class="mt-4 grid gap-5">
-              <div class="flex items-end justify-center gap-3">
-                {featuredBooks.slice(0, 3).map((book, index) => (
-                  <BookCover
-                    book={book}
-                    size={index === 1 ? 'lg' : 'md'}
-                    class={index === 1 ? 'relative z-10' : 'relative'}
-                  />
-                ))}
-              </div>
-              <p class="max-w-2xl text-base leading-relaxed text-soft">
-                The Mom Test, Thinking, Fast and Slow, and The Wisdom of Crowds become lenses for
-                separating real demand from politeness, optimism, and groupthink in Japan/Korea-aware
-                startup and work contexts.
-              </p>
-            </div>
-          </div>
-
-          <div class="rounded-md border border-line bg-ink p-5 text-paper">
-            <p class="font-sans text-xs uppercase tracking-[0.18em] text-paper/55">Answer path</p>
-            <div class="mt-5 grid gap-4 sm:grid-cols-3">
-              {[
-                ['1', 'Separate excitement from evidence.'],
-                ['2', 'Use past behavior, not praise.'],
-                ['3', 'Turn uncertainty into the next test.'],
-              ].map(([number, text]) => (
-                <div class="grid grid-cols-[2rem_1fr] gap-3">
-                  <span class="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 font-sans text-sm text-paper/80">
-                    {number}
-                  </span>
-                  <p class="min-w-0 font-serif text-lg font-semibold leading-tight">{text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-5 rounded-md border border-line bg-paper p-5">
-          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Book-grounded answer</p>
-          <p class="mt-3 text-base leading-relaxed text-soft">
-            The answer is not "trust your gut" or "ask users if they like it." It is to use books as
-            lenses, then adapt the method to local customer behavior, workplace norms, and decision
-            pressure in Japan and Korea.
+        <div>
+          <p class="max-w-2xl text-lg leading-relaxed text-soft">
+            Most reading tools start with summaries. Answer with Books starts with the situation on your mind, then points you toward the sharper question and the book lens that fits.
           </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-20 xl:px-[120px]">
-    <div class="grid grid-cols-1 gap-4 border-y border-line bg-wash/70 px-5 py-8 sm:px-6 md:grid-cols-3">
-      <div class="rounded-md bg-paper p-5">
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Listen locally</p>
-        <p class="mt-2 font-serif text-2xl font-semibold">Find questions Japanese and Korean readers keep asking.</p>
-      </div>
-      <div class="rounded-md bg-paper p-5">
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Synthesize globally</p>
-        <p class="mt-2 font-serif text-2xl font-semibold">Pull the strongest ideas across books.</p>
-      </div>
-      <div class="rounded-md bg-paper p-5">
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Apply locally</p>
-        <p class="mt-2 font-serif text-2xl font-semibold">Turn insight into the next useful move in context.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 lg:px-20 xl:px-[120px]">
-    <div class="grid grid-cols-1 gap-10 lg:grid-cols-[0.95fr_1.05fr] xl:gap-16">
-      <div>
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">How it works</p>
-        <div class="mt-6 grid gap-5">
-          <div class="grid grid-cols-[3rem_1fr] gap-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-md border border-line bg-wash text-accent">
-              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M4 6.5c2-1.2 5.2-1.2 8 1v11c-2.8-2.2-6-2.2-8-1z" />
-                <path d="M12 7.5c2.8-2.2 6-2.2 8-1v11c-2-1.2-5.2-1.2-8 1z" />
-                <path d="M12 7.5v11" />
-              </svg>
-            </div>
-            <div>
-              <h2 class="font-serif text-2xl font-semibold leading-tight tracking-tight">1. Add a book</h2>
-              <p class="mt-2 max-w-xl leading-relaxed text-soft">
-                A title is enough to start. Books earn their page through a real reading, then get
-                tested against questions coming from Japan and Korea.
-              </p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-[3rem_1fr] gap-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-md border border-line bg-wash text-accent">
-              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M9 3h6" />
-                <path d="M10 3v5l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 17l-5-9V3" />
-                <path d="M8 15h8" />
-              </svg>
-            </div>
-            <div>
-              <h2 class="font-serif text-2xl font-semibold leading-tight tracking-tight">2. Distill into a skill</h2>
-              <p class="mt-2 max-w-xl leading-relaxed text-soft">
-                Each book is reduced to its load-bearing ideas, mental models, frameworks, and when
-                to reach for them, then packaged as a callable skill.
-              </p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-[3rem_1fr] gap-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-md border border-line bg-wash text-accent">
-              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m8 8-4 4 4 4" />
-                <path d="m16 8 4 4-4 4" />
-                <path d="m14 4-4 16" />
-              </svg>
-            </div>
-            <div>
-              <h2 class="font-serif text-2xl font-semibold leading-tight tracking-tight">3. Call it anywhere</h2>
-              <p class="mt-2 max-w-xl leading-relaxed text-soft">
-                Ask a real question and the right books answer on this site, as a chat AI skill, or
-                over the REST API, with the Japanese/Korean context preserved.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="rounded-md border border-line bg-wash p-6 sm:p-8">
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Your shelf, callable</p>
-        <h2 class="mt-3 font-serif text-4xl font-semibold leading-tight tracking-tight">
-          Turn your books into one localized chat skill.
-        </h2>
-        <p class="mt-4 max-w-2xl leading-relaxed text-soft">
-          Add the books you've read and they become skills you can query from this site, your chat AI,
-          your agent of choice, or programmatically. The goal is not translation alone; it is answers
-          that understand the questions Japanese and Korean readers bring to the shelf.
-        </p>
-        <p class="mt-6">
           <a
-            href="/signup/"
-            class="bg-ink text-paper px-5 py-2.5 rounded-sm hover:bg-accent transition-colors text-[0.95rem]"
+            href="/onboarding/start/"
+            class="awb-pill awb-pill-primary mt-6 transition-colors"
           >
-            Add a book
+            Start personalization
           </a>
-        </p>
-        <div class="mt-8">
-          <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Skill + REST API install</p>
-          <pre class="mt-3 overflow-x-auto rounded-md bg-ink px-4 py-3 text-[0.9rem] leading-relaxed text-paper"><code class="whitespace-nowrap">{installCommand}</code></pre>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 lg:px-20 xl:px-[120px]">
-    <div class="grid grid-cols-1 gap-10 xl:grid-cols-[0.7fr_1.3fr] xl:gap-16">
-      <div>
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">The shelf</p>
-        <h2 class="mt-3 max-w-lg font-serif text-4xl font-semibold leading-tight tracking-tight">
-          A library that works backwards from local demand.
-        </h2>
-        <p class="mt-4 max-w-lg leading-relaxed text-soft">
-          Each book page extracts the useful machinery: concepts, stories, frameworks, failure modes,
-          and when to apply them. That lets each answer point back to real source material while still
-          speaking to the local situations readers are trying to solve.
-        </p>
-        <p class="mt-6">
-          <a href="/books/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
-            See all books
-          </a>
-        </p>
-      </div>
-      <div class="grid gap-4 md:grid-cols-2">
-        {featuredBooks.map((book) => <BookRow book={book} />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-20 xl:px-[120px]">
-    <div class="grid grid-cols-1 gap-10 border-y border-line bg-ink px-5 py-16 text-paper sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-10">
-      <div>
-        <p class="text-xs uppercase tracking-[0.18em] text-paper/55 font-sans">Internet question engine</p>
-        <h2 class="mt-3 max-w-lg font-serif text-4xl font-semibold leading-tight tracking-tight">
-          Japanese and Korean demand becomes better book-grounded answers.
-        </h2>
-        <p class="mt-4 max-w-lg leading-relaxed text-paper/70">
-          CrowdListen can reveal what people are asking, saving, debating, and getting stuck on across
-          Japanese and Korean communities. Answer with Books uses that demand signal to choose what to
-          synthesize next, while books supply the deeper judgment.
-        </p>
-      </div>
-      <div class="grid gap-3">
+      <div class="mt-10 grid gap-4 border-t border-line pt-8 lg:grid-cols-3">
         {[
-          ['Local demand', 'Am I validating this idea or just collecting compliments?'],
-          ['Source lenses', 'The Mom Test + Thinking, Fast and Slow'],
-          ['Digestible answer', 'Past behavior beats polite feedback; base rates beat founder optimism.'],
-        ].map(([label, text]) => (
-          <div class="rounded-md border border-white/10 bg-white/[0.06] p-5">
-            <p class="text-xs uppercase tracking-[0.18em] text-paper/45 font-sans">{label}</p>
-            <p class="mt-2 font-serif text-2xl font-semibold leading-tight">{text}</p>
-          </div>
+          ['Start with the situation', 'Name what you are trying to solve instead of searching by book title.'],
+          ['Find the better question', 'Turn vague top-of-mind thoughts into something you can actually work through.'],
+          ['Open the right lens', 'Pull the framework, story, or next move from the book that fits the moment.'],
+        ].map(([title, text], index) => (
+          <article class="rounded-2xl border border-line bg-wash/70 p-5">
+            <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">0{index + 1}</p>
+            <h3 class="mt-3 font-serif text-2xl leading-tight">{title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-soft">{text}</p>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 lg:px-20 xl:px-[120px]">
+  <script>
+    const carousel = document.querySelector<HTMLElement>('[data-insight-carousel]');
+    const slides = Array.from(carousel?.querySelectorAll<HTMLElement>('[data-carousel-slide]') ?? []);
+    let activeSlide = 0;
+    let slideTimer: number | undefined;
+
+    const showSlide = (index: number) => {
+      if (slides.length === 0) return;
+      activeSlide = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        slide.hidden = slideIndex !== activeSlide;
+        slide.classList.toggle('hidden', slideIndex !== activeSlide);
+      });
+    };
+
+    const scheduleSlide = () => {
+      window.clearInterval(slideTimer);
+      slideTimer = window.setInterval(() => showSlide(activeSlide + 1), 5200);
+    };
+
+    carousel?.addEventListener('click', (event) => {
+      const dot = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-carousel-dot]');
+      if (!dot) return;
+      showSlide(Number(dot.dataset.carouselDot ?? 0));
+      scheduleSlide();
+    });
+
+    showSlide(0);
+    scheduleSlide();
+  </script>
+
+  <section id="install" class="mx-auto max-w-6xl px-5">
+    <div class="awb-card grid grid-cols-1 overflow-hidden lg:grid-cols-[0.82fr_1.18fr]">
+      <div class="border-b border-line px-5 py-8 sm:px-7 lg:border-b-0 lg:border-r lg:py-9">
+        <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Agent skill</p>
+        <h2 class="mt-3 max-w-md font-serif text-3xl leading-tight tracking-[-0.015em] sm:text-4xl">
+          Install the shelf as a skill.
+        </h2>
+        <p class="mt-3 max-w-lg leading-relaxed text-soft">
+          Give your chat AI books it can call while you work.
+        </p>
+      </div>
+      <div class="px-5 py-8 sm:px-7 lg:py-9">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Install</p>
+            <p class="mt-2 text-sm leading-relaxed text-soft">
+              Add the book layer to your agent setup.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <a href="/signup/" class="awb-pill awb-pill-primary min-h-0 px-4 py-2 transition-colors">Create account</a>
+            <a href="/books/" class="awb-pill awb-pill-outline min-h-0 px-4 py-2 transition-colors">
+              Browse books
+            </a>
+          </div>
+        </div>
+        <pre class="mt-5 overflow-x-auto rounded-2xl border border-ink/10 bg-ink px-4 py-4 font-sans text-[0.88rem] leading-relaxed text-white shadow-sm"><code class="whitespace-nowrap"><span class="select-none text-white/45">$ </span>{installCommand}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 py-16">
     <div class="mb-7 flex items-end justify-between gap-5">
       <div>
-        <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Featured localized answers</p>
-        <h2 class="mt-3 font-serif text-4xl font-semibold tracking-tight">Answers from the global shelf</h2>
+        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Featured books</p>
+        <h2 class="mt-3 font-serif text-4xl tracking-[-0.015em]">Source books</h2>
       </div>
-      <a href="/answers/" class="hidden text-sm text-accent underline underline-offset-4 decoration-1 sm:inline">
-        All localized answers
+      <a href="/books/" class="hidden font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft sm:inline">
+        All books
+      </a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {shelfBooks.map((book) => <BookRow book={book} compact />)}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5">
+    <div class="awb-card grid grid-cols-1 gap-10 px-5 py-16 sm:px-6 lg:grid-cols-[0.88fr_1.12fr] lg:px-10">
+      <div class="flex flex-col justify-center">
+        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Profile</p>
+        <h2 class="mt-3 max-w-lg font-serif text-4xl leading-tight tracking-[-0.015em]">
+          Track what keeps showing up.
+        </h2>
+        <p class="mt-4 max-w-lg leading-relaxed text-soft">
+          See the books, answers, and patterns you return to.
+        </p>
+      </div>
+      <ActivityPanel
+        eyebrow="Profile tracker"
+        title="A visible trail of useful insights."
+        description="Open insights, save books, and build a stash of book-backed answers for the situations that keep coming up."
+        compact
+        showDetails={false}
+        class="bg-card text-ink"
+      />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <div class="mb-7 flex items-end justify-between gap-5">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Featured answers</p>
+        <h2 class="mt-3 font-serif text-4xl tracking-[-0.015em]">Answers from the shelf</h2>
+      </div>
+      <a href="/answers/" class="hidden font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft sm:inline">
+        All answers
       </a>
     </div>
     <div class="grid gap-4 lg:grid-cols-3">
-      {featuredAnswers.map((answer) => <AnswerRow answer={answer} bookTitles={bookTitles} />)}
+      {shelfAnswers.map((answer) => <AnswerRow answer={answer} bookTitles={bookTitles} compact />)}
     </div>
   </section>
 
-  <FaqList
-    items={homeFaqs}
-    eyebrow="Site Q&A"
-    title="How the glocal book engine works"
-  />
-
-  <section class="mx-auto max-w-[1440px] px-5 pb-16 sm:px-8 lg:px-20 xl:px-[120px]">
-    <div class="grid grid-cols-1 gap-8 rounded-md border border-line bg-wash p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
-      <div>
-        <h2 class="font-serif text-3xl font-semibold tracking-tight">Build a shelf around the questions you actually have</h2>
-        <p class="mt-3 max-w-2xl leading-relaxed text-soft">
-          Save books, follow answers, and turn your recurring Japan/Korea-specific questions into a
-          living library of ideas you can call on.
-        </p>
-      </div>
-      <div class="flex flex-wrap gap-3">
-        <a
-          href="/signup/"
-          class="bg-ink text-paper px-5 py-2.5 rounded-sm hover:bg-accent transition-colors text-[0.95rem]"
-        >
-          Create account
-        </a>
-        <a
-          href="/login/"
-          class="border border-line px-5 py-2.5 rounded-sm text-[0.95rem] text-soft hover:border-accent hover:text-accent"
-        >
-          Log in
-        </a>
-      </div>
-    </div>
-  </section>
+  <FaqList items={homeFaqs} eyebrow="FAQ" title="Got questions? We have answers." width="wide" />
 </Base>

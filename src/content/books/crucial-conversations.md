@@ -9,7 +9,7 @@ featured: false
 order: 14
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Safety precedes substance.**
 When people feel unsafe, they move to silence or violence: withholding, masking, attacking, controlling, or defensiveness. The conversation cannot improve until safety returns.
@@ -38,10 +38,6 @@ Hard messages land better when both sides can see the larger aim they still shar
 - When a team keeps confusing politeness with alignment.
 - When a conversation needs both honesty and relationship protection.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The central discipline is to protect the conditions under which truth can enter the room.
-
-## How I've applied it
-
-CrowdListen demand often contains conflict language: managers asking how to give feedback, employees asking whether to confront a boss, founders avoiding a cofounder issue. This book gives those questions a usable sequence.

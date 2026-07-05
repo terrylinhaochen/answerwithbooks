@@ -9,7 +9,7 @@ featured: false
 order: 7
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Startups are learning machines.**
 Ries defines the startup problem as uncertainty, not execution. A startup is not just a small company; it is an institution searching for a repeatable model. The main output should be validated learning, not features shipped.
@@ -41,10 +41,6 @@ The loop needs a decision point. If the evidence undermines the core assumption,
 - When growth metrics look good but retention or willingness to pay is unclear.
 - When deciding whether a failure is a feature problem or a thesis problem.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The book's useful discipline is not "move fast." It is "make the next build answer a question that matters."
-
-## How I've applied it
-
-For Answer with Books, the Lean Startup question is whether people want book summaries, or whether they want book-backed answers to problems they already have. The current slice tests the latter: demand first, book lens second, short useful guide third.

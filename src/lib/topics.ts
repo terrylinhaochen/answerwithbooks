@@ -1,35 +1,34 @@
 import type { CollectionEntry } from 'astro:content';
-import { localizedTopicDescriptions } from './glocal';
 
 export const CANONICAL_TOPICS = [
   {
     slug: 'career',
     label: 'Career',
-    description: localizedTopicDescriptions.career,
+    description: 'Career direction, skill building, management, work choices, and the next professional step.',
     tags: ['career', 'work', 'skill-building', 'life-design'],
   },
   {
     slug: 'relationships',
     label: 'Relationships',
-    description: localizedTopicDescriptions.relationships,
+    description: 'Communication, conflict, trust, feedback, leadership, and the conversations that shape work and life.',
     tags: ['communication', 'conflict', 'teams', 'leadership', 'management'],
   },
   {
     slug: 'health',
     label: 'Health',
-    description: localizedTopicDescriptions.health,
+    description: 'Habits, burnout, attention, energy, and behavior change.',
     tags: ['health', 'habits', 'behavior-change', 'burnout'],
   },
   {
     slug: 'technology',
     label: 'Technology',
-    description: localizedTopicDescriptions.technology,
+    description: 'Systems, design, usability, operations, quality, and how technical choices affect people.',
     tags: ['technology', 'systems', 'operations', 'quality', 'design', 'usability', 'web', 'science', 'epistemology', 'paradigms', 'institutions', 'psychology'],
   },
   {
     slug: 'business',
     label: 'Business',
-    description: localizedTopicDescriptions.business,
+    description: 'Startups, product, strategy, validation, customer research, metrics, and growth decisions.',
     tags: [
       'business',
       'startups',
@@ -55,19 +54,19 @@ export const CANONICAL_TOPICS = [
   {
     slug: 'negotiation',
     label: 'Negotiation',
-    description: localizedTopicDescriptions.negotiation,
+    description: 'Salary, leverage, persuasion, tradeoffs, and difficult back-and-forth decisions.',
     tags: ['negotiation', 'salary'],
   },
   {
     slug: 'productivity',
     label: 'Productivity',
-    description: localizedTopicDescriptions.productivity,
+    description: 'Focus, overwhelm, time, priorities, execution, and getting meaningful work done.',
     tags: ['productivity', 'focus', 'time', 'overwhelm', 'execution', 'priorities'],
   },
   {
     slug: 'decisions',
     label: 'Decisions',
-    description: localizedTopicDescriptions.decisions,
+    description: 'Judgment, intuition, collective intelligence, uncertainty, and choosing under pressure.',
     tags: ['decision-making', 'judgment', 'intuition', 'collective intelligence', 'markets', 'ideas'],
   },
 ] as const;

@@ -20,17 +20,6 @@ export function faqJsonLd(url: string, items: FaqItem[]) {
   };
 }
 
-export function audienceJsonLd() {
-  return {
-    '@type': 'Audience',
-    audienceType: 'Japanese and Korean readers',
-    geographicArea: [
-      { '@type': 'Country', name: 'Japan' },
-      { '@type': 'Country', name: 'South Korea' },
-    ],
-  };
-}
-
 export function compactList(items: string[], fallback: string) {
   if (items.length === 0) return fallback;
   if (items.length === 1) return items[0];

@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-07-04",
+  "purpose": "Demand-led candidate books to evaluate when CrowdListen surfaces source gaps.",
+  "candidates": [
+    {
+      "id": "obviously-awesome",
+      "title": "Obviously Awesome",
+      "author": "April Dunford",
+      "reason": "Useful for recurring questions about positioning, differentiation, and explaining why a product matters.",
+      "demand_links": ["finding-real-users", "validating-buying-intent", "gtm-positioning"],
+      "status": "candidate"
+    },
+    {
+      "id": "crossing-the-chasm",
+      "title": "Crossing the Chasm",
+      "author": "Geoffrey A. Moore",
+      "reason": "Useful for questions about early adopters, beachhead markets, and moving from interest to adoption.",
+      "demand_links": ["finding-real-users", "validating-buying-intent", "gtm-positioning"],
+      "status": "candidate"
+    },
+    {
+      "id": "traction",
+      "title": "Traction",
+      "author": "Gabriel Weinberg and Justin Mares",
+      "reason": "Useful for demand questions about channels, repeatable growth tests, and where to find users.",
+      "demand_links": ["finding-real-users", "channel-testing", "audience-discovery"],
+      "status": "candidate"
+    },
+    {
+      "id": "jobs-to-be-done",
+      "title": "Competing Against Luck",
+      "author": "Clayton M. Christensen, Taddy Hall, Karen Dillon, and David S. Duncan",
+      "reason": "Useful for translating messy customer language into demand, jobs, and buying triggers.",
+      "demand_links": ["customer-discovery", "validating-buying-intent", "product-strategy"],
+      "status": "candidate"
+    }
+  ]
+}

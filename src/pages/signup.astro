@@ -4,14 +4,14 @@ import Base from '../layouts/Base.astro';
 
 <Base
   title="Create an account"
-  description="Create a free Answer with Books account to save Japan/Korea-aware books and answers for later."
+  description="Create a free Answer with Books account to save books and answers for later."
   path="/signup/"
   robots="noindex, follow"
 >
   <section class="mx-auto max-w-sm px-5 pt-20 pb-24">
     <h1 class="font-serif text-3xl font-semibold tracking-tight">Create an account</h1>
-    <p class="mt-3 text-soft text-[0.95rem]">
-      Free, and takes a minute. Save global books and localized answers to your own shelf.
+    <p class="mt-3 text-soft text-[0.95rem]" data-signup-copy>
+      Free, and takes a minute. Save books to your own shelf.
     </p>
 
     <form id="signup-form" class="mt-8 space-y-5" novalidate>
@@ -52,16 +52,30 @@ import Base from '../layouts/Base.astro';
 
     <p class="mt-6 text-sm text-soft">
       Already have one?
-      <a href="/login/" class="text-accent underline underline-offset-4 decoration-1">Log in</a>.
+      <a href="/login/" data-login-link class="text-accent underline underline-offset-4 decoration-1">Log in</a>.
     </p>
   </section>
 
   <script>
     import { supabase } from '../lib/supabase';
+    import { hasPendingOnboarding, persistOnboardingProfile } from '../lib/onboarding';
 
     const form = document.getElementById('signup-form') as HTMLFormElement;
     const message = document.getElementById('form-message') as HTMLParagraphElement;
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const signupCopy = document.querySelector<HTMLElement>('[data-signup-copy]');
+    const loginLink = document.querySelector<HTMLAnchorElement>('[data-login-link]');
+    const fromOnboarding = new URLSearchParams(window.location.search).get('from') === 'onboarding';
+    const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
+    const redirectAfterAuth = pendingOnboarding ? '/profile/?onboarded=1' : '/my-books/';
+
+    if (pendingOnboarding) {
+      if (signupCopy) {
+        signupCopy.textContent =
+          'Your setup is saved in this browser. Create an account to sync it to your profile.';
+      }
+      if (loginLink) loginLink.href = '/login/?from=onboarding';
+    }
 
     const show = (text: string, kind: 'error' | 'ok') => {
       message.textContent = text;
@@ -70,7 +84,14 @@ import Base from '../layouts/Base.astro';
     };
 
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) window.location.href = '/my-books/';
+      if (!data.session) return;
+      if (pendingOnboarding) {
+        persistOnboardingProfile(supabase, data.session).finally(() => {
+          window.location.href = redirectAfterAuth;
+        });
+      } else {
+        window.location.href = redirectAfterAuth;
+      }
     });
 
     form.addEventListener('submit', async (e) => {
@@ -95,11 +116,14 @@ import Base from '../layouts/Base.astro';
 
       if (data.session) {
         // Email confirmation disabled in this project: signed in immediately.
-        window.location.href = '/my-books/';
+        if (pendingOnboarding) await persistOnboardingProfile(supabase, data.session);
+        window.location.href = redirectAfterAuth;
       } else {
         // Email confirmation required.
         show(
-          'Almost there — check your email for a confirmation link, then log in.',
+          pendingOnboarding
+            ? 'Almost there — check your email for a confirmation link, then log in to sync your setup.'
+            : 'Almost there — check your email for a confirmation link, then log in.',
           'ok'
         );
         submitBtn.textContent = 'Confirmation email sent';

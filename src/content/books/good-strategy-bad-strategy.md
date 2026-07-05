@@ -9,7 +9,7 @@ featured: false
 order: 6
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Bad strategy hides the hard part.**
 Bad strategy often sounds sophisticated: vision statements, values, financial targets, long initiative lists. Rumelt's point is that these can all avoid the actual work of strategy: naming the central challenge and choosing what not to do.
@@ -38,10 +38,6 @@ Words like "innovative," "customer-centric," and "world-class" are not automatic
 - When a company says "strategy" but means revenue target.
 - When you need a sharper way to turn research into choices.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The kernel is the book's durable tool: diagnosis, guiding policy, coherent action. The phrase is simple enough to remember and strict enough to expose weak thinking.
-
-## How I've applied it
-
-Rumelt is useful for CrowdListen because demand research can produce too many plausible directions. The kernel forces a handoff from "users are saying many things" to "this is the central challenge, this is the bet, and these are the few actions that belong together."

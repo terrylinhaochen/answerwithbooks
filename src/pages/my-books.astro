@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import ActivityPanel from '../components/ActivityPanel.astro';
 
 // Build-time book metadata, shipped as a data island for the client script.
 const books = await getCollection('books');
@@ -10,35 +11,73 @@ const bookMeta = Object.fromEntries(
 ---
 
 <Base
-  title="My books"
-  description="Your saved global books and localized answers on Answer with Books."
+  title="Profile"
+  description="Your saved books, question activity, and profile on Answer with Books."
   path="/my-books/"
   robots="noindex, follow"
 >
-  <section class="mx-auto max-w-3xl px-5 pt-16 pb-24">
+  <section class="mx-auto max-w-6xl px-5 pt-16 pb-24">
     <div id="library-loading" class="text-soft">Checking your session…</div>
 
     <div id="library-content" class="hidden">
-      <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">My localized shelf</p>
-      <h1 class="mt-3 font-serif text-4xl font-semibold tracking-tight">
-        Welcome back<span id="user-name"></span>.
-      </h1>
+      <div class="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+        <div>
+          <p class="text-xs uppercase tracking-[0.18em] text-faint font-sans">Profile</p>
+          <h1 class="mt-3 max-w-lg font-serif text-5xl font-semibold leading-tight tracking-tight">
+            Welcome back<span id="user-name"></span>.
+          </h1>
+          <p class="mt-5 max-w-lg text-lg leading-relaxed text-soft">
+            This is the start of your question profile: the books you save, the answers you open,
+            and the topics that keep coming back.
+          </p>
+          <p class="mt-7">
+            <a href="/answers/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
+              Find the next answer
+            </a>
+          </p>
+        </div>
 
-      <h2 class="mt-12 text-xs uppercase tracking-[0.18em] text-faint font-sans border-b border-line pb-3">
-        Saved global books
-      </h2>
-      <ul id="saved-list" class="divide-y divide-line"></ul>
-      <p id="saved-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
-        Nothing saved yet. Browse <a href="/books/" class="text-accent underline underline-offset-4 decoration-1">the global shelf</a>
-        and hit “Save this book” on any book.
-      </p>
+        <ActivityPanel
+          eyebrow="Your activity"
+          title="Keep a visible streak of exploration."
+          description="The goal is not generic reading progress. It is a trail of recurring questions, source books, and next questions the system can use to help you explore better."
+        />
+      </div>
 
-      <div class="mt-12 py-5 px-5 bg-wash rounded-sm text-[0.95rem] text-soft leading-relaxed max-w-prose">
-        <p class="font-semibold text-ink mb-1">Coming soon</p>
-        <p>
-          Saved localized answers, reading notes, and syncing your shelf across devices. For now,
-          saved books live in this browser.
-        </p>
+      <div class="mt-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <section class="rounded-md border border-line bg-paper p-5 sm:p-6">
+          <h2 class="text-xs uppercase tracking-[0.18em] text-faint font-sans border-b border-line pb-3">
+            Saved books
+          </h2>
+          <ul id="saved-list" class="divide-y divide-line"></ul>
+          <p id="saved-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+            Nothing saved yet. Browse <a href="/books/" class="text-accent underline underline-offset-4 decoration-1">the shelf</a>
+            and hit "Save this book" on any book.
+          </p>
+        </section>
+
+        <section class="rounded-md border border-line bg-wash p-5 text-[0.95rem] leading-relaxed text-soft sm:p-6">
+          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Next layer</p>
+          <h2 class="mt-3 font-serif text-3xl font-semibold leading-tight tracking-tight text-ink">
+            From saved shelf to question graph.
+          </h2>
+          <p class="mt-3">
+            The useful profile is not just books read. It should connect what you are thinking about,
+            which answers helped, which books supplied the insight, and what question should come next.
+          </p>
+          <div class="mt-5 grid gap-3">
+            {[
+              'Saved answers',
+              'Top-of-mind questions',
+              'Source quotes and concepts',
+              'Next question recommendations',
+            ].map((item) => (
+              <div class="border-t border-line pt-3 font-serif text-lg font-semibold text-ink">
+                {item}
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
 
       <p class="mt-10">

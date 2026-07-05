@@ -12,20 +12,19 @@ export async function GET() {
 
   const body = `# Answer with Books
 
-Answer with Books turns recurring Japan/Korea-aware questions into short, book-grounded how-to guides.
+Answer with Books turns recurring internet questions into short, book-grounded how-to guides.
 The site is maintained by Terry Chen.
 
 ## Best Entry Points
 
 - Home: ${site}/
-- Localized guides: ${site}/answers/
-- Global source books: ${site}/books/
+- Guides: ${site}/answers/
+- Source books: ${site}/books/
 - Topics: ${site}/topics/
-- About: ${site}/about/
 - RSS: ${site}/feed.xml
 - Sitemap: ${site}/sitemap-index.xml
 
-## Localized Guides
+## Guides
 
 ${answers
   .map(
@@ -34,7 +33,7 @@ ${answers
   )
   .join('\n')}
 
-## Global Source Books
+## Source Books
 
 ${books
   .map((book) => `- [${book.data.title}](${site}/books/${book.id}/): ${book.data.oneLiner}`)

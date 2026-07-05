@@ -1,0 +1,137 @@
+---
+import Base from '../layouts/Base.astro';
+import ActivityPanel from '../components/ActivityPanel.astro';
+---
+
+<Base
+  title="Profile"
+  description="Track your Answer with Books activity, saved books, and insight exploration profile."
+  path="/profile/"
+  robots="noindex, follow"
+>
+  <section data-profile-loading class="mx-auto max-w-6xl px-5 pb-16 pt-16">
+    <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Profile</p>
+    <h1 class="mt-3 font-serif text-4xl font-semibold leading-tight">Checking your session...</h1>
+  </section>
+
+  <section data-profile-shell class="mx-auto hidden max-w-6xl px-5 pb-16 pt-16">
+    <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
+      <div>
+        <p class="font-sans text-xs uppercase tracking-[0.18em] text-accent">Profile</p>
+        <h1 class="mt-3 max-w-3xl font-serif text-5xl font-semibold leading-tight tracking-tight">
+          Your insight trail.
+        </h1>
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">
+          Track the book-backed moves you return to, then use that behavior to surface what to read, ask, and apply next.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="/my-books/"
+          data-profile-primary
+          class="bg-ink px-5 py-2.5 text-[0.95rem] text-paper transition-colors hover:bg-accent"
+        >
+          Open dashboard
+        </a>
+        <a
+          href="/answers/"
+          class="border border-line px-5 py-2.5 text-[0.95rem] text-soft transition-colors hover:border-accent hover:text-accent"
+        >
+          Explore insights
+        </a>
+      </div>
+    </div>
+
+    <section data-onboarding-summary class="mt-8 hidden border-y border-line bg-wash/60 px-5 py-6 sm:px-6">
+      <div class="grid gap-5 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
+        <div>
+          <p class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Personalization setup</p>
+          <h2 class="mt-3 font-serif text-3xl font-semibold leading-tight">
+            Your shelf has a starting point.
+          </h2>
+          <p class="mt-3 text-sm leading-relaxed text-soft" data-onboarding-sync>
+            Saved in this browser.
+          </p>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-3">
+          <div class="border border-line bg-paper p-4">
+            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Focus</p>
+            <p class="mt-2 font-serif text-xl font-semibold leading-tight" data-onboarding-focus></p>
+          </div>
+          <div class="border border-line bg-paper p-4">
+            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Shelf</p>
+            <p class="mt-2 font-serif text-xl font-semibold leading-tight" data-onboarding-shelf></p>
+          </div>
+          <div class="border border-line bg-paper p-4">
+            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Top of mind</p>
+            <p class="mt-2 text-sm leading-relaxed text-soft" data-onboarding-goal></p>
+          </div>
+          <div class="border border-line bg-paper p-4 sm:col-span-3">
+            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">ChatGPT</p>
+            <p class="mt-2 text-sm leading-relaxed text-soft" data-onboarding-chatgpt></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="mt-10">
+      <ActivityPanel
+        eyebrow="Reading activity"
+        title="A map of the useful insights you keep needing."
+        description="Open insights, save books, and let repeated behavior reveal the questions and book lenses worth keeping close."
+        showDetails={false}
+        showLink={false}
+      />
+    </div>
+  </section>
+
+  <script>
+    import { supabase } from '../lib/supabase';
+    import { readOnboardingProfile, persistOnboardingProfile, hasPendingOnboarding } from '../lib/onboarding';
+
+    const primary = document.querySelector<HTMLAnchorElement>('[data-profile-primary]');
+    const summary = document.querySelector<HTMLElement>('[data-onboarding-summary]');
+    const shell = document.querySelector<HTMLElement>('[data-profile-shell]');
+    const loading = document.querySelector<HTMLElement>('[data-profile-loading]');
+    const focusNode = document.querySelector<HTMLElement>('[data-onboarding-focus]');
+    const shelfNode = document.querySelector<HTMLElement>('[data-onboarding-shelf]');
+    const goalNode = document.querySelector<HTMLElement>('[data-onboarding-goal]');
+    const chatgptNode = document.querySelector<HTMLElement>('[data-onboarding-chatgpt]');
+    const syncNode = document.querySelector<HTMLElement>('[data-onboarding-sync]');
+
+    const renderOnboardingSummary = (profile: ReturnType<typeof readOnboardingProfile>, synced = false) => {
+      if (!profile || !summary) return;
+      summary.classList.remove('hidden');
+      if (focusNode) focusNode.textContent = profile.focus.length > 0 ? profile.focus.join(', ') : 'Not chosen yet';
+      if (shelfNode) shelfNode.textContent = profile.shelf;
+      if (goalNode) goalNode.textContent = profile.goal || 'No current top of mind yet.';
+      if (chatgptNode) {
+        chatgptNode.textContent =
+          profile.chatgpt?.intent === 'connect'
+            ? `Marked for future ChatGPT connection${profile.chatgpt.useCase ? `: ${profile.chatgpt.useCase}` : '.'}`
+            : 'Not requested yet.';
+      }
+      if (syncNode) syncNode.textContent = synced ? 'Synced to your account.' : 'Saved in this browser.';
+    };
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!primary) return;
+      if (!data.session) {
+        window.location.replace('/onboarding/start/?from=profile');
+        return;
+      }
+
+      loading?.classList.add('hidden');
+      shell?.classList.remove('hidden');
+
+      if (hasPendingOnboarding()) {
+        persistOnboardingProfile(supabase, data.session).then(() => {
+          renderOnboardingSummary(readOnboardingProfile(), true);
+        });
+      } else {
+        const metadataProfile = data.session.user.user_metadata?.answer_with_books_onboarding;
+        renderOnboardingSummary(readOnboardingProfile() || metadataProfile, Boolean(metadataProfile));
+      }
+    });
+  </script>
+</Base>

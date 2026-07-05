@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to turn messy feedback into a real signal visual">
+  <rect width="1280" height="720" fill="#f23a1f"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#a91f10" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#fff9ea" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#fff9ea" opacity=".22"/>
+  <path d="M84 168h254" stroke="#fff9ea" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#fff9ea" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">CUSTOMER RESEARCH</text>
+  <text x="84" y="418" fill="#fff9ea" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" letter-spacing="0" opacity=".98">Feedback Signal</text>
+  <text x="86" y="486" fill="#fff9ea" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">11</text>
+  
+    <path d="m604 142 34 92 98 4-76 60 26 94-82-54-82 54 26-94-76-60 98-4Z" fill="#15d0c8"/>
+    <circle cx="604" cy="286" r="132" fill="none" stroke="#fff9ea" stroke-width="13" opacity=".25"/>
+</svg>

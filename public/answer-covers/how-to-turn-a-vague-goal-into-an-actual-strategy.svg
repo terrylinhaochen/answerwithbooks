@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to turn a vague goal into an actual strategy visual">
+  <rect width="1280" height="720" fill="#ffc21a"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#d69300" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#211a00" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#211a00" opacity=".22"/>
+  <path d="M84 168h254" stroke="#211a00" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#211a00" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">STRATEGY</text>
+  <text x="84" y="418" fill="#211a00" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="0" opacity=".98">Strategy</text>
+  <text x="86" y="486" fill="#211a00" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">12</text>
+  
+      <circle cx="604" cy="282" r="128" fill="#d69300" opacity=".38"/>
+      <circle cx="604" cy="282" r="92" fill="none" stroke="#211a00" stroke-width="16" opacity=".7"/>
+      <circle cx="604" cy="282" r="44" fill="#1647d9"/>
+      <path d="m604 282 122-104" stroke="#0a8f74" stroke-width="18" stroke-linecap="round"/>
+</svg>

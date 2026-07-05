@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1536" viewBox="0 0 512 768" role="img" aria-labelledby="title desc">
+  <title id="title">The Wisdom of Crowds cover</title>
+  <desc id="desc">Generated editorial cover for The Wisdom of Crowds by James Surowiecki.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#56364b" offset="0"/>
+      <stop stop-color="#2a1622" offset="1"/>
+    </linearGradient>
+    <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer></filter>
+  </defs>
+  <rect width="512" height="768" fill="url(#g)"/>
+  <rect x="0" y="0" width="76" height="768" fill="#000" opacity=".18"/>
+  <rect x="78" y="0" width="2" height="768" fill="#fff" opacity=".09"/>
+  <rect width="512" height="768" filter="url(#paper)" opacity=".55"/>
+  <path d="M430-20c-70 110-60 224 22 342 48 68 54 146 18 234" fill="none" stroke="#f9efe3" stroke-width="24" opacity=".06"/>
+  
+      <path d="M116 340h246" stroke="#f9efe3" stroke-width="10" opacity=".25"/>
+      <path d="M238 340v150" stroke="#f9efe3" stroke-width="10" opacity=".25"/>
+      <path d="m238 490 74-74 74 74-74 74Z" fill="#d7a84d"/>
+      <path d="m102 340 78-78 78 78-78 78Z" fill="#f9efe3" opacity=".22"/><path d="m302 340 78-78 78 78-78 78Z" fill="#f9efe3" opacity=".22"/>
+  <g transform="translate(102 92)">
+    <text x="0" y="0" fill="#f9efe3" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="5" opacity=".76">JAMES SUROWIECKI</text>
+  </g>
+  <g transform="translate(102 150)">
+    <text x="0" y="0" fill="#f9efe3" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700">The Wisdom of</text><text x="0" y="50" fill="#f9efe3" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700">Crowds</text>
+  </g>
+  <rect x="102" y="612" width="196" height="34" fill="#d7a84d" opacity=".95"/>
+  <text x="102" y="696" fill="#f9efe3" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="6" opacity=".76">2004</text>
+</svg>

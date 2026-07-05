@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to make a confusing page easier to use visual">
+  <rect width="1280" height="720" fill="#d8326f"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#8f1249" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#fff8ee" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#fff8ee" opacity=".22"/>
+  <path d="M84 168h254" stroke="#fff8ee" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#fff8ee" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">DESIGN</text>
+  <text x="84" y="418" fill="#fff8ee" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="0" opacity=".98">Clear Pages</text>
+  <text x="86" y="486" fill="#fff8ee" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">14</text>
+  
+      <rect x="462" y="166" width="104" height="104" rx="18" fill="#ffd447"/>
+      <rect x="590" y="166" width="104" height="104" rx="18" fill="#fff8ee" opacity=".2"/>
+      <rect x="462" y="294" width="104" height="104" rx="18" fill="#fff8ee" opacity=".2"/>
+      <rect x="590" y="294" width="104" height="104" rx="18" fill="#ff8a1f"/>
+</svg>

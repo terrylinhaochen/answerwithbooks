@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to delegate without losing control visual">
+  <rect width="1280" height="720" fill="#6a24d8"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#3d1288" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#fffefa" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#fffefa" opacity=".22"/>
+  <path d="M84 168h254" stroke="#fffefa" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#fffefa" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">MANAGEMENT</text>
+  <text x="84" y="418" fill="#fffefa" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="0" opacity=".98">Delegate</text>
+  <text x="86" y="486" fill="#fffefa" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">04</text>
+  
+      <path d="M510 380 690 132M592 392 772 144" stroke="#fffefa" stroke-width="17" opacity=".68"/>
+      <path d="M563 304h145M600 252h145M638 199h145" stroke="#b7ff1f" stroke-width="20"/>
+</svg>

@@ -9,7 +9,7 @@ featured: false
 order: 19
 ---
 
-## Core mental models
+## Core lessons
 
 **1. The passion hypothesis is incomplete.**
 Newport argues that loving your work is often an outcome of mastery, autonomy, and impact, not a starting instruction.
@@ -38,10 +38,6 @@ People want more autonomy, but pursuing control before having enough career capi
 - When a career change needs a practical bridge.
 - When the question is how to become valuable, not just how to feel inspired.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The useful reframe is to stop asking only what work you want and start asking what capabilities can earn better work.
-
-## How I've applied it
-
-This book supports Answer with Books topics around career uncertainty, skill compounding, and deciding whether to switch, stay, or deepen.

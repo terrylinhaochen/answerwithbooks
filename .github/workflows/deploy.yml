@@ -22,6 +22,9 @@ jobs:
       # safe to keep in the workflow so forks/builds stay reproducible.
       PUBLIC_SUPABASE_URL: https://lkyitzrjxptvtahigtdz.supabase.co
       PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxreWl0enJqeHB0dnRhaGlndGR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMDIzMjIsImV4cCI6MjA2NTg3ODMyMn0.V_gXx2pJWKHMSVstAU8mbw1TSBCct4nBe6IgtgU4VzY
+      PUBLIC_GA_MEASUREMENT_ID: G-FNWRC3EMV4
+      PUBLIC_GA_MEASUREMENT_IDS: ${{ vars.ANSWERWITHBOOKS_GA_MEASUREMENT_IDS }}
+      PUBLIC_GOOGLE_SITE_VERIFICATION: xFZB90c9egZSAqh5_HxtLdxhxym5yMcHFYwwYtnwrHg
     steps:
       - name: Checkout
         uses: actions/checkout@v4

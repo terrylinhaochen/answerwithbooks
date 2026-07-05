@@ -1,0 +1,255 @@
+---
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  compact?: boolean;
+  showDetails?: boolean;
+  showLink?: boolean;
+  class?: string;
+}
+
+const {
+  eyebrow = 'Reading activity',
+  title = 'Your question graph grows as you explore.',
+  description =
+    'Track the questions, books, and topics you keep returning to so the site can surface better unknown unknowns over time.',
+  compact = false,
+  showDetails = true,
+  showLink = true,
+} = Astro.props;
+const className = Astro.props.class ?? '';
+const weeks = 53;
+const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
+---
+
+<section class={`activity-panel rounded-2xl border border-line bg-paper p-5 sm:p-6 ${className}`} data-activity-panel>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div class="min-w-0">
+      <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">{eyebrow}</p>
+      <h2 class="mt-3 max-w-xl font-serif text-3xl leading-tight tracking-[-0.015em]">
+        {title}
+      </h2>
+      <p class="mt-3 max-w-2xl leading-relaxed text-soft">
+        {description}
+      </p>
+    </div>
+    {
+      showLink && (
+        <a href="/profile/" class="shrink-0 font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
+          Open profile
+        </a>
+      )
+    }
+  </div>
+
+  <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+    {[
+      ['streak', 'Day streak'],
+      ['questions', 'Questions opened'],
+      ['books', 'Books explored'],
+      ['saved', 'Books saved'],
+    ].map(([key, label]) => (
+      <div class="rounded-2xl border border-line bg-wash/70 p-4">
+        <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">{label}</p>
+        <p class="mt-2 font-serif text-3xl leading-none" data-activity-stat={key}>0</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="mt-6 overflow-x-auto pb-1">
+    <div class="activity-graph w-max" data-activity-graph>
+      <div class="activity-months" aria-hidden="true">
+        {Array.from({ length: weeks }, (_, index) => (
+          <span data-activity-month={index}></span>
+        ))}
+      </div>
+      <div class="activity-weekdays font-sans text-xs text-faint" aria-hidden="true">
+        <span style="grid-row: 2;">Mon</span>
+        <span style="grid-row: 4;">Wed</span>
+        <span style="grid-row: 6;">Fri</span>
+      </div>
+      <div class="activity-cells" aria-label="Recent Answer with Books activity">
+        {cells.map((index) => (
+          <span
+            class="activity-cell block rounded-[2px] border border-line bg-wash"
+            data-activity-cell={index}
+          ></span>
+        ))}
+      </div>
+      <div class="activity-legend font-sans text-xs text-faint" aria-hidden="true">
+        <span>Less</span>
+        <span class="activity-cell" data-level="0"></span>
+        <span class="activity-cell" data-level="2"></span>
+        <span class="activity-cell" data-level="3"></span>
+        <span class="activity-cell" data-level="4"></span>
+        <span>More</span>
+      </div>
+    </div>
+  </div>
+
+  {
+    showDetails && (
+      <div class="mt-5 grid gap-3 text-sm text-soft sm:grid-cols-3">
+        {[
+          ['Explore', 'Open answers that match recurring internet questions.'],
+          ['Ground', 'Save books that give the answer real source material.'],
+          ['Return', 'Let repeated behavior reveal what is actually top of mind.'],
+        ].map(([label, text]) => (
+          <div class="border-t border-line pt-3">
+            <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">{label}</p>
+            <p class="mt-1 leading-relaxed">{text}</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
+</section>
+
+<script>
+  const panels = document.querySelectorAll<HTMLElement>('[data-activity-panel]');
+  const activityKey = 'awb:activity';
+  const savedKey = 'awb:saved-books';
+
+  const readJson = <T,>(key: string, fallback: T): T => {
+    try {
+      return JSON.parse(localStorage.getItem(key) ?? '') as T;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const dateKey = (date: Date) => date.toISOString().slice(0, 10);
+  const renderActivityPanels = () => {
+    const activity = readJson<{
+      days?: Record<string, number>;
+      sections?: Record<string, number>;
+      total?: number;
+    }>(activityKey, {});
+    const saved = readJson<string[]>(savedKey, []);
+    const days = activity.days ?? {};
+    const sections = activity.sections ?? {};
+    const today = new Date();
+
+    let streak = 0;
+    for (let offset = 0; offset < 365; offset += 1) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - offset);
+      if ((days[dateKey(date)] ?? 0) > 0) streak += 1;
+      else break;
+    }
+
+    for (const panel of panels) {
+      const setStat = (name: string, value: number) => {
+        const node = panel.querySelector(`[data-activity-stat="${name}"]`);
+        if (node) node.textContent = String(value);
+      };
+
+      setStat('streak', streak);
+      setStat('questions', sections.answers ?? 0);
+      setStat('books', sections.books ?? 0);
+      setStat('saved', saved.length);
+
+      const cells = panel.querySelectorAll<HTMLElement>('[data-activity-cell]');
+      const monthNodes = panel.querySelectorAll<HTMLElement>('[data-activity-month]');
+      let lastMonth = '';
+
+      monthNodes.forEach((node, index) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() - ((monthNodes.length - 1 - index) * 7 + today.getDay()));
+        const month = date.toLocaleString('en-US', { month: 'short' });
+        if (month !== lastMonth || index === 0) {
+          node.textContent = month;
+          lastMonth = month;
+        } else {
+          node.textContent = '';
+        }
+      });
+
+      cells.forEach((cell, index) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() - (cells.length - 1 - index));
+        const count = days[dateKey(date)] ?? 0;
+        cell.title = `${dateKey(date)}: ${count} visit${count === 1 ? '' : 's'}`;
+        if (count >= 5) cell.dataset.level = '4';
+        else if (count >= 3) cell.dataset.level = '3';
+        else if (count >= 1) cell.dataset.level = '2';
+        else cell.dataset.level = '0';
+      });
+    }
+  };
+
+  renderActivityPanels();
+  window.setTimeout(renderActivityPanels, 0);
+  window.addEventListener('storage', renderActivityPanels);
+  window.addEventListener('awb:activity-updated', renderActivityPanels);
+</script>
+
+<style>
+  .activity-graph {
+    display: grid;
+    grid-template-columns: 2.4rem auto;
+    grid-template-rows: 1rem auto 1.2rem;
+    gap: 0.35rem 0.55rem;
+  }
+
+  .activity-months {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: repeat(53, 0.62rem);
+    gap: 0.18rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    color: var(--color-faint);
+  }
+
+  .activity-weekdays {
+    grid-column: 1;
+    grid-row: 2;
+    display: grid;
+    grid-template-rows: repeat(7, 0.62rem);
+    gap: 0.18rem;
+    line-height: 0.62rem;
+  }
+
+  .activity-cells {
+    grid-column: 2;
+    grid-row: 2;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, 0.62rem);
+    gap: 0.18rem;
+  }
+
+  .activity-cell {
+    width: 0.62rem;
+    height: 0.62rem;
+  }
+
+  .activity-legend {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.32rem;
+  }
+
+  .activity-cell[data-level='0'] {
+    background: var(--color-wash);
+  }
+
+  .activity-cell[data-level='2'] {
+    background: color-mix(in srgb, var(--color-accent) 42%, var(--color-wash));
+    border-color: color-mix(in srgb, var(--color-accent) 38%, var(--color-line));
+  }
+
+  .activity-cell[data-level='3'] {
+    background: color-mix(in srgb, var(--color-accent) 66%, var(--color-wash));
+    border-color: color-mix(in srgb, var(--color-accent) 58%, var(--color-line));
+  }
+
+  .activity-cell[data-level='4'] {
+    background: var(--color-accent);
+    border-color: var(--color-accent-dark);
+  }
+</style>

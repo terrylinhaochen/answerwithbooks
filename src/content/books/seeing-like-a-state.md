@@ -9,7 +9,7 @@ featured: true
 order: 4
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Legibility: the state's master project.**
 To tax, conscript, and govern, a state must first *see* its society — so it simplifies: standardized surnames, uniform land registers, grid cities, common units of measure. Each simplification makes the territory more legible to the center, and each discards local detail that didn't fit the schema. Legibility isn't a side effect of administration; it is the precondition for it — and the distortion is built in.
@@ -45,14 +45,10 @@ The planned factory runs on workarounds; the planned city of Brasília was saved
 - When tempted to dismiss an existing messy process as irrational — first ask what invisible work it's doing.
 - Pairs with *The Wisdom of Crowds*: Surowiecki on aggregating distributed knowledge, Scott on what happens when the center overwrites it.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 > "Certain forms of knowledge and control require a narrowing of vision... making possible a high degree of schematic knowledge, control, and manipulation."
 
 > "The necessarily simple abstractions of large bureaucratic institutions... can never adequately represent the actual complexity of natural or social processes."
 
 The image to keep: the second-generation forest, dying in perfect rows. Every clean abstraction over a living system should make you ask what the underbrush was doing.
-
-## How I've applied it
-
-Software is applied legibility — every schema and dashboard I build deletes detail by design, and Scott keeps me honest about what I'm deleting. Concretely: when CrowdListen reduces an audience's reactions to scores and clusters, the Scott question is "what mētis am I flattening?" — which pushed me to keep raw quotes and outlier voices one click from every aggregate, not buried under it. His four rules also describe good shipping discipline better than most engineering books: small reversible steps, expect surprises, and assume users will use the product in ways the roadmap never imagined — then treat that as signal, not misuse.

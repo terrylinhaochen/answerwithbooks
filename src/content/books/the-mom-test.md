@@ -9,7 +9,7 @@ featured: true
 order: 1
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Everyone lies to you, politely.**
 People you interview want the conversation to go well. Your mom says your app idea is great because she loves you; strangers say it's great because it ends the meeting faster. The lie isn't malicious — it's social lubricant. The burden is on you to ask questions that even a polite person can't answer with a comfortable falsehood. The Mom Test is named for the standard it sets: your questions should be so grounded in facts that *even your mom* couldn't mislead you with them.
@@ -48,7 +48,7 @@ People will cheerfully confirm that something is annoying. The real questions ar
 - When someone on the team says "everyone we talked to loved it" — this book is the antidote.
 - When deciding whether a feature request is real or polite noise.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 > "You shouldn't ask anyone whether your business is a good idea... It's a bad question and everyone will lie to you at least a little."
 
@@ -57,7 +57,3 @@ People will cheerfully confirm that something is annoying. The real questions ar
 > "If they haven't looked for ways of solving it already, they're not going to look for (or buy) yours."
 
 The book's sharpest reframe: a failed conversation is one where you only collected compliments. By that standard, most "great meetings" founders report are failures.
-
-## How I've applied it
-
-Building CrowdListen, my early conversations were classic anti-patterns: I demoed, people nodded, I logged "positive feedback." Re-running those conversations Mom Test-style — "show me the last time you tried to figure out what your audience thought" — changed the product. The painful, specific stories were about *aggregating scattered feedback*, not about the dashboard I had been building. The other habit that stuck: ending every promising conversation by asking for something that costs the other person effort. The people who wouldn't make an intro or schedule a follow-up were telling me something their compliments weren't.

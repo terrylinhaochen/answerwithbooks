@@ -9,7 +9,7 @@ featured: false
 order: 8
 ---
 
-## Core mental models
+## Core lessons
 
 **1. People scan, they do not read.**
 Most users do not approach a page like a document. They glance, scan, click the first plausible thing, and backtrack if wrong. Design that assumes careful reading is already losing.
@@ -38,10 +38,6 @@ Krug's practical contribution is the cheap test: watch a few real people use the
 - When analytics show traffic but not action.
 - When a page is "beautiful" and still unclear.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The title is the test. Every unnecessary question in a user's mind is friction: What is this? Is this clickable? Am I in the right place? What happens next?
-
-## How I've applied it
-
-The book is a useful guardrail for content-heavy products like Answer with Books and a2a-catalog. The page has to answer the user's first question before it earns the right to teach anything deeper.

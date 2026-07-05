@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="How to know when to trust your gut visual">
+  <rect width="1280" height="720" fill="#6a24d8"/>
+  <rect x="0" y="0" width="1280" height="720" fill="#3d1288" opacity=".1"/>
+  <rect x="764" y="94" width="344" height="344" rx="54" fill="#fffefa" opacity=".12"/>
+  <rect x="84" y="536" width="346" height="3" fill="#fffefa" opacity=".22"/>
+  <path d="M84 168h254" stroke="#fffefa" stroke-width="2" opacity=".2"/>
+  <text x="84" y="168" fill="#fffefa" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="7" opacity=".66">DECISION MAKING</text>
+  <text x="84" y="418" fill="#fffefa" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" letter-spacing="0" opacity=".98">Trust Your Gut</text>
+  <text x="86" y="486" fill="#fffefa" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6" opacity=".56">16</text>
+  
+      <path d="M410 360c86-76 142-84 210-168" fill="none" stroke="#fffefa" stroke-width="20" stroke-linecap="round" opacity=".7"/>
+      <path d="M620 192h-82v-82" fill="none" stroke="#b7ff1f" stroke-width="20" stroke-linecap="round"/>
+      <path d="M410 360c92 46 154 48 256 96" fill="none" stroke="#ff8a1f" stroke-width="20" stroke-linecap="round"/>
+      <circle cx="410" cy="360" r="28" fill="#b7ff1f"/>
+</svg>

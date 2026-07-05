@@ -1,0 +1,327 @@
+{
+  "generated_at": "2026-07-04T22:33:10.089Z",
+  "engine": "answer-with-books-crowdlisten-loop",
+  "source_queue": "../core/research/crowdlisten-handoff-queue.json",
+  "context_pack_id": "awb-content-answer-loop",
+  "metrics": {
+    "source_records": 54,
+    "top_demand_signals": 5,
+    "answer_brief_candidates": 3,
+    "published_answers": 21,
+    "shelf_books": 20,
+    "candidate_books": 4,
+    "model_cover_assets": 20,
+    "fallback_cover_assets": 20
+  },
+  "loop_readiness": {
+    "demand_layer": "ready",
+    "matching_layer": "ready",
+    "publishing_layer": "ready",
+    "asset_layer": "ready",
+    "writeback_layer": "needs_live_analytics_and_follow_up_questions"
+  },
+  "demand_coverage": [
+    {
+      "signal_id": "validate-without-fooling-yourself",
+      "title": "How to validate an idea without fooling yourself",
+      "evidence_count": 8,
+      "source_record_count": 3,
+      "matched_books": [
+        "the-mom-test",
+        "thinking-fast-and-slow"
+      ],
+      "published_answer": "how-to-validate-an-idea-without-fooling-yourself",
+      "status": "published"
+    },
+    {
+      "signal_id": "repair-user-interviews",
+      "title": "How to fix user interviews that are not teaching you anything",
+      "evidence_count": 8,
+      "source_record_count": 3,
+      "matched_books": [
+        "the-mom-test"
+      ],
+      "published_answer": "how-to-fix-user-interviews-that-are-not-teaching-you-anything",
+      "status": "published"
+    },
+    {
+      "signal_id": "trust-gut-or-check-it",
+      "title": "How to know when to trust your gut",
+      "evidence_count": 8,
+      "source_record_count": 3,
+      "matched_books": [
+        "thinking-fast-and-slow"
+      ],
+      "published_answer": "how-to-know-when-to-trust-your-gut",
+      "status": "published"
+    },
+    {
+      "signal_id": "prevent-smart-team-bad-decision",
+      "title": "How to keep a smart team from making a dumb decision",
+      "evidence_count": 8,
+      "source_record_count": 3,
+      "matched_books": [
+        "the-wisdom-of-crowds",
+        "thinking-fast-and-slow"
+      ],
+      "published_answer": "how-to-keep-a-smart-team-from-making-a-dumb-decision",
+      "status": "published"
+    },
+    {
+      "signal_id": "pivot-without-panicking",
+      "title": "How to tell whether to pivot or keep going",
+      "evidence_count": 8,
+      "source_record_count": 3,
+      "matched_books": [
+        "the-structure-of-scientific-revolutions",
+        "thinking-fast-and-slow"
+      ],
+      "published_answer": "how-to-tell-whether-to-pivot-or-keep-going",
+      "status": "published"
+    }
+  ],
+  "action_queue": [
+    {
+      "action_id": "awb-action-01",
+      "title": "How to validate an idea without fooling yourself",
+      "concern_id": "validate-without-fooling-yourself",
+      "format": "how_to_guide",
+      "books": [
+        "the-mom-test",
+        "thinking-fast-and-slow"
+      ],
+      "missing_books": [],
+      "published_answer": "how-to-validate-an-idea-without-fooling-yourself",
+      "status": "published",
+      "next_step": "write_back_performance_and_follow_up_questions"
+    },
+    {
+      "action_id": "awb-action-02",
+      "title": "How to fix user interviews that are not teaching you anything",
+      "concern_id": "repair-user-interviews",
+      "format": "how_to_guide",
+      "books": [
+        "the-mom-test"
+      ],
+      "missing_books": [],
+      "published_answer": "how-to-fix-user-interviews-that-are-not-teaching-you-anything",
+      "status": "published",
+      "next_step": "write_back_performance_and_follow_up_questions"
+    },
+    {
+      "action_id": "awb-action-03",
+      "title": "How to know when to trust your gut",
+      "concern_id": "trust-gut-or-check-it",
+      "format": "how_to_guide",
+      "books": [
+        "thinking-fast-and-slow"
+      ],
+      "missing_books": [],
+      "published_answer": "how-to-know-when-to-trust-your-gut",
+      "status": "published",
+      "next_step": "write_back_performance_and_follow_up_questions"
+    }
+  ],
+  "book_expansion_queue": [
+    {
+      "id": "obviously-awesome",
+      "title": "Obviously Awesome",
+      "author": "April Dunford",
+      "reason": "Useful for recurring questions about positioning, differentiation, and explaining why a product matters.",
+      "demand_links": [
+        "finding-real-users",
+        "validating-buying-intent",
+        "gtm-positioning"
+      ],
+      "status": "candidate",
+      "exists_in_shelf": false,
+      "next_step": "acquire_or_upload_source_then_ingest"
+    },
+    {
+      "id": "crossing-the-chasm",
+      "title": "Crossing the Chasm",
+      "author": "Geoffrey A. Moore",
+      "reason": "Useful for questions about early adopters, beachhead markets, and moving from interest to adoption.",
+      "demand_links": [
+        "finding-real-users",
+        "validating-buying-intent",
+        "gtm-positioning"
+      ],
+      "status": "candidate",
+      "exists_in_shelf": false,
+      "next_step": "acquire_or_upload_source_then_ingest"
+    },
+    {
+      "id": "traction",
+      "title": "Traction",
+      "author": "Gabriel Weinberg and Justin Mares",
+      "reason": "Useful for demand questions about channels, repeatable growth tests, and where to find users.",
+      "demand_links": [
+        "finding-real-users",
+        "channel-testing",
+        "audience-discovery"
+      ],
+      "status": "candidate",
+      "exists_in_shelf": false,
+      "next_step": "acquire_or_upload_source_then_ingest"
+    },
+    {
+      "id": "jobs-to-be-done",
+      "title": "Competing Against Luck",
+      "author": "Clayton M. Christensen, Taddy Hall, Karen Dillon, and David S. Duncan",
+      "reason": "Useful for translating messy customer language into demand, jobs, and buying triggers.",
+      "demand_links": [
+        "customer-discovery",
+        "validating-buying-intent",
+        "product-strategy"
+      ],
+      "status": "candidate",
+      "exists_in_shelf": false,
+      "next_step": "acquire_or_upload_source_then_ingest"
+    }
+  ],
+  "next_recommendations": [
+    {
+      "id": "next-event-awb-answer-01",
+      "title": "Create a follow-up answer on finding real users and validating buying intent",
+      "target_action_type": "create_answer",
+      "required_context": [
+        "How do I find users outside my network?",
+        "How do I know if interview feedback is real buying intent?"
+      ]
+    },
+    {
+      "id": "next-event-awb-digest-01",
+      "title": "Shorten the founder decision digest and make the next-answer path explicit",
+      "target_action_type": "revise_personalized_digest",
+      "required_context": [
+        "segment completion",
+        "audio completion",
+        "follow-up questions",
+        "source concern IDs"
+      ]
+    }
+  ],
+  "asset_coverage": [
+    {
+      "book_id": "atomic-habits",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "crucial-conversations",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "deep-work",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "designing-your-life",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "dont-make-me-think",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "four-thousand-weeks",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "getting-things-done",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "good-strategy-bad-strategy",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "high-output-management",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "made-to-stick",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "never-split-the-difference",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "seeing-like-a-state",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "so-good-they-cant-ignore-you",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "the-checklist-manifesto",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "the-effective-executive",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "the-lean-startup",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "the-mom-test",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "the-structure-of-scientific-revolutions",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "the-wisdom-of-crowds",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    },
+    {
+      "book_id": "thinking-fast-and-slow",
+      "preferred_asset": "jpg",
+      "has_model_cover": true,
+      "has_fallback_cover": true
+    }
+  ]
+}

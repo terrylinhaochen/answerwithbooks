@@ -9,7 +9,7 @@ featured: false
 order: 16
 ---
 
-## Core mental models
+## Core lessons
 
 **1. Effectiveness can be learned.**
 Drucker separates intelligence, personality, and activity from effectiveness. The executive's job is contribution, not busyness.
@@ -38,10 +38,6 @@ Do first things first and second things not at all. Strategy becomes real throug
 - When delegation is weak because contribution is unclear.
 - When the team needs fewer priorities with stronger ownership.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The enduring lesson is that effectiveness begins by facing the calendar honestly.
-
-## How I've applied it
-
-This book is useful for Answer with Books questions about delegation, management leverage, and the feeling of being busy without moving the work that matters.

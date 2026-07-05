@@ -9,7 +9,7 @@ featured: false
 order: 17
 ---
 
-## Core mental models
+## Core lessons
 
 **1. A manager's output is the output of the organization.**
 Grove's most useful reframe is that management output is indirect. Your work matters through the decisions, clarity, and performance it creates in others.
@@ -38,10 +38,6 @@ Bad meetings waste time, but Grove's point is sharper: recurring meetings and on
 - When a manager is doing the team's work instead of improving the team system.
 - When scaling creates coordination costs.
 
-## Memorable ideas
+## Memorable ideas and lines
 
 The practical question is always: which activity increases the future output of the team?
-
-## How I've applied it
-
-High Output Management pairs well with Drucker for Answer with Books concerns where the user asks how to delegate, manage, or create leverage without losing quality.
