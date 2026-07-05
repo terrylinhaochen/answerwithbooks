@@ -107,9 +107,9 @@ const current = Astro.url.pathname;
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink">
     <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
-      <div class="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
+      <div class="awb-header mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
         <a href="/" class="awb-brand" aria-label="Answer with Books home">Answer with Books</a>
-        <div class="flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
+        <div class="awb-header__actions flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
           <nav aria-label="Main" class="awb-nav">
             {
               nav.map((item) => (
