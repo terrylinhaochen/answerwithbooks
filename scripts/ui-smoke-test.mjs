@@ -165,14 +165,23 @@ async function testLoginAndSignout(page) {
 }
 
 async function clearSupabaseBrowserState(page) {
-  await page.evaluate(() => {
-    for (const key of Object.keys(localStorage)) {
-      if (key.startsWith('sb-')) localStorage.removeItem(key);
+  await page.waitForLoadState('domcontentloaded');
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      await page.evaluate(() => {
+        for (const key of Object.keys(localStorage)) {
+          if (key.startsWith('sb-')) localStorage.removeItem(key);
+        }
+        for (const key of Object.keys(sessionStorage)) {
+          if (key.startsWith('sb-')) sessionStorage.removeItem(key);
+        }
+      });
+      return;
+    } catch (error) {
+      if (attempt === 1) throw error;
+      await page.waitForLoadState('domcontentloaded');
     }
-    for (const key of Object.keys(sessionStorage)) {
-      if (key.startsWith('sb-')) sessionStorage.removeItem(key);
-    }
-  });
+  }
 }
 
 async function assertNoMobileHeaderOverlap(page) {
