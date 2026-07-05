@@ -334,10 +334,68 @@ const jsonLd = [
             </a>
           </div>
         </div>
-        <pre class="mt-5 overflow-x-auto rounded-2xl border border-ink/10 bg-ink px-4 py-4 font-sans text-[0.88rem] leading-relaxed text-white shadow-sm"><code class="whitespace-nowrap"><span class="select-none text-white/45">$ </span>{installCommand}</code></pre>
+        <div class="mt-5 rounded-2xl border border-ink/10 bg-ink p-2 shadow-sm">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <pre class="min-w-0 flex-1 overflow-x-auto px-3 py-3 font-sans text-[0.88rem] leading-relaxed text-white"><code class="whitespace-nowrap"><span class="select-none text-white/45">$ </span><span data-install-command>{installCommand}</span></code></pre>
+            <button
+              type="button"
+              class="min-h-11 rounded-xl border border-white/15 bg-white/10 px-4 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white hover:text-ink"
+              data-copy-install
+              aria-describedby="install-copy-status"
+            >
+              Copy
+            </button>
+          </div>
+          <p id="install-copy-status" class="sr-only" aria-live="polite" data-copy-install-status></p>
+        </div>
       </div>
     </div>
   </section>
+
+  <script>
+    const copyInstallButton = document.querySelector<HTMLButtonElement>('[data-copy-install]');
+    const installCommandNode = document.querySelector<HTMLElement>('[data-install-command]');
+    const copyInstallStatus = document.querySelector<HTMLElement>('[data-copy-install-status]');
+
+    const copyText = async (value: string) => {
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(value);
+          return;
+        } catch {
+          // Continue to the textarea fallback for embedded browsers.
+        }
+      }
+      const field = document.createElement('textarea');
+      field.value = value;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      const copied = document.execCommand('copy');
+      field.remove();
+      if (!copied) throw new Error('Copy command failed');
+    };
+
+    copyInstallButton?.addEventListener('click', async () => {
+      const command = installCommandNode?.textContent?.trim();
+      if (!command) return;
+      const original = copyInstallButton.textContent;
+      try {
+        await copyText(command);
+        copyInstallButton.textContent = 'Copied';
+        if (copyInstallStatus) copyInstallStatus.textContent = 'Install command copied.';
+      } catch {
+        copyInstallButton.textContent = 'Failed';
+        if (copyInstallStatus) copyInstallStatus.textContent = 'Install command could not be copied.';
+      } finally {
+        window.setTimeout(() => {
+          copyInstallButton.textContent = original ?? 'Copy';
+        }, 1800);
+      }
+    });
+  </script>
 
   <section class="mx-auto max-w-6xl px-5 py-16">
     <div class="mb-7 flex items-end justify-between gap-5">

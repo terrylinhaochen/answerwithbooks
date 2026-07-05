@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-const utilityPaths = ['/login/', '/signup/', '/my-books/', '/404/'];
+const utilityPaths = ['/login/', '/signup/', '/my-books/', '/profile/', '/onboarding/start/', '/404/'];
 
 // https://astro.build/config
 export default defineConfig({
@@ -27,18 +27,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !utilityPaths.some((path) => page.endsWith(path)),
-      changefreq: 'weekly',
       lastmod: new Date(),
-      priority: 0.7,
-      serialize(item) {
-        if (item.url === 'https://answerwithbooks.com/') {
-          return { ...item, priority: 1.0, changefreq: 'daily' };
-        }
-        if (item.url.includes('/answers/') || item.url.includes('/books/')) {
-          return { ...item, priority: 0.8 };
-        }
-        return item;
-      },
     }),
   ],
   vite: {

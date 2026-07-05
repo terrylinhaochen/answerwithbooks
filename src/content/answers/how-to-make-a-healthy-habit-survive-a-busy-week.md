@@ -1,6 +1,6 @@
 ---
 question: "How to make a healthy habit survive a busy week"
-description: "A practical guide for keeping a habit alive when work, travel, stress, or a bad week breaks the ideal routine. Use Atomic Habits and Four Thousand Weeks to make the habit smaller, more automatic, and less dependent on perfect days."
+description: "Keep a habit alive when work, travel, stress, or a bad week breaks the routine. Use Atomic Habits and Four Thousand Weeks to make the habit smaller and less dependent on perfect days."
 books: ["atomic-habits", "four-thousand-weeks"]
 date: 2026-07-04
 featured: false

@@ -11,6 +11,8 @@ Bad user interviews usually do not feel bad while they are happening. The call i
 
 The fix is not a better icebreaker. It is a different evidence standard.
 
+A useful interview should leave you with at least one of five things: a recent story, a workaround, a cost, a stakeholder, or a commitment. Without one of those, the interview may have been pleasant, but it has not changed what you know.
+
 CrowdListen surfaced this as a repeated founder and product-team problem: people are trying to do discovery, but their access is filtered, their interviewees are polite, and their teams still need a decision. [*The Mom Test*](/books/the-mom-test/) is the right book lens because it treats interviews as evidence collection, not persuasion.
 
 ## Stop asking for reactions

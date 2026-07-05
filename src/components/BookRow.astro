@@ -11,12 +11,12 @@ const { book, compact = false } = Astro.props;
 const topics = topicsForTags(book.data.tags);
 ---
 
-<article class="group h-full rounded-2xl border border-line bg-card p-4 shadow-sm transition-colors hover:border-ink/25">
-  <div class={`grid h-full gap-4 ${compact ? 'grid-cols-[5rem_minmax(0,1fr)] sm:grid-cols-[7rem_minmax(0,1fr)]' : 'grid-cols-[4.5rem_minmax(0,1fr)] sm:grid-cols-[5rem_minmax(0,1fr)]'}`}>
-    <BookCover book={book} size={compact ? 'md' : 'sm'} class="shrink-0" />
+<article class={`group h-full rounded-2xl border border-line bg-card shadow-sm transition-colors hover:border-ink/25 ${compact ? 'p-5' : 'p-4'}`}>
+  <div class={compact ? 'flex h-full flex-col gap-5' : 'grid h-full grid-cols-[4.5rem_minmax(0,1fr)] gap-4 sm:grid-cols-[5rem_minmax(0,1fr)]'}>
+    <BookCover book={book} size={compact ? 'lg' : 'sm'} class={compact ? 'mx-auto' : 'shrink-0'} />
     <div class="flex min-w-0 flex-1 flex-col">
       <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Source book</p>
-      <h3 class={`mt-1 text-wrap font-serif tracking-[-0.01em] leading-snug ${compact ? 'text-xl' : 'text-2xl'}`}>
+      <h3 class={`mt-1 text-wrap font-serif tracking-[-0.01em] leading-snug ${compact ? 'text-2xl' : 'text-2xl'}`}>
         <a href={`/books/${book.id}/`} class="hover:text-soft">{book.data.title}</a>
       </h3>
       <p class="mt-1 text-sm text-faint">

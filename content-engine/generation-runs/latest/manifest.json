@@ -1,0 +1,220 @@
+{
+  "generated_at": "2026-07-05T00:42:00.456Z",
+  "spec": "content-engine/CONTENT_GENERATION_SPEC.md",
+  "mode": "prompt_plan",
+  "counts": {
+    "books": 20,
+    "answers": 21
+  },
+  "outputs": {
+    "books": [
+      {
+        "id": "atomic-habits",
+        "title": "Atomic Habits",
+        "prompt": "content-engine/generation-runs/latest/books/atomic-habits.md"
+      },
+      {
+        "id": "crucial-conversations",
+        "title": "Crucial Conversations",
+        "prompt": "content-engine/generation-runs/latest/books/crucial-conversations.md"
+      },
+      {
+        "id": "deep-work",
+        "title": "Deep Work",
+        "prompt": "content-engine/generation-runs/latest/books/deep-work.md"
+      },
+      {
+        "id": "designing-your-life",
+        "title": "Designing Your Life",
+        "prompt": "content-engine/generation-runs/latest/books/designing-your-life.md"
+      },
+      {
+        "id": "dont-make-me-think",
+        "title": "Don't Make Me Think",
+        "prompt": "content-engine/generation-runs/latest/books/dont-make-me-think.md"
+      },
+      {
+        "id": "four-thousand-weeks",
+        "title": "Four Thousand Weeks",
+        "prompt": "content-engine/generation-runs/latest/books/four-thousand-weeks.md"
+      },
+      {
+        "id": "getting-things-done",
+        "title": "Getting Things Done",
+        "prompt": "content-engine/generation-runs/latest/books/getting-things-done.md"
+      },
+      {
+        "id": "good-strategy-bad-strategy",
+        "title": "Good Strategy Bad Strategy",
+        "prompt": "content-engine/generation-runs/latest/books/good-strategy-bad-strategy.md"
+      },
+      {
+        "id": "high-output-management",
+        "title": "High Output Management",
+        "prompt": "content-engine/generation-runs/latest/books/high-output-management.md"
+      },
+      {
+        "id": "made-to-stick",
+        "title": "Made to Stick",
+        "prompt": "content-engine/generation-runs/latest/books/made-to-stick.md"
+      },
+      {
+        "id": "never-split-the-difference",
+        "title": "Never Split the Difference",
+        "prompt": "content-engine/generation-runs/latest/books/never-split-the-difference.md"
+      },
+      {
+        "id": "seeing-like-a-state",
+        "title": "Seeing Like a State",
+        "prompt": "content-engine/generation-runs/latest/books/seeing-like-a-state.md"
+      },
+      {
+        "id": "so-good-they-cant-ignore-you",
+        "title": "So Good They Can't Ignore You",
+        "prompt": "content-engine/generation-runs/latest/books/so-good-they-cant-ignore-you.md"
+      },
+      {
+        "id": "the-checklist-manifesto",
+        "title": "The Checklist Manifesto",
+        "prompt": "content-engine/generation-runs/latest/books/the-checklist-manifesto.md"
+      },
+      {
+        "id": "the-effective-executive",
+        "title": "The Effective Executive",
+        "prompt": "content-engine/generation-runs/latest/books/the-effective-executive.md"
+      },
+      {
+        "id": "the-lean-startup",
+        "title": "The Lean Startup",
+        "prompt": "content-engine/generation-runs/latest/books/the-lean-startup.md"
+      },
+      {
+        "id": "the-mom-test",
+        "title": "The Mom Test",
+        "prompt": "content-engine/generation-runs/latest/books/the-mom-test.md"
+      },
+      {
+        "id": "the-structure-of-scientific-revolutions",
+        "title": "The Structure of Scientific Revolutions",
+        "prompt": "content-engine/generation-runs/latest/books/the-structure-of-scientific-revolutions.md"
+      },
+      {
+        "id": "the-wisdom-of-crowds",
+        "title": "The Wisdom of Crowds",
+        "prompt": "content-engine/generation-runs/latest/books/the-wisdom-of-crowds.md"
+      },
+      {
+        "id": "thinking-fast-and-slow",
+        "title": "Thinking, Fast and Slow",
+        "prompt": "content-engine/generation-runs/latest/books/thinking-fast-and-slow.md"
+      }
+    ],
+    "answers": [
+      {
+        "id": "how-to-decide-what-to-do-with-your-career-next",
+        "question": "How to decide what to do with your career next",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-decide-what-to-do-with-your-career-next.md"
+      },
+      {
+        "id": "how-to-delegate-without-losing-control",
+        "question": "How to delegate without losing control",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-delegate-without-losing-control.md"
+      },
+      {
+        "id": "how-to-explain-an-idea-so-people-remember-it",
+        "question": "How to explain an idea so people remember it",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-explain-an-idea-so-people-remember-it.md"
+      },
+      {
+        "id": "how-to-fix-user-interviews-that-are-not-teaching-you-anything",
+        "question": "How to fix user interviews that are not teaching you anything",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-fix-user-interviews-that-are-not-teaching-you-anything.md"
+      },
+      {
+        "id": "how-to-get-out-of-task-overwhelm-without-reorganizing-your-whole-life",
+        "question": "How to get out of task overwhelm without reorganizing your whole life",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-get-out-of-task-overwhelm-without-reorganizing-your-whole-life.md"
+      },
+      {
+        "id": "how-to-have-a-hard-conversation-without-making-it-worse",
+        "question": "How to have a hard conversation without making it worse",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-have-a-hard-conversation-without-making-it-worse.md"
+      },
+      {
+        "id": "how-to-keep-a-smart-team-from-making-a-dumb-decision",
+        "question": "How to keep a smart team from making a dumb decision",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-keep-a-smart-team-from-making-a-dumb-decision.md"
+      },
+      {
+        "id": "how-to-know-when-to-trust-your-gut",
+        "question": "How to know when to trust your gut",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-know-when-to-trust-your-gut.md"
+      },
+      {
+        "id": "how-to-know-whether-your-metrics-are-lying-to-you",
+        "question": "How to know whether your metrics are lying to you",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-know-whether-your-metrics-are-lying-to-you.md"
+      },
+      {
+        "id": "how-to-make-a-confusing-page-easier-to-use",
+        "question": "How to make a confusing page easier to use",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-make-a-confusing-page-easier-to-use.md"
+      },
+      {
+        "id": "how-to-make-a-healthy-habit-survive-a-busy-week",
+        "question": "How to make a healthy habit survive a busy week",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-make-a-healthy-habit-survive-a-busy-week.md"
+      },
+      {
+        "id": "how-to-make-a-plan-that-survives-contact-with-reality",
+        "question": "How to make a plan that survives contact with reality",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-make-a-plan-that-survives-contact-with-reality.md"
+      },
+      {
+        "id": "how-to-make-project-estimates-less-fictional",
+        "question": "How to make project estimates less fictional",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-make-project-estimates-less-fictional.md"
+      },
+      {
+        "id": "how-to-negotiate-salary-without-guessing-your-worth",
+        "question": "How to negotiate salary without guessing your worth",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-negotiate-salary-without-guessing-your-worth.md"
+      },
+      {
+        "id": "how-to-prioritize-when-every-request-sounds-urgent",
+        "question": "How to prioritize when every request sounds urgent",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-prioritize-when-every-request-sounds-urgent.md"
+      },
+      {
+        "id": "how-to-run-user-interviews-that-do-not-lie-to-you",
+        "question": "How to run user interviews that do not lie to you",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-run-user-interviews-that-do-not-lie-to-you.md"
+      },
+      {
+        "id": "how-to-tell-whether-to-pivot-or-keep-going",
+        "question": "How to tell whether to pivot or keep going",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-tell-whether-to-pivot-or-keep-going.md"
+      },
+      {
+        "id": "how-to-test-a-risky-idea-before-you-build-too-much",
+        "question": "How to test a risky idea before you build too much",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-test-a-risky-idea-before-you-build-too-much.md"
+      },
+      {
+        "id": "how-to-turn-a-vague-goal-into-an-actual-strategy",
+        "question": "How to turn a vague goal into an actual strategy",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-turn-a-vague-goal-into-an-actual-strategy.md"
+      },
+      {
+        "id": "how-to-turn-messy-feedback-into-a-real-signal",
+        "question": "How to turn messy feedback into a real signal",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-turn-messy-feedback-into-a-real-signal.md"
+      },
+      {
+        "id": "how-to-validate-an-idea-without-fooling-yourself",
+        "question": "How to validate an idea without fooling yourself",
+        "prompt": "content-engine/generation-runs/latest/answers/how-to-validate-an-idea-without-fooling-yourself.md"
+      }
+    ]
+  }
+}

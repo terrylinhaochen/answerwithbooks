@@ -9,51 +9,70 @@ featured: true
 order: 1
 ---
 
+The most dangerous user interview is the one that feels like it went well. The person smiles, says the idea sounds interesting, and gives you a few sentences that look good in a notes doc. Then you go build, and nothing in the market behaves the way the conversation implied.
+
+Rob Fitzpatrick's [*The Mom Test*](/books/the-mom-test/) earns its place on this shelf because it gives a strict standard for customer truth. The point is not to become a better interviewer in the abstract. The point is to stop collecting social approval and start collecting evidence that can change a product decision.
+
+## What the book is about
+
+The book is about the gap between what people say in a polite conversation and what their behavior actually proves. Most bad discovery work fails because the founder makes the conversation about the idea too early. Once the idea is on the table, the other person starts reacting to you, not reconstructing their real workflow.
+
+Fitzpatrick's method is simple: talk about the customer's life, ask about specifics in the past, and listen more than you pitch. That sounds small, but it changes the unit of evidence. Instead of asking whether someone would use a thing, you ask what happened last time, what they did instead, what it cost, who else was involved, and whether they have already tried to solve it.
+
 ## Core lessons
 
-**1. Everyone lies to you, politely.**
-People you interview want the conversation to go well. Your mom says your app idea is great because she loves you; strangers say it's great because it ends the meeting faster. The lie isn't malicious — it's social lubricant. The burden is on you to ask questions that even a polite person can't answer with a comfortable falsehood. The Mom Test is named for the standard it sets: your questions should be so grounded in facts that *even your mom* couldn't mislead you with them.
+### Politeness is not evidence
 
-**2. Talk about their life, not your idea.**
-The moment you pitch, the data is contaminated. Every question afterward measures how nice the person is, not how real the problem is. The fix is structural: ask about what they did last week, what it cost them, what they tried, who else they complained to. Their past behavior is evidence; their opinion of your future product is not.
+People usually do not lie in interviews because they are malicious. They lie because the conversation is socially loaded. Your mom wants to encourage you. A friendly prospect wants the meeting to end pleasantly. A teammate may want to avoid killing momentum. The safer assumption is that vague enthusiasm is social lubricant until behavior proves otherwise.
 
-**3. Compliments are worthless; commitments are gold.**
-"That's really cool" is a deflection, not a data point. What counts is anything that costs the person something: time (a scheduled follow-up with a clear agenda), reputation (an intro to their boss or budget owner), or money (a pre-order, a letter of intent, a deposit). Fitzpatrick calls these *currency*. If a meeting ends with kind words and nothing on the calendar, it didn't go well — it went nowhere.
+The practical move is to make your questions hard to answer with a comfortable falsehood. "Do you like this idea?" invites kindness. "When did this last happen?" requires a memory. If the person cannot produce a recent example, you have learned something useful: the problem may not be current, painful, or concrete enough yet.
 
-**4. Bad news is good news.**
-A lukewarm "meh" that arrives in week two saves you the year you would have spent discovering it in production. The goal of customer conversations is truth, not validation. Learning that a problem doesn't matter, or that the customer has no budget, or that they've tried nothing to solve it (a tell that they don't really care) is a *successful* outcome.
+### Talk about their life, not your idea
 
-**5. Some problems don't matter.**
-People will cheerfully confirm that something is annoying. The real questions are: Where does this rank against everything else on their plate? What does it cost them? What have they already tried? If they've never Googled for a solution, the problem isn't burning enough to build a business on.
+The moment you pitch, the data changes. Every answer after the pitch is partly about your product, your framing, and the interviewee's desire to be agreeable. The book's discipline is to stay with the customer's existing world for longer than feels natural.
 
-## Key frameworks
+A good interview asks about the current workaround. What tool do they use now? Who owns the workflow? Where does it break? What happens when it breaks? How often does the pain actually appear? The answer you need is not whether your imagined product is appealing. It is whether the person's existing reality contains enough pain, frequency, and attempted behavior to justify building.
 
-**The three rules of the Mom Test:**
-1. Talk about their life instead of your idea.
-2. Ask about specifics in the past instead of generics or opinions about the future.
-3. Talk less and listen more.
+### Compliments are cheap; commitments cost something
 
-**Question quality check.** Bad: "Would you buy a product that did X?" (invites a hypothetical lie). Good: "What are you using now? What does it cost you? When did this last happen — walk me through it." Future tense and hypotheticals are where lies live; past tense and specifics are where truth lives.
+The book's most useful filter is the difference between a compliment and a commitment. A compliment makes you feel good but costs the speaker nothing. A commitment costs time, reputation, money, access, or internal effort. That is why a second meeting with the workflow owner matters more than "this sounds really cool."
 
-**Deflect compliments, anchor fluff, dig beneath signals.** When you get a compliment, ignore it and move on. When you get a generic claim ("I always…", "I'd definitely…"), anchor it: "When did that last happen?" When you get an emotional signal (frustration, excitement), dig: "Tell me more about that."
+This is also where discovery becomes measurable. If every interview ends with praise and no next step, the market is not moving toward you. If interviews produce introductions, examples, pilots, preorders, or permission to inspect real artifacts, you are seeing advancement. The goal is not to force commitment in every call; it is to stop mistaking non-commitment for validation.
 
-**Commitment and advancement.** Every meeting should end by pushing for a next step that costs the prospect something. If you don't know what to ask for, you went into the meeting without a goal — Fitzpatrick's "three big questions" prep: decide in advance the three things you most need to learn.
+### Bad news is useful
 
-**Keep it casual.** Early-stage learning conversations don't need a scheduled "interview." A good conversation about someone's workflow can happen at a conference, in a coffee line, or in a user's existing support thread. Formality raises the stakes and invites performance.
+Good discovery is not designed to make an idea survive. It is designed to make reality arrive sooner. A lukewarm reaction, a missing budget, an absent workaround, or a customer who says the pain is annoying but never urgent can save months of work.
 
-## When to reach for this book
+The emotional trap is that bad news feels like failure. The operating truth is the opposite. If the problem is weak, if the buyer is wrong, or if the workflow is inaccessible, learning that before you build is one of the highest-return outcomes the interview can produce.
 
-- Before writing code for any new product or feature.
-- When your user interviews keep producing enthusiastic feedback but no usage.
-- When someone on the team says "everyone we talked to loved it" — this book is the antidote.
-- When deciding whether a feature request is real or polite noise.
+### Some problems are real but not important enough
 
-## Memorable ideas and lines
+People will confirm that many things are annoying. That does not mean the problem can support a product, feature, or campaign. The stronger test is relative priority: what did they stop doing because of this, what did they pay for, what did they patch together, and what happens if the problem remains unsolved?
 
-> "You shouldn't ask anyone whether your business is a good idea... It's a bad question and everyone will lie to you at least a little."
+This is where The Mom Test is especially useful for product teams. It prevents the team from treating every articulate complaint as demand. The right question is not "is this a problem?" It is "does this problem already create behavior?"
 
-> "Opinions are worthless... Anything involving the future is an over-optimistic lie."
+## How to use it
 
-> "If they haven't looked for ways of solving it already, they're not going to look for (or buy) yours."
+Start by writing the three things you most need to learn before the conversation. If you do not know what decision the interview should inform, the interview will naturally drift toward interesting but unusable detail.
 
-The book's sharpest reframe: a failed conversation is one where you only collected compliments. By that standard, most "great meetings" founders report are failures.
+During the call, replace future-tense reactions with past-tense specifics. Ask when the issue last happened, what the person did, what they tried before, what made the workaround painful, and who else felt the cost. When you hear a generic claim, anchor it: "When did that last happen?" When you hear a compliment, do not argue or celebrate; move back to behavior.
+
+End by asking for a next step that fits the evidence. Early on, that may be another example, an introduction, or permission to inspect a sanitized artifact. Later, it may be a pilot, a paid test, or a commitment from the actual buyer. The next step is part of the evidence.
+
+> "Opinions are worthless."
+
+That short line is the book's operating standard. Treat opinions as conversation texture, not decision evidence.
+
+## When this lens breaks
+
+The Mom Test can be misused as a reason to ignore every stated preference. That is too rigid. Sometimes opinions matter, especially when you are testing language, positioning, taste, trust, or emotional resonance. The key is to know what kind of question you are asking. A preference is not demand evidence, but it can still be design or messaging evidence.
+
+The method also needs adjustment when access is constrained. In regulated, enterprise, or sensitive categories, you may not be able to ask direct questions or inspect raw examples. In those cases, the principle still holds, but the evidence source changes: support tickets, anonymized workflows, account-manager notes, usage logs, renewal objections, or internal proxy interviews may be closer to the truth than a formal customer call.
+
+## Best paired with
+
+Pair this book with [*Thinking, Fast and Slow*](/books/thinking-fast-and-slow/) when the risk is self-deception. Kahneman explains why people substitute easy questions for hard ones; Fitzpatrick gives the interview discipline that makes substitution harder.
+
+Pair it with [*The Lean Startup*](/books/the-lean-startup/) when the next step is an experiment. The Mom Test helps you choose evidence-worthy assumptions before you build; Lean Startup helps you turn those assumptions into a build-measure-learn loop.
+
+Pair it with [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) when feedback is coming from many people. The Mom Test protects the unit of evidence; Wisdom of Crowds helps decide when aggregation is trustworthy.

@@ -18,11 +18,22 @@ CrowdListen demand packet
 ## Commands
 
 ```bash
+npm run content:plan
+npm run content:eval
 npm run engine:report
 npm run engine:ingest -- --candidate obviously-awesome --source /path/to/source.pdf
 npm run covers
 npm run covers:gemini
 ```
+
+`npm run content:plan` reads the canonical generation spec, current book pages, current answer
+pages, and available content packets, then writes a prompt pack under
+`content-engine/generation-runs/`. Use this as the dry-run step before regenerating public
+Markdown in batches.
+
+`npm run content:eval -- --collection=books --ids=the-mom-test --strict` checks the public
+Markdown against the content-quality bar: required sections, minimum substance, paragraph/list
+balance, placeholder text, and short-quote limits.
 
 `npm run engine:report` reads the sibling core queue at
 `../core/research/crowdlisten-handoff-queue.json`, compares it with the current shelf and answer
@@ -34,6 +45,13 @@ Use the report as the work queue:
 - `blocked_missing_books`: acquire/upload the source book, ingest it, then generate covers/assets.
 - `published`: write back impressions, clicks, saves, and follow-up questions.
 - `candidate`: evaluate whether demand justifies adding the book to the shelf.
+
+## Content Packets
+
+`content-engine/content-packets/*.json` stores durable background records for published
+answers. A packet connects the CrowdListen demand signal, matched source books, page asset,
+triage schema, and agent-use cases so the public page can also function as machine-usable
+context.
 
 ## Source Asset Pipeline
 

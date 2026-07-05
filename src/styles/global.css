@@ -88,26 +88,33 @@ h3,
 
 .awb-brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.22rem;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
+  min-height: 2.15rem;
+  border: 1px solid var(--color-line);
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.62);
   color: var(--color-ink);
-  font-family: var(--font-serif);
-  font-size: clamp(1.08rem, 1.6vw, 1.28rem);
-  font-weight: 500;
-  letter-spacing: -0.015em;
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0;
   line-height: 1;
+  padding: 0 0.95rem;
+  box-shadow: 0 10px 26px rgb(12 10 9 / 0.035);
   text-decoration: none;
   white-space: nowrap;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
 .awb-brand:hover {
-  color: var(--color-soft);
-}
-
-.awb-brand__with {
-  color: #9f4b3b;
-  font-style: italic;
+  border-color: color-mix(in srgb, var(--color-ink) 22%, var(--color-line));
+  background: var(--color-card);
+  color: var(--color-ink);
 }
 
 .awb-nav {
@@ -189,7 +196,9 @@ h3,
 
 @media (max-width: 520px) {
   .awb-brand {
-    width: 100%;
+    max-width: calc(100vw - 10rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .awb-nav {
@@ -216,6 +225,29 @@ h3,
   width: 100%;
   max-width: 65ch;
   overflow-wrap: break-word;
+}
+.prose-awb--wide {
+  max-width: 78ch;
+}
+.prose-awb--aligned {
+  max-width: 72ch;
+  margin-right: auto;
+}
+.prose-awb--aligned > p,
+.prose-awb--aligned > h3,
+.prose-awb--aligned > ul,
+.prose-awb--aligned > ol,
+.prose-awb--aligned > blockquote {
+  max-width: none;
+}
+.prose-awb--aligned > h2 {
+  max-width: none;
+  border-top: 1px solid var(--color-line);
+  padding-top: 2.25rem;
+}
+.prose-awb--aligned > h2:first-of-type {
+  border-top: 0;
+  padding-top: 0;
 }
 .prose-awb h2 {
   font-family: var(--font-serif);

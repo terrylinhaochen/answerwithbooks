@@ -1,0 +1,39 @@
+{
+  "packet_id": "repair-user-interviews",
+  "status": "published",
+  "last_updated": "2026-07-04",
+  "source": "CrowdListen demand loop",
+  "demand_signal": {
+    "recurring_question": "Why are user interviews not teaching me anything?",
+    "audience": ["founders", "product managers", "user researchers"],
+    "problem_pattern": "Teams leave discovery calls with encouragement, but not enough evidence to decide what to build, change, or test next.",
+    "evidence_standard": ["recent story", "workaround", "cost", "stakeholder", "commitment"]
+  },
+  "published_output": {
+    "answer_id": "how-to-fix-user-interviews-that-are-not-teaching-you-anything",
+    "answer_path": "/answers/how-to-fix-user-interviews-that-are-not-teaching-you-anything/",
+    "cover_asset": "/answer-covers/how-to-fix-user-interviews-that-are-not-teaching-you-anything.jpg",
+    "primary_book": "the-mom-test",
+    "topic_tags": ["startups", "user-research", "validation"]
+  },
+  "book_context": [
+    {
+      "book_id": "the-mom-test",
+      "role": "source_lens",
+      "sections_used": ["customer discovery", "question quality", "commitment tests", "evidence over compliments"]
+    }
+  ],
+  "triage_schema": {
+    "who": "A builder, PM, researcher, or founder running interviews that feel friendly but uninformative.",
+    "what": "Diagnose whether the conversation produced usable demand evidence or only reactions.",
+    "why": "Compliments and speculation make weak ideas look safer than they are.",
+    "what_changed": "The user now has an evidence checklist and a better interview script.",
+    "what_should_happen_next": "Run the next interview around recent behavior, current workarounds, and a small commitment."
+  },
+  "agent_use_cases": [
+    "Score an interview transcript for evidence versus compliments.",
+    "Generate a follow-up script from a vague customer call.",
+    "Route messy feedback into product discovery, support follow-up, or a commitment test.",
+    "Recommend The Mom Test when a user asks why discovery calls are not producing decisions."
+  ]
+}

@@ -5,7 +5,7 @@ interface Props {
   items: FaqItem[];
   eyebrow?: string;
   title?: string;
-  width?: 'article' | 'wide';
+  width?: 'article' | 'medium' | 'wide';
 }
 
 const {
@@ -15,7 +15,8 @@ const {
   width = 'article',
 } = Astro.props;
 
-const widthClass = width === 'wide' ? 'max-w-6xl' : 'max-w-3xl';
+const widthClass =
+  width === 'wide' ? 'max-w-6xl' : width === 'medium' ? 'max-w-5xl' : 'max-w-3xl';
 ---
 
 {

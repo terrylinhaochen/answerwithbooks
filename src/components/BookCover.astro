@@ -7,9 +7,10 @@ interface Props {
   book: CollectionEntry<'books'>;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   class?: string;
+  priority?: boolean;
 }
 
-const { book, size = 'md' } = Astro.props;
+const { book, size = 'md', priority = false } = Astro.props;
 const className = Astro.props.class ?? '';
 
 const palettes: Record<string, { cover: string; band: string; ink: string; line: string }> = {
@@ -74,7 +75,16 @@ const coverAsset = existsSync(jpgPath)
       style={style}
       aria-label={`Open ${book.data.title}`}
     >
-      <img src={coverAsset} alt={`${book.data.title} cover`} class="book-cover__image" loading="lazy" />
+      <img
+        src={coverAsset}
+        alt={`${book.data.title} cover`}
+        class="book-cover__image"
+        width="600"
+        height="900"
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchpriority={priority ? 'high' : 'auto'}
+      />
       <span class="book-cover__overlay" aria-hidden="true">
         <span class="book-cover__title">{coverTitle}</span>
         <span class="book-cover__year">{book.data.year}</span>

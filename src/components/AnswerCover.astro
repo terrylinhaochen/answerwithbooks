@@ -6,9 +6,10 @@ import type { CollectionEntry } from 'astro:content';
 interface Props {
   answer: CollectionEntry<'answers'>;
   class?: string;
+  priority?: boolean;
 }
 
-const { answer } = Astro.props;
+const { answer, priority = false } = Astro.props;
 const className = Astro.props.class ?? '';
 
 const labelByAnswer: Record<string, string> = {
@@ -64,7 +65,17 @@ const topicLabel = (answer.data.tags?.[0] ?? 'Insight')
 >
   {
     coverAsset ? (
-      <img src={coverAsset.href} alt="" class="answer-cover__image" loading="eager" aria-hidden="true" />
+      <img
+        src={coverAsset.href}
+        alt=""
+        class="answer-cover__image"
+        width="1200"
+        height="675"
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchpriority={priority ? 'high' : 'auto'}
+        aria-hidden="true"
+      />
     ) : (
       <span class="answer-cover__fallback" aria-hidden="true">
         <span></span>
