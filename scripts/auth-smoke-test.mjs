@@ -24,7 +24,7 @@ const stamp = Date.now();
 const email = process.argv[2] ?? `terrychen2026+awb-test-${stamp}@u.northwestern.edu`;
 const password = process.argv[3] ?? `awb-Test-${stamp}!`;
 
-console.log('[0/3] Checking Supabase auth settings ...');
+console.log('[0/4] Checking Supabase auth settings ...');
 const settings = await fetch(`${env.PUBLIC_SUPABASE_URL}/auth/v1/settings`, {
   headers: {
     apikey: env.PUBLIC_SUPABASE_ANON_KEY,
@@ -44,7 +44,18 @@ console.log(
     `mailer_autoconfirm=${Boolean(settingsData.mailer_autoconfirm)}`
 );
 
-console.log(`[1/3] Signing up ${email} ...`);
+console.log('[1/4] Checking password login endpoint with an expected invalid login ...');
+const invalidLogin = await supabase.auth.signInWithPassword({
+  email: `missing-${stamp}@u.northwestern.edu`,
+  password: `not-${password}`,
+});
+if (!invalidLogin.error) {
+  console.log('INVALID LOGIN CHECK ERROR: unexpected session returned for throwaway credentials');
+  process.exit(1);
+}
+console.log(`INVALID LOGIN CHECK OK: ${invalidLogin.error.message}`);
+
+console.log(`[2/4] Signing up ${email} ...`);
 const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
 
 if (signUpError) {
@@ -71,7 +82,7 @@ if (signUpData.session) {
   console.log('SIGNUP: unexpected response shape', signUpData);
 }
 
-console.log('[2/3] Attempting password login ...');
+console.log('[3/4] Attempting password login ...');
 const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
   email,
   password,
@@ -86,6 +97,6 @@ if (signInError) {
   console.log(`LOGIN OK: session for ${signInData.session.user.email}`);
 }
 
-console.log('[3/3] Signing out ...');
+console.log('[4/4] Signing out ...');
 await supabase.auth.signOut();
 console.log('Done.');
