@@ -44,7 +44,7 @@ As a reader with my own concern, note, interview excerpt, or source text, I can 
 - Entry: `/upload/`
 - Auth: signed-in users can create maps; signed-out users are routed through login/signup and returned to upload
 - Result: `/my-books/` shows the map under Your mapped content
-- Persistence: local `awb:user-content-maps`
+- Persistence: Supabase `content_maps` when available, plus local `awb:user-content-maps` fallback
 
 ## Community Browser
 
@@ -53,8 +53,8 @@ As a reader, I can browse maps created by the product or made public by other re
 - Entry: `/community/`
 - Action: search maps and collect useful maps
 - Result: `/my-books/` shows collected maps
-- Persistence: seeded community maps plus local `awb:collected-content-maps`
+- Persistence: Supabase `content_map_collections` for signed-in users, plus local `awb:collected-content-maps` fallback for seeded/static maps
 
 ## Current Boundary
 
-The first version is static-safe: user-created maps and collected maps persist locally in the browser, while auth and onboarding metadata use Supabase. A production shared community feed should later move public maps and collections into Supabase tables with row-level security.
+The web app remains static-safe, but shared maps are backed by Supabase when the `content_maps` and `content_map_collections` migrations are applied. Local storage remains a fallback for seeded maps and offline browser state.

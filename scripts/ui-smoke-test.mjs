@@ -8,6 +8,8 @@ const root = resolve(new URL('..', import.meta.url).pathname);
 const distRoot = join(root, 'dist');
 const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const supabaseRequests = [];
+const remoteContentMaps = [];
+const remoteContentMapCollections = [];
 let activeUser = null;
 
 if (!existsSync(join(distRoot, 'index.html'))) {
@@ -59,6 +61,14 @@ try {
   assert.ok(
     supabaseRequests.some((request) => request.kind === 'profile-upsert'),
     'onboarding sync should attempt profiles upsert'
+  );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'content-map-insert'),
+    'content mapping should insert a Supabase content map'
+  );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'content-map-collection-insert'),
+    'community collection should insert a Supabase content map collection'
   );
 
   await context.close();
@@ -189,15 +199,16 @@ async function testMappingAndCommunityCollection(page) {
   await assertVisibleText(page, '[data-map-result]', 'The Mom Test');
 
   await page.goto('/community/', { waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, '[data-community-list]', 'Customer interview map');
   await assertVisibleText(page, '[data-community-list]', 'Startup idea validation without fooling yourself');
-  await page.locator('[data-community-map="community-startup-validation"] button').click();
-  await assertVisibleText(page, '[data-community-map="community-startup-validation"]', 'Collected - remove');
+  await page.locator('[data-community-map="11111111-1111-4111-8111-111111111111"] button').click();
+  await assertVisibleText(page, '[data-community-map="11111111-1111-4111-8111-111111111111"]', 'Collected - remove');
 
   await page.goto('/my-books/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#library-content:not(.hidden)');
   await assertVisibleText(page, '#saved-answer-list', 'How to fix user interviews that are not teaching you anything');
   await assertVisibleText(page, '#user-map-list', 'Customer interview map');
-  await assertVisibleText(page, '#collected-map-list', 'Startup idea validation without fooling yourself');
+  await assertVisibleText(page, '#collected-map-list', 'Customer interview map');
 }
 
 async function clearSupabaseBrowserState(page) {
@@ -317,6 +328,78 @@ async function handleSupabaseRoute(route) {
   if (url.pathname === '/rest/v1/profiles') {
     supabaseRequests.push({ kind: 'profile-upsert', method, body });
     return fulfillJson(route, Array.isArray(body) ? body : [body], 201);
+  }
+
+  if (url.pathname === '/rest/v1/content_maps') {
+    if (method === 'POST') {
+      const row = {
+        id: '11111111-1111-4111-8111-111111111111',
+        author_email: body.author_email ?? activeUser?.email ?? 'reader@example.test',
+        title: body.title,
+        problem: body.problem,
+        source_note: body.source_note ?? '',
+        topics: body.topics ?? [],
+        books: body.books ?? [],
+        answers: body.answers ?? [],
+        visibility: body.visibility ?? 'private',
+        user_id: body.user_id ?? activeUser?.id,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      remoteContentMaps.unshift(row);
+      supabaseRequests.push({ kind: 'content-map-insert', method, body });
+      return fulfillJson(route, row, 201);
+    }
+    if (method === 'GET') {
+      const idsFilter = url.searchParams.get('id') ?? '';
+      const userFilter = url.searchParams.get('user_id') ?? '';
+      let rows = [...remoteContentMaps];
+      if (url.searchParams.get('visibility') === 'eq.public') {
+        rows = rows.filter((row) => row.visibility === 'public');
+      }
+      if (userFilter.startsWith('eq.')) {
+        rows = rows.filter((row) => row.user_id === userFilter.slice(3));
+      }
+      if (idsFilter.startsWith('in.(')) {
+        const ids = idsFilter.slice(4, -1).split(',').map((id) => id.replace(/^"|"$/g, ''));
+        rows = rows.filter((row) => ids.includes(row.id));
+      }
+      return fulfillJson(route, rows);
+    }
+  }
+
+  if (url.pathname === '/rest/v1/content_map_collections') {
+    if (method === 'POST') {
+      const row = {
+        id: '22222222-2222-4222-8222-222222222222',
+        user_id: body.user_id ?? activeUser?.id,
+        content_map_id: body.content_map_id,
+        created_at: new Date().toISOString(),
+      };
+      remoteContentMapCollections.push(row);
+      supabaseRequests.push({ kind: 'content-map-collection-insert', method, body });
+      return fulfillJson(route, row, 201);
+    }
+    if (method === 'DELETE') {
+      const userFilter = url.searchParams.get('user_id') ?? '';
+      const mapFilter = url.searchParams.get('content_map_id') ?? '';
+      const userId = userFilter.startsWith('eq.') ? userFilter.slice(3) : '';
+      const mapId = mapFilter.startsWith('eq.') ? mapFilter.slice(3) : '';
+      for (let index = remoteContentMapCollections.length - 1; index >= 0; index -= 1) {
+        if (remoteContentMapCollections[index].user_id === userId && remoteContentMapCollections[index].content_map_id === mapId) {
+          remoteContentMapCollections.splice(index, 1);
+        }
+      }
+      return fulfillJson(route, {});
+    }
+    if (method === 'GET') {
+      const userFilter = url.searchParams.get('user_id') ?? '';
+      const userId = userFilter.startsWith('eq.') ? userFilter.slice(3) : '';
+      return fulfillJson(
+        route,
+        remoteContentMapCollections.filter((row) => !userId || row.user_id === userId)
+      );
+    }
   }
 
   return fulfillJson(route, { ok: true });

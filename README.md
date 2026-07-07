@@ -66,6 +66,7 @@ On this workspace, `npm run build:local` uses the known-good Node 22 runtime.
 | `src/content/answers/*.md` | Question-led answers from the shelf |
 | `src/lib/topics.ts` | Broad browse categories |
 | `docs/USER_STORIES.md` | End-to-end reader, mapper, and community collection stories |
+| `supabase/*.sql` | Profile, content-map, and collection tables with row-level security |
 | `content-engine/` | Repeatable content-generation specs and runs |
 | `public/covers/` | Generated book cover assets |
 | `public/answer-covers/` | Generated answer-card assets |

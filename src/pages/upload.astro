@@ -204,6 +204,7 @@ const answerTitles = Object.fromEntries(answers.map((answer) => [answer.id, answ
     const resultTopics = document.querySelector<HTMLElement>('[data-result-topics]');
     const resultBooks = document.querySelector<HTMLElement>('[data-result-books]');
     const resultAnswers = document.querySelector<HTMLElement>('[data-result-answers]');
+    let activeSession: Awaited<ReturnType<typeof supabase.auth.getSession>>['data']['session'] = null;
     const index = JSON.parse(document.getElementById('map-index')?.textContent ?? '{}') as {
       bookIndex: LibraryItem[];
       answerIndex: LibraryItem[];
@@ -261,6 +262,7 @@ const answerTitles = Object.fromEntries(answers.map((answer) => [answer.id, answ
     };
 
     supabase.auth.getSession().then(({ data }) => {
+      activeSession = data.session;
       loading?.classList.add('hidden');
       if (data.session) shell?.classList.remove('hidden');
       else guest?.classList.remove('hidden');
@@ -277,7 +279,7 @@ const answerTitles = Object.fromEntries(answers.map((answer) => [answer.id, answ
       showMessage(`Loaded ${file.name}.`);
     });
 
-    form?.addEventListener('submit', (event) => {
+    form?.addEventListener('submit', async (event) => {
       event.preventDefault();
       const data = new FormData(form);
       const title = String(data.get('title') || '').trim();
@@ -305,9 +307,35 @@ const answerTitles = Object.fromEntries(answers.map((answer) => [answer.id, answ
         createdAt: new Date().toISOString(),
       };
 
+      if (activeSession?.user) {
+        const { data: remoteMap, error } = await supabase
+          .from('content_maps')
+          .insert({
+            user_id: activeSession.user.id,
+            author_email: activeSession.user.email,
+            title: map.title,
+            problem: map.problem,
+            source_note: map.sourceNote,
+            topics: map.topics,
+            books: map.books,
+            answers: map.answers,
+            visibility: map.visibility,
+          })
+          .select('id, created_at')
+          .single();
+        if (!error && remoteMap?.id) {
+          map.id = remoteMap.id;
+          map.createdAt = remoteMap.created_at;
+        } else if (error) {
+          showMessage(`Saved locally. Shared map table is not ready yet: ${error.message}`);
+        }
+      }
+
       const maps = readJson<ContentMap[]>(USER_MAPS_KEY, []);
       writeJson(USER_MAPS_KEY, [map, ...maps]);
-      showMessage(map.visibility === 'public' ? 'Saved to your dashboard and community preview.' : 'Saved to your dashboard.');
+      if (!message || message.classList.contains('hidden')) {
+        showMessage(map.visibility === 'public' ? 'Saved to your dashboard and community.' : 'Saved to your dashboard.');
+      }
       renderMap(map);
     });
   </script>

@@ -165,6 +165,31 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
       communityMaps: ContentMap[];
       topicLabels: Record<string, string>;
     };
+    type RemoteMapRow = {
+      id: string;
+      author_email: string | null;
+      title: string;
+      problem: string;
+      source_note: string | null;
+      topics: string[];
+      books: string[];
+      answers: string[];
+      visibility: 'private' | 'public';
+      created_at: string;
+    };
+
+    const remoteRowToMap = (row: RemoteMapRow): ContentMap => ({
+      id: row.id,
+      title: row.title,
+      problem: row.problem,
+      sourceNote: row.source_note ?? '',
+      topics: row.topics ?? [],
+      books: row.books ?? [],
+      answers: row.answers ?? [],
+      visibility: row.visibility,
+      author: row.author_email ? row.author_email.split('@')[0] : 'Reader',
+      createdAt: row.created_at,
+    });
 
     const appendSimpleLink = (
       list: HTMLElement,
@@ -269,6 +294,7 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
       }
 
       const userMaps = readJson<ContentMap[]>(USER_MAPS_KEY, []);
+      const renderedUserMapIds = new Set(userMaps.map((map) => map.id));
       if (userMaps.length === 0) {
         userMapEmpty.classList.remove('hidden');
       } else {
@@ -279,10 +305,42 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
       const collected = readJson<string[]>(COLLECTED_MAPS_KEY, [])
         .map((id) => allCommunityMaps.find((map) => map.id === id))
         .filter((map): map is ContentMap => Boolean(map));
+      const renderedCollectedMapIds = new Set(collected.map((map) => map.id));
       if (collected.length === 0) {
         collectedMapEmpty.classList.remove('hidden');
       } else {
         for (const map of collected) {
+          collectedMapList.appendChild(renderMapCard(map));
+        }
+      }
+
+      const { data: remoteOwnRows } = await supabase
+        .from('content_maps')
+        .select('id, author_email, title, problem, source_note, topics, books, answers, visibility, created_at')
+        .eq('user_id', data.session.user.id)
+        .order('created_at', { ascending: false });
+      for (const map of ((remoteOwnRows ?? []) as RemoteMapRow[]).map(remoteRowToMap)) {
+        if (renderedUserMapIds.has(map.id)) continue;
+        userMapEmpty.classList.add('hidden');
+        renderedUserMapIds.add(map.id);
+        userMapList.appendChild(renderMapCard(map));
+      }
+
+      const { data: remoteCollectionRows } = await supabase
+        .from('content_map_collections')
+        .select('content_map_id')
+        .eq('user_id', data.session.user.id);
+      const remoteCollectionIds = (remoteCollectionRows ?? [])
+        .map((row) => row.content_map_id)
+        .filter((id) => !renderedCollectedMapIds.has(id));
+      if (remoteCollectionIds.length > 0) {
+        const { data: remoteCollectedRows } = await supabase
+          .from('content_maps')
+          .select('id, author_email, title, problem, source_note, topics, books, answers, visibility, created_at')
+          .in('id', remoteCollectionIds);
+        for (const map of ((remoteCollectedRows ?? []) as RemoteMapRow[]).map(remoteRowToMap)) {
+          collectedMapEmpty.classList.add('hidden');
+          renderedCollectedMapIds.add(map.id);
           collectedMapList.appendChild(renderMapCard(map));
         }
       }

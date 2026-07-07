@@ -56,6 +56,7 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
   <script type="application/json" id="community-data" set:html={JSON.stringify({ communityMaps, bookTitles, answerTitles, topicLabels })} />
 
   <script>
+    import { supabase } from '../lib/supabase';
     import {
       COLLECTED_MAPS_KEY,
       USER_MAPS_KEY,
@@ -70,15 +71,55 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
       answerTitles: Record<string, string>;
       topicLabels: Record<string, string>;
     };
+    type RemoteMapRow = {
+      id: string;
+      author_email: string | null;
+      title: string;
+      problem: string;
+      source_note: string | null;
+      topics: string[];
+      books: string[];
+      answers: string[];
+      visibility: 'private' | 'public';
+      created_at: string;
+    };
     const list = document.querySelector<HTMLElement>('[data-community-list]');
     const search = document.querySelector<HTMLInputElement>('[data-map-search]');
     const count = document.querySelector<HTMLElement>('[data-map-count]');
     const empty = document.querySelector<HTMLElement>('[data-community-empty]');
+    let activeUserId = '';
+    let remoteMaps: ContentMap[] = [];
+    let remoteCollected: string[] = [];
+
+    const remoteRowToMap = (row: RemoteMapRow): ContentMap => ({
+      id: row.id,
+      title: row.title,
+      problem: row.problem,
+      sourceNote: row.source_note ?? '',
+      topics: row.topics ?? [],
+      books: row.books ?? [],
+      answers: row.answers ?? [],
+      visibility: row.visibility,
+      author: row.author_email ? row.author_email.split('@')[0] : 'Reader',
+      createdAt: row.created_at,
+    });
 
     const publicUserMaps = () =>
       readJson<ContentMap[]>(USER_MAPS_KEY, []).filter((map) => map.visibility === 'public');
 
-    const allMaps = () => [...publicUserMaps(), ...data.communityMaps];
+    const uniqueMaps = (maps: ContentMap[]) => {
+      const seen = new Set<string>();
+      return maps.filter((map) => {
+        if (seen.has(map.id)) return false;
+        seen.add(map.id);
+        return true;
+      });
+    };
+
+    const allMaps = () => uniqueMaps([...remoteMaps, ...publicUserMaps(), ...data.communityMaps]);
+
+    const readCollected = () =>
+      Array.from(new Set([...readJson<string[]>(COLLECTED_MAPS_KEY, []), ...remoteCollected]));
 
     const createList = (items: string[], labels: Record<string, string>, path: string) => {
       const wrapper = document.createElement('div');
@@ -96,7 +137,7 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
     const render = () => {
       if (!list) return;
       const query = search?.value.trim().toLowerCase() ?? '';
-      const collected = readJson<string[]>(COLLECTED_MAPS_KEY, []);
+      const collected = readCollected();
       const maps = allMaps().filter((map) => {
         const haystack = `${map.title} ${map.problem} ${map.sourceNote} ${map.topics.join(' ')}`.toLowerCase();
         return !query || haystack.includes(query);
@@ -137,13 +178,31 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
         collect.type = 'button';
         collect.className = 'awb-pill cursor-pointer';
         const paint = () => {
-          const active = readJson<string[]>(COLLECTED_MAPS_KEY, []).includes(map.id);
+          const active = readCollected().includes(map.id);
           collect.textContent = active ? 'Collected - remove' : 'Collect map';
           collect.classList.toggle('awb-pill-primary', active);
           collect.classList.toggle('awb-pill-outline', !active);
         };
-        collect.addEventListener('click', () => {
-          toggleId(COLLECTED_MAPS_KEY, map.id);
+        collect.addEventListener('click', async () => {
+          const active = readCollected().includes(map.id);
+          const isRemote = remoteMaps.some((remoteMap) => remoteMap.id === map.id);
+          if (activeUserId && isRemote) {
+            if (active) {
+              await supabase
+                .from('content_map_collections')
+                .delete()
+                .eq('user_id', activeUserId)
+                .eq('content_map_id', map.id);
+              remoteCollected = remoteCollected.filter((id) => id !== map.id);
+            } else {
+              await supabase
+                .from('content_map_collections')
+                .insert({ user_id: activeUserId, content_map_id: map.id });
+              remoteCollected = [...remoteCollected, map.id];
+            }
+          } else {
+            toggleId(COLLECTED_MAPS_KEY, map.id);
+          }
           paint();
         });
         paint();
@@ -158,5 +217,25 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
 
     search?.addEventListener('input', render);
     render();
+
+    supabase.auth.getSession().then(async ({ data: sessionData }) => {
+      activeUserId = sessionData.session?.user.id ?? '';
+      const { data: mapRows } = await supabase
+        .from('content_maps')
+        .select('id, author_email, title, problem, source_note, topics, books, answers, visibility, created_at')
+        .eq('visibility', 'public')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      remoteMaps = ((mapRows ?? []) as RemoteMapRow[]).map(remoteRowToMap);
+
+      if (activeUserId) {
+        const { data: collectionRows } = await supabase
+          .from('content_map_collections')
+          .select('content_map_id')
+          .eq('user_id', activeUserId);
+        remoteCollected = (collectionRows ?? []).map((row) => row.content_map_id);
+      }
+      render();
+    });
   </script>
 </Base>
