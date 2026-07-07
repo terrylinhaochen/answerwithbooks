@@ -10,6 +10,7 @@ const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
 const supabaseRequests = [];
 const remoteContentMaps = [];
 const remoteContentMapCollections = [];
+const mockAccessToken = makeMockAccessToken();
 let activeUser = null;
 
 if (!existsSync(join(distRoot, 'index.html'))) {
@@ -44,6 +45,7 @@ try {
   await testAuthRedirects(page);
   await testOnboardingSignupProfileAndShelf(page);
   await testLoginAndSignout(page);
+  await testEmailLinkCallback(page);
   await testMappingAndCommunityCollection(page);
 
   assert.ok(
@@ -72,7 +74,7 @@ try {
   );
 
   await context.close();
-  console.log('UI smoke test passed: mobile nav, carousel, filters, saved books, saved answers, onboarding, signup, profile sync, login, signout, content mapping, community collection, and install copy verified.');
+  console.log('UI smoke test passed: mobile nav, carousel, filters, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, community collection, and install copy verified.');
 } finally {
   if (browser) await browser.close();
   server.closeAllConnections();
@@ -170,6 +172,17 @@ async function testLoginAndSignout(page) {
   await page.locator('#email').fill('reader@example.test');
   await page.locator('#password').fill('awb-Test-Password-123!');
   await page.locator('#submit-btn').click();
+  await page.waitForURL('**/my-books/');
+  await page.waitForSelector('#library-content:not(.hidden)');
+  await assertVisibleText(page, '#library-content', 'Welcome back, reader');
+}
+
+async function testEmailLinkCallback(page) {
+  activeUser = makeUser('reader@example.test');
+  await clearSupabaseBrowserState(page);
+  await page.goto(`/login/#access_token=${mockAccessToken}&refresh_token=mock-refresh-token&type=signup`, {
+    waitUntil: 'domcontentloaded',
+  });
   await page.waitForURL('**/my-books/');
   await page.waitForSelector('#library-content:not(.hidden)');
   await assertVisibleText(page, '#library-content', 'Welcome back, reader');
@@ -407,13 +420,33 @@ async function handleSupabaseRoute(route) {
 
 function makeSessionPayload(user) {
   return {
-    access_token: 'mock-access-token',
+    access_token: mockAccessToken,
     token_type: 'bearer',
     expires_in: 3600,
     expires_at: Math.floor(Date.now() / 1000) + 3600,
     refresh_token: 'mock-refresh-token',
     user,
   };
+}
+
+function makeMockAccessToken() {
+  const header = toBase64Url({ alg: 'none', typ: 'JWT' });
+  const payload = toBase64Url({
+    aud: 'authenticated',
+    exp: Math.floor(Date.now() / 1000) + 3600,
+    sub: '00000000-0000-4000-8000-000000000001',
+    email: 'reader@example.test',
+    role: 'authenticated',
+  });
+  return `${header}.${payload}.mock-signature`;
+}
+
+function toBase64Url(value) {
+  return Buffer.from(JSON.stringify(value))
+    .toString('base64')
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
 }
 
 function makeUser(email) {

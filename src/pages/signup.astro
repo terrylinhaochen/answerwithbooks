@@ -58,6 +58,7 @@ import Base from '../layouts/Base.astro';
 
   <script>
     import { supabase } from '../lib/supabase';
+    import { consumeAuthCallback, emailRedirectTo } from '../lib/auth-callback';
     import { hasPendingOnboarding, persistOnboardingProfile } from '../lib/onboarding';
 
     const form = document.getElementById('signup-form') as HTMLFormElement;
@@ -70,6 +71,7 @@ import Base from '../layouts/Base.astro';
     const fromUpload = from === 'upload';
     const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
     const redirectAfterAuth = pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
+    const authReturnPath = pendingOnboarding ? '/login/?from=onboarding' : fromUpload ? '/login/?from=upload' : '/login/';
 
     if (pendingOnboarding) {
       if (signupCopy) {
@@ -88,15 +90,22 @@ import Base from '../layouts/Base.astro';
       message.classList.add(kind === 'error' ? 'text-accent' : 'text-soft');
     };
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) return;
-      if (pendingOnboarding) {
-        persistOnboardingProfile(supabase, data.session).finally(() => {
-          window.location.href = redirectAfterAuth;
-        });
-      } else {
-        window.location.href = redirectAfterAuth;
+    const finishAuth = async (session, error, silent = false) => {
+      if (error || !session) {
+        if (!silent) show(error ?? 'Email link did not return a session. Try logging in again.', 'error');
+        return;
       }
+      if (pendingOnboarding) await persistOnboardingProfile(supabase, session);
+      window.location.href = redirectAfterAuth;
+    };
+
+    consumeAuthCallback(supabase).then(async (result) => {
+      if (result.handled) {
+        await finishAuth(result.session, result.error);
+        return;
+      }
+      const { data } = await supabase.auth.getSession();
+      await finishAuth(data.session, undefined, true);
     });
 
     form.addEventListener('submit', async (e) => {
@@ -109,7 +118,7 @@ import Base from '../layouts/Base.astro';
       const { data, error } = await supabase.auth.signUp({
         email: String(formData.get('email')).trim(),
         password: String(formData.get('password')),
-        options: { emailRedirectTo: 'https://answerwithbooks.com/login/' },
+        options: { emailRedirectTo: emailRedirectTo(authReturnPath) },
       });
 
       if (error) {
@@ -121,8 +130,7 @@ import Base from '../layouts/Base.astro';
 
       if (data.session) {
         // Email confirmation disabled in this project: signed in immediately.
-        if (pendingOnboarding) await persistOnboardingProfile(supabase, data.session);
-        window.location.href = redirectAfterAuth;
+        await finishAuth(data.session);
       } else {
         // Email confirmation required.
         show(

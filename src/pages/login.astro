@@ -55,6 +55,7 @@ import Base from '../layouts/Base.astro';
 
   <script>
     import { supabase } from '../lib/supabase';
+    import { consumeAuthCallback } from '../lib/auth-callback';
     import { hasPendingOnboarding, persistOnboardingProfile } from '../lib/onboarding';
 
     const form = document.getElementById('login-form') as HTMLFormElement;
@@ -78,16 +79,24 @@ import Base from '../layouts/Base.astro';
       if (signupLink) signupLink.href = '/signup/?from=upload';
     }
 
-    // Already logged in? Go straight to saved books.
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) return;
-      if (pendingOnboarding) {
-        persistOnboardingProfile(supabase, data.session).finally(() => {
-          window.location.href = redirectAfterAuth;
-        });
-      } else {
-        window.location.href = redirectAfterAuth;
+    const finishAuth = async (session, error, silent = false) => {
+      if (error || !session) {
+        if (silent) return;
+        message.textContent = error ?? 'Email link did not return a session. Try logging in again.';
+        message.classList.remove('hidden');
+        return;
       }
+      if (pendingOnboarding) await persistOnboardingProfile(supabase, session);
+      window.location.href = redirectAfterAuth;
+    };
+
+    consumeAuthCallback(supabase).then(async (result) => {
+      if (result.handled) {
+        await finishAuth(result.session, result.error);
+        return;
+      }
+      const { data } = await supabase.auth.getSession();
+      await finishAuth(data.session, undefined, true);
     });
 
     form.addEventListener('submit', async (e) => {
@@ -109,8 +118,7 @@ import Base from '../layouts/Base.astro';
         submitBtn.textContent = 'Log in';
         return;
       }
-      if (pendingOnboarding) await persistOnboardingProfile(supabase, data.session);
-      window.location.href = redirectAfterAuth;
+      await finishAuth(data.session);
     });
   </script>
 </Base>
