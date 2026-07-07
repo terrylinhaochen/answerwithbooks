@@ -65,9 +65,11 @@ import Base from '../layouts/Base.astro';
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
     const signupCopy = document.querySelector<HTMLElement>('[data-signup-copy]');
     const loginLink = document.querySelector<HTMLAnchorElement>('[data-login-link]');
-    const fromOnboarding = new URLSearchParams(window.location.search).get('from') === 'onboarding';
+    const from = new URLSearchParams(window.location.search).get('from');
+    const fromOnboarding = from === 'onboarding';
+    const fromUpload = from === 'upload';
     const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
-    const redirectAfterAuth = pendingOnboarding ? '/profile/?onboarded=1' : '/my-books/';
+    const redirectAfterAuth = pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
 
     if (pendingOnboarding) {
       if (signupCopy) {
@@ -75,6 +77,9 @@ import Base from '../layouts/Base.astro';
           'Your setup is saved in this browser. Create an account to sync it to your profile.';
       }
       if (loginLink) loginLink.href = '/login/?from=onboarding';
+    } else if (fromUpload) {
+      if (signupCopy) signupCopy.textContent = 'Create an account to map content to your personal shelf.';
+      if (loginLink) loginLink.href = '/login/?from=upload';
     }
 
     const show = (text: string, kind: 'error' | 'ok') => {

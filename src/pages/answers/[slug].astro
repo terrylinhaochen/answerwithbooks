@@ -146,7 +146,21 @@ const jsonLd = [
         <p class="mt-4 text-sm text-faint">
           <time datetime={answer.data.date.toISOString()}>{dateFmt}</time>
         </p>
-        <div class="mt-6 flex flex-wrap gap-2">
+        <div class="mt-6 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            data-save-answer={answer.id}
+            class="awb-pill awb-pill-outline cursor-pointer"
+          >
+            Save answer
+          </button>
+          <button
+            type="button"
+            data-like-answer={answer.id}
+            class="awb-pill awb-pill-outline cursor-pointer"
+          >
+            Mark helpful
+          </button>
           {topics.map((topic) => (
             <a
               href={`/topics/${topic.slug}/`}
@@ -216,4 +230,31 @@ const jsonLd = [
       </aside>
     )
   }
+
+  <script>
+    import { LIKED_ANSWERS_KEY, SAVED_ANSWERS_KEY, readJson, toggleId } from '../../lib/user-library';
+
+    const wireToggle = (selector: string, key: string, offText: string, onText: string) => {
+      const button = document.querySelector<HTMLButtonElement>(selector);
+      if (!button) return;
+      const id = button.dataset.saveAnswer || button.dataset.likeAnswer;
+      if (!id) return;
+
+      const paint = () => {
+        const active = readJson<string[]>(key, []).includes(id);
+        button.textContent = active ? onText : offText;
+        button.classList.toggle('awb-pill-primary', active);
+        button.classList.toggle('awb-pill-outline', !active);
+      };
+
+      button.addEventListener('click', () => {
+        toggleId(key, id);
+        paint();
+      });
+      paint();
+    };
+
+    wireToggle('[data-save-answer]', SAVED_ANSWERS_KEY, 'Save answer', 'Saved - remove');
+    wireToggle('[data-like-answer]', LIKED_ANSWERS_KEY, 'Mark helpful', 'Helpful');
+  </script>
 </Base>

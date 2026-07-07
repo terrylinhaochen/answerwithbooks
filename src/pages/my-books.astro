@@ -2,12 +2,26 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
+import { CANONICAL_TOPICS } from '../lib/topics';
+import { communityMaps } from '../lib/user-library';
 
 // Build-time book metadata, shipped as a data island for the client script.
 const books = await getCollection('books');
+const answers = await getCollection('answers');
 const bookMeta = Object.fromEntries(
   books.map((b) => [b.id, { title: b.data.title, author: b.data.author }])
 );
+const answerMeta = Object.fromEntries(
+  answers.map((answer) => [
+    answer.id,
+    {
+      question: answer.data.question,
+      description: answer.data.description,
+      books: answer.data.books,
+    },
+  ])
+);
+const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.slug, topic.label]));
 ---
 
 <Base
@@ -30,11 +44,14 @@ const bookMeta = Object.fromEntries(
             This is the start of your question profile: the books you save, the answers you open,
             and the topics that keep coming back.
           </p>
-          <p class="mt-7">
-            <a href="/answers/" class="text-accent underline underline-offset-4 decoration-1 hover:text-accent-dark">
-              Find the next answer
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="/upload/" class="awb-pill awb-pill-primary">
+              Map content
             </a>
-          </p>
+            <a href="/community/" class="awb-pill awb-pill-outline">
+              Browse community maps
+            </a>
+          </div>
         </div>
 
         <ActivityPanel
@@ -44,7 +61,7 @@ const bookMeta = Object.fromEntries(
         />
       </div>
 
-      <div class="mt-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <div class="mt-12 grid gap-8 lg:grid-cols-2">
         <section class="awb-card-link p-5 sm:p-6">
           <h2 class="awb-eyebrow border-b border-line pb-3">
             Saved books
@@ -56,27 +73,46 @@ const bookMeta = Object.fromEntries(
           </p>
         </section>
 
-        <section class="awb-panel p-5 text-[0.95rem] leading-relaxed text-soft sm:p-6">
-          <p class="awb-eyebrow">Next layer</p>
-          <h2 class="mt-3 font-serif text-3xl leading-tight text-ink">
-            From saved shelf to question graph.
+        <section class="awb-card-link p-5 sm:p-6">
+          <h2 class="awb-eyebrow border-b border-line pb-3">
+            Saved answers
           </h2>
-          <p class="mt-3">
-            The useful profile is not just books read. It should connect what you are thinking about,
-            which answers helped, which books supplied the insight, and what question should come next.
+          <ul id="saved-answer-list" class="divide-y divide-line"></ul>
+          <p id="saved-answer-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+            Nothing saved yet. Open <a href="/answers/" class="text-accent underline underline-offset-4 decoration-1">an answer</a>
+            and save the ones you want to return to.
           </p>
-          <div class="mt-5 grid gap-3">
-            {[
-              'Saved answers',
-              'Top-of-mind questions',
-              'Source quotes and concepts',
-              'Next question recommendations',
-            ].map((item) => (
-              <div class="border-t border-line pt-3 font-serif text-lg text-ink">
-                {item}
-              </div>
-            ))}
+        </section>
+      </div>
+
+      <div class="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <section class="awb-panel p-5 sm:p-6">
+          <div class="flex flex-col gap-3 border-b border-line pb-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="awb-eyebrow">Your mapped content</p>
+              <h2 class="mt-2 font-serif text-3xl leading-tight text-ink">Problems, uploads, and source notes.</h2>
+            </div>
+            <a href="/upload/" class="awb-pill awb-pill-outline">Create map</a>
           </div>
+          <div id="user-map-list" class="mt-5 grid gap-4"></div>
+          <p id="user-map-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+            No mapped content yet. Paste or upload a note on the <a href="/upload/" class="text-accent underline underline-offset-4 decoration-1">map content</a> page.
+          </p>
+        </section>
+
+        <section class="awb-card-link p-5 sm:p-6">
+          <div class="flex flex-col gap-3 border-b border-line pb-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="awb-eyebrow">Collected maps</p>
+              <h2 class="mt-2 font-serif text-3xl leading-tight text-ink">Other readers' demand signals.</h2>
+            </div>
+            <a href="/community/" class="awb-pill awb-pill-outline">Browse maps</a>
+          </div>
+          <div id="collected-map-list" class="mt-5 grid gap-4"></div>
+          <p id="collected-map-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+            Nothing collected yet. Browse <a href="/community/" class="text-accent underline underline-offset-4 decoration-1">community maps</a>
+            and collect the ones that match your current questions.
+          </p>
         </section>
       </div>
 
@@ -93,20 +129,111 @@ const bookMeta = Object.fromEntries(
   </section>
 
   <script type="application/json" id="book-meta" set:html={JSON.stringify(bookMeta)} />
+  <script type="application/json" id="answer-meta" set:html={JSON.stringify(answerMeta)} />
+  <script type="application/json" id="dashboard-map-meta" set:html={JSON.stringify({ communityMaps, topicLabels })} />
 
   <script>
     import { supabase } from '../lib/supabase';
+    import {
+      COLLECTED_MAPS_KEY,
+      SAVED_ANSWERS_KEY,
+      SAVED_BOOKS_KEY,
+      USER_MAPS_KEY,
+      readJson,
+      type ContentMap,
+    } from '../lib/user-library';
 
-    const KEY = 'awb:saved-books';
     const loading = document.getElementById('library-loading')!;
     const content = document.getElementById('library-content')!;
     const userName = document.getElementById('user-name')!;
     const savedList = document.getElementById('saved-list')!;
     const savedEmpty = document.getElementById('saved-empty')!;
+    const savedAnswerList = document.getElementById('saved-answer-list')!;
+    const savedAnswerEmpty = document.getElementById('saved-answer-empty')!;
+    const userMapList = document.getElementById('user-map-list')!;
+    const userMapEmpty = document.getElementById('user-map-empty')!;
+    const collectedMapList = document.getElementById('collected-map-list')!;
+    const collectedMapEmpty = document.getElementById('collected-map-empty')!;
     const signoutBtn = document.getElementById('signout-btn')!;
     const bookMeta: Record<string, { title: string; author: string }> = JSON.parse(
       document.getElementById('book-meta')!.textContent ?? '{}'
     );
+    const answerMeta: Record<string, { question: string; description: string; books: string[] }> = JSON.parse(
+      document.getElementById('answer-meta')!.textContent ?? '{}'
+    );
+    const mapMeta = JSON.parse(document.getElementById('dashboard-map-meta')!.textContent ?? '{}') as {
+      communityMaps: ContentMap[];
+      topicLabels: Record<string, string>;
+    };
+
+    const appendSimpleLink = (
+      list: HTMLElement,
+      href: string,
+      title: string,
+      meta: string,
+      description?: string
+    ) => {
+      const li = document.createElement('li');
+      li.className = 'py-4';
+      const a = document.createElement('a');
+      a.href = href;
+      a.className =
+        'font-serif text-lg text-ink hover:text-accent underline underline-offset-4 decoration-line hover:decoration-accent';
+      a.textContent = title;
+      const span = document.createElement('span');
+      span.className = 'text-sm text-faint ml-2';
+      span.textContent = meta;
+      li.append(a, span);
+      if (description) {
+        const p = document.createElement('p');
+        p.className = 'mt-2 text-sm leading-relaxed text-soft';
+        p.textContent = description;
+        li.appendChild(p);
+      }
+      list.appendChild(li);
+    };
+
+    const renderMapCard = (map: ContentMap) => {
+      const card = document.createElement('article');
+      card.className = 'rounded-xl border border-line bg-card p-4';
+      const meta = document.createElement('p');
+      meta.className = 'awb-eyebrow';
+      meta.textContent = map.visibility === 'public' ? 'Public map' : 'Private map';
+      const title = document.createElement('h3');
+      title.className = 'mt-2 font-serif text-2xl leading-tight text-ink';
+      title.textContent = map.title;
+      const problem = document.createElement('p');
+      problem.className = 'mt-2 text-sm leading-relaxed text-soft';
+      problem.textContent = map.problem;
+      const topics = document.createElement('div');
+      topics.className = 'mt-3 flex flex-wrap gap-2';
+      for (const topic of map.topics) {
+        const pill = document.createElement('a');
+        pill.href = `/topics/${topic}/`;
+        pill.className =
+          'inline-flex min-h-8 items-center rounded-full border border-line px-2.5 py-1 text-xs text-soft hover:border-ink hover:text-ink';
+        pill.textContent = mapMeta.topicLabels[topic] ?? topic;
+        topics.appendChild(pill);
+      }
+      const links = document.createElement('div');
+      links.className = 'mt-3 flex flex-wrap gap-3 text-sm';
+      for (const book of map.books.slice(0, 2)) {
+        const link = document.createElement('a');
+        link.href = `/books/${book}/`;
+        link.className = 'text-accent underline underline-offset-4 decoration-1';
+        link.textContent = bookMeta[book]?.title ?? book;
+        links.appendChild(link);
+      }
+      for (const answer of map.answers.slice(0, 2)) {
+        const link = document.createElement('a');
+        link.href = `/answers/${answer}/`;
+        link.className = 'text-accent underline underline-offset-4 decoration-1';
+        link.textContent = answerMeta[answer]?.question ?? answer;
+        links.appendChild(link);
+      }
+      card.append(meta, title, problem, topics, links);
+      return card;
+    };
 
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
@@ -115,30 +242,48 @@ const bookMeta = Object.fromEntries(
       const email = data.session.user.email ?? '';
       userName.textContent = email ? `, ${email.split('@')[0]}` : '';
 
-      let saved: string[] = [];
-      try {
-        saved = JSON.parse(localStorage.getItem(KEY) ?? '[]');
-      } catch {
-        saved = [];
-      }
+      const saved = readJson<string[]>(SAVED_BOOKS_KEY, []);
       const known = saved.filter((slug) => bookMeta[slug]);
 
       if (known.length === 0) {
         savedEmpty.classList.remove('hidden');
       } else {
         for (const slug of known) {
-          const li = document.createElement('li');
-          li.className = 'py-4';
-          const a = document.createElement('a');
-          a.href = `/books/${slug}/`;
-          a.className =
-            'font-serif text-lg text-ink hover:text-accent underline underline-offset-4 decoration-line hover:decoration-accent';
-          a.textContent = bookMeta[slug].title;
-          const span = document.createElement('span');
-          span.className = 'text-sm text-faint ml-2';
-          span.textContent = bookMeta[slug].author;
-          li.append(a, span);
-          savedList.appendChild(li);
+          appendSimpleLink(savedList, `/books/${slug}/`, bookMeta[slug].title, bookMeta[slug].author);
+        }
+      }
+
+      const savedAnswers = readJson<string[]>(SAVED_ANSWERS_KEY, []).filter((slug) => answerMeta[slug]);
+      if (savedAnswers.length === 0) {
+        savedAnswerEmpty.classList.remove('hidden');
+      } else {
+        for (const slug of savedAnswers) {
+          appendSimpleLink(
+            savedAnswerList,
+            `/answers/${slug}/`,
+            answerMeta[slug].question,
+            `${answerMeta[slug].books.length} source ${answerMeta[slug].books.length === 1 ? 'book' : 'books'}`,
+            answerMeta[slug].description
+          );
+        }
+      }
+
+      const userMaps = readJson<ContentMap[]>(USER_MAPS_KEY, []);
+      if (userMaps.length === 0) {
+        userMapEmpty.classList.remove('hidden');
+      } else {
+        for (const map of userMaps) userMapList.appendChild(renderMapCard(map));
+      }
+
+      const allCommunityMaps = [...userMaps.filter((map) => map.visibility === 'public'), ...mapMeta.communityMaps];
+      const collected = readJson<string[]>(COLLECTED_MAPS_KEY, [])
+        .map((id) => allCommunityMaps.find((map) => map.id === id))
+        .filter((map): map is ContentMap => Boolean(map));
+      if (collected.length === 0) {
+        collectedMapEmpty.classList.remove('hidden');
+      } else {
+        for (const map of collected) {
+          collectedMapList.appendChild(renderMapCard(map));
         }
       }
 

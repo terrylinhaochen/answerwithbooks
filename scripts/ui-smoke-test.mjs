@@ -42,6 +42,7 @@ try {
   await testAuthRedirects(page);
   await testOnboardingSignupProfileAndShelf(page);
   await testLoginAndSignout(page);
+  await testMappingAndCommunityCollection(page);
 
   assert.ok(
     supabaseRequests.some((request) => request.kind === 'signup'),
@@ -61,7 +62,7 @@ try {
   );
 
   await context.close();
-  console.log('UI smoke test passed: mobile nav, carousel, filters, saved books, onboarding, signup, profile sync, login, signout, and install copy verified.');
+  console.log('UI smoke test passed: mobile nav, carousel, filters, saved books, saved answers, onboarding, signup, profile sync, login, signout, content mapping, community collection, and install copy verified.');
 } finally {
   if (browser) await browser.close();
   server.closeAllConnections();
@@ -162,6 +163,41 @@ async function testLoginAndSignout(page) {
   await page.waitForURL('**/my-books/');
   await page.waitForSelector('#library-content:not(.hidden)');
   await assertVisibleText(page, '#library-content', 'Welcome back, reader');
+}
+
+async function testMappingAndCommunityCollection(page) {
+  await page.goto('/answers/how-to-fix-user-interviews-that-are-not-teaching-you-anything/', {
+    waitUntil: 'domcontentloaded',
+  });
+  await page.locator('[data-save-answer]').click();
+  await expectText(page.locator('[data-save-answer]'), /Saved - remove/);
+  await page.locator('[data-like-answer]').click();
+  await expectText(page.locator('[data-like-answer]'), /Helpful/);
+
+  await page.goto('/upload/', { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('[data-upload-shell]:not(.hidden)');
+  await page.locator('input[name="title"]').fill('Customer interview map');
+  await page
+    .locator('textarea[name="problem"]')
+    .fill('I need to validate a startup idea without getting fooled by polite user interviews.');
+  await page
+    .locator('textarea[name="sourceNote"]')
+    .fill('Users compliment the product but avoid committing budget or changing behavior. We need better evidence from recent behavior.');
+  await page.locator('input[name="visibility"]').check();
+  await page.locator('[data-map-submit]').click();
+  await assertVisibleText(page, '[data-map-result]', 'Customer interview map');
+  await assertVisibleText(page, '[data-map-result]', 'The Mom Test');
+
+  await page.goto('/community/', { waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, '[data-community-list]', 'Startup idea validation without fooling yourself');
+  await page.locator('[data-community-map="community-startup-validation"] button').click();
+  await assertVisibleText(page, '[data-community-map="community-startup-validation"]', 'Collected - remove');
+
+  await page.goto('/my-books/', { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#library-content:not(.hidden)');
+  await assertVisibleText(page, '#saved-answer-list', 'How to fix user interviews that are not teaching you anything');
+  await assertVisibleText(page, '#user-map-list', 'Customer interview map');
+  await assertVisibleText(page, '#collected-map-list', 'Startup idea validation without fooling yourself');
 }
 
 async function clearSupabaseBrowserState(page) {

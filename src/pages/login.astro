@@ -62,15 +62,20 @@ import Base from '../layouts/Base.astro';
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
     const loginCopy = document.querySelector<HTMLElement>('[data-login-copy]');
     const signupLink = document.querySelector<HTMLAnchorElement>('[data-signup-link]');
-    const fromOnboarding = new URLSearchParams(window.location.search).get('from') === 'onboarding';
+    const from = new URLSearchParams(window.location.search).get('from');
+    const fromOnboarding = from === 'onboarding';
+    const fromUpload = from === 'upload';
     const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
-    const redirectAfterAuth = pendingOnboarding ? '/profile/?onboarded=1' : '/my-books/';
+    const redirectAfterAuth = pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
 
     if (pendingOnboarding) {
       if (loginCopy) {
         loginCopy.textContent = 'Log in to sync the setup you just created to your profile.';
       }
       if (signupLink) signupLink.href = '/signup/?from=onboarding';
+    } else if (fromUpload) {
+      if (loginCopy) loginCopy.textContent = 'Log in to map content to your personal shelf.';
+      if (signupLink) signupLink.href = '/signup/?from=upload';
     }
 
     // Already logged in? Go straight to saved books.

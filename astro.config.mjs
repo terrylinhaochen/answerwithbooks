@@ -2,7 +2,16 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-const utilityPaths = ['/login/', '/signup/', '/my-books/', '/profile/', '/onboarding/start/', '/404/'];
+const utilityPaths = [
+  '/login/',
+  '/signup/',
+  '/my-books/',
+  '/profile/',
+  '/onboarding/start/',
+  '/upload/',
+  '/community/',
+  '/404/',
+];
 
 // https://astro.build/config
 export default defineConfig({

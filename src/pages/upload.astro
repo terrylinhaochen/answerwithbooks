@@ -1,0 +1,314 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { CANONICAL_TOPICS, topicsForTags } from '../lib/topics';
+
+const books = await getCollection('books');
+const answers = await getCollection('answers');
+const bookIndex = books.map((book) => ({
+  id: book.id,
+  title: book.data.title,
+  description: `${book.data.oneLiner} ${book.data.readIf}`,
+  tags: book.data.tags,
+  author: book.data.author,
+}));
+const answerIndex = answers.map((answer) => ({
+  id: answer.id,
+  title: answer.data.question,
+  description: answer.data.description,
+  tags: answer.data.tags,
+  books: answer.data.books,
+}));
+const answerBookTitles = Object.fromEntries(
+  answers.map((answer) => [
+    answer.id,
+    answer.data.books.map((slug) => books.find((book) => book.id === slug)?.data.title ?? slug),
+  ])
+);
+const topicIndex = CANONICAL_TOPICS.map((topic) => ({
+  slug: topic.slug,
+  label: topic.label,
+  description: topic.description,
+}));
+const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.slug, topic.label]));
+const bookTitles = Object.fromEntries(books.map((book) => [book.id, book.data.title]));
+const answerTitles = Object.fromEntries(answers.map((answer) => [answer.id, answer.data.question]));
+---
+
+<Base
+  title="Map content"
+  description="Upload or paste a concern, note, or source excerpt and map it to useful Answer with Books topics, books, and answers."
+  path="/upload/"
+  robots="noindex, follow"
+>
+  <section class="awb-section py-14 sm:py-16">
+    <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+      <div>
+        <p class="awb-eyebrow">Map content</p>
+        <h1 class="mt-3 max-w-3xl font-serif text-5xl leading-tight sm:text-6xl">
+          Turn a concern or source note into a shelf map.
+        </h1>
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">
+          Paste a question, uploaded note, interview fragment, or book excerpt. The app maps it to topics, source books, and useful answers you can save to your profile.
+        </p>
+      </div>
+      <a href="/community/" class="awb-pill awb-pill-outline">Browse community maps</a>
+    </div>
+
+    <div data-upload-loading class="mt-8 text-soft">Checking your session...</div>
+
+    <section data-upload-guest class="awb-panel mt-8 hidden p-6">
+      <p class="awb-eyebrow">Account required</p>
+      <h2 class="mt-3 font-serif text-3xl leading-tight">Create a profile before mapping content.</h2>
+      <p class="mt-3 max-w-2xl text-soft">
+        Uploads are part of your personal shelf, so sign in first. Public sharing is optional after the map is created.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/login/?from=upload" class="awb-pill awb-pill-primary">Log in</a>
+        <a href="/signup/?from=upload" class="awb-pill awb-pill-outline">Create account</a>
+      </div>
+    </section>
+
+    <section data-upload-shell class="mt-8 hidden">
+      <form data-content-map-form class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div class="awb-panel p-5 sm:p-6">
+          <div class="grid gap-5">
+            <label>
+              <span class="awb-eyebrow">Map title</span>
+              <input
+                name="title"
+                class="awb-input mt-2"
+                placeholder="Example: Better customer interviews for a new product"
+                required
+              />
+            </label>
+
+            <label>
+              <span class="awb-eyebrow">Question or concern</span>
+              <textarea
+                name="problem"
+                rows="4"
+                class="awb-input mt-2 min-h-28 resize-y"
+                placeholder="What are you trying to understand, decide, or solve?"
+                required
+              ></textarea>
+            </label>
+
+            <label>
+              <span class="awb-eyebrow">Source note</span>
+              <textarea
+                name="sourceNote"
+                rows="8"
+                class="awb-input mt-2 min-h-44 resize-y"
+                placeholder="Paste notes, an interview excerpt, a reading passage, or anything you want mapped to the shelf."
+              ></textarea>
+            </label>
+
+            <label class="block">
+              <span class="awb-eyebrow">Upload text file</span>
+              <input
+                type="file"
+                accept=".txt,.md,text/plain,text/markdown"
+                data-source-file
+                class="mt-2 block w-full rounded-lg border border-line bg-card px-3 py-3 font-sans text-sm text-soft"
+              />
+            </label>
+
+            <label class="flex items-start gap-3 rounded-xl border border-line bg-card p-4">
+              <input type="checkbox" name="visibility" value="public" class="mt-1 accent-accent" />
+              <span>
+                <span class="block font-serif text-xl leading-tight">Let other readers browse this map</span>
+                <span class="mt-1 block text-sm leading-relaxed text-soft">
+                  Public maps stay in this browser today and appear on the community page as a preview of the shared system.
+                </span>
+              </span>
+            </label>
+          </div>
+
+          <div class="mt-6 flex flex-wrap items-center gap-3 border-t border-line pt-5">
+            <button type="submit" class="awb-pill awb-pill-primary cursor-pointer" data-map-submit>
+              Map to books
+            </button>
+            <a href="/my-books/" class="awb-pill awb-pill-outline">Open dashboard</a>
+          </div>
+          <p data-map-message role="status" class="mt-4 hidden text-sm text-soft"></p>
+        </div>
+
+        <aside class="awb-card-link p-5 sm:p-6">
+          <p class="awb-eyebrow">User story</p>
+          <h2 class="mt-3 font-serif text-3xl leading-tight">Where this shows up</h2>
+          <div class="mt-5 grid gap-4 text-sm leading-relaxed text-soft">
+            <p>
+              Your map appears on the dashboard under "Your mapped content" with the matched topics, books, and answers.
+            </p>
+            <p>
+              If you mark it browsable, it also appears on the community maps page so other readers can collect it.
+            </p>
+            <p>
+              Collected community maps appear on your dashboard as reusable demand signals for future personalization.
+            </p>
+          </div>
+        </aside>
+      </form>
+
+      <section data-map-result class="awb-panel mt-8 hidden p-5 sm:p-6">
+        <div class="grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
+          <div>
+            <p class="awb-eyebrow">Mapped result</p>
+            <h2 class="mt-3 font-serif text-3xl leading-tight" data-result-title></h2>
+            <p class="mt-3 text-soft" data-result-problem></p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-3">
+            <div class="awb-card-link p-4">
+              <p class="awb-eyebrow">Topics</p>
+              <div class="mt-3 flex flex-wrap gap-2" data-result-topics></div>
+            </div>
+            <div class="awb-card-link p-4">
+              <p class="awb-eyebrow">Books</p>
+              <ul class="mt-3 space-y-2 text-sm text-soft" data-result-books></ul>
+            </div>
+            <div class="awb-card-link p-4">
+              <p class="awb-eyebrow">Answers</p>
+              <ul class="mt-3 space-y-2 text-sm text-soft" data-result-answers></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </section>
+
+  <script type="application/json" id="map-index" set:html={JSON.stringify({ bookIndex, answerIndex, topicIndex, bookTitles, answerTitles, topicLabels, answerBookTitles })} />
+
+  <script>
+    import { supabase } from '../lib/supabase';
+    import {
+      USER_MAPS_KEY,
+      inferTopics,
+      makeContentMapId,
+      readJson,
+      scoreLibraryItems,
+      writeJson,
+      type ContentMap,
+      type LibraryItem,
+    } from '../lib/user-library';
+
+    const loading = document.querySelector<HTMLElement>('[data-upload-loading]');
+    const guest = document.querySelector<HTMLElement>('[data-upload-guest]');
+    const shell = document.querySelector<HTMLElement>('[data-upload-shell]');
+    const form = document.querySelector<HTMLFormElement>('[data-content-map-form]');
+    const fileInput = document.querySelector<HTMLInputElement>('[data-source-file]');
+    const message = document.querySelector<HTMLElement>('[data-map-message]');
+    const result = document.querySelector<HTMLElement>('[data-map-result]');
+    const resultTitle = document.querySelector<HTMLElement>('[data-result-title]');
+    const resultProblem = document.querySelector<HTMLElement>('[data-result-problem]');
+    const resultTopics = document.querySelector<HTMLElement>('[data-result-topics]');
+    const resultBooks = document.querySelector<HTMLElement>('[data-result-books]');
+    const resultAnswers = document.querySelector<HTMLElement>('[data-result-answers]');
+    const index = JSON.parse(document.getElementById('map-index')?.textContent ?? '{}') as {
+      bookIndex: LibraryItem[];
+      answerIndex: LibraryItem[];
+      topicIndex: Array<{ slug: string; label: string; description: string }>;
+      bookTitles: Record<string, string>;
+      answerTitles: Record<string, string>;
+      topicLabels: Record<string, string>;
+    };
+
+    const showMessage = (text: string) => {
+      if (!message) return;
+      message.textContent = text;
+      message.classList.remove('hidden');
+    };
+
+    const renderMap = (map: ContentMap) => {
+      result?.classList.remove('hidden');
+      if (resultTitle) resultTitle.textContent = map.title;
+      if (resultProblem) resultProblem.textContent = map.problem;
+      if (resultTopics) {
+        resultTopics.innerHTML = '';
+        for (const topic of map.topics) {
+          const pill = document.createElement('a');
+          pill.href = `/topics/${topic}/`;
+          pill.className = 'inline-flex min-h-8 items-center rounded-full border border-line px-2.5 py-1 text-xs text-soft hover:border-ink hover:text-ink';
+          pill.textContent = index.topicLabels[topic] ?? topic;
+          resultTopics.appendChild(pill);
+        }
+      }
+      if (resultBooks) {
+        resultBooks.innerHTML = '';
+        for (const book of map.books) {
+          const item = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = `/books/${book}/`;
+          link.className = 'text-ink underline underline-offset-4 decoration-line hover:text-accent';
+          link.textContent = index.bookTitles[book] ?? book;
+          item.appendChild(link);
+          resultBooks.appendChild(item);
+        }
+      }
+      if (resultAnswers) {
+        resultAnswers.innerHTML = '';
+        for (const answer of map.answers) {
+          const item = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = `/answers/${answer}/`;
+          link.className = 'text-ink underline underline-offset-4 decoration-line hover:text-accent';
+          link.textContent = index.answerTitles[answer] ?? answer;
+          item.appendChild(link);
+          resultAnswers.appendChild(item);
+        }
+      }
+      result?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    };
+
+    supabase.auth.getSession().then(({ data }) => {
+      loading?.classList.add('hidden');
+      if (data.session) shell?.classList.remove('hidden');
+      else guest?.classList.remove('hidden');
+    });
+
+    fileInput?.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file || !form) return;
+      const text = await file.text();
+      const note = form.querySelector<HTMLTextAreaElement>('textarea[name="sourceNote"]');
+      const title = form.querySelector<HTMLInputElement>('input[name="title"]');
+      if (note) note.value = text;
+      if (title && !title.value) title.value = file.name.replace(/\.[^.]+$/, '').replaceAll('-', ' ');
+      showMessage(`Loaded ${file.name}.`);
+    });
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const title = String(data.get('title') || '').trim();
+      const problem = String(data.get('problem') || '').trim();
+      const sourceNote = String(data.get('sourceNote') || '').trim();
+      if (!title || !problem) {
+        showMessage('Add a title and question before mapping.');
+        return;
+      }
+
+      const query = `${title} ${problem} ${sourceNote}`;
+      const matchedBooks = scoreLibraryItems(query, index.bookIndex, 4).map((item) => item.id);
+      const matchedAnswers = scoreLibraryItems(query, index.answerIndex, 4).map((item) => item.id);
+      const topics = inferTopics(query, index.topicIndex, matchedBooks.length > 0 ? ['business'] : ['decisions']);
+      const map: ContentMap = {
+        id: makeContentMapId(),
+        title,
+        problem,
+        sourceNote,
+        topics,
+        books: matchedBooks,
+        answers: matchedAnswers,
+        visibility: data.get('visibility') === 'public' ? 'public' : 'private',
+        author: 'You',
+        createdAt: new Date().toISOString(),
+      };
+
+      const maps = readJson<ContentMap[]>(USER_MAPS_KEY, []);
+      writeJson(USER_MAPS_KEY, [map, ...maps]);
+      showMessage(map.visibility === 'public' ? 'Saved to your dashboard and community preview.' : 'Saved to your dashboard.');
+      renderMap(map);
+    });
+  </script>
+</Base>

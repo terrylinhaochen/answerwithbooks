@@ -1,0 +1,162 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { CANONICAL_TOPICS } from '../lib/topics';
+import { communityMaps } from '../lib/user-library';
+
+const books = await getCollection('books');
+const answers = await getCollection('answers');
+const bookTitles = Object.fromEntries(books.map((book) => [book.id, book.data.title]));
+const answerTitles = Object.fromEntries(answers.map((answer) => [answer.id, answer.data.question]));
+const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.slug, topic.label]));
+---
+
+<Base
+  title="Community maps"
+  description="Browse reader concern maps and collect the ones that match what you are trying to solve."
+  path="/community/"
+  robots="noindex, follow"
+>
+  <section class="awb-section py-14 sm:py-16">
+    <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+      <div>
+        <p class="awb-eyebrow">Community maps</p>
+        <h1 class="mt-3 max-w-3xl font-serif text-5xl leading-tight sm:text-6xl">
+          Browse how other readers map problems to books.
+        </h1>
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">
+          Each map starts with a user concern, then connects it to topics, source books, and answers worth reading next.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="/upload/" class="awb-pill awb-pill-primary">Map your content</a>
+        <a href="/my-books/" class="awb-pill awb-pill-outline">Open dashboard</a>
+      </div>
+    </div>
+
+    <section class="awb-panel mt-8 p-4 sm:p-5">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <label class="block min-w-0 lg:w-[26rem]">
+          <span class="awb-eyebrow">Search maps</span>
+          <input
+            type="search"
+            placeholder="Search career, validation, hard conversations..."
+            class="awb-input mt-2"
+            data-map-search
+          />
+        </label>
+        <p class="text-sm text-faint" data-map-count></p>
+      </div>
+    </section>
+
+    <section class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3" data-community-list></section>
+    <p class="mt-5 hidden text-sm text-faint" data-community-empty>No maps match this search.</p>
+  </section>
+
+  <script type="application/json" id="community-data" set:html={JSON.stringify({ communityMaps, bookTitles, answerTitles, topicLabels })} />
+
+  <script>
+    import {
+      COLLECTED_MAPS_KEY,
+      USER_MAPS_KEY,
+      readJson,
+      toggleId,
+      type ContentMap,
+    } from '../lib/user-library';
+
+    const data = JSON.parse(document.getElementById('community-data')?.textContent ?? '{}') as {
+      communityMaps: ContentMap[];
+      bookTitles: Record<string, string>;
+      answerTitles: Record<string, string>;
+      topicLabels: Record<string, string>;
+    };
+    const list = document.querySelector<HTMLElement>('[data-community-list]');
+    const search = document.querySelector<HTMLInputElement>('[data-map-search]');
+    const count = document.querySelector<HTMLElement>('[data-map-count]');
+    const empty = document.querySelector<HTMLElement>('[data-community-empty]');
+
+    const publicUserMaps = () =>
+      readJson<ContentMap[]>(USER_MAPS_KEY, []).filter((map) => map.visibility === 'public');
+
+    const allMaps = () => [...publicUserMaps(), ...data.communityMaps];
+
+    const createList = (items: string[], labels: Record<string, string>, path: string) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mt-4 flex flex-wrap gap-2';
+      for (const id of items.slice(0, 3)) {
+        const link = document.createElement('a');
+        link.href = `${path}${id}/`;
+        link.className = 'inline-flex min-h-8 max-w-full items-center rounded-full border border-line px-2.5 py-1 text-xs text-soft hover:border-ink hover:text-ink';
+        link.textContent = labels[id] ?? id;
+        wrapper.appendChild(link);
+      }
+      return wrapper;
+    };
+
+    const render = () => {
+      if (!list) return;
+      const query = search?.value.trim().toLowerCase() ?? '';
+      const collected = readJson<string[]>(COLLECTED_MAPS_KEY, []);
+      const maps = allMaps().filter((map) => {
+        const haystack = `${map.title} ${map.problem} ${map.sourceNote} ${map.topics.join(' ')}`.toLowerCase();
+        return !query || haystack.includes(query);
+      });
+      list.innerHTML = '';
+      for (const map of maps) {
+        const card = document.createElement('article');
+        card.className = 'awb-card-link flex h-full flex-col p-5';
+        card.dataset.communityMap = map.id;
+
+        const meta = document.createElement('p');
+        meta.className = 'awb-eyebrow';
+        meta.textContent = map.author === 'You' ? 'Your public map' : 'Reader map';
+
+        const title = document.createElement('h2');
+        title.className = 'mt-3 font-serif text-2xl leading-tight';
+        title.textContent = map.title;
+
+        const problem = document.createElement('p');
+        problem.className = 'mt-3 text-sm leading-relaxed text-soft';
+        problem.textContent = map.problem;
+
+        const topicRow = document.createElement('div');
+        topicRow.className = 'mt-4 flex flex-wrap gap-2';
+        for (const topic of map.topics) {
+          const pill = document.createElement('span');
+          pill.className = 'inline-flex min-h-8 items-center rounded-full border border-line px-2.5 py-1 text-xs text-soft';
+          pill.textContent = data.topicLabels[topic] ?? topic;
+          topicRow.appendChild(pill);
+        }
+
+        const books = createList(map.books, data.bookTitles, '/books/');
+        const answers = createList(map.answers, data.answerTitles, '/answers/');
+
+        const actionRow = document.createElement('div');
+        actionRow.className = 'mt-auto flex flex-wrap items-center gap-3 pt-5';
+        const collect = document.createElement('button');
+        collect.type = 'button';
+        collect.className = 'awb-pill cursor-pointer';
+        const paint = () => {
+          const active = readJson<string[]>(COLLECTED_MAPS_KEY, []).includes(map.id);
+          collect.textContent = active ? 'Collected - remove' : 'Collect map';
+          collect.classList.toggle('awb-pill-primary', active);
+          collect.classList.toggle('awb-pill-outline', !active);
+        };
+        collect.addEventListener('click', () => {
+          toggleId(COLLECTED_MAPS_KEY, map.id);
+          paint();
+        });
+        paint();
+        actionRow.appendChild(collect);
+
+        card.append(meta, title, problem, topicRow, books, answers, actionRow);
+        list.appendChild(card);
+      }
+      if (count) count.textContent = `${maps.length} map${maps.length === 1 ? '' : 's'}`;
+      empty?.classList.toggle('hidden', maps.length > 0);
+    };
+
+    search?.addEventListener('input', render);
+    render();
+  </script>
+</Base>
