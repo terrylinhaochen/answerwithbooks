@@ -64,17 +64,17 @@ const carouselItems = carouselIds
     },
   }));
 const installCommand = 'npx answer-with-books install --skill --api';
-const siteDescription = 'The best way to learn from books using AI.';
+const siteDescription = 'Read thoughtful book digests, then use the agent that knows you to turn the right ideas into personalized advice.';
 const homeFaqs = [
   {
     question: 'How does Answer with Books work?',
     answer:
-      'You start with what is on your mind. Answer with Books turns that into sharper questions, then finds book-backed insights that match the situation.',
+      'Read a self-contained book digest or open an answer brief for a live problem. Copy the brief into your agent, where the installed skill combines the source books with context the agent already knows about you.',
   },
   {
     question: 'What makes this different from normal book summaries?',
     answer:
-      'The unit is not a chapter summary. Each answer starts from a real problem, then uses one to three books as lenses for judgment, tradeoffs, and next moves.',
+      'The book pages are concise but substantial editorial digests. The final advice is produced in your own agent harness, where memory and current context can change which ideas matter and what you should do next.',
   },
   {
     question: 'What is included in the public shelf?',
@@ -132,10 +132,11 @@ const jsonLd = [
   },
   {
     '@type': 'SiteNavigationElement',
-    name: ['Books', 'Answers', 'Get started'],
+    name: ['Books', 'Answers', 'Skills', 'Get started'],
     url: [
       'https://answerwithbooks.com/books/',
       'https://answerwithbooks.com/answers/',
+      'https://answerwithbooks.com/skills/',
       'https://answerwithbooks.com/onboarding/start/',
     ],
   },
@@ -155,20 +156,20 @@ const jsonLd = [
     <div class="grid min-w-0 grid-cols-1 items-stretch gap-10 xl:grid-cols-[0.95fr_1.05fr] xl:gap-16">
       <div class="flex min-w-0 flex-col justify-center">
         <p class="max-w-[20rem] font-sans text-xs font-semibold uppercase leading-relaxed tracking-[0.08em] text-faint sm:max-w-none">
-          Learn from books with AI
+          Use books on the problem in front of you
         </p>
         <h1 class="mt-5 max-w-[13ch] break-words font-serif text-[2.85rem] leading-[1.03] sm:max-w-3xl sm:text-6xl xl:text-[4.75rem]">
           The best way to learn from books using AI.
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-soft">
-          Start with what you are trying to solve. Get the question behind it, the book lens that fits, and a useful next move.
+          Read a genuinely useful digest. When the problem is personal, give the answer URL to the agent that already knows your goals, constraints, and prior attempts.
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-4 text-[0.95rem]">
           <a
-            href="/onboarding/start/"
+            href="/books/"
             class="awb-pill awb-pill-primary transition-colors"
           >
-            Get started
+            Read book digests
           </a>
           <a href="/answers/" class="awb-pill awb-pill-outline transition-colors">
             Explore answers
@@ -245,12 +246,12 @@ const jsonLd = [
         <div>
           <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Question-first reading</p>
           <h2 class="mt-3 max-w-2xl font-serif text-4xl leading-tight lg:text-[2.85rem]">
-            The shelf starts working when it knows what you are stuck on.
+            Book ideas, applied to your context.
           </h2>
         </div>
         <div>
           <p class="max-w-2xl text-lg leading-relaxed text-soft">
-            Most reading tools start with summaries. Answer with Books starts with the situation on your mind, then points you toward the sharper question and the book lens that fits.
+            Book pages are designed to stand alone. Answer briefs become more valuable when the installed skill reads them inside the harness that already knows your work and life.
           </p>
           <a
             href="/onboarding/start/"
@@ -262,9 +263,9 @@ const jsonLd = [
       </div>
       <div class="mt-10 grid gap-4 border-t border-line pt-8 lg:grid-cols-3">
         {[
-          ['Start with the situation', 'Name what you are trying to solve instead of searching by book title.'],
-          ['Find the better question', 'Turn vague top-of-mind thoughts into something you can actually work through.'],
-          ['Open the right lens', 'Pull the framework, story, or next move from the book that fits the moment.'],
+          ['Read the digest', 'Understand the book’s argument, mechanisms, applications, and limits without reading a thin list of takeaways.'],
+          ['Open an answer brief', 'Choose a real problem and see the initial decision rule plus the source books behind it.'],
+          ['Personalize in your agent', 'Let the installed skill combine those sources with context your harness already knows about you.'],
         ].map(([title, text], index) => (
           <article class="rounded-2xl border border-line bg-wash/70 p-5">
             <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">0{index + 1}</p>
@@ -328,8 +329,8 @@ const jsonLd = [
           </div>
           <div class="flex flex-wrap gap-3 text-sm">
             <a href="/signup/" class="awb-pill awb-pill-primary min-h-0 px-4 py-2 transition-colors">Create account</a>
-            <a href="/books/" class="awb-pill awb-pill-outline min-h-0 px-4 py-2 transition-colors">
-              Browse books
+            <a href="/skills/" class="awb-pill awb-pill-outline min-h-0 px-4 py-2 transition-colors">
+              Explore skill
             </a>
           </div>
         </div>

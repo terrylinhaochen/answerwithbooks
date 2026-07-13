@@ -85,6 +85,20 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
         </section>
       </div>
 
+      <section class="awb-panel mt-8 p-5 sm:p-6">
+        <div class="flex flex-col gap-3 border-b border-line pb-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="awb-eyebrow">Open questions</p>
+            <h2 class="mt-2 font-serif text-3xl leading-tight text-ink">Honest misses waiting for a stronger answer.</h2>
+          </div>
+          <a href="/skills/" class="awb-pill awb-pill-outline">Install the agent skill</a>
+        </div>
+        <ul id="open-question-list" class="divide-y divide-line"></ul>
+        <p id="open-question-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+          No open questions yet. Questions captured by the agent skill appear here when the shelf has no strong published answer.
+        </p>
+      </section>
+
       <div class="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <section class="awb-panel p-5 sm:p-6">
           <div class="flex flex-col gap-3 border-b border-line pb-4 sm:flex-row sm:items-end sm:justify-between">
@@ -136,6 +150,7 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
     import { supabase } from '../lib/supabase';
     import {
       COLLECTED_MAPS_KEY,
+      OPEN_QUESTIONS_KEY,
       SAVED_ANSWERS_KEY,
       SAVED_BOOKS_KEY,
       USER_MAPS_KEY,
@@ -150,6 +165,8 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
     const savedEmpty = document.getElementById('saved-empty')!;
     const savedAnswerList = document.getElementById('saved-answer-list')!;
     const savedAnswerEmpty = document.getElementById('saved-answer-empty')!;
+    const openQuestionList = document.getElementById('open-question-list')!;
+    const openQuestionEmpty = document.getElementById('open-question-empty')!;
     const userMapList = document.getElementById('user-map-list')!;
     const userMapEmpty = document.getElementById('user-map-empty')!;
     const collectedMapList = document.getElementById('collected-map-list')!;
@@ -289,6 +306,21 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
             answerMeta[slug].question,
             `${answerMeta[slug].books.length} source ${answerMeta[slug].books.length === 1 ? 'book' : 'books'}`,
             answerMeta[slug].description
+          );
+        }
+      }
+
+      const openQuestions = readJson<Array<{ question: string; context: string; createdAt: string }>>(OPEN_QUESTIONS_KEY, []);
+      if (openQuestions.length === 0) {
+        openQuestionEmpty.classList.remove('hidden');
+      } else {
+        for (const item of openQuestions) {
+          appendSimpleLink(
+            openQuestionList,
+            `/skills/`,
+            item.question,
+            'Needs a stronger published answer',
+            item.context || undefined
           );
         }
       }

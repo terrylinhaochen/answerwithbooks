@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+
+const url = 'https://answerwithbooks.com/editorial/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${url}#webpage`,
+  url,
+  name: 'Answer with Books editorial method',
+  description: 'How Answer with Books creates, sources, reviews, and updates self-contained book digests and book-grounded answers.',
+  isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+  author: { '@type': 'Person', name: 'Terry Chen', url: 'https://terrylinhaochen.github.io' },
+};
+---
+
+<Base
+  title="Editorial method"
+  description="How Answer with Books creates, sources, reviews, and updates self-contained book digests and book-grounded answers."
+  path="/editorial/"
+  jsonLd={jsonLd}
+>
+  <article class="awb-section py-16">
+    <p class="awb-eyebrow">Editorial method</p>
+    <h1 class="awb-display mt-3 max-w-4xl text-5xl leading-tight sm:text-6xl">How the shelf is made</h1>
+    <p class="awb-copy mt-5 max-w-3xl text-lg">
+      Answer with Books turns durable ideas from books into self-contained explanations for real questions. The standard is usefulness with a visible source trail, not compressed chapter coverage.
+    </p>
+
+    <div class="prose-awb prose-awb--aligned mt-12">
+      <h2>Who writes and reviews the pages</h2>
+      <p>
+        Terry Chen edits the public catalog. Each page is reviewed against the same editorial rubric before it is treated as complete. Book authors remain the source of the underlying ideas; Answer with Books is responsible for the selection, explanation, structure, and practical interpretation.
+      </p>
+
+      <h2>How a book digest is produced</h2>
+      <p>
+        A digest identifies the book's central claim, explains the mechanisms behind its most consequential ideas, and preserves examples only when they come from the book or another named source. It is written to stand alone. It does not preview a future summary, fabricate a worked example, or reproduce the book chapter by chapter.
+      </p>
+
+      <h2>How an answer is produced</h2>
+      <p>
+        An answer starts with a recurring practical problem and a decision the reader is trying to make. The linked book digests are read as source briefs, then only the ideas that materially change the diagnosis or next move are used. Claims from books are separated from editorial inference.
+      </p>
+
+      <h2>How automation is used</h2>
+      <p>
+        Software and AI assistance may help organize source material, test structure, check links, measure prose balance, and identify pages that need review. Automation is not treated as a source. Final pages are edited against source fidelity, usefulness, and non-fabrication checks before publication.
+      </p>
+
+      <h2>How pages are checked and updated</h2>
+      <p>
+        Catalog audits verify self-contained length, prose-led structure, source-book links, descriptive metadata, crawlable internal links, structured data, and rendered accessibility. A page is revised when its explanation is incomplete, its source use is weak, or its advice no longer follows from the evidence.
+      </p>
+    </div>
+  </article>
+</Base>

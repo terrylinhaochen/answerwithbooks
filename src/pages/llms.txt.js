@@ -18,6 +18,7 @@ The site is maintained by Terry Chen.
 ## Best Entry Points
 
 - Home: ${site}/
+- Agent skill: ${site}/skills/
 - Guides: ${site}/answers/
 - Source books: ${site}/books/
 - Topics: ${site}/topics/

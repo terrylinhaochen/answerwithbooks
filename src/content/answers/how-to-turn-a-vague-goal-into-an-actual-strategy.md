@@ -1,71 +1,90 @@
 ---
 question: "How to turn a vague goal into an actual strategy"
-description: "Strategy is not a goal, a slogan, or a planning meeting. Use Good Strategy Bad Strategy to diagnose the real constraint, then use Seeing Like a State to avoid deleting the local knowledge your plan needs."
+description: "Turn a goal into strategy by diagnosing the decisive obstacle, choosing an exclusionary approach, coordinating actions around it, and defining evidence that can revise the diagnosis."
 books: ["good-strategy-bad-strategy", "seeing-like-a-state"]
 date: 2026-06-20
 featured: false
 tags: ["strategy", "planning", "management"]
 ---
 
-The demand signal is blunt: founders and PMs keep asking how to "do strategy" when the inputs are chaotic. One prospect email changes the roadmap. Product notes live in one place, requirements in another, decisions in a third. Someone asks for "growth strategy" and gets a menu of tactics: marketing, partnerships, products, pricing.
+“Grow faster,” “become the trusted platform,” and “improve customer experience” describe desired outcomes. They do not explain what prevents the outcome, which approach should receive concentrated effort, or what attractive work should wait. Calling the goal a strategy postpones the conflict strategy exists to resolve.
 
-That confusion is the clue. A strategy is not the menu. It is the reason one part of the menu matters most right now.
+Convert the goal into a causal argument. Diagnose the obstacle that matters most now, choose a guiding policy for addressing it, and select actions that reinforce one another because of that policy. Then expose the simplifications in the diagnosis to people with local knowledge and define evidence that will force an update.
 
-## Start with a diagnosis, not a goal
+[*Good Strategy Bad Strategy*](/books/good-strategy-bad-strategy/) supplies the kernel of diagnosis, guiding policy, and coherent action. [*Seeing Like a State*](/books/seeing-like-a-state/) supplies the warning: a clean strategic model can erase the local facts and informal systems on which execution depends.
 
-Richard Rumelt's [*Good Strategy Bad Strategy*](/books/good-strategy-bad-strategy/) is useful because it is rude to vague planning. A goal like "grow faster" or "be the trusted platform" is not strategy. It does not explain what is blocking progress.
+## A goal names the destination; diagnosis explains the difficulty
 
-The first move is diagnosis. Write the situation as a causal claim:
+Rumelt’s diagnosis reduces a complex situation to an explanation of the central challenge. “Revenue is below plan” is a symptom. A diagnosis identifies the mechanism: perhaps target users do not reach value before setup cost becomes visible, buyers cannot justify switching risk, or acquisition brings a segment the product is not designed to retain.
 
-- Bad: "We need more users."
-- Better: "Users arrive from founder-led content, but activation drops because they do not understand which workflow to try first."
-- Bad: "We need enterprise readiness."
-- Better: "Mid-market buyers like the product, but security and permission gaps stop procurement before pilots expand."
+A useful diagnosis is specific enough to rule actions in and out, broad enough to connect multiple observations, and contestable enough that evidence can challenge it. It should distinguish the obstacle from the absence of the desired result.
 
-The better versions are strategy-shaped because they tell you where force might matter.
+Begin with observations, not strategic vocabulary. Which behavior fails? Where does the process stop? What workaround exists? Which constraint recurs across cases? What changed when performance was better? Preserve facts separately from the inference that connects them.
 
-## Choose a guiding policy
+Competing diagnoses should be written before they become competing roadmaps. One group may believe demand is weak; another may believe demand exists but adoption fails. Funding both full plans avoids the disagreement while dispersing effort. Identify the evidence that would distinguish the models.
 
-Once the diagnosis is clear, choose the rule for action. This is not yet a roadmap. It is the policy that filters the roadmap.
+## A guiding policy creates a rule for exclusion
 
-If the diagnosis is onboarding confusion, the guiding policy might be: "Make the first successful workflow obvious before adding breadth." If the diagnosis is procurement risk, it might be: "Win trust for one narrow regulated use case before expanding the platform story."
+The guiding policy states the overall approach to the diagnosed obstacle. It is more constraining than a value and less detailed than a project plan. It should help people make local decisions without returning every choice to leadership.
 
-Good guiding policies are uncomfortable because they exclude plausible work. If your policy does not kill any roadmap items, it is probably decorative.
+Test the policy with plausible work. If every existing initiative can be reframed as supporting it, the policy has not concentrated anything. A strategy becomes real when resources move and a reasonable activity is delayed or stopped.
 
-## Make actions coherent
+The policy should also express the chosen mechanism. “Focus on onboarding” remains a topic. A policy might prioritize letting users experience the core outcome before asking them to complete migration or setup. That criterion can shape product, messaging, service, and measurement coherently.
 
-The third part of Rumelt's kernel is coherent action. The actions should reinforce each other:
+Policies are provisional. Their authority comes from the current diagnosis, so evidence that weakens the diagnosis should weaken the policy. Loyalty to a slogan after its causal basis fails is not strategic consistency.
 
-1. Rewrite the homepage around one workflow.
-2. Build the first-run template for that workflow.
-3. Publish three proof examples showing the workflow in the target context.
-4. Measure activation only for users who enter through that path.
+<figure class="awb-line-illustration" aria-labelledby="strategy-answer-caption">
+  <svg viewBox="0 0 720 185" role="img" aria-label="A vague goal becomes strategy through diagnosis, guiding policy, coherent actions, and an evidence loop">
+    <rect x="20" y="54" width="132" height="74" rx="12" class="awb-line-illustration__box" />
+    <rect x="180" y="54" width="132" height="74" rx="12" class="awb-line-illustration__box" />
+    <rect x="340" y="54" width="145" height="74" rx="12" class="awb-line-illustration__box" />
+    <rect x="513" y="54" width="185" height="74" rx="12" class="awb-line-illustration__box" />
+    <path d="M152 91 H180 M312 91 H340 M485 91 H513" class="awb-line-illustration__line" />
+    <path d="M605 140 C605 174 246 174 246 140" class="awb-line-illustration__line" />
+    <text x="86" y="82" text-anchor="middle" class="awb-line-illustration__label">Goal</text>
+    <text x="86" y="104" text-anchor="middle">desired outcome</text>
+    <text x="246" y="82" text-anchor="middle" class="awb-line-illustration__label">Diagnosis</text>
+    <text x="246" y="104" text-anchor="middle">decisive obstacle</text>
+    <text x="412" y="82" text-anchor="middle" class="awb-line-illustration__label">Guiding policy</text>
+    <text x="412" y="104" text-anchor="middle">chosen approach</text>
+    <text x="605" y="82" text-anchor="middle" class="awb-line-illustration__label">Coherent actions</text>
+    <text x="605" y="104" text-anchor="middle">mutual reinforcement</text>
+  </svg>
+  <figcaption id="strategy-answer-caption">Results revise the explanation; they do not merely score the activity.</figcaption>
+</figure>
 
-That is strategy. A random mix of "SEO, enterprise dashboard, integrations, influencer campaign, AI assistant" may be busy and rationalized, but it is not coherent.
+## Coherent actions create more than a ranked portfolio
 
-## Audit what the plan deletes
+Actions are coherent when each implements the guiding policy and makes the other chosen actions more effective. A collection of high-priority initiatives can remain strategically weak if each responds to a different theory of progress.
 
-James C. Scott's [*Seeing Like a State*](/books/seeing-like-a-state/) adds the necessary warning. Strategy simplifies reality so a team can act. But every simplification deletes local knowledge.
+For every action, state which part of the policy it expresses and what output or capability it creates. Then ask whether removing it breaks the strategic chain. Work can be necessary for maintenance, compliance, or another operating lane without belonging to the strategy; label it honestly rather than forcing every obligation into the narrative.
 
-Before you execute, ask:
+Coherence also requires sequencing. A proximate objective creates a challenge close enough to solve with current knowledge and valuable enough to improve the next position. The organization may not know the complete path to the goal, but it should know which uncertainty or bottleneck must be resolved first.
 
-- What messy user behavior did our diagnosis flatten?
-- Which team has local knowledge that contradicts the clean plan?
-- What workaround are we treating as noise even though it keeps the system alive?
-- What metric could improve while the real user experience gets worse?
+Capacity is part of the argument. A strategy with more coherent actions than the organization can execute is still a list of aspirations. Concentration means matching the set to real people, time, and dependencies.
 
-The goal is not to avoid simplification. It is to keep the plan reversible and porous enough that reality can correct it.
+## Local knowledge should challenge the diagnosis before scale
 
-## The one-page strategy template
+Scott’s legibility critique applies because strategy simplifies. Metrics, segments, workflow diagrams, and operating models make the situation visible to decision-makers while omitting variation. The people closest to customers and execution may know which exception is normal, which workaround carries the process, or which metric hides displaced cost.
 
-Use this before the next planning meeting:
+Run a local-knowledge review before commitment. Ask operators what the diagnosis gets wrong, which behavior does not fit, what would break if the policy were applied literally, and which informal process needs protection or deliberate replacement.
 
-1. **Diagnosis:** The central constraint is...
-2. **Evidence:** We believe this because...
-3. **Guiding policy:** Therefore we will...
-4. **Coherent actions:** The few actions that belong together are...
-5. **Tradeoffs:** We will not...
-6. **Local knowledge check:** The people closest to the work say...
-7. **Tripwire:** If this is wrong, we should see...
+This is not a request for unanimous approval. Local experience can also overgeneralize from salient cases. Preserve observations, compare across sources, and distinguish a contradiction of the mechanism from a preference for existing work.
 
-If the page is hard to fill out, that is useful. The pain means the strategy was not ready. Better to discover that in a document than across a quarter of scattered work.
+Use reversible pilots where uncertainty is high. The pilot should exercise the core mechanism and include the hard dependency rather than demonstrate an easy subset. Define rollback and the next commitment before results arrive.
+
+## A strategy needs update conditions, not only targets
+
+A target says what success looks like. An update condition says what evidence would change the diagnosis, policy, or actions. Without it, a missed target can always produce more effort inside the same model.
+
+Choose leading observations tied to the causal chain. If the policy is correct, what behavior should change first? Which segment should respond? What should become easier or stop occurring? Add a guardrail for the cost the policy might shift elsewhere.
+
+Record the baseline, expected direction and magnitude, review point, and authority to revise. Strategy is a hypothesis that earns concentrated commitment; it should be strong enough to guide action and explicit enough to be proven wrong.
+
+## The next move is a one-page strategy kernel
+
+Write the goal at the top, then complete five paragraphs. First, the diagnosis: the central obstacle and causal mechanism. Second, the evidence: observations supporting it and the strongest competing explanation. Third, the guiding policy: the approach and the attractive work it excludes. Fourth, the coherent actions: the few linked commitments, owners, and sequence. Fifth, the update condition: what result changes the model.
+
+Review the page with people closest to execution. Add the local facts the clean model omitted and identify which decision is reversible enough to test first. Remove any action that cannot explain its relationship to the policy or move it to the appropriate non-strategic operating lane.
+
+The page is ready when a colleague can use it to reject a plausible request, explain why the remaining actions belong together, and name the observation that would make the organization change direction. Until then, the document contains goals and activity, not strategy.

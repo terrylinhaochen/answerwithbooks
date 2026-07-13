@@ -1,55 +1,88 @@
 ---
 question: "How to make a plan that survives contact with reality"
-description: "Plans fail when they delete local knowledge and mistake a clean map for the territory. Seeing Like a State and The Wisdom of Crowds show how to plan without flattening reality."
+description: "Make plans resilient by naming what the model omits, preserving local knowledge, using reversible steps and slack, and defining evidence that can revise the plan."
 books: ["seeing-like-a-state", "the-wisdom-of-crowds"]
 date: 2026-05-26
 featured: true
 tags: ["planning", "systems", "organizations"]
 ---
 
-The discovery engine found a practical version of this question in operations and engineering communities: sprint planning blown up by hidden dependencies, GitHub issues falling out of sync with real work, stakeholders bypassing change processes. The common thread is not that people need prettier plans. It is that the plan keeps deleting the messy local facts that make the work real.
+A plan simplifies reality so people can coordinate. That simplification is necessary and dangerous. Dependencies become arrows, work becomes tasks, people become roles, and uncertainty becomes a date. The representation makes action possible while deleting details that may be carrying the system.
 
-Top-down plans don't fail because planners are stupid. They fail because planning *requires simplification* — and the things deleted in the simplification turn out to have been doing the actual work.
+A resilient plan does not try to describe everything. It identifies what has been omitted, keeps people with local knowledge inside the correction loop, breaks commitment into reversible stages, preserves slack for surprise, and states which observations will change the plan. The objective is not prediction without error; it is error that becomes visible before it compounds.
 
-## The forest that died in straight lines
+[*Seeing Like a State*](/books/seeing-like-a-state/) explains how legibility can erase practical knowledge and why imposed schemes become brittle. [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) supplies the complementary design: distributed knowledge becomes useful when diverse, independent, local inputs are genuinely aggregated.
 
-James C. Scott's [*Seeing Like a State*](/books/seeing-like-a-state/) opens with the cleanest case study of top-down failure ever written. Eighteenth-century Prussian foresters, optimizing for timber revenue, replaced wild old-growth forests with neat monoculture rows — same species, same age, same spacing. Everything illegible was cleared: underbrush, deadwood, "weed" species. The first harvest was a triumph, and the model spread across Europe.
+## Every plan is a map that deletes part of the territory
 
-The second generation collapsed. The deleted mess — fungal networks, insect diversity, soil-building litter — had been the forest's infrastructure. The Germans had to invent a word for what happened: *Waldsterben*, forest death.
+James C. Scott’s example of scientific forestry shows the mechanism. Prussian foresters simplified diverse forests into rows of commercially valuable trees that could be counted and harvested. Early yields validated the model. Later generations deteriorated because the undergrowth, soil processes, species diversity, and other “mess” removed from the plan had performed invisible ecological work.
 
-That's the template. Every top-down plan is a scientific forest: a complex, evolved system replaced by a representation of it that's optimized for the planner's visibility — what Scott calls **legibility** — and the costs land later, downstream, on someone else.
+The lesson is not that simplification always fails. It is that the benefits appear in the categories the plan measures, while the costs may accumulate in the omitted relationships. A project plan can make milestones legible while hiding review latency, informal coordination, setup, workarounds, and the learning required to discover that a requirement is wrong.
 
-## The four ingredients of catastrophe
+Run a deletion audit before execution. For each abstraction—milestone, metric, role, workflow, architecture box—ask what variation it suppresses, who relies on that variation, and how the omitted fact would re-enter the plan. If no channel exists, the model can remain internally successful while the work fails outside it.
 
-Scott is careful: simplification alone produces mediocrity, not disaster. The historic catastrophes — Soviet collectivization, Tanzania's forced villagization, Brasília — required four things at once:
+## Local knowledge needs standing, not an invitation at the end
 
-1. **Legibility schemes**: society reorganized so the center can see it.
-2. **High-modernist ideology**: unbounded confidence that expert design beats evolved practice.
-3. **Power to impose the plan** over objections.
-4. **A civil society too weak to resist.**
+Scott uses **mētis** for practical, situated knowledge acquired through experience: how this environment behaves, which exception recurs, what workaround keeps the formal process functioning, and which apparently redundant step protects against failure.
 
-The corporate translation is uncomfortable but exact: a metrics regime nobody can question, total confidence in the new architecture, an executive mandate, and teams without standing to push back. Most failed reorgs and great rewrites have all four ingredients in miniature.
+Local knowledge is difficult to centralize because part of it becomes visible only during action. Asking operators for feedback after the plan is complete treats their knowledge as commentary on decisions whose structure already excludes it.
 
-## What the plan deletes: mētis
+Bring people close to the work into diagnosis, assumption review, and pilot design. Preserve dissent before hierarchy shapes it. Surowiecki’s conditions explain why: diversity and decentralization provide different facts; independence prevents early consensus from erasing them; aggregation makes the facts consequential.
 
-Scott's name for the deleted material is **mētis** — practical, local, adaptive knowledge that can't be written into the spec. The farmer's feel for *this* valley's frost. The ops engineer's knowledge of which "redundant" service is actually holding up production. The support agent's sense of which complaints predict churn.
+Participation without decision influence is not aggregation. State which parts of the plan are fixed, which can be revised, who has authority to pause, and how contrary evidence is adjudicated.
 
-Two of Scott's observations should be tattooed on every planning document:
+<figure class="awb-line-illustration" aria-labelledby="resilient-plan-caption">
+  <svg viewBox="0 0 720 185" role="img" aria-label="A simplified plan acts through a reversible step, receives local evidence, and updates before the next commitment">
+    <rect x="24" y="54" width="145" height="74" rx="12" class="awb-line-illustration__box" />
+    <rect x="201" y="54" width="145" height="74" rx="12" class="awb-line-illustration__box" />
+    <rect x="378" y="54" width="145" height="74" rx="12" class="awb-line-illustration__box" />
+    <rect x="555" y="54" width="141" height="74" rx="12" class="awb-line-illustration__box" />
+    <path d="M169 91 H201 M346 91 H378 M523 91 H555" class="awb-line-illustration__line" />
+    <path d="M625 140 C625 174 273 174 273 140" class="awb-line-illustration__line" />
+    <text x="96" y="82" text-anchor="middle" class="awb-line-illustration__label">Model</text>
+    <text x="96" y="104" text-anchor="middle">state omissions</text>
+    <text x="273" y="82" text-anchor="middle" class="awb-line-illustration__label">Small step</text>
+    <text x="273" y="104" text-anchor="middle">reversible action</text>
+    <text x="450" y="82" text-anchor="middle" class="awb-line-illustration__label">Local evidence</text>
+    <text x="450" y="104" text-anchor="middle">surprise + adaptation</text>
+    <text x="625" y="82" text-anchor="middle" class="awb-line-illustration__label">Update</text>
+    <text x="625" y="104" text-anchor="middle">next commitment</text>
+  </svg>
+  <figcaption id="resilient-plan-caption">The correction loop is part of the plan, not evidence that planning failed.</figcaption>
+</figure>
 
-- **Formal order is parasitic on informal order.** Work-to-rule strikes prove it: when workers follow the official procedures *exactly*, production halts. The org chart never described how work happened; it described how the center imagined it.
-- **The plan's tidiness is aesthetic, not functional.** Brasília looked perfect from the air and was unlivable at street level — it was rescued by the unplanned settlements that grew around it. Beware any plan whose chief virtue is how clean the diagram looks.
+## Reversibility determines how much uncertainty the plan can tolerate
 
-There's a [*Wisdom of Crowds*](/books/the-wisdom-of-crowds/) corollary here: Surowiecki's case for decentralization is the same argument in reverse. Knowledge in complex systems is distributed by nature; the question is whether your decision process aggregates it or overwrites it. Top-down planning is the overwrite. The center doesn't just lack the local knowledge — the act of imposing the plan *destroys the conditions* under which the knowledge was produced.
+Scott’s closing principles favor small steps, reversibility, preparation for surprise, and human inventiveness. These are not arguments for timid action. They align the size of commitment with the quality of knowledge.
 
-## How to plan anyway
+Classify decisions by the cost and time of reversal. Test uncertain assumptions before committing migrations, contracts, organizational changes, or public promises that make retreat expensive. A reversible pilot should exercise the part of the system that contains the risk; a demonstration that avoids the difficult dependency produces reassurance rather than learning.
 
-Scott isn't anti-planning, and "bottom-up everything" is not the lesson. His closing rules are a how-to for planning in complex systems, and they transfer directly to product, infrastructure, and org design:
+For irreversible or safety-critical choices, the answer is not to experiment casually. Increase precommitment review, simulation, redundancy, staged rollout, and independent challenge. Reversibility is one way to manage uncertainty, not the only one.
 
-1. **Take small steps.** Prefer ten reversible moves to one grand stroke; let feedback steer.
-2. **Favor reversibility.** Ask of every change: how do we undo this when we're wrong?
-3. **Plan on surprises.** Leave slack — budget, schedule, architectural headroom — for what the plan can't foresee.
-4. **Plan on human inventiveness.** Users and workers will adapt, repurpose, and subvert the design. Build channels that turn that adaptation into signal (pilot programs, escape hatches, feedback loops) instead of suppressing it as non-compliance.
+Define rollback conditions before enthusiasm and sunk cost arrive. A rollback is credible only if data, staffing, interfaces, and communication remain compatible with returning or changing direction.
 
-And one addition from the audit side: for every dashboard, model, or metric you impose, keep asking **"what does this representation delete, and who relied on it?"** People optimize against the representation — gamed metrics are legibility's revenge.
+## Slack is capacity for the reality the model cannot contain
 
-The forest is the test. If your plan's success depends on the system staying as simple as the slide that describes it, you have planted rows. Wait for the second generation.
+Plans often label every unallocated hour or resource as inefficiency. That creates a schedule which succeeds only if the model is complete. Surprise then propagates across tightly coupled dependencies.
+
+Slack can take the form of time, budget, capacity, alternative suppliers, architectural headroom, or people able to respond across boundaries. Its size should reflect uncertainty, coupling, and cost of failure. A routine, well-understood task needs less than a novel migration or reorganization.
+
+Slack should not conceal a refusal to prioritize. Distinguish contingency reserved for known uncertainty from extra scope quietly added because capacity appears available. When the buffer is consumed, make the cause visible so future plans can update their reference class.
+
+Human inventiveness is another form of adaptive capacity. Users and workers will improve, repurpose, and circumvent the design. Treat workarounds as evidence. Some are unsafe deviations to eliminate; others reveal a requirement or coordination mechanism the formal plan missed. Investigation must precede standardization.
+
+## Metrics should expose model failure, not enforce compliance
+
+A plan needs indicators, but metrics built from the same abstraction can only confirm the plan’s view. Pair progress measures with signals from the territory: error reports, qualitative observations, exceptions, downstream workload, and behavior outside the intended path.
+
+Ask whether the metric can improve while the actual outcome worsens. If teams are rewarded for task completion, hidden rework may rise. If adoption counts are emphasized, low-value use may replace meaningful completion. A countermeasure should observe the most plausible displaced cost.
+
+The update condition belongs in the plan before measurement. State which result will cause continuation, revision, pause, or abandonment and who can invoke it. Otherwise every outcome can be reinterpreted as a reason to preserve the original direction.
+
+## The next move is a plan-deletion review
+
+Take the current plan and add four columns beside each major commitment: assumption, omitted local knowledge, reversibility, and update evidence. Ask the people closest to execution to mark where the representation differs from how work happens and which workaround or dependency is carrying unrecognized load.
+
+Choose the earliest step that can expose the most consequential assumption without creating irreversible cost. Preserve enough slack and rollback capacity to respond. Collect independent observations during the step, then hold a scheduled update review before the next commitment becomes automatic.
+
+The success condition is not that the original plan survives unchanged. It is that the objective remains achievable because reality can correct the method. A plan has survived contact when adaptation is expected, evidence has authority, and the organization learns before the deleted detail becomes the second-generation forest.

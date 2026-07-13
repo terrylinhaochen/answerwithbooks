@@ -1,0 +1,152 @@
+---
+import openAiIcon from '@lobehub/icons-static-svg/icons/openai.svg?url';
+import claudeIcon from '@lobehub/icons-static-svg/icons/claude.svg?url';
+import geminiIcon from '@lobehub/icons-static-svg/icons/gemini.svg?url';
+import grokIcon from '@lobehub/icons-static-svg/icons/grok.svg?url';
+
+interface Props {
+  title: string;
+  author: string;
+  bookUrl: string;
+}
+
+const { title, author, bookUrl } = Astro.props;
+const skillUrl = 'https://raw.githubusercontent.com/Crowdlisten/Crowdlisten_books/main/skill/answer-with-books/SKILL.md';
+const providers = [
+  { id: 'chatgpt', label: 'ChatGPT', url: 'https://chatgpt.com/', icon: openAiIcon },
+  { id: 'claude', label: 'Claude', url: 'https://claude.ai/new', icon: claudeIcon },
+  { id: 'gemini', label: 'Gemini', url: 'https://gemini.google.com/app', icon: geminiIcon },
+  { id: 'grok', label: 'Grok', url: 'https://grok.com/', icon: grokIcon },
+];
+const prompt = `Start a personalized reading experience for ${title} by ${author}.
+
+Book digest: ${bookUrl}
+Skill instructions: ${skillUrl}
+
+Read both, follow the skill's Book URL Contract, and begin.`;
+---
+
+<section class="mt-8" data-book-personalizer>
+  <div class="rounded-3xl bg-ink p-6 text-white shadow-sm sm:p-8">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <div>
+        <p class="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-white/55">Personalize</p>
+        <h2 class="mt-3 max-w-2xl font-serif text-3xl leading-tight sm:text-4xl">Connect this book to your experience.</h2>
+        <p class="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+          Read it in scope of your own experience. Select the ideas that matter to you, connect them to your context, and turn them into something you can use.
+        </p>
+      </div>
+
+      <div>
+        <p class="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-white/55">Open in</p>
+        <div class="mt-3 flex flex-wrap gap-2.5" role="group" aria-label="Choose your preferred AI">
+          {providers.map((provider) => (
+            <button
+              type="button"
+              class="group flex size-14 items-center justify-center rounded-xl border-2 border-transparent bg-white text-ink shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
+              data-ai-provider={provider.id}
+              data-ai-url={provider.url}
+              aria-label={provider.label}
+              title={provider.label}
+            >
+              <img src={provider.icon} alt="" aria-hidden="true" class="size-7 object-contain" width="28" height="28" decoding="async" />
+              <span class="sr-only">{provider.label}</span>
+            </button>
+          ))}
+        </div>
+        <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="mt-3 flex min-h-11 w-full items-center justify-center rounded-full border border-white bg-white px-5 py-2.5 font-sans text-sm font-semibold text-ink transition hover:bg-white/90" data-personalize-button>
+          Personalize in ChatGPT
+        </a>
+      </div>
+    </div>
+
+    <p class="mt-4 min-h-5 font-sans text-sm text-white/60" aria-live="polite" data-personalize-status>
+      Your choice is remembered. Personalization follows the
+      <a class="underline decoration-white/30 underline-offset-4 hover:decoration-white" href={skillUrl} target="_blank" rel="noreferrer">Answer with Books skill</a>.
+    </p>
+    <textarea hidden aria-hidden="true" tabindex="-1" data-personalize-prompt>{prompt}</textarea>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-book-personalizer]');
+  if (root) {
+    const storageKey = 'awb:preferred-ai';
+    const options = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-ai-provider]'));
+    const action = root.querySelector<HTMLAnchorElement>('[data-personalize-button]');
+    const prompt = root.querySelector<HTMLElement>('[data-personalize-prompt]');
+    const status = root.querySelector<HTMLElement>('[data-personalize-status]');
+
+    const providerName = (provider: string) => provider === 'chatgpt'
+      ? 'ChatGPT'
+      : provider.charAt(0).toUpperCase() + provider.slice(1);
+
+    const supportsPromptLink = (provider: string) => ['chatgpt', 'claude', 'grok'].includes(provider);
+
+    const destinationFor = (provider: string, baseUrl: string, promptText: string) => {
+      const destination = new URL(baseUrl);
+      if (supportsPromptLink(provider)) destination.searchParams.set('q', promptText);
+      return destination.toString();
+    };
+
+    const paint = (provider: string) => {
+      const selected = options.find((option) => option.dataset.aiProvider === provider) ?? options[0];
+      options.forEach((option) => {
+        const active = option === selected;
+        option.setAttribute('aria-pressed', String(active));
+        option.classList.toggle('border-white', active);
+        option.classList.toggle('ring-2', active);
+        option.classList.toggle('ring-white/35', active);
+        option.classList.toggle('ring-offset-2', active);
+        option.classList.toggle('ring-offset-ink', active);
+        option.classList.toggle('opacity-65', !active);
+      });
+      if (action && selected) {
+        action.dataset.selectedProvider = selected.dataset.aiProvider;
+        action.dataset.selectedUrl = selected.dataset.aiUrl;
+        action.href = destinationFor(
+          selected.dataset.aiProvider ?? 'chatgpt',
+          selected.dataset.aiUrl ?? 'https://chatgpt.com/',
+          prompt?.textContent ?? '',
+        );
+        action.textContent = `Personalize in ${providerName(selected.dataset.aiProvider ?? 'chatgpt')}`;
+      }
+    };
+
+    let savedProvider = 'chatgpt';
+    try {
+      savedProvider = localStorage.getItem(storageKey) ?? savedProvider;
+    } catch {
+      // Storage can be unavailable in strict privacy modes; the default still works.
+    }
+    paint(savedProvider);
+
+    options.forEach((option) => option.addEventListener('click', () => {
+      const provider = option.dataset.aiProvider ?? 'chatgpt';
+      try {
+        localStorage.setItem(storageKey, provider);
+      } catch {
+        // The selection still applies for this page view.
+      }
+      paint(provider);
+      if (status) status.textContent = `${providerName(provider)} will open when you personalize.`;
+    }));
+
+    action?.addEventListener('click', async () => {
+      if (!prompt) return;
+      const provider = action.dataset.selectedProvider ?? 'chatgpt';
+      try {
+        await navigator.clipboard.writeText(prompt.textContent ?? '');
+        action.textContent = 'Prompt copied';
+        if (status) status.textContent = supportsPromptLink(provider)
+          ? `Opening a new ${providerName(provider)} chat with this book and the Answer with Books skill. The prompt is also copied.`
+          : `Prompt copied. Paste it into ${providerName(provider)} to start the personalized reading.`;
+      } catch {
+        if (status) status.textContent = supportsPromptLink(provider)
+          ? `Opening ${providerName(provider)} with the personalized reading prompt.`
+          : 'Copy was blocked. Allow clipboard access and try again.';
+      }
+      window.setTimeout(() => paint(provider), 2600);
+    });
+  }
+</script>

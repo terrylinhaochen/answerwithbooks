@@ -47,7 +47,11 @@ for (const file of htmlFiles) {
   const text = stripTags(html);
   const jsonLd = jsonLdBlocks(html, path);
   const faqBlocks = jsonLd.filter((block) => blockContainsType(block, 'FAQPage'));
+  const articleBlocks = jsonLd.filter((block) => blockContainsType(block, 'Article'));
   const visibleFaq = /FAQ|Q&A|What this guide answers|How this book is used|How these guides work|How the source shelf works|Questions about/i.test(text);
+  const isBookDetail = /^\/books\/[^/]+\/$/.test(path);
+  const isAnswerDetail = /^\/answers\/[^/]+\/$/.test(path);
+  const isCatalogDetail = isBookDetail || isAnswerDetail;
 
   requireValue(title, path, 'missing <title>');
   requireValue(description, path, 'missing meta description');
@@ -67,6 +71,15 @@ for (const file of htmlFiles) {
   }
   if (!isNoindex && description && (description.length < 50 || description.length > 220)) {
     warn(path, `meta description length is ${description.length}; check search result readability`);
+  }
+  if (isCatalogDetail && description && (description.length < 80 || description.length > 200)) {
+    fail(`${path}: catalog meta description must be 80-200 characters; found ${description.length}`);
+  }
+  if (isBookDetail && title && !/\bsummary\b/i.test(title)) {
+    fail(`${path}: book title does not target the natural summary intent`);
+  }
+  if (isAnswerDetail && title && textBetween(html, 'h1') && !normalizeText(title).startsWith(normalizeText(textBetween(html, 'h1')))) {
+    fail(`${path}: answer title does not lead with the visible question`);
   }
 
   for (const property of [
@@ -101,8 +114,15 @@ for (const file of htmlFiles) {
   if (!isNoindex) {
     if (jsonLd.length === 0) fail(`${path}: indexable page has no JSON-LD`);
     if (!sitemapUrls.has(canonical)) fail(`${path}: indexable canonical is missing from sitemap`);
-    if (!faqBlocks.length) fail(`${path}: indexable page has no FAQPage JSON-LD`);
-    if (!visibleFaq) fail(`${path}: indexable page has no visible FAQ/Q&A section`);
+    if (path !== '/editorial/' && !faqBlocks.length) fail(`${path}: indexable page has no FAQPage JSON-LD`);
+    if (path !== '/editorial/' && !visibleFaq) fail(`${path}: indexable page has no visible FAQ/Q&A section`);
+    if (isCatalogDetail && !articleBlocks.length) fail(`${path}: catalog detail page has no Article JSON-LD`);
+    if (isCatalogDetail && !/<a\b[^>]*href=["']\/editorial\/["'][^>]*>Terry Chen<\/a>/i.test(html)) {
+      fail(`${path}: catalog detail page has no visible linked editor byline`);
+    }
+    if (isAnswerDetail && !/<details\b(?=[^>]*\bopen\b)(?=[^>]*\bdata-source-brief\b)[^>]*>/i.test(html)) {
+      fail(`${path}: general source brief is not expanded by default`);
+    }
     indexableCanonicals.set(path, canonical);
     trackUnique(titles, title, path, 'title');
     trackUnique(descriptions, description, path, 'meta description');
@@ -371,6 +391,10 @@ function decode(value) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function normalizeText(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
 function report(checkedCount) {

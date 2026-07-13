@@ -69,14 +69,20 @@ A practical use of this book has three steps. First, name the current pattern in
 
 On this site, the book is connected to questions such as "How to make a plan that survives contact with reality", "How to make project estimates less fictional", "How to turn a vague goal into an actual strategy". Those links are the best way to see the lens in use: the book becomes practical when it is attached to a real problem.
 
-## When this lens breaks
+## The warning is against closed plans, not all plans
 
 The lens breaks when it is treated as a universal rule. Seeing Like a State is strongest for systems, planning, and institutions, but it should not replace direct evidence from the situation in front of you. A book can sharpen judgment; it cannot remove the need to inspect the actual constraints.
 
 It also breaks when the reader uses the language of the book as decoration. If the idea does not change the next question, the next test, or the next conversation, it has become vocabulary rather than judgment. The standard for this shelf is practical transfer: can the idea help someone make a better move today?
 
-## Best paired with
+Scott’s practical standard is not whether a system uses abstractions; coordination at scale requires them. It is whether the abstraction remains answerable to the people and conditions it simplifies. Preserve reversibility, local experimentation, slack, and a real route by which inconvenient knowledge can change the plan. A map becomes dangerous when the territory is required to obey it.
 
-Pair Seeing Like a State with [*Getting Things Done*](/books/getting-things-done/) and [*The Checklist Manifesto*](/books/the-checklist-manifesto/) when the question needs more than one lens. One book can name the central pattern; a second book can supply the counterweight, the operating detail, or the human constraint that keeps the answer from becoming too neat.
+## Legibility becomes dangerous when it joins coercive power
 
-That pairing is also useful for AI and agent workflows. A single book can overfit the answer to one worldview. A small shelf of related books gives the agent enough contrast to explain the tradeoff, cite the source lens, and still return a practical next step.
+Scott is precise that simplification alone does not explain the disasters in the book. The catastrophic combination joins administrative ordering to high-modernist confidence, a state capable of imposing the scheme, and a civil society too weak to resist. The model is consequential because it directs attention from a planner’s mistaken idea to the system that prevents correction.
+
+The same distinction matters at smaller scales. A standardized field in a form may be inconvenient but revisable. A metric tied to pay, access, or punishment can force people to reorganize their behavior around what the center can count. Once the representation controls resources, omitted realities become costly to report and local adaptation begins to look like noncompliance.
+
+The appropriate safeguard is not simply better data. More detailed central measurement can increase surveillance while preserving the assumption that all relevant knowledge should be made legible to one authority. Countervailing power, appeal, local discretion, independent evidence, and the ability to exit or reverse a decision protect the correction channel.
+
+This is why Scott’s argument belongs as much to institutional design as to project planning. Ask not only what the map omits, but who can challenge it, what happens to the challenger, and whether the people bearing the cost have authority to change the scheme. A simplification remains a tool while it is contestable. It becomes a regime when the map defines reality and possesses the power to punish whatever does not fit.

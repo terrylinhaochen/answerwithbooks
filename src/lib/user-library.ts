@@ -3,6 +3,7 @@ export const SAVED_ANSWERS_KEY = 'awb:saved-answers';
 export const LIKED_ANSWERS_KEY = 'awb:liked-answers';
 export const USER_MAPS_KEY = 'awb:user-content-maps';
 export const COLLECTED_MAPS_KEY = 'awb:collected-content-maps';
+export const OPEN_QUESTIONS_KEY = 'awb:open-questions';
 
 export interface ContentMap {
   id: string;
@@ -24,6 +25,12 @@ export interface LibraryItem {
   tags: string[];
   books?: string[];
   author?: string;
+}
+
+export interface RankedLibraryItem {
+  item: LibraryItem;
+  score: number;
+  matchedTerms: string[];
 }
 
 export const communityMaps: ContentMap[] = [
@@ -105,25 +112,61 @@ export const toggleId = (key: string, id: string) => {
 export const makeContentMapId = () =>
   crypto.randomUUID?.() ?? `00000000-0000-4000-8000-${Date.now().toString().padStart(12, '0').slice(-12)}`;
 
-export const tokenize = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, ' ')
-    .split(/\s+/)
-    .filter((token) => token.length > 2);
+const retrievalStopwords = new Set([
+  'and', 'answer', 'answers', 'are', 'book', 'books', 'can', 'does', 'for', 'from',
+  'have', 'how', 'into', 'know', 'make', 'making', 'more', 'need', 'problem', 'reader',
+  'next', 'real', 'should', 'summary', 'than', 'that', 'the', 'their', 'them', 'they', 'this',
+  'use', 'using', 'want', 'what', 'when', 'where', 'which', 'who', 'why', 'with', 'would',
+  'your',
+]);
 
-export const scoreLibraryItems = (query: string, items: LibraryItem[], limit = 4) => {
+const stem = (token: string) => {
+  if (token.length > 5 && token.endsWith('ing')) return token.slice(0, -3);
+  if (token.length > 4 && token.endsWith('ed')) return token.slice(0, -2);
+  if (token.length > 4 && token.endsWith('es')) return token.slice(0, -2);
+  if (token.length > 3 && token.endsWith('s')) return token.slice(0, -1);
+  return token;
+};
+
+export const tokenize = (value: string) => [
+  ...new Set(
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, ' ')
+      .split(/\s+/)
+      .filter((token) => token.length > 2 && !retrievalStopwords.has(token))
+      .map(stem)
+      .filter((token) => token.length > 2 && !retrievalStopwords.has(token))
+  ),
+];
+
+export const rankLibraryItems = (query: string, items: LibraryItem[], limit = 4): RankedLibraryItem[] => {
   const tokens = tokenize(query);
   return items
     .map((item) => {
-      const haystack = `${item.title} ${item.description} ${item.tags.join(' ')} ${item.author ?? ''}`.toLowerCase();
-      const score = tokens.reduce((sum, token) => sum + (haystack.includes(token) ? 1 : 0), 0);
-      return { item, score };
+      const titleTokens = new Set(tokenize(item.title));
+      const tagTokens = new Set(tokenize(item.tags.join(' ')));
+      const descriptionTokens = new Set(tokenize(item.description));
+      const authorTokens = new Set(tokenize(item.author ?? ''));
+      const matchedTerms = tokens.filter((token) =>
+        titleTokens.has(token) || tagTokens.has(token) || descriptionTokens.has(token) || authorTokens.has(token)
+      );
+      const score = tokens.reduce((sum, token) => {
+        if (titleTokens.has(token)) return sum + 7;
+        if (tagTokens.has(token)) return sum + 4;
+        if (descriptionTokens.has(token)) return sum + 2;
+        if (authorTokens.has(token)) return sum + 1;
+        return sum;
+      }, 0);
+      return { item, score, matchedTerms };
     })
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title))
-    .slice(0, limit)
-    .map(({ item }) => item);
+    .slice(0, limit);
+};
+
+export const scoreLibraryItems = (query: string, items: LibraryItem[], limit = 4) => {
+  return rankLibraryItems(query, items, limit).map(({ item }) => item);
 };
 
 export const inferTopics = (

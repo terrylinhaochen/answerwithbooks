@@ -1,81 +1,85 @@
-# Answer with Books Content Generation Spec
+# Answer with Books content generation spec
 
-This is the canonical shape for generated public content. The goal is not a book summary
-library. The goal is a shelf of human-authored books converted into useful judgment for
-specific situations.
+This is the canonical production contract for every public book digest and answer brief. It mirrors `docs/EDITORIAL_STYLE.md` and `docs/ANSWER_EDITORIAL_WORKFLOW.md`; generated drafts are not publishable until they pass the same editorial review and automated gates as hand-edited pages.
 
-## Shared Standards
+## Shared standard
 
-- Write for a smart, busy reader with a real problem, not for someone browsing summaries.
-- Use paragraphs as the default. Lists are allowed only for checklists, scripts, or compact
-  decision rules.
-- Keep every claim tied to one of three inputs: CrowdListen demand, source-book ideas, or
-  visible user behavior.
-- Do not fabricate quotations. Use short verified excerpts only when the source text has been
-  reviewed; otherwise paraphrase and label the idea.
-- Do not reproduce chapters, long passages, or comprehensive substitutes for a book.
-- End with a practical action a reader or agent can use immediately.
+- Deliver the insight on the page. Never preview a book or a later personalized answer.
+- Begin from one important, non-obvious question or tension and answer it directly.
+- Develop the reasoning through paragraphs: claim, mechanism, source evidence or attributed example, and implication.
+- Use lists only for genuinely sequential procedures, exact questions, or compact comparisons. Paragraphs must substantially outnumber list items.
+- Use examples only when they come from the book, the demand packet, or another named source. Never invent a worked example.
+- Use quotations only when the source wording has been verified; keep them short and paraphrase by default.
+- Put qualifications beside the claims they change. Do not append generic `When this lens breaks`, `Best paired with`, or `Related books` sections.
+- Add a simple accessible line illustration only when a causal chain, hierarchy, tradeoff, or sequence is clearer visually.
+- Preserve descriptive links to every source book used.
+- Finish when the central argument and its practical consequence are complete.
 
-## Book Distillation Shape
+## Book digest contract
 
-Each book page should answer: when should this book be called, what does it help you see, and
-what reusable lenses does it add to the shelf?
+Each book page is a self-contained explanation of the book's useful argument, normally 1,200–1,800 words.
 
 Frontmatter:
 
-- `title`
-- `author`
-- `year`
-- `oneLiner`: one sentence describing what the book helps the reader understand or do.
-- `readIf`: one concrete situation where the book is worth reaching for.
-- `tags`
-- `featured`
-- `order`
+- `title`, `author`, and `year`
+- `oneLiner`: a specific, page-level description suitable for cards and search snippets
+- `readIf`: one concrete situation where the book is useful
+- `tags`, `featured`, and `order`
 
 Body:
 
-1. Opening hook: 1-2 paragraphs on why the book earns a slot in the shelf.
-2. `## What the book is about`: 2 paragraphs, not a chapter-by-chapter summary.
-3. `## Core lessons`: 3-5 named lessons, each with a paragraph explaining how to use it.
-4. `## How to use it`: practical lenses, scripts, checks, or decision rules.
-5. `## When this lens breaks`: limits, common misuses, or cases where the book is insufficient.
-6. `## Best paired with`: adjacent books or answer situations when available.
+1. Open with the book's central claim and why it matters. Do not praise the book or tell the reader what it will teach later.
+2. Use four to six idea-led sections. Preserve the mechanisms connecting the ideas rather than summarizing chapters.
+3. Attribute any example to the book or its named source and explain what the example proves.
+4. Include a procedure or decision rule only when it follows from the book's argument.
+5. Integrate misreadings and limitations where they affect a claim.
+6. End naturally. Catalog relationships belong in the surrounding interface.
 
-Avoid standalone `How I’ve applied it` sections. Application belongs inside the practical
-lenses and answer pages.
+Search intent:
 
-## Answer Shape
+- The page title targets `{book title} summary` without keyword stuffing.
+- The description combines the distinctive one-line argument with the title and author.
+- The visible digest must satisfy the query without requiring another search.
 
-Each answer page should answer: what is the reader really trying to solve, which books clarify
-the situation, and what should happen next?
+## Answer brief contract
+
+Each answer page solves one recurring practical problem using one to three catalog books, normally in 900–1,400 words.
 
 Frontmatter:
 
-- `question`
-- `description`: the decision rule preview shown in cards and SEO snippets.
-- `books`
-- `date`
-- `featured`
-- `tags`
+- `question`: the natural-language search intent and visible H1
+- `description`: an 80–200 character, page-specific summary of the diagnosis or decision rule
+- `books`, `date`, `featured`, and `tags`
 
 Body:
 
-1. Opening demand frame: 2-3 paragraphs describing the recurring question or situation.
-2. `## What is really going on`: diagnosis, not generic advice.
-3. `## What the books add`: the specific source-book lenses and why they matter here.
-4. `## The working move`: the main action, script, checklist, or operating rule.
-5. `## What to watch for`: failure modes, false positives, or cases where the advice breaks.
-6. `## Try this next`: one concrete next step the reader or an agent can execute.
+1. Establish the reader's concrete symptom and pending decision in the opening.
+2. State a direct answer that is specific enough to exclude plausible alternatives.
+3. Use four to six idea-led sections to explain the diagnosis, mechanism, source evidence, decision consequence, and next move.
+4. Link the catalog book exactly where its idea enters the reasoning.
+5. Separate a book's claim from editorial inference.
+6. Use one short checklist, script, or sequence only when the material is inherently procedural.
+7. End with an update condition or next move that follows from the diagnosis, not a generic summary.
 
-## Background Engine Record
+Search intent:
 
-For high-priority answers, add a `content-engine/content-packets/*.json` packet with:
+- Lead the title and H1 with the exact reader question.
+- Make the description unique and concrete enough to distinguish this answer from adjacent questions.
+- Answer the question in the opening and use descriptive internal anchors to supporting book pages.
 
-- demand signal
-- published output path
-- source books and roles
-- triage schema: `who`, `what`, `why`, `what_changed`, `what_should_happen_next`
-- agent use cases
+## Background engine record
 
-The public Markdown is the reader artifact. The packet is the machine-usable system-of-record
-artifact.
+For high-priority answers, keep a `content-engine/content-packets/*.json` packet containing the demand signal, published path, source-book roles, triage schema, and agent use cases. The packet is the evidence record; the Markdown is the reader artifact.
+
+## Required verification
+
+Run all of the following before publication:
+
+```text
+npm run content:eval -- --collection=<books|answers> --ids=<slug> --strict
+npm run build:local
+npm run test:ui
+npm run audit:seo
+```
+
+Passing automation is necessary but not sufficient. The editor must still verify source fidelity, originality, usefulness, and rendered readability.

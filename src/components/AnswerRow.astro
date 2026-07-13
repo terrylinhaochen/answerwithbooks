@@ -11,7 +11,6 @@ const { answer, bookTitles, compact = false } = Astro.props;
 const sourceBooks = answer.data.books
   .map((slug) => ({ slug, title: bookTitles.get(slug) }))
   .filter((book) => book.title);
-const sourceCount = answer.data.books.length;
 const cleanPreview = (value: string) =>
   value
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
@@ -34,10 +33,7 @@ const previewParagraphs = compact
 <article class={`awb-card-link group flex h-full flex-col ${compact ? 'p-4' : 'p-5'}`}>
   <AnswerCover answer={answer} class={compact ? 'mb-4' : 'mb-5'} />
   <div class="flex min-w-0 flex-1 flex-col self-stretch">
-    <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">
-      Answer · {sourceCount} {sourceCount === 1 ? 'book' : 'books'}
-    </p>
-    <h3 class={`mt-2 font-serif leading-snug ${compact ? 'text-xl' : 'text-2xl'}`}>
+    <h3 class={`font-serif leading-snug ${compact ? 'text-xl' : 'text-2xl'}`}>
       <a href={`/answers/${answer.id}/`} class="inline-flex min-h-8 items-center hover:text-soft">{answer.data.question}</a>
     </h3>
     {
@@ -60,11 +56,6 @@ const previewParagraphs = compact
     <div class={`answer-row__preview mt-3 text-soft leading-relaxed ${compact ? 'text-[0.95rem]' : 'space-y-3'}`}>
       {previewParagraphs.map((paragraph) => <p>{paragraph}</p>)}
     </div>
-    <p class="mt-auto pt-4 text-sm font-sans">
-      <a href={`/answers/${answer.id}/`} class="inline-flex min-h-8 items-center font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
-        Read the answer
-      </a>
-    </p>
   </div>
 </article>
 

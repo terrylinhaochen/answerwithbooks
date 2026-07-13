@@ -75,14 +75,10 @@ A practical use of this book has three steps. First, name the current pattern in
 
 On this site, the book is connected to questions such as "How to have a hard conversation without making it worse", "How to keep a smart team from making a dumb decision", "How to know when to trust your gut". Those links are the best way to see the lens in use: the book becomes practical when it is attached to a real problem.
 
-## When this lens breaks
+## Bias language does not make the observer unbiased
 
 The lens breaks when it is treated as a universal rule. Thinking, Fast and Slow is strongest for decision making, psychology, and judgment, but it should not replace direct evidence from the situation in front of you. A book can sharpen judgment; it cannot remove the need to inspect the actual constraints.
 
 It also breaks when the reader uses the language of the book as decoration. If the idea does not change the next question, the next test, or the next conversation, it has become vocabulary rather than judgment. The standard for this shelf is practical transfer: can the idea help someone make a better move today?
 
-## Best paired with
-
-Pair Thinking, Fast and Slow with [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) when the question needs more than one lens. One book can name the central pattern; a second book can supply the counterweight, the operating detail, or the human constraint that keeps the answer from becoming too neat.
-
-That pairing is also useful for AI and agent workflows. A single book can overfit the answer to one worldview. A small shelf of related books gives the agent enough contrast to explain the tradeoff, cite the source lens, and still return a practical next step.
+The practical response to the book is procedural humility. Use base rates before narratives harden, record predictions before outcomes are known, separate dimensions before making a holistic judgment, and invite dissent before commitment. The goal is not to eliminate intuition. It is to know when the environment has earned it and to build a decision process that does not depend on noticing one’s own error in real time.

@@ -28,7 +28,9 @@ console.log(JSON.stringify({
     headings: check.headings.length,
     paragraphs: check.paragraphs,
     list_items: check.listItems,
+    illustrations: check.illustrations,
     quote_words: check.quoteWords,
+    applicability: check.applicability,
     errors: check.errors,
     warnings: check.warnings,
   })),
@@ -39,24 +41,46 @@ if (strict && failures.length > 0) {
 }
 
 function auditBook(entry) {
-  const required = ['What the book is about', 'Core lessons', 'How to use it', 'When this lens breaks'];
   const state = baseAudit(entry, 'books');
-  for (const heading of required) {
-    if (!state.headings.includes(heading)) state.errors.push(`missing heading: ${heading}`);
-  }
-  if (state.words < 650) state.errors.push(`too short: ${state.words} words`);
-  if (state.paragraphs < 8) state.warnings.push('needs more paragraph-led explanation');
+  if (state.headings.length < 4) state.errors.push('needs at least 4 idea-led section headings');
+  if (state.words < 1200) state.errors.push(`below self-contained digest minimum: ${state.words} words`);
+  else if (state.words < 1300) state.warnings.push(`below the 1,500-word digest target: ${state.words} words`);
+  if (state.words > 1900) state.warnings.push(`above the focused digest range: ${state.words} words`);
+  if (state.paragraphs < 10) state.warnings.push('needs more paragraph-led explanation');
   if (state.quoteWords > 25) state.errors.push(`too many quoted source words: ${state.quoteWords}`);
-  if (!state.headings.includes('Best paired with')) state.warnings.push('missing pairing section');
+  if (state.headings.some((heading) => /^A worked example/i.test(heading))) {
+    state.warnings.push('generic worked-example section; use only a source-attributed example with a descriptive heading');
+  }
+  if (state.headings.includes('When this lens breaks')) state.warnings.push('template boundary section; integrate the qualification beside the claim');
+  if (state.headings.includes('Best paired with')) state.warnings.push('template pairing section; keep catalog relationships in the product interface');
+  if (state.headings.includes('Related books')) state.warnings.push('template related-books section; keep catalog relationships in the product interface');
   return score(state);
 }
 
 function auditAnswer(entry) {
   const state = baseAudit(entry, 'answers');
-  if (state.words < 450) state.errors.push(`too short: ${state.words} words`);
-  if (state.headings.length < 4) state.errors.push('needs at least 4 section headings');
-  if (state.paragraphs < 6) state.warnings.push('needs more paragraph-led explanation');
+  const opening = state.body.split(/^##\s+/m)[0];
+  state.applicability = {
+    problem_frame: wordCount(stripMarkdown(opening)) >= 55,
+    source_grounding: /\/books\//.test(state.body),
+    mechanism: /\b(because|therefore|which means|the reason|causes?|creates?|changes?|turns?)\b/i.test(state.body),
+    decision_rule: state.headings.some((heading) => /rule|checklist|sequence|workflow|script|template|test|audit|reset|summary/i.test(heading)) || /\b(if|when|unless)\b/i.test(state.body),
+    next_move: state.headings.some((heading) => /try this|next|move|workflow|sequence|checklist|script|template|reset|practical|mechanics/i.test(heading)) || state.listItems >= 3,
+  };
+  if (state.words < 800) state.errors.push(`below self-contained answer minimum: ${state.words} words`);
+  else if (state.words < 900) state.warnings.push(`below the answer target range: ${state.words} words`);
+  if (state.words > 1500) state.warnings.push(`above the focused answer range: ${state.words} words`);
+  if (state.headings.length < 4) state.errors.push('needs at least 4 idea-led section headings');
+  if (state.paragraphs < 10) state.warnings.push('needs more paragraph-led explanation');
   if (state.quoteWords > 25) state.errors.push(`too many quoted source words: ${state.quoteWords}`);
+  if (!state.applicability.problem_frame) state.warnings.push('opening does not establish a concrete reader problem');
+  if (!state.applicability.source_grounding) state.errors.push('missing links to source-book lenses');
+  if (!state.applicability.mechanism) state.errors.push('missing causal explanation or mechanism');
+  if (!state.applicability.decision_rule) state.errors.push('missing a usable decision rule');
+  if (!state.applicability.next_move) state.errors.push('missing an executable next move');
+  if (state.headings.some((heading) => /^(When this lens breaks|Best paired with|Related books)$/i.test(heading))) {
+    state.warnings.push('contains a generic template ending instead of an argument-led conclusion');
+  }
   return score(state);
 }
 
@@ -67,6 +91,7 @@ function baseAudit(entry, collection) {
   const quoteWords = [...body.matchAll(/^>\s+(.+)$/gm)]
     .reduce((total, match) => total + wordCount(stripMarkdown(match[1])), 0);
   const listItems = [...body.matchAll(/^\s*[-*]\s+\S|^\s*\d+\.\s+\S/gm)].length;
+  const illustrations = [...body.matchAll(/<figure\b[^>]*class=["'][^"']*awb-line-illustration/gi)].length;
   const paragraphs = body
     .split(/\n{2,}/)
     .map((block) => block.trim())
@@ -76,7 +101,10 @@ function baseAudit(entry, collection) {
   const errors = [];
   const warnings = [];
   if (/TODO|TBD|lorem ipsum/i.test(body)) errors.push('contains placeholder text');
-  if (listItems > paragraphs * 2) warnings.push('list-heavy relative to paragraphs');
+  if (listItems > paragraphs) warnings.push('list-heavy relative to paragraphs');
+  if (/\b(this (?:book|answer) will teach|read (?:this|the) book|read on to|you(?:'|’)ll learn|the author explores)\b/i.test(body)) {
+    warnings.push('contains preview language instead of directly delivering the insight');
+  }
 
   return {
     id: entry.id,
@@ -85,9 +113,12 @@ function baseAudit(entry, collection) {
     headings,
     paragraphs,
     listItems,
+    illustrations,
     quoteWords,
     errors,
     warnings,
+    body,
+    applicability: null,
   };
 }
 
@@ -120,6 +151,7 @@ function stripFrontmatter(markdown) {
 
 function stripMarkdown(value) {
   return String(value)
+    .replace(/<[^>]+>/g, ' ')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/[`*_>#-]/g, ' ')
     .replace(/\s+/g, ' ')

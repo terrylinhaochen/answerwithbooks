@@ -53,11 +53,16 @@ const iconByTopic = {
   strategy: 'target',
 };
 
+const iconByAnswer = {
+  'how-to-tell-whether-your-value-proposition-is-actually-different': 'distinct',
+};
+
 const symbolByIcon = {
   balance: 'one balanced scale made from two bold circles and a clean center beam',
   blocks: 'three oversized blocks snapping into a clean finished shape',
   compass: 'one compass needle inside a simple path ring',
   dialogue: 'two speech-stone shapes meeting without any text or bubbles containing marks',
+  distinct: 'three matching product tiles moving together, with one tile visibly separating onto a clear chosen path',
   fork: 'one road splitting into two bold paths with a clear decision node',
   grid: 'four clean interface tiles reorganizing into one obvious layout',
   ladder: 'one sturdy ladder with two highlighted rungs',
@@ -85,6 +90,7 @@ const labelByAnswer = {
   'how-to-prioritize-when-every-request-sounds-urgent': 'Prioritize',
   'how-to-run-user-interviews-that-do-not-lie-to-you': 'Better Research',
   'how-to-tell-whether-to-pivot-or-keep-going': 'Pivot?',
+  'how-to-tell-whether-your-value-proposition-is-actually-different': 'Different?',
   'how-to-test-a-risky-idea-before-you-build-too-much': 'Risk Test',
   'how-to-turn-a-vague-goal-into-an-actual-strategy': 'Strategy',
   'how-to-turn-messy-feedback-into-a-real-signal': 'Feedback Signal',
@@ -154,7 +160,7 @@ function iconFor(tags = []) {
 function themeFor(answer, index) {
   return {
     colors: palettes[index % palettes.length],
-    icon: iconFor(answer.tags),
+    icon: iconByAnswer[answer.id] ?? iconFor(answer.tags),
     label: labelByAnswer[answer.id] ?? 'Insight',
     topic: topicLabel(answer.tags),
   };
@@ -190,6 +196,9 @@ function motif(icon, colors) {
   }
   if (icon === 'dialogue') {
     return `<path d="M432 174h222c30 0 54 24 54 54v70c0 30-24 54-54 54h-80l-72 58 18-58h-88c-30 0-54-24-54-54v-70c0-30 24-54 54-54Z" fill="${ink}" opacity=".18"/><path d="M506 224h220c26 0 48 22 48 48v60c0 26-22 48-48 48h-52l-54 54 8-54H506c-26 0-48-22-48-48v-60c0-26 22-48 48-48Z" fill="${accent}"/><circle cx="548" cy="303" r="12" fill="${dim}"/><circle cx="616" cy="303" r="12" fill="${dim}"/><circle cx="684" cy="303" r="12" fill="${dim}"/>`;
+  }
+  if (icon === 'distinct') {
+    return `<g transform="translate(16 18)" fill="none" stroke="${dim}" stroke-linecap="round" stroke-linejoin="round" opacity=".42"><path d="M340 230h150" stroke-width="56"/><path d="m454 182 68 48-68 48" stroke-width="50"/><path d="M340 430h150" stroke-width="56"/><path d="m454 382 68 48-68 48" stroke-width="50"/><path d="M340 330h150c108 0 108-170 216-170h44" stroke-width="66"/><path d="m714 112 72 48-72 48" stroke-width="58"/></g><g fill="none" stroke="${dim}" stroke-linecap="round" stroke-linejoin="round"><path d="M340 230h150" stroke-width="56"/><path d="m454 182 68 48-68 48" stroke-width="50"/><path d="M340 430h150" stroke-width="56"/><path d="m454 382 68 48-68 48" stroke-width="50"/><path d="M340 330h150c108 0 108-170 216-170h44" stroke-width="66"/><path d="m714 112 72 48-72 48" stroke-width="58"/></g><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M340 230h150" stroke="${ink}" stroke-width="30" opacity=".68"/><path d="m458 198 44 32-44 32" stroke="${ink}" stroke-width="27" opacity=".68"/><path d="M340 430h150" stroke="${ink}" stroke-width="30" opacity=".68"/><path d="m458 398 44 32-44 32" stroke="${ink}" stroke-width="27" opacity=".68"/><path d="M340 330h150c108 0 108-170 216-170h44" stroke="${warm}" stroke-width="38"/><path d="m718 128 48 32-48 32" stroke="${accent}" stroke-width="32"/></g>`;
   }
   if (icon === 'signal') {
     return `<rect x="462" y="316" width="50" height="82" rx="12" fill="${ink}" opacity=".28"/><rect x="542" y="246" width="50" height="152" rx="12" fill="${accent}"/><rect x="622" y="174" width="50" height="224" rx="12" fill="${warm}"/><path d="M442 198c92-64 167-40 250 10" fill="none" stroke="${ink}" stroke-width="15" opacity=".56"/>`;
@@ -229,6 +238,32 @@ function renderSvgCover(answer, index) {
   ${motif(icon, colors)}
 </svg>
 `;
+}
+
+function renderRasterSvgCover(answer, index) {
+  const { colors, icon } = themeFor(answer, index);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1376" height="768" viewBox="0 0 1376 768" role="img" aria-label="${escapeXml(answer.question)} visual">
+  <defs>
+    <radialGradient id="light" cx="78%" cy="42%" r="58%">
+      <stop offset="0" stop-color="${colors.ink}" stop-opacity=".08"/>
+      <stop offset="1" stop-color="${colors.dim}" stop-opacity=".08"/>
+    </radialGradient>
+  </defs>
+  <rect width="1376" height="768" fill="${colors.bg}"/>
+  <rect width="1376" height="768" fill="url(#light)"/>
+  <circle cx="1062" cy="385" r="238" fill="${colors.dim}" opacity=".14"/>
+  <g transform="translate(410 76) scale(1.08)">
+    ${motif(icon, colors)}
+  </g>
+</svg>
+`;
+}
+
+async function generateLocalRaster(answer, index) {
+  const { default: sharp } = await import('sharp');
+  await sharp(Buffer.from(renderRasterSvgCover(answer, index)))
+    .jpeg({ quality: 94, chromaSubsampling: '4:4:4' })
+    .toFile(path.join(outputDir, `${answer.id}.jpg`));
 }
 
 async function generateGeminiImage(answer, prompt) {
@@ -304,7 +339,10 @@ const answers = readAnswers()
 
 fs.mkdirSync(outputDir, { recursive: true });
 
-const prompts = {};
+const promptsPath = path.join(outputDir, 'prompts.json');
+const prompts = selectedIds && fs.existsSync(promptsPath)
+  ? JSON.parse(fs.readFileSync(promptsPath, 'utf8'))
+  : {};
 for (const [index, answer] of answers.entries()) {
   prompts[answer.id] = {
     question: answer.question,
@@ -315,14 +353,17 @@ for (const [index, answer] of answers.entries()) {
 
   if (provider === 'svg') {
     fs.writeFileSync(path.join(outputDir, `${answer.id}.svg`), renderSvgCover(answer, index));
+  } else if (provider === 'local') {
+    await generateLocalRaster(answer, index);
   } else if (provider === 'gemini' || provider === 'nanobanana') {
     await generateGeminiImage(answer, prompts[answer.id].providerPrompt);
   } else if (provider !== 'prompts') {
-    throw new Error(`Unknown provider "${provider}". Use svg, prompts, gemini, or nanobanana.`);
+    throw new Error(`Unknown provider "${provider}". Use local, svg, prompts, gemini, or nanobanana.`);
   }
 }
 
-fs.writeFileSync(path.join(outputDir, 'prompts.json'), `${JSON.stringify(prompts, null, 2)}\n`);
+fs.writeFileSync(promptsPath, `${JSON.stringify(prompts, null, 2)}\n`);
 console.log(`Generated ${answers.length} answer cover prompt${answers.length === 1 ? '' : 's'} in ${path.relative(root, outputDir)}`);
 if (provider === 'svg') console.log('Generated SVG answer cover assets.');
+if (provider === 'local') console.log('Generated local raster answer cover assets from the shared vector system.');
 if (provider === 'gemini' || provider === 'nanobanana') console.log(`Generated Gemini/Nano Banana ${geminiImageExtension.toUpperCase()} answer cover assets.`);

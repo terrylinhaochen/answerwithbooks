@@ -71,6 +71,7 @@ const symbolByBook = {
   'the-structure-of-scientific-revolutions': 'one orbit ring breaking and reforming around a cube',
   'the-wisdom-of-crowds': 'one large signal formed by many tiny dots',
   'thinking-fast-and-slow': 'two simple paths, one lightning bolt and one slow curve',
+  'zero-to-one': 'one thick outlined ring transforming upward into a single angular prism, one continuous emblem showing a leap into a new dimension',
 };
 
 const paletteByBook = {
@@ -94,6 +95,7 @@ const paletteByBook = {
   'the-structure-of-scientific-revolutions': { bg: '#3432c7', accent: '#7dffcf', warm: '#ff8a1f', ink: '#12115a', name: 'deep indigo' },
   'the-wisdom-of-crowds': { bg: '#0877d9', accent: '#37f5ff', warm: '#ffbd2e', ink: '#062b4f', name: 'royal blue' },
   'thinking-fast-and-slow': { bg: '#9c114c', accent: '#ffd51f', warm: '#25d6ff', ink: '#35071b', name: 'magenta burgundy' },
+  'zero-to-one': { bg: '#f04b32', accent: '#fff4dc', warm: '#171717', ink: '#4b1008', name: 'vivid vermilion' },
 };
 
 function parseFrontmatter(markdown) {
@@ -284,8 +286,8 @@ function styleInstruction(book, symbol) {
     return [
       `Required palette: ${paletteText}.`,
       'Style variation: large sticker emblem. Make the symbol feel like one bold app sticker on a flat color field, with a thick clean outline and slight offset shadow. Use a playful, high-contrast Duolingo or Headway-like app illustration energy, but keep it premium.',
-      'The emblem should occupy 50-62% of the central canvas, with generous padding on every side so no sticker edge gets cropped. Avoid tiny details. The result should be instantly recognizable from across the room.',
-      'The background must remain one unbroken solid primary color across the entire image. Do not add a darker footer, lower band, separator line, vignette, or separate bottom block.',
+      'The emblem should occupy 45-55% of the upper canvas, with generous padding on every side so no sticker edge gets cropped. Avoid tiny details. The result should be instantly recognizable from across the room.',
+      'The background must remain one unbroken solid primary color across the entire image, including the bottom 42% where the title plate will sit. Do not add a darker footer, lower band, separator line, vignette, or separate bottom block.',
       'Make the books visibly different from each other by using the required primary background color strongly. The final set should not look like variations of the same navy/teal cover.',
     ];
   }
@@ -320,9 +322,9 @@ function imagePrompt(book) {
     ...styleInstruction(book, symbol),
     'Memorability standard: the image must read instantly at a tiny thumbnail size. If the idea needs more than one emblem, simplify it.',
     'Style: flat 2D illustration, bold geometric shapes, crisp edges, premium editorial taste, not photorealistic, not painterly, not collage.',
-    'Composition standard: one centered emblem in the central 68% of the 2:3 vertical canvas, generous negative space, no scene, no background environment, no depth-of-field, no realistic room, no hands.',
+    'Composition standard: one centered emblem fully contained in the upper 56% of the 2:3 vertical canvas, generous negative space, no scene, no background environment, no depth-of-field, no realistic room, no hands.',
     'Simplicity limit: use one main object and at most one supporting shape. Avoid clusters, crowds, many lines, tiny parts, diagrams, dashboards, maps with detail, charts, documents, UI, and decorative clutter.',
-    'Background standard: perfectly solid matte color field or a nearly solid field with only extremely subtle paper grain. No gradients, no pattern fields, no texture-heavy backgrounds, no horizontal split.',
+    'Background standard: perfectly solid matte color field or a nearly solid field with only extremely subtle paper grain. Keep the bottom 42% calm and unobstructed for the website title overlay. No gradients, no pattern fields, no texture-heavy backgrounds, no horizontal split.',
     'Color standard: very high contrast and memorable. Use the required palette strongly so this book looks different from the others. Avoid beige, gray, washed-out neutrals, muddy gradients, monochrome palettes, and low-contrast pastel art.',
     'Hard no-text rule: no letters, no words, no book title, no author name, no numbers, no punctuation marks, no fake glyphs, no interface icons, no logos, no labels, no signage.',
     'Avoid literal speech bubbles, question marks, documents with writing, screens with UI, pages with text, book mockups, or any surface that could look like typography.',
@@ -403,7 +405,15 @@ const books = readBooks()
   .slice(0, limit);
 fs.mkdirSync(outputDir, { recursive: true });
 
-const prompts = {};
+const promptsPath = path.join(outputDir, 'prompts.json');
+let prompts = {};
+if (fs.existsSync(promptsPath)) {
+  try {
+    prompts = JSON.parse(fs.readFileSync(promptsPath, 'utf8'));
+  } catch {
+    prompts = {};
+  }
+}
 for (const book of books) {
   prompts[book.id] = {
     title: book.title,
@@ -420,7 +430,7 @@ for (const book of books) {
   }
 }
 
-fs.writeFileSync(path.join(outputDir, 'prompts.json'), `${JSON.stringify(prompts, null, 2)}\n`);
+fs.writeFileSync(promptsPath, `${JSON.stringify(prompts, null, 2)}\n`);
 console.log(`Generated ${books.length} cover prompt${books.length === 1 ? '' : 's'} in ${path.relative(root, outputDir)}`);
 if (provider === 'svg') console.log('Generated SVG cover assets.');
 if (provider === 'gemini' || provider === 'nanobanana') console.log(`Generated Gemini/Nano Banana ${geminiImageExtension.toUpperCase()} cover assets.`);

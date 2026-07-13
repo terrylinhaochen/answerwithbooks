@@ -43,6 +43,7 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 const nav = [
   { href: '/books/', label: 'Books' },
   { href: '/answers/', label: 'Answers' },
+  { href: '/skills/', label: 'Skills' },
 ];
 const current = Astro.url.pathname;
 ---
@@ -147,9 +148,10 @@ const current = Astro.url.pathname;
 
     <footer class="border-t border-line mt-20 bg-paper">
       <div class="mx-auto max-w-6xl px-5 py-10 text-sm text-soft">
-        <p>
-          Answer with Books — books distilled into usable answers.
-        </p>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p>Answer with Books — books distilled into usable answers.</p>
+          <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Editorial method</a>
+        </div>
       </div>
     </footer>
 
@@ -162,6 +164,8 @@ const current = Astro.url.pathname;
         ? 'answers'
         : path.startsWith('/books/')
           ? 'books'
+          : path.startsWith('/skills/')
+            ? 'skills'
           : path.startsWith('/topics/')
             ? 'topics'
             : path.startsWith('/onboarding/')

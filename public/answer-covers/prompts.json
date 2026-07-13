@@ -1,4 +1,10 @@
 {
+  "how-to-tell-whether-your-value-proposition-is-actually-different": {
+    "question": "How to tell whether your value proposition is actually different",
+    "label": "Different?",
+    "topic": "Business",
+    "providerPrompt": "Create a text-free 16:9 title-card illustration for a premium mobile learning app answer preview. Answer question: How to tell whether your value proposition is actually different Answer description: A value proposition is different only when a user chooses or behaves differently because of it. Use a substitution test, a commitment test, and one observable outcome before polishing the claim. Website overlay label, not to be drawn in the image: Different? Topic: Business Required visual metaphor: three matching product tiles moving together, with one tile visibly separating onto a clear chosen path. Required palette: solid electric blue background (#0b6bdc), accent #43f5ff, highlight #ffd447. Style: same large sticker emblem language as the book covers: clean flat 2D, bold geometric shapes, thick crisp outline, slight offset shadow, playful but premium. Composition: one large emblem on the right half of the horizontal canvas. Leave the left 45% visually calm and mostly solid color because the website will render the title words there. Background standard: one unbroken solid primary color across the full image. No split panel, no footer band, no dark lower block, no gradients behind the future title. Simplicity limit: one main object and at most one supporting shape. No collage, no scene, no rooms, no realistic people, no documents, no dashboards, no tiny details. Hard no-text rule: no letters, no words, no book title, no answer title, no numbers, no punctuation, no fake glyphs, no logos, no labels, no signage, no UI text. Do not create a physical book cover, 3D book object, product photo, border, screenshot, or anything that looks like typography."
+  },
   "how-to-fix-user-interviews-that-are-not-teaching-you-anything": {
     "question": "How to fix user interviews that are not teaching you anything",
     "label": "User Interviews",

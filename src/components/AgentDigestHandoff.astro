@@ -1,0 +1,61 @@
+---
+interface SourceBook {
+  title: string;
+  url: string;
+}
+
+interface Props {
+  question: string;
+  answerUrl: string;
+  sourceBooks: SourceBook[];
+}
+
+const { question, answerUrl, sourceBooks } = Astro.props;
+const prompt = `Use the installed Answer with Books skill to create a personalized digest for me.
+
+Read this answer brief and every source-book digest linked from it:
+${answerUrl}
+
+Question: ${question}
+Source books: ${sourceBooks.map((book) => `${book.title} (${book.url})`).join(', ')}
+
+Before writing, use relevant context you already know about my goals, constraints, prior attempts, preferences, and current work. Do not make me repeat context that is already available in this harness. Ask at most one clarifying question, and only if the missing fact would materially change the recommendation.
+
+Write a 900–1,500 word personalized digest. Explain what is likely happening in my situation, select only the book ideas that materially apply, show where the books reinforce or challenge each other, and distinguish book-grounded claims from your inference about me. End with a decision rule, one concrete next move, the boundary of the advice, and what evidence would change your recommendation.`;
+---
+
+<section class="mt-10 rounded-3xl bg-ink p-6 text-white shadow-sm sm:p-8" data-agent-digest>
+  <div class="grid gap-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+    <div>
+      <p class="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-white/55">Personalized digest</p>
+      <h2 class="mt-3 max-w-2xl font-serif text-3xl leading-tight sm:text-4xl">Take this into the agent that already knows you.</h2>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+        The agent will read this brief and its source books, then use your existing goals, constraints, and prior context to make the advice specific to you.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-3 lg:justify-end">
+      <button type="button" class="awb-pill cursor-pointer border-white bg-white text-ink hover:bg-white/90" data-copy-agent-prompt>
+        Copy for your agent
+      </button>
+      <a href="/skills/" class="awb-pill border border-white/25 text-white hover:border-white/60">Install the skill</a>
+    </div>
+  </div>
+  <p class="mt-4 min-h-5 font-sans text-sm text-white/60" aria-live="polite" data-agent-copy-status></p>
+  <details class="mt-5 border-t border-white/15 pt-5">
+    <summary class="cursor-pointer font-sans text-sm font-medium text-white/75">See the handoff prompt</summary>
+    <pre class="mt-4 max-h-72 overflow-auto whitespace-pre-wrap rounded-2xl bg-black/25 p-4 font-sans text-sm leading-relaxed text-white/75"><code data-agent-prompt>{prompt}</code></pre>
+  </details>
+</section>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-copy-agent-prompt]');
+  const prompt = document.querySelector<HTMLElement>('[data-agent-prompt]');
+  const status = document.querySelector<HTMLElement>('[data-agent-copy-status]');
+  button?.addEventListener('click', async () => {
+    if (!prompt) return;
+    await navigator.clipboard.writeText(prompt.textContent ?? '');
+    button.textContent = 'Copied';
+    if (status) status.textContent = 'Paste it into Codex, Claude, ChatGPT, or your preferred agent harness.';
+    window.setTimeout(() => { button.textContent = 'Copy for your agent'; }, 2200);
+  });
+</script>

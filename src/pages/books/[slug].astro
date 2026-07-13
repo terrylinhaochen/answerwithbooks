@@ -5,9 +5,10 @@ import { fileURLToPath } from 'node:url';
 import Base from '../../layouts/Base.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookCover from '../../components/BookCover.astro';
+import BookDigestPersonalizer from '../../components/BookDigestPersonalizer.astro';
 import FaqList from '../../components/FaqList.astro';
 import { topicsForTags } from '../../lib/topics';
-import { compactList, faqJsonLd } from '../../lib/seo';
+import { compactDescription, compactList, faqJsonLd } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const books = await getCollection('books');
@@ -17,6 +18,19 @@ export async function getStaticPaths() {
 const { book } = Astro.props;
 const { Content } = await render(book);
 const topics = topicsForTags(book.data.tags);
+const digestWordCount = String(book.body ?? '')
+  .replace(/---[\s\S]*?---/, '')
+  .replace(/\[[^\]]+\]\([^)]+\)/g, ' ')
+  .replace(/[#*_>`-]/g, ' ')
+  .trim()
+  .split(/\s+/)
+  .filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.ceil(digestWordCount / 200));
+const seoTitle = `${book.data.title} Summary and Key Ideas`;
+const seoDescription = compactDescription(
+  book.data.oneLiner,
+  `A self-contained summary of ${book.data.title} by ${book.data.author}.`
+);
 
 const allBooks = await getCollection('books');
 const bookTitleMap = new Map(allBooks.map((entry) => [entry.id, entry.data.title]));
@@ -57,7 +71,7 @@ const jsonLd = [
     '@id': `${url}#webpage`,
     url,
     name: `${book.data.title} by ${book.data.author}`,
-    description: book.data.oneLiner,
+    description: seoDescription,
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
     primaryImageOfPage: { '@id': `${url}#primaryimage` },
@@ -72,10 +86,14 @@ const jsonLd = [
     '@id': `${url}#article`,
     mainEntityOfPage: { '@id': `${url}#webpage` },
     headline: `${book.data.title} by ${book.data.author}, distilled into usable ideas`,
-    description: book.data.oneLiner,
+    description: seoDescription,
     image: new URL(bookImage, 'https://answerwithbooks.com').href,
     author: { '@type': 'Person', name: 'Terry Chen', url: 'https://terrylinhaochen.github.io' },
     publisher: { '@id': 'https://answerwithbooks.com/#person' },
+    inLanguage: 'en',
+    isAccessibleForFree: true,
+    wordCount: digestWordCount,
+    articleSection: book.data.tags,
     keywords: book.data.tags,
     about: { '@id': `${url}#book` },
     url,
@@ -112,8 +130,8 @@ const jsonLd = [
 ---
 
 <Base
-  title={book.data.title}
-  description={book.data.oneLiner}
+  title={seoTitle}
+  description={seoDescription}
   path={`/books/${book.id}/`}
   image={bookImage}
   imageAlt={`${book.data.title} cover illustration`}
@@ -131,12 +149,15 @@ const jsonLd = [
 
     <header class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(13rem,18rem)] lg:items-start">
       <div>
-        <p class="awb-eyebrow">Book · distilled</p>
+        <p class="awb-eyebrow">Book digest · {digestWordCount.toLocaleString()} words · {readingMinutes} min</p>
         <h1 class="mt-3 text-wrap break-words font-serif text-4xl leading-tight sm:text-5xl">
           {book.data.title}
         </h1>
         <p class="mt-3 text-soft">
           {book.data.author}, {book.data.year}
+        </p>
+        <p class="mt-2 text-sm text-faint">
+          Digest by <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Terry Chen</a>
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-4">
           <button
@@ -159,6 +180,8 @@ const jsonLd = [
       </div>
       <BookCover book={book} size="lg" class="justify-self-start lg:justify-self-end" priority />
     </header>
+
+    <BookDigestPersonalizer title={book.data.title} author={book.data.author} bookUrl={url} />
 
     <section class="mt-6 grid gap-5 lg:grid-cols-2">
       <div class="awb-card-link p-6 text-[1rem] leading-relaxed">

@@ -2,12 +2,12 @@
 import Base from '../../layouts/Base.astro';
 
 const focusOptions = [
-  { value: 'business', label: 'Business', detail: 'Strategy, customers, growth, and market decisions.' },
-  { value: 'technology', label: 'Technology', detail: 'Systems, engineering judgment, AI, and product quality.' },
-  { value: 'productivity', label: 'Productivity', detail: 'Focus, execution, habits, and attention.' },
-  { value: 'career', label: 'Career', detail: 'Skill growth, management, leverage, and next steps.' },
-  { value: 'decisions', label: 'Decisions', detail: 'Uncertainty, intuition, tradeoffs, and judgment.' },
-  { value: 'relationships', label: 'Relationships', detail: 'Feedback, communication, conflict, and trust.' },
+  { value: 'business', label: 'Business' },
+  { value: 'technology', label: 'Technology' },
+  { value: 'productivity', label: 'Productivity' },
+  { value: 'career', label: 'Career' },
+  { value: 'decisions', label: 'Decisions' },
+  { value: 'relationships', label: 'Relationships' },
 ];
 
 const shelfOptions = [
@@ -23,70 +23,32 @@ const shelfOptions = [
   path="/onboarding/start/"
   robots="noindex, follow"
 >
-  <section class="awb-section py-14 sm:py-16">
-    <div class="awb-panel overflow-hidden">
-      <div class="grid gap-7 border-b border-line px-5 py-8 sm:px-7 lg:grid-cols-[1fr_auto] lg:items-end">
-        <div>
-          <p class="awb-eyebrow">Get started</p>
-          <h1 class="mt-3 max-w-3xl font-serif text-5xl leading-[1.04] sm:text-6xl">
-            Tell the shelf what you are trying to solve.
-          </h1>
-          <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">
-            We will use this to shape your question profile, recommend source books, and make the next insight more relevant.
-          </p>
-        </div>
-        <a href="/answers/" class="awb-pill awb-pill-outline">
-          Skip and explore insights
+  <section class="awb-section py-10 sm:py-14">
+    <div class="awb-panel mx-auto max-w-3xl overflow-hidden">
+      <div class="flex items-center justify-between gap-4 border-b border-line px-5 py-4 sm:px-7">
+        <p class="font-serif text-xl">Get started</p>
+        <a href="/answers/" class="text-sm text-soft underline decoration-line underline-offset-4 hover:text-ink">
+          Skip for now
         </a>
       </div>
 
-      <form data-onboarding-form class="grid gap-0 lg:grid-cols-[1fr_21rem]">
-        <div class="px-5 py-7 sm:px-7">
-          <div class="mb-7 grid gap-2 sm:grid-cols-3" aria-label="Onboarding progress">
-            <button
-              type="button"
-              data-step-jump="0"
-              class="awb-card-link px-4 py-3 text-left"
-            >
-              <span class="block font-sans text-[0.68rem] uppercase tracking-[0.18em] text-faint">1. Focus</span>
-              <span class="mt-1 block font-serif text-lg leading-tight">What matters now</span>
-            </button>
-            <button
-              type="button"
-              data-step-jump="1"
-              class="awb-card-link px-4 py-3 text-left"
-            >
-              <span class="block font-sans text-[0.68rem] uppercase tracking-[0.18em] text-faint">2. Shelf</span>
-              <span class="mt-1 block font-serif text-lg leading-tight">Where to start</span>
-            </button>
-            <button
-              type="button"
-              data-step-jump="2"
-              class="awb-card-link px-4 py-3 text-left"
-            >
-              <span class="block font-sans text-[0.68rem] uppercase tracking-[0.18em] text-faint">3. Use case</span>
-              <span class="mt-1 block font-serif text-lg leading-tight">What to solve</span>
-            </button>
-          </div>
-
+      <form data-onboarding-form class="px-5 py-7 sm:px-7 sm:py-9">
           <section data-onboarding-step="0">
             <fieldset>
-              <legend class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Choose your focus</legend>
-              <h2 class="mt-3 max-w-2xl font-serif text-4xl leading-tight">
-                Pick the areas where better book-backed judgment would actually help.
-              </h2>
-              <p class="mt-3 max-w-2xl text-soft">
-                Choose one or more. This gives the content engine a first signal for which questions, examples, and books to surface.
-              </p>
-              <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <legend class="awb-eyebrow">Step 1 of 3</legend>
+              <h1 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
+                What do you want help with?
+              </h1>
+              <p class="mt-2 text-soft">Choose one or more.</p>
+              <div class="mt-6 grid gap-3 sm:grid-cols-2">
               {
                 focusOptions.map((option) => (
-                  <label class="awb-card-link group flex min-h-[8rem] cursor-pointer flex-col justify-between p-4">
+                  <label class="awb-card-link group flex cursor-pointer items-center gap-3 p-4">
                     <input class="peer sr-only" type="checkbox" name="focus" value={option.value} />
-                    <span class="font-serif text-2xl leading-tight text-ink group-has-[:checked]:text-accent">
+                    <span aria-hidden="true" class="h-4 w-4 rounded-full border border-line group-has-[:checked]:border-accent group-has-[:checked]:bg-accent"></span>
+                    <span class="font-serif text-xl leading-tight text-ink group-has-[:checked]:text-accent">
                       {option.label}
                     </span>
-                    <span class="mt-3 text-sm leading-relaxed text-soft">{option.detail}</span>
                   </label>
                 ))
               }
@@ -96,14 +58,11 @@ const shelfOptions = [
 
           <section data-onboarding-step="1" class="hidden">
             <fieldset>
-              <legend class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Start the shelf</legend>
-              <h2 class="mt-3 max-w-2xl font-serif text-4xl leading-tight">
-                Tell us what source material should drive the first recommendations.
+              <legend class="awb-eyebrow">Step 2 of 3</legend>
+              <h2 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
+                Where should we start?
               </h2>
-              <p class="mt-3 max-w-2xl text-soft">
-                The product should feel useful before your full library exists, then get sharper as your own books and behavior come in.
-              </p>
-              <div class="mt-5 grid gap-3">
+              <div class="mt-6 grid gap-3">
               {
                 shelfOptions.map((option) => (
                   <label class="awb-card-link group flex cursor-pointer items-start gap-3 p-5">
@@ -123,46 +82,17 @@ const shelfOptions = [
 
           <section data-onboarding-step="2" class="hidden">
             <label>
-              <span class="font-sans text-xs uppercase tracking-[0.18em] text-faint">Current top of mind</span>
-              <span class="mt-3 block max-w-2xl font-serif text-4xl leading-tight">
-                What are you trying to understand, decide, or get unstuck on?
+              <span class="awb-eyebrow">Step 3 of 3</span>
+              <span class="mt-3 block font-serif text-4xl leading-tight sm:text-5xl">
+                What is top of mind?
               </span>
               <textarea
                 name="goal"
-                rows="5"
-                class="awb-input mt-5 min-h-36 resize-y"
-                placeholder="Example: I want better customer interviews, sharper positioning, and a reading trail that helps me make product decisions."
+                rows="4"
+                class="awb-input mt-6 min-h-32 resize-y"
+                placeholder="Describe what you are trying to understand, decide, or get unstuck on."
               ></textarea>
             </label>
-
-            <div id="chatgpt-connection" class="awb-card-link mt-5 p-5">
-              <div class="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
-                <div>
-                  <p class="awb-eyebrow">ChatGPT</p>
-                  <h3 class="mt-2 font-serif text-2xl leading-tight">Use this shelf inside ChatGPT.</h3>
-                  <p class="mt-2 text-sm leading-relaxed text-soft">
-                    The right version is a ChatGPT app or action that calls your Answer with Books profile. It should not import private ChatGPT history.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  data-chatgpt-connect
-                  aria-pressed="false"
-                  class="awb-pill awb-pill-outline"
-                >
-                  Link later
-                </button>
-              </div>
-              <input type="hidden" name="chatgptIntent" value="none" />
-              <label class="mt-4 block">
-                <span class="font-sans text-xs uppercase tracking-[0.16em] text-faint">How you would use it</span>
-                <input
-                  name="chatgptUseCase"
-                  class="awb-input mt-2"
-                  placeholder="Example: call my shelf while planning content, product decisions, or customer research."
-                />
-              </label>
-            </div>
           </section>
 
           <div class="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
@@ -185,37 +115,10 @@ const shelfOptions = [
               data-step-submit
               class="awb-pill awb-pill-primary hidden"
             >
-              Save and create profile
+              Finish
             </button>
           </div>
-        </div>
-
-        <aside class="border-t border-line bg-paper px-5 py-7 sm:px-7 lg:border-l lg:border-t-0">
-          <p class="awb-eyebrow">Setup</p>
-          <h2 class="mt-3 font-serif text-3xl leading-tight" data-step-title>
-            Start with demand.
-          </h2>
-          <p class="mt-3 text-sm leading-relaxed text-soft">
-            Your choices are saved in this browser as you move through the flow. After the final step, sign in or create an account to sync them.
-          </p>
-          <div class="mt-6 grid gap-3 text-sm text-soft">
-            <div class="border-t border-line pt-3">
-              <span class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Now</span>
-              <p class="mt-1" data-step-now>Choose the categories that match what you are trying to solve.</p>
-            </div>
-            <div class="border-t border-line pt-3">
-              <span class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Next</span>
-              <p class="mt-1" data-step-next-copy>Pick the shelf strategy.</p>
-            </div>
-            <div class="border-t border-line pt-3">
-              <span class="font-sans text-xs uppercase tracking-[0.16em] text-faint">ChatGPT note</span>
-              <p class="mt-1">
-                Account linking should work through an Answer with Books ChatGPT app or action, not by scraping ChatGPT history.
-              </p>
-            </div>
-          </div>
-          <p data-onboarding-message role="status" class="mt-7 hidden text-sm leading-relaxed text-soft"></p>
-        </aside>
+          <p data-onboarding-message role="status" class="mt-5 hidden text-sm leading-relaxed text-soft"></p>
       </form>
     </div>
   </section>
@@ -232,34 +135,11 @@ const shelfOptions = [
     const form = document.querySelector<HTMLFormElement>('[data-onboarding-form]');
     const message = document.querySelector<HTMLElement>('[data-onboarding-message]');
     const steps = [...document.querySelectorAll<HTMLElement>('[data-onboarding-step]')];
-    const jumps = [...document.querySelectorAll<HTMLButtonElement>('[data-step-jump]')];
     const back = document.querySelector<HTMLButtonElement>('[data-step-back]');
     const next = document.querySelector<HTMLButtonElement>('[data-step-next]');
     const submit = document.querySelector<HTMLButtonElement>('[data-step-submit]');
-    const stepTitle = document.querySelector<HTMLElement>('[data-step-title]');
-    const stepNow = document.querySelector<HTMLElement>('[data-step-now]');
-    const stepNextCopy = document.querySelector<HTMLElement>('[data-step-next-copy]');
-    const chatgptButton = document.querySelector<HTMLButtonElement>('[data-chatgpt-connect]');
-    const chatgptIntent = form?.querySelector<HTMLInputElement>('input[name="chatgptIntent"]');
     const existing = readOnboardingProfile();
     const STEP_KEY = 'awb:onboarding:step';
-    const stepCopy = [
-      {
-        title: 'Start with demand.',
-        now: 'Choose the categories that match what you are trying to solve.',
-        next: 'Pick the shelf strategy.',
-      },
-      {
-        title: 'Choose the source layer.',
-        now: 'Decide whether to start from the public shelf, your own books, or adjacent unknowns.',
-        next: 'Name the actual use case.',
-      },
-      {
-        title: 'Make it actionable.',
-        now: 'Write the situation and choose whether ChatGPT should become a future surface.',
-        next: 'Create an account to sync the profile.',
-      },
-    ];
     let currentStep = Math.min(Math.max(Number(localStorage.getItem(STEP_KEY) ?? '0') || 0, 0), steps.length - 1);
 
     if (form && existing) {
@@ -271,14 +151,6 @@ const shelfOptions = [
       if (shelf) shelf.checked = true;
       const goal = form.querySelector<HTMLTextAreaElement>('textarea[name="goal"]');
       if (goal) goal.value = existing.goal;
-      if (existing.chatgpt?.intent === 'connect' && chatgptIntent && chatgptButton) {
-        chatgptIntent.value = 'connect';
-        chatgptButton.textContent = 'ChatGPT marked';
-        chatgptButton.setAttribute('aria-pressed', 'true');
-        chatgptButton.classList.add('border-accent', 'text-accent');
-      }
-      const useCase = form.querySelector<HTMLInputElement>('input[name="chatgptUseCase"]');
-      if (useCase) useCase.value = existing.chatgpt?.useCase ?? '';
     }
 
     const snapshotProfile = (pending = false) => {
@@ -290,10 +162,7 @@ const shelfOptions = [
         focus: data.getAll('focus').map(String),
         shelf: String(data.get('shelf') || 'public'),
         goal: String(data.get('goal') || '').trim(),
-        chatgpt: {
-          intent: data.get('chatgptIntent') === 'connect' ? 'connect' : 'none',
-          useCase: String(data.get('chatgptUseCase') || '').trim(),
-        },
+        chatgpt: existing?.chatgpt,
         createdAt: existing?.createdAt || now,
         updatedAt: now,
       };
@@ -305,27 +174,11 @@ const shelfOptions = [
       currentStep = Math.min(Math.max(step, 0), steps.length - 1);
       localStorage.setItem(STEP_KEY, String(currentStep));
       steps.forEach((node, index) => node.classList.toggle('hidden', index !== currentStep));
-      jumps.forEach((button, index) => {
-        button.classList.toggle('border-accent', index === currentStep);
-        button.classList.toggle('bg-wash', index === currentStep);
-        button.setAttribute('aria-current', index === currentStep ? 'step' : 'false');
-      });
       if (back) back.classList.toggle('invisible', currentStep === 0);
       if (next) next.classList.toggle('hidden', currentStep === steps.length - 1);
       if (submit) submit.classList.toggle('hidden', currentStep !== steps.length - 1);
-      const copy = stepCopy[currentStep];
-      if (stepTitle) stepTitle.textContent = copy.title;
-      if (stepNow) stepNow.textContent = copy.now;
-      if (stepNextCopy) stepNextCopy.textContent = copy.next;
       if (message) message.classList.add('hidden');
     };
-
-    jumps.forEach((button) => {
-      button.addEventListener('click', () => {
-        snapshotProfile(false);
-        showStep(Number(button.dataset.stepJump || '0'));
-      });
-    });
 
     back?.addEventListener('click', () => {
       snapshotProfile(false);
@@ -335,17 +188,6 @@ const shelfOptions = [
     next?.addEventListener('click', () => {
       snapshotProfile(false);
       showStep(currentStep + 1);
-    });
-
-    chatgptButton?.addEventListener('click', () => {
-      if (!chatgptIntent) return;
-      const nextValue = chatgptIntent.value === 'connect' ? 'none' : 'connect';
-      chatgptIntent.value = nextValue;
-      chatgptButton.textContent = nextValue === 'connect' ? 'ChatGPT marked' : 'Link later';
-      chatgptButton.setAttribute('aria-pressed', nextValue === 'connect' ? 'true' : 'false');
-      chatgptButton.classList.toggle('border-accent', nextValue === 'connect');
-      chatgptButton.classList.toggle('text-accent', nextValue === 'connect');
-      snapshotProfile(false);
     });
 
     form?.addEventListener('input', () => {

@@ -41,7 +41,11 @@ try {
   const page = await context.newPage();
 
   await testHomeInteractions(page);
+  await testSkills(page);
+  await testBookPersonalization(page);
+  await testBookEditorialSlice(page);
   await testFilters(page);
+  await testBookRequest(page);
   await testAuthRedirects(page);
   await testOnboardingSignupProfileAndShelf(page);
   await testLoginAndSignout(page);
@@ -72,9 +76,13 @@ try {
     supabaseRequests.some((request) => request.kind === 'content-map-collection-insert'),
     'community collection should insert a Supabase content map collection'
   );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'book-request-insert'),
+    'book request modal should insert a Supabase book request'
+  );
 
   await context.close();
-  console.log('UI smoke test passed: mobile nav, carousel, filters, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, community collection, and install copy verified.');
+  console.log('UI smoke test passed: skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, book requests, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
 } finally {
   if (browser) await browser.close();
   server.closeAllConnections();
@@ -97,6 +105,7 @@ async function testHomeInteractions(page) {
 
 async function testFilters(page) {
   await page.goto('/answers/', { waitUntil: 'domcontentloaded' });
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
   await page.locator('[data-filter-search]').fill('pivot');
   await expectText(page.locator('[data-filter-count]'), /insight/);
   await assertVisibleText(page, '[data-filter-list]', 'pivot');
@@ -111,6 +120,84 @@ async function testFilters(page) {
   await expectText(page.locator('[data-filter-count]'), /0 books/);
 }
 
+async function testBookRequest(page) {
+  await page.goto('/books/', { waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, '[data-open-book-request]', 'Add a book');
+  await page.locator('[data-open-book-request]').click();
+  await page.locator('[data-book-request-dialog]').waitFor({ state: 'visible' });
+  await page.locator('[data-book-request-form] input[name="title"]').fill('The Design of Everyday Things');
+  await page.locator('[data-book-request-form] input[name="author"]').fill('Don Norman');
+  await page.locator('[data-book-request-form] textarea[name="note"]').fill('Useful for product and interface decisions.');
+  await page.locator('[data-book-request-submit]').click();
+  await expectText(page.locator('[data-book-request-status]'), /Request received/);
+  await page.locator('[data-close-book-request]').first().click();
+  assert.equal(await page.locator('[data-book-request-dialog]').isVisible(), false);
+}
+
+async function testSkills(page) {
+  await page.goto('/ask/', { waitUntil: 'domcontentloaded' });
+  await page.waitForURL('**/skills/');
+  await assertVisibleText(page, 'h1', 'Give your agent a shelf it can call');
+  assert.equal(await page.locator('textarea').count(), 0);
+  await page.locator('[data-copy-skill]').click();
+  await expectText(page.locator('[data-copy-skill]'), /Copied/);
+  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'npx answer-with-books install --skill --api');
+}
+
+async function testBookPersonalization(page) {
+  await page.goto('/books/atomic-habits/', { waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, '[data-book-personalizer]', 'Connect this book to your experience');
+  assert.equal(await page.locator('[data-book-personalizer] [data-ai-provider] img').count(), 4);
+  assert.equal(await page.locator('[data-book-personalizer] details').count(), 0);
+  const personalizerTop = await page.locator('[data-book-personalizer]').evaluate((element) => element.getBoundingClientRect().top);
+  const digestTop = await page.locator('.prose-awb').evaluate((element) => element.getBoundingClientRect().top);
+  assert.ok(personalizerTop < digestTop, 'personalization should appear before the digest body');
+  await page.locator('[data-ai-provider="claude"]').click();
+  assert.equal(await page.evaluate(() => localStorage.getItem('awb:preferred-ai')), 'claude');
+  await expectText(page.locator('[data-personalize-button]'), /Personalize in Claude/);
+  const claudeDestination = new URL(await page.locator('[data-personalize-button]').getAttribute('href'));
+  assert.equal(claudeDestination.origin + claudeDestination.pathname, 'https://claude.ai/new');
+  assert.match(claudeDestination.searchParams.get('q'), /Start a personalized reading experience for Atomic Habits/);
+  assert.match(claudeDestination.searchParams.get('q'), /answerwithbooks\.com\/books\/atomic-habits/);
+  assert.match(claudeDestination.searchParams.get('q'), /Crowdlisten_books\/main\/skill\/answer-with-books\/SKILL\.md/);
+  assert.doesNotMatch(claudeDestination.searchParams.get('q'), /Use relevant context you already know/);
+  assert.doesNotMatch(claudeDestination.searchParams.get('q'), /End with one idea to remember/);
+
+  await page.locator('[data-personalize-button]').evaluate((element) => {
+    element.addEventListener('click', (event) => event.preventDefault(), { once: true });
+  });
+  await page.locator('[data-personalize-button]').click();
+  await expectText(page.locator('[data-personalize-button]'), /Prompt copied/);
+  const prompt = await page.evaluate(() => navigator.clipboard.readText());
+  assert.match(prompt, /Start a personalized reading experience for Atomic Habits/);
+  assert.match(prompt, /answerwithbooks\.com\/books\/atomic-habits/);
+  assert.match(prompt, /Crowdlisten_books\/main\/skill\/answer-with-books\/SKILL\.md/);
+  assert.match(prompt, /follow the skill's Book URL Contract, and begin/);
+  assert.doesNotMatch(prompt, /Use relevant context you already know/);
+  assert.doesNotMatch(prompt, /End with one idea to remember/);
+
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await expectText(page.locator('[data-personalize-button]'), /Personalize in Claude/);
+  assert.equal(await page.locator('[data-ai-provider="claude"]').getAttribute('aria-pressed'), 'true');
+
+  await page.locator('[data-ai-provider="chatgpt"]').click();
+  const chatGptDestination = new URL(await page.locator('[data-personalize-button]').getAttribute('href'));
+  assert.equal(chatGptDestination.origin + chatGptDestination.pathname, 'https://chatgpt.com/');
+  assert.match(chatGptDestination.searchParams.get('q'), /Start a personalized reading experience for Atomic Habits/);
+}
+
+async function testBookEditorialSlice(page) {
+  await page.goto('/books/the-mom-test/', { waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, '.prose-awb', 'The central problem in customer research is not that people lie.');
+  await assertVisibleText(page, '.prose-awb', 'Evidence gets stronger as it becomes more costly');
+  assert.equal(await page.locator('.awb-line-illustration').count(), 1);
+  const prose = await page.locator('.prose-awb').innerText();
+  assert.doesNotMatch(prose, /A worked example|When this lens breaks|Best paired with|Related books/);
+  const paragraphCount = await page.locator('.prose-awb p').count();
+  const listItemCount = await page.locator('.prose-awb li').count();
+  assert.ok(paragraphCount > listItemCount, 'book digest should be prose-led rather than list-led');
+}
+
 async function testAuthRedirects(page) {
   activeUser = null;
   await page.goto('/profile/', { waitUntil: 'domcontentloaded' });
@@ -120,14 +207,18 @@ async function testAuthRedirects(page) {
 
 async function testOnboardingSignupProfileAndShelf(page) {
   await page.goto('/onboarding/start/', { waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, 'h1', 'What do you want help with?');
+  assert.equal(await page.locator('[data-step-jump]').count(), 0);
+  assert.equal(await page.locator('[data-chatgpt-connect]').count(), 0);
+  assert.doesNotMatch(await page.locator('body').innerText(), /Start with demand|ChatGPT note|Your choices are saved in this browser/);
   await page.locator('label').filter({ hasText: 'Business' }).click();
   await page.locator('label').filter({ hasText: 'Career' }).click();
   await page.locator('[data-step-next]').click();
+  await assertVisibleText(page, '[data-onboarding-step="1"]', 'Where should we start?');
   await page.locator('label').filter({ hasText: 'Use books I already care about' }).click();
   await page.locator('[data-step-next]').click();
+  await assertVisibleText(page, '[data-onboarding-step="2"]', 'What is top of mind?');
   await page.locator('textarea[name="goal"]').fill('I need better customer interviews and career decisions.');
-  await page.locator('[data-chatgpt-connect]').click();
-  await page.locator('input[name="chatgptUseCase"]').fill('Use my shelf while planning product content.');
   await page.locator('[data-step-submit]').click();
   await page.waitForURL('**/signup/?from=onboarding');
   assert.equal(await page.evaluate(() => localStorage.getItem('awb:onboarding:pending')), '1');
@@ -141,7 +232,7 @@ async function testOnboardingSignupProfileAndShelf(page) {
   await assertVisibleText(page, '[data-onboarding-focus]', 'business, career');
   await assertVisibleText(page, '[data-onboarding-shelf]', 'owned');
   await assertVisibleText(page, '[data-onboarding-goal]', 'customer interviews');
-  await assertVisibleText(page, '[data-onboarding-chatgpt]', 'Use my shelf while planning product content.');
+  await assertVisibleText(page, '[data-onboarding-chatgpt]', 'Not requested yet.');
   await assertVisibleText(page, '[data-onboarding-sync]', 'Synced to your account.');
   assert.equal(await page.evaluate(() => localStorage.getItem('awb:onboarding:pending')), null);
 
@@ -192,6 +283,22 @@ async function testMappingAndCommunityCollection(page) {
   await page.goto('/answers/how-to-fix-user-interviews-that-are-not-teaching-you-anything/', {
     waitUntil: 'domcontentloaded',
   });
+  assert.equal(await page.locator('[data-source-brief]').evaluate((details) => details.open), true);
+  await assertVisibleText(page, '[data-source-brief] .prose-awb', 'Find the broken link before changing the script');
+  assert.equal(await page.locator('[data-source-brief] .awb-line-illustration').count(), 1);
+  const sourceBrief = await page.locator('[data-source-brief] .prose-awb').innerText();
+  assert.doesNotMatch(sourceBrief, /When this lens breaks|Best paired with|Related books/);
+  assert.ok(
+    await page.locator('[data-source-brief] .prose-awb p').count() >
+      await page.locator('[data-source-brief] .prose-awb li').count(),
+    'answer source brief should be prose-led rather than list-led'
+  );
+  await page.locator('[data-copy-agent-prompt]').click();
+  await expectText(page.locator('[data-copy-agent-prompt]'), /Copied/);
+  const agentPrompt = await page.evaluate(() => navigator.clipboard.readText());
+  assert.match(agentPrompt, /Use the installed Answer with Books skill/);
+  assert.match(agentPrompt, /how-to-fix-user-interviews-that-are-not-teaching-you-anything/);
+  assert.match(agentPrompt, /context you already know about my goals, constraints, prior attempts/);
   await page.locator('[data-save-answer]').click();
   await expectText(page.locator('[data-save-answer]'), /Saved - remove/);
   await page.locator('[data-like-answer]').click();
@@ -341,6 +448,11 @@ async function handleSupabaseRoute(route) {
   if (url.pathname === '/rest/v1/profiles') {
     supabaseRequests.push({ kind: 'profile-upsert', method, body });
     return fulfillJson(route, Array.isArray(body) ? body : [body], 201);
+  }
+
+  if (url.pathname === '/rest/v1/book_requests' && method === 'POST') {
+    supabaseRequests.push({ kind: 'book-request-insert', method, body });
+    return fulfillJson(route, {}, 201);
   }
 
   if (url.pathname === '/rest/v1/content_maps') {

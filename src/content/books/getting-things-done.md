@@ -2,70 +2,87 @@
 title: "Getting Things Done"
 author: "David Allen"
 year: 2001
-oneLiner: "A system for turning mental clutter into captured commitments, clear next actions, and regular review."
-readIf: "Your head is full of open loops, reminders, half-decisions, and vague tasks that keep resurfacing at the worst possible time."
+oneLiner: "A workflow for turning mental clutter into captured commitments, explicit next actions, and a system reviewed often enough to trust."
+readIf: "Your head is full of open loops, reminders, half-decisions, and vague tasks that resurface at the wrong time."
 tags: ["productivity", "execution", "systems"]
 featured: false
 order: 11
 ---
 
-## What the book is about
+David Allen begins from a familiar contradiction: people can have sophisticated plans and still feel preoccupied by small unfinished obligations. The problem is not simply too much work. It is that the work has not been converted into decisions the mind can stop rehearsing.
 
-Getting Things Done is useful on Answer with Books because it turns a broad area of productivity, execution, and systems into a concrete way to think. A system for turning mental clutter into captured commitments, clear next actions, and regular review.
+An unanswered message, an idea for a trip, and “prepare the launch” are psychologically similar when they remain undefined. Each is an **open loop**: something has your attention because you have not decided what it means or what should happen next. The mind keeps reminding you, but it does so unreliably. It surfaces the obligation when you cannot act and forgets it when you can.
 
-The public page should not work like a compressed chapter summary. Its job is to preserve the usable judgment: when the book helps, what kind of problem it clarifies, and what mistake it prevents a reader from making. In this case, the book is most relevant when your head is full of open loops, reminders, half-decisions, and vague tasks that keep resurfacing at the worst possible time.
+*Getting Things Done* proposes a complete workflow for closing that gap. Capture what has your attention, clarify what each item means, organize the result where it belongs, review the whole system regularly, and then choose what to do. The individual techniques are simple. Their value comes from using them as a trusted system rather than as disconnected productivity tricks.
 
-David Allen's contribution is treated here as a source lens. A reader does not need to remember every argument in the book to use it; they need a few stable moves they can recognize when a real decision, conversation, plan, or workflow starts to wobble.
+## Capture removes the need to remember at the wrong time
 
-## Core lessons
+Allen’s best-known claim is that the mind is for having ideas, not holding them. This does not mean memory is weak in every respect. It means the mind is poorly suited to maintaining a complete, context-sensitive inventory of commitments. It cannot reliably separate an obligation that needs action today from one that merely feels unresolved.
 
-**1. Your mind is for having ideas, not holding them.**
-Allen's starting point is that the brain is a bad reminder system. It recalls obligations by association and anxiety, not by priority or context.
+Capture means putting every potentially meaningful input into a small number of collection points: an inbox, notebook, voice capture tool, or digital list. The medium matters less than completeness and retrievability. If some obligations live in the system while others remain in email, chat, scraps of paper, and memory, the mind still has reason not to trust the system.
 
-**2. Capture everything.**
-Open loops create background stress because the mind does not trust that they will resurface. A trusted external system reduces the need to rehearse every obligation.
+Capturing is not planning. Writing “budget” in an inbox has only moved the ambiguity out of your head. That is still useful because it separates collection from decision, but relief becomes durable only when the item is clarified. Capture should therefore be easy enough to use in the moment and limited enough that every inbox can later be emptied.
 
-**3. Define the next action.**
-Vague tasks stay stuck because they hide the physical next move. "Plan launch" is fog; "email Maya for the launch checklist" is actionable.
+## Clarifying turns a reminder into a decision
 
-**4. Review is what makes the system trustworthy.**
-A list you never review becomes another pile. The weekly review reconnects projects, next actions, waiting-for items, and calendar commitments.
+For each captured item, Allen asks first: **Is it actionable?** If not, it can be discarded, kept as reference, or deferred to a someday/maybe list. If it is actionable, the crucial question is: **What is the next action?**
 
-## Key frameworks
+A next action is the next visible, physical behavior that would move the matter forward. “Plan launch” is not an action because it conceals several decisions. “Email Maya for the final launch checklist” is actionable. “Draft three possible launch dates” is actionable. The wording matters because vague verbs such as plan, handle, explore, or improve force the brain to rediscover what the task means each time it appears.
 
-**Inbox to next action.** For each captured item, decide: is it actionable? If yes, what is the next visible action? If not, is it trash, reference, or someday?
+If one action will not complete the desired outcome, Allen calls the outcome a **project**. In GTD, a project can be small: anything requiring more than one action. The distinction ensures that an active outcome has at least one next action and that a next-action list does not lose the larger result it serves.
 
-**Two-minute rule.** If a task can be done immediately in roughly two minutes, do it instead of storing and reprocessing it.
+This is the mechanism behind the system’s effect on overwhelm. Volume is burdensome, but volume combined with undecided meaning is worse. Clarification converts a field of ambiguous pressure into discrete choices: act, delegate, defer, incubate, retain, or discard.
 
-**Weekly review.** Clear inboxes, review projects, update next actions, and make sure nothing important depends on memory alone.
+## Organizing keeps different kinds of commitments from competing
 
-## When to reach for this book
+Once clarified, items go to lists that reflect their meaning. Actions tied to a specific day or time belong on the calendar. Actions to do as soon as possible belong on next-action lists, often grouped by context. Delegated items go on a waiting-for list. Multi-step outcomes go on a projects list. Non-actionable material goes to reference or someday/maybe.
 
-- When you feel overwhelmed by small tasks.
-- When your system is scattered across notes, email, chat, and memory.
-- When projects stall because next actions are unclear.
-- When planning creates more anxiety than control.
+The calendar is deliberately narrow. Allen reserves it for what must happen on that date, not for a wish list of tasks. When aspirational tasks repeatedly roll forward, the calendar stops representing reality. A clean boundary preserves its authority.
 
-## Memorable ideas and lines
+Context lists reflect the fact that possible actions depend on where you are, which tools are available, how much time remains, and how much energy you have. The original book uses contexts such as calls, errands, office, and computer. Modern tools blur some of those boundaries, but the principle remains: a useful list should reduce the options to actions that are actually possible now.
 
-The book's lasting move is the next-action question. Most overwhelm is not just volume; it is volume plus ambiguity.
+Allen’s two-minute rule fits inside clarification. If an action takes roughly two minutes, doing it immediately is usually cheaper than organizing and reviewing it later. The rule concerns processing cost, not importance. It should not become permission to spend a morning on an endless stream of tiny requests while consequential work waits.
 
-## How to use it
+## Review is what makes an external system trustworthy
 
-Start with the situation, not the book title. Ask what is actually hard right now: a decision, a habit, a conversation, a plan, a metric, or a product question. Then use Getting Things Done as a lens for the part of the situation that keeps repeating.
+A perfectly organized list decays as soon as new work arrives. The system works only if it is reviewed often enough that the mind believes important commitments will reappear before they become emergencies.
 
-A practical use of this book has three steps. First, name the current pattern in plain language. Second, choose the idea from the book that explains why the pattern persists. Third, make the next move small enough that reality can answer back. The value is not that the book sounds wise; the value is that it changes what you do next.
+Allen’s weekly review restores that trust. Inboxes are emptied. Loose papers and notes are captured. The calendar is checked backward for unfinished follow-up and forward for preparation. Projects are reviewed so each active outcome has a next action. Waiting-for and someday/maybe lists are reconsidered. The review is not primarily a cleanup ritual; it reconnects day-to-day actions to the complete inventory of commitments.
 
-On this site, the book is connected to questions such as "How to get out of task overwhelm without reorganizing your whole life". Those links are the best way to see the lens in use: the book becomes practical when it is attached to a real problem.
+This explains why many partial versions of GTD fail. Capturing without clarifying creates a larger pile. Clarifying without reviewing produces stale lists. Reviewing without making hard choices preserves commitments that should be renegotiated or abandoned. The system reduces mental load only when it is more reliable than mental rehearsal.
 
-## When this lens breaks
+<figure class="digest-illustration">
+  <svg viewBox="0 0 780 170" role="img" aria-labelledby="gtd-title gtd-desc">
+    <title id="gtd-title">The Getting Things Done workflow</title>
+    <desc id="gtd-desc">Inputs move through capture, clarification, organization, and review before informing action.</desc>
+    <defs><marker id="gtd-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="currentColor"></path></marker></defs>
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="20" y="45" width="125" height="62" rx="10"></rect><rect x="172" y="45" width="125" height="62" rx="10"></rect><rect x="324" y="45" width="125" height="62" rx="10"></rect><rect x="476" y="45" width="125" height="62" rx="10"></rect><rect x="628" y="45" width="125" height="62" rx="10"></rect>
+      <path d="M145 76h17M297 76h17M449 76h17M601 76h17" marker-end="url(#gtd-arrow)"></path>
+      <path d="M690 118c0 35-455 35-455 0" marker-end="url(#gtd-arrow)"></path>
+    </g>
+    <g fill="currentColor" text-anchor="middle" font-family="inherit" font-size="15" font-weight="700"><text x="82" y="81">Capture</text><text x="234" y="81">Clarify</text><text x="386" y="81">Organize</text><text x="538" y="81">Review</text><text x="690" y="81">Engage</text></g>
+    <text x="462" y="151" fill="currentColor" text-anchor="middle" font-family="inherit" font-size="12">review keeps the system current</text>
+  </svg>
+  <figcaption>No stage can compensate indefinitely for a missing one.</figcaption>
+</figure>
 
-The lens breaks when it is treated as a universal rule. Getting Things Done is strongest for productivity, execution, and systems, but it should not replace direct evidence from the situation in front of you. A book can sharpen judgment; it cannot remove the need to inspect the actual constraints.
+## Doing follows context, time, energy, and priority
 
-It also breaks when the reader uses the language of the book as decoration. If the idea does not change the next question, the next test, or the next conversation, it has become vocabulary rather than judgment. The standard for this shelf is practical transfer: can the idea help someone make a better move today?
+GTD postpones prioritization until the available actions are trustworthy. In the moment, Allen suggests filtering by context, time available, energy available, and priority. This is not an argument that urgency or strategic importance is unimportant. It is an argument that priority becomes usable only after impossible and undefined options have been removed.
 
-## Best paired with
+The book also distinguishes the horizontal and vertical dimensions of control. Horizontal control maintains coherence across the whole field of commitments. Vertical control goes deeper on one project through what Allen calls the natural planning model: clarify purpose and principles, envision the outcome, brainstorm, organize, and identify next actions. A person needs both. A detailed project plan does not protect neglected commitments elsewhere; a complete task inventory does not supply the thinking a difficult project requires.
 
-Pair Getting Things Done with [*Seeing Like a State*](/books/seeing-like-a-state/) and [*Deep Work*](/books/deep-work/) when the question needs more than one lens. One book can name the central pattern; a second book can supply the counterweight, the operating detail, or the human constraint that keeps the answer from becoming too neat.
+## Clear commitments include deliberate non-commitments
 
-That pairing is also useful for AI and agent workflows. A single book can overfit the answer to one worldview. A small shelf of related books gives the agent enough contrast to explain the tradeoff, cite the source lens, and still return a practical next step.
+GTD can be mistaken for a system that lets a person handle unlimited work. It does not make time infinite or determine which responsibilities are worth accepting. It makes the cost and status of commitments visible. That visibility should lead to renegotiation as often as execution.
+
+An open loop closes in several legitimate ways: complete it, decide the next action, delegate it, defer it, or consciously stop caring about it. The important move is replacing unexamined pressure with an explicit agreement. Some agreements are with other people; many are with yourself.
+
+This is also the limit of the two-minute rule and highly granular task lists. Processing small actions can create a satisfying sense of control while protecting a person from choosing among larger commitments. Allen’s workflow is strongest as infrastructure. It clears the cognitive fog so a better question can be asked: given everything I could do, which commitments should still exist?
+
+## A trusted system produces appropriate attention
+
+The book describes its desired state as “mind like water”: attention responds proportionately to what is happening, then returns to rest. The phrase does not promise a life without pressure. It describes the absence of unnecessary pressure created by reminders that arrive without decisions attached.
+
+The complete practice is therefore less about getting more things done than about making commitments explicit. Capture everything that has your attention. Decide what each item means. Put the result in the right place. Review often enough to keep the inventory true. Then work from choices you have already clarified instead of repeatedly reconstructing your obligations from anxiety.

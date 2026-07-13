@@ -3,12 +3,13 @@ import { getCollection, render } from 'astro:content';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Base from '../../layouts/Base.astro';
+import AgentDigestHandoff from '../../components/AgentDigestHandoff.astro';
 import AnswerCover from '../../components/AnswerCover.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookCover from '../../components/BookCover.astro';
 import FaqList from '../../components/FaqList.astro';
 import { topicsForTags } from '../../lib/topics';
-import { compactList, faqJsonLd } from '../../lib/seo';
+import { compactDescription, compactList, faqJsonLd } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const answers = await getCollection('answers');
@@ -18,6 +19,14 @@ export async function getStaticPaths() {
 const { answer } = Astro.props;
 const { Content } = await render(answer);
 const topics = topicsForTags(answer.data.tags);
+const answerWordCount = String(answer.body ?? '')
+  .replace(/---[\s\S]*?---/, '')
+  .replace(/\[[^\]]+\]\([^)]+\)/g, ' ')
+  .replace(/[#*_>`-]/g, ' ')
+  .trim()
+  .split(/\s+/)
+  .filter(Boolean).length;
+const seoDescription = compactDescription(answer.data.description);
 
 const allBooks = await getCollection('books');
 const sourceBooks = answer.data.books
@@ -62,9 +71,9 @@ const faqs = [
     answer: `This answer draws on ${compactList(sourceBookTitles, 'the source shelf')} and links back to each source book for deeper reading.`,
   },
   {
-    question: 'Who is this answer written for?',
+    question: 'How do I make this answer personal?',
     answer:
-      'It is written for readers who want practical, book-grounded guidance they can use before a real decision.',
+      'Copy the agent handoff prompt. The installed Answer with Books skill reads this brief and its source-book digests, then adapts them using context your agent already knows about you.',
   },
 ];
 const jsonLd = [
@@ -73,7 +82,7 @@ const jsonLd = [
     '@id': `${url}#webpage`,
     url,
     name: answer.data.question,
-    description: answer.data.description,
+    description: seoDescription,
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
     primaryImageOfPage: { '@id': `${url}#primaryimage` },
@@ -94,6 +103,10 @@ const jsonLd = [
     image: new URL(answerImage, 'https://answerwithbooks.com').href,
     author: { '@type': 'Person', name: 'Terry Chen', url: 'https://terrylinhaochen.github.io' },
     publisher: { '@id': 'https://answerwithbooks.com/#person' },
+    inLanguage: 'en',
+    isAccessibleForFree: true,
+    wordCount: answerWordCount,
+    articleSection: answer.data.tags,
     keywords: answer.data.tags,
     about: sourceBooks.map((book) => ({
       '@type': 'Book',
@@ -121,7 +134,7 @@ const jsonLd = [
 
 <Base
   title={answer.data.question}
-  description={answer.data.description}
+  description={seoDescription}
   path={`/answers/${answer.id}/`}
   image={answerImage}
   imageAlt={`Answer card for ${answer.data.question}`}
@@ -139,11 +152,13 @@ const jsonLd = [
 
     <header class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] lg:items-start">
       <div>
-        <p class="awb-eyebrow">Answer</p>
+        <p class="awb-eyebrow">Answer brief</p>
         <h1 class="mt-3 text-wrap break-words font-serif text-4xl leading-tight sm:text-5xl">
           {answer.data.question}
         </h1>
         <p class="mt-4 text-sm text-faint">
+          By <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Terry Chen</a>
+          <span aria-hidden="true"> · </span>
           <time datetime={answer.data.date.toISOString()}>{dateFmt}</time>
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-2">
@@ -207,12 +222,27 @@ const jsonLd = [
       </div>
     </section>
 
-    <div class="prose-awb prose-awb--aligned mt-10">
-      <Content />
-    </div>
+    <AgentDigestHandoff
+      question={answer.data.question}
+      answerUrl={url}
+      sourceBooks={sourceBooks.map((book) => ({
+        title: book.data.title,
+        url: `https://answerwithbooks.com/books/${book.id}/`,
+      }))}
+    />
+
+    <details open data-source-brief class="mt-10 rounded-2xl border border-line bg-card px-5 py-4 sm:px-7">
+      <summary class="cursor-pointer font-serif text-2xl text-ink">Read the general source brief</summary>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-soft">
+        This is the non-personalized editorial starting point. Use the agent handoff above when your own context should change the advice.
+      </p>
+      <div class="prose-awb prose-awb--aligned mt-8">
+        <Content />
+      </div>
+    </details>
   </article>
 
-  <FaqList items={faqs} eyebrow="Answer Q&A" title="What this guide answers" width="medium" />
+  <FaqList items={faqs} eyebrow="Answer brief Q&A" title="How to use this brief" width="medium" />
 
   {
     relatedAnswers.length > 0 && (

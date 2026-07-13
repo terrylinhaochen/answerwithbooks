@@ -7,94 +7,74 @@ featured: true
 tags: ["startups", "user-research", "validation"]
 ---
 
-Bad user interviews usually do not feel bad while they are happening. The call is friendly. The person nods. They say the problem sounds important. You leave with notes full of phrases that look useful, then realize none of them tell you what to build, whether the pain is real, or whether anyone will change behavior.
+Bad interviews rarely feel bad. The conversation is warm, the participant recognizes the problem, and the notes contain phrases that sound quotable. The failure appears later, when the team cannot name anything it would build, stop, narrow, or investigate differently because of what it heard.
 
-The fix is not a better icebreaker. It is a different evidence standard.
+The usual response is to improve the interview script. That only fixes one of three possible failures. An interview can be uninformative because the questions invite opinions instead of evidence, because the participant is too far from the behavior, or because the team never decided what the conversation should change. The repair depends on which link is broken.
 
-A useful interview should leave you with at least one of five things: a recent story, a workaround, a cost, a stakeholder, or a commitment. Without one of those, the interview may have been pleasant, but it has not changed what you know.
+[*The Mom Test*](/books/the-mom-test/) supplies the evidence standard: reconstruct specific behavior before asking people to judge an idea, and treat commitment as stronger than praise. The additional operating rule is to connect that evidence to a pending decision. A conversation teaches you something only when it changes your model or the next move.
 
-CrowdListen surfaced this as a repeated founder and product-team problem: people are trying to do discovery, but their access is filtered, their interviewees are polite, and their teams still need a decision. [*The Mom Test*](/books/the-mom-test/) is the right book lens because it treats interviews as evidence collection, not persuasion.
+## Find the broken link before changing the script
 
-## Stop asking for reactions
+A useful interview completes a chain from conversation to evidence to decision. Weak research usually breaks at one transition. If the participant offers reactions but cannot describe a recent event, the evidence link is broken. If they know the policy but not the daily workaround, access is broken. If the notes are detailed but nothing could change the plan, the decision link is broken.
 
-The most common failure is asking a future-facing reaction question:
+<figure class="awb-line-illustration" aria-labelledby="interview-chain-caption">
+  <svg viewBox="0 0 720 170" role="img" aria-label="A useful interview connects conversation to evidence to a decision">
+    <path d="M90 104 H630" class="awb-line-illustration__line" />
+    <circle cx="90" cy="104" r="8" class="awb-line-illustration__point" />
+    <circle cx="360" cy="104" r="8" class="awb-line-illustration__point" />
+    <circle cx="630" cy="104" r="8" class="awb-line-illustration__point" />
+    <text x="90" y="137" text-anchor="middle">Conversation</text>
+    <text x="360" y="137" text-anchor="middle">Evidence</text>
+    <text x="630" y="137" text-anchor="middle">Decision</text>
+    <text x="225" y="74" text-anchor="middle" class="awb-line-illustration__label">What happened?</text>
+    <text x="495" y="74" text-anchor="middle" class="awb-line-illustration__label">What changes?</text>
+  </svg>
+  <figcaption id="interview-chain-caption">Do not add more questions until you know which transition is failing.</figcaption>
+</figure>
 
-- Would you use this?
-- Is this a problem for you?
-- Would this save your team time?
-- What do you think of this idea?
+This diagnosis prevents a common waste: collecting more of the same weak data. Ten additional reaction interviews do not repair a behavioral-evidence problem. A better transcript from the wrong participant does not repair an access problem. More research cannot repair a decision no one has defined.
 
-Those questions invite speculation and kindness. The interviewee can be generous without lying. They can imagine a better future version of themselves. They can like you. None of that creates evidence.
+## When people give opinions, reconstruct an event
 
-Replace reaction questions with recent-behavior questions:
+Future-facing questions make the participant predict a situation that does not yet exist. Would you use this? Would it save time? How much would you pay? A sincere answer still depends on imagination, politeness, and an idealized picture of future behavior.
 
-- When did this last happen?
-- What were you trying to do?
-- What did you do instead?
-- Who else was involved?
-- What did it cost in time, money, risk, or embarrassment?
-- What have you already tried?
+Move backward in time instead. Ask about the most recent occurrence, then reconstruct it in order. What triggered the problem? What was the person trying to accomplish? What did they do next? Which tool, document, or colleague entered the workflow? Where did time, money, risk, or credibility disappear?
 
-If the person cannot name a recent example, you may still have a real idea, but you do not yet have evidence from this interview.
+The distinction is not that opinions are worthless. They can reveal language, taste, trust, and comprehension. They are simply weak evidence for demand. If the decision is whether a message feels credible, a reaction may be exactly the evidence required. If the decision is whether someone will replace an existing workflow, behavior and commitment matter more.
 
-## Look for workarounds before opinions
+Workarounds are especially informative because they show that a problem has already defeated inaction. A spreadsheet, manual handoff, support escalation, paid but disliked tool, or repeated search is a trace of importance. If no trace exists, the problem may be infrequent, owned by someone else, or adequately solved. Do not argue the participant into caring; find out which explanation fits.
 
-Strong interviews leave a trail of prior behavior. The person has searched for a fix, built a spreadsheet, paid for a bad tool, asked a teammate, opened a support ticket, or changed their workflow. Weak interviews produce only opinions.
+## When access is filtered, move closer to behavior
 
-Use the interview to map the current workaround:
+Sometimes the questions are sound but the participant cannot supply the evidence. A manager may know the outcome but not the workaround. A buyer may understand procurement but never touch the tool. A customer-facing team may summarize complaints while removing the sequence and stakes that made them meaningful.
 
-1. What triggers the problem?
-2. What do they do today?
-3. Where does that workaround break?
-4. Who feels the cost?
-5. What would have to change for them to adopt something new?
+The solution is not always another interview. Move to the closest available record of behavior: an anonymized artifact, support ticket, usage event, renewal objection, implementation document, or conversation with the person who performs the workaround. These sources are not automatically more truthful, but they reduce the distance between the claim and the event.
 
-The workaround matters because people rarely buy solutions to problems they have never tried to solve.
+Keep access failure separate from weak demand. “The manager could not describe the workflow” does not mean the workflow is painless. It means this participant cannot answer that question. Conversely, a detailed operator story does not prove a buyer will fund the solution. Operator, buyer, approver, and blocker may each hold a different piece of the decision.
 
-## Separate access problems from demand problems
+## When nothing changes, define the update condition first
 
-Sometimes interviews are not teaching you anything because the demand is weak. Sometimes the demand is real, but the research setup is broken.
+An interview can contain excellent evidence and still teach the team nothing if no decision is waiting for it. Before the call, write the uncertainty in a form that could be updated. For example: we do not know whether the pain occurs weekly, whether the workflow owner controls budget, or whether the existing workaround is costly enough to replace.
 
-For example, a PM in a regulated category may not be allowed to ask direct financial-behavior questions. A founder selling to enterprise users may only reach managers, not daily operators. A designer may hear sanitized feedback because the customer success team is in the room.
+Then write what evidence would move the plan. A recent recurring incident might justify more discovery. A workaround consuming several roles might change the target segment. Repeated satisfaction with the current process might lower the priority. The exact threshold depends on the decision; the important part is agreeing that some observations can change direction.
 
-In those cases, do not conclude that interviews are useless. Change the evidence source:
+This also improves note-taking. Preserve the observation before compressing it into an interpretation. “They reconcile three exports every Friday” is evidence. “They need automation” is an inference. Keeping them separate lets someone else challenge the proposed solution without discarding the underlying fact.
 
-- Use support tickets to find repeated language.
-- Ask account managers what users complain about before renewals.
-- Compare interview claims with product behavior.
-- Ask for anonymized examples instead of sensitive details.
-- Interview the person who handles the workaround, not only the buyer.
+## Commitment shows whether the conversation can advance
 
-The job is not to worship interviews. The job is to find the closest available evidence of real behavior.
+Praise costs nothing. A useful next step costs time, access, money, or reputation. That is why Fitzpatrick treats commitments as stronger signals: they move the research into contact with another constraint.
 
-## End every interview with a commitment test
+The commitment should fit the remaining uncertainty. If the workflow is unclear, ask to inspect a sanitized artifact or speak with the operator. If authority is unclear, ask for an introduction to the buyer. If adoption is unclear and the product is concrete enough, define a pilot with an owner and success condition. A premature request for payment can be as uninformative as a compliment because it tests the wrong stage.
 
-A useful interview should make the next step clearer. If the person has a real problem, ask for a small commitment that matches the stage of the relationship:
+A refusal is not automatically rejection. It may reveal privacy limits, timing, authority, or low priority. The point is not to force a yes. It is to make the next source of uncertainty visible.
 
-- A second call with the person who owns the workflow.
-- Permission to inspect an anonymized example.
-- An introduction to another affected user.
-- A pilot with a defined success condition.
-- A payment, pre-order, or signed letter when the solution is concrete enough.
+## Reset the next five interviews
 
-Do not treat every refusal as rejection. But do treat commitment as a stronger signal than compliments. "Keep me posted" is not the same as "I will introduce you to the team that owns this."
+Use a small batch to repair the system rather than rewriting the entire research program:
 
-## A better interview script
+1. Name one decision and the evidence that could change it.
+2. Recruit people close enough to the relevant behavior.
+3. Reconstruct recent events before describing the idea.
+4. End with the smallest commitment that opens the next uncertainty.
 
-Use this sequence when your current interviews feel vague:
-
-1. "What happened the last time this came up?"
-2. "Walk me through what you did, step by step."
-3. "Where did that process get annoying, expensive, risky, or slow?"
-4. "What have you tried already?"
-5. "Who else cares when this breaks?"
-6. "Can you show me an example, with anything sensitive removed?"
-7. "If this is worth solving, what would be a useful next step?"
-
-That script turns the interview from a conversation about your idea into a reconstruction of the user's reality.
-
-## The practical rule
-
-If an interview gives you praise, write it down but do not count it. If it gives you a recent story, a workaround, a cost, a stakeholder, or a commitment, count it as evidence.
-
-The goal is not to make every interview positive. The goal is to make every interview decision-useful. A bad idea discovered early is a successful interview.
+After five conversations, review facts and inferences separately. Count recent events, workarounds, costs, stakeholders, and commitments—not compliments. If the evidence changes the target user, the problem, or the next test, the interviews are teaching again. If it changes nothing, diagnose the broken link before scheduling five more.

@@ -15,19 +15,11 @@ The hard part isn't the abandoning. It's that *both* persistence and pivoting ar
 
 Thomas Kuhn's [*The Structure of Scientific Revolutions*](/books/the-structure-of-scientific-revolutions/) describes how science handles exactly this dilemma. Most of the time, scientists do "normal science": they work *inside* a framework — a paradigm — and treat unexpected results as puzzles to be solved, not as evidence against the framework. This is rational. Most anomalies dissolve under harder work. A field that abandoned its framework at the first contrary result would never get anywhere.
 
-But sometimes the framework itself is wrong, and Kuhn's account of how that announces itself is the most practically useful idea in the book. A paradigm in **crisis** has a signature:
-
-- **Anomalies persist** through repeated, competent attempts to resolve them.
-- **They strike the core**, not the periphery — Mercury's orbit was a problem for Newton's heart, not his edges.
-- **Patches multiply.** This is the tell. Ptolemaic astronomers kept the earth at the center by adding epicycles — circles on circles — each one saving the data while the framework's elegance and predictive power drained away. The system still "worked," in the sense that every individual problem had a fix. It was also dying.
+But sometimes the framework itself is wrong, and Kuhn's account of how that announces itself is the most practically useful idea in the book. A paradigm in **crisis** has a recognizable signature. Anomalies persist through repeated, competent attempts to resolve them. They strike the core rather than the periphery—Mercury’s orbit challenged Newtonian mechanics at a central point. And patches multiply. Ptolemaic astronomers kept the earth at the center by adding epicycles, circles on circles that saved individual observations while the framework’s elegance and predictive power drained away. The system still “worked” because every discrepancy received a fix. It was also becoming less capable of explaining why the fixes were necessary.
 
 ## The translation to your situation
 
-Swap "paradigm" for your strategy, architecture, research program, or business thesis, and Kuhn's triage becomes a checklist. Look at your last few months of problems and fixes:
-
-1. **Do the same problems keep returning** after being competently "solved"?
-2. **Do they attack your central thesis** ("users want this," "this architecture scales," "this channel converts") rather than the edges?
-3. **Is the cost of each fix rising?** Are your solutions increasingly special cases, exceptions, and one-off accommodations — epicycles?
+Swap “paradigm” for your strategy, architecture, research program, or business thesis, and Kuhn’s triage becomes operational. Examine the last few months of problems and fixes. Do the same problems return after competent attempts to resolve them? Do they attack the central thesis—whether users want the product, the architecture scales, or the channel converts—rather than an edge? Is the cost of each fix rising through exceptions, special cases, and one-off accommodations?
 
 One yes means: keep working, this is normal science. Three yeses means you're not in a rough patch; you're in a crisis, and further patching is denial with a work ethic.
 
@@ -43,13 +35,12 @@ Here Kuhn issues a warning to eager pivoters: **"the decision to reject one para
 
 That's your bar for a pivot. Not "this is hard" — everything is hard — but: **a specific alternative exists that explains both why your old approach won what it won, and why it keeps failing where it fails.** A pivot without that is just quitting with extra steps; you'll re-enter the pre-paradigm fog and burn months relearning what the old approach already knew.
 
-## The checklist
+## The next move is a crisis review with a candidate alternative
 
-1. Inventory the last quarter's problems. Recurring? Core-striking? Patch costs rising?
-2. If 0-1 of those: persist. You're doing normal science. Patching is the job.
-3. If all three: stop patching. Name the crisis out loud.
-4. Run the premortem and the outside view to counteract sunk-cost vision.
-5. Don't abandon until you have a candidate paradigm that explains old wins *and* current anomalies.
-6. Set the next tripwire before you commit to the new approach — you'll need this list again.
+Inventory the last quarter’s important problems, the attempted fixes, and whether each problem returned. Mark which failures strike the central thesis and whether patch cost is rising. If only one condition appears, persistence is still reasonable: normal work inside a useful framework includes resolving anomalies. If all three recur, stop treating each item as an isolated execution miss and name the strategic crisis.
 
-Kuhn's deepest comfort: crisis isn't failure. It's the only mechanism by which frameworks improve, and the anomalies you've been patching are the raw material of the better thesis. The teams that die aren't the ones that hit crises — they're the ones that added epicycles until the money ran out.
+Run the premortem and outside view before deciding. Then require a candidate alternative to explain both the current anomalies and the genuine successes of the old approach. Compare the two on specific observations, not enthusiasm for change. A pivot earns commitment when it produces a more coherent account and a testable path; persistence earns commitment when the old model still resolves anomalies without escalating special pleading.
+
+Set the next tripwire before acting: the observation and date that will force another review. Kuhn’s deepest comfort is that crisis is not failure. Anomalies are raw material for a better thesis. The teams that die are often the ones that keep adding epicycles until the ability to choose has disappeared.
+
+The decision is credible when the same evidence standard can justify staying or changing.

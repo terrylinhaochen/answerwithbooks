@@ -69,14 +69,20 @@ A practical use of this book has three steps. First, name the current pattern in
 
 On this site, the book is connected to questions such as "How to tell whether to pivot or keep going". Those links are the best way to see the lens in use: the book becomes practical when it is attached to a real problem.
 
-## When this lens breaks
+## Not every anomaly is a revolution
 
 The lens breaks when it is treated as a universal rule. The Structure of Scientific Revolutions is strongest for science, paradigms, and epistemology, but it should not replace direct evidence from the situation in front of you. A book can sharpen judgment; it cannot remove the need to inspect the actual constraints.
 
 It also breaks when the reader uses the language of the book as decoration. If the idea does not change the next question, the next test, or the next conversation, it has become vocabulary rather than judgment. The standard for this shelf is practical transfer: can the idea help someone make a better move today?
 
-## Best paired with
+Kuhn’s model is most useful as a discipline for interpreting persistent anomalies, not as permission to call every disagreement a paradigm shift. Normal science earns its persistence by solving hard puzzles; a replacement earns attention when it explains central failures and opens productive work that the old frame cannot. The difficult judgment is knowing when repair is still discovery and when repair has become protection of the frame itself.
 
-Pair The Structure of Scientific Revolutions with another source book that challenges the same problem from a different angle when the question needs more than one lens. One book can name the central pattern; a second book can supply the counterweight, the operating detail, or the human constraint that keeps the answer from becoming too neat.
+## Conversion changes the standards used to see the evidence
 
-That pairing is also useful for AI and agent workflows. A single book can overfit the answer to one worldview. A small shelf of related books gives the agent enough contrast to explain the tradeoff, cite the source lens, and still return a practical next step.
+Paradigm choice is difficult because competing frameworks do not merely give different answers to an agreed list of questions. They can disagree about which problems matter, what counts as an explanation, which instruments are reliable, and what a successful solution should look like. Kuhn calls this partial incommensurability.
+
+The claim does not mean communication is impossible or that evidence has no role. Scientists can compare predictions, anomalies, scope, precision, simplicity, and the new research a framework makes possible. But there may be no neutral algorithm whose standards both sides accept without already granting part of one paradigm.
+
+This helps explain why revolutionary change often resembles conversion. A new framework can make familiar facts appear differently organized, as in a perceptual gestalt switch. Textbooks later present the transition as a clean accumulation of discoveries, hiding the period when the field disputed the meaning of the observations themselves.
+
+Outside science, the concept should be used cautiously. Organizational factions often call ordinary incentive conflicts “different paradigms” to avoid resolving them. The diagnostic value appears when groups repeatedly talk past one another because they classify problems, evidence, and success differently. In that case, asking for more arguments inside either vocabulary may deepen the impasse. Translation requires making the standards explicit, identifying observations both frameworks can risk, and comparing which approach generates more productive work rather than merely which one sounds coherent to its own adherents.

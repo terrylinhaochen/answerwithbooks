@@ -1,0 +1,373 @@
+---
+import Base from '../layouts/Base.astro';
+
+const description =
+  'A pure text scenario experience for Acquired Intelligence: skill as practiced problem-solving, not memorization.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://answerwithbooks.com/acquired-intelligence/#webpage',
+  url: 'https://answerwithbooks.com/acquired-intelligence/',
+  name: 'Acquired Intelligence Scenario',
+  description,
+  isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+  inLanguage: 'en',
+};
+---
+
+<Base
+  title="Acquired Intelligence Scenario"
+  description={description}
+  path="/acquired-intelligence/"
+  jsonLd={jsonLd}
+  robots="noindex, follow"
+>
+  <section class="acq-chat" data-acq-chat>
+    <div class="acq-chat__inner">
+      <header class="acq-chat__intro">
+        <p class="acq-chat__eyebrow">Acquired Intelligence</p>
+        <h1>Skill is practiced recognition.</h1>
+        <p>
+          Not what you memorize. What your mind and hands know to do when a problem appears.
+        </p>
+      </header>
+
+      <div class="acq-dialog" role="region" aria-label="Scenario chat">
+        <div class="acq-transcript" data-transcript aria-live="polite">
+          <article class="acq-message acq-message--host">
+            <p class="acq-message__speaker">Host</p>
+            <div class="acq-message__body">
+              <p>
+                Type <strong>begin</strong>. Use any outside help. I will adapt the case from your moves.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <form class="acq-compose" data-compose>
+          <label for="acq-input" class="sr-only">Response</label>
+          <textarea
+            id="acq-input"
+            data-input
+            rows="3"
+            placeholder="Begin..."
+          ></textarea>
+          <div class="acq-compose__actions">
+            <button type="submit">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const root = document.querySelector<HTMLElement>('[data-acq-chat]');
+
+    if (root) {
+      const transcript = root.querySelector<HTMLElement>('[data-transcript]');
+      const form = root.querySelector<HTMLFormElement>('[data-compose]');
+      const input = root.querySelector<HTMLTextAreaElement>('[data-input]');
+
+      const state = {
+        stage: 0,
+        moves: [] as string[],
+        usedExternalHelp: false,
+        namedSkill: '',
+      };
+
+      const host = (html: string) => appendMessage('Host', html, 'host');
+      const user = (text: string) => appendMessage('You', escapeHtml(text), 'user');
+
+      const escapeHtml = (text: string) =>
+        text.replace(/[&<>"']/g, (char) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+        })[char] ?? char);
+
+      const appendMessage = (speaker: string, html: string, kind: 'host' | 'user') => {
+        if (!transcript) return;
+        const article = document.createElement('article');
+        article.className = `acq-message acq-message--${kind}`;
+        article.innerHTML = `
+          <p class="acq-message__speaker">${speaker}</p>
+          <div class="acq-message__body">${html}</div>
+        `;
+        transcript.append(article);
+        transcript.scrollTo({ top: transcript.scrollHeight, behavior: 'smooth' });
+      };
+
+      const paragraphs = (items: string[]) => items.map((item) => `<p>${item}</p>`).join('');
+      const includesAny = (text: string, words: string[]) => words.some((word) => text.includes(word));
+
+      const inferSkill = () => {
+        const combined = state.moves.join(' ').toLowerCase();
+        if (includesAny(combined, ['commitment', 'pilot', 'proof', 'evidence', 'behavior', 'paid'])) {
+          return 'Commitment Calibration';
+        }
+        if (includesAny(combined, ['stakeholder', 'conflict', 'conversation', 'trust', 'procurement'])) {
+          return 'Stakeholder Tension Mapping';
+        }
+        if (includesAny(combined, ['system', 'workflow', 'incentive', 'constraint', 'process'])) {
+          return 'Workflow Reality Testing';
+        }
+        return 'Judgment Under Ambiguity';
+      };
+
+      const nextHostTurn = (raw: string) => {
+        const text = raw.toLowerCase();
+        state.moves.push(raw);
+        state.usedExternalHelp ||= includesAny(text, ['chatgpt', 'claude', 'perplexity', 'ai said', 'book', 'notes', 'cheat', 'asked']);
+
+        if (state.stage === 0) {
+          state.stage = 1;
+          host(paragraphs([
+            'Case 01.',
+            'A founder interviewed eight operations leads. Six said the AI training product was interesting. Nobody agreed to pilot.',
+            'The founder asks: "Should we ship and sell annual plans?" What do you do next?',
+          ]));
+          return;
+        }
+
+        if (state.stage === 1) {
+          state.stage = 2;
+          const grounded = includesAny(text, ['last', 'recent', 'specific', 'behavior', 'commitment', 'pilot', 'artifact', 'workflow']);
+          host(paragraphs([
+            grounded
+              ? 'You push past praise. The founder opens the notes.'
+              : 'You answer too quickly. The case adds friction.',
+            'New detail: onboarding fatigue appears three times. Compliance appears twice. One procurement intro went silent. The strongest quote came from a friend.',
+            'Is this validation? What changes in your judgment?',
+          ]));
+          return;
+        }
+
+        if (state.stage === 2) {
+          state.stage = 3;
+          const external = state.usedExternalHelp
+            ? 'You used outside intelligence. Did it sharpen your standard or just your wording?'
+            : 'You have not used outside resources yet. That is allowed, but this is designed to be open-book.';
+          host(paragraphs([
+            external,
+            'Procurement replies: send a security review and a mock workflow with real onboarding artifacts first. The team has no artifacts.',
+            'Name the hidden test. What is evidence, and what is theater?',
+          ]));
+          return;
+        }
+
+        if (state.stage === 3) {
+          state.stage = 4;
+          const skill = inferSkill();
+          state.namedSkill = skill;
+          host(paragraphs([
+            'The case is no longer about whether the idea is good.',
+            'It is about separating fluent momentum from costly commitment.',
+            `A skill is forming: <strong>${skill}</strong>.`,
+            'Make it reusable: "When I see ___, do ___ before I believe ___."',
+          ]));
+          return;
+        }
+
+        if (state.stage === 4) {
+          state.stage = 5;
+          const skill = state.namedSkill || inferSkill();
+          host(`
+            <p><strong>Acquired skill: ${skill}</strong></p>
+            <p>${escapeHtml(raw)}</p>
+            <p>This is not a completion badge. It is a judgment pattern from your casework.</p>
+            <p>Keep going to test it on a new variation.</p>
+          `);
+          return;
+        }
+
+        host(paragraphs([
+          'Variation: now the evidence is a polished AI market map with no buyer conversations.',
+          'Use the skill. What do you refuse to believe until someone pays a cost?',
+        ]));
+      };
+
+      form?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const value = input?.value.trim();
+        if (!value) return;
+        user(value);
+        if (input) input.value = '';
+        nextHostTurn(value);
+      });
+
+    }
+  </script>
+</Base>
+
+<style is:global>
+  .acq-chat {
+    min-height: calc(100vh - 4rem);
+    padding: 2.25rem 1.25rem 3rem;
+  }
+
+  .acq-chat__inner {
+    width: min(100%, 44rem);
+    margin-inline: auto;
+  }
+
+  .acq-chat__intro {
+    padding-bottom: 1.5rem;
+  }
+
+  .acq-chat__eyebrow,
+  .acq-message__speaker {
+    color: var(--color-faint);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .acq-chat__intro h1 {
+    margin-top: 0.75rem;
+    font-family: var(--font-serif);
+    font-size: clamp(2.65rem, 7vw, 5rem);
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 0.98;
+  }
+
+  .acq-chat__intro p:last-child {
+    max-width: 34rem;
+    margin-top: 0.95rem;
+    color: var(--color-soft);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .acq-dialog {
+    display: grid;
+    grid-template-rows: minmax(10rem, 1fr) auto;
+    height: min(34rem, calc(100vh - 14rem));
+    min-height: 24rem;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    background: var(--color-card);
+    box-shadow: 0 18px 48px rgb(12 10 9 / 0.05);
+  }
+
+  .acq-transcript {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.25rem 1.1rem 0;
+  }
+
+  .acq-message {
+    display: grid;
+    gap: 0.45rem;
+    border-bottom: 1px solid var(--color-line);
+    padding: 1rem 0;
+  }
+
+  .acq-message__body {
+    color: var(--color-ink);
+    font-size: 0.98rem;
+    line-height: 1.58;
+  }
+
+  .acq-message__body p + p {
+    margin-top: 0.72rem;
+  }
+
+  .acq-message--user .acq-message__body {
+    color: var(--color-soft);
+    white-space: pre-wrap;
+  }
+
+  .acq-message strong {
+    font-weight: 700;
+  }
+
+  .acq-compose {
+    display: grid;
+    gap: 0.65rem;
+    border-top: 1px solid var(--color-line);
+    background: var(--color-wash);
+    padding: 0.85rem 1.1rem 1rem;
+  }
+
+  .acq-compose textarea {
+    width: 100%;
+    min-height: 5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    background: var(--color-card);
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 1rem;
+    line-height: 1.55;
+    padding: 0.9rem;
+    resize: vertical;
+  }
+
+  .acq-compose textarea:focus {
+    border-color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px var(--color-ink);
+    outline: none;
+  }
+
+  .acq-compose__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+  }
+
+  .acq-compose button {
+    min-height: 2.45rem;
+    border: 1px solid var(--color-line);
+    border-radius: 9999px;
+    background: var(--color-card);
+    color: var(--color-ink);
+    font-size: 0.86rem;
+    font-weight: 800;
+    padding: 0 1rem;
+  }
+
+  .acq-compose button[type='submit'] {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: white;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 520px) {
+    .acq-chat {
+      padding: 1.4rem 0.75rem 2.5rem;
+    }
+
+    .acq-message__body {
+      font-size: 0.95rem;
+    }
+
+    .acq-dialog {
+      height: min(27rem, calc(100vh - 15rem));
+      min-height: 25rem;
+    }
+
+    .acq-transcript {
+      padding-inline: 0.9rem;
+    }
+
+    .acq-compose {
+      padding-inline: 0.9rem;
+    }
+  }
+</style>

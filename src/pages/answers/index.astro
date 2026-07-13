@@ -22,7 +22,7 @@ const faqs = [
   {
     question: 'What makes these answers different from normal book summaries?',
     answer:
-      'Each answer starts with a specific reader problem and then uses books as source material. The goal is a useful decision rule or next step, not a chapter-by-chapter summary.',
+      'Each answer is an agent-ready brief for a specific problem. It supplies an initial decision rule and source books; the installed skill uses your harness context to produce the final personalized digest.',
   },
   {
     question: 'How are answers chosen?',
@@ -40,9 +40,9 @@ const jsonLd = [
     '@type': 'CollectionPage',
     '@id': `${url}#webpage`,
     url,
-    name: 'Answer with Books guides',
+    name: 'Answer with Books briefs',
     description:
-      'Practical how-to guides that answer recurring internet questions with frameworks from books.',
+      'Agent-ready problem briefs grounded in source-book digests and designed for personalized advice.',
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
     mainEntity: { '@id': `${url}#itemlist` },
@@ -73,16 +73,15 @@ const jsonLd = [
 
 <Base
   title="Answers"
-  description="Real questions, answered with books: startup validation, team decisions, failed plans, pivots, and intuition — each answer grounded in distilled reading."
+  description="Real questions framed as agent-ready briefs, each grounded in source-book digests and ready for personalized advice."
   path="/answers/"
   jsonLd={jsonLd}
 >
   <section class="awb-section pt-16 pb-8">
-    <p class="awb-eyebrow">Insight library</p>
-    <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">Book-grounded insights</h1>
+    <p class="awb-eyebrow">Answer briefs</p>
+    <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">Problems, ready for your agent</h1>
     <p class="awb-copy mt-4 max-w-2xl">
-      Practical insights from recurring demand signals, grounded in one to three books from
-      <a href="/books/" class="text-accent underline underline-offset-4 decoration-1">the shelf</a>.
+      Each brief frames a recurring problem, supplies the strongest source books, and gives your agent a grounded starting point for advice that uses your context.
     </p>
   </section>
 
@@ -182,7 +181,7 @@ const jsonLd = [
     const count = root?.querySelector<HTMLElement>('[data-filter-count]');
     const empty = root?.querySelector<HTMLElement>('[data-filter-empty]');
     const items = Array.from(list?.querySelectorAll<HTMLElement>('[data-filter-item]') ?? []);
-    const pageSize = 8;
+    const pageSize = 9;
     let activeCategory = 'all';
     let currentPage = 1;
 

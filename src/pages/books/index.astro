@@ -17,12 +17,12 @@ const faqs = [
   {
     question: 'What is a source book on Answer with Books?',
     answer:
-      'A source book is a book distilled into ideas, frameworks, and use cases that can support practical answers.',
+      'A source book is an original, self-contained digest of the book’s central argument, useful models, evidence, common misreadings, and limits.',
   },
   {
     question: 'Does the public book page show the full book text?',
     answer:
-      'No. Public pages show distilled reader-facing notes. Heavier backend text can support matching and generation without becoming visible UI copy.',
+      'No. Public pages are original reader-facing digests, not reproductions of the book. They are designed to be useful on their own and to give an agent reliable source material for personalization.',
   },
   {
     question: 'How do books connect to answers?',
@@ -37,7 +37,7 @@ const jsonLd = [
     url,
     name: 'Answer with Books source library',
     description:
-      'A source library of books distilled into mental models, frameworks, and practical applications.',
+      'A source library of self-contained book digests designed for reading and agent-assisted application.',
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
     mainEntity: { '@id': `${url}#itemlist` },
@@ -68,7 +68,7 @@ const jsonLd = [
 
 <Base
   title="Books"
-  description="The shelf: every book on this site, distilled into mental models, frameworks, and the situations they're built for."
+  description="The shelf: self-contained book digests covering the argument, useful models, applications, misreadings, and limits."
   path="/books/"
   jsonLd={jsonLd}
 >
@@ -76,7 +76,7 @@ const jsonLd = [
     <p class="awb-eyebrow">Source library</p>
     <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">The shelf</h1>
     <p class="awb-copy mt-4 max-w-2xl">
-      Source books distilled into the ideas, frameworks, and situations where they are useful.
+      Self-contained digests of each book’s central argument, useful models, evidence, common misreadings, and limits.
     </p>
   </section>
 
@@ -111,6 +111,25 @@ const jsonLd = [
 
   <section class="awb-section pb-16 pt-2">
     <div class="grid items-stretch gap-4 md:grid-cols-2" data-filter-list>
+      <div class="h-full">
+        <button
+          type="button"
+          class="awb-card-link group h-full w-full p-4 text-left"
+          data-open-book-request
+          aria-haspopup="dialog"
+          aria-controls="book-request-dialog"
+        >
+          <span class="grid h-full grid-cols-[4.5rem_minmax(0,1fr)] gap-4 sm:grid-cols-[5rem_minmax(0,1fr)]">
+            <span class="book-request-cover" aria-hidden="true"><span>+</span></span>
+            <span class="flex min-w-0 flex-1 flex-col">
+              <span class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Can’t find it?</span>
+              <span class="mt-1 font-serif text-2xl leading-snug text-ink">Add a book</span>
+              <span class="mt-3 leading-relaxed text-soft">Request a book and help us decide what belongs on the shelf next.</span>
+              <span class="mt-auto pt-4 font-sans text-sm font-medium text-ink underline decoration-line underline-offset-4">Submit a book</span>
+            </span>
+          </span>
+        </button>
+      </div>
       {books.map((book) => (
         <div
           class="h-full"
@@ -147,9 +166,115 @@ const jsonLd = [
       </div>
     </div>
   </section>
+
+  <dialog id="book-request-dialog" class="book-request-dialog" data-book-request-dialog aria-labelledby="book-request-title">
+    <div class="book-request-dialog__panel">
+      <div class="flex items-start justify-between gap-5 border-b border-line p-5 sm:p-6">
+        <div>
+          <p class="awb-eyebrow">Add to the shelf</p>
+          <h2 id="book-request-title" class="mt-2 font-serif text-3xl leading-tight">Request a book</h2>
+          <p class="mt-2 max-w-md text-sm leading-relaxed text-soft">Tell us what is missing. We’ll review it for a future digest.</p>
+        </div>
+        <button type="button" class="book-request-dialog__close" data-close-book-request aria-label="Close book request">×</button>
+      </div>
+
+      <form class="grid gap-4 p-5 sm:p-6" data-book-request-form>
+        <label>
+          <span class="awb-eyebrow">Book title</span>
+          <input name="title" class="awb-input mt-2" maxlength="200" autocomplete="off" required />
+        </label>
+        <label>
+          <span class="awb-eyebrow">Author</span>
+          <input name="author" class="awb-input mt-2" maxlength="200" autocomplete="off" required />
+        </label>
+        <label>
+          <span class="awb-eyebrow">Why should we add it? <span class="normal-case tracking-normal text-faint">(optional)</span></span>
+          <textarea name="note" class="awb-input mt-2 min-h-24 resize-y" maxlength="1000" rows="3"></textarea>
+        </label>
+        <label>
+          <span class="awb-eyebrow">Email <span class="normal-case tracking-normal text-faint">(optional)</span></span>
+          <input name="email" type="email" class="awb-input mt-2" maxlength="320" autocomplete="email" />
+        </label>
+        <label class="book-request-trap" aria-hidden="true">
+          <span>Website</span>
+          <input name="website" tabindex="-1" autocomplete="off" />
+        </label>
+        <div class="flex flex-wrap items-center gap-3 border-t border-line pt-5">
+          <button type="submit" class="awb-pill awb-pill-primary cursor-pointer" data-book-request-submit>Submit request</button>
+          <button type="button" class="awb-pill awb-pill-outline cursor-pointer" data-close-book-request>Cancel</button>
+        </div>
+        <p class="hidden text-sm leading-relaxed text-soft" role="status" aria-live="polite" data-book-request-status></p>
+      </form>
+    </div>
+  </dialog>
   <FaqList items={faqs} eyebrow="Book library Q&A" title="How the source shelf works" width="wide" />
 
   <script>
+    import { supabase } from '../../lib/supabase';
+
+    const requestDialog = document.querySelector<HTMLDialogElement>('[data-book-request-dialog]');
+    const requestForm = document.querySelector<HTMLFormElement>('[data-book-request-form]');
+    const requestStatus = document.querySelector<HTMLElement>('[data-book-request-status]');
+    const requestSubmit = document.querySelector<HTMLButtonElement>('[data-book-request-submit]');
+    const requestEmail = requestForm?.querySelector<HTMLInputElement>('input[name="email"]');
+
+    document.querySelector<HTMLButtonElement>('[data-open-book-request]')?.addEventListener('click', async () => {
+      requestStatus?.classList.add('hidden');
+      if (requestEmail && !requestEmail.value) {
+        const { data } = await supabase.auth.getSession();
+        requestEmail.value = data.session?.user.email ?? '';
+      }
+      requestDialog?.showModal();
+      requestForm?.querySelector<HTMLInputElement>('input[name="title"]')?.focus();
+    });
+
+    for (const close of document.querySelectorAll<HTMLButtonElement>('[data-close-book-request]')) {
+      close.addEventListener('click', () => requestDialog?.close());
+    }
+
+    requestDialog?.addEventListener('click', (event) => {
+      if (event.target === requestDialog) requestDialog.close();
+    });
+
+    requestForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(requestForm);
+      if (String(formData.get('website') ?? '').trim()) return;
+
+      const title = String(formData.get('title') ?? '').trim();
+      const author = String(formData.get('author') ?? '').trim();
+      if (!title || !author) return;
+
+      if (requestSubmit) {
+        requestSubmit.disabled = true;
+        requestSubmit.textContent = 'Submitting…';
+      }
+      if (requestStatus) {
+        requestStatus.textContent = 'Sending your request…';
+        requestStatus.classList.remove('hidden');
+      }
+
+      const { error } = await supabase.from('book_requests').insert({
+        title,
+        author,
+        note: String(formData.get('note') ?? '').trim(),
+        requester_email: String(formData.get('email') ?? '').trim() || null,
+        source_path: window.location.pathname,
+      });
+
+      if (requestSubmit) {
+        requestSubmit.disabled = false;
+        requestSubmit.textContent = 'Submit request';
+      }
+      if (requestStatus) {
+        requestStatus.textContent = error
+          ? 'We couldn’t submit that request. Please try again.'
+          : 'Request received. We’ll review it for the shelf.';
+        requestStatus.classList.remove('hidden');
+      }
+      if (!error) requestForm.reset();
+    });
+
     const root = document.querySelector<HTMLElement>('[data-library-filter]');
     const list = document.querySelector<HTMLElement>('[data-filter-list]');
     const search = root?.querySelector<HTMLInputElement>('[data-filter-search]');
@@ -211,4 +336,80 @@ const jsonLd = [
     });
     render();
   </script>
+
+  <style>
+    .book-request-cover {
+      align-items: center;
+      aspect-ratio: 2 / 3;
+      background: var(--color-wash);
+      border: 1px dashed color-mix(in srgb, var(--color-ink) 34%, var(--color-line));
+      border-radius: 8px;
+      color: var(--color-soft);
+      display: flex;
+      justify-content: center;
+      width: 4rem;
+    }
+
+    .book-request-cover span {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .book-request-dialog {
+      background: transparent;
+      border: 0;
+      color: var(--color-ink);
+      margin: auto;
+      max-height: calc(100dvh - 2rem);
+      max-width: min(34rem, calc(100vw - 2rem));
+      padding: 0;
+      width: 100%;
+    }
+
+    .book-request-dialog::backdrop {
+      background: rgb(12 10 9 / 0.54);
+      backdrop-filter: blur(3px);
+    }
+
+    .book-request-dialog__panel {
+      background: var(--color-card);
+      border: 1px solid var(--color-line);
+      border-radius: 18px;
+      box-shadow: 0 28px 80px rgb(12 10 9 / 0.24);
+      max-height: calc(100dvh - 2rem);
+      overflow-y: auto;
+    }
+
+    .book-request-dialog__close {
+      align-items: center;
+      background: transparent;
+      border: 1px solid var(--color-line);
+      border-radius: 999px;
+      color: var(--color-soft);
+      display: inline-flex;
+      flex: 0 0 auto;
+      font-family: var(--font-sans);
+      font-size: 1.25rem;
+      height: 2.25rem;
+      justify-content: center;
+      line-height: 1;
+      width: 2.25rem;
+    }
+
+    .book-request-dialog__close:hover {
+      border-color: var(--color-ink);
+      color: var(--color-ink);
+    }
+
+    .book-request-trap {
+      left: -10000px;
+      position: absolute;
+    }
+
+    @media (min-width: 640px) {
+      .book-request-cover { width: 5rem; }
+    }
+  </style>
 </Base>

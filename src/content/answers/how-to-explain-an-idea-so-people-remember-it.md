@@ -1,79 +1,91 @@
 ---
 question: "How to explain an idea so people remember it"
-description: "When people understand your product only after a long explanation, the idea is not packaged yet. Made to Stick shows how to find the core, make it concrete, and turn explanation into recall."
+description: "Make an idea portable by choosing its decision-relevant core, exposing a meaningful gap, making the mechanism concrete, and testing independent retellings."
 books: ["made-to-stick", "the-wisdom-of-crowds"]
 date: 2026-06-17
 featured: false
 tags: ["communication", "marketing", "positioning"]
 ---
 
-The demand signal is not subtle: founders know what they are building but cannot explain it, explainer videos look polished but do not explain the product, and product marketers argue whether the problem is positioning, ICP, or channel execution.
+When people understand an idea only while you are explaining it, the problem is not recall alone. They may have followed each sentence without identifying which claim should organize the rest. Once your sequence and slides disappear, they cannot reconstruct the meaning or use it in a decision.
 
-That is usually a packaging problem. The idea may be real, but it has not been made portable.
+A memorable explanation gives the audience a compact core, then enough causal and concrete structure to recover the larger idea. It earns attention by revealing a gap in the audience’s current model, establishes why the claim is credible and consequential, and provides a scene or story that lets the idea be mentally simulated.
 
-## Start with the Curse of Knowledge
+[*Made to Stick*](/books/made-to-stick/) supplies those design principles. [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) adds an important testing condition: collect interpretations independently before discussion allows one confident person to shape everyone else’s restatement.
 
-Chip Heath and Dan Heath's [*Made to Stick*](/books/made-to-stick/) begins with the trap experts fall into: once you know something, it is hard to remember what it felt like not to know it.
+## The Curse of Knowledge makes experts start too late
 
-That is why product explanations often start too late:
+Once a person knows a system well, its concepts become compressed. Terms that once required explanation now feel self-evident, and intermediate reasoning disappears into expertise. The speaker begins with categories, architecture, or distinctions the audience does not yet possess.
 
-- They name the category before the pain.
-- They describe features before the job.
-- They use internal distinctions customers do not have.
-- They explain the system instead of the moment when someone needs it.
+The Heath brothers call this the Curse of Knowledge. It cannot be solved by deciding to “be clearer” because the missing context has become difficult for the expert to see. The repair is to reconstruct the audience’s starting model. What do they already believe happens? Which event makes the idea relevant? What do they need to decide or do differently?
 
-The fix is to start where the listener starts.
+Begin at the point where the existing model fails. Naming every feature or premise before the audience knows why it matters increases cognitive load without creating a structure for remembering it. The opening should establish a recognizable situation and the important thing people currently misunderstand about it.
 
-## Find the core
+This does not require pretending the audience knows nothing. Different audiences need different starting points. A useful explanation preserves the same core while changing which background can be assumed and which evidence makes the claim credible.
 
-Do not ask, "What are all the things this product does?" Ask, "What is the one thing someone must remember?"
+## Simplicity is a hierarchy, not a word limit
 
-Examples:
+The core is the single claim that should survive if everything else is forgotten. Finding it requires exclusion: which idea governs the audience’s next interpretation or choice, and which true details can wait?
 
-- Not: "An AI-powered research and synthesis platform."
-- Better: "Find the questions buyers are already asking, then publish the answer they should find."
-- Not: "A comprehensive A2A and MCP marketplace."
-- Better: "A catalog that helps builders find the right agent capability without reading every protocol thread."
+In *Made to Stick*, Southwest Airlines’ low-fare identity functions as a core because it helps reject attractive options that would undermine the strategy. The phrase is valuable not because it is short but because it carries a decision rule. A memorable idea should do the same. If the audience repeats the sentence but cannot use it, the explanation has produced a slogan rather than a core.
 
-The better version may be less complete. That is the point. Completeness is not the same as recall.
+Place supporting detail in a hierarchy. The core states what matters. The mechanism explains why it is true. Evidence establishes when to believe it. Examples show what it looks like. Qualifications describe where the claim changes. When all five receive equal prominence, the audience must build the hierarchy itself.
 
-## Make it concrete
+Compact language helps transmission, but it should not remove the mechanism. “Focus on value” is short and empty. A stronger core names the causal distinction that changes behavior, such as why more activity can reduce learning or why independent judgments should be collected before group discussion.
 
-Abstract: "We improve workflow visibility."
+<figure class="awb-line-illustration" aria-labelledby="idea-transmission-caption">
+  <svg viewBox="0 0 720 180" role="img" aria-label="An expert idea is distilled to a core, supported by mechanism and evidence, then tested through independent retellings">
+    <rect x="38" y="48" width="150" height="82" rx="12" class="awb-line-illustration__box" />
+    <rect x="285" y="48" width="150" height="82" rx="12" class="awb-line-illustration__box" />
+    <rect x="532" y="48" width="150" height="82" rx="12" class="awb-line-illustration__box" />
+    <path d="M188 89 H285 M435 89 H532" class="awb-line-illustration__line" />
+    <text x="113" y="80" text-anchor="middle" class="awb-line-illustration__label">Expert model</text>
+    <text x="113" y="102" text-anchor="middle">too much is implicit</text>
+    <text x="360" y="75" text-anchor="middle" class="awb-line-illustration__label">Portable idea</text>
+    <text x="360" y="98" text-anchor="middle">core + mechanism</text>
+    <text x="360" y="116" text-anchor="middle">evidence + example</text>
+    <text x="607" y="80" text-anchor="middle" class="awb-line-illustration__label">Independent recall</text>
+    <text x="607" y="102" text-anchor="middle">same meaning returns</text>
+  </svg>
+  <figcaption id="idea-transmission-caption">The test is not whether the explanation sounded good, but whether its meaning survives without the explainer.</figcaption>
+</figure>
 
-Concrete: "When a podcast episode goes live, you know where it appeared, whether you followed up, and which guest produced pipeline."
+## Surprise works when it reveals a gap the idea can close
 
-Abstract: "We help travelers understand China."
+Attention follows violated expectations. A useful explanation first makes the common expectation visible, then shows the observation it cannot explain. The audience becomes curious because it can feel the incompleteness of its model.
 
-Concrete: "Before you land, you know which apps to install, how to pay, how to ask for help, and what will not work like it does at home."
+Unexpectedness without resolution becomes a hook detached from the idea. The surprise should direct attention toward the mechanism, not merely increase arousal. After the explanation, the result should seem understandable under a better model rather than remain a disconnected fact.
 
-Concrete ideas travel because people can picture them.
+A practical opening therefore has three moves in prose: here is what people normally assume; here is where that assumption predicts the wrong outcome; here is the mechanism that accounts for the difference. This structure earns attention while preserving intellectual honesty.
 
-## Test repeatability
+Do not overstate the contradiction. If the new claim applies only under particular conditions, name them. A dramatic universal statement may be more repeatable while teaching the wrong idea.
 
-James Surowiecki's [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) adds a useful test: do not rely on one person's reaction. Collect independent restatements.
+## Concreteness gives different minds the same object
 
-Show the explanation to five target users separately. Ask each to explain it back in one sentence. If their versions diverge wildly, your message is not stable yet. If they repeat the wrong part, your emphasis is wrong. If they can tell a friend what it does, you are close.
+Abstract terms allow silent disagreement. Two people can endorse “better alignment” or “customer centricity” while imagining incompatible behaviors. A concrete explanation supplies a shared event, object, sequence, or observable outcome.
 
-## A simple packaging workflow
+The point is not to decorate an abstraction with sensory language. The concrete detail should carry the causal structure. Describe what happens first, what changes, which constraint appears, and what someone can observe afterward. A well-chosen scene lets the listener mentally run the idea and recognize it later.
 
-1. Write the user's painful moment.
-2. Write the one sentence they should remember.
-3. Replace abstract nouns with a concrete scene.
-4. Add one example before adding feature detail.
-5. Ask five people to explain it back.
-6. Keep the version that survives independent retelling.
+Stories are particularly useful when action unfolds through decisions and consequences. They can simulate what to notice and how to respond. But a vivid story can overpower the general claim or imply more evidence than one case supports. State what the example demonstrates and where the broader evidence comes from.
 
-The goal is not to make the idea smaller. It is to make the handle smaller, so the full idea can be picked up.
+Credibility should also be made concrete. Translate statistics into a scale the audience can grasp, connect claims to inspectable evidence, and distinguish an authoritative source from a source with direct experience. The aim is not the appearance of specificity; it is to make the basis of belief recoverable.
 
-## Why this matters now
+## Emotion should reveal the stakes already present
 
-A confusing idea usually fails before anyone reaches the nuance. People do not reject it after careful analysis; they forget it, misrepeat it, or remember the least important part. That is especially costly for products, essays, launches, and internal strategy because distribution depends on other people being able to carry the idea accurately.
+An idea can be understood and believed without changing action. Emotion connects it to something the audience values: identity, responsibility, a person affected, an avoided loss, or a desired capability.
 
-[*Made to Stick*](/books/made-to-stick/) supplies the packaging discipline: find the core, make it concrete, and give the listener a handle. [*The Wisdom of Crowds*](/books/the-wisdom-of-crowds/) supplies the test: do not trust one reaction. See whether independent people repeat the same meaning back.
+The ethical constraint is that emotion should make real stakes perceptible rather than manufacture urgency. Fear and outrage make false ideas memorable too. If the emotional frame disappears when the evidence is stated plainly, it is probably carrying more of the argument than it should.
 
-## How to use this answer
+Ask what becomes possible, costly, or irreversible if the claim is true. A specific consequence is usually stronger than insisting that the topic is important. The audience should know not only what to remember but when the memory should become relevant.
 
-Take the thing you are explaining and reduce it to one memorable sentence plus one concrete example. Show it to five people separately, ask them to explain it back, and keep revising until the version that comes back is the version you meant to send.
+## The next test is five independent retellings
 
-The goal is not clever copy. It is transmission: the idea should survive being carried by someone who is not you.
+Asking “Does that make sense?” produces weak evidence because people can recognize an explanation without being able to reconstruct it. Ask target readers or listeners separately to explain the idea in their own words and say what they would do differently because of it.
+
+Surowiecki’s conditions for collective intelligence explain why independence matters. If participants hear one another first, early phrasing and confident voices can create artificial agreement. Private restatements preserve different interpretations long enough to show whether the message itself produced convergence.
+
+Compare the returned versions. If people preserve the same core in different words, the idea is portable. If they remember the example but not the mechanism, the example is too dominant. If each person recalls a different feature, the hierarchy is unclear. If they repeat the sentence but infer incompatible actions, the core lacks a decision consequence.
+
+Revise the explanation around the transmission failure rather than adding more detail everywhere. Sharpen the core, move the audience’s starting point earlier, replace an abstraction with a causal scene, or clarify the evidence and boundary. Then test again with new people who have not heard the prior discussion.
+
+The standard is not cleverness or perfect verbatim recall. A successful explanation lets someone who is not you recover the important claim, explain why it is true, recognize when it applies, and carry it into a decision without needing your original sequence beside them.

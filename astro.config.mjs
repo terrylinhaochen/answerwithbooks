@@ -10,6 +10,8 @@ const utilityPaths = [
   '/onboarding/start/',
   '/upload/',
   '/community/',
+  '/acquired-intelligence/',
+  '/ask/',
   '/404/',
 ];
 
@@ -18,6 +20,7 @@ export default defineConfig({
   site: 'https://answerwithbooks.com',
   base: '/',
   output: 'static',
+  devToolbar: { enabled: false },
   trailingSlash: 'always',
   redirects: {
     '/answers/how-do-i-know-if-my-startup-idea-is-any-good/':

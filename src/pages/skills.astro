@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import FaqList from '../components/FaqList.astro';
+import { faqJsonLd } from '../lib/seo';
+
+const installCommand = 'npx answer-with-books install --skill --api';
+const description = 'Install the Answer with Books agent skill and give your AI a problem-first, book-grounded shelf it can call while you work.';
+const faqs = [
+  {
+    question: 'What does the Answer with Books skill do?',
+    answer: 'It retrieves the closest published answers and relevant source books for a live question, then helps the agent adapt those lenses to the user’s context.',
+  },
+  {
+    question: 'Does the skill return book summaries?',
+    answer: 'No. Its intended output is a diagnosis, decision rule, next move, boundary, and compact source note for the problem at hand.',
+  },
+  {
+    question: 'What happens when the shelf has no strong answer?',
+    answer: 'The skill records a new question and answers only from sufficiently relevant books. It does not pretend that a weak article match is already a published answer.',
+  },
+];
+const jsonLd = [
+  {
+    '@type': 'SoftwareApplication',
+    '@id': 'https://answerwithbooks.com/skills/#agent-skill',
+    name: 'Answer with Books agent skill',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Any environment with Node.js and an agent that supports skills',
+    description,
+    url: 'https://answerwithbooks.com/skills/',
+  },
+  faqJsonLd('https://answerwithbooks.com/skills/', faqs),
+];
+---
+
+<Base title="Skills" description={description} path="/skills/" jsonLd={jsonLd}>
+  <section class="awb-section py-14 sm:py-16">
+    <div class="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(24rem,1.15fr)] lg:items-center">
+      <div>
+        <p class="awb-eyebrow">Skills</p>
+        <h1 class="mt-3 max-w-2xl font-serif text-5xl leading-[1.04] sm:text-6xl">Give your agent a shelf it can call.</h1>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed text-soft">
+          Bring a live problem. The skill retrieves the strongest published answer, adds the book lenses that fit, and stays honest when the shelf has a gap.
+        </p>
+      </div>
+      <div class="awb-panel min-w-0 overflow-hidden p-5 sm:p-7">
+        <p class="awb-eyebrow">Install the agent skill</p>
+        <div class="mt-5 rounded-2xl border border-ink/10 bg-ink p-2 shadow-sm">
+          <div class="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
+            <pre class="min-w-0 max-w-full flex-1 overflow-x-auto px-3 py-3 font-sans text-[0.88rem] leading-relaxed text-white"><code class="whitespace-nowrap"><span class="select-none text-white/45">$ </span><span data-skill-command>{installCommand}</span></code></pre>
+            <button type="button" class="min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-4 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-white hover:bg-white hover:text-ink sm:w-auto" data-copy-skill>Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="awb-section pb-16">
+    <p class="awb-eyebrow mb-5">Every answer includes</p>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {[
+        ['Diagnosis', 'Name the mechanism underneath the user’s specific situation.'],
+        ['Decision rule', 'State the observable condition that changes what to do.'],
+        ['Next move', 'Produce one small action or artifact the user can inspect.'],
+        ['Boundary', 'Say where the book lens breaks or what evidence would change the answer.'],
+      ].map(([title, body]) => (
+        <article class="awb-card-link p-5">
+          <h2 class="font-serif text-2xl leading-tight">{title}</h2>
+          <p class="mt-3 text-sm leading-relaxed text-soft">{body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <FaqList items={faqs} eyebrow="Skills Q&A" title="How the skill works" width="wide" />
+
+  <script>
+    const button = document.querySelector<HTMLButtonElement>('[data-copy-skill]');
+    const command = document.querySelector<HTMLElement>('[data-skill-command]');
+    button?.addEventListener('click', async () => {
+      if (!command) return;
+      await navigator.clipboard.writeText(command.textContent ?? '');
+      button.textContent = 'Copied';
+      window.setTimeout(() => { button.textContent = 'Copy'; }, 1800);
+    });
+  </script>
+</Base>

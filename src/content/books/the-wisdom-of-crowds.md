@@ -71,14 +71,20 @@ A practical use of this book has three steps. First, name the current pattern in
 
 On this site, the book is connected to questions such as "How to explain an idea so people remember it", "How to keep a smart team from making a dumb decision", "How to make a plan that survives contact with reality". Those links are the best way to see the lens in use: the book becomes practical when it is attached to a real problem.
 
-## When this lens breaks
+## A crowd is only as wise as its information structure
 
 The lens breaks when it is treated as a universal rule. The Wisdom of Crowds is strongest for collective intelligence, decision making, and markets, but it should not replace direct evidence from the situation in front of you. A book can sharpen judgment; it cannot remove the need to inspect the actual constraints.
 
 It also breaks when the reader uses the language of the book as decoration. If the idea does not change the next question, the next test, or the next conversation, it has become vocabulary rather than judgment. The standard for this shelf is practical transfer: can the idea help someone make a better move today?
 
-## Best paired with
+The book’s central test is structural. Before trusting a collective answer, inspect where information came from, whether judgments formed independently, which local knowledge remains available, and how inputs become an output. Counting more voices does not repair correlated evidence or a process that rewards conformity. Wisdom is an achievement of design, not a property of a large group.
 
-Pair The Wisdom of Crowds with [*Thinking, Fast and Slow*](/books/thinking-fast-and-slow/) when the question needs more than one lens. One book can name the central pattern; a second book can supply the counterweight, the operating detail, or the human constraint that keeps the answer from becoming too neat.
+## Aggregation mechanisms embed values as well as information
 
-That pairing is also useful for AI and agent workflows. A single book can overfit the answer to one worldview. A small shelf of related books gives the agent enough contrast to explain the tradeoff, cite the source lens, and still return a practical next step.
+A market, vote, average, jury, and deliberating committee do not merely combine the same inputs in different ways. Each defines who participates, what influence means, which information is expressible, and what outcome counts. Choosing an aggregation rule is therefore part of the substantive decision, not a neutral technical step.
+
+Prices can combine dispersed beliefs and incentives efficiently while excluding needs that lack purchasing power and external costs that never enter the transaction. Voting gives participants formal equality while compressing intensity, information, and minority risk into a rule for counting. An average uses all numeric inputs but can be distorted by extremes; a median is robust to extremes while discarding information about magnitude.
+
+The mechanism should match the question. Forecasts may benefit from independent probabilities or estimates. Complex value conflicts require deliberation and legitimate authority, not only prediction accuracy. Safety decisions may need vetoes or thresholds because the cost of one kind of error is asymmetric.
+
+Surowiecki’s four conditions remain necessary but not sufficient for a just decision. A crowd can accurately predict an outcome without having the right to impose it, and a legitimate democratic choice can remain factually mistaken. Good design separates epistemic questions—what is likely true—from normative and governance questions—what should be done and who may decide—then chooses a process capable of carrying each.
