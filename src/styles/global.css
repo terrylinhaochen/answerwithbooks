@@ -568,8 +568,44 @@ h3,
   text-align: center;
 }
 
+.digest-illustration {
+  margin: 2rem 0 2.25rem;
+  border: 1px solid var(--color-line);
+  border-radius: 1.25rem;
+  background: var(--color-wash);
+  padding: 1.25rem 1.25rem 1rem;
+}
+.digest-illustration svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  color: var(--color-faint);
+}
+.digest-illustration rect,
+.digest-illustration circle,
+.digest-illustration ellipse {
+  fill: var(--color-card);
+  stroke: var(--color-line);
+}
+.digest-illustration text {
+  fill: var(--color-ink);
+  font-family: var(--font-sans);
+}
+.digest-illustration figcaption {
+  margin-top: 0.5rem;
+  color: var(--color-soft);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 @media (max-width: 639px) {
   .awb-line-illustration {
+    padding-inline: 0.75rem;
+  }
+  .digest-illustration {
     padding-inline: 0.75rem;
   }
   .awb-line-illustration text {

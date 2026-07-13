@@ -224,6 +224,21 @@ async function testIllustrationContrast(page) {
   assert.ok(colors.box, 'illustration box should have a computed fill');
   assert.ok(colors.label, 'illustration label should have a computed fill');
   assert.notEqual(colors.box, colors.label, 'illustration labels should contrast with their boxes');
+
+  await page.goto('/books/good-strategy-bad-strategy/', { waitUntil: 'domcontentloaded' });
+  const bookColors = await page.locator('.digest-illustration').evaluate((figure) => {
+    const box = figure.querySelector('rect');
+    const label = figure.querySelector('text');
+    return {
+      background: getComputedStyle(figure).backgroundColor,
+      box: box ? getComputedStyle(box).fill : '',
+      label: label ? getComputedStyle(label).fill : '',
+    };
+  });
+  assert.ok(bookColors.background, 'book illustration should have a computed background');
+  assert.ok(bookColors.box, 'book illustration box should have a computed fill');
+  assert.ok(bookColors.label, 'book illustration label should have a computed fill');
+  assert.notEqual(bookColors.box, bookColors.label, 'book illustration labels should contrast with their boxes');
 }
 
 async function testAuthRedirects(page) {
