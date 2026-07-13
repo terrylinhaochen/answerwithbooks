@@ -113,6 +113,16 @@ async function testFilters(page) {
   await expectText(page.locator('[data-filter-empty]'), /No insights match/);
 
   await page.goto('/books/', { waitUntil: 'domcontentloaded' });
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
+  assert.equal(await page.locator('[data-book-request-card]').isVisible(), true);
+  await page.locator('[data-pagination-next]').click();
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), 10);
+  assert.equal(await page.locator('[data-book-request-card]').isVisible(), false);
+  await page.locator('[data-pagination-next]').click();
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), 2);
+  assert.equal(await page.locator('[data-book-request-card]').isVisible(), false);
+  await page.locator('[data-pagination-prev]').click();
+  await page.locator('[data-pagination-prev]').click();
   await page.locator('[data-filter-search]').fill('deep work');
   await expectText(page.locator('[data-filter-count]'), /1 book/);
   await assertVisibleText(page, '[data-filter-list]', 'Deep Work');

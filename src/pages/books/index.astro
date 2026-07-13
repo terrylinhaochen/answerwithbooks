@@ -111,7 +111,7 @@ const jsonLd = [
 
   <section class="awb-section pb-16 pt-2">
     <div class="grid items-stretch gap-4 md:grid-cols-2" data-filter-list>
-      <div class="h-full">
+      <div class="h-full" data-book-request-card>
         <button
           type="button"
           class="awb-card-link group h-full w-full p-4 text-left"
@@ -282,6 +282,7 @@ const jsonLd = [
     const count = root?.querySelector<HTMLElement>('[data-filter-count]');
     const items = Array.from(list?.querySelectorAll<HTMLElement>('[data-filter-item]') ?? []);
     const pageSize = 10;
+    const firstPageBookCount = pageSize - 1;
     let currentPage = 1;
 
     const pagination = document.querySelector<HTMLElement>('[data-pagination]');
@@ -289,6 +290,7 @@ const jsonLd = [
     const paginationPage = pagination?.querySelector<HTMLElement>('[data-pagination-page]');
     const previous = pagination?.querySelector<HTMLButtonElement>('[data-pagination-prev]');
     const next = pagination?.querySelector<HTMLButtonElement>('[data-pagination-next]');
+    const requestCard = list?.querySelector<HTMLElement>('[data-book-request-card]');
 
     const render = () => {
       const query = search?.value.trim().toLowerCase() ?? '';
@@ -300,13 +302,15 @@ const jsonLd = [
         return Boolean(matchesCategory && matchesQuery);
       });
       const total = matches.length;
-      const pageCount = Math.max(1, Math.ceil(total / pageSize));
+      const pageCount = Math.max(1, Math.ceil((total + 1) / pageSize));
       currentPage = Math.min(currentPage, pageCount);
-      const start = total === 0 ? 0 : (currentPage - 1) * pageSize;
-      const end = Math.min(start + pageSize, total);
+      const start = total === 0 ? 0 : currentPage === 1 ? 0 : firstPageBookCount + (currentPage - 2) * pageSize;
+      const booksOnPage = currentPage === 1 ? firstPageBookCount : pageSize;
+      const end = Math.min(start + booksOnPage, total);
       const pageItems = new Set(matches.slice(start, end));
 
       for (const item of items) item.hidden = !pageItems.has(item);
+      if (requestCard) requestCard.hidden = currentPage !== 1;
 
       if (count) count.textContent = `${total} book${total === 1 ? '' : 's'}`;
       if (pagination) pagination.hidden = total <= pageSize;
