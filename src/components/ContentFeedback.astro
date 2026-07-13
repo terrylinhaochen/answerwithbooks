@@ -1,0 +1,123 @@
+---
+interface Props {
+  contentType: 'book' | 'answer';
+  contentSlug: string;
+  contentTitle: string;
+}
+
+const { contentType, contentSlug, contentTitle } = Astro.props;
+---
+
+<section
+  class="awb-panel mt-10 p-5 sm:p-6"
+  data-content-feedback
+  data-content-type={contentType}
+  data-content-slug={contentSlug}
+  data-content-title={contentTitle}
+>
+  <div class="grid gap-5 lg:grid-cols-[minmax(0,0.7fr)_minmax(18rem,1.3fr)] lg:items-start">
+    <div>
+      <p class="awb-eyebrow">Feedback</p>
+      <h2 class="mt-2 font-serif text-3xl leading-tight">Was this useful?</h2>
+      <p class="mt-2 text-sm leading-relaxed text-soft">A quick note helps us make the shelf more useful.</p>
+    </div>
+
+    <form class="grid gap-4" data-feedback-form>
+      <input type="hidden" name="sentiment" value="" />
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Was this content useful?">
+        <button type="button" class="awb-pill awb-pill-outline cursor-pointer" data-feedback-choice="helpful" aria-pressed="false">Yes</button>
+        <button type="button" class="awb-pill awb-pill-outline cursor-pointer" data-feedback-choice="not_helpful" aria-pressed="false">Not yet</button>
+      </div>
+      <label>
+        <span class="sr-only">What was useful or missing?</span>
+        <textarea
+          name="comment"
+          class="awb-input min-h-20 resize-y"
+          rows="2"
+          maxlength="2000"
+          placeholder="What was useful or missing? (optional)"
+        ></textarea>
+      </label>
+      <label class="content-feedback__trap" aria-hidden="true">
+        <span>Website</span>
+        <input name="website" tabindex="-1" autocomplete="off" />
+      </label>
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="submit" class="awb-pill awb-pill-primary cursor-pointer" data-feedback-submit disabled>Submit feedback</button>
+        <p class="hidden text-sm text-soft" role="status" aria-live="polite" data-feedback-status></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-content-feedback]')) {
+    const form = root.querySelector<HTMLFormElement>('[data-feedback-form]');
+    const sentiment = form?.querySelector<HTMLInputElement>('input[name="sentiment"]');
+    const submit = form?.querySelector<HTMLButtonElement>('[data-feedback-submit]');
+    const status = form?.querySelector<HTMLElement>('[data-feedback-status]');
+    const choices = Array.from(form?.querySelectorAll<HTMLButtonElement>('[data-feedback-choice]') ?? []);
+
+    for (const choice of choices) {
+      choice.addEventListener('click', () => {
+        if (sentiment) sentiment.value = choice.dataset.feedbackChoice ?? '';
+        if (submit) submit.disabled = !sentiment?.value;
+        for (const button of choices) {
+          const active = button === choice;
+          button.setAttribute('aria-pressed', String(active));
+          button.classList.toggle('awb-pill-primary', active);
+          button.classList.toggle('awb-pill-outline', !active);
+        }
+      });
+    }
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      if (String(formData.get('website') ?? '').trim()) return;
+      const selected = String(formData.get('sentiment') ?? '').trim();
+      if (!selected) return;
+
+      if (submit) {
+        submit.disabled = true;
+        submit.textContent = 'Submitting…';
+      }
+      if (status) {
+        status.textContent = 'Sending…';
+        status.classList.remove('hidden');
+      }
+
+      const { error } = await supabase.from('content_feedback').insert({
+        content_type: root.dataset.contentType,
+        content_slug: root.dataset.contentSlug,
+        content_title: root.dataset.contentTitle,
+        sentiment: selected,
+        comment: String(formData.get('comment') ?? '').trim(),
+        source_path: window.location.pathname,
+      });
+
+      if (submit) {
+        submit.textContent = error ? 'Try again' : 'Feedback sent';
+        submit.disabled = !error;
+      }
+      if (status) {
+        status.textContent = error ? 'We couldn’t send that. Please try again.' : 'Thank you — this helps improve the shelf.';
+        status.classList.remove('hidden');
+      }
+    });
+  }
+</script>
+
+<style>
+  [data-feedback-submit]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .content-feedback__trap {
+    left: -10000px;
+    position: absolute;
+  }
+</style>

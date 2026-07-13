@@ -7,6 +7,7 @@ import AgentDigestHandoff from '../../components/AgentDigestHandoff.astro';
 import AnswerCover from '../../components/AnswerCover.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookCover from '../../components/BookCover.astro';
+import ContentFeedback from '../../components/ContentFeedback.astro';
 import FaqList from '../../components/FaqList.astro';
 import { topicsForTags } from '../../lib/topics';
 import { compactDescription, compactList, faqJsonLd } from '../../lib/seo';
@@ -169,13 +170,6 @@ const jsonLd = [
           >
             Save answer
           </button>
-          <button
-            type="button"
-            data-like-answer={answer.id}
-            class="awb-pill awb-pill-outline cursor-pointer"
-          >
-            Mark helpful
-          </button>
           {topics.map((topic) => (
             <a
               href={`/topics/${topic.slug}/`}
@@ -240,6 +234,8 @@ const jsonLd = [
         <Content />
       </div>
     </details>
+
+    <ContentFeedback contentType="answer" contentSlug={answer.id} contentTitle={answer.data.question} />
   </article>
 
   <FaqList items={faqs} eyebrow="Answer brief Q&A" title="How to use this brief" width="medium" />
@@ -262,7 +258,7 @@ const jsonLd = [
   }
 
   <script>
-    import { LIKED_ANSWERS_KEY, SAVED_ANSWERS_KEY, readJson, toggleId } from '../../lib/user-library';
+    import { SAVED_ANSWERS_KEY, readJson, toggleId } from '../../lib/user-library';
 
     const wireToggle = (selector: string, key: string, offText: string, onText: string) => {
       const button = document.querySelector<HTMLButtonElement>(selector);
@@ -285,6 +281,5 @@ const jsonLd = [
     };
 
     wireToggle('[data-save-answer]', SAVED_ANSWERS_KEY, 'Save answer', 'Saved - remove');
-    wireToggle('[data-like-answer]', LIKED_ANSWERS_KEY, 'Mark helpful', 'Helpful');
   </script>
 </Base>

@@ -264,6 +264,7 @@ function validateAgentFriendlyControls(html, path) {
     if (!attr(button, 'type')) fail(`${path}: button missing type attribute`);
   }
   for (const input of tags(html, 'input')) {
+    if ((attr(input, 'type') ?? '').toLowerCase() === 'hidden') continue;
     const id = attr(input, 'id');
     const ariaLabel = attr(input, 'aria-label');
     const labelledBy = attr(input, 'aria-labelledby');

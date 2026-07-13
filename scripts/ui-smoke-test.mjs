@@ -81,9 +81,17 @@ try {
     supabaseRequests.some((request) => request.kind === 'book-request-insert'),
     'book request modal should insert a Supabase book request'
   );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'content-feedback-insert' && request.body.content_type === 'book'),
+    'book feedback should insert a Supabase content feedback row'
+  );
+  assert.ok(
+    supabaseRequests.some((request) => request.kind === 'content-feedback-insert' && request.body.content_type === 'answer'),
+    'answer feedback should insert a Supabase content feedback row'
+  );
 
   await context.close();
-  console.log('UI smoke test passed: skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, book requests, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
+  console.log('UI smoke test passed: skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, book requests, content feedback, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
 } finally {
   if (browser) await browser.close();
   server.closeAllConnections();
@@ -207,6 +215,11 @@ async function testBookEditorialSlice(page) {
   const paragraphCount = await page.locator('.prose-awb p').count();
   const listItemCount = await page.locator('.prose-awb li').count();
   assert.ok(paragraphCount > listItemCount, 'book digest should be prose-led rather than list-led');
+  await assertVisibleText(page, '[data-content-feedback]', 'Was this useful?');
+  await page.locator('[data-content-feedback] [data-feedback-choice="helpful"]').click();
+  await page.locator('[data-content-feedback] textarea[name="comment"]').fill('The evidence ladder made the book easier to apply.');
+  await page.locator('[data-content-feedback] [data-feedback-submit]').click();
+  await expectText(page.locator('[data-content-feedback] [data-feedback-status]'), /Thank you/);
 }
 
 async function testIllustrationContrast(page) {
@@ -344,8 +357,11 @@ async function testMappingAndCommunityCollection(page) {
   assert.match(agentPrompt, /context you already know about my goals, constraints, prior attempts/);
   await page.locator('[data-save-answer]').click();
   await expectText(page.locator('[data-save-answer]'), /Saved - remove/);
-  await page.locator('[data-like-answer]').click();
-  await expectText(page.locator('[data-like-answer]'), /Helpful/);
+  await assertVisibleText(page, '[data-content-feedback]', 'Was this useful?');
+  await page.locator('[data-content-feedback] [data-feedback-choice="not_helpful"]').click();
+  await page.locator('[data-content-feedback] textarea[name="comment"]').fill('The decision boundary could be more specific.');
+  await page.locator('[data-content-feedback] [data-feedback-submit]').click();
+  await expectText(page.locator('[data-content-feedback] [data-feedback-status]'), /Thank you/);
 
   await page.goto('/upload/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('[data-upload-shell]:not(.hidden)');
@@ -495,6 +511,11 @@ async function handleSupabaseRoute(route) {
 
   if (url.pathname === '/rest/v1/book_requests' && method === 'POST') {
     supabaseRequests.push({ kind: 'book-request-insert', method, body });
+    return fulfillJson(route, {}, 201);
+  }
+
+  if (url.pathname === '/rest/v1/content_feedback' && method === 'POST') {
+    supabaseRequests.push({ kind: 'content-feedback-insert', method, body });
     return fulfillJson(route, {}, 201);
   }
 

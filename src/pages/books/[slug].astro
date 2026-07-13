@@ -6,6 +6,7 @@ import Base from '../../layouts/Base.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookCover from '../../components/BookCover.astro';
 import BookDigestPersonalizer from '../../components/BookDigestPersonalizer.astro';
+import ContentFeedback from '../../components/ContentFeedback.astro';
 import FaqList from '../../components/FaqList.astro';
 import { topicsForTags } from '../../lib/topics';
 import { compactDescription, compactList, faqJsonLd } from '../../lib/seo';
@@ -201,6 +202,8 @@ const jsonLd = [
     <div class="prose-awb prose-awb--aligned mt-10">
       <Content />
     </div>
+
+    <ContentFeedback contentType="book" contentSlug={book.id} contentTitle={book.data.title} />
   </article>
 
   <FaqList items={faqs} eyebrow="Book Q&A" title="How this book is used" width="medium" />
