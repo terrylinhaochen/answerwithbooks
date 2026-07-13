@@ -550,6 +550,11 @@ h3,
   stroke: var(--color-accent);
   stroke-width: 3;
 }
+.awb-line-illustration__box {
+  fill: var(--color-card);
+  stroke: var(--color-line);
+  stroke-width: 1.5;
+}
 .awb-line-illustration .awb-line-illustration__label {
   fill: var(--color-ink);
   font-weight: 600;

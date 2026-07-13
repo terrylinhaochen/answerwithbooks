@@ -44,6 +44,7 @@ try {
   await testSkills(page);
   await testBookPersonalization(page);
   await testBookEditorialSlice(page);
+  await testIllustrationContrast(page);
   await testFilters(page);
   await testBookRequest(page);
   await testAuthRedirects(page);
@@ -206,6 +207,23 @@ async function testBookEditorialSlice(page) {
   const paragraphCount = await page.locator('.prose-awb p').count();
   const listItemCount = await page.locator('.prose-awb li').count();
   assert.ok(paragraphCount > listItemCount, 'book digest should be prose-led rather than list-led');
+}
+
+async function testIllustrationContrast(page) {
+  await page.goto('/answers/how-to-keep-a-smart-team-from-making-a-dumb-decision/', {
+    waitUntil: 'domcontentloaded',
+  });
+  const colors = await page.locator('.awb-line-illustration').evaluate((figure) => {
+    const box = figure.querySelector('.awb-line-illustration__box');
+    const label = figure.querySelector('.awb-line-illustration__label');
+    return {
+      box: box ? getComputedStyle(box).fill : '',
+      label: label ? getComputedStyle(label).fill : '',
+    };
+  });
+  assert.ok(colors.box, 'illustration box should have a computed fill');
+  assert.ok(colors.label, 'illustration label should have a computed fill');
+  assert.notEqual(colors.box, colors.label, 'illustration labels should contrast with their boxes');
 }
 
 async function testAuthRedirects(page) {
