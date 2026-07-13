@@ -1,0 +1,964 @@
+{
+  "id": "resp_0242ff0e83bdfd21016a547fca5e248198a54b3b42064e7658",
+  "object": "response",
+  "created_at": 1783922634,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783922726,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fcb861881988b251c0e5fbeabfb",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "A.G. Lafley Roger Martin Playing to Win official site five choices strategy",
+          "Harvard Business Review Playing to Win Lafley Martin strategy choice cascade",
+          "Playing to Win A.G. Lafley Roger Martin publisher page",
+          "Roger Martin Playing to Win strategy choice cascade official"
+        ],
+        "query": "A.G. Lafley Roger Martin Playing to Win official site five choices strategy",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/thought-pillars/strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/books/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://strategycascade.ai/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/webinar/2014/12/playing-to-win-how-strategy-really-works"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/lets-read/playing-to-win?trk=article-ssr-frontend-pulse_little-text-block"
+          },
+          {
+            "type": "url",
+            "url": "https://www.publishersweekly.com/9781422187395"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/the-danger-of-locking-loading-36c74f68a9b2"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/decoding-the-strategy-choice-cascade-475d40555eb1"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2017/04/strategic-choices-need-to-be-made-simultaneously-not-sequentially"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Playing_to_Win.html?id=DMi4zQEACAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/56dee43ee321400514f98522/t/5c62e145a4222f72fba3120b/1549984071684/HBR_Martin_Playing%2Bto%2BWin_executive-summary.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/four-years-of-playing-to-win-strategy-dc535451a5e7"
+          },
+          {
+            "type": "url",
+            "url": "https://www.caseatlas.org/frameworks/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://s3.amazonaws.com/he-product-images/docs/M00096_HE_Strategy_Primer_FNL.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bayifoundation.org/wp-content/uploads/2021/05/Harvard-How-Strategy-really-works.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/playing-to-win.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.productfocus.com/wp/wp-content/uploads/2025/01/February-content-playing-to-win.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1310.2561"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1211.3193"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/cond-mat/0201313"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2011.11031"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fcda8308198b70c03e4549a3a41",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fce37c48198b92487474b4c88ae",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:hbr.org Lafley Martin Playing to Win excerpt strategy choice cascade reverse engineering",
+          "Roger Martin reverse engineering strategy choices Playing to Win",
+          "Playing to Win reverse engineer strategic possibilities Lafley Martin",
+          "A.G. Lafley Roger Martin interview Playing to Win strategy is choice"
+        ],
+        "query": "site:hbr.org Lafley Martin Playing to Win excerpt strategy choice cascade reverse engineering",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/thought-pillars/strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/the-best-strategy-icebreaker-0c9b6ae58461"
+          },
+          {
+            "type": "url",
+            "url": "https://faintsignal.org/reverse-engineering-focuses-strategic-options/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/books/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://www.caseatlas.org/frameworks/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/webinar/2014/12/playing-to-win-how-strategy-really-works"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/webinar/2013/04/a-playbook-for-winning"
+          },
+          {
+            "type": "url",
+            "url": "https://grafium.co/blog/what-is-the-strategy-cascade"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/misplaced-shoulds-in-strategy-c29e8ac9f5ab"
+          },
+          {
+            "type": "url",
+            "url": "https://www.perdoo.com/resources/blog/book-review-playing-to-win-by-a-g-lafley-and-roger-martin"
+          },
+          {
+            "type": "url",
+            "url": "https://www.studocu.com/en-us/document/harvard-university/business-strategy/playing-to-win-strategy-insights-from-lafley-martin-2013/134873611"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/the-evolution-of-the-strategic-choice-structuring-process-653521519014"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/playing-to-win.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/56dee43ee321400514f98522/t/5c62e145a4222f72fba3120b/1549984071684/HBR_Martin_Playing%2Bto%2BWin_executive-summary.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/docs/default-source/default-document-library/2014-03-17---the-big-lie-of-strategic-planning---financial-review.pdf?sfvrsn=a8230182_0"
+          },
+          {
+            "type": "url",
+            "url": "https://thevisioncouncil.org/sites/default/files/Playing%20to%20Win%20Keynote.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.productfocus.com/wp/wp-content/uploads/2025/01/February-content-playing-to-win.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1912.00317"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2011.11031"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2309.04858"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1707.06307"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fd10fb081988bd096e06b408a4b",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fd196488198bba96eec12433749",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://hbr.org/books/playing-to-win"
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fd3052c8198bf998b143fe1ffaa",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fd402808198803a9d83367e3818",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Bringing Science to the Art of Strategy Lafley Martin Rivkin Siggelkow strategic choice structuring process",
+          "Lafley Martin Rivkin Siggelkow what would have to be true strategy HBR 2012",
+          "Harvard Business Review Bringing Science to the Art of Strategy what would have to be true"
+        ],
+        "query": "Bringing Science to the Art of Strategy Lafley Martin Rivkin Siggelkow strategic choice structuring process",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://hbr.org/2012/09/bringing-science-to-the-art-of-strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/archive-toc/BR1209"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/thought-pillars/strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://ivypanda.com/essays/bringing-science-to-the-art-of-strategy/"
+          },
+          {
+            "type": "url",
+            "url": "https://nicolajsiggelkow.com/wp-content/uploads/2017/01/SYLL16-MGMT701.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hbrtaiwan.com/article/12049/bringing-science-to-the-art-of-strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/the-strategic-choice-structuring-process-5e116b12ae1f"
+          },
+          {
+            "type": "url",
+            "url": "https://www.manageris.com/article-bringing-science-to-the-art-of-strategy-23412.html"
+          },
+          {
+            "type": "url",
+            "url": "https://glifos.unis.edu.gt/library/index.php?lang=en&mode=cataloging&query=%40title%3DSpecial%3AGSMSearchPage%40process%3D%40field1%3Dencabezamiento%40value1%3DADMINISTRACION+REVISTAS+%40mode%3Dcataloging%40mode%3Dcataloging&recnum=62&title=223463"
+          },
+          {
+            "type": "url",
+            "url": "https://www.researchgate.net/publication/230809241_Bringing_science_to_the_art_of_strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/when-should-a-process-be-art-not-science/R0903D"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ioatwork.com/adding-scientific-rigor-to-strategic-planning/"
+          },
+          {
+            "type": "url",
+            "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1001704"
+          },
+          {
+            "type": "url",
+            "url": "https://alves.pro.br/uploads/1/3/7/9/13790082/hbr20180118_strategicplanning_v2.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/docs/default-source/default-document-library/2014-03-17---the-big-lie-of-strategic-planning---financial-review.pdf?sfvrsn=a8230182_0"
+          },
+          {
+            "type": "url",
+            "url": "https://www.peterfisk.com/wp-content/uploads/2016/01/A-Playbook-For-Strategy-by-AG-Lafley.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://scholar.harvard.edu/files/rsadun/files/how_to_ceos_make_strategy.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://docs.candid.org/edoc/11266439/document.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1304.1186"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1302.6906"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2204.01467"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1709.03480"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fd705c08198ac453e9bafd24f3c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fd70df881989e69c9e5fe1b1356",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Harvard Business Review Press Playing to Win How Strategy Really Works 2013 ISBN 9781422187395",
+          "Playing to Win How Strategy Really Works Harvard Business Review Press 272 pages 2013"
+        ],
+        "query": "Harvard Business Review Press Playing to Win How Strategy Really Works 2013 ISBN 9781422187395",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Playing_to_Win.html?id=qJFQqVa_p3YC"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/books/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/playing-to-win-expanded-with-bonus-hbr-articles-how-strategy-really-works/10852"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2014/12/playing-to-win-how-strategy-really-works"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/editions/19174280-playing-to-win-how-strategy-really-works"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.co.uk/books?id=qJFQqVa_p3YC"
+          },
+          {
+            "type": "url",
+            "url": "https://www.indigo.ca/en-ca/playing-to-win-how-strategy-really-works/9781422187395.html"
+          },
+          {
+            "type": "url",
+            "url": "https://libcatalog.sacredheart.edu/cgi-bin/koha/opac-detail.pl?biblionumber=34217&shelfbrowse_itemnumber=33979"
+          },
+          {
+            "type": "url",
+            "url": "https://library.ibsu.ac.pg/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=2759"
+          },
+          {
+            "type": "url",
+            "url": "https://mitpressbookstore.mit.edu/book/9781422187395"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL27143899M/Playing_to_win"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/pt/title/playing-to-win-how-strategy-really-works/oclc/1152818002?ht=edition&referer=di"
+          },
+          {
+            "type": "url",
+            "url": "https://bayifoundation.org/wp-content/uploads/2021/05/Harvard-How-Strategy-really-works.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.productfocus.com/wp/wp-content/uploads/2025/01/February-content-playing-to-win.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://books.digitalkbshah.com/wp-content/uploads/2025/06/HBR-Guide-to-Setting-Your-Strategy.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/56dee43ee321400514f98522/t/5c62e145a4222f72fba3120b/1549984071684/HBR_Martin_Playing%2Bto%2BWin_executive-summary.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://images.abovethetreeline.com/ea/BXBC/pdfs/Big%20Five_HBR%20Press_Strategy_low%20res.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://elibrary.pip-semarang.ac.id/ebooks/files/ebook_file_20200804140946.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1302.3642"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1311.6224"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1312.5602"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/cs/0611164"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fdb4a748198acf01bb057ddee7a",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fdb57f88198a17a74171aae7a6c",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://hbr.org/books/playing-to-win"
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fdcc2b881989b0d55556095e8a0",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fddbfc08198b2c98c8710c1433c",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "A.G. Lafley Olay turnaround Playing to Win HBR",
+          "Playing to Win Olay where to play how to win Lafley Martin",
+          "Lafley Martin Olay masstige playing to win"
+        ],
+        "query": "A.G. Lafley Olay turnaround Playing to Win HBR",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://hbr.org/chapters/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/books/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/store/landing/playing-to-win-strategy-toolkit"
+          },
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/playing-to-win-expanded-with-bonus-hbr-articles-how-strategy-really-works/10852?sku=10852E-KND-ENG"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/webinar/2014/12/playing-to-win-how-strategy-really-works"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/webinar/2013/04/a-playbook-for-winning"
+          },
+          {
+            "type": "url",
+            "url": "https://afma.org.au/playing-to-win-how-strategy-really-works-by-a-g-lafley-and-roger-martin/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.caseatlas.org/frameworks/playing-to-win"
+          },
+          {
+            "type": "url",
+            "url": "https://www.perdoo.com/resources/blog/book-review-playing-to-win-by-a-g-lafley-and-roger-martin"
+          },
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/playing-to-win-toolkit-expanded-with-gen-ai-prompts/10850"
+          },
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/playing-to-win-strategy-toolkit/PTWTL1"
+          },
+          {
+            "type": "url",
+            "url": "https://iffaglobal.com/library/management/playing-to-win/"
+          },
+          {
+            "type": "url",
+            "url": "https://tpkprofessionalsolutions.com/wp-content/uploads/2022/01/MBE-P2W-intro.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://bayifoundation.org/wp-content/uploads/2021/05/Harvard-How-Strategy-really-works.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/56dee43ee321400514f98522/t/5c62e145a4222f72fba3120b/1549984071684/HBR_Martin_Playing%2Bto%2BWin_executive-summary.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://imp.dayawisesa.com/wp-content/uploads/2023/08/The-Crux-Richard-Rumelt.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://books.digitalkbshah.com/wp-content/uploads/2025/06/HBR-Guide-to-Setting-Your-Strategy.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/playing-to-win.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2011.11031"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1604.05543"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1412.3701"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1701.05976"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fe10f508198b32047f4125b5c58",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fe543ec8198bb7de1f3caf31ef8",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://hbr.org/2012/09/bringing-science-to-the-art-of-strategy"
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fe65c708198bd2ee0f59e61e700",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fe7860c819896b2334dc56b3314",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Roger Martin A Plan Is Not a Strategy HBR strategy choice",
+          "Roger Martin strategy is not planning where to play how to win"
+        ],
+        "query": "Roger Martin A Plan Is Not a Strategy HBR strategy choice",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://hbr.org/2025/05/a-plan-is-not-a-strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/thought-pillars/strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/webinar/2014/12/playing-to-win-how-strategy-really-works"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/docs/default-source/default-document-library/why-bother-doing-strategy.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2014/05/are-you-confusing-strategy-with-planning"
+          },
+          {
+            "type": "url",
+            "url": "https://iffaglobal.com/library/management/playing-to-win/"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/docs/default-source/default-document-library/6-13-2023-red---roger-martin---strategy-in-1000-words.pdf?sfvrsn=b8ca0382_0"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2025/05/a-plan-is-not-a-strategy?language=es"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/strategy-vs-planning-complements-not-substitutes-ea08e56809d6"
+          },
+          {
+            "type": "url",
+            "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+          },
+          {
+            "type": "url",
+            "url": "https://rogermartin.medium.com/how-to-prepare-for-strategy-4beaa4715c6e"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/docs/default-source/default-document-library/2014-03-17---the-big-lie-of-strategic-planning---financial-review.pdf?sfvrsn=a8230182_0"
+          },
+          {
+            "type": "url",
+            "url": "https://www.slaw.ca/2013/04/16/playing-to-win-roger-martin-on-strategy-for-corporate-counsel-a-ccca-keynote/"
+          },
+          {
+            "type": "url",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/20607964/"
+          },
+          {
+            "type": "url",
+            "url": "https://rogerlmartin.com/docs/default-source/articles/strategy/scs.pdf?sfvrsn=28f50182_0"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2011.11031"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2002.10524"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1109.2341"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2104.08641"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fed38608198b53791c5b673979d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0242ff0e83bdfd21016a547fed6c2081988b4f8c5e7e903fae",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+      }
+    },
+    {
+      "id": "rs_0242ff0e83bdfd21016a547fefbfec8198a4f43e399883de7b",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0242ff0e83bdfd21016a5480001118819887c30c583a76f10e",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 776,
+              "start_index": 705,
+              "title": "Strategy",
+              "url": "https://rogerlmartin.com/thought-pillars/strategy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1225,
+              "start_index": 1149,
+              "title": "Bringing Science to the Art of Strategy",
+              "url": "https://hbr.org/2012/09/bringing-science-to-the-art-of-strategy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1544,
+              "start_index": 1455,
+              "title": "The Difference Between a Plan and a Strategy",
+              "url": "https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2099,
+              "start_index": 1970,
+              "title": "\n\tPlaying to Win: How Strategy Really Works | Rotman School of Management\n",
+              "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2525,
+              "start_index": 2396,
+              "title": "\n\tPlaying to Win: How Strategy Really Works | Rotman School of Management\n",
+              "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3097,
+              "start_index": 2968,
+              "title": "\n\tPlaying to Win: How Strategy Really Works | Rotman School of Management\n",
+              "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3898,
+              "start_index": 3769,
+              "title": "\n\tPlaying to Win: How Strategy Really Works | Rotman School of Management\n",
+              "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4420,
+              "start_index": 4331,
+              "title": "The Difference Between a Plan and a Strategy",
+              "url": "https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5159,
+              "start_index": 5030,
+              "title": "\n\tPlaying to Win: How Strategy Really Works | Rotman School of Management\n",
+              "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6005,
+              "start_index": 5876,
+              "title": "\n\tPlaying to Win: How Strategy Really Works | Rotman School of Management\n",
+              "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6719,
+              "start_index": 6589,
+              "title": "The Strategic Choice Structuring Process | by Roger Martin | Medium",
+              "url": "https://rogermartin.medium.com/the-strategic-choice-structuring-process-5e116b12ae1f?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7625,
+              "start_index": 7576,
+              "title": "Playing to Win: How Strategy Really Works",
+              "url": "https://hbr.org/books/playing-to-win"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8117,
+              "start_index": 8065,
+              "title": "Download Free Chapter: Playing To Win",
+              "url": "https://hbr.org/chapters/playing-to-win"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8528,
+              "start_index": 8476,
+              "title": "Download Free Chapter: Playing To Win",
+              "url": "https://hbr.org/chapters/playing-to-win"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8840,
+              "start_index": 8768,
+              "title": "Playing to Win: \nHow Strategy Really Works by Roger L. Martin, A G Lafley",
+              "url": "https://www.publishersweekly.com/9781422187395"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9373,
+              "start_index": 9284,
+              "title": "The Difference Between a Plan and a Strategy",
+              "url": "https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9726,
+              "start_index": 9597,
+              "title": "\n\tPlaying to Win: How Strategy Really Works | Rotman School of Management\n",
+              "url": "https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10460,
+              "start_index": 10331,
+              "title": "Medium",
+              "url": "https://rogermartin.medium.com/the-evolution-of-the-strategic-choice-structuring-process-653521519014"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10942,
+              "start_index": 10830,
+              "title": "Playing to Win: How Strategy Really Works - A.G. Lafley, Roger L. Martin - Google Books",
+              "url": "https://books.google.com/books/about/Playing_to_Win.html?id=qJFQqVa_p3YC&utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11462,
+              "start_index": 11334,
+              "title": "Playing to Win, Expanded with Bonus HBR Articles: How Strategy Really Works",
+              "url": "https://store.hbr.org/product/playing-to-win-expanded-with-bonus-hbr-articles-how-strategy-really-works/10852"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Playing to Win* by A.G. Lafley and Roger L. Martin\n\n## Central argument\n\n*Playing to Win: How Strategy Really Works* argues that strategy is not a mission statement, annual plan, budget, or list of initiatives; it is an integrated set of choices that positions an organization to win in a chosen arena. The book’s practical thesis is that strategy becomes manageable when leaders answer five linked questions: winning aspiration, where to play, how to win, required capabilities, and management systems. Roger Martin’s official strategy page states the core definition plainly: strategy is choice, not a long planning document, and the five choices must position the organization to win. ([rogerlmartin.com](https://rogerlmartin.com/thought-pillars/strategy))\n\nThe tension the book resolves is between two bad defaults: over-formal “strategic planning” that produces safe activity lists, and under-disciplined creativity that produces attractive but untested ideas. Lafley and Martin’s associated HBR article with Jan Rivkin and Nicolaj Siggelkow frames this as a need to reconcile empirical rigor with creative strategic thinking. ([hbr.org](https://hbr.org/2012/09/bringing-science-to-the-art-of-strategy)) Martin’s later HBR podcast explanation reinforces the distinction: planning concerns controllable activities and resources; strategy concerns a desired competitive outcome that depends on customers, competitors, and uncertainty. ([hbr.org](https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy))\n\n## Mechanisms and frameworks\n\n### Strategy as choice\n\nThe book’s framework depends on the premise that strategy requires choosing some things and not others. A “strategy” that does not rule anything out is closer to an aspiration or plan. Martin’s Rotman talk describes strategy as choices “to do some things and not others,” and warns that organizations that do not make these choices may be beaten by competitors that do. ([www-2.rotman.utoronto.ca](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re))\n\nThe choices are not independent checklist items. The cascade only works if each choice fits with and reinforces the others. Martin explicitly warns that the five choices cannot be locked in one at a time, because an aspiration may prove inconsistent with feasible places to play or ways to win. ([www-2.rotman.utoronto.ca](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re))\n\n### Winning aspiration\n\nWinning aspiration defines what “winning” means for the organization and its chosen stakeholders. It is not merely a lofty purpose or financial target. It sets the objective function for the rest of the cascade: without it, leaders cannot judge whether a where-to-play or how-to-win choice is good enough. Rotman’s transcript says that without specifying the aspiration, the organization lacks an objective function. ([www-2.rotman.utoronto.ca](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re))\n\nEditorial caution: do not collapse winning aspiration into a slogan such as “be the best.” In this framework, aspiration matters because it disciplines later choices; if the aspiration cannot be connected to a credible playing field and winning logic, it must be revised.\n\n### Where to play\n\nWhere to play defines the competitive arena: customer segments, channels, geographies, product categories, vertical stages, price tiers, or other boundaries. It answers where the organization will place its bets rather than where it might theoretically participate. Rotman’s transcript frames this as choosing where in the potential marketplace to put the organization’s chips. ([www-2.rotman.utoronto.ca](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re))\n\nDo not merge this with “how to win.” Where to play is the field of competition; how to win is the specific advantage in that field. A company can pick an attractive market and still lack a way to win there.\n\n### How to win\n\nHow to win explains why the organization will create a superior value equation in the chosen arena. Martin describes this as being better than competitors at serving customers in the selected playing field. ([hbr.org](https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy)) It may involve differentiation, cost advantage, system advantage, customer insight, brand, scale, channel control, or another coherent source of superiority.\n\nThis is the heart of strategy with where-to-play: the two questions must be answered together. A broad “how” without a specific arena is vague; a specific arena without a winning logic is mere market entry.\n\n### Required capabilities\n\nCapabilities are the organizational abilities that must exist for the chosen how-to-win to be credible. Rotman’s transcript ties capabilities directly to the chosen way to win, chosen place to play, and aspiration. ([www-2.rotman.utoronto.ca](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re)) They are not generic strengths or a laundry list of competencies; they are the few capabilities without which the strategy fails.\n\nFor an editor, the causal chain is important: aspiration sets the aim; where-to-play and how-to-win define the strategic logic; required capabilities specify what the organization must be able to do unusually well to make that logic real.\n\n### Management systems\n\nManagement systems are the routines, measures, decision processes, incentives, reviews, and structures that build, maintain, and adapt the required capabilities. Rotman’s transcript explains that these systems ensure the organization builds and maintains capabilities over time so it can win where it has chosen to play. ([www-2.rotman.utoronto.ca](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re))\n\nDo not reduce management systems to “execution.” In the cascade, systems are part of strategy because they make the strategic choices durable and observable.\n\n### Reverse engineering choices\n\nReverse engineering is the book’s discipline for testing strategic possibilities before committing to them. Martin’s later explanation of the Strategic Choice Structuring Process says the Strategy Choice Cascade is the content of strategy, while SCSP is the process for creating one; he also identifies the core question as asking what would have to be true for a strategic choice to work. ([rogermartin.medium.com](https://rogermartin.medium.com/the-strategic-choice-structuring-process-5e116b12ae1f?utm_source=openai))\n\nThe practical mechanism is: frame the strategic issue as a real choice; generate multiple possibilities; reverse-engineer each by specifying the conditions that would have to hold; identify the conditions that are least certain or most contested; test those assumptions; then choose. This avoids both advocacy wars and false precision. The key is not to ask, “Is my preferred option true?” but “What must be true for this to be a good choice, and can we test that?”\n\n## Book-grounded examples\n\n- **P&G overall turnaround** — HBR’s book page and free excerpt state that Lafley and Martin’s approach was used during Lafley’s first CEO tenure, during which P&G doubled sales, quadrupled profits, and increased market value by more than $100 billion. This example demonstrates the book’s claim that the framework was practice-derived, not merely theoretical. ([hbr.org](https://hbr.org/books/playing-to-win))\n\n- **Olay / Oil of Olay** — Official HBR material identifies Olay as one of the iconic P&G brand stories used to illustrate the method. Publisher’s Weekly also identifies Oil of Olay among the brands whose development or positioning brings the theory to life. Use this as a brand transformation example, but verify specific details such as “masstige,” price points, and target segments directly against the book before public publication. ([hbr.org](https://hbr.org/chapters/playing-to-win))\n\n- **Bounty, Swiffer, Febreze, Gillette** — HBR’s free excerpt names Olay, Bounty, Gillette, Swiffer, and Febreze as cases showing how choosing a strategic approach and supporting choices differentiates playing from winning. These examples can be used collectively to show that the framework is applied at brand and product levels, not only corporate level. ([hbr.org](https://hbr.org/chapters/playing-to-win))\n\n- **Bounty, Swiffer, Force Flex, Oil of Olay** — Publisher’s Weekly independently confirms these as examples in the book and says the book connects theoretical concepts about where and how to win to P&G brand development and positioning. ([publishersweekly.com](https://www.publishersweekly.com/9781422187395))\n\n## Qualifications and common misreadings\n\n- **Not “win at all costs.”** “Winning” means defining a competitive aspiration and serving chosen customers better in a chosen arena, not ignoring ethics or stakeholders.\n\n- **Not a plan.** Martin repeatedly distinguishes strategy from planning. Plans list activities under management control; strategy makes a theory about how the organization will win despite customer and competitor uncertainty. ([hbr.org](https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy))\n\n- **Not a sequential checklist.** Later Martin commentary emphasizes that the cascade is a system, not a rigid sequence. The choices must fit; leaders may need to revisit earlier answers as later constraints become clear. ([www-2.rotman.utoronto.ca](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re))\n\n- **Not just the first three choices.** Capabilities and management systems are not afterthoughts. Without them, where-to-play and how-to-win remain abstract.\n\n- **Evidence base is practice-heavy.** The book is grounded in P&G experience, executive practice, and strategy scholarship, not a controlled empirical study. This makes it a practitioner framework rather than a universal law.\n\n- **Later revisions exist.** Martin says the five-box Strategy Choice Cascade has had only clarifying wording changes, while the Strategic Choice Structuring Process has evolved more substantially through practice. ([rogermartin.medium.com](https://rogermartin.medium.com/the-evolution-of-the-strategic-choice-structuring-process-653521519014))\n\n## Metadata check\n\nThe original book is *Playing to Win: How Strategy Really Works*, by A.G. Lafley and Roger L. Martin, published by Harvard Business Review Press / Harvard Business Press in 2013. Google Books lists publication on February 5, 2013, 272 pages, with ebook ISBN 9781422187401; Publisher’s Weekly lists the hardcover ISBN as 9781422187395 and 272 pages. ([books.google.com](https://books.google.com/books/about/Playing_to_Win.html?id=qJFQqVa_p3YC&utm_source=openai))\n\nA materially different later edition exists: *Playing to Win, Expanded with Bonus HBR Articles*, published September 30, 2025, 320 pages, with a new foreword and bonus HBR articles. The core five-choice framework remains the same in the publisher description, but the expanded edition adds editorial and article material that should not be attributed to the 2013 original without checking. ([store.hbr.org](https://store.hbr.org/product/playing-to-win-expanded-with-bonus-hbr-articles-how-strategy-really-works/10852))\n\n## Sources\n\n- [Roger L. Martin — “Strategy”](https://rogerlmartin.com/thought-pillars/strategy) — Supports the definition of strategy as choice and lists the five Strategy Choice Cascade questions.\n\n- [HBR book page — *Playing to Win: How Strategy Really Works*](https://hbr.org/books/playing-to-win) — Supports authorship, publisher positioning, P&G performance claims, and official framing of where-to-play/how-to-win.\n\n- [HBR free chapter landing page — *Playing to Win*](https://hbr.org/chapters/playing-to-win) — Supports the official excerpt framing and verifies P&G brand examples including Olay, Bounty, Gillette, Swiffer, and Febreze.\n\n- [Rotman School of Management — “Playing to Win: How Strategy Really Works”](https://www-2.rotman.utoronto.ca/insightshub/strategy-value-creation/playing-to-win-how-strategy-re) — Supports Martin’s explanation of the five choices, the need for fit, and the warning against treating the cascade as a lockstep sequence.\n\n- [HBR — “Bringing Science to the Art of Strategy”](https://hbr.org/2012/09/bringing-science-to-the-art-of-strategy) — Supports the rigor/creativity tension behind the reverse-engineering and testing approach.\n\n- [HBR podcast — “The Difference Between a Plan and a Strategy”](https://hbr.org/podcast/2023/05/the-difference-between-a-plan-and-a-strategy) — Supports Martin’s later clarification that strategy is not planning and must form a coherent theory of winning.\n\n- [Roger Martin — “The Strategic Choice Structuring Process”](https://rogermartin.medium.com/the-strategic-choice-structuring-process-5e116b12ae1f) — Supports the distinction between the cascade as strategy content and SCSP as the process for creating strategy.\n\n- [Roger Martin — “The Evolution of the Strategic Choice Structuring Process”](https://rogermartin.medium.com/the-evolution-of-the-strategic-choice-structuring-process-653521519014) — Supports later revision history and the role of “what would have to be true” in reverse-engineering strategic choices.\n\n- [Publisher’s Weekly review](https://www.publishersweekly.com/9781422187395) — Supports metadata, credibility, and verification that P&G examples such as Bounty, Swiffer, Force Flex, and Oil of Olay are in the book.\n\n- [HBR Store — *Playing to Win, Expanded with Bonus HBR Articles*](https://store.hbr.org/product/playing-to-win-expanded-with-bonus-hbr-articles-how-strategy-really-works/10852) — Supports edition differences for the 2025 expanded version."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 6
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 76863,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 4743,
+    "output_tokens_details": {
+      "reasoning_tokens": 2010
+    },
+    "total_tokens": 81606
+  },
+  "user": null,
+  "metadata": {}
+}

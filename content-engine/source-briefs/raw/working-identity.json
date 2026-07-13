@@ -1,0 +1,703 @@
+{
+  "id": "resp_00f6423bd55aadde016a5482ed7e688199a081dbc0da10757a",
+  "object": "response",
+  "created_at": 1783923437,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923528,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_00f6423bd55aadde016a5482ee44908199acf3da907314541a",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Herminia Ibarra Working Identity official site possible selves crafting experiments shifting connections making sense career transition",
+          "Herminia Ibarra Working Identity book official publisher Harvard Business School Press",
+          "Working Identity Herminia Ibarra official excerpt reader guide interview career transition"
+        ],
+        "query": "Herminia Ibarra Working Identity official site possible selves crafting experiments shifting connections making sense career transition",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/working-identity-updated-edition-with-a-new-preface-unconventional-strategies-for-reinventing-your-career/10659"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/working-identity-book/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Working_Identity.html?id=m4bzwnBdktoC"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Working_Identity.html?id=h0eswwEACAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/about/"
+          },
+          {
+            "type": "url",
+            "url": "https://weichen.blog/en/notes/working-identity/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/reinventing-your-career-when-its-not-just-about-you/"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/abs/10.2307/2667055"
+          },
+          {
+            "type": "url",
+            "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-020924-071546"
+          },
+          {
+            "type": "url",
+            "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Self-presentation_Impression_Formation/Ibarra_1999_Provisional_selves.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hbs.edu/faculty/Shared%20Documents/events/129/Ibarra%20CV.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hbs.edu/faculty/Shared%2520Documents/events/129/Ibarra%2520CV.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.gbv.de/dms/zbw/1851741941.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://openaccess.city.ac.uk/28672/1/Expanding%20the%20Core%20of%20Conservatoire%20Training%20-%20Digital%20Library%20Copy%20of%20PhD%20Thesis.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1003.4655"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.02236"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2507.08857"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1507.05107"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a5482f0fb4c819992c82ba114200d59",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_00f6423bd55aadde016a5482f19e108199b365722538b7589d",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Herminia Ibarra Working Identity interview possible selves career change",
+          "Herminia Ibarra Working Identity interview crafting experiments shifting connections making sense",
+          "Herminia Ibarra Working Identity INSEAD interview career reinvention"
+        ],
+        "query": "Herminia Ibarra Working Identity interview possible selves career change",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://knowledge.insead.edu/author/herminia-ibarra"
+          },
+          {
+            "type": "url",
+            "url": "https://www.rolandberger.com/en/Insights/Publications/Herminia-Ibarra-on-working-identity.html"
+          },
+          {
+            "type": "url",
+            "url": "https://knowledge.insead.edu/leadership-organisations/dont-wait-promotion-make-leadership-transition-now"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/reinventing-your-career-when-its-not-just-about-you/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2024/01/reinventing-your-career-when-its-not-just-about-you"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://knowledge.insead.edu/career/making-change"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2018/11/how-your-identity-changes-when-you-change-jobs"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/reinventing-your-career-in-the-time-of-coronavirus/"
+          },
+          {
+            "type": "url",
+            "url": "https://knowledge.insead.edu/leadership-organisations/six-ways-grow-your-job"
+          },
+          {
+            "type": "url",
+            "url": "https://weichen.blog/en/notes/working-identity/"
+          },
+          {
+            "type": "url",
+            "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.up.ac.za/media/shared/78/ZP_Files/2020/ibarra-1999.zp195281.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.insead.edu/system/files/2023-06/making-a-significant-career-transition-as-of-june-2023.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.insead.edu/sites/default/files/assets/dept/fr/docs/faculty-booklet.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://flora.insead.edu/fichiersti_wp/inseademccctheseswave25/87363.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.tcd.ie/Careers/PhD-Module/Face%20to%20face%20sessions/Designing%20your%20Career%20PDF%20with%20notes.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1003.4655"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.02236"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.09925"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1212.3320"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a5482f49290819996f698bec88107a2",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_00f6423bd55aadde016a5482f4a9588199bac961d4471c8d6e",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://herminiaibarra.com/working-identity-book/"
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a5482f69cb081999fe50582e98e4358",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_00f6423bd55aadde016a5482f707988199864d69b28628b2ef",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://herminiaibarra.com/working-identity-book/"
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a5482f8df4c8199b4e4300db7370685",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_00f6423bd55aadde016a5482f93c5c8199a90098f856bc267b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a5482fb6dc0819984df411d3001fb56",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_00f6423bd55aadde016a5482fbab208199a4dbf50227cf2025",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a5482ffe4248199a58efc48ead3f283",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_00f6423bd55aadde016a548301a7b881999f771c6a49fffb88",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Herminia Ibarra Working Identity liminal period transition",
+          "Herminia Ibarra liminal career transition Working Identity",
+          "Working Identity liminal period Ibarra official"
+        ],
+        "query": "Herminia Ibarra Working Identity liminal period transition",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://journals.aom.org/doi/10.5465/amr.35.1.zok135"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/reinventing-your-career-when-its-not-just-about-you/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-020924-071546"
+          },
+          {
+            "type": "url",
+            "url": "https://pages.stern.nyu.edu/~eyoon/seminar/hibarra/Abstract.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/working-identity-book/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.london.edu/faculty-and-research/faculty-profiles/h/herminia-ibarra"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/reinventing-your-career-in-the-time-of-coronavirus/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/the-three-phases-of-making-a-major-life-change/"
+          },
+          {
+            "type": "url",
+            "url": "https://herminiaibarra.com/about/"
+          },
+          {
+            "type": "url",
+            "url": "https://weichen.blog/en/notes/working-identity/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2024/01/reinventing-your-career-when-its-not-just-about-you"
+          },
+          {
+            "type": "url",
+            "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2016/2016-79.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://flora.insead.edu/fichiersti_wp/InseadEMCCCtheseswave23/86214.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.tcd.ie/Careers/PhD-Module/Face%20to%20face%20sessions/Designing%20your%20Career%20PDF%20with%20notes.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://flora.insead.edu/fichiersti_wp/inseademccctheseswave22/86442.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2005/2005-51.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1405.3381"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1404.6247"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.02236"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2203.11665"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a548304bac48199a4cf3035187193f9",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_00f6423bd55aadde016a54830d6b9c81998dc1d95d713f10ca",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/"
+      }
+    },
+    {
+      "id": "rs_00f6423bd55aadde016a54830f4074819991dfe7a0778ca368",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_00f6423bd55aadde016a54831257a4819990477911addbea40",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 1051,
+              "start_index": 978,
+              "title": "Working Identity book by Herminia Ibarra",
+              "url": "https://herminiaibarra.com/working-identity-book/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1541,
+              "start_index": 1445,
+              "title": "Working Identity: Unconventional Strategies for Reinventing Your Career - Herminia Ibarra - Google Books",
+              "url": "https://books.google.com/books/about/Working_Identity.html?id=m4bzwnBdktoC"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2324,
+              "start_index": 2239,
+              "title": "Working Identity:",
+              "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2885,
+              "start_index": 2725,
+              "title": "Working Identity, Updated Edition, With a New Preface: Unconventional Strategies for Reinventing Your Career",
+              "url": "https://store.hbr.org/product/working-identity-updated-edition-with-a-new-preface-unconventional-strategies-for-reinventing-your-career/10659"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3648,
+              "start_index": 3559,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4454,
+              "start_index": 4365,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5393,
+              "start_index": 5304,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5839,
+              "start_index": 5727,
+              "title": "Why career transition is so hard. And how to manage it better. - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6561,
+              "start_index": 6472,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7312,
+              "start_index": 7200,
+              "title": "Why career transition is so hard. And how to manage it better. - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7822,
+              "start_index": 7737,
+              "title": "Working Identity:",
+              "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8480,
+              "start_index": 8402,
+              "title": "Provisional Selves: Experimenting with Image and Identity in Professional Adaptation - Herminia Ibarra, 1999 ",
+              "url": "https://journals.sagepub.com/doi/abs/10.2307/2667055"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9063,
+              "start_index": 8978,
+              "title": "Working Identity:",
+              "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9485,
+              "start_index": 9396,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9833,
+              "start_index": 9744,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10342,
+              "start_index": 10257,
+              "title": "Working Identity:",
+              "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10827,
+              "start_index": 10742,
+              "title": "Working Identity:",
+              "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11167,
+              "start_index": 11078,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11541,
+              "start_index": 11452,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11841,
+              "start_index": 11752,
+              "title": "How to stay stuck in the wrong career - Herminia Ibarra",
+              "url": "https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12120,
+              "start_index": 12035,
+              "title": "Working Identity:",
+              "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12574,
+              "start_index": 12489,
+              "title": "Working Identity:",
+              "url": "https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13021,
+              "start_index": 12913,
+              "title": "Career Transition and Professional Identity: Dynamic Processes, Multiple Selves, and Nonlinear Trajectories | Annual Reviews",
+              "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-020924-071546"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13392,
+              "start_index": 13296,
+              "title": "Working Identity: Unconventional Strategies for Reinventing Your Career - Herminia Ibarra - Google Books",
+              "url": "https://books.google.com/books/about/Working_Identity.html?id=m4bzwnBdktoC"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13887,
+              "start_index": 13727,
+              "title": "Working Identity, Updated Edition, With a New Preface: Unconventional Strategies for Reinventing Your Career",
+              "url": "https://store.hbr.org/product/working-identity-updated-edition-with-a-new-preface-unconventional-strategies-for-reinventing-your-career/10659"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14180,
+              "start_index": 14086,
+              "title": "Herminia Ibarra | London Business School",
+              "url": "https://www.london.edu/faculty-and-research/faculty-profiles/h/herminia-ibarra"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Working Identity* by Herminia Ibarra\n\n## Central argument\n\nHerminia Ibarra’s core thesis is that career reinvention is not primarily a matter of discovering a fixed inner self and then executing a rational plan. It is an iterative identity-learning process: people discover what they want to become by trying out possible futures in practice, building new relationships, and retrospectively making sense of what their experiments reveal. The book’s central tension is between the conventional “plan-and-implement” model of career change and Ibarra’s “test-and-learn” model. The conventional model assumes clarity should precede action; Ibarra argues that in major career transitions, clarity is often the product of action. Her official book page states the argument directly: knowing comes from doing and experimenting, and the process works through experimenting with new activities, interacting with new networks, and making sense of emerging possibilities. ([herminiaibarra.com](https://herminiaibarra.com/working-identity-book/))\n\nThe book is grounded in Ibarra’s research on managers and professionals in transition. Bibliographic sources confirm the original book was published by Harvard Business School Press in 2003 and drew on in-depth research with career changers; an INSEAD working paper linked to the book reports an in-depth study of 39 managers and professionals who changed, or were trying to change, careers. ([books.google.com](https://books.google.com/books/about/Working_Identity.html?id=m4bzwnBdktoC))\n\n## Mechanisms and frameworks\n\n### Possible selves\n\n“Possible selves” are the imagined identities a person might become, ought to become, or fears becoming. Ibarra uses the concept against the idea that career choice is mainly about uncovering one stable true self. In the INSEAD working paper associated with *Working Identity*, she contrasts true-self career advice with a more dynamic view of identity: people are “many selves,” shaped by hopes, fears, current circumstances, and past histories. In career transition, possible selves become the working material of change: the person is not choosing from fully formed options but developing, testing, revising, and discarding imagined futures. ([flora.insead.edu](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf))\n\nImportant distinction: possible selves are not the same as fantasies, goals, or job titles. A fantasy becomes useful only when it is made vivid and testable through contact with real activities, people, and constraints. The 2023 HBR Press page describes the transition as a crooked journey in which people try on multiple possible selves rather than travel linearly toward a predetermined identity. ([store.hbr.org](https://store.hbr.org/product/working-identity-updated-edition-with-a-new-preface-unconventional-strategies-for-reinventing-your-career/10659))\n\n### Career transition through action\n\nIbarra’s practical reversal is: act first, then interpret. This does not mean reckless quitting. It means generating evidence about new identities through concrete, bounded experiences. The action-first logic matters because the old identity was also built through practice: routines, titles, institutional affiliations, colleagues, and repeated performances. Therefore, a new identity cannot be produced by introspection alone; it must be enacted enough to feel plausible. Ibarra’s official excerpt says old identities were acquired in practice and are redefined through crafting experiments, shifting connections, and making sense. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\n### Crafting experiments\n\nCrafting experiments are low-commitment probes that let people test possible professional roles without immediately abandoning the current career. They include side projects, freelance work, temporary assignments, advisory work, moonlighting, courses, sabbaticals, pro bono projects, or other activities that make a new identity tangible. The causal role is twofold: experiments create new information about whether a possible self is desirable and viable, and they create momentum by building skills, contacts, confidence, and small wins. Ibarra stresses that delaying action until the destination is settled is a common mistake; the experiments are how the destination becomes knowable. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\nDo not collapse crafting experiments into ordinary job search. A job search tries to obtain a role already defined as desirable. An identity experiment is more provisional: it is a way to learn what kind of work, people, status, rhythm, and self-concept actually fit.\n\n### Shifting connections\n\nShifting connections means deliberately entering new networks, reference groups, and mentoring relationships that support the emerging identity. It is not merely networking for leads. Ibarra emphasizes that career change often requires finding people one wants to emulate and communities where one can imagine belonging. Existing mentors, family, and colleagues can provide support, but they may also keep the person attached to the old identity. New contacts can legitimize a different possible self and provide models for how to act in the new world. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\nThis mechanism is relational: other people help a possible self become socially real. They offer language, feedback, apprenticeship, status cues, and invitations. In later writing, Ibarra distinguishes bridging beyond the current circle from bonding with kindred spirits who help people tolerate the emotional strain of transition. ([herminiaibarra.com](https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/))\n\n### Making sense of experience\n\nMaking sense is the narrative practice of arranging experiments, triggers, setbacks, and old commitments into a coherent story about who one is becoming. It is not a single epiphany. Ibarra argues that defining moments often occur late in the process and help explain changes already underway; they are effects and organizing devices, not usually the root cause of transformation. Stories are refined through telling and retelling to oneself and others, and they matter because audiences—employers, family, colleagues, and the transitioning person—need a plausible account of continuity and change. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\nThis is distinct from rationalization. Sensemaking is not inventing a false story after the fact; it is identity work that converts scattered experiments into a usable narrative thread, helping the person commit, enlist support, and explain why the move is coherent.\n\n### Liminal period\n\nThe liminal period is the in-between state when the old professional identity has lost authority but the new one is not yet stable. Ibarra’s later official article describes this as emotionally difficult but productive: liminality creates time and space to question old assumptions, build skills and relationships, and explore who one might become. ([herminiaibarra.com](https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/))\n\nFor the digest, treat liminality as a necessary transition zone, not as mere indecision. The book-grounded implication is that premature closure—taking the nearest respectable job or retreating into the old identity—can prevent deeper learning. The INSEAD working paper states that major career transitions may take three to five years and involve difficulty, confusion, and uncertainty before the new identity stabilizes. ([flora.insead.edu](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf))\n\n### Identity is revised through practice\n\nThe book’s larger identity theory is practice-based. People become new professional selves through repeated enactments, not through a one-time decision. Experiments generate experiences; new relationships provide models and recognition; stories integrate those experiences into identity. Ibarra’s 1999 article on “provisional selves” supplies the academic foundation: professionals adapt by observing role models, experimenting with provisional selves, and evaluating those experiments against internal standards and external feedback. ([journals.sagepub.com](https://journals.sagepub.com/doi/abs/10.2307/2667055))\n\n## Book-grounded examples\n\n- **Susan Fontaine**: A former consulting partner initially followed the logic of a respectable post-MBA career move, then realized it did not answer the deeper problem. She used freelance assignments and pro bono charity work as experiments, which led to paid nonprofit-sector consulting. This demonstrates crafting experiments, the danger of premature closure, and how a transition can revise work arrangements rather than simply replace one occupation with another. ([flora.insead.edu](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf))\n\n- **Harris**: A temporary assignment leading a division helped him test whether he could operate as a general manager, addressing fears that introspection had not resolved. His later relationship with Gerry, a founder who saw him differently from an old mentor, demonstrates both identity experimentation and shifting connections. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\n- **Gary McCarthy**: Gary used alumni and company networks, but the decisive factor was a role model in the new setting. This supports Ibarra’s claim that new connections matter not only for openings but for making a new self feel learnable and legitimate. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\n- **June Prescott**: A literature professor explored finance by auditing business courses, seeking mentors, and testing whether she could identify with people in the finance world. She evaluated possible selves through questions such as whether she wanted to be like the people she met. Her case demonstrates shifting connections, role models, and the gradual embodiment of an abstract option through people and settings. ([flora.insead.edu](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf))\n\n- **Brenda Rayport**: A publishing executive’s discomfort with a caricature of her life became a recurring sensemaking image while she explored alternatives and eventually founded a literary agency. Her case demonstrates how triggers become meaningful within a longer process and how a new identity can integrate work, creativity, and personal life rather than choose one side of a false tradeoff. ([flora.insead.edu](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf))\n\n- **John Alexander**: A would-be author’s astrologer episode is used to show that apparent “moments of truth” usually make sense of change already underway rather than causing it from scratch. The example is useful for correcting the epiphany myth. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\n## Qualifications and common misreadings\n\n- **Not a quit-your-job manifesto.** Ibarra recommends action, but much of the action is bounded experimentation—side projects, temporary roles, courses, advisory work, or freelancing—not impulsive abandonment of income or responsibilities. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\n- **Not pure introspection, but not anti-reflection.** Reflection is crucial after experience has produced material to interpret. The mistake is expecting solitary analysis to deliver certainty before action. ([herminiaibarra.com](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/))\n\n- **Not a single true calling.** The framework assumes multiple possible selves and often a portfolio of experiments. A public digest should avoid turning the thesis into “find your passion.” ([flora.insead.edu](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf))\n\n- **Scope conditions.** The original research centers on managers and professionals, often mid-career, and the INSEAD paper notes that some findings are illustrated through professional women’s career dilemmas while the strategies are not claimed to be gender-specific. It should not be generalized uncritically to every worker, labor market, or economic constraint. ([flora.insead.edu](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf))\n\n- **Later research complicates closure.** A 2026 Annual Review article coauthored by Ibarra frames contemporary careers as nonlinear and identifies open questions in the research on career transition and professional identity. Later Ibarra writing also suggests modern transitions may be recurring rather than resolved once and for all. ([annualreviews.org](https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-020924-071546))\n\n## Metadata check\n\n- **Title:** *Working Identity: Unconventional Strategies for Reinventing Your Career*.  \n- **Author:** Herminia Ibarra.  \n- **Original publication:** Harvard Business School Press, 2003; Google Books lists 199 pages and ISBN 1578517788 / 9781578517787. ([books.google.com](https://books.google.com/books/about/Working_Identity.html?id=m4bzwnBdktoC))  \n- **Updated edition:** Harvard Business Review Press published *Working Identity, Updated Edition, With a New Preface* on October 17, 2023; HBR Press lists 240 pages and describes added action-oriented exercises and new examples. The core thesis appears continuous: career transition is experimental, nonlinear, and identity-based. ([store.hbr.org](https://store.hbr.org/product/working-identity-updated-edition-with-a-new-preface-unconventional-strategies-for-reinventing-your-career/10659))  \n- **Author affiliation/current authority check:** London Business School identifies Ibarra as Charles Handy Chair in Organisational Behaviour and an authority on leadership and career transition. ([london.edu](https://www.london.edu/faculty-and-research/faculty-profiles/h/herminia-ibarra))\n\n## Sources\n\n- [Herminia Ibarra official book page — *Working Identity*](https://herminiaibarra.com/working-identity-book/) — Supports the book’s central thesis, the 2023 updated edition, and the three practices of experimenting, interacting with new networks, and making sense.\n- [Harvard Business Review Press product page — *Working Identity, Updated Edition*](https://store.hbr.org/product/working-identity-updated-edition-with-a-new-preface-unconventional-strategies-for-reinventing-your-career/10659) — Supports metadata for the 2023 edition and publisher framing of possible selves, identity experiments, networks, and storytelling.\n- [Google Books — 2003 *Working Identity* bibliographic page](https://books.google.com/books/about/Working_Identity.html?id=m4bzwnBdktoC) — Supports original publication year, publisher, length, ISBN, and high-level description of the book’s examples and “acts of reinvention.”\n- [Herminia Ibarra — “How to stay stuck in the wrong career”](https://herminiaibarra.com/how-to-stay-stuck-in-the-wrong-career/) — Official excerpt/article supporting the plan-and-implement vs. test-and-learn distinction, crafting experiments, shifting connections, making sense, and examples of Susan, Harris, Gary, and John.\n- [INSEAD working paper — “Our Many Possible Selves: Re-working our Identities to Reinvent our Careers”](https://flora.insead.edu/fichiersti_wp/inseadwp2004/2004-22.pdf) — Supports possible selves, the practice-based identity theory, research scope, and book-grounded examples of Susan, June, and Brenda.\n- [Administrative Science Quarterly abstract — “Provisional Selves”](https://journals.sagepub.com/doi/abs/10.2307/2667055) — Supports the academic foundation for identity experimentation through role models, provisional selves, and feedback.\n- [Herminia Ibarra — “Why career transition is so hard. And how to manage it better.”](https://herminiaibarra.com/why-career-transition-is-so-hard-and-how-to-manage-it-better/) — Supports the liminal-period concept and later refinements about diverging/delaying, exploiting/exploring, and bridge/bond relationships.\n- [Annual Review of Organizational Psychology and Organizational Behavior — “Career Transition and Professional Identity”](https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-020924-071546) — Supports later scholarly context: nonlinear transitions, identity dynamics, liminality, and acknowledged research gaps.\n- [London Business School faculty profile — Herminia Ibarra](https://www.london.edu/faculty-and-research/faculty-profiles/h/herminia-ibarra) — Supports current author identity, affiliation, and expertise in leadership and career transition."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 3
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 65330,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 4649,
+    "output_tokens_details": {
+      "reasoning_tokens": 1379
+    },
+    "total_tokens": 69979
+  },
+  "user": null,
+  "metadata": {}
+}

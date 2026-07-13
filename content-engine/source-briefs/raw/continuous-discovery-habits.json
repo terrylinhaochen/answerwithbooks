@@ -1,0 +1,947 @@
+{
+  "id": "resp_0389d8e156eed7d5016a548081c2548198ab768b4e5ad18f01",
+  "object": "response",
+  "created_at": 1783922817,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783922913,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0389d8e156eed7d5016a548082e7dc8198b0ad855f090a4150",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Teresa Torres Continuous Discovery Habits official book weekly customer touchpoints product trio opportunity solution tree",
+          "Continuous Discovery Habits Teresa Torres Product Talk official",
+          "Continuous Discovery Habits publisher Product Talk Press 2021 Teresa Torres",
+          "Teresa Torres continuous discovery habits interview opportunity solution tree assumption mapping"
+        ],
+        "query": "Teresa Torres Continuous Discovery Habits official book weekly customer touchpoints product trio opportunity solution tree",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/upcoming-events-march-2024/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.startups.com/lexicon/continuous-discovery"
+          },
+          {
+            "type": "url",
+            "url": "https://www.k8mak.com/skills/opportunity-solution-tree/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/continuous-discovery-habits/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.v01.io/posts/bookshelf/2021-continuous-discovery-habits/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/discovering-solutions/"
+          },
+          {
+            "type": "url",
+            "url": "https://greatquestion.co/blog/continuous-discovery-habits"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ybrikman.com/blog/2023/03/02/continuous-discovery-habits/"
+          },
+          {
+            "type": "url",
+            "url": "https://getperspective.ai/blog/the-opportunity-solution-tree-a-2026-guide-for-continuous-discovery"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ideaplan.io/frameworks/opportunity-solution-tree"
+          },
+          {
+            "type": "url",
+            "url": "https://inigomedina.co/library/work/torres-continuous-discovery-habits"
+          },
+          {
+            "type": "url",
+            "url": "https://uploads-ssl.webflow.com/646b4f31599a311972aa26dd/64bf7c57443faa46c89fca36_Checklist%20-%20Continuous%20Discovery%20Habits%20-%20Teresa%20Torres.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.productfocus.com/wp/wp-content/uploads/2019/10/Product_Focus_PMJ07_Agile.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/55807b56e4b0d1280d7ce0e3/t/61d77cf9f4a3e213da082129/1641512186943/Summary_Continuous_Discovery_Habits_2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://srinathramakrishnan.wordpress.com/wp-content/uploads/2021/06/brief-summary-of-continuous-discovery-habits.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://assets-global.website-files.com/66f3d2ee00f1a412da3a1e50/67c85080db075b123f421426_83769006183.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://digital-garden.ontheagilepath.net/assets/FormingContinuousDiscoveryHabits.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2307.13104"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2601.00912"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1807.03367"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1907.07032"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a5480850ef08198b061822bad028235",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a5480856dfc8198b2f0f880e26c036e",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:producttalk.org \"weekly\" \"customer\" \"Continuous Discovery Habits\" \"Teresa Torres\"",
+          "site:producttalk.org \"product trio\" \"Continuous Discovery Habits\" \"Teresa Torres\"",
+          "site:producttalk.org \"opportunity solution tree\" \"assumption mapping\" \"Continuous Discovery Habits\"",
+          "site:producttalk.org \"experience interviews\" \"Teresa Torres\""
+        ],
+        "query": "site:producttalk.org \"weekly\" \"customer\" \"Continuous Discovery Habits\" \"Teresa Torres\"",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/continuous-discovery-habits/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/roles-in-a-product-trio/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/responsibility-in-a-product-trio/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/2024/10/customer-recruiting/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/interview-customers-together/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/tools-of-the-trade-opportunity-solution-tree/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/glossary-discovery-continuous-discovery/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/sales-owns-customer-relationships/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/getting-started-with-discovery/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/cdh-book-club-april-2026-2/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/cdh-book-club-april-2026/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a5480877980819896c60962684dda17",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:producttalk.org \"Shifting from Outputs to Outcomes\" \"desired outcome\" Teresa Torres",
+          "site:producttalk.org \"Assumption Mapping\" \"Teresa Torres\" \"desirability\" \"viability\"",
+          "site:producttalk.org \"small tests\" \"Teresa Torres\" \"Continuous Discovery Habits\"",
+          "site:producttalk.org \"experience map\" \"interview snapshots\" \"Teresa Torres\""
+        ],
+        "query": "site:producttalk.org \"Shifting from Outputs to Outcomes\" \"desired outcome\" Teresa Torres",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/shifting-from-outputs-to-outcomes/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/2024/07/shifting-from-outputs-to-outcomes/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/interview-snapshot/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/2023/12/stakeholder-feature-requests/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/keeping-track-of-discovery/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/glossary-discovery-desired-outcome/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/tag/stakeholder-management/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/customer-interviews/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/tag/defining-outcomes/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/continuous-discovery-across-the-organization/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/glossary-discovery-okrs/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a54808a84d881989a8f19b6aae5ab4e",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a54808acf9481989eb5917f780054b4",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.producttalk.org/"
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a54808eb73c8198a055be4f5a7dea61",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a54808f2ee08198b4ac508f14953a03",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.producttalk.org/assumption-testing/"
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a548091abc08198ac41e89d9233f133",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a548091f7bc81988c324e38fbae58a3",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.producttalk.org/assumption-testing/"
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a5480944cf88198a5f7b897fdd711b0",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a548094d1608198bce851fd2d86e0d6",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Continuous Discovery Habits Teresa Torres ISBN Product Talk Press 2021",
+          "Continuous Discovery Habits Discover Products that Create Customer Value and Business Value Teresa Torres publication date publisher",
+          "WorldCat Continuous Discovery Habits Teresa Torres 2021 Product Talk"
+        ],
+        "query": "Continuous Discovery Habits Teresa Torres ISBN Product Talk Press 2021",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Continuous_Discovery_Habits.html?id=Wb4yEAAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://vagrantpress.com/books/continuous-discovery-habits-discover-products-that-create-customer-value-and-business-value-2"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.co.in/books?id=Wb4yEAAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://play.google.com/store/books/details/Continuous_Discovery_Habits_Discover_Products_that?hl=en_US&id=Wb4yEAAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.walmart.com/ip/260891189"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/en/book/show/58046715-continuous-discovery-habits"
+          },
+          {
+            "type": "url",
+            "url": "https://www.campusbooks.com/books/9781736633304-continuous-discovery-habits-discover-products-that-create-customer-value-and-business-value"
+          },
+          {
+            "type": "url",
+            "url": "https://www.finnotes.org/publications/continuous-discovery-habits"
+          },
+          {
+            "type": "url",
+            "url": "https://www.jermainebrown.org/books/continuous-discovery-habits-discover-products-that-create-customer-value-and-business-value"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/book/show/58093580-continuous-discovery-habits"
+          },
+          {
+            "type": "url",
+            "url": "https://www.perlego.com/book/4189213/continuous-discovery-habits-discover-products-that-create-customer-value-and-business-value-pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/de/title/1357011382"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/55807b56e4b0d1280d7ce0e3/t/61d77cf9f4a3e213da082129/1641512186943/Summary_Continuous_Discovery_Habits_2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://13184971338858146552.googlegroups.com/attach/4c786410aae65/Continuous_Discovery_Habits_Discover_Products_that_Create_Customer_Value_and_Business_Value.pdf?part=0.1&vt=ANaJVrG6Oe4HgJLhY0xK6G4dWO9dEdc3Cqdn8RtsuC7dKUviAjkBzpOO1DIGUU6gUJVLQdhGuSkuUAHYfiORI-AOTXarWf9OZQITkDUYU8gVjA3BSy1053w"
+          },
+          {
+            "type": "url",
+            "url": "https://srinathramakrishnan.wordpress.com/wp-content/uploads/2021/06/brief-summary-of-continuous-discovery-habits.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://vladimir.remenar.net/download/continuous-discovery-habits-pdf/?masterkey=GSc9hyltFXfsT9ktApeXA0VnUYBYI4BW9HknV3EgFBO11iOrb2y4n5KZWYvc4L2F9pgmy1NSFzGKNp-HIAFbzwT4265i-H5BkMT3eA4_ats&wpdmdl=1483"
+          },
+          {
+            "type": "url",
+            "url": "https://staging.foodbabe.com/archive-ga-23-57/pdf?dataid=aom30-3233&title=teresa-torres-opportunity-solution-tree.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://explore.gcts.edu/gacor1-21/Book?dataid=XsN33-2476&title=new-product-development.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2601.00912"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1912.00778"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1211.5407"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/0708.2090"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a54809881108198b48aa80e3927da07",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a548098b5c881988c14dec13bcefb67",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Teresa Torres Continuous Discovery Habits interview product trio weekly customer touchpoints",
+          "Teresa Torres interview Continuous Discovery Habits opportunity solution tree podcast",
+          "Mind the Product Teresa Torres Continuous Discovery Habits interview",
+          "Lenny Teresa Torres Continuous Discovery Habits opportunity solution tree"
+        ],
+        "query": "Teresa Torres Continuous Discovery Habits interview product trio weekly customer touchpoints",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.mindtheproduct.com/teresa-torres-answers-your-product-discovery-questions/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.k8mak.com/skills/opportunity-solution-tree/"
+          },
+          {
+            "type": "url",
+            "url": "https://greatquestion.co/blog/continuous-discovery-habits"
+          },
+          {
+            "type": "url",
+            "url": "https://qualz.ai/research-guide/frameworks/opportunity-solution-tree"
+          },
+          {
+            "type": "url",
+            "url": "https://www.startups.com/lexicon/continuous-discovery"
+          },
+          {
+            "type": "url",
+            "url": "https://www.koji.so/blog/weekly-customer-interviews-continuous-discovery"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ideaplan.io/frameworks/opportunity-solution-tree"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mindtheproduct.com/getting-to-a-team-based-approach-to-continuous-discovery-by-teresa-torres/"
+          },
+          {
+            "type": "url",
+            "url": "https://uxuiprinciples.com/en/principles/continuous-discovery-cadence"
+          },
+          {
+            "type": "url",
+            "url": "https://productatheart.com/blog/teresa-torres-even-you-can-do-continuous-discovery-bringing-the-discovery-habits-to-every-organization"
+          },
+          {
+            "type": "url",
+            "url": "https://toolstackpm.com/methodologies/opportunity-solution-tree"
+          },
+          {
+            "type": "url",
+            "url": "https://www.saasbookshelf.com/books/continuous-discovery-habits"
+          },
+          {
+            "type": "url",
+            "url": "https://www.creativebrief.com/user_files/26445/1686045162_Beyond_Building_Strong_Product_Culture_eBook.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://assets-global.website-files.com/66f3d2ee00f1a412da3a1e50/67c85080db075b123f421426_83769006183.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.oneknightinproduct.com/teresa-torres/One_Knight_in_Product-E71-Teresa_Torres.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/55807b56e4b0d1280d7ce0e3/t/61d77cf9f4a3e213da082129/1641512186943/Summary_Continuous_Discovery_Habits_2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.welcomehomevetsofnj.org/textbook-ga-24-2-27/opportunity-solution-tree-example.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://digital-garden.ontheagilepath.net/assets/Opportunity%20Solution%20Tree%20Learning%20Session_MiroExport.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2603.29890"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2601.00912"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2312.14231"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1608.01900"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a54809c9cfc8198ae6c9269d86b07af",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0389d8e156eed7d5016a54809cbcfc8198a0d0271b230aefe3",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:producttalk.org cdh book club January 2026 Continuous Discovery Habits chapters outcome",
+          "site:producttalk.org \"Let's Read Continuous Discovery Habits Together\" \"March 2026\"",
+          "site:producttalk.org \"Let's Read Continuous Discovery Habits Together\" \"June 2026\" \"assumption\""
+        ],
+        "query": "site:producttalk.org cdh book club January 2026 Continuous Discovery Habits chapters outcome",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/cdh-book-club-march-2026/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/continuous-discovery-habits-book/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/lets-read-continuous-discovery-habits-together-january-2026/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/page/2/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/?p=1478"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/author/teresa/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/cdh-book-club-february-2026/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/continuous-discovery-habits/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/cdh-book-club-april-2026/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/cdh-book-club-june-2026/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/cdh-book-club-april-2026-2/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/content/files/2025/08/interviewing_guide.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/glossary-discovery-continuous-discovery/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/continuous-discovery-habits/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/2024/10/customer-recruiting/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/product-trios/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/shifting-from-outputs-to-outcomes/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/opportunity-solution-trees/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/customer-interviews/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/interview-snapshot/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/assumption-testing/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.producttalk.org/interview-customers-together/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Continuous_Discovery_Habits.html?id=Wb4yEAAAQBAJ&utm_source=openai"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0389d8e156eed7d5016a5480a12e408198826d0b70f3b51488",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0389d8e156eed7d5016a5480b4a65c8198808b3e564f0c632c",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 732,
+              "start_index": 625,
+              "title": "Continuous Discovery | Definition and Overview | Product Talk",
+              "url": "https://www.producttalk.org/glossary-discovery-continuous-discovery/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1595,
+              "start_index": 1500,
+              "title": "Continuous Discovery Habits (the Book) is Finally Here!",
+              "url": "https://www.producttalk.org/continuous-discovery-habits/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2134,
+              "start_index": 2027,
+              "title": "Continuous Discovery | Definition and Overview | Product Talk",
+              "url": "https://www.producttalk.org/glossary-discovery-continuous-discovery/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2643,
+              "start_index": 2548,
+              "title": "Customer Recruiting for Continuous Discovery: Get Easy Access to Customers Week Over Week | Product Talk",
+              "url": "https://www.producttalk.org/2024/10/customer-recruiting/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3077,
+              "start_index": 3014,
+              "title": "Product Trios: What They Are, Why They Matter, and How to Get Started",
+              "url": "https://www.producttalk.org/product-trios/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3588,
+              "start_index": 3525,
+              "title": "Product Trios: What They Are, Why They Matter, and How to Get Started",
+              "url": "https://www.producttalk.org/product-trios/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4019,
+              "start_index": 3918,
+              "title": "Shifting from Outputs to Outcomes: Why It Matters and How to Get Started",
+              "url": "https://www.producttalk.org/shifting-from-outputs-to-outcomes/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4529,
+              "start_index": 4453,
+              "title": "Opportunity Solution Trees: Visualize Your Discovery to Stay Aligned and Drive Outcomes",
+              "url": "https://www.producttalk.org/opportunity-solution-trees/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5157,
+              "start_index": 5081,
+              "title": "Opportunity Solution Trees: Visualize Your Discovery to Stay Aligned and Drive Outcomes",
+              "url": "https://www.producttalk.org/opportunity-solution-trees/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5664,
+              "start_index": 5588,
+              "title": "Opportunity Solution Trees: Visualize Your Discovery to Stay Aligned and Drive Outcomes",
+              "url": "https://www.producttalk.org/opportunity-solution-trees/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6395,
+              "start_index": 6308,
+              "title": "Customer Interviews: How to Recruit, What to Ask, and How to Synthesize What You Learn",
+              "url": "https://www.producttalk.org/customer-interviews/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6840,
+              "start_index": 6754,
+              "title": "The Interview Snapshot: How to Synthesize and Share What You Learned from a Single Customer Interview",
+              "url": "https://www.producttalk.org/interview-snapshot/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7428,
+              "start_index": 7360,
+              "title": "Assumption Testing: Everything You Need to Know to Get Started",
+              "url": "https://www.producttalk.org/assumption-testing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7731,
+              "start_index": 7663,
+              "title": "Assumption Testing: Everything You Need to Know to Get Started",
+              "url": "https://www.producttalk.org/assumption-testing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8211,
+              "start_index": 8143,
+              "title": "Assumption Testing: Everything You Need to Know to Get Started",
+              "url": "https://www.producttalk.org/assumption-testing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8556,
+              "start_index": 8488,
+              "title": "Assumption Testing: Everything You Need to Know to Get Started",
+              "url": "https://www.producttalk.org/assumption-testing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8949,
+              "start_index": 8848,
+              "title": "Shifting from Outputs to Outcomes: Why It Matters and How to Get Started",
+              "url": "https://www.producttalk.org/shifting-from-outputs-to-outcomes/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9405,
+              "start_index": 9337,
+              "title": "Assumption Testing: Everything You Need to Know to Get Started",
+              "url": "https://www.producttalk.org/assumption-testing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9792,
+              "start_index": 9716,
+              "title": "Opportunity Solution Trees: Visualize Your Discovery to Stay Aligned and Drive Outcomes",
+              "url": "https://www.producttalk.org/opportunity-solution-trees/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10128,
+              "start_index": 10052,
+              "title": "Opportunity Solution Trees: Visualize Your Discovery to Stay Aligned and Drive Outcomes",
+              "url": "https://www.producttalk.org/opportunity-solution-trees/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10447,
+              "start_index": 10351,
+              "title": "Why Product Trios Should Interview Customers Together",
+              "url": "https://www.producttalk.org/interview-customers-together/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10664,
+              "start_index": 10601,
+              "title": "Product Trios: What They Are, Why They Matter, and How to Get Started",
+              "url": "https://www.producttalk.org/product-trios/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10948,
+              "start_index": 10872,
+              "title": "Opportunity Solution Trees: Visualize Your Discovery to Stay Aligned and Drive Outcomes",
+              "url": "https://www.producttalk.org/opportunity-solution-trees/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11290,
+              "start_index": 11214,
+              "title": "Opportunity Solution Trees: Visualize Your Discovery to Stay Aligned and Drive Outcomes",
+              "url": "https://www.producttalk.org/opportunity-solution-trees/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11468,
+              "start_index": 11400,
+              "title": "Assumption Testing: Everything You Need to Know to Get Started",
+              "url": "https://www.producttalk.org/assumption-testing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11710,
+              "start_index": 11642,
+              "title": "Assumption Testing: Everything You Need to Know to Get Started",
+              "url": "https://www.producttalk.org/assumption-testing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12101,
+              "start_index": 12006,
+              "title": "Continuous Discovery Habits (the Book) is Finally Here!",
+              "url": "https://www.producttalk.org/continuous-discovery-habits/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12744,
+              "start_index": 12619,
+              "title": "Continuous Discovery Habits: Discover Products that Create Customer Value ... - Teresa Torres - Google Books",
+              "url": "https://books.google.com/books/about/Continuous_Discovery_Habits.html?id=Wb4yEAAAQBAJ&utm_source=openai"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Continuous Discovery Habits* by Teresa Torres\n\n## Central argument\n\nTeresa Torres’s thesis is that product discovery should not be a front-loaded phase, a quarterly research project, or a validation step after a team has already chosen a feature. It should be a continuous weekly practice performed by the team building the product, using small research activities to decide what to build in pursuit of a desired product outcome. Torres defines continuous discovery as weekly customer touchpoints, by the team building the product, where the team conducts small research activities toward a desired outcome. ([producttalk.org](https://www.producttalk.org/glossary-discovery-continuous-discovery/?utm_source=openai))\n\nThe tension the book resolves is between **business value** and **customer value**, and between **speed** and **confidence**. Product teams are under pressure to ship, but shipping outputs does not prove they created value. Conversely, customer-centered research can become slow, detached from delivery, or disconnected from business outcomes. Torres’s answer is a structured cadence: align the product trio around one outcome, interview continuously to identify opportunities, visualize the decision space in an opportunity solution tree, and run assumption tests to compare solutions before building. Her book announcement summarizes this path as starting with a clear outcome, interviewing to discover opportunities, and assumption-testing to evaluate solutions. ([producttalk.org](https://www.producttalk.org/continuous-discovery-habits/?utm_source=openai))\n\n## Mechanisms and frameworks\n\n### Weekly customer touchpoints\n\nThe weekly cadence is the operating backbone. “Weekly” is not just a frequency target; it is meant to make customer input available when product decisions are actually being made. Official Product Talk material stresses that discovery and delivery are not separate phases, and that continuous discovery should generate recent evidence for everyday product decisions. ([producttalk.org](https://www.producttalk.org/glossary-discovery-continuous-discovery/?utm_source=openai))\n\nA touchpoint can include interviews, prototype tests, surveys, or other small research activities, but Torres treats continuous interviewing as a keystone habit because stories from customers feed the opportunity space. The practice depends on making recruiting sustainable; Torres later emphasizes that teams should automate recruiting because manually hustling for interviewees each week undermines the habit. ([producttalk.org](https://www.producttalk.org/2024/10/customer-recruiting/?utm_source=openai))\n\n### Product trio\n\nThe “product trio” is usually a product manager, designer, and engineer who jointly lead discovery while remaining part of the delivery team. The concept is flexible: the point is not to exclude researchers, analysts, product marketers, or other roles, but to ensure the smallest practical cross-functional decision-making group is directly involved. ([producttalk.org](https://www.producttalk.org/product-trios/))\n\nThe causal role of the trio is to prevent handoffs from distorting discovery. If a PM gathers requirements, hands them to design, and design hands them to engineering, each later role discovers gaps too late. Torres argues that when the trio interviews, maps opportunities, chooses target opportunities, generates solutions, and tests together, they build shared understanding and can resolve disagreements with evidence rather than preferences. ([producttalk.org](https://www.producttalk.org/product-trios/))\n\n### Desired outcome\n\nA desired outcome is the impact the team wants its work to have on customers or the business; it is often a metric, but it can be directional when the right metric is still emerging. Torres distinguishes outcomes from outputs: an output is what a team ships, while an outcome is the effect that output has. ([producttalk.org](https://www.producttalk.org/shifting-from-outputs-to-outcomes/?utm_source=openai))\n\nIn the opportunity solution tree, the outcome sits at the top and scopes discovery. Later Product Talk guidance says a product outcome is usually the right level for discovery: business outcomes can be too broad for a team to directly move, while feature-level traction metrics can be too narrow. Torres also recommends that teams work on one outcome at a time when possible, because multiple simultaneous outcomes dilute learning. ([producttalk.org](https://www.producttalk.org/opportunity-solution-trees/))\n\n### Opportunity solution tree\n\nThe opportunity solution tree is the book’s main visual framework. Its layers are: desired outcome at the root/top; opportunities beneath it; solutions beneath selected opportunities; and assumption tests beneath solutions. Opportunities are customer needs, pain points, and desires that, if addressed, could drive the outcome. Solutions are product, service, or feature ideas that address an opportunity. Assumption tests evaluate whether a solution can create customer value in a way that also drives business value. ([producttalk.org](https://www.producttalk.org/opportunity-solution-trees/))\n\nThe tree is important because it distinguishes problem-space learning from solution-space ideation. Teams first map the opportunity space, then choose a target opportunity, then consider multiple solutions, then test assumptions. Torres warns against making up opportunities from internal beliefs; official guidance says teams should start with several story-based customer interviews and revise the tree as interviews continue. ([producttalk.org](https://www.producttalk.org/opportunity-solution-trees/))\n\n### Experience interviews / story-based interviews\n\nI did not find “experience interviews” as a formal phrase in the official material inspected. The official terminology is **story-based customer interviews**, supported by **experience maps** and **interview snapshots**. For a digest, treat “experience interviews” as the book’s practice of interviewing customers about specific past experiences rather than asking speculative questions about what they might want. Product Talk’s interview guidance says the goal is to collect at least one story about past behavior, because unmet needs, pain points, and desires emerge from those stories. ([producttalk.org](https://www.producttalk.org/customer-interviews/?utm_source=openai))\n\nThe interview snapshot is a one-page synthesis artifact for a single interview. It can include quick facts, a representative quote, opportunities, insights, and an experience map of the story. The comprehensive experience map aggregates patterns across interviews, while the opportunity solution tree captures opportunities relevant to the current outcome. ([producttalk.org](https://www.producttalk.org/interview-snapshot/?utm_source=openai))\n\n### Assumption mapping\n\nAssumption mapping comes after the team has candidate solutions. The team identifies what must be true for each idea to work, across categories such as desirability, viability, feasibility, usability, and ethical risk. Torres’s later official guide credits David Bland’s *Testing Business Ideas* for assumption mapping: rank assumptions by how important they are to the idea and how much evidence the team already has. The riskiest assumptions are those that are critical and weakly supported. ([producttalk.org](https://www.producttalk.org/assumption-testing/))\n\nThe distinction matters: assumption mapping is not the same as validating a whole solution. It breaks a solution into testable beliefs, allowing teams to compare ideas cheaply and avoid over-investing in the first plausible feature. ([producttalk.org](https://www.producttalk.org/assumption-testing/))\n\n### Small tests\n\nTorres uses “assumption tests” rather than “experiments” for discovery work. Her rationale is that teams often lack the time or traffic for formal experiments before building, and whole-idea tests are too slow. Assumption tests evaluate a single risky assumption. Official Product Talk guidance groups common tests into prototype tests, one-question surveys, data mining, and research spikes. ([producttalk.org](https://www.producttalk.org/assumption-testing/))\n\nSmall tests are causal links between discovery and delivery: they help the trio decide which solution looks best before committing to build. Torres does not say every assumption must be tested; the team should test the assumptions most likely to sink the idea or cause harm. ([producttalk.org](https://www.producttalk.org/assumption-testing/))\n\n## Book-grounded examples\n\n- **Slack integrations**: Product Talk uses Slack integrations to distinguish outputs from outcomes. Integrations are outputs; usage, satisfaction, and retention effects are outcomes. This example demonstrates why shipping a feature is not the success condition. ([producttalk.org](https://www.producttalk.org/shifting-from-outputs-to-outcomes/?utm_source=openai))  \n- **Local newspaper article sharing**: In the assumption-testing guide, Torres gives a mini opportunity solution tree with the outcome “increase new readers,” a target opportunity around knowing someone who should read an article, and possible solutions such as social sharing, email, or SMS. This example shows how one opportunity can support multiple solutions and many assumptions. ([producttalk.org](https://www.producttalk.org/assumption-testing/))  \n- **Dinner / takeout / meal prep**: The opportunity solution tree guide contrasts opportunities such as hunger, uncertainty about dinner, or lack of cooking time with solutions such as takeout, restaurants, or meal kits. This example demonstrates the frequent error of labeling a solution as an opportunity. ([producttalk.org](https://www.producttalk.org/opportunity-solution-trees/))  \n- **Google Reader and Dark Sky**: Torres uses these as examples of loved products that did not create enough value for the owning business. They illustrate why the OST starts with business value while the opportunity space keeps the path customer-centered. ([producttalk.org](https://www.producttalk.org/opportunity-solution-trees/))\n\n## Qualifications and common misreadings\n\n- **Not “PM does research and reports back.”** The trio should hear from customers directly because discovery evidence must be timely, actionable, and believable to the builders. ([producttalk.org](https://www.producttalk.org/interview-customers-together/?utm_source=openai))  \n- **Not “researchers are excluded.”** Torres says the trio model is adaptable; the core principle is cross-functional collaboration, not rigid titles. ([producttalk.org](https://www.producttalk.org/product-trios/))  \n- **Not “customer value alone is enough.”** The framework aims for products customers value that also sustain the business. The desired outcome and opportunity space intentionally connect those two sides. ([producttalk.org](https://www.producttalk.org/opportunity-solution-trees/))  \n- **Not “brainstorm opportunities from internal knowledge.”** Official guidance warns that made-up opportunities carry bias and missing context; interviews are the preferred source, while sales/support/analytics inputs can inspire questions for later interviews. ([producttalk.org](https://www.producttalk.org/opportunity-solution-trees/))  \n- **Not “test everything.”** Assumption testing focuses on the riskiest assumptions, not exhaustive proof. ([producttalk.org](https://www.producttalk.org/assumption-testing/))  \n- **Not “A/B testing equals discovery.”** Torres distinguishes assumption tests used before deciding what to build from experiments used after shipping to measure impact. ([producttalk.org](https://www.producttalk.org/assumption-testing/))  \n- **Scope condition:** The method assumes a team has or can negotiate access to customers, a durable enough product area to learn over time, and an outcome it can influence. Torres acknowledges many organizations remain output-driven, reorganize teams frequently, or restrict customer access. ([producttalk.org](https://www.producttalk.org/continuous-discovery-habits/?utm_source=openai))\n\n## Metadata check\n\nThe full title is *Continuous Discovery Habits: Discover Products that Create Customer Value and Business Value*. The author is Teresa Torres. Google Books lists Product Talk LLC as publisher, May 19, 2021, 218 pages, ISBN 9781736633311 for the ebook edition. Product Talk’s official announcement was also published May 19, 2021. Retail listings show a paperback ISBN 9781736633304 and a different page count, but I found no evidence that those format differences materially change the framework. ([books.google.com](https://books.google.com/books/about/Continuous_Discovery_Habits.html?id=Wb4yEAAAQBAJ&utm_source=openai))\n\n## Sources\n\n- [Product Talk — “Continuous Discovery Habits (the Book) is Finally Here!”](https://www.producttalk.org/continuous-discovery-habits/) — Official launch post supporting the book’s purpose, product-trio audience, outcome/interview/assumption-test sequence, and 2021 publication context.  \n- [Product Talk — Continuous Discovery glossary](https://www.producttalk.org/glossary-discovery-continuous-discovery/) — Official definition of continuous discovery and its three requirements.  \n- [Product Talk — “Everyone Can Do Continuous Discovery—Even You! Here’s How”](https://www.producttalk.org/getting-started-with-discovery/) — Official later explanation of weekly touchpoints, trio work, hidden assumptions, and recruiting automation.  \n- [Product Talk — “Product Trios: What They Are, Why They Matter, and How to Get Started”](https://www.producttalk.org/product-trios/) — Official detailed source for trio composition, flexibility, collaboration, handoff problems, and shared risk ownership.  \n- [Product Talk — “Why Product Trios Should Interview Customers Together”](https://www.producttalk.org/interview-customers-together/) — Official excerpt supporting why the trio conducts its own interviews.  \n- [Product Talk — “Shifting from Outputs to Outcomes”](https://www.producttalk.org/shifting-from-outputs-to-outcomes/) — Official source for desired outcome, output/outcome distinction, Slack example, and outcome scope.  \n- [Product Talk — Desired Outcome glossary](https://www.producttalk.org/glossary-discovery-desired-outcome/) — Official concise definition of desired outcome and its role at the top of the OST.  \n- [Product Talk — “Opportunity Solution Trees”](https://www.producttalk.org/opportunity-solution-trees/) — Official comprehensive guide to OST structure, prerequisites, opportunity/solution distinctions, examples, and business/customer value tension.  \n- [Product Talk — “Customer Interviews”](https://www.producttalk.org/customer-interviews/) — Official guide to story-based interviews, opportunities from stories, and interview snapshots.  \n- [Product Talk — “The Interview Snapshot”](https://www.producttalk.org/interview-snapshot/) — Official source for interview snapshot, experience map, and levels of synthesis.  \n- [Product Talk — “Assumption Testing”](https://www.producttalk.org/assumption-testing/) — Official source for assumptions, assumption categories, assumption mapping, small tests, and distinction from experiments.  \n- [Product Talk — 2026 CDH Book Club: January, March, April, May](https://www.producttalk.org/continuous-discovery-habits-book/) — Official reading guides confirming chapter coverage and later framing of mindsets, experience maps, interviewing, and opportunity mapping.  \n- [Mind the Product — “Getting to a team-based approach to continuous discovery”](https://www.mindtheproduct.com/getting-to-a-team-based-approach-to-continuous-discovery-by-teresa-torres/) — Credible conference summary of Torres explaining weekly touchpoints, small research activities, desired outcomes, and the product trio.  \n- [Mind the Product — “Teresa Torres Answers Your Product Discovery Questions”](https://www.mindtheproduct.com/teresa-torres-answers-your-product-discovery-questions/) — Credible interview/Q&A supporting framework-agnostic positioning, outcomes, opportunities, and stakeholder constraints.  \n- [Google Books — *Continuous Discovery Habits* bibliographic page](https://books.google.com/books/about/Continuous_Discovery_Habits.html?id=Wb4yEAAAQBAJ) — Metadata for full title, author, publisher, publication date, ISBN, and page count."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 6
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 70830,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 5106,
+    "output_tokens_details": {
+      "reasoning_tokens": 1931
+    },
+    "total_tokens": 75936
+  },
+  "user": null,
+  "metadata": {}
+}

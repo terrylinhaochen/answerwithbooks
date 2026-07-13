@@ -124,14 +124,22 @@ async function testFilters(page) {
   await page.goto('/books/', { waitUntil: 'domcontentloaded' });
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
   assert.equal(await page.locator('[data-book-request-card]').isVisible(), true);
+  const totalBooksText = await page.locator('[data-filter-count]').textContent();
+  const totalBooks = Number(totalBooksText?.match(/\d+/)?.[0] ?? 0);
+  const pageCount = Math.max(1, Math.ceil((totalBooks + 1) / 10));
+  assert.ok(totalBooks >= 9, 'book shelf should expose a populated catalog');
   await page.locator('[data-pagination-next]').click();
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 10);
   assert.equal(await page.locator('[data-book-request-card]').isVisible(), false);
-  await page.locator('[data-pagination-next]').click();
-  assert.equal(await page.locator('[data-filter-item]:visible').count(), 2);
+  for (let pageNumber = 2; pageNumber < pageCount; pageNumber += 1) {
+    await page.locator('[data-pagination-next]').click();
+  }
+  const expectedLastPageBooks = totalBooks - 9 - Math.max(0, pageCount - 2) * 10;
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), expectedLastPageBooks);
   assert.equal(await page.locator('[data-book-request-card]').isVisible(), false);
-  await page.locator('[data-pagination-prev]').click();
-  await page.locator('[data-pagination-prev]').click();
+  for (let pageNumber = pageCount; pageNumber > 1; pageNumber -= 1) {
+    await page.locator('[data-pagination-prev]').click();
+  }
   await page.locator('[data-filter-search]').fill('deep work');
   await expectText(page.locator('[data-filter-count]'), /1 book/);
   await assertVisibleText(page, '[data-filter-list]', 'Deep Work');

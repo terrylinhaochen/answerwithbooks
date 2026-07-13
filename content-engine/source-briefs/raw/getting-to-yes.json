@@ -1,0 +1,730 @@
+{
+  "id": "resp_0114ce1859c304e1016a5480ff09548198b35599018bf5d7a8",
+  "object": "response",
+  "created_at": 1783922943,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923027,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0114ce1859c304e1016a5480ffc0708198b5f8b40b8146f8dc",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Getting to Yes official Roger Fisher William Ury Bruce Patton publisher page",
+          "Harvard Program on Negotiation Getting to Yes Roger Fisher William Ury Bruce Patton",
+          "William Ury official Getting to Yes BATNA principled negotiation",
+          "Roger Fisher Getting to Yes Harvard Negotiation Project"
+        ],
+        "query": "Getting to Yes official Roger Fisher William Ury Bruce Patton publisher page",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/six-guidelines-for-getting-to-yes/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/business-negotiations/how-to-get-to-the-table/"
+          },
+          {
+            "type": "url",
+            "url": "https://hls.harvard.edu/today/refining-the-techniques-of-negotiation-and-adr/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/324551/getting-to-yes-by-roger-fisher-and-william-ury/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.uhab.org/resource/successful-conflict-resolution-getting-to-yes/"
+          },
+          {
+            "type": "url",
+            "url": "https://hls.harvard.edu/today/roger-fisher-1922-2012/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-training-daily/dear-negotiation-coach-getting-your-team-in-the-same-frames-nb/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/conflict-resolution/conflict-resolution-and-opportunities-for-mutual-gains-in-negotiation-key-concepts-from-getting-to-yes/"
+          },
+          {
+            "type": "url",
+            "url": "https://hollisarchives.lib.harvard.edu/catalog/law00255"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2024/03/to-negotiate-better-start-with-yourself"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/who-are-the-founders-of-pon/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/dose-of-leadership/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/Books-by-Roger-Fisher.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/13_NJ_WhatRogerGotRight.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.law.harvard.edu/hnlr/wp-content/uploads/sites/91/Can-Theory-Building-in-the-Negotiation-Field_Susskind.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://lira.bc.edu/files/pdf?fileid=5980a477-2d29-4a63-a9ad-7fa08ce50ec0"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/0808.0781"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2203.13623"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2212.09072"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1706.05125"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a548101dfc08198a1669a199f184151",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a5481035ec481989340be8099634738",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.penguinrandomhouse.com/books/324551/getting-to-yes-by-roger-fisher-and-william-ury/"
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a548104d8d481988817737ba93e6767",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a548106b2b081988901f8c152053b58",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Library of Congress Getting to Yes Fisher Ury 1981 Bruce Patton 1991 edition",
+          "Open Library Getting to Yes 1981 Roger Fisher William Ury Bruce Patton",
+          "Internet Archive Getting to yes negotiating agreement without giving in 1981 Fisher Ury Patton",
+          "Getting to Yes 1991 edition Bruce Patton"
+        ],
+        "query": "Library of Congress Getting to Yes Fisher Ury 1981 Bruce Patton 1991 edition",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL22268099M/Getting_to_yes"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL1552521M"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Getting_to_Yes.html?id=H9lOAAAAMAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Getting_to_Yes.html?id=y8GeMayZ0qQC"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Getting_to_Yes.html?id=MNMEC7Iu2cAC"
+          },
+          {
+            "type": "url",
+            "url": "https://fisher.bibliocommons.com/v2/record/S108C56349"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/title/Getting-to-yes-%3A-negotiating-agreement-without-giving-in/oclc/1465354302"
+          },
+          {
+            "type": "url",
+            "url": "https://digitalcommons.usu.edu/unf_research/47/"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Getting_to_Yes.html?id=sjH3emOkC1MC"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/de/title/getting-to-yes-negotiating-agreement-without-giving-in/oclc/559327568?ht=edition&referer=di"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/th/title/getting-to-yes-negotiating-agreement-without-giving-in/oclc/559327568?ht=edition&referer=di"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Getting_to_yes.html?id=FZqDWYWJLiYC"
+          },
+          {
+            "type": "url",
+            "url": "https://ftp.mail.chapters.narpm.org/default.aspx/explore/597/619/aK0MNW/getting-to__yes_negotiating-agreement-without-giving-in.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.unidesktesting.motion.ac.in/textbooks/publication/filedownload.ashx/getting_to_yes_negotiation_agreement_without_giving_in.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.rexresearch1.com/NegotiationLibrary/GettingtoYesNegotiatingFisher.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://topperlearning.motion.ac.in/%4073771981/boditd/epruparup/opiopq/getting%2Bto%2Byes%2Bnegotiating%2Bagreement%2Bwithout%2Bgiving%2Bin%2B3rd%2Bedition.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/Books-by-Roger-Fisher.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://about.openlibhums.org/index.jsp/Resources/wgEQsQ/GettingToYesByRogerFisherAndWilliamUry.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/hep-ph/9302272"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1507.08502"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1706.05125"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/0704.1678"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a54810938e881989aa6b7902e9323f1",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a548109a0088198bc374f020457bbe1",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.penguinrandomhouse.com/books/324551/getting-to-yes-by-roger-fisher-and-william-ury/"
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a54810ac3b08198b818673477f921aa",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a54810c72a881988c3c3e5afb245bd8",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:pon.harvard.edu Getting to Yes BATNA objective criteria principled negotiation",
+          "site:pon.harvard.edu \"objective criteria\" \"Getting to Yes\"",
+          "site:pon.harvard.edu \"BATNA\" \"Getting to Yes\" \"alternatives\"",
+          "site:williamury.com \"BATNA\" \"Getting to Yes\""
+        ],
+        "query": "site:pon.harvard.edu Getting to Yes BATNA objective criteria principled negotiation",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/batna/translate-your-batna-to-the-current-deal/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/batna/batna-examples-and-what-you-can-learn-from-them/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/batna/too-eager-to-close-nb/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/dispute-resolution/principled-negotiation-resolve-disagreements/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/six-guidelines-for-getting-to-yes/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/business-negotiations/negotiation-preparation-strategies/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/what-is-negotiation/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/batna/take-your-batna-to-the-next-level/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/dealing-with-a-stubborn-counterpart/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/batna/best-alternative-to-a-negotiated-agreement-beyond-the-basics/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/conflict-resolution/preparing-for-multiparty-negotiation/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/Books-by-Roger-Fisher.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/13_NJ_WhatRogerGotRight.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/nowithconvictionizbedathanyes2plz/wp-content/uploads/GTYWY-Excerpt.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a548110d4a48198b3ace21f38ce6131",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a54811100cc8198a589d049a2388e27",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf"
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a5481124fc0819897708b609e540eae",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a54811331088198a1a171ecff397991",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/"
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a5481146bf08198997f860919d71a76",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a548116df7c8198a53a496b3926b0f6",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:williamury.com \"An Example from Getting to Yes\"",
+          "site:pon.harvard.edu \"Sinai\" \"Getting to Yes\" Fisher Ury",
+          "site:pon.harvard.edu \"Jones\" \"Getting to Yes\" landlord tenant",
+          "site:pon.harvard.edu \"orange\" \"Getting to Yes\" Fisher Ury"
+        ],
+        "query": "site:williamury.com \"An Example from Getting to Yes\"",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/negotiation-skills-value-creation-resources/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/positional-bargaining-pitfalls/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/navigating-the-new-age-of-conflict/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/wp-content/uploads/articles/Complete_Wellbeing_article.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/to-negotiate-better-start-with-yourself-hbr-ideacast/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/the-tim-ferriss-show-episode-721/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/creative-warriors-interviews-william-ury/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/kusp-radio-interviews-william-ury/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/william-ury-on-how-to-fire-underperforming-staff-and-handle-angry-church-members-carey-nieuwhof-leadership-podcast/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/33-voices-interview/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/being-a-possibilist-insights-at-the-edge-with-tami-simon/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/negotiation-expert-william-ury-on-why-conflict-is-good-for-us-kqed/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.williamury.com/author-talks-the-formula-for-successful-negotiation/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a548119bfc4819893d793857e3dd87a",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a54811aa910819880c37a752214255b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.williamury.com/navigating-the-new-age-of-conflict/"
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a54811c8ec881988704fa0fe723da7d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0114ce1859c304e1016a5481211f1c81989e3a3cdccabf995e",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/positional-bargaining-pitfalls/"
+      }
+    },
+    {
+      "id": "rs_0114ce1859c304e1016a548122c16081988f9137b4387dda57",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0114ce1859c304e1016a54812d5e688198818666ad7b24c20e",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 868,
+              "start_index": 736,
+              "title": "Principled Negotiation: Focus on Interests to Create Value - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1406,
+              "start_index": 1295,
+              "title": "Positional Bargaining Pitfalls - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/positional-bargaining-pitfalls/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2135,
+              "start_index": 2003,
+              "title": "Principled Negotiation: Focus on Interests to Create Value - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2421,
+              "start_index": 2289,
+              "title": "Principled Negotiation: Focus on Interests to Create Value - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3066,
+              "start_index": 2966,
+              "title": "Navigating the New Age of Conflict – WILLIAM URY",
+              "url": "https://www.williamury.com/navigating-the-new-age-of-conflict/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3744,
+              "start_index": 3612,
+              "title": "Principled Negotiation: Focus on Interests to Create Value - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4281,
+              "start_index": 4201,
+              "title": "Lessons from a Master Negotiator – The Tim Ferriss Show – WILLIAM URY",
+              "url": "https://www.williamury.com/the-tim-ferriss-show-episode-721/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4809,
+              "start_index": 4690,
+              "title": "Using Principled Negotiation to Resolve Disagreements - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/dispute-resolution/principled-negotiation-resolve-disagreements/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5634,
+              "start_index": 5541,
+              "title": "BATNA Tool.docx",
+              "url": "https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6083,
+              "start_index": 5961,
+              "title": "Best Alternative to a Negotiated Agreement: Beyond the Basics - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/batna/best-alternative-to-a-negotiated-agreement-beyond-the-basics/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6725,
+              "start_index": 6645,
+              "title": "Lessons from a Master Negotiator – The Tim Ferriss Show – WILLIAM URY",
+              "url": "https://www.williamury.com/the-tim-ferriss-show-episode-721/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6957,
+              "start_index": 6846,
+              "title": "Positional Bargaining Pitfalls - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/positional-bargaining-pitfalls/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7466,
+              "start_index": 7304,
+              "title": "How to Fire Underperforming Staff and Handle Angry Church Members – Carey Nieuwhof Leadership Podcast – WILLIAM URY",
+              "url": "https://www.williamury.com/william-ury-on-how-to-fire-underperforming-staff-and-handle-angry-church-members-carey-nieuwhof-leadership-podcast/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8072,
+              "start_index": 7979,
+              "title": "BATNA Tool.docx",
+              "url": "https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8526,
+              "start_index": 8394,
+              "title": "Principled Negotiation: Focus on Interests to Create Value - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8887,
+              "start_index": 8803,
+              "title": "To Negotiate Better, Start with Yourself",
+              "url": "https://hbr.org/podcast/2024/03/to-negotiate-better-start-with-yourself"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9328,
+              "start_index": 9206,
+              "title": "Best Alternative to a Negotiated Agreement: Beyond the Basics - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/batna/best-alternative-to-a-negotiated-agreement-beyond-the-basics/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9728,
+              "start_index": 9620,
+              "title": "What Roger Fisher Got Profoundly Right: Five Enduring Lessons for Negotiators",
+              "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/13_NJ_WhatRogerGotRight.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10112,
+              "start_index": 9989,
+              "title": "Getting to Yes by Roger Fisher, William L. Ury, Bruce Patton: 9780143118756 | PenguinRandomHouse.com: Books",
+              "url": "https://www.penguinrandomhouse.com/books/324551/getting-to-yes-by-roger-fisher-and-william-ury/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10649,
+              "start_index": 10543,
+              "title": "Harvard Negotiation Project",
+              "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/Books-by-Roger-Fisher.pdf"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Getting to Yes* — Roger Fisher, William Ury, Bruce Patton\n\n## Central argument\n\n*Getting to Yes* argues that negotiation should not be treated as a choice between “hard” positional bargaining and “soft” concession-making. Its thesis is that parties can often reach wiser, more durable agreements by negotiating “on the merits”: separating relationship issues from substantive issues, identifying underlying interests, inventing options before deciding, and using fair external standards to resolve conflicting claims. Harvard’s Program on Negotiation describes the book’s method as a third path beyond aggressive hard-line bargaining and accommodation, aimed at problem solving rather than victory over the other side. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/))\n\nThe tension the book resolves is practical and moral: negotiators want to protect their own interests without damaging relationships, yielding to pressure, or getting trapped in arbitrary compromise. Positional bargaining makes people defend public demands, worry about face-saving, and trade concessions; PON summarizes the authors’ critique that this can produce unwise agreements, inefficiency, and damaged relationships. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/negotiation-skills-daily/positional-bargaining-pitfalls/)) The book’s alternative is not “be nice” or “split the difference,” but structure the negotiation so that both firmness and collaboration are possible.\n\n## Mechanisms and frameworks\n\n**Principled negotiation / negotiation on the merits.** This is the umbrella method. It asks negotiators to be firm about substance but constructive in process: treat the dispute as a joint problem, not a personal contest. PON identifies four core elements from the book: separate people from the problem, focus on interests rather than positions, invent options for mutual gain, and insist on objective criteria. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/)) BATNA sits alongside these as the power and choice discipline: a proposed “yes” is good only if it beats the negotiator’s best no-deal course of action. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/))\n\n**Separate the people from the problem.** The book does not say emotions and relationships are irrelevant. It says they must be handled explicitly rather than confused with the substantive issue. The “people problem” includes perception, emotion, communication, status, fear, and identity. If those are ignored, negotiators may make substantive concessions to soothe feelings, or attack the person instead of the obstacle. Ury later summarizes the operational stance as being respectful toward people while remaining direct about the problem. ([williamury.com](https://www.williamury.com/navigating-the-new-age-of-conflict/?utm_source=openai))\n\n**Interests rather than positions.** Positions are stated demands; interests are the reasons those demands matter. A position might be “open the window” or “higher salary”; interests might be fresh air, avoiding a draft, recognition, flexibility, security, or budget constraints. The causal claim is that positions often look incompatible while interests may reveal compatible needs, tradeoffs, or new issues. PON’s account of principled negotiation defines interests as the underlying needs, motivations, and concerns beneath surface demands. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/))\n\n**Options for mutual gain.** This step comes after diagnosing interests but before committing to a deal. The book distinguishes inventing from deciding: first generate possible packages, contingencies, trades, sequencing choices, and implementation mechanisms; only later evaluate them. Ury’s later explanation emphasizes that criticism during invention suppresses creativity, while separating idea generation from evaluation produces more possibilities. ([williamury.com](https://www.williamury.com/the-tim-ferriss-show-episode-721/)) This is also where “expanding the pie” happens: parties create value before deciding how to divide it.\n\n**Objective criteria.** When interests still conflict, the book advises moving from a contest of wills to a search for standards both sides can regard as legitimate. Criteria might include market value, precedent, scientific evidence, professional standards, legal rulings, cost estimates, or tradition. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/dispute-resolution/principled-negotiation-resolve-disagreements/)) Objective criteria do not eliminate disagreement; they provide a principled basis for selecting among possible outcomes without relying only on pressure, stubbornness, or arbitrary compromise.\n\n**BATNA.** BATNA means the best alternative to a negotiated agreement: what a party will do if no deal is reached. It protects against two opposite errors—accepting a deal worse than one’s alternative, or rejecting a deal better than one’s alternative. William Ury’s official BATNA tool gives the process as: brainstorm possible no-deal actions, improve the promising ones into realistic alternatives, select the strongest practical plan, consider whether to reveal it, analyze the other side’s BATNA, and revise as information changes. ([williamury.com](https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf))\n\n**Power through alternatives.** The book’s concept of power is not primarily bluster, size, wealth, or threats; it is the practical ability to meet one’s interests without the current agreement. PON summarizes this as the idea that a strong BATNA is often a negotiator’s greatest source of power, though not the only source. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/batna/best-alternative-to-a-negotiated-agreement-beyond-the-basics/)) This matters because principled negotiation is not surrender: a negotiator can collaborate while also improving alternatives, setting a walk-away point, and refusing agreements that do not beat the BATNA.\n\n## Book-grounded examples\n\n**The orange.** Ury confirms that *Getting to Yes* uses the story of two sisters fighting over an orange: compromise gives each half, but inquiry reveals one wants peel for cooking and the other wants fruit. The example demonstrates why positions can conceal compatible interests and why “split the difference” can waste value. ([williamury.com](https://www.williamury.com/the-tim-ferriss-show-episode-721/)) PON also uses the orange to explain how revealing interests enables creative dealmaking rather than fixed-pie division. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/negotiation-skills-daily/positional-bargaining-pitfalls/))\n\n**The open/closed window.** Ury says the book uses Mary Parker Follett’s library-window story: one student wants the window open, another closed; the underlying interests are fresh air and avoiding a draft, so opening a nearby window satisfies both. This demonstrates the move from positional conflict to interest diagnosis and option creation. ([williamury.com](https://www.williamury.com/william-ury-on-how-to-fire-underperforming-staff-and-handle-angry-church-members-carey-nieuwhof-leadership-podcast/))\n\n**Small town versus large corporation.** Ury’s official BATNA tool identifies this as an example from *Getting to Yes*: a small town negotiating with a large factory increases an annual payment dramatically because the town has a concrete no-deal alternative—annexing the factory and taxing it—while the corporation has not converted its apparent clout into a practical alternative. The example demonstrates “power through alternatives”: relative power depends on each side’s BATNA, not just resources or size. ([williamury.com](https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf))\n\n## Qualifications and common misreadings\n\nA common misreading is that *Getting to Yes* means “always reach agreement.” PON explicitly warns that the goal is not agreement for its own sake; the agreement should be better than the negotiator’s BATNA, and walking away from an inferior deal is disciplined decision-making. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/))\n\nAnother misreading is that “separate people from the problem” means suppress feelings. Later Ury interviews emphasize the opposite: unmanaged reaction is often the obstacle, so negotiators need self-control, listening, and perspective before they can use the framework well. ([hbr.org](https://hbr.org/podcast/2024/03/to-negotiate-better-start-with-yourself))\n\nA third limitation is that BATNA is powerful but not exhaustive. PON notes that focusing too narrowly on BATNA can cause negotiators to overlook other sources of strength and leave value on the table, especially in ongoing relationships where the “alternative” may be continued no-agreement rather than a clean exit. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/batna/best-alternative-to-a-negotiated-agreement-beyond-the-basics/))\n\nObjective criteria are also not magic. James Sebenius’s *Negotiation Journal* essay on Roger Fisher notes that critics can question what counts as “objective” in contested situations, while still recognizing that shared standards can shift bargaining away from a destructive test of wills. ([pon.harvard.edu](https://www.pon.harvard.edu/wp-content/uploads/images/posts/13_NJ_WhatRogerGotRight.pdf))\n\n## Metadata check\n\nCurrent title: *Getting to Yes: Negotiating Agreement Without Giving In*. Penguin Random House’s current page lists Roger Fisher, William L. Ury, and Bruce Patton as authors of the 2011 Penguin edition, published May 3, 2011, at 240 pages. ([penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/324551/getting-to-yes-by-roger-fisher-and-william-ury/))\n\nOriginal publication: Harvard’s Roger Fisher bibliography lists *Getting to YES* as Fisher and Ury with Bruce Patton as editor, Boston: Houghton Mifflin, 1981, 162 pages; Penguin paperback followed in 1983. The 1991 second edition lists Fisher, Ury, and Patton as authors, adds “Ten Questions People Ask about Getting to YES,” and lightly updates the main text. The 2011 third edition adds updated examples and modest revisions. ([pon.harvard.edu](https://www.pon.harvard.edu/wp-content/uploads/images/posts/Books-by-Roger-Fisher.pdf)) For a public digest, note that “Fisher, Ury, and Patton” is accurate for later standard editions, but the 1981 first edition was principally Fisher and Ury, with Patton credited editorially in the Harvard bibliography.\n\n## Sources\n\n- [Penguin Random House: *Getting to Yes*](https://www.penguinrandomhouse.com/books/324551/getting-to-yes-by-roger-fisher-and-william-ury/) — Confirms current title, subtitle, authorship, 2011 edition details, and publisher description of the core method.\n- [Harvard Program on Negotiation: “Principled Negotiation: Focus on Interests to Create Value”](https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/) — Supports the four-part framework, BATNA’s role, and the “not agreement at any cost” clarification.\n- [Harvard Program on Negotiation: “Positional Bargaining Pitfalls”](https://www.pon.harvard.edu/daily/negotiation-skills-daily/positional-bargaining-pitfalls/) — Supports the critique of positional bargaining and the orange example.\n- [William Ury: BATNA Tool](https://www.williamury.com/wp-content/uploads/2024/07/BATNA-Tool.docx.pdf) — Supports BATNA process steps and the small-town/factory example from *Getting to Yes*.\n- [William Ury / Tim Ferriss interview: “Lessons from a Master Negotiator”](https://www.williamury.com/the-tim-ferriss-show-episode-721/) — Supports Ury’s later explanations of BATNA, creative option generation, and the orange example.\n- [William Ury / Carey Nieuwhof interview](https://www.williamury.com/william-ury-on-how-to-fire-underperforming-staff-and-handle-angry-church-members-carey-nieuwhof-leadership-podcast/) — Supports the open/closed window example and the interests-versus-positions distinction.\n- [Harvard Program on Negotiation: “Using Principled Negotiation to Resolve Disagreements”](https://www.pon.harvard.edu/daily/dispute-resolution/principled-negotiation-resolve-disagreements/) — Supports objective criteria, examples of standards, and the joint-search approach.\n- [Harvard Program on Negotiation: “Best Alternative to a Negotiated Agreement: Beyond the Basics”](https://www.pon.harvard.edu/daily/batna/best-alternative-to-a-negotiated-agreement-beyond-the-basics/) — Supports BATNA as power and cautions against over-narrow BATNA thinking.\n- [Harvard Law School: “Roger Fisher (1922–2012)”](https://hls.harvard.edu/today/roger-fisher-1922-2012/) — Supports Fisher’s institutional role, the Harvard Negotiation Project, and the book’s influence.\n- [Harvard Negotiation Project PDF: “Books by Roger Fisher”](https://www.pon.harvard.edu/wp-content/uploads/images/posts/Books-by-Roger-Fisher.pdf) — Supports original publication metadata and edition differences.\n- [James Sebenius, “What Roger Fisher Got Profoundly Right”](https://www.pon.harvard.edu/wp-content/uploads/images/posts/13_NJ_WhatRogerGotRight.pdf) — Supports qualifications about objective criteria, BATNA, and later scholarly critique."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 4
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 74559,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 4438,
+    "output_tokens_details": {
+      "reasoning_tokens": 1806
+    },
+    "total_tokens": 78997
+  },
+  "user": null,
+  "metadata": {}
+}

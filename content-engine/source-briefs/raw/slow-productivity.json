@@ -1,0 +1,741 @@
+{
+  "id": "resp_0cfdcec268a5020e016a5482735444819ba5779e671febe5d8",
+  "object": "response",
+  "created_at": 1783923315,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923406,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0cfdcec268a5020e016a548274bfa4819b93ca691e5eb558ca",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Cal Newport Slow Productivity official page pseudo-productivity natural pace obsess over quality",
+          "Penguin Random House Slow Productivity Cal Newport do fewer things work at a natural pace obsess over quality",
+          "Cal Newport Slow Productivity excerpt pseudo-productivity knowledge work measurement",
+          "Cal Newport interview Slow Productivity pseudo-productivity visible activity valuable output"
+        ],
+        "query": "Cal Newport Slow Productivity official page pseudo-productivity natural pace obsess over quality",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.penguin.co.uk/books/454746/slow-productivity-by-newport-cal/9781405960946"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/pseudo-productivity/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.gq.com/story/cal-newport-slow-productivity-interview"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/"
+          },
+          {
+            "type": "url",
+            "url": "https://ericsandroni.com/book-summary-slow-productivity-by-cal-newport/"
+          },
+          {
+            "type": "url",
+            "url": "https://bigthink.com/series/the-big-think-interview/cal-newport-burnout/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/writing/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/the-straight-a-gospels-pseudo-work-does-not-equal-work/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.nature.com/articles/d41586-024-02540-0"
+          },
+          {
+            "type": "url",
+            "url": "https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport"
+          },
+          {
+            "type": "url",
+            "url": "https://onpode.com/episode/a-note-on-slow-productivity-ba6a671f"
+          },
+          {
+            "type": "url",
+            "url": "https://assets.edge.bigthink.com/uploads/attachment/file/5615/Cal_Newport_DG_TM_Slow_Productivity.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://creonesource.com/wp-content/uploads/2025/02/Slow-Productivity-Notes.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1706.01521"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2112.12580"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1612.08228"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2211.06319"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a548276aba4819ba676e6e70ade0791",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a548279e528819b8b29e7b5b0da80ae",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a54827b7608819ba4a181513e4d63a9",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a54827c2b98819ba521eda10ed2ab9b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "On sale Mar 05, 2024",
+        "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a54827df674819b8c7bffe0fb31004c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a54827f2010819b98505dbc3ebab8c7",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a548280df44819b8535994abc9a9bba",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a548281a248819b9ecfec3199cbd287",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/"
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a548283abf4819bb93dcfe2656b58a9",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a5482846410819b9701fac27c5e47e0",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.nature.com/articles/d41586-024-02540-0"
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a5482875184819ba47a304a73becd03",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a5482886070819b88db83e41b03ddd3",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:calnewport.com \"Slow Productivity\" \"Pseudo-Productivity\"",
+          "site:calnewport.com \"Slow Productivity\" \"seasonality\"",
+          "site:calnewport.com \"Slow Productivity\" \"Jane Austen\" \"Marie Curie\""
+        ],
+        "query": "site:calnewport.com \"Slow Productivity\" \"Pseudo-Productivity\"",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://calnewport.com/manchester-united-embraces-pseudo-productivity/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/dispatch-from-vermont/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/author/cnewport/page/3/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/blog/page/6/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/productivity-rain-dances/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/archive/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/ai-isnt-breaking-work-its-already-broken/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/the-workload-fairy-tale/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/blog-/page/8/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/blog./page/7/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/blog/page/9/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/blog-/page/9/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a54828b2b04819b89f53614a38c53fe",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a54828b9594819ba24daa3ef77a3d79",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://calnewport.com/manchester-united-embraces-pseudo-productivity/"
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a54828d6b6c819b9b1bdf2379a64486",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a54828de198819b85e64c9924c60e3e",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Cal Newport Georgetown University Slow Productivity professor official bio"
+        ],
+        "query": "Cal Newport Georgetown University Slow Productivity professor official bio",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/media-kit/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/a-brief-note-on-tenure/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/contact/"
+          },
+          {
+            "type": "url",
+            "url": "https://jcw.georgetown.edu/speaker/cal-newport-ph-d/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/writing/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/authors/59907/cal-newport/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/wp-content/uploads/2025/10/calnewport-cv-10-28-2025.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://humanities.georgetown.edu/announcements/what-makes-us-human-in-the-age-of-ai-series/"
+          },
+          {
+            "type": "url",
+            "url": "https://cs.georgetown.edu/news-story/jeremy-fineman-and-cal-newport-promoted-to-professor/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/722732/slow-productivity-by-cal-newport/9780593544860/"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/two-chances-to-see-me-next-week/"
+          },
+          {
+            "type": "url",
+            "url": "https://people.cs.georgetown.edu/~cnewport/pubs/CalvinNewportCV.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://images.wng.org/WORLD_5-4-2024.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://calnewport.com/wp-content/uploads/2022/11/calnewport-cv.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://executiveeducation.wharton.upenn.edu/wp-content/uploads/2024/11/NanoTool-2024-11.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1612.08228"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2204.05989"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2103.02524"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1602.00795"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a5482915d78819bb88da97ce0769c0b",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0cfdcec268a5020e016a54829188c4819b94505a34094c1bd7",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/"
+      }
+    },
+    {
+      "id": "rs_0cfdcec268a5020e016a54829394a4819b9881d1343ed383b1",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0cfdcec268a5020e016a54829e8bd4819ba5ff53ede2847b59",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 909,
+              "start_index": 810,
+              "title": "Slow_9780593544853_all_4p_r1.indd",
+              "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1510,
+              "start_index": 1413,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2300,
+              "start_index": 2203,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3091,
+              "start_index": 2994,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3717,
+              "start_index": 3614,
+              "title": "Bestselling Author Cal Newport Shares His Groundbreaking Philosophy for Doing Impactful Work—Without the Burnout",
+              "url": "https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4341,
+              "start_index": 4265,
+              "title": "How to Do More by Doing Less (and Doing It Better) | GQ",
+              "url": "https://www.gq.com/story/cal-newport-slow-productivity-interview"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4915,
+              "start_index": 4816,
+              "title": "Slow_9780593544853_all_4p_r1.indd",
+              "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5464,
+              "start_index": 5361,
+              "title": "Bestselling Author Cal Newport Shares His Groundbreaking Philosophy for Doing Impactful Work—Without the Burnout",
+              "url": "https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5976,
+              "start_index": 5900,
+              "title": "How to Do More by Doing Less (and Doing It Better) | GQ",
+              "url": "https://www.gq.com/story/cal-newport-slow-productivity-interview"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6458,
+              "start_index": 6359,
+              "title": "Slow_9780593544853_all_4p_r1.indd",
+              "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6916,
+              "start_index": 6819,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7466,
+              "start_index": 7369,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7876,
+              "start_index": 7779,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8396,
+              "start_index": 8281,
+              "title": "Work slower, achieve more: A talk with Cal Newport | Dropbox Blog",
+              "url": "https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8894,
+              "start_index": 8797,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9259,
+              "start_index": 9164,
+              "title": "A Slower Way to Amp Up Your Productivity - Georgetown University",
+              "url": "https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9539,
+              "start_index": 9463,
+              "title": "How to Do More by Doing Less (and Doing It Better) | GQ",
+              "url": "https://www.gq.com/story/cal-newport-slow-productivity-interview"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9884,
+              "start_index": 9785,
+              "title": "Slow_9780593544853_all_4p_r1.indd",
+              "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10185,
+              "start_index": 10070,
+              "title": "Work slower, achieve more: A talk with Cal Newport | Dropbox Blog",
+              "url": "https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10605,
+              "start_index": 10510,
+              "title": "A Slower Way to Amp Up Your Productivity - Georgetown University",
+              "url": "https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11147,
+              "start_index": 11050,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11523,
+              "start_index": 11426,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11926,
+              "start_index": 11827,
+              "title": "Slow_9780593544853_all_4p_r1.indd",
+              "url": "https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12306,
+              "start_index": 12209,
+              "title": "Slow Productivity - Penguin Random House Library Marketing",
+              "url": "https://penguinrandomhouselibrary.com/book/?isbn=9780593544853"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12502,
+              "start_index": 12451,
+              "title": "Cal Newport, New York Times Bestselling Author of Seven Books",
+              "url": "https://calnewport.com/writing/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12884,
+              "start_index": 12789,
+              "title": "A Slower Way to Amp Up Your Productivity - Georgetown University",
+              "url": "https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13183,
+              "start_index": 13107,
+              "title": "How to Do More by Doing Less (and Doing It Better) | GQ",
+              "url": "https://www.gq.com/story/cal-newport-slow-productivity-interview"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13546,
+              "start_index": 13443,
+              "title": "Bestselling Author Cal Newport Shares His Groundbreaking Philosophy for Doing Impactful Work—Without the Burnout",
+              "url": "https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13910,
+              "start_index": 13795,
+              "title": "Work slower, achieve more: A talk with Cal Newport | Dropbox Blog",
+              "url": "https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14257,
+              "start_index": 14167,
+              "title": "The lost art of accomplishment without burnout - Big Think",
+              "url": "https://bigthink.com/series/the-big-think-interview/cal-newport-burnout/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14679,
+              "start_index": 14548,
+              "title": "Cal Newport_DG_TM_Slow Productivity",
+              "url": "https://assets.edge.bigthink.com/uploads/attachment/file/5615/Cal_Newport_DG_TM_Slow_Productivity.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 15067,
+              "start_index": 14977,
+              "title": "Manchester United Embraces Pseudo-Productivity - Cal Newport",
+              "url": "https://calnewport.com/manchester-united-embraces-pseudo-productivity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 15337,
+              "start_index": 15269,
+              "title": "Productivity Rain Dances - Cal Newport",
+              "url": "https://calnewport.com/productivity-rain-dances/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 15595,
+              "start_index": 15530,
+              "title": "Dispatch From Vermont - Cal Newport",
+              "url": "https://calnewport.com/dispatch-from-vermont/"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Slow Productivity* by Cal Newport (2024)\n\n## Central argument\n\nCal Newport’s thesis is that knowledge workers are not exhausted because productivity itself is bad, but because modern offices adopted a broken substitute for productivity: measuring or intuiting useful work through visible busyness. His alternative, “slow productivity,” is a philosophy for organizing knowledge work so that meaningful output can accumulate over time without relying on constant activity, overload, or burnout. Newport frames the tension as a false choice between hustle culture and anti-ambition: the book argues that people can still pursue serious accomplishment, but only by rejecting performative busyness and rebuilding work around fewer simultaneous commitments, more humane pacing, and durable quality. ([calnewport.com](https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf))\n\nThe official publisher positioning is consistent with that thesis: the problem is a definition of productivity that treats busyness as useful effort, leading to long task lists, meetings, messages, and burnout; the promised remedy is a “slower” but not anti-work approach to meaningful accomplishment. Newport’s official site describes the book as arguing that digital office technologies intensified unsustainable overload in knowledge work and that the book provides a concrete plan for reducing it. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n## Mechanisms and frameworks\n\n**Pseudo-productivity.** Newport defines pseudo-productivity as using visible activity as the main approximation for actual productive effort. The concept is not merely “being busy”; it is a measurement regime. Because knowledge work lacks the clear output/input ratios of agriculture or manufacturing, organizations and individuals defaulted to signals that could be seen: being in the office, replying quickly, attending meetings, sending messages, and looking active. Newport argues that this became especially damaging once email, Slack, mobile computing, and remote-work tools made visible activity demonstrable at any hour and in ever-smaller increments. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n**Knowledge-work measurement.** Newport distinguishes industrial productivity from knowledge-work productivity. In farming or manufacturing, one can often measure output per unit of input and then improve a defined process. The book’s excerpt contrasts bushels per acre, cars per labor hour, Taylor’s Bethlehem Steel measurements, and Ford’s assembly-line gains with knowledge work, where one person juggles heterogeneous tasks and another person juggles a different mix. There is usually no single output, no standardized production system, and no easy way to compare people whose real obligations differ. This measurement gap is the causal opening through which pseudo-productivity enters. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n**Visible activity versus valuable output.** Slow productivity reorients attention from visible activity in the moment to valuable things produced over longer time scales. Newport repeatedly contrasts activity-based thinking with outcome-based thinking: ask what work you will be proud to have advanced this week or month, then judge daily progress by whether it moves that output forward. This distinction matters because visible activity can crowd out the time, cognitive capacity, and calm needed for valuable output. ([mariashriversundaypaper.com](https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/))\n\n**Do fewer things.** This principle is often misread as “accomplish less.” Newport’s explanation is narrower: do fewer things at once. The mechanism is workload concentration. Too many active projects create administrative overhead—meetings, messages, status updates, context switching—and this overhead consumes the time that would otherwise produce the work itself. A practical formulation is to divide commitments into an active list and a waiting list, making workload transparent and pulling new work in only after active work is completed. ([gq.com](https://www.gq.com/story/cal-newport-slow-productivity-interview))\n\n**Work at a natural pace.** Newport means that knowledge work should include variation in intensity rather than constant urgency. The official excerpt says professional efforts should unfold at a humane, varied pace, with hard periods balanced by relaxation across different time scales. In interviews, Newport connects this to not overloading the day and to designing seasons of more and less intensity. This is not idleness; it is energy management for long-term output. ([calnewport.com](https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf))\n\n**Seasonality.** Seasonality is a specific implementation of natural pace. Newport describes taking summers slower and balancing a busy teaching/book-tour semester with a lighter fall. In a later official blog post, he calls a summer retreat an exercise in seasonality: a period for recharging and recentering the creative work that sustains him. For an editor, treat seasonality as planned variation in workload or focus, not simply vacation. ([mariashriversundaypaper.com](https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/))\n\n**Obsess over quality.** This principle shifts ambition away from doing more things and toward becoming excellent at the core craft that matters in one’s role. Newport warns that quality is not the same as perfectionistic non-shipping: you still need delivery constraints. The point is to identify the most valuable work in the job, develop taste about what makes good work good, and let quality justify pruning lower-value activity. ([gq.com](https://www.gq.com/story/cal-newport-slow-productivity-interview))\n\n## Book-grounded examples\n\n**John McPhee.** The official excerpt opens with McPhee’s slow, apparently languid process and then zooms out to his career: many books, Pulitzer recognition, long *New Yorker* output, and influence as a teacher. The example demonstrates Newport’s core point that work can look unbusy at the daily scale while being extremely productive across a career. ([calnewport.com](https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf))\n\n**Les Moonves and CBS.** The excerpt’s CBS vignette shows a manager responding to poor performance by demanding visible office presence late on a Friday. Newport uses it as a case study in twentieth-century knowledge-work assumptions: harder workers, longer hours, and visible presence are treated as the obvious knobs to turn when results are disappointing. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n**Reader survey and Drucker/Davenport discussion.** Newport’s informal survey of nearly seven hundred mostly knowledge workers found vague definitions of productivity: people tended to name activities rather than measurable outcomes. The excerpt then connects that vagueness to management theory’s difficulty defining knowledge-worker productivity. This example supports the measurement-gap premise, not a universal empirical claim about all offices. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n**Taylor, Bethlehem Steel, and Ford.** These examples show why old productivity thinking worked better in industrial contexts: clear tasks, measurable outputs, and defined systems. They are not models for knowledge work; they are contrast cases explaining why knowledge work slid into visible-activity proxies. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n**Newton, Marie Curie, and Jane Austen.** In official interviews, Newport says he discusses Newton’s long timescale, Curie’s productive research thinking during a three-month countryside vacation, and Austen’s inability to produce major work until her life had enough space. These examples illustrate natural pace, breathing room, and the difference between visible effort and long-horizon achievement. ([blog.dropbox.com](https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport))\n\n**Galileo, Isaac Newton, Jane Austen, and Georgia O’Keeffe.** The publisher lists these figures as part of the book’s cast of historical knowledge workers. I verified their inclusion from official publisher copy, but not the exact lesson Newport draws from each beyond the broad slow-productivity framework; avoid assigning detailed anecdotes to Galileo or O’Keeffe unless checked in the book text. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n## Qualifications and common misreadings\n\nSlow productivity is not anti-productivity or anti-ambition. Newport explicitly positions it between hustle culture and rejecting work altogether: it aims to preserve pride, meaning, and accomplishment while reducing burnout. ([georgetown.edu](https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/))\n\n“Do fewer things” does not mean “finish fewer things.” Newport says the target is fewer concurrent active commitments; by reducing overhead and fragmentation, throughput and quality can rise over time. ([gq.com](https://www.gq.com/story/cal-newport-slow-productivity-interview))\n\n“Work at a natural pace” does not mean every day is easy or slow. It means intense periods should be balanced by slower periods, recovery, and seasonal variation. Treat it as a pacing architecture, not permission to disengage from obligations. ([calnewport.com](https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf))\n\n“Obsess over quality” is not endless polishing. Newport explicitly recognizes the need to ship and suggests stakes or delivery dates so that quality-seeking does not become avoidance. ([blog.dropbox.com](https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport))\n\nScope condition: the framework is primarily about knowledge work—jobs where outputs are ambiguous, workloads are heterogeneous, and workers have at least some autonomy over commitments, attention, and systems. Newport also applies some ideas to students, but the main causal account concerns modern knowledge-work offices. ([georgetown.edu](https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/))\n\n## Metadata check\n\nTitle: *Slow Productivity: The Lost Art of Accomplishment Without Burnout*. Author: Cal Newport. Original U.S. hardcover publication: March 5, 2024, Portfolio/Penguin Random House, 256 pages, ISBN 9780593544853. Ebook and audiobook formats also list March 5, 2024. I found no material edition differences affecting the digest; note only that UK/Penguin pages use UK-market metadata and the same three-principle positioning. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\nAuthorship is single-author Cal Newport. Around publication he was described by publisher and Georgetown sources as an associate professor of computer science at Georgetown; later official bio pages indicate promotion to professor, but that does not affect 2024 book metadata. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n\n## Sources\n\n- [Cal Newport official excerpt PDF — *Slow Productivity*](https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf) — Supports the book’s self-definition, three principles, John McPhee example, and the thesis that the problem is a faulty definition of productivity. ([calnewport.com](https://calnewport.com/wp-content/uploads/2023/12/Slow-Productivity_Excerpt.pdf))\n- [Penguin Random House Library Marketing page for *Slow Productivity*](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853) — Supports publication metadata, publisher description, official excerpt of chapter one, pseudo-productivity definition, and historical examples. ([penguinrandomhouselibrary.com](https://penguinrandomhouselibrary.com/book/?isbn=9780593544853))\n- [Cal Newport official writing page](https://calnewport.com/writing/) — Supports author-site positioning of the book and its three principles. ([calnewport.com](https://calnewport.com/writing/))\n- [Georgetown University “Ask a Professor: Cal Newport on Slow Productivity”](https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/) — Supports institutional connection, pre-publication explanation of the framework, knowledge-work scope, and student applications. ([georgetown.edu](https://www.georgetown.edu/news/how-to-improve-your-productivity-and-focus/))\n- [GQ interview with Cal Newport](https://www.gq.com/story/cal-newport-slow-productivity-interview) — Supports Newport’s explanation of pseudo-productivity, overload, active/waiting workload management, and quality/taste. ([gq.com](https://www.gq.com/story/cal-newport-slow-productivity-interview))\n- [Maria Shriver’s Sunday Paper interview with Cal Newport](https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/) — Supports activity-to-outcome shift, Newport’s personal examples of seasonality, and distinctions among the three principles. ([mariashriversundaypaper.com](https://www.mariashriversundaypaper.com/cal-newport-slow-productivity/))\n- [Dropbox interview with Cal Newport](https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport) — Supports craft/quality interpretation and verified references to Newton, Marie Curie, and Jane Austen examples. ([blog.dropbox.com](https://blog.dropbox.com/topics/work-culture/work-slower-achieve-more-a-talk-with-cal-newport))\n- [Big Think interview/discussion transcript](https://bigthink.com/series/the-big-think-interview/cal-newport-burnout/) — Supports Newport’s concise explanation of industrial versus knowledge-work measurement and “do fewer things” as fewer things at once. ([bigthink.com](https://bigthink.com/series/the-big-think-interview/cal-newport-burnout/))\n- [Big Think discussion guide for team managers](https://assets.edge.bigthink.com/uploads/attachment/file/5615/Cal_Newport_DG_TM_Slow_Productivity.pdf) — Supports practical application language around long-term output, performative activity, time blocking, and reducing active commitments. ([assets.edge.bigthink.com](https://assets.edge.bigthink.com/uploads/attachment/file/5615/Cal_Newport_DG_TM_Slow_Productivity.pdf))\n- [Cal Newport blog post “Manchester United Embraces Pseudo-Productivity”](https://calnewport.com/manchester-united-embraces-pseudo-productivity/) — Supports Newport’s later official illustration of pseudo-productivity as visible activity, especially email traffic, standing in for useful output. ([calnewport.com](https://calnewport.com/manchester-united-embraces-pseudo-productivity/))\n- [Cal Newport blog post “Productivity Rain Dances”](https://calnewport.com/productivity-rain-dances/) — Supports the distinction between symbolic productivity activity and concrete results over time. ([calnewport.com](https://calnewport.com/productivity-rain-dances/))\n- [Cal Newport blog post “Dispatch From Vermont”](https://calnewport.com/dispatch-from-vermont/) — Supports Newport’s later use of “seasonality” as recharge and recentering for creative work. ([calnewport.com](https://calnewport.com/dispatch-from-vermont/))"
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 3
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 76252,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 4638,
+    "output_tokens_details": {
+      "reasoning_tokens": 1570
+    },
+    "total_tokens": 80890
+  },
+  "user": null,
+  "metadata": {}
+}

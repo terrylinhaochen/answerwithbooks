@@ -1,0 +1,982 @@
+{
+  "id": "resp_045b1c634dcb4adf016a5480e26ed881999bab91246fa4faaf",
+  "object": "response",
+  "created_at": 1783922914,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923031,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_045b1c634dcb4adf016a5480e3210c8199ba49b0cb87954a34",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Amy Edmondson official The Fearless Organization psychological safety book setting the stage inviting participation responding productively",
+          "The Fearless Organization Amy C Edmondson publisher Wiley psychological safety interpersonal risk reporting errors",
+          "Amy Edmondson The Fearless Organization interview psychological safety not comfort high standards",
+          "Harvard Business School Amy Edmondson The Fearless Organization psychological safety"
+        ],
+        "query": "Amy Edmondson official The Fearless Organization psychological safety book setting the stage inviting participation responding productively",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.hbs.edu/recruiting/guides-and-stories/fostering-candor-teams-organizations"
+          },
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/the-fearless-organization/ROT389"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bu.edu/ombuds/resources/psychological-safety/"
+          },
+          {
+            "type": "url",
+            "url": "https://ebook.app.hcu.edu.gh/wp-content/uploads/2022/06/Amy-C.-Edmondson-The-Fearless-Organization_-Creating-Psychological-Safety-in-the-Workplace-for-Learning-Innovation-and-Growth-Wiley-2018.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2025/05/what-people-get-wrong-about-psychological-safety?giftToken=5872625251763833616433"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aamc.org/news/amy-edmondson-psychological-safety-critically-important-medicine"
+          },
+          {
+            "type": "url",
+            "url": "https://fearlessorganizationscan.com/media/h5ifpyti/the-fearless-report-2024_version20250415.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mindtools.com/a2sfubu/the-fearless-organization/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.library.hbs.edu/working-knowledge/four-steps-to-build-the-psychological-safety-that-high-performing-teams-need-today"
+          },
+          {
+            "type": "url",
+            "url": "https://amycedmondson.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://fearlessorganizationscan.com/media/zecpb3oi/the_fearless_report_latest_edition_20260421.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1111/peps.12509"
+          },
+          {
+            "type": "url",
+            "url": "https://s3.amazonaws.com/ClubExpressClubFiles/921789/documents/The_Fearless_Organization_Book_Review_1178961155.pdf?AWSAccessKeyId=AKIA6MYUE6DNNJ6ROIH3&Expires=1779310125&Signature=42W25XSE0YUkaudBZbY6mq5XAac%3D&response-content-disposition=inline%3B+filename%3DThe_Fearless_Organization_Book_Review.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://amycedmondson.com/resources/"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/amy-edmondson-on-psychological-safety-and-how/id1344231571?i=1000431588384"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2601.10824"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2603.09997"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2601.15600"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2602.23279"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5480e5ad9c81999cd174cc46102212",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5480e5d74c819993297b77f42bcb36",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:wiley.com The Fearless Organization Amy C Edmondson Wiley 2018",
+          "site:amycedmondson.com \"The Fearless Organization\" \"setting the stage\"",
+          "\"The Fearless Organization\" \"setting the stage\" \"inviting participation\" \"responding productively\"",
+          "\"Psychological Safety and Learning Behavior in Work Teams\" Edmondson 1999 Administrative Science Quarterly"
+        ],
+        "query": "site:wiley.com The Fearless Organization Amy C Edmondson Wiley 2018",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.scienceopen.com/document?vid=19a8b3d6-7c51-461a-ba8c-c365de17cae0"
+          },
+          {
+            "type": "url",
+            "url": "https://ndlsearch.ndl.go.jp/en/books/R100000136-I1573105975715889920"
+          },
+          {
+            "type": "url",
+            "url": "https://jglobal.jst.go.jp/en/detail?JGLOBAL_ID=200902156428215690"
+          },
+          {
+            "type": "url",
+            "url": "https://uat.store.wiley.com/en-us/the-fearless-organization-creating-psychological-safety-in-the-workplace-for-learning-innovation-and-growth-p-9781119477242"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mindtools.com/a2sfubu/the-fearless-organization/"
+          },
+          {
+            "type": "url",
+            "url": "https://insightbooks.app/books/the-fearless-organization"
+          },
+          {
+            "type": "url",
+            "url": "https://oamonitor.ireland.openaire.eu/national/search/publication?pid=10.2307%2F2666999"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wiley.com/en-us/Management%2BTeams-c-BA15"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wiley.com/en-us/solutions-partnerships/permissions/business-rights/collections/employee-engagement/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.scribd.com/document/994635210/The-Fearless-Organization"
+          },
+          {
+            "type": "url",
+            "url": "https://studylib.net/doc/28489368/the-fearless-organization"
+          },
+          {
+            "type": "url",
+            "url": "https://kammsolutions.com/wp-content/uploads/2019/07/The-Fearless-Organization_Amy-Edmonson-Interview.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://laurieruettimann.com/creating-the-fearless-organization-are-you-listening/"
+          },
+          {
+            "type": "url",
+            "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+          },
+          {
+            "type": "url",
+            "url": "https://content.onenorth.com/hubfs/Assembly%202024/Resilience-How%20to%20Respond%20to%20%28Not%20Control%29%20Chaos_Kalev%20Peekna.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://theacademy.sdsu.edu/wp-content/uploads/2023/06/SACHS-Research-Summary_Learning_Organizations-Rev-May-2023.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://openaccess.nhh.no/nhh-xmlui/bitstream/handle/11250/3158932/no.nhh%3Awiseflow%3A7041862%3A57768776.pdf?isAllowed=y&sequence=5"
+          },
+          {
+            "type": "url",
+            "url": "https://specialolympics.ca/media/z1wf5b4r/psychological-safety-how-to-build_wall-skills.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5480ea847481998eb576a982f60b91",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5480ea97048199a52d24d63bd90e53",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://amycedmondson.com/"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5480ec4a648199a8a506e956d0b5a7",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5480ecae648199b30e5ce187b3a879",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Wiley \"9781119477242\" \"The Fearless Organization\"",
+          "\"978-1-119-47724-2\" \"The Fearless Organization\" Wiley"
+        ],
+        "query": "Wiley \"9781119477242\" \"The Fearless Organization\"",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.bibguru.com/b/how-to-cite-the-fearless-organization/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.overdrive.com/media/3940039/the-fearless-organization"
+          },
+          {
+            "type": "url",
+            "url": "https://www.oreilly.com/library/view/the-fearless-organization/9781119477242/f01.xhtml"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL27370790M/The_Fearless_Organization"
+          },
+          {
+            "type": "url",
+            "url": "https://cir.nii.ac.jp/crid/1971149384835030056"
+          },
+          {
+            "type": "url",
+            "url": "https://www.oreilly.com/library/view/the-fearless-organization/9781119477242/eula.xhtml"
+          },
+          {
+            "type": "url",
+            "url": "https://www.oreilly.com/library/view/the-fearless-organization/9781119477242/"
+          },
+          {
+            "type": "url",
+            "url": "https://uat.store.wiley.com/en-us/the-fearless-organization-creating-psychological-safety-in-the-workplace-for-learning-innovation-and-growth-p-9781119477242"
+          },
+          {
+            "type": "url",
+            "url": "https://business.walmart.com/ip/The-Fearless-Organization-Creating-Psychological-Safety-in-the-Workplace-for-Learning-Innovation-and-Growth-Hardcover-9781119477242/874790027"
+          },
+          {
+            "type": "url",
+            "url": "https://web.imt.edu/DownloadFiles/Library/PDF/NewArrivals/New_Arrivals_Books_Sep_2024.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://app.thestorygraph.com/books/2142784c-02b9-473f-8937-89c6841bba02/editions"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/editions/62557502-the-fearless-organization-creating-psychological-safety-in-the-workplac"
+          },
+          {
+            "type": "url",
+            "url": "https://libkoha.alfaisal.edu/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=593501"
+          },
+          {
+            "type": "url",
+            "url": "https://ebook.app.hcu.edu.gh/wp-content/uploads/2022/06/Amy-C.-Edmondson-The-Fearless-Organization_-Creating-Psychological-Safety-in-the-Workplace-for-Learning-Innovation-and-Growth-Wiley-2018.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wiley.com/content/dam/wiley-dotcom/en/b2c/permissions/business---rights/translation/2024%20Smash%20Hits.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.fagskulen.no/contentassets/c5da0d1f1e3c49d28ee3e4ab3193e85e/gk-01-26-moteinnkalling-og-saksdokument-27.02.2026.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://ekstramaterialer.dk/media/zpcfyphg/appendiks-den-frygtloese-organisation.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.theseus.fi/bitstream/handle/10024/348736/Aguilera_Henna.pdf?sequence=3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5480ef9c348199a641eefaf247117b",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5480efbd4481998fd3c1460207a30b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Harvard Business School Amy Edmondson Novartis Professor psychological safety Fearless Organization",
+          "HBS Amy Edmondson faculty The Fearless Organization Novartis Professor"
+        ],
+        "query": "Harvard Business School Amy Edmondson Novartis Professor psychological safety Fearless Organization",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://learn.hms.harvard.edu/about/leadership-faculty/faculty/amy-c-edmondson-phd"
+          },
+          {
+            "type": "url",
+            "url": "https://www.gsd.harvard.edu/person/amy-c-edmondson-ab-81-am-95-phd-96/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.library.hbs.edu/working-knowledge/collections/amy-c-edmondson"
+          },
+          {
+            "type": "url",
+            "url": "https://store.hbr.org/product/the-fearless-organization/ROT389"
+          },
+          {
+            "type": "url",
+            "url": "https://pll.harvard.edu/instructor/amy-edmondson"
+          },
+          {
+            "type": "url",
+            "url": "https://amycedmondson.com/about/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hbs.edu/news/releases/thinkers-50-2021"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wiley-vch.de/en/areas-interest/finance-economics-law/business-management-13ba/management-13ba1/management-teams-13ba15/the-fearless-organization-978-1-119-47724-2"
+          },
+          {
+            "type": "url",
+            "url": "https://hsph.harvard.edu/news/debunking-misconceptions-about-workplace-psychological-safety/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2021/06/4-steps-to-boost-psychological-safety-at-your-workplace"
+          },
+          {
+            "type": "url",
+            "url": "https://ceo.usc.edu/bio/amy-c-edmondson/"
+          },
+          {
+            "type": "url",
+            "url": "https://amycedmondson.com/psychological-safety/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hbs.edu/ris/Publication%20Files/Reflections_%20Voice%20and%20Silence%20in%20Workplace%20Conversations_619d3fd0-ddbf-4519-ab21-86695f515624.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://fearlessorganizationscan.com/media/zecpb3oi/the_fearless_report_latest_edition_20260421.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.med.upenn.edu/uphscovid19education/assets/user-content/documents/leading/hbr-covid19-10440-pdf-eng-%281%29.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://26225792.fs1.hubspotusercontent-eu1.net/hubfs/26225792/Edmondson%20%282018%29.%20How%20fearless%20organizations%20succeed.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://fearlessorganizationscan.com/media/h5ifpyti/the-fearless-report-2024_version20250415.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://s3.amazonaws.com/ClubExpressClubFiles/921789/documents/The_Fearless_Organization_Book_Review_1178961155.pdf?AWSAccessKeyId=AKIA6MYUE6DNNJ6ROIH3&Expires=1779310125&Signature=42W25XSE0YUkaudBZbY6mq5XAac%3D&response-content-disposition=inline%3B+filename%3DThe_Fearless_Organization_Book_Review.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2301.12954"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2008.06764"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1802.01378"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1612.08228"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5480f38be88199b4006c0c442a64f1",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5480f6704c81999fa525c8fadfa0fd",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Amy Edmondson The Fearless Organization Children's Hospital Julie Morath official",
+          "Amy Edmondson The Fearless Organization Pixar official interview",
+          "Amy Edmondson The Fearless Organization Volkswagen Wells Fargo Challenger official"
+        ],
+        "query": "Amy Edmondson The Fearless Organization Children's Hospital Julie Morath official",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://ebook.app.hcu.edu.gh/wp-content/uploads/2022/06/Amy-C.-Edmondson-The-Fearless-Organization_-Creating-Psychological-Safety-in-the-Workplace-for-Learning-Innovation-and-Growth-Wiley-2018.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://amycedmondson.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2019/09/how-a-new-leader-broke-through-a-culture-of-accuse-blame-and-criticize"
+          },
+          {
+            "type": "url",
+            "url": "https://amycedmondson.com/about/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psychologytoday.com/gb/blog/the-fearless-organization/201901/fearing-the-truth"
+          },
+          {
+            "type": "url",
+            "url": "https://www.forbes.com/sites/stevedenning/2022/11/26/amy-edmondson-how-to-make-firms-fearless/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.linkedin.com/posts/amycedmondson_psychologicalsafety-teamwork-thefearlessorganization-activity-7308604697714540545-bg82"
+          },
+          {
+            "type": "url",
+            "url": "https://www.jamestaylor.me/amy-edmondson/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wiley-vch.de/en/areas-interest/finance-economics-law/the-fearless-organization-978-1-119-47724-2"
+          },
+          {
+            "type": "url",
+            "url": "https://studylib.net/doc/28489368/the-fearless-organization"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mindtools.com/a2sfubu/the-fearless-organization/"
+          },
+          {
+            "type": "url",
+            "url": "https://economictimes.indiatimes.com/news/et-evoke/in-a-fearless-organisation-people-express-question-and-innovate-freely-amy-edmondson/articleshow/93647532.cms?from=mdr"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2008.06764"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2004.07213"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2002.09054"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2009.04661"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5480fb3c4c8199b6d4ef8b2acb6d94",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5480fb8ae4819992ccb6b49ae06ca8",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Amy Edmondson psychological safety not about being nice comfort low standards high standards",
+          "Amy Edmondson psychological safety high standards comfort zone anxiety zone learning zone",
+          "site:amycedmondson.com \"psychological safety\" \"not\" \"standards\""
+        ],
+        "query": "Amy Edmondson psychological safety not about being nice comfort low standards high standards",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://courses.worldcampus.psu.edu/welcome/psych485/001/content/01_lesson/02_page.html"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11780054/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.leanblog.org/2020/01/amy-edmondson-psychological-safety-speaking-up/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+          },
+          {
+            "type": "url",
+            "url": "https://nm-wwwukdr1-ext.ncl.edu.my/learning-and-teaching/lec/teaching-approaches/safe-spaces/"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12805134/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2021/12/psychological-safety-in-theory-and-in-practice"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aamc.org/news/amy-edmondson-psychological-safety-critically-important-medicine"
+          },
+          {
+            "type": "url",
+            "url": "https://www.talkabouttalk.com/amy-edmondson-175/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wef.org/globalassets/assets-wef/2-resources/online-education/webcasts/presentation-handouts/9mar22-wise_people.pdf?_t_hit.id=WEF_Models_Media_DocumentFile%2F_01a1670d-15c6-4cb9-946e-54b04a9394d5&_t_hit.pos=5943&_t_id=1B2M2Y8AsgTpgAmY7PhCfg%3D%3D&_t_ip=66.249.75.1&_t_q=&_t_tags=language%3Aen%2Csiteid%3Af67304a6-8380-48ac-8f4e-24cf31d241f9"
+          },
+          {
+            "type": "url",
+            "url": "https://www.umassmed.edu/globalassets/academy-of-educators/images/events/grand-rounds/learning-environments-that-promote-curiosity-egr-91825.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10571297/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.lawsociety.ie/globalassets/documents/psych-services/psychological-safety-toolkit-final.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://resources.rework.com/libraries/leadership-legends/amy-edmondson-leadership"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aha.org/system/files/media/file/2026/06/AHA_Team_Training_Webinar_Slides_June_2026.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://getleda.com/psychological-safety/edmondson-research"
+          },
+          {
+            "type": "url",
+            "url": "https://www.caltrin.org/wp-content/uploads/2024/09/Trauma-Informed-Leadership-CalTrin-September-2024.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://assets.swoogo.com/uploads/4569905-67193b6a95348.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2603.09997"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2105.14499"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2208.12454"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2410.12071"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5480fff0e48199b22593c52462b8e0",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5481003b8881999be9fd31af2f6a77",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "Learning behavior consists of activities carried out by team members through which a team obtains and processes data",
+        "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a548103e8588199abadfc98026d40b9",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a54810431e881999a88fc426cc37b7f",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a548107b43081999dcda44c0dbe22ef",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a548111797c8199b3304a5c87339b43",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://hbr.org/podcast/2019/09/how-a-new-leader-broke-through-a-culture-of-accuse-blame-and-criticize"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a54811361e08199a4c27a1ca5b9e8a1",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a548113e61081999075bd36ee3788f6",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "Pixar",
+        "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a5481165c008199b76ea66ce10fcfd5",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a5481188ff88199ab02dbbeb80201e5",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.psychologytoday.com/gb/blog/the-fearless-organization/201901/fearing-the-truth"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a54811a3b0881999ffbc5d3728f4e19",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a54811b721881999cda37eea4005e59",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://hsph.harvard.edu/news/debunking-misconceptions-about-workplace-psychological-safety/"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a54811d6a508199996cfb0dbc1ac821",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_045b1c634dcb4adf016a54811dbb1081999dcb7638e1b526ac",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.wiley-vch.de/en/areas-interest/finance-economics-law/the-fearless-organization-978-1-119-47724-2"
+      }
+    },
+    {
+      "id": "rs_045b1c634dcb4adf016a54811fe7388199b18fa4c2fe46a641",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_045b1c634dcb4adf016a54812b9fb0819981e90341652fa0fb",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 800,
+              "start_index": 674,
+              "title": "Wiley-VCH - The Fearless Organization",
+              "url": "https://www.wiley-vch.de/en/areas-interest/finance-economics-law/the-fearless-organization-978-1-119-47724-2"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1760,
+              "start_index": 1615,
+              "title": "Psychological Safety and Learning Behavior in Work Teams",
+              "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2541,
+              "start_index": 2396,
+              "title": "Psychological Safety and Learning Behavior in Work Teams",
+              "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3245,
+              "start_index": 3100,
+              "title": "Psychological Safety and Learning Behavior in Work Teams",
+              "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3882,
+              "start_index": 3791,
+              "title": "Creating Psychological Safety in the Workplace",
+              "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4518,
+              "start_index": 4373,
+              "title": "Psychological Safety and Learning Behavior in Work Teams",
+              "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5105,
+              "start_index": 5026,
+              "title": "The Fearless Organization",
+              "url": "https://www.mindtools.com/a2sfubu/the-fearless-organization/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5622,
+              "start_index": 5543,
+              "title": "The Fearless Organization",
+              "url": "https://www.mindtools.com/a2sfubu/the-fearless-organization/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6151,
+              "start_index": 6072,
+              "title": "The Fearless Organization",
+              "url": "https://www.mindtools.com/a2sfubu/the-fearless-organization/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6893,
+              "start_index": 6778,
+              "title": "How a New Leader Broke Through a Culture of Accuse, Blame, and Criticize",
+              "url": "https://hbr.org/podcast/2019/09/how-a-new-leader-broke-through-a-culture-of-accuse-blame-and-criticize"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7375,
+              "start_index": 7284,
+              "title": "Creating Psychological Safety in the Workplace",
+              "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7997,
+              "start_index": 7882,
+              "title": "How a New Leader Broke Through a Culture of Accuse, Blame, and Criticize",
+              "url": "https://hbr.org/podcast/2019/09/how-a-new-leader-broke-through-a-culture-of-accuse-blame-and-criticize"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8519,
+              "start_index": 8404,
+              "title": "Fearing the Truth | Psychology Today United Kingdom",
+              "url": "https://www.psychologytoday.com/gb/blog/the-fearless-organization/201901/fearing-the-truth"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8938,
+              "start_index": 8847,
+              "title": "Creating Psychological Safety in the Workplace",
+              "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9307,
+              "start_index": 9216,
+              "title": "Creating Psychological Safety in the Workplace",
+              "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9945,
+              "start_index": 9800,
+              "title": "Psychological Safety and Learning Behavior in Work Teams",
+              "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10415,
+              "start_index": 10324,
+              "title": "Creating Psychological Safety in the Workplace",
+              "url": "https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10804,
+              "start_index": 10725,
+              "title": "The Fearless Organization",
+              "url": "https://www.mindtools.com/a2sfubu/the-fearless-organization/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11276,
+              "start_index": 11161,
+              "title": "Fearing the Truth | Psychology Today United Kingdom",
+              "url": "https://www.psychologytoday.com/gb/blog/the-fearless-organization/201901/fearing-the-truth"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12002,
+              "start_index": 11876,
+              "title": "Wiley-VCH - The Fearless Organization",
+              "url": "https://www.wiley-vch.de/en/areas-interest/finance-economics-law/the-fearless-organization-978-1-119-47724-2"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *The Fearless Organization* by Amy C. Edmondson\n\n## Central argument\n\nAmy C. Edmondson’s *The Fearless Organization: Creating Psychological Safety in the Workplace for Learning, Innovation, and Growth* argues that modern work depends on candor: people must be able to raise concerns, ask questions, admit mistakes, challenge assumptions, and offer incomplete ideas without fear that doing so will damage their standing. Wiley’s publisher description frames the book as a response to the knowledge economy, where innovation, quality, and adaptation require a steady flow of new information and critical thought rather than “fitting in” and silent compliance. ([wiley-vch.de](https://www.wiley-vch.de/en/areas-interest/finance-economics-law/the-fearless-organization-978-1-119-47724-2))\n\nThe tension the book resolves is between **high standards** and **low fear**. Many managers assume performance pressure must be backed by interpersonal fear, while many readers misread psychological safety as softness, comfort, or consensus. Edmondson’s thesis is that the opposite is true: when work is uncertain, complex, interdependent, or high-stakes, fear suppresses the very data leaders need. Psychological safety is not the goal by itself; it is an enabling climate that lets learning behavior convert problems, dissent, experiments, and errors into better performance. Her 1999 Administrative Science Quarterly paper supplies the research spine: team psychological safety is associated with learning behavior, and learning behavior mediates the relationship between psychological safety and performance. ([web.mit.edu](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423))\n\n## Mechanisms and frameworks\n\n**Psychological safety.** Edmondson’s research defines team psychological safety as a shared team-level belief that the group is safe for interpersonal risk-taking. It is not merely an individual’s confidence, personal resilience, or general friendliness; it is a local climate formed by repeated interactions and reinforced by leader behavior, peer responses, and work systems. The original paper also distinguishes psychological safety from simple trust: it includes trust and respect, but specifically concerns whether speaking up will bring embarrassment, rejection, punishment, or loss of standing. ([web.mit.edu](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423))\n\n**Interpersonal risk.** The “risk” in the framework is often small but powerful: looking ignorant by asking a question, looking incompetent by admitting an error, looking negative by raising a concern, or looking disruptive by challenging a plan. Edmondson’s paper explains that these image and career costs can keep people from sharing information even when the organization would benefit. This mechanism is central: people silently calculate whether voice is worth the social cost, and silence often wins unless the local climate changes the calculation. ([web.mit.edu](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423))\n\n**Reporting errors.** The book’s argument about errors is subtle. A psychologically safe team may initially appear to have more errors because people report more of them. Edmondson’s hospital research began with the puzzle that better teams reported higher error rates; the interpretation was not that they necessarily erred more, but that they were more willing and able to talk about mistakes. The AAMC interview and HBR IdeaCast both use this discovery to explain why error reporting is a learning signal, not automatically a defect signal. ([hbr.org](https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace))\n\n**Learning behavior.** Learning behavior is the behavioral bridge between safety and performance. Edmondson’s 1999 paper defines it through activities such as seeking feedback, sharing information, asking for help, discussing errors, and experimenting. These actions help teams adapt, understand customers or patients, improve processes, and detect the unintended consequences of past actions. Psychological safety matters because these learning behaviors are often interpersonally risky. ([web.mit.edu](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423))\n\n**Setting the stage.** The leadership toolkit begins by reframing the work. Leaders make explicit that the task is uncertain, complex, interdependent, or error-prone, and that therefore voice is necessary. Setting the stage also emphasizes purpose: what is at stake, why the work matters, and who is affected. In an official interview, Edmondson describes this as naming the realities people may otherwise take for granted so that speaking up becomes part of the work rather than a personality preference. ([mindtools.com](https://www.mindtools.com/a2sfubu/the-fearless-organization/))\n\n**Inviting participation.** Once the stage is set, leaders must actively invite input. This includes situational humility, proactive inquiry, and structures that make contribution easier: asking genuine questions, creating forums, drawing out lower-status voices, and designing meetings or processes where silence is less automatic. Edmondson stresses that framing creates the rationale for voice, but leaders still have to ask for it. ([mindtools.com](https://www.mindtools.com/a2sfubu/the-fearless-organization/))\n\n**Responding productively.** The response to voice determines whether the climate strengthens or collapses. Productive response means listening, acknowledging, thanking, investigating, helping, and acting on input where appropriate. It does not require agreeing with every idea. Edmondson also includes sanctioning clear violations—bullying, harassment, or other boundary breaches—because tolerating harmful behavior makes the workplace less safe. ([mindtools.com](https://www.mindtools.com/a2sfubu/the-fearless-organization/))\n\n**Safety is not comfort or low standards.** The book’s key corrective is the safety/accountability matrix: high psychological safety plus high standards creates the learning or high-performance zone; high safety with low standards is comfort; high standards with low safety is anxiety; low both is apathy. The Children’s Hospital HBS discussion makes this distinction explicit: blameless reporting is not the same as no accountability. Later Harvard material reinforces common misreadings: psychological safety does not mean niceness, automatic agreement, protection from performance consequences, or policy-only compliance. ([hbr.org](https://hbr.org/podcast/2019/09/how-a-new-leader-broke-through-a-culture-of-accuse-blame-and-criticize))\n\n## Book-grounded examples\n\n**Hospital error-reporting discovery.** Edmondson’s original research into hospital teams found that better teams reported more mistakes, leading her to infer that reporting rates reflected openness as well as error incidence. This example demonstrates why leaders should not treat low reported error counts as proof of safety or quality; silence can hide risk. ([hbr.org](https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace))\n\n**Children’s Hospital & Clinics / Julie Morath.** HBS’s *Cold Call* episode connects Edmondson’s case to *The Fearless Organization*. Morath, COO at Children’s Hospital & Clinics, used blameless reporting, reframing, changed language, and failure-analysis meetings to shift a blame-oriented culture toward learning. The example demonstrates all three leadership moves: set the stage by explaining complex system failures, invite reporting, and respond by studying events rather than hunting for culprits. ([hbr.org](https://hbr.org/podcast/2019/09/how-a-new-leader-broke-through-a-culture-of-accuse-blame-and-criticize))\n\n**Wells Fargo, Volkswagen, Nokia, and the New York Fed.** In an authorized Psychology Today excerpt from *The Fearless Organization*, Edmondson uses these cases to show how capable organizations can fail when frontline information does not travel upward. The examples demonstrate that fear can create an illusion of execution while suppressing disconfirming data that should trigger strategic adaptation. ([psychologytoday.com](https://www.psychologytoday.com/gb/blog/the-fearless-organization/201901/fearing-the-truth))\n\n**Pixar.** In the HBR IdeaCast about the book, Edmondson points to Pixar as an example of deliberately institutionalized candor, using leader fallibility and structured critique to improve creative work. The example demonstrates that psychological safety supports high creative standards by making early weakness discussable. ([hbr.org](https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace))\n\n**Toyota Andon cord.** Edmondson uses Toyota’s production system as an example of designing structures that make speaking up easier, especially in hierarchical contexts. The Andon cord operationalizes the expectation that workers surface problems early rather than hide them. ([hbr.org](https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace))\n\n## Qualifications and common misreadings\n\nDo not present psychological safety as a universal cure or a direct substitute for strategy, skill, resources, or accountability. Edmondson’s research model treats safety as an enabler of learning behavior, which then supports performance; it is not magic morale. The original paper also found context support and leader coaching relevant, while psychological safety explained learning behavior more strongly than team efficacy in the tested model. ([web.mit.edu](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423))\n\nAvoid equating psychological safety with being nice. Edmondson repeatedly says the concept is about candor, not politeness or the avoidance of hard conversations. Later Harvard commentary identifies several misreadings: all ideas do not have to be accepted, performance management still exists, layoffs are not eliminated, and laws or policies alone cannot create the climate. ([hbr.org](https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace))\n\nAvoid saying “no blame” means “no consequences.” The book distinguishes blameless reporting for learning from sanctioning clear violations. Recklessness, harassment, intentional misconduct, or repeated boundary breaches still require accountability because failing to address them reduces safety for others. ([mindtools.com](https://www.mindtools.com/a2sfubu/the-fearless-organization/))\n\nScope condition: the argument is strongest where work is uncertain, interdependent, knowledge-intensive, safety-critical, creative, or fast-changing. In simpler, observable, individual tasks, fear-based control may appear to produce compliance, but Edmondson argues it performs poorly when people must integrate knowledge, adapt, and report weak signals. ([psychologytoday.com](https://www.psychologytoday.com/gb/blog/the-fearless-organization/201901/fearing-the-truth))\n\n## Metadata check\n\nConfirmed title: *The Fearless Organization: Creating Psychological Safety in the Workplace for Learning, Innovation, and Growth*. Confirmed author: Amy C. Edmondson, Novartis Professor of Leadership and Management at Harvard Business School. Wiley-VCH lists the book as a first edition, 256-page hardcover, ISBN 978-1-119-47724-2, with a December 2018 listing; other catalog and platform records show late-2018 release dates, and Harvard faculty materials identify the book year as 2018. No material edition differences affecting the digest were found in the sources inspected. ([wiley-vch.de](https://www.wiley-vch.de/en/areas-interest/finance-economics-law/the-fearless-organization-978-1-119-47724-2))\n\n## Sources\n\n- [Amy C. Edmondson official site — home](https://amycedmondson.com/) — Confirms Edmondson’s current positioning around psychological safety, organizational learning, and *The Fearless Organization*.\n- [Amy C. Edmondson official site — resources](https://amycedmondson.com/resources/) — Identifies official resource pathways connected to psychological safety and the book.\n- [Wiley-VCH publisher page for *The Fearless Organization*](https://www.wiley-vch.de/en/areas-interest/finance-economics-law/the-fearless-organization-978-1-119-47724-2) — Supports title, subtitle, author, ISBN, edition/page metadata, publisher framing, and table of contents.\n- [Harvard Medical School faculty bio: Amy C. Edmondson](https://learn.hms.harvard.edu/about/leadership-faculty/faculty/amy-c-edmondson-phd) — Supports author role, institutional affiliation, and 2018 publication year.\n- [Edmondson, “Psychological Safety and Learning Behavior in Work Teams,” Administrative Science Quarterly, 1999](https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf?es_p=756423) — Primary research source for psychological safety, interpersonal risk, learning behavior, and the safety–learning–performance mechanism.\n- [HBR IdeaCast: “Creating Psychological Safety in the Workplace”](https://hbr.org/podcast/2019/01/creating-psychological-safety-in-the-workplace) — Supports Edmondson’s explanation of the book, the hospital error-reporting discovery, candor-not-niceness framing, Pixar, Toyota, and limitations.\n- [Mind Tools expert interview: “The Fearless Organization”](https://www.mindtools.com/a2sfubu/the-fearless-organization/) — Supports the three-part leader toolkit: setting the stage, inviting participation, responding productively, plus sanctioning violations.\n- [AAMC interview: “Amy Edmondson: Psychological safety is critically important in medicine”](https://www.aamc.org/news/amy-edmondson-psychological-safety-critically-important-medicine) — Supports medical/patient-safety framing, reporting errors, and the leader actions of framing, inviting, and responding.\n- [HBS *Cold Call*: “How a New Leader Broke Through a Culture of Accuse, Blame, and Criticize”](https://hbr.org/podcast/2019/09/how-a-new-leader-broke-through-a-culture-of-accuse-blame-and-criticize) — Supports the Julie Morath / Children’s Hospital example, blameless reporting, high accountability, and the learning-zone distinction.\n- [Psychology Today excerpt by Amy C. Edmondson: “Fearing the Truth”](https://www.psychologytoday.com/gb/blog/the-fearless-organization/201901/fearing-the-truth) — Authorized excerpt supporting the Volkswagen, Wells Fargo, Nokia, and New York Fed examples and the “strategy as hypothesis” learning loop.\n- [Harvard T.H. Chan School of Public Health: “Debunking misconceptions about workplace psychological safety”](https://hsph.harvard.edu/news/debunking-misconceptions-about-workplace-psychological-safety/) — Supports later clarifications and common misreadings from Edmondson and Michaela Kerrissey’s 2025 HBR article."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 6
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 90497,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 5184,
+    "output_tokens_details": {
+      "reasoning_tokens": 2273
+    },
+    "total_tokens": 95681
+  },
+  "user": null,
+  "metadata": {}
+}

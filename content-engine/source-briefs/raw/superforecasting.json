@@ -1,0 +1,1411 @@
+{
+  "id": "resp_0a5c8d24abead1eb016a54815359288198a55b7fdde2f666d1",
+  "object": "response",
+  "created_at": 1783923027,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923191,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0a5c8d24abead1eb016a5481546f888198aab08bb5ef15d282",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Philip Tetlock official Superforecasting book Good Judgment Project Brier scores",
+          "Superforecasting Philip Tetlock Dan Gardner publisher page Crown 2015",
+          "Philip Tetlock Superforecasting interview Good Judgment Project Brier score foxes hedgehogs",
+          "Good Judgment Project official superforecasting Tetlock Brier scores"
+        ],
+        "query": "Philip Tetlock official Superforecasting book Good Judgment Project Brier scores",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/9780804136709/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/about/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.gjopen.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2023/06/Superforecasting-the-Fed-Target-Rate_6_14_23.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2022/04/Superforecasters-Covid-Recovery-31-March-2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.insidehighered.com/blogs/technology-and-learning/hedgehogs-foxes-and-%E2%80%98superforecasting%E2%80%99"
+          },
+          {
+            "type": "url",
+            "url": "https://www.forbes.com/sites/stevendesmyter/2021/07/08/superforecasting--how-to-read-the-future/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mdpi.com/2227-9091/4/3/24"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2022/12/GJ_Superforecasting-Proof_2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://www.forecaster-test.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/supers-vs-hybrid-systems/"
+          },
+          {
+            "type": "url",
+            "url": "https://knowledge.insead.edu/strategy/secret-ingredients-superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stat.berkeley.edu/users/aldous/157/Papers/harford.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://scholarworks.iu.edu/dspace/bitstreams/6684dcf0-e060-4232-a68d-dfb642f2c1a5/download"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2022/10/Superforecaster-Accuracy.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.07862"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2411.11126"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2604.26106"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/physics/0401046"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4038112/perfect-your-predictions/"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/5848271/superforecasters-covid-19/"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4157550/predicting-my-predictions/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a548157c638819886b538bb17720125",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54815c17988198b2aa9f1b946f4e47",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Philip Tetlock official website Superforecasting",
+          "University of Pennsylvania Philip Tetlock Superforecasting Good Judgment Project",
+          "IARPA ACE Good Judgment Project Tetlock Mellers forecasting tournament",
+          "Tetlock Gardner Superforecasting interview base rates Fermi estimation"
+        ],
+        "query": "Philip Tetlock official website Superforecasting",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.iarpa.gov/research-programs/ace"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psychologicalscience.org/journals/current-directions/0963721414534257/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/the-first-championship-season/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.iarpa.gov/newsroom/article/iarpa-announces-publication-of-data-from-the-good-judgment-project"
+          },
+          {
+            "type": "url",
+            "url": "https://www.iarpa.gov/newsroom/article/the-peculiar-blindness-of-experts"
+          },
+          {
+            "type": "url",
+            "url": "https://www.cambridge.org/core/journals/judgment-and-decision-making/article/forecasting-forecaster-accuracy-contributions-of-past-performance-and-individual-differences/914F973B8C6A9CDCD3F1EA7CF17048D2"
+          },
+          {
+            "type": "url",
+            "url": "https://www.citizenscience.gov/ace-forecasting/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/about/"
+          },
+          {
+            "type": "url",
+            "url": "https://pikprofessors.upenn.edu/meet-the-professors/philip-tetlock"
+          },
+          {
+            "type": "url",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/28154049/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0010027718302798"
+          },
+          {
+            "type": "url",
+            "url": "https://www.sciencedirect.com/science/article/abs/pii/S0377221720306007"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2022/12/GJ_Superforecasting-Proof_2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://repository.upenn.edu/server/api/core/bitstreams/d182dd97-ce71-4d0e-9393-c44514f78036/content"
+          },
+          {
+            "type": "url",
+            "url": "https://sjdm.org/~baron/journal/20/200313b/jdm200313b.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://faculty.bard.edu/hhaggard/teaching/sci127Sp20/notes/TetlockGardnerSuperforecasting1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://cpb-us-e1.wpmucdn.com/sites.dartmouth.edu/dist/0/433/files/2022/10/Samotinl-Friedman-Horowitz-Crowdsourcing-INS.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://scholar.harvard.edu/files/rzeckhauser/files/improving_the_accuracy_of_geopolitical_risk_assessments.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.07862"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2411.11126"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2412.10981"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2604.26106"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4157550/predicting-my-predictions/"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/5848271/superforecasters-covid-19/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.axios.com/2019/05/14/geopolitical-forecasters-director-national-intelligence"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4038112/perfect-your-predictions/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a54815f819c8198b2df140c31bd1543",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54815f98a88198bfb1e0fc8a7a33d7",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Superforecasting official excerpt chapter Fermi estimate base rates Tetlock",
+          "Superforecasting Philip Tetlock Dan Gardner official reading guide",
+          "Superforecasting ten commandments appendix Tetlock Gardner official",
+          "Penguin Random House Superforecasting excerpt read sample"
+        ],
+        "query": "Superforecasting official excerpt chapter Fermi estimate base rates Tetlock",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/"
+          },
+          {
+            "type": "url",
+            "url": "https://faculty.bard.edu/hhaggard/teaching/sci127Sp20/notes/TetlockGardnerSuperforecasting1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://search.centrecountylibrary.org/Record/382686/TOC"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouseretail.com/book/?isbn=9780804136716"
+          },
+          {
+            "type": "url",
+            "url": "https://www.supersummary.com/superforecasting/summary/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/fermi-estimation/"
+          },
+          {
+            "type": "url",
+            "url": "https://tetlock.socialpsychology.org/teaching"
+          },
+          {
+            "type": "url",
+            "url": "https://www.similartobooks.com/books/superforecasting/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.supersummary.com/superforecasting/chapter-12-appendix-summary/"
+          },
+          {
+            "type": "url",
+            "url": "https://penguinrandomhousehighereducation.com/book/?isbn=9780804136716"
+          },
+          {
+            "type": "url",
+            "url": "https://www.overdrive.com/media/2562005/superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2016/05/superforecasting-how-to-upgrade-your-companys-judgment"
+          },
+          {
+            "type": "url",
+            "url": "https://disb.dc.gov/sites/default/files/dc/sites/disb/publication/attachments/Applicant%20Exhibit%206-A.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://dangardner.ca/publication/superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://external.dandelon.com/download/attachments/dandelon/ids/CH001F5CD44C4B8F1C6A4C1257FE1004F1140.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2303.18006"
+          },
+          {
+            "type": "url",
+            "url": "https://rdl.train.army.mil/catalog-ws/view/ARI_TinT_WBT/references/Superforecaster.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2411.11126"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1511.02301"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2012.03854"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4038112/perfect-your-predictions/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a5481628fc48198a3324748acac1c71",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a548162a18081989326971bcc499923",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://dangardner.ca/publication/superforecasting"
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a5481657c38819884230e8ac5176c9c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a5481673bf481988cbdd9026fd10116",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Good Judgment Brier score calibration superforecasting official",
+          "Mellers Tetlock Brier score calibration superforecasters Psychological Science 2015",
+          "Mellers Stone Atanasov Tetlock identifying and cultivating superforecasters pdf Brier score",
+          "superforecasting calibration Brier score Good Judgment Project paper"
+        ],
+        "query": "Good Judgment Brier score calibration superforecasting official",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2022/10/Superforecaster-Accuracy.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psychologicalscience.org/journals/perspectives/1745691615577794/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.io/publicforecasts/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.afponline.org/docs/librariesprovider8/default-document-library/five-keys-to-superforecasting.pdf?sfvrsn=3022146b_2"
+          },
+          {
+            "type": "url",
+            "url": "https://www.gjopen.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2601.13362"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2023/06/Superforecasting-the-Fed-Target-Rate_6_14_23.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mdpi.com/2227-9091/4/3/24"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2209.04892"
+          },
+          {
+            "type": "url",
+            "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psychologicalscience.org/journals/current-directions/0963721414534257/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0749597883710125/pdf?md5=599386fc17f01a7e1de1294540f12c51&pid=1-s2.0-S0749597883710125-main.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2022/04/Superforecasters-Covid-Recovery-31-March-2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://good-judgment.thinkific.com/pages/faq"
+          },
+          {
+            "type": "url",
+            "url": "https://www.crei.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://brierscore.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.convexly.app/answers/how-to-measure-forecasting-calibration"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2019/01/SuperforecastingWorkshops.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/physics/0401046"
+          },
+          {
+            "type": "url",
+            "url": "https://www.gjopen.com/faq?source=post_page---------------------------"
+          },
+          {
+            "type": "url",
+            "url": "https://link.springer.com/chapter/10.1007/978-3-032-11892-9_3"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2607.00164"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a54816e90f88198ae3ebba633d60442",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54816f2da08198a09f5968a209d516",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Tetlock foxes hedgehogs experts prediction official interview Superforecasting",
+          "Philip Tetlock foxes hedgehogs superforecasting interview",
+          "Expert Political Judgment foxes hedgehogs Tetlock publisher",
+          "Superforecasting foxes hedgehogs Philip Tetlock official"
+        ],
+        "query": "Tetlock foxes hedgehogs experts prediction official interview Superforecasting",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://lawcat.berkeley.edu/record/439922"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Expert_Political_Judgment.html?id=9_Wy8HJ9mRAC"
+          },
+          {
+            "type": "url",
+            "url": "https://www.newsweek.com/nw-ai/predicting-future-supergroup-ai-humans-hedgehogs-foxes-2132146"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mdpi.com/2227-9091/4/3/24"
+          },
+          {
+            "type": "url",
+            "url": "https://cogdevlab.yale.edu/sites/default/files/files/KeilHedgehogs2010.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.forbes.com/sites/stevendesmyter/2021/07/08/superforecasting--how-to-read-the-future/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.insidehighered.com/blogs/technology-and-learning/hedgehogs-foxes-and-%E2%80%98superforecasting%E2%80%99"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/en/book/show/89158.Expert_Political_Judgment"
+          },
+          {
+            "type": "url",
+            "url": "https://s3-euw1-ap-pe-df-pch-content-store-p.s3.eu-west-1.amazonaws.com/9781003106555/8adc4ecd-b36a-44b8-b9b3-3f50978e30e8/web.pdf?AWSAccessKeyId=ASIAQFVOSJ57474UQEMG&Expires=1770706600&Signature=74uWNvb%2B%2FJYtt%2F4p5Ssf8ET%2Fhsk%3D&response-content-disposition=attachment%3B+filename%3D%2210.4324_9781003106555_webpdf.pdf%22&x-amz-security-token=IQoJb3JpZ2luX2VjENL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDcbQ4%2BdyO0GCN2AKeW%2FjFb44Fq8%2FY%2FzzvLGVdcjkXcFgIhAMBAiSSZUYhZXtR8uLkzRMuKFgjwmoQOvFLBXKE%2BbVK3KpYECJv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQBBoMMDEyMTc3MjY0NTExIgxHYLrBZtv8GC9XMRwq6gNM2p9eICaLzKMa0DRq0MNckiNFXg3ikQH%2BBhQk4Lp6lrPO93rhz%2BT7GJED8IsVYTJCfz9bD7B75REbYo%2BiZkAUzRwkA1HWX%2BhgnOu3FYkGcCWp%2FiTh1ugHBNoixWhRw42KQcbV2WccY%2BA4JTmJxBOFgJOnIjqpORDJCaPWP9HHIMq6rXbi6Qa8kdebr913ZB%2B0oEDzTn3vh9Agqu5I9AtDl0TL5iTo7NOFTdNArAdsyDmZ2rZ2hQ9puoQ0Ryc6fPP4HV%2FLV5rfKOKy2F6QK1PC9WVJs8xj7qGIkP%2BPzCEMyQkmLFYLzqzkXYu6a59vGblRL66WPUBg5Yxk623S34Q1t5CzUGKRl5Ix5P9QqnD7g%2BxGJoEdBbhqO5d4rR5GHyU5wnfm2P2EuNAZ6oXhd5ZgdDKH7JlbzbrHpjneNaUOGJETNZOsPKZUgHnVt0GGb3RcmwsmY4J4i3Wgm4BsTrUa2N7sSb9iDTY9PW6CsXGkAvV6F1Zt%2FZh0YtNy%2BPXsdZx9LO35SvNmP3ARmf8V7n1Tvw%2FGduAxJfe6w9isuUaKXgqJzDNCAycgUExj5dRJ%2FHSdXVq8LorI7%2BrvMx4%2BLF%2BdCneC4p59QCdeKfEN%2BpkvT37spAFUs43ap%2F6M0Zi6Y0JcctrvEt7qgo%2FCMMKgqswGOqQBue5aaVru6QW3Uce%2Fl7Fooic%2BToQGDXBxna5DxBeVGGozMQQb0SIk2xRmccwDpNTICUF63JLRypZg3Ee2amqUAiuTMVoIzilEFTi7HwKktXdqa3AbOg7K5NATqB0irsX7%2F8%2BZwZ905CIYi0%2FFKBXpSmN99Pko2IqHaAv2CvMDr9%2BRQl%2FSRqtf9U3l9qWV%2BbQ6jtUd02VvakQB%2BANM%2BwjPDB133y4%3D"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wnycstudios.org/story/psychology-predictions2"
+          },
+          {
+            "type": "url",
+            "url": "https://www.target.com/p/-/A-1002213063"
+          },
+          {
+            "type": "url",
+            "url": "https://www.supersummary.com/superforecasting/themes/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ideasthesia.org/superforecasting-tetlock/"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7333631/"
+          },
+          {
+            "type": "url",
+            "url": "https://api.pageplace.de/preview/DT0400.9781400830312_A25087807/preview-9781400830312_A25087807.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.cia.gov/resources/csi/static/Capturing-Potential-of-Outlier.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://faculty.bard.edu/hhaggard/teaching/sci127Sp20/notes/TetlockGardnerSuperforecasting1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://marketing.org.nz/hubfs/LD%20Online%20Materials/Critical%20Thinking%20for%20Marketers/Why%20Foxes%20are%20Better%20Forecasters%20than%20Hedgehogs.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.07862"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2411.11126"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1408.0087"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2301.10985"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4157550/predicting-my-predictions/"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4038112/perfect-your-predictions/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a548173d45c8198a1b2fe4126729aec",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a548174309481989b01f7c91ba1c640",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Tetlock Superforecasting Fermi estimation base rates official interview",
+          "Superforecasting Fermi estimate base rate Tetlock interview",
+          "Philip Tetlock base rates Fermi estimation Good Judgment Project",
+          "Superforecasting dragonfly eye outside view base rates Fermi"
+        ],
+        "query": "Tetlock Superforecasting Fermi estimation base rates official interview",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/about/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/fermi-estimation/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psychologicalscience.org/journals/current-directions/0963721414534257/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://www.gjopen.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/"
+          },
+          {
+            "type": "url",
+            "url": "https://magazine.wharton.upenn.edu/issues/spring-2016/how-to-see-the-future-and-know-it-when-you-see-it/"
+          },
+          {
+            "type": "url",
+            "url": "https://rdl.train.army.mil/catalog-ws/view/ARI_TinT_WBT/references/Superforecaster.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.underthesurface.blog/p/can-ai-agents-mimic-a-superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://www.cultivatelabs.com/posts/superforecasting-everything-has-a-base-rate"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.07862"
+          },
+          {
+            "type": "url",
+            "url": "https://predictionmarketsnow.com/modules/science-of-superforecasting/dragonfly-eye-multiple-perspectives"
+          },
+          {
+            "type": "url",
+            "url": "https://brain.mikecordell.com/superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://css.ethz.ch/content/dam/ethz/special-interest/gess/cis/center-for-securities-studies/pdfs/RR-Reports-2021-StrategicForesight.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.whathappensnextin6minutes.com/p/can-anyone-predict-what-happens-next"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/wp-content/uploads/2024/03/Superforecasters-Covid-Origin-20240311.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.openphilanthropy.org/sites/default/files/Philip_Tetlock_03-08-16_%28public%29.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stat.berkeley.edu/~aldous/Real-World/book_april_2015.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.casact.org/sites/default/files/presentation/annual_2016_presentations_c-27.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2411.11126"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2202.00125"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1401.5473"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a54817a6c4481988651ae28e4794632",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54817aec9481989166615b1a22b915",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "Read Sample",
+        "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/"
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a54817e606c8198ab8bdd29c9a9b322",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54818130f08198a4c33cd02037a8cc",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.psychologicalscience.org/journals/perspectives/1745691615577794/"
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a548183cd448198918b7b1603b77aeb",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a548184272481989db71ad9601b6add",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "Brier",
+        "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a548186f9248198ae8baa4a281214a6",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54818774588198b2ffe46bfc5ad61b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a54818d02e881988032fe43ee9474db",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54818d5eb48198becabfb50637178b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Mellers Ungar Baron Psychological strategies for winning a geopolitical forecasting tournament 2014 Good Judgment Project"
+        ],
+        "query": "Mellers Ungar Baron Psychological strategies for winning a geopolitical forecasting tournament 2014 Good Judgment Project",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.psychologicalscience.org/journals/psychological-science/0956797614524255/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psychologicalscience.org/journals/current-directions/0963721414534257/"
+          },
+          {
+            "type": "url",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/24659192/"
+          },
+          {
+            "type": "url",
+            "url": "https://dialnet.unirioja.es/servlet/articulo?codigo=4689536"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/10.1177/0963721414534257"
+          },
+          {
+            "type": "url",
+            "url": "https://www.researchgate.net/publication/261034938_Psychological_Strategies_for_Winning_a_Geopolitical_Forecasting_Tournament"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/10.1177/0956797614524255"
+          },
+          {
+            "type": "url",
+            "url": "https://escholarship.org/uc/item/4rg4n9vr"
+          },
+          {
+            "type": "url",
+            "url": "https://citeseerx.ist.psu.edu/document?doi=bdf7913fad965fc3c2c6de1c99d1eef5618f2931&repid=rep1&type=pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/abs/10.1177/0956797614524255"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/abs/10.1177/0963721414534257"
+          },
+          {
+            "type": "url",
+            "url": "https://profiles.wustl.edu/en/publications/psychological-strategies-for-winning-a-geopolitical-forecasting-t/"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/pdf/10.1177/0956797614524255"
+          },
+          {
+            "type": "url",
+            "url": "https://faculty.wharton.upenn.edu/wp-content/uploads/2015/07/2014---psychological-strategies-for-winning-a-tournament.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rdl.train.army.mil/catalog-ws/view/ARI_TinT_WBT/references/Superforecaster.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://learnmoore.org/papers/Mellers%20et%20al%202014.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1408.0087"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1401.5863"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a548192c3dc8198b68088c0152ad60e",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a54819ae3808198b8829a19394dc318",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"How many piano tuners\" \"Superforecasting\" \"Tetlock\"",
+          "\"piano tuners\" \"Superforecasting\" \"Tetlock\" \"Gardner\" -Shortform",
+          "\"Fermi\" \"piano tuners\" \"Superforecasting\" \"Tetlock\" -Shortform"
+        ],
+        "query": "\"How many piano tuners\" \"Superforecasting\" \"Tetlock\"",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/superforecaster/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.summrize.com/books/super-forecasting-summary"
+          },
+          {
+            "type": "url",
+            "url": "https://www.supersummary.com/superforecasting/chapters-5-7-summary/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.theactuary.com/arts/2015/2015/12/01/superforecasting-art-and-science-prediction"
+          },
+          {
+            "type": "url",
+            "url": "https://andrewclark.co.uk/all-media/superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://rdl.train.army.mil/catalog-ws/view/ARI_TinT_WBT/references/Superforecaster.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bookbrowse.com/mag/reviews/index.cfm/book_number/5154/superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://commoncog.com/how-the-superforecasters-do-it/"
+          },
+          {
+            "type": "url",
+            "url": "https://studylib.net/doc/25736404/philip-e.-tetlock---superforecasting-the-art-and-science-..."
+          },
+          {
+            "type": "url",
+            "url": "https://www.everand.com/book/813273197/Superforecasting-The-Art-and-Science-of-Prediction"
+          },
+          {
+            "type": "url",
+            "url": "https://www.supersummary.com/superforecasting/chapter-12-appendix-summary/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mindtools.com/as4s9bo/superforecasting-the-art-science-of-prediction"
+          },
+          {
+            "type": "url",
+            "url": "https://admiredleadership.com/book-summaries/superforecasting/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.clingendael.org/pub/2017/monitor2017/multiorder/pdf/appendix_2_methodology_and_approach.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://business-digest.eu/_media/pdfs/USBD264021.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://operators.macro-ops.com/wp-content/uploads/2016/09/Ten-Commandments-of-Forecasting-Vault.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/4/45/SHOOT_THE_HORSE_AND_BUILD_A_BETTER_BARN_DOOR-_EXPLORING_THE_POTENTIAL_FOR_A_SUPERFORECASTING_METHODOLOGY_TO_STRENGTHEN_THE_DHS_LEADERSHIP_SELECTION_PROCESS_%28IA_shootthehorseand1094561354%29.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a5481a35bec81988356a071ca0a4d37",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0a5c8d24abead1eb016a5481a5d7508198a2a9c2dae8fb859b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Superforecasting hardcover 9780804136693 Crown September 2015",
+          "Library of Congress Superforecasting the art and science of prediction Tetlock Gardner 2015 Crown",
+          "WorldCat Superforecasting the art and science of prediction 2015 Crown"
+        ],
+        "query": "Superforecasting hardcover 9780804136693 Crown September 2015",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/es/title/950418069"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL26682260M/Superforecasting_The_Art_and_Science_of_Prediction"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Superforecasting.html?id=hC_qBQAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/editions/43596077-superforecasting-the-art-and-science-of-prediction"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL26431412M/Superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://www.betterworldbooks.com/product/detail/superforecasting-the-art-and-science-of-prediction-9780804136693/ebook"
+          },
+          {
+            "type": "url",
+            "url": "https://ci.nii.ac.jp/ncid/BB2410271X"
+          },
+          {
+            "type": "url",
+            "url": "https://jonas.salk.edu/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=4846"
+          },
+          {
+            "type": "url",
+            "url": "https://search.centrecountylibrary.org/Record/382686/TOC"
+          },
+          {
+            "type": "url",
+            "url": "https://jonas.salk.edu/cgi-bin/koha/opac-detail.pl?biblionumber=4846"
+          },
+          {
+            "type": "url",
+            "url": "https://cmc.marmot.org/Record/.b49273140"
+          },
+          {
+            "type": "url",
+            "url": "https://ci.nii.ac.jp/ncid/BB19968169"
+          },
+          {
+            "type": "url",
+            "url": "https://faculty.bard.edu/hhaggard/teaching/sci127Sp20/notes/TetlockGardnerSuperforecasting1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wisdompage.com/reviews/2015%20Reviews/Scoring%20Forecast%20Accuracy.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rdl.train.army.mil/catalog-ws/view/ARI_TinT_WBT/references/Superforecaster.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://home.army.mil/rucker/download_file/view/803/934"
+          },
+          {
+            "type": "url",
+            "url": "https://www.utupub.fi/server/api/core/bitstreams/c8cf4d61-29bc-4282-94c7-76a13b96351b/content"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.07862"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1003.2167"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1503.09156"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2012.03854"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4038112/perfect-your-predictions/"
+          },
+          {
+            "type": "url",
+            "url": "https://time.com/4157550/predicting-my-predictions/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.iarpa.gov/research-programs/ace"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/about/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Expert_Political_Judgment.html?id=9_Wy8HJ9mRAC"
+          },
+          {
+            "type": "url",
+            "url": "https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting"
+          },
+          {
+            "type": "url",
+            "url": "https://www.theactuary.com/arts/2015/2015/12/01/superforecasting-art-and-science-prediction?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psychologicalscience.org/journals/current-directions/0963721414534257/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/"
+          },
+          {
+            "type": "url",
+            "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/the-first-championship-season/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mdpi.com/2227-9091/4/3/24"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Superforecasting.html?id=hC_qBQAAQBAJ&utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://search.centrecountylibrary.org/Record/382686/TOC?utm_source=openai"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0a5c8d24abead1eb016a5481aeb27c8198a77854d07b251a23",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0a5c8d24abead1eb016a5481c4704881989583f72d118ed91f",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 963,
+              "start_index": 834,
+              "title": "Superforecasting by Philip E. Tetlock, Dan Gardner: 9780804136716 | PenguinRandomHouse.com: Books",
+              "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1755,
+              "start_index": 1697,
+              "title": "IARPA - ACE",
+              "url": "https://www.iarpa.gov/research-programs/ace"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2314,
+              "start_index": 2243,
+              "title": "About Superforecasting | Unprecedented Accurate & Precise Forecasting",
+              "url": "https://goodjudgment.com/about/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2606,
+              "start_index": 2533,
+              "title": "",
+              "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3180,
+              "start_index": 3107,
+              "title": "",
+              "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3989,
+              "start_index": 3916,
+              "title": "",
+              "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4776,
+              "start_index": 4671,
+              "title": "Expert Political Judgment: How Good Is It? How Can We Know? - Philip E. Tetlock, Philip Eyrikson Tetlock - Google Books",
+              "url": "https://books.google.com/books/about/Expert_Political_Judgment.html?id=9_Wy8HJ9mRAC"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5431,
+              "start_index": 5306,
+              "title": "Phil Tetlock Explains the Art and Science of Superforecasting | Nareit",
+              "url": "https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6239,
+              "start_index": 6110,
+              "title": "Superforecasting: the art and science of prediction | The Actuary",
+              "url": "https://www.theactuary.com/arts/2015/2015/12/01/superforecasting-art-and-science-prediction?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6773,
+              "start_index": 6700,
+              "title": "",
+              "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7510,
+              "start_index": 7398,
+              "title": "Forecasting Tournaments - Current Directions in Psychological Science - APS",
+              "url": "https://www.psychologicalscience.org/journals/current-directions/0963721414534257/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7710,
+              "start_index": 7619,
+              "title": "The Superforecasters’ Track Record - Good Judgment",
+              "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8261,
+              "start_index": 8132,
+              "title": "Superforecasting by Philip E. Tetlock, Dan Gardner: 9780804136716 | PenguinRandomHouse.com: Books",
+              "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8655,
+              "start_index": 8582,
+              "title": "",
+              "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9140,
+              "start_index": 9011,
+              "title": "Superforecasting by Philip E. Tetlock, Dan Gardner: 9780804136716 | PenguinRandomHouse.com: Books",
+              "url": "https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9490,
+              "start_index": 9361,
+              "title": "Superforecasting: the art and science of prediction | The Actuary",
+              "url": "https://www.theactuary.com/arts/2015/2015/12/01/superforecasting-art-and-science-prediction?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9913,
+              "start_index": 9792,
+              "title": "The first championship season - Good Judgment",
+              "url": "https://goodjudgment.com/resources/the-superforecasters-track-record/the-first-championship-season/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10350,
+              "start_index": 10277,
+              "title": "",
+              "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10713,
+              "start_index": 10588,
+              "title": "Phil Tetlock Explains the Art and Science of Superforecasting | Nareit",
+              "url": "https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11038,
+              "start_index": 10965,
+              "title": "",
+              "url": "https://web.stanford.edu/~knutson/nfc/mellers15.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11452,
+              "start_index": 11401,
+              "title": "Superforecasting: The Art and Science of Prediction. By Philip Tetlock and Dan Gardner | MDPI",
+              "url": "https://www.mdpi.com/2227-9091/4/3/24"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11742,
+              "start_index": 11637,
+              "title": "Expert Political Judgment: How Good Is It? How Can We Know? - Philip E. Tetlock, Philip Eyrikson Tetlock - Google Books",
+              "url": "https://books.google.com/books/about/Expert_Political_Judgment.html?id=9_Wy8HJ9mRAC"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12233,
+              "start_index": 12119,
+              "title": "Superforecasting: The Art and Science of Prediction - Philip E. Tetlock, Dan Gardner - Google Books",
+              "url": "https://books.google.com/books/about/Superforecasting.html?id=hC_qBQAAQBAJ&utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12594,
+              "start_index": 12484,
+              "title": "Table of Contents: Superforecasting",
+              "url": "https://search.centrecountylibrary.org/Record/382686/TOC?utm_source=openai"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Superforecasting* by Philip E. Tetlock and Dan Gardner\n\n## Central argument\n\n*Superforecasting: The Art and Science of Prediction* argues that forecasting in politics, business, intelligence, and ordinary life is neither hopeless guesswork nor a mystical gift. Tetlock and Gardner’s core claim is narrower and more empirical: when forecasts are framed as clear, time-bounded, probabilistic judgments, then scored against outcomes and improved through feedback, some people reliably outperform others—and many of their habits can be taught or emulated. The publisher’s description frames the tension directly: Tetlock’s earlier expert-forecasting work showed that many experts perform only slightly better than chance, yet his later Good Judgment Project found a subset of ordinary forecasters who did unusually well. ([penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/))\n\nThe book resolves a tension between two bad defaults: fatalism about complex human affairs and overconfidence in pundit/expert certainty. It does **not** say the future is generally knowable. It says some bounded questions—especially near- to medium-term geopolitical, economic, and organizational questions with defined resolution criteria—can be forecast better when people use probabilistic thinking, base rates, evidence gathering, frequent updating, collaboration, and scorekeeping. IARPA’s ACE program supplies the institutional backdrop: it was designed to improve the accuracy, precision, and timeliness of intelligence forecasts by eliciting, combining, and empirically testing probabilistic judgments against real events. ([iarpa.gov](https://www.iarpa.gov/research-programs/ace))\n\n## Mechanisms and frameworks\n\n**Good Judgment Project.** The Good Judgment Project was the forecasting research program led by Philip Tetlock and Barbara Mellers at the University of Pennsylvania within IARPA’s ACE tournament. Good Judgment’s own account says the tournament began in 2011 and involved four years, roughly 500 questions, and more than a million forecasts; IARPA later released GJP data for research use, describing it as millions of forecasts collected over four years. ([goodjudgment.com](https://goodjudgment.com/about/?utm_source=openai)) In the research design, forecasters answered questions such as whether Silvio Berlusconi would leave office before a specified date, assigned probabilities from 0% to 100%, and could update before the question closed. ([web.stanford.edu](https://web.stanford.edu/~knutson/nfc/mellers15.pdf))\n\n**Brier scores.** Brier scores are the book’s central feedback instrument: a proper scoring rule for probabilistic forecasts, calculated as squared distance between a forecast and the outcome. In the GJP convention, a binary event can be scored on a 0–2 scale, where 0 is best and 2 worst; lower scores are better. The Mellers et al. paper explains that Brier scores were used both to assess accuracy and to encourage forecasters to state true beliefs rather than blur probability with preferences. ([web.stanford.edu](https://web.stanford.edu/~knutson/nfc/mellers15.pdf)) For an editor: Brier scores are not “confidence scores.” They reward both correct direction and well-sized probabilities. A 60% forecast that occurs scores better than a 51% forecast that occurs, but a 99% forecast that fails is punished sharply.\n\n**Calibration.** Calibration is often collapsed into Brier accuracy, but it is only one component. A forecaster is well calibrated if, over many cases, events assigned 70% probability occur about 70% of the time. The Mellers paper distinguishes calibration from **resolution**, the ability to separate signal from noise by assigning meaningfully different probabilities when evidence warrants it. Superforecasters did better on Brier scores, calibration, resolution, and learning rates. ([web.stanford.edu](https://web.stanford.edu/~knutson/nfc/mellers15.pdf)) This distinction matters: a forecaster can be well calibrated by staying vague near 50%, but that may provide little useful information; strong forecasting needs both humility and appropriate decisiveness.\n\n**Foxes and hedgehogs.** Tetlock’s fox/hedgehog contrast comes from *Expert Political Judgment* and is carried into *Superforecasting*. The fox uses many small models, updates flexibly, and draws from multiple traditions; the hedgehog uses one large theory and tends to force ambiguous evidence into that frame. Google Books’ publisher description of *Expert Political Judgment* says Tetlock found foxlike thinkers more successful than hedgehog-like thinkers in prediction. ([books.google.com](https://books.google.com/books/about/Expert_Political_Judgment.html?id=9_Wy8HJ9mRAC)) In the digest, this should not become “generalists beat experts.” The book’s target is cognitive style: active open-mindedness, eclectic evidence use, and willingness to revise.\n\n**Base rates and the outside view.** Superforecasting starts with a reference class before plunging into vivid case details. In a Tetlock interview about applying the framework to real estate demand, he says superforecasters begin with an outside view—broader comparison information—and then move to an inside view by examining case-specific trends. ([reit.com](https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting)) The causal role is anchoring: base rates stop forecasters from treating every event as unique. The next step is adjustment, not blind obedience to the base rate.\n\n**Fermi estimation.** Fermi estimation means breaking a seemingly unanswerable question into smaller quantities that can be estimated, checked, or debated. The book’s commonly cited example is estimating the number of piano tuners in Chicago by decomposing the problem into the number of pianos, tuning frequency, time per tuning, and annual working hours. I found this verified in credible reviews and professional material, not in an official publisher excerpt; use it conservatively as a book-discussed example. ([theactuary.com](https://www.theactuary.com/arts/2015/2015/12/01/superforecasting-art-and-science-prediction?utm_source=openai)) The mechanism is transparency: decomposition reveals which assumptions drive the answer.\n\n**Frequent belief updating.** Superforecasters revise probabilities as new information arrives. This is not jittery overreaction; it is disciplined Bayesian-style adjustment. The Mellers paper reports that superforecasters updated beliefs more often than comparison groups and that frequency of belief updating was the strongest single behavioral predictor of accuracy. ([web.stanford.edu](https://web.stanford.edu/~knutson/nfc/mellers15.pdf)) This should be paired with calibration: updating improves forecasts only if the size of the update matches the evidentiary weight.\n\n**Tournament feedback.** Forecasting tournaments create feedback loops missing from punditry. They require clear questions, deadlines, resolution criteria, probability estimates, scoring, leaderboards, and opportunities to learn. APS describes tournaments as level-playing-field competitions that reveal which people, teams, or algorithms produce more accurate probabilities; GJP’s winning approach combined debiasing training, teams, selection of top performers, and aggregation algorithms. ([psychologicalscience.org](https://www.psychologicalscience.org/journals/current-directions/0963721414534257/)) Good Judgment’s later materials emphasize postmortems and scorekeeping as continuing parts of the practice. ([goodjudgment.com](https://goodjudgment.com/resources/the-superforecasters-track-record/))\n\n## Book-grounded examples\n\n- **Good Judgment Project volunteers.** Publisher and author materials describe the GJP as involving ordinary people, including a Brooklyn filmmaker, a retired pipe installer, and a former ballroom dancer, forecasting global events. This demonstrates the book’s anti-credentialist but not anti-expertise point: track record can reveal forecasting skill outside traditional status hierarchies. ([penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/))\n\n- **Berlusconi resignation question.** The Mellers paper gives the example of forecasting whether Silvio Berlusconi would resign, lose reelection/confidence, or otherwise leave office before January 1, 2012. This demonstrates how messy political questions were converted into bounded, resolvable probability questions. ([web.stanford.edu](https://web.stanford.edu/~knutson/nfc/mellers15.pdf))\n\n- **Osama bin Laden raid and Bay of Pigs.** The publisher states that the book uses the bin Laden compound raid as a forecasting success and Bay of Pigs as a failure. For the public digest, use these as contrasting cases about judgment under uncertainty and institutional decision-making, but avoid adding details beyond what can be checked in the book. ([penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/))\n\n- **Piano tuners in Chicago.** Credible secondary sources identify this as the book’s Fermi-estimation example. It demonstrates how decomposition can improve estimates even when no single input is known with certainty. ([theactuary.com](https://www.theactuary.com/arts/2015/2015/12/01/superforecasting-art-and-science-prediction?utm_source=openai))\n\n- **Elite superforecaster teams.** Good Judgment’s account says the top 2% of forecasters were grouped into five 12-person teams in 2012 and outperformed other ACE competitors; the Mellers paper explains the selection/tracking logic and cautions that this was not merely an isolated training effect. ([goodjudgment.com](https://goodjudgment.com/resources/the-superforecasters-track-record/the-first-championship-season/))\n\n## Qualifications and common misreadings\n\nDo **not** present superforecasting as prophecy. The evidence is strongest for bounded questions with measurable outcomes and feedback. Mellers et al. explicitly caution that winning a tournament does not prove a strategy is optimal, and that the GJP involved hypothesis generation and testing in a high-stakes setting. ([web.stanford.edu](https://web.stanford.edu/~knutson/nfc/mellers15.pdf))\n\nDo **not** say experts are useless. The book criticizes unscored, overconfident punditry, not knowledge. Tetlock’s interview examples still use domain evidence; the method starts with base rates and then examines case-specific details. ([reit.com](https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting))\n\nDo **not** collapse Brier score, calibration, and sharpness. Brier score rewards overall probabilistic accuracy; calibration measures whether long-run confidence matches outcomes; resolution measures whether forecasts discriminate signal from noise. ([web.stanford.edu](https://web.stanford.edu/~knutson/nfc/mellers15.pdf))\n\nDo **not** turn “update often” into “change your mind constantly.” The stronger claim is that superforecasters revise in response to evidence and learn from feedback; overreaction can also worsen scores. A critical MDPI review notes that Brier scoring harshly penalizes grave confident errors and can create incentives toward weaker forecasts if misunderstood. ([mdpi.com](https://www.mdpi.com/2227-9091/4/3/24))\n\nDo **not** reduce foxes vs. hedgehogs to personality branding. The useful distinction is methodological: eclectic, revisable, evidence-sensitive thinking versus one-theory certainty. ([books.google.com](https://books.google.com/books/about/Expert_Political_Judgment.html?id=9_Wy8HJ9mRAC))\n\n## Metadata check\n\nConfirmed title: *Superforecasting: The Art and Science of Prediction*. Confirmed authors: Philip E. Tetlock and Dan Gardner. Original publication year: 2015, by Crown. Google Books lists Crown publication on September 29, 2015, 352 pages; Penguin Random House lists the ebook on September 29, 2015 and the paperback on September 13, 2016, also 352 pages. ([books.google.com](https://books.google.com/books/about/Superforecasting.html?id=hC_qBQAAQBAJ&utm_source=openai)) A library TOC record identifies the print book as a first edition from Crown in 2015 and lists chapters including “Keeping score,” “Superforecasters,” “Perpetual beta,” “Superteams,” and the appendix “Ten commandments for aspiring superforecasters.” ([search.centrecountylibrary.org](https://search.centrecountylibrary.org/Record/382686/TOC?utm_source=openai)) I found no verified edition difference that materially changes the digest; the paperback appears to be a later format rather than a revised argument.\n\n## Sources\n\n- [Penguin Random House page for *Superforecasting*](https://www.penguinrandomhouse.com/books/227815/superforecasting-by-philip-e-tetlock-and-dan-gardner/) — Confirms title, authors, publisher formats, publication dates, page count, official description, and book-grounded examples such as the Good Judgment Project, bin Laden raid, and Bay of Pigs.\n\n- [Dan Gardner official page for *Superforecasting*](https://dangardner.ca/publication/superforecasting) — Supports the author-side framing of the book as drawing on decades of research and a government-funded forecasting tournament.\n\n- [Philip E. Tetlock profile at Social Psychology Network](https://tetlock.socialpsychology.org/teaching) — Confirms Tetlock’s own bibliography entry for *Superforecasting* and related forecasting talks.\n\n- [IARPA ACE program page](https://www.iarpa.gov/research-programs/ace) — Supports the institutional goal of improving intelligence forecasts through elicitation, aggregation, and empirical testing.\n\n- [IARPA announcement on Good Judgment Project data](https://www.iarpa.gov/newsroom/article/iarpa-announces-publication-of-data-from-the-good-judgment-project) — Confirms public release of GJP data and the scale of millions of forecasts over four years.\n\n- [Good Judgment “About Superforecasting”](https://goodjudgment.com/about/) — Supports the post-book Good Judgment account of GJP’s scale, leadership, and superforecaster concept.\n\n- [APS: “Forecasting Tournaments”](https://www.psychologicalscience.org/journals/current-directions/0963721414534257/) — Supports the tournament-feedback framework and GJP’s combination of debiasing, teams, top-performer selection, and aggregation.\n\n- [APS: “Identifying and Cultivating Superforecasters”](https://www.psychologicalscience.org/journals/perspectives/1745691615577794/) — Supports the research conclusion that superforecasters were partly discovered and partly cultivated.\n\n- [Full-text PDF of Mellers et al. 2015, hosted at Stanford](https://web.stanford.edu/~knutson/nfc/mellers15.pdf) — Used for detailed mechanisms: Brier scores, calibration, updating frequency, selection into teams, and research caveats.\n\n- [Nareit interview with Philip Tetlock](https://www.reit.com/news/reit-magazine/march-april-2016/phil-tetlock-explains-art-and-science-superforecasting) — Supports the outside-view/base-rate mechanism and Tetlock’s explanation of organizational application.\n\n- [Wharton Magazine interview-based article](https://magazine.wharton.upenn.edu/issues/spring-2016/how-to-see-the-future-and-know-it-when-you-see-it/) — Supports the level-playing-field critique of punditry and the “dart-throwing chimp” baseline context.\n\n- [Google Books page for *Expert Political Judgment*](https://books.google.com/books/about/Expert_Political_Judgment.html?id=9_Wy8HJ9mRAC) — Supports the fox/hedgehog distinction from Tetlock’s earlier work.\n\n- [MDPI review of *Superforecasting*](https://www.mdpi.com/2227-9091/4/3/24) — Supports Brier-score explanation and caveats about scoring-rule interpretation.\n\n- [Good Judgment “First championship season”](https://goodjudgment.com/resources/the-superforecasters-track-record/the-first-championship-season/) — Supports the account of elite superforecaster teams and early tournament results.\n\n- [Good Judgment “Superforecasters’ Track Record”](https://goodjudgment.com/resources/the-superforecasters-track-record/) — Supports the continuing emphasis on postmortems and keeping score.\n\n- [Centre County Library TOC record](https://search.centrecountylibrary.org/Record/382686/TOC) — Supports first-edition metadata and table-of-contents check.\n\n- [The Actuary review of *Superforecasting*](https://www.theactuary.com/arts/2015/2015/12/01/superforecasting-art-and-science-prediction) — Supports the book’s use of Fermi estimation and the piano-tuners example; treated as secondary verification, not official excerpt."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 9
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 98090,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 6543,
+    "output_tokens_details": {
+      "reasoning_tokens": 3203
+    },
+    "total_tokens": 104633
+  },
+  "user": null,
+  "metadata": {}
+}

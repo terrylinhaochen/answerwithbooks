@@ -9,10 +9,12 @@ const providerArg = process.argv.find((arg) => arg.startsWith('--provider='));
 const limitArg = process.argv.find((arg) => arg.startsWith('--limit='));
 const idsArg = process.argv.find((arg) => arg.startsWith('--ids='));
 const styleArg = process.argv.find((arg) => arg.startsWith('--style='));
+const concurrencyArg = process.argv.find((arg) => arg.startsWith('--concurrency='));
 const provider = providerArg?.split('=')[1] ?? process.env.COVER_PROVIDER ?? 'gemini';
 const limit = limitArg ? Number(limitArg.split('=')[1]) : Infinity;
 const selectedIds = idsArg ? new Set(idsArg.split('=').slice(1).join('=').split(',').filter(Boolean)) : null;
 const coverStyle = styleArg?.split('=')[1] ?? process.env.COVER_STYLE ?? 'sticker';
+const coverConcurrency = Number(concurrencyArg?.split('=')[1] ?? process.env.COVER_CONCURRENCY ?? 2);
 const geminiImageMime = process.env.GEMINI_IMAGE_MIME || 'image/jpeg';
 const geminiImageExtension = geminiImageMime === 'image/png' ? 'png' : 'jpg';
 const geminiKeyEnvPaths = [
@@ -72,6 +74,30 @@ const symbolByBook = {
   'the-wisdom-of-crowds': 'one large signal formed by many tiny dots',
   'thinking-fast-and-slow': 'two simple paths, one lightning bolt and one slow curve',
   'zero-to-one': 'one thick outlined ring transforming upward into a single angular prism, one continuous emblem showing a leap into a new dimension',
+  'obviously-awesome': 'one bright prism aligning three scattered rays into a single focused beam',
+  'traction': 'one bold arrow landing in the center of a simple target ring',
+  'competing-against-luck': 'one block being pulled cleanly upward into a progress notch',
+  'playing-to-win': 'one decisive path passing through five linked choice gates toward a target',
+  'the-goal': 'one narrow hourglass bottleneck between two smooth conveyor lines',
+  'continuous-discovery-habits': 'one branching opportunity tree with a single illuminated tested path',
+  'the-design-of-everyday-things': 'one door handle whose form unmistakably signals pulling',
+  'radical-candor': 'one heart fused with a straight forward-pointing arrow',
+  'the-fearless-organization': 'one open doorway cut through a protective shield',
+  'difficult-conversations': 'two contrasting speech stones connected by one neutral bridge',
+  'getting-to-yes': 'two separate paths curving around conflict and meeting at one shared circle',
+  'noise': 'three judgment needles aimed at visibly different points on one dial',
+  'superforecasting': 'one probability dial with a precisely calibrated needle and target dot',
+  'thinking-in-bets': 'one poker chip balancing a decision arrow against an outcome circle, with no numbers or letters',
+  'the-scout-mindset': 'one open eye fused with a clear compass needle',
+  'thinking-in-systems': 'one reservoir shape connected to itself by a bold feedback loop',
+  'accelerate': 'four small streams combining into one fast upward arrow',
+  'team-topologies': 'four distinct modular blocks connected through one clean interaction seam',
+  'slow-productivity': 'one sturdy tortoise shell formed from a single precise gear',
+  'make-it-stick': 'one retrieval hook pulling a bright memory dot from a simple stack',
+  'working-identity': 'two different masks connected by a stepping-stone path',
+  'the-happiness-trap': 'one tight thought loop opening toward a values star',
+  'scarcity': 'one tunnel narrowing a wide field into a sharp beam of attention',
+  'the-good-life': 'two interlocking circles joined by one visible repair stitch',
 };
 
 const paletteByBook = {
@@ -96,6 +122,30 @@ const paletteByBook = {
   'the-wisdom-of-crowds': { bg: '#0877d9', accent: '#37f5ff', warm: '#ffbd2e', ink: '#062b4f', name: 'royal blue' },
   'thinking-fast-and-slow': { bg: '#9c114c', accent: '#ffd51f', warm: '#25d6ff', ink: '#35071b', name: 'magenta burgundy' },
   'zero-to-one': { bg: '#f04b32', accent: '#fff4dc', warm: '#171717', ink: '#4b1008', name: 'vivid vermilion' },
+  'obviously-awesome': { bg: '#ff4f87', accent: '#ffe44d', warm: '#173bff', ink: '#4b0921', name: 'hot coral pink' },
+  'traction': { bg: '#0847c7', accent: '#ffcf29', warm: '#ff5a38', ink: '#031b4c', name: 'signal blue' },
+  'competing-against-luck': { bg: '#d84718', accent: '#83ffb5', warm: '#fff1cd', ink: '#4c1404', name: 'burnt orange' },
+  'playing-to-win': { bg: '#5a24b8', accent: '#f7ef4f', warm: '#42e8c0', ink: '#200748', name: 'royal violet' },
+  'the-goal': { bg: '#0d6b5e', accent: '#ffbf38', warm: '#fff4df', ink: '#042b26', name: 'deep jade' },
+  'continuous-discovery-habits': { bg: '#f04b2e', accent: '#7cffd5', warm: '#fff0cb', ink: '#4c1007', name: 'discovery orange' },
+  'the-design-of-everyday-things': { bg: '#f2b70a', accent: '#1234a5', warm: '#fff8df', ink: '#4c3600', name: 'industrial yellow' },
+  'radical-candor': { bg: '#e52945', accent: '#8bffce', warm: '#fff2dc', ink: '#4b0712', name: 'direct red' },
+  'the-fearless-organization': { bg: '#008c78', accent: '#ffdf43', warm: '#ff6a52', ink: '#042e27', name: 'open teal' },
+  'difficult-conversations': { bg: '#8238a7', accent: '#ffcb45', warm: '#6effd0', ink: '#2c0c3a', name: 'dialogue purple' },
+  'getting-to-yes': { bg: '#1673d1', accent: '#ffcb3c', warm: '#fff3dc', ink: '#06284c', name: 'agreement blue' },
+  'noise': { bg: '#3d4259', accent: '#ff5d73', warm: '#4df0dc', ink: '#151824', name: 'slate signal' },
+  'superforecasting': { bg: '#1252a4', accent: '#f9e643', warm: '#7bffd2', ink: '#061f43', name: 'forecast blue' },
+  'thinking-in-bets': { bg: '#7b1644', accent: '#57e6d2', warm: '#ffd145', ink: '#2d0718', name: 'casino plum' },
+  'the-scout-mindset': { bg: '#007b91', accent: '#ffda42', warm: '#ff6849', ink: '#032d35', name: 'scout cyan' },
+  'thinking-in-systems': { bg: '#126442', accent: '#f4dc49', warm: '#76dfff', ink: '#05291b', name: 'systems green' },
+  'accelerate': { bg: '#ef3c28', accent: '#58f2d0', warm: '#fff0cc', ink: '#4c0c04', name: 'velocity red' },
+  'team-topologies': { bg: '#3151c6', accent: '#ffb936', warm: '#78ffd5', ink: '#0d1c52', name: 'modular blue' },
+  'slow-productivity': { bg: '#315b50', accent: '#ffcc4a', warm: '#f5f0db', ink: '#122a25', name: 'patient green' },
+  'make-it-stick': { bg: '#d42e74', accent: '#ffdb35', warm: '#6dffcf', ink: '#490a27', name: 'memory magenta' },
+  'working-identity': { bg: '#3f46a6', accent: '#ff9f43', warm: '#a6ffda', ink: '#151947', name: 'identity indigo' },
+  'the-happiness-trap': { bg: '#e15b1a', accent: '#68efcb', warm: '#fff0d0', ink: '#4b1805', name: 'values orange' },
+  'scarcity': { bg: '#702f84', accent: '#ffd33d', warm: '#61efd1', ink: '#280d31', name: 'tunnel violet' },
+  'the-good-life': { bg: '#bf315e', accent: '#ffd34d', warm: '#79f0d0', ink: '#430b20', name: 'relationship rose' },
 };
 
 function parseFrontmatter(markdown) {
@@ -358,6 +408,40 @@ async function generateGeminiImage(book, prompt) {
   fs.writeFileSync(path.join(outputDir, `${book.id}.${geminiImageExtension}`), Buffer.from(encoded, 'base64'));
 }
 
+async function generateOpenAiImage(book, prompt) {
+  const apiKey = openAiApiKey();
+  if (!apiKey) throw new Error('Missing OPENAI_API_KEY for OpenAI cover generation.');
+  const response = await fetch('https://api.openai.com/v1/responses', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      store: false,
+      model: process.env.OPENAI_IMAGE_HOST_MODEL || 'gpt-5.5',
+      input: prompt,
+      tools: [{
+        type: 'image_generation',
+        model: process.env.OPENAI_IMAGE_MODEL || 'gpt-image-1.5',
+        size: '1024x1536',
+        quality: process.env.OPENAI_IMAGE_QUALITY || 'high',
+        background: 'opaque',
+        output_format: 'jpeg',
+        output_compression: 92,
+      }],
+      tool_choice: 'required',
+    }),
+  });
+  if (!response.ok) {
+    throw new Error(`OpenAI image request failed for ${book.id}: ${response.status} ${await response.text()}`);
+  }
+  const json = await response.json();
+  const encoded = json.output?.find((item) => item.type === 'image_generation_call')?.result;
+  if (!encoded) throw new Error(`No OpenAI image data returned for ${book.id}`);
+  fs.writeFileSync(path.join(outputDir, `${book.id}.jpg`), Buffer.from(encoded, 'base64'));
+}
+
 function geminiApiKey() {
   if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
   if (process.env.GOOGLE_AI_API_KEY) return process.env.GOOGLE_AI_API_KEY;
@@ -369,6 +453,15 @@ function geminiApiKey() {
       readEnvValue(envPath, 'GOOGLE_AI_API_KEY') ??
       readEnvValue(envPath, 'VITE_GOOGLE_AI_API_KEY') ??
       readEnvValue(envPath, 'GOOGLE_API_KEY');
+    if (key) return key;
+  }
+  return null;
+}
+
+function openAiApiKey() {
+  if (process.env.OPENAI_API_KEY) return process.env.OPENAI_API_KEY;
+  for (const envPath of geminiKeyEnvPaths) {
+    const key = readEnvValue(envPath, 'OPENAI_API_KEY');
     if (key) return key;
   }
   return null;
@@ -405,6 +498,10 @@ const books = readBooks()
   .slice(0, limit);
 fs.mkdirSync(outputDir, { recursive: true });
 
+if (!Number.isInteger(coverConcurrency) || coverConcurrency < 1 || coverConcurrency > 6) {
+  throw new Error('--concurrency must be an integer from 1 to 6.');
+}
+
 const promptsPath = path.join(outputDir, 'prompts.json');
 let prompts = {};
 if (fs.existsSync(promptsPath)) {
@@ -421,16 +518,34 @@ for (const book of books) {
     style: coverStyle,
     providerPrompt: imagePrompt(book),
   };
+}
+
+await runCoverPool(books, coverConcurrency, async (book) => {
   if (provider === 'svg') {
     fs.writeFileSync(path.join(outputDir, `${book.id}.svg`), renderSvgCover(book));
   } else if (provider === 'gemini' || provider === 'nanobanana') {
     await generateGeminiImage(book, prompts[book.id].providerPrompt);
+  } else if (provider === 'openai') {
+    await generateOpenAiImage(book, prompts[book.id].providerPrompt);
   } else if (provider !== 'prompts') {
-    throw new Error(`Unknown provider "${provider}". Use svg, prompts, gemini, or nanobanana.`);
+    throw new Error(`Unknown provider "${provider}". Use svg, prompts, gemini, nanobanana, or openai.`);
   }
-}
+});
 
 fs.writeFileSync(promptsPath, `${JSON.stringify(prompts, null, 2)}\n`);
 console.log(`Generated ${books.length} cover prompt${books.length === 1 ? '' : 's'} in ${path.relative(root, outputDir)}`);
 if (provider === 'svg') console.log('Generated SVG cover assets.');
 if (provider === 'gemini' || provider === 'nanobanana') console.log(`Generated Gemini/Nano Banana ${geminiImageExtension.toUpperCase()} cover assets.`);
+if (provider === 'openai') console.log('Generated OpenAI JPEG cover assets.');
+
+async function runCoverPool(items, size, worker) {
+  let index = 0;
+  const workers = Array.from({ length: Math.min(size, items.length) }, async () => {
+    while (index < items.length) {
+      const item = items[index++];
+      await worker(item);
+      console.log(`[cover] ${item.id}`);
+    }
+  });
+  await Promise.all(workers);
+}

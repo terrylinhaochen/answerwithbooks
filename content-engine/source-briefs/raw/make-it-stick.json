@@ -1,0 +1,871 @@
+{
+  "id": "resp_02bfe7e643b0bad6016a548279f904819a8d3e7b6d7086a771",
+  "object": "response",
+  "created_at": 1783923322,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923427,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_02bfe7e643b0bad6016a54827ac3f8819a993a0c626307486c",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Make It Stick official Peter C. Brown book retrieval practice spacing interleaving",
+          "Make It Stick Harvard University Press Peter C Brown Roediger McDaniel",
+          "Make It Stick author interview Roediger McDaniel desirable difficulties illusions mastery",
+          "Make It Stick official reader guide PDF Brown Roediger McDaniel"
+        ],
+        "query": "Make It Stick official Peter C. Brown book retrieval practice spacing interleaving",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.retrievalpractice.org/make-it-stick"
+          },
+          {
+            "type": "url",
+            "url": "https://www.makeitstick.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.makeitstick.com/learning-strategies"
+          },
+          {
+            "type": "url",
+            "url": "https://stemed.uchicago.edu/school-support-services/news-and-events/reading-recommendations/make-it-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/MAKE_IT_STICK.html?id=1vcF0QEACAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://bagerbach.com/books/make-it-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://chooser.crossref.org/?doi=10.2307%2Fj.ctt6wprs3"
+          },
+          {
+            "type": "url",
+            "url": "https://teaching.uchicago.edu/news/pedagogy-corner/pedagogy-corner-make-it-stick"
+          },
+          {
+            "type": "url",
+            "url": "https://ift.onlinelibrary.wiley.com/doi/full/10.1111/1541-4329.12075"
+          },
+          {
+            "type": "url",
+            "url": "https://learnlog.app/books/make-it-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.researchgate.net/publication/286159570_Make_It_Stick_The_Science_of_Successful_Learning"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/make-it-stick-the-science-of-effective-learning/id1700331903?i=1000670062212"
+          },
+          {
+            "type": "url",
+            "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://med.und.edu/education-training/education-resources/_files/docs/makeitstickguide2019.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://edrev.asu.edu/edrev/index.php/ER/article/download/1970/593/2001"
+          },
+          {
+            "type": "url",
+            "url": "https://mcnair.truman.edu/files/2015/07/Make-it-stick-2.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2606.26181"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1804.07781"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/0912.0201"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1410.1490"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a54827dbcd0819aa3fbd7dc6e097442",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a54827ef588819a822164cd0055faad",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:hup.harvard.edu Make It Stick The Science of Successful Learning Brown Roediger McDaniel",
+          "Henry Roediger Make It Stick Washington University interview retrieval practice",
+          "Mark McDaniel Make It Stick Washington University CIRCLE",
+          "Peter C Brown Make It Stick official author"
+        ],
+        "query": "site:hup.harvard.edu Make It Stick The Science of Successful Learning Brown Roediger McDaniel",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://circle.wustl.edu/people/mark-mcdaniel/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.petercbrown.com/make_it_stick.php"
+          },
+          {
+            "type": "url",
+            "url": "https://circle.wustl.edu/reflective-writing-can-help-students-link-course-content-to-their-lives/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.makeitstick.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://chooser.crossref.org/?doi=10.2307%2Fj.ctt6wprs3"
+          },
+          {
+            "type": "url",
+            "url": "https://source.washu.edu/2014/04/science-of-learning-book-offers-tips-to-make-it-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://psych.washu.edu/department-retirements"
+          },
+          {
+            "type": "url",
+            "url": "https://circle.wustl.edu/author/kellyganz/"
+          },
+          {
+            "type": "url",
+            "url": "https://psych.washu.edu/people/henry-roediger"
+          },
+          {
+            "type": "url",
+            "url": "https://psychnet.wustl.edu/memory/"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/MAKE_IT_STICK.html?id=1vcF0QEACAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://catalog.cclsny.org/bib/201067"
+          },
+          {
+            "type": "url",
+            "url": "https://psychnet.wustl.edu/memory/wp-content/uploads/2018/04/BC_Putnam-et-al-inpress.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://er.educause.edu/~/media/files/blogs/2018/6/er183409quickreferencequide.pdf?la=en"
+          },
+          {
+            "type": "url",
+            "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://psychnet.wustl.edu/memory/wp-content/uploads/2021/01/Roediger_Brown_School-Administrator.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.burtthompson.net/uploads/9/6/8/4/9684389/roediger-2014_how_tests_make_us_smarter__new_york_times_.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2204.01691"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1303.5778"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1709.06560"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1511.06939"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a548283acd4819abf06390d79c17061",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a548283d0b0819abb088274760d7453",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.petercbrown.com/make_it_stick.php"
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a54828537ac819a85da4ab9fc1043c7",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a5482856170819a9023069bb6e4e3b4",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.makeitstick.com/"
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a548288cae8819a8ace939a12cb1ece",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a5482893700819aae97fb744badb892",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.makeitstick.com/about-make-it-stick"
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a54828a38e8819aa0ae79c8b5556a5d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a54828bd06c819a80eda7dd2993780b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Peter Brown Henry Roediger Make It Stick interview School Administrator low stakes quizzing",
+          "Make It Stick interview Peter C Brown Henry Roediger Mark McDaniel retrieval practice spacing interleaving",
+          "\"Make It Stick\" \"desirable difficulties\" \"interview\" Roediger McDaniel",
+          "site:psychnet.wustl.edu/memory \"Make It Stick\" \"retrieval practice\" \"School Administrator\""
+        ],
+        "query": "Peter Brown Henry Roediger Make It Stick interview School Administrator low stakes quizzing",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.retrievalpractice.org/make-it-stick"
+          },
+          {
+            "type": "url",
+            "url": "https://teaching.uchicago.edu/news/pedagogy-corner/pedagogy-corner-make-it-stick"
+          },
+          {
+            "type": "url",
+            "url": "https://www.makeitstick.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://psychnet.wustl.edu/memory/wp-content/uploads/2021/01/Roediger_Brown_School-Administrator.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/make-it-stick-the-science-of-effective-learning/id1700331903?i=1000670062212"
+          },
+          {
+            "type": "url",
+            "url": "https://psychnet.wustl.edu/memory/publications/"
+          },
+          {
+            "type": "url",
+            "url": "https://bagerbach.com/books/make-it-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://ift.onlinelibrary.wiley.com/doi/full/10.1111/1541-4329.12075"
+          },
+          {
+            "type": "url",
+            "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://er.educause.edu/~/media/files/blogs/2018/6/er183409quickreferencequide.pdf?la=en"
+          },
+          {
+            "type": "url",
+            "url": "https://www.apmreports.org/episode/2016/02/12/making-sure-learning-sticks"
+          },
+          {
+            "type": "url",
+            "url": "https://digitalpromise.org/2014/10/15/ask-the-cognitive-scientist-retrieval-practice/"
+          },
+          {
+            "type": "url",
+            "url": "https://studylib.net/doc/27809083/brown-mcdaniel-roediger-2014-make-it-stick"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aasa.org/resources/resource/importance-testing-learning-strategy"
+          },
+          {
+            "type": "url",
+            "url": "https://experiencelife.lifetime.life/article/make-it-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://tea.texas.gov/texas-educators/certification/educator-testing/strategies-for-memory-recall.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2012.06421"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2005.14165"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1511.07528"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1602.02697"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a54828fe1b8819a8e44ea1191e20edc",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a548290019c819a971c7c17a8d05135",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.apmreports.org/episode/2016/02/12/making-sure-learning-sticks"
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a548292c34c819a8ff8cdf674a75484",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a5482935124819a9e4b609a07f8c01f",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a548295d898819ab06f43f61ae5a5f8",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a5482960f74819a971620a2f40647bc",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "reflection",
+        "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a548297d520819aadc0204ec642fa97",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a548298e2d0819ab7c36a92b08c9cc0",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"Make It Stick\" \"reflection\" \"elaboration\" \"generation\" official",
+          "\"Make It Stick\" \"Reflection\" \"Generation\" \"Elaboration\" Brown Roediger McDaniel",
+          "\"Make It Stick\" \"Reflection\" \"write to learn\" McDaniel"
+        ],
+        "query": "\"Make It Stick\" \"reflection\" \"elaboration\" \"generation\" official",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://bagerbach.com/books/make-it-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://ift.onlinelibrary.wiley.com/doi/full/10.1111/1541-4329.12075"
+          },
+          {
+            "type": "url",
+            "url": "https://studylib.net/doc/27809083/brown-mcdaniel-roediger-2014-make-it-stick"
+          },
+          {
+            "type": "url",
+            "url": "https://scissortailcs.com/practical-ways-to-use-reflection-for-sticky-learning/"
+          },
+          {
+            "type": "url",
+            "url": "https://blog.apaonline.org/2020/02/19/takeaways-from-make-it-stick-the-science-of-successful-learning/"
+          },
+          {
+            "type": "url",
+            "url": "https://wac.umn.edu/tww-program/teaching-resources/using-reflective-writing"
+          },
+          {
+            "type": "url",
+            "url": "https://extension.harvard.edu/blog/learning-strategies-that-work/"
+          },
+          {
+            "type": "url",
+            "url": "https://so03.tci-thaijo.org/index.php/jiskku/article/download/249000/170590"
+          },
+          {
+            "type": "url",
+            "url": "https://app.thestorygraph.com/reviews/8f6c7ea2-83b5-425a-b8f9-a41e82cba7f5"
+          },
+          {
+            "type": "url",
+            "url": "https://rutraining.org/2017/02/06/training-superglue-design-elements-that-make-learning-stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.researchgate.net/publication/354680880_Book_Review_of_Make_It_Stick_The_Science_of_Successful_Learning"
+          },
+          {
+            "type": "url",
+            "url": "https://libmind.github.io/b10_make_it_stick/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.csun.edu/~kme52026/makeitstick.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://toniobarton.wordpress.com/2018/08/21/make-it-stick-book-study/"
+          },
+          {
+            "type": "url",
+            "url": "https://medicine.llu.edu/sites/medicine.llu.edu/files/2021-07/Handout-The-Sciences-Illusions-for-Learning-for-the-Long-Term.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.briarcliffschools.org/uploaded/HS_files/School_Communications/Make_It_Stick_Presentation_To_Students_2018-19.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://texastia.greatheartsamerica.org/wp-content/uploads/sites/64/2023/01/GH-Pedagogy-Teacher-Best-Practices-Playbook.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.sdstate.edu/sites/default/files/file-archive/2022-05/master-the-ability-to-learn-2022_0.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a54829f11b8819aad7d895e50985d5f",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02bfe7e643b0bad6016a54829f51d8819a9f43df0a15e639e9",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://extension.harvard.edu/blog/learning-strategies-that-work/"
+      }
+    },
+    {
+      "id": "rs_02bfe7e643b0bad6016a5482a0cd48819a87080b8e12af4c15",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_02bfe7e643b0bad6016a5482b69644819a8c0d3040f0b14c6e",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 967,
+              "start_index": 899,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1423,
+              "start_index": 1314,
+              "title": "Science of learning book offers tips to 'Make it Stick' - The Source - WashU",
+              "url": "https://source.washu.edu/2014/04/science-of-learning-book-offers-tips-to-make-it-stick/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2125,
+              "start_index": 2057,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2718,
+              "start_index": 2650,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3344,
+              "start_index": 3241,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3945,
+              "start_index": 3842,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4386,
+              "start_index": 4318,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4986,
+              "start_index": 4918,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5583,
+              "start_index": 5480,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6133,
+              "start_index": 6030,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6603,
+              "start_index": 6535,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7109,
+              "start_index": 7000,
+              "title": "Ask the Cognitive Scientist: Retrieval Practice – Digital Promise",
+              "url": "https://digitalpromise.org/2014/10/15/ask-the-cognitive-scientist-retrieval-practice/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7508,
+              "start_index": 7405,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7860,
+              "start_index": 7757,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8190,
+              "start_index": 8087,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8502,
+              "start_index": 8399,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8827,
+              "start_index": 8759,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9139,
+              "start_index": 9071,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9717,
+              "start_index": 9614,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10077,
+              "start_index": 9987,
+              "title": "\n\tThe Importance of Testing as a Learning Strategy | AASA\n",
+              "url": "https://www.aasa.org/resources/resource/importance-testing-learning-strategy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10538,
+              "start_index": 10446,
+              "title": "Learning Strategies That Work | Harvard Extension School",
+              "url": "https://extension.harvard.edu/blog/learning-strategies-that-work/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11361,
+              "start_index": 11280,
+              "title": "Make It Stick",
+              "url": "https://chooser.crossref.org/?doi=10.2307%2Fj.ctt6wprs3"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11566,
+              "start_index": 11517,
+              "title": "Make It Stick | Science‑Backed Learning Strategies That Really Work",
+              "url": "https://www.makeitstick.com/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11835,
+              "start_index": 11767,
+              "title": "Make It Stick Book | The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/about-make-it-stick"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12060,
+              "start_index": 11992,
+              "title": "Learning Strategies That Really Work | Study Tips for Students, Teachers & Parents",
+              "url": "https://www.makeitstick.com/learning-strategies"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12287,
+              "start_index": 12221,
+              "title": "\nMake It Stick by Peter C. Brown",
+              "url": "https://www.petercbrown.com/make_it_stick.php"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12570,
+              "start_index": 12467,
+              "title": "Make It Stick: The Science of Successful Learning",
+              "url": "https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12906,
+              "start_index": 12797,
+              "title": "Science of learning book offers tips to 'Make it Stick' - The Source - WashU",
+              "url": "https://source.washu.edu/2014/04/science-of-learning-book-offers-tips-to-make-it-stick/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13128,
+              "start_index": 13060,
+              "title": "Mark McDaniel | CIRCLE  | Washington University in St. Louis",
+              "url": "https://circle.wustl.edu/people/mark-mcdaniel/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13349,
+              "start_index": 13283,
+              "title": "Henry Roediger | Psychological & Brain Sciences",
+              "url": "https://psych.washu.edu/people/henry-roediger"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13706,
+              "start_index": 13597,
+              "title": "Ask the Cognitive Scientist: Retrieval Practice – Digital Promise",
+              "url": "https://digitalpromise.org/2014/10/15/ask-the-cognitive-scientist-retrieval-practice/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14023,
+              "start_index": 13933,
+              "title": "\n\tThe Importance of Testing as a Learning Strategy | AASA\n",
+              "url": "https://www.aasa.org/resources/resource/importance-testing-learning-strategy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14334,
+              "start_index": 14242,
+              "title": "Learning Strategies That Work | Harvard Extension School",
+              "url": "https://extension.harvard.edu/blog/learning-strategies-that-work/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14597,
+              "start_index": 14523,
+              "title": "Make it Stick",
+              "url": "https://www.retrievalpractice.org/make-it-stick"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Make It Stick: The Science of Successful Learning*\n\n## Central argument\n\n*Make It Stick* argues that durable learning is usually not produced by the study behaviors that feel most productive in the moment—rereading, highlighting, cramming, and blocked repetition—but by effortful practices that require learners to retrieve, discriminate, connect, and apply knowledge over time. The book’s core tension is between **short-term performance/fluency** and **long-term learning**: easy practice can create rapid visible improvement and confidence, while harder practice may feel slower and less successful but produces more durable, flexible mastery. The official excerpt frames the thesis as a correction to common intuitions about learning: learning must still be available later, effective learning is an acquired skill, and the most effective strategies are often counterintuitive. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))\n\nThe book is also a translation project: Roediger and McDaniel supply cognitive-science research on learning and memory, while Brown turns it into an accessible narrative using real-world stories. WashU’s publication note says Brown interviewed people whose stories illustrate the science, while Roediger and McDaniel supplied the research base. ([source.washu.edu](https://source.washu.edu/2014/04/science-of-learning-book-offers-tips-to-make-it-stick/))\n\n## Mechanisms and frameworks\n\n**Retrieval practice** means trying to recall facts, concepts, procedures, or experiences from memory rather than re-exposing oneself to the material. The causal claim is that retrieval itself changes memory: it strengthens access routes, interrupts forgetting, and reveals gaps that rereading can hide. The book treats quizzing primarily as a learning tool, not merely an assessment tool; low- or no-stakes quizzes, flashcards, summarizing without looking, and explaining from memory are practical forms. Feedback matters because it corrects errors and prevents false retrieval from being reinforced. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))\n\n**Spacing** is distributing study or practice across time, especially allowing enough forgetting that later retrieval is effortful. It is not the same as simply “studying longer.” Spacing works with retrieval: after a delay, recall is harder, and that harder successful recall strengthens later access. The book contrasts spacing with cramming or massed practice, which can raise immediate performance while fading quickly. Roediger notes that exact spacing prescriptions remain uncertain and vary by material and learner. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))\n\n**Interleaving** is mixing related problem types, topics, or categories rather than mastering one type in a block before moving to the next. Its main mechanism is discrimination: the learner must decide what kind of problem or example is present and select the appropriate response. This is distinct from spacing, though the two often co-occur. Blocking improves fluency during practice; interleaving often depresses practice performance but improves delayed performance when real tests or real life present mixed cases. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))\n\n**Variation** is practice under varied conditions or with varied forms of the same target skill or concept. It supports transfer by preventing overfitting to one version of a task. Variation differs from interleaving: interleaving mixes categories or problem types; variation changes conditions, examples, or presentations within a skill or target. The book’s endnotes verify an anagram study in which varied versions produced better later performance than repeated exposure to the same version. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))\n\n**Generation** is attempting an answer, solution, explanation, or prediction before being shown the correct answer. The book treats generation as useful even when the first attempt is wrong, provided corrective feedback follows. The mechanism is not that guessing is magic; rather, the prior attempt prepares the mind to notice and encode the later solution more deeply. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))\n\n**Elaboration** is giving new material meaning by explaining it in one’s own words, connecting it to prior knowledge, creating examples, analogies, or mental models, and embedding it in a larger context. Its mechanism is connection-making: the more meaningful routes into a concept, the more cues are available for later retrieval and application. The official excerpt uses heat transfer, history, angular momentum, and baseball batting as illustrations of connecting abstract ideas to concrete prior knowledge and mental models. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))\n\n**Reflection** is deliberate review of an experience or learning episode by asking what happened, what was learned, what worked, what failed, and what should be tried next. It combines retrieval, elaboration, generation, and sometimes mental rehearsal. The official endnotes verify “write-to-learn” research and the book-connected recommendation of brief writing exercises; AASA’s article by Roediger and Brown also lists write-to-learn as a classroom technique that elaborates new material. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))\n\n**Desirable difficulties** are learning conditions that create short-term challenge but improve long-term retention or transfer when the difficulty is relevant and surmountable. Spacing, interleaving, variation, generation, and retrieval can all be desirable difficulties. The book’s key distinction is that difficulty is not automatically good: the difficulty must require useful cognitive work and be paired with adequate feedback or support. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))\n\n**Illusions of mastery** arise when familiarity and fluency are mistaken for durable knowledge. Rereading, highlighting, massed practice, and blocked homework often feel productive because the material becomes easier to process; the learner then overestimates what can be recalled or applied later. Calibration—using quizzes, feedback, and objective performance checks—helps correct these illusions. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))\n\n## Book-grounded examples\n\n- **Columbia, Illinois classroom quizzing:** Roediger describes classroom experiments using actual middle- and high-school materials, clicker-style responses, no-grade quizzes, and immediate feedback; more-quizzed material was retained better on chapter, semester, and delayed tests. This example demonstrates retrieval practice plus feedback in authentic classrooms. ([digitalpromise.org](https://digitalpromise.org/2014/10/15/ask-the-cognitive-scientist-retrieval-practice/))  \n- **Surgical-resident spacing study:** The endnotes identify a study comparing a daylong intensive surgical lesson with four shorter sessions spread over weeks; spaced instruction improved later retention and application. This demonstrates spacing in skill learning, not just textbook memory. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))  \n- **Math problem interleaving:** The book’s notes cite Rohrer and Taylor’s study showing that shuffled practice across problem types beat clustered textbook-style practice on later tests. This demonstrates discrimination and procedure selection. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))  \n- **Painting-style learning:** Students learned artists’ styles better when examples were interleaved than massed, even though many believed massing helped more. This demonstrates both interleaving and illusions of mastery. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))  \n- **Anagram variation:** Learners who practiced varied anagrams for the same target word later outperformed those who practiced the same tested anagram repeatedly. This demonstrates variation and transfer. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))  \n- **Pilot simulator failure scenario:** The official excerpt uses a pilot facing hydraulic failure in a simulator to show how testing reveals whether procedures are retrievable under conditions resembling use. This demonstrates retrieval as calibration. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))  \n- **Baseball batter mental models:** The excerpt’s batter example shows expert performance as the use of well-formed mental models that filter cues and connect them to action. This demonstrates elaboration, structure building, and transfer. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))\n\n## Qualifications and common misreadings\n\nDo not reduce the book to “make learning hard.” The authors’ point is that certain difficulties are desirable only when they support the target performance and can be overcome. Confusion without feedback, excessive load, or irrelevant obstacles are not endorsed. The endnotes explicitly note that errorless learning may be important for memory-impaired learners, even though corrected errors can help in many educational contexts. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))\n\nDo not turn retrieval practice into high-stakes testing. Roediger and Brown emphasize low- and no-stakes quizzing as routine practice; their AASA piece argues that regular low-stakes retrieval can reduce test anxiety by making recall ordinary rather than exceptional. ([aasa.org](https://www.aasa.org/resources/resource/importance-testing-learning-strategy))\n\nDo not treat one technique as universally best. McDaniel’s Harvard Extension interview says strategy choice depends on the learning outcome: factual recall may call for retrieval practice, while inference and novel problem solving may call for mental models and connection-making. He also says learners need to see these techniques work for themselves to adopt them. ([extension.harvard.edu](https://extension.harvard.edu/blog/learning-strategies-that-work/))\n\nOpen uncertainty: I found no evidence of a materially revised edition that changes the book’s framework. Later official and institutional materials largely restate the 2014 claims rather than revise them.\n\n## Metadata check\n\nTitle: *Make It Stick: The Science of Successful Learning*. Authors: Peter C. Brown, Henry L. Roediger III, and Mark A. McDaniel. Original publication: 2014, Belknap Press/Harvard University Press; Crossref records the monograph as published April 14, 2014, and Brown’s official author page lists Harvard University Press, 2014, ISBN 978-0674729018. A later Google Books/HUP listing shows a 2023 Harvard University Press ISBN, but I did not verify content changes; use the 2014 edition as the basis for the digest. ([chooser.crossref.org](https://chooser.crossref.org/?doi=10.2307%2Fj.ctt6wprs3))\n\n## Sources\n\n- [Official *Make It Stick* website](https://www.makeitstick.com/) — Supports the book’s major claims, author roles, and “big ideas” framing. ([makeitstick.com](https://www.makeitstick.com/))  \n- [Official *Make It Stick* book page and excerpt](https://www.makeitstick.com/about-make-it-stick) — Supports the central thesis, official excerpt, concept definitions, and book-grounded examples. ([makeitstick.com](https://www.makeitstick.com/about-make-it-stick))  \n- [Official learning strategies page](https://www.makeitstick.com/learning-strategies) — Supports practical guidance for learners, teachers, and parents. ([makeitstick.com](https://www.makeitstick.com/learning-strategies))  \n- [Peter C. Brown official author page](https://www.petercbrown.com/make_it_stick.php) — Supports publisher, year, ISBN, and Brown’s description of the book. ([petercbrown.com](https://www.petercbrown.com/make_it_stick.php))  \n- [Make It Stick endnotes PDF](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf) — Supports research provenance, examples, and qualifications. ([makeitstick.com](https://www.makeitstick.com/_files/ugd/99359a_b68cc695ab0b42cbaea9e8afe6d7e282.pdf))  \n- [WashU news release](https://source.washu.edu/2014/04/science-of-learning-book-offers-tips-to-make-it-stick/) — Supports authorship roles, release context, retrieval practice, spacing, interleaving, and generation claims. ([source.washu.edu](https://source.washu.edu/2014/04/science-of-learning-book-offers-tips-to-make-it-stick/))  \n- [WashU CIRCLE profile: Mark McDaniel](https://circle.wustl.edu/people/mark-mcdaniel/) — Supports McDaniel’s research areas and connection to CIRCLE. ([circle.wustl.edu](https://circle.wustl.edu/people/mark-mcdaniel/))  \n- [WashU profile: Henry Roediger](https://psych.washu.edu/people/henry-roediger) — Supports Roediger’s research focus on retrieval practice and memory. ([psych.washu.edu](https://psych.washu.edu/people/henry-roediger))  \n- [Digital Promise interview with Henry Roediger](https://digitalpromise.org/2014/10/15/ask-the-cognitive-scientist-retrieval-practice/) — Supports retrieval-practice classroom implementation, spacing caveats, and “not a panacea” qualification. ([digitalpromise.org](https://digitalpromise.org/2014/10/15/ask-the-cognitive-scientist-retrieval-practice/))  \n- [AASA article by Roediger and Brown](https://www.aasa.org/resources/resource/importance-testing-learning-strategy) — Supports low-stakes quizzing, feedback, interleaving, write-to-learn, and stress-related qualifications. ([aasa.org](https://www.aasa.org/resources/resource/importance-testing-learning-strategy))  \n- [Harvard Extension Q&A with Mark McDaniel](https://extension.harvard.edu/blog/learning-strategies-that-work/) — Supports illusions of fluency, interleaving, strategy-selection caveats, and later author commentary. ([extension.harvard.edu](https://extension.harvard.edu/blog/learning-strategies-that-work/))  \n- [RetrievalPractice.org *Make It Stick* page](https://www.retrievalpractice.org/make-it-stick) — Supports chapter-level framing and classroom-research context connected to the authors. ([retrievalpractice.org](https://www.retrievalpractice.org/make-it-stick))"
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 4
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 80787,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 5035,
+    "output_tokens_details": {
+      "reasoning_tokens": 2116
+    },
+    "total_tokens": 85822
+  },
+  "user": null,
+  "metadata": {}
+}

@@ -199,9 +199,11 @@ const jsonLd = [
       </div>
     </section>
 
-    <div class="prose-awb prose-awb--aligned mt-10">
-      <Content />
-    </div>
+    <section class="mt-10 rounded-2xl border border-line bg-card px-5 py-6 sm:px-7 sm:py-8">
+      <div class="prose-awb prose-awb--aligned">
+        <Content />
+      </div>
+    </section>
 
     <ContentFeedback contentType="book" contentSlug={book.id} contentTitle={book.data.title} />
   </article>

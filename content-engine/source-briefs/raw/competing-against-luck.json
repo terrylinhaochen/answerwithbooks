@@ -1,0 +1,752 @@
+{
+  "id": "resp_0256949ac6501f43016a548031d7488198a28034711a0b1998",
+  "object": "response",
+  "created_at": 1783922737,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783922817,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0256949ac6501f43016a5480328f908198a788444c215e4193",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Competing Against Luck official Clayton Christensen jobs to be done milkshake condominium",
+          "Competing Against Luck HarperCollins publisher page Clayton Christensen Taddy Hall Karen Dillon David Duncan",
+          "Clayton Christensen Institute jobs to be done Competing Against Luck",
+          "Harvard Business Review Competing Against Luck Clayton Christensen jobs to be done interview milkshake"
+        ],
+        "query": "Competing Against Luck official Clayton Christensen jobs to be done milkshake condominium",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/theory/jobs-to-be-done/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2020/01/revisiting-jobs-to-be-done-with-clayton-christensen"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books?id=zGd_CwAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/blog/students-buying-selling/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/blog/5-tips-avoid-innovation-flop/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.thrv.com/blog/clayton-christensen-jobs-to-be-done"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL35800116M/Competing_Against_Luck"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/blog/learn-from-mark-cuban/"
+          },
+          {
+            "type": "url",
+            "url": "https://discover.knoxcountylibrary.org/Record/457191"
+          },
+          {
+            "type": "url",
+            "url": "https://catalogue.statelibrary.kerala.gov.in/cgi-bin/koha/opac-detail.pl?biblionumber=336712"
+          },
+          {
+            "type": "url",
+            "url": "https://www.phase-5.com/news-insights/insights/competing-against-luck-clayton-christensens-book-about-jobs-to-be-done?hs_amp=true"
+          },
+          {
+            "type": "url",
+            "url": "https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing"
+          },
+          {
+            "type": "url",
+            "url": "https://tnshrm.org/images/downloads/2021_SLC_Presentations/applying_lessons_from_corporate_innovation_to_hr___gibbs.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://catalogimages.wiley.com/images/db/pdf/9781394345892.excerpt.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://catalogimages.wiley.com/images/db/pdf/9781119660873.excerpt.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/competing-against-luck.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://tcbaf.org/wp-content/uploads/2023/04/2021-02-TCBAF-Community-Meeting-Jobs-To-Be-Done.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.keltonglobal.com/wp-content/uploads/2021/05/JTBD_eBook_Kelton-a-Material-Company.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1802.07068"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1402.4536"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1909.07956"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1811.00673"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0256949ac6501f43016a548034f3508198b7d221f06f5529c5",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0256949ac6501f43016a548036102c819888fef3d01d00582f",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:claytonchristensen.com Competing Against Luck jobs to be done",
+          "Know Your Customers Jobs to Be Done Christensen Hall Dillon Duncan HBR 2016",
+          "Competing Against Luck official excerpt jobs to be done Christensen",
+          "Competing Against Luck review interview Clayton Christensen Taddy Hall David Duncan"
+        ],
+        "query": "site:claytonchristensen.com Competing Against Luck jobs to be done",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://hbr.org/2016/09/know-your-customers-jobs-to-be-done"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/book/competing-against-luck/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pdma.org/page/review_competing_aga"
+          },
+          {
+            "type": "url",
+            "url": "https://cokeep.me/links/rR132VVSn"
+          },
+          {
+            "type": "url",
+            "url": "https://dialnet.unirioja.es/ejemplar/440567"
+          },
+          {
+            "type": "url",
+            "url": "https://www.tmfnk.com/read/articles/know-your-customers/"
+          },
+          {
+            "type": "url",
+            "url": "https://files.blogs.baruch.cuny.edu/wp-content/blogs.dir/6905/files/2019/02/Know-your-customer-Jobs-to-be-done-Chrstensen.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.econbiz.de/Record/know-your-customers-jobs-to-be-done-christensen-clayton/10011550443"
+          },
+          {
+            "type": "url",
+            "url": "https://guptadeepak.com/books/competing-against-luck/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hbrtaiwan.com/article/13611/know-your-customers-%E2%80%9Cjobs-to-be-done%E2%80%9D"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/10.1177/0972150917700718"
+          },
+          {
+            "type": "url",
+            "url": "https://iilm.edu/blog/book-review-competing-against-luck-the-story-of-innovation-and-customer-choice-clayton-m-christensen-karen-dillon-taddy-hall-david-s-duncan/"
+          },
+          {
+            "type": "url",
+            "url": "https://innovationvista.com/book-review/competing-against-luck-innovation-and-customer-choice/"
+          },
+          {
+            "type": "url",
+            "url": "https://akerscloud.diskstation.me/Books-Mags/Business%20%26%20Money%20Books%20Collection/Harvard%20Business%20Review%20-%20September%202016.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://ellisonchair.tamu.edu/files/2020/10/Integrating-Around-the-Job-to-Be-Done.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://tnshrm.org/images/downloads/2021_SLC_Presentations/applying_lessons_from_corporate_innovation_to_hr___gibbs.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.nyhealthchallenge.com/teams-sub/wp-content/uploads/2019/03/Know-Your-Customers---Jobs-to-Be-Done-.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/competing-against-luck.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1802.07068"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2312.04711"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1706.02447"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1402.4536"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0256949ac6501f43016a548038e5288198b0d19b567edaad8b",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0256949ac6501f43016a5480397618819896a9aa5a0b2cd2ea",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.christenseninstitute.org/book/competing-against-luck/"
+      }
+    },
+    {
+      "id": "rs_0256949ac6501f43016a54803afd608198ba8931edba805412",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0256949ac6501f43016a54803ba6788198b385468b7373a195",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.christenseninstitute.org/theory/jobs-to-be-done/"
+      }
+    },
+    {
+      "id": "rs_0256949ac6501f43016a54803dabe88198bb33a410d26abdf3",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0256949ac6501f43016a54803e417881989706289ad033caf8",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Competing Against Luck forces of progress push pull anxiety habit official",
+          "Christensen forces of progress Jobs to Be Done push pull anxiety habit",
+          "site:christenseninstitute.org \"forces of progress\" \"Jobs to Be Done\"",
+          "\"forces of progress\" \"Competing Against Luck\""
+        ],
+        "query": "Competing Against Luck forces of progress push pull anxiety habit official",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/graphic/the-forces-of-progress/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/video/what-is-jobs-to-be-done-theory/"
+          },
+          {
+            "type": "url",
+            "url": "https://pulserevops.com/sales-book-summaries/bs0200"
+          },
+          {
+            "type": "url",
+            "url": "https://jobstobedone.org/page/4/"
+          },
+          {
+            "type": "url",
+            "url": "https://insightbooks.app/books/competing-against-luck"
+          },
+          {
+            "type": "url",
+            "url": "https://medium.com/mbreads/competing-against-luck-379fe4b9268a"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/wp-content/uploads/2021/03/Improvement_Imperative.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.selfstorming.com/tools/libraries/frameworks/jobs-to-be-done"
+          },
+          {
+            "type": "url",
+            "url": "https://www.dx.mba/lenses/forces-of-progress"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/blog/getting-house-order-tidying-expert-barriers-to-behavior-change/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/wp-content/uploads/2018/08/JTBD.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.diefirma.de/en/blog/jobs-to-be-done-glossary"
+          },
+          {
+            "type": "url",
+            "url": "https://brianrhea.com/customer-acquisition-customer-retention/"
+          },
+          {
+            "type": "url",
+            "url": "https://jobstobedone.org/radio/pull-and-anxiety/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/wp-content/uploads/2020/05/Curriculum-Conundrum-3.16-update.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.changemakeracademy.com/wp-content/uploads/2019/07/ChangeMaker_Chap3_TheJobToBeDone_Print.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/download/9591/?tmstv=1772810870"
+          },
+          {
+            "type": "url",
+            "url": "https://myservicemonitor.com/wp-content/uploads/2023/01/WCAKC.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1802.07068"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2405.14614"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2003.13660"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1706.02447"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0256949ac6501f43016a5480413b8c819892285b3c2fce9d09",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0256949ac6501f43016a5480414fc88198a69f93f3aceb7810",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.christenseninstitute.org/graphic/the-forces-of-progress/"
+      }
+    },
+    {
+      "id": "rs_0256949ac6501f43016a548042e6a08198b3031f70a533891b",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0256949ac6501f43016a54804332d4819886377c821f23e60a",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:harpercollins.com/products/competing-against-luck-clayton-m-christensen",
+          "HarperCollins Competing Against Luck The Story of Innovation and Customer Choice Clayton Christensen",
+          "HarperBusiness Competing Against Luck Clayton Christensen October 4 2016 288 pages"
+        ],
+        "query": "site:harpercollins.com/products/competing-against-luck-clayton-m-christensen",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/book/competing-against-luck/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/editions/49037725-competing-against-luck"
+          },
+          {
+            "type": "url",
+            "url": "https://www.target.com/p/-/A-93680562"
+          },
+          {
+            "type": "url",
+            "url": "https://iilm.edu/blog/book-review-competing-against-luck-the-story-of-innovation-and-customer-choice-clayton-m-christensen-karen-dillon-taddy-hall-david-s-duncan/"
+          },
+          {
+            "type": "url",
+            "url": "https://biblia.com/api/plugins/embeddedpreview?historybuttons=false&layout=minimal&navigationbox=false&resourceName=LLS%3A9781400343225&sharebutton=false"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/works/OL17842331W/Competing_Against_Luck"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL26428781M/Competing_Against_Luck"
+          },
+          {
+            "type": "url",
+            "url": "https://play.google.com/store/books/details/Competing_Against_Luck_The_Story_of_Innovation_and?hl=en-US&id=zGd_CwAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/title/959710764"
+          },
+          {
+            "type": "url",
+            "url": "https://www.allbookstores.com/Competing-Against-Luck-The-Story/9780062565235"
+          },
+          {
+            "type": "url",
+            "url": "https://library.wasatchcounty.gov/OverDrive/349f7441-ab8e-4a26-a5a4-28da08619268/Home"
+          },
+          {
+            "type": "url",
+            "url": "https://librarycatalog.folsom.ca.us/Record/.b24364824"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/competing-against-luck.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://9dd37306d2e339f9b1de-7d04e79e02fadd9001419223a2438615.ssl.cf2.rackcdn.com/Book%20Club/World%2050%20Book%20Club%20-%20Competing%20Against%20Luck.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://reedjoe.com/wp-content/uploads/2021/12/metaverse_competing-against-luck_1101225.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://cdn.bookey.app/pdf/book/en/competing-against-luck.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://former-students.imperial.edu/wwu4/article?docid=uQd32-9355&title=competing-against-luck-pdf.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1406.7541"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1302.6906"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1909.02063"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1608.01900"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2016/09/know-your-customers-jobs-to-be-done"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/theory/jobs-to-be-done/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/video/what-is-jobs-to-be-done-theory/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/graphic/the-forces-of-progress/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2020/01/revisiting-jobs-to-be-done-with-clayton-christensen"
+          },
+          {
+            "type": "url",
+            "url": "https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pdma.org/page/review_competing_aga?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.christenseninstitute.org/book/competing-against-luck/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books?id=zGd_CwAAQBAJ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0256949ac6501f43016a548048c8b08198aa3de199845c3c2c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0256949ac6501f43016a54805dc7f081989fa4d9ade3e318d6",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 765,
+              "start_index": 670,
+              "title": "Competing Against Luck: The Story of Innovation and Customer Choice - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/book/competing-against-luck/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1321,
+              "start_index": 1249,
+              "title": "Know Your Customers’ “Jobs to Be Done”",
+              "url": "https://hbr.org/2016/09/know-your-customers-jobs-to-be-done"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1854,
+              "start_index": 1764,
+              "title": "Jobs to Be Done Theory - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/theory/jobs-to-be-done/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2468,
+              "start_index": 2364,
+              "title": "What is Jobs to Be Done Theory? - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/video/what-is-jobs-to-be-done-theory/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3042,
+              "start_index": 2952,
+              "title": "Jobs to Be Done Theory - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/theory/jobs-to-be-done/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3590,
+              "start_index": 3492,
+              "title": "The Forces of Progress - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/graphic/the-forces-of-progress/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4286,
+              "start_index": 4190,
+              "title": "Revisiting “Jobs To Be Done” with Clayton Christensen",
+              "url": "https://hbr.org/podcast/2020/01/revisiting-jobs-to-be-done-with-clayton-christensen"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4753,
+              "start_index": 4657,
+              "title": "Revisiting “Jobs To Be Done” with Clayton Christensen",
+              "url": "https://hbr.org/podcast/2020/01/revisiting-jobs-to-be-done-with-clayton-christensen"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5491,
+              "start_index": 5387,
+              "title": "Clay Christensen’s Milkshake Marketing | Working Knowledge",
+              "url": "https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6292,
+              "start_index": 6202,
+              "title": "Jobs to Be Done Theory - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/theory/jobs-to-be-done/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6819,
+              "start_index": 6721,
+              "title": "The Forces of Progress - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/graphic/the-forces-of-progress/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7329,
+              "start_index": 7225,
+              "title": "Clay Christensen’s Milkshake Marketing | Working Knowledge",
+              "url": "https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7800,
+              "start_index": 7722,
+              "title": "Book Review: Competing Against Luck - Product Development and Management Association",
+              "url": "https://www.pdma.org/page/review_competing_aga?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8303,
+              "start_index": 8199,
+              "title": "Clay Christensen’s Milkshake Marketing | Working Knowledge",
+              "url": "https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8803,
+              "start_index": 8690,
+              "title": "Competing Against Luck: The Story of Innovation and Customer Choice - Christensen Institute",
+              "url": "https://www.christenseninstitute.org/book/competing-against-luck/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9230,
+              "start_index": 9162,
+              "title": "Competing Against Luck: The Story of Innovation and Customer Choice - Clayton M. Christensen, Taddy Hall, Karen Dillon, David S. Duncan - Google Books",
+              "url": "https://books.google.com/books?id=zGd_CwAAQBAJ"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Competing Against Luck* by Clayton M. Christensen, Taddy Hall, Karen Dillon, and David S. Duncan\n\n## Central argument\n\n*Competing Against Luck* argues that innovation becomes less dependent on luck when companies stop treating “the customer” or “the product category” as the unit of analysis and instead identify the **job** a person or organization is trying to get done in a specific circumstance. The book’s publisher-facing description and the Christensen Institute page frame the thesis as a rejection of the idea that merely understanding customers is enough; what matters is understanding the causal reason customers “hire” a product or service. ([christenseninstitute.org](https://www.christenseninstitute.org/book/competing-against-luck/))\n\nThe tension the book resolves is: companies have more customer data, segmentation, and product-performance metrics than ever, yet innovation still feels hit-or-miss. Christensen and coauthors’ answer is that much conventional analysis captures correlations—demographics, preferences, product attributes—rather than the cause of choice. The HBR article tied to the book asks whether innovation must be hit-or-miss and answers no, if innovators understand why customers make choices. ([hbr.org](https://hbr.org/2016/09/know-your-customers-jobs-to-be-done))\n\n## Mechanisms and frameworks\n\n**Jobs to be done.** A “job” is not simply a product function, customer profile, market category, or generic need. It is the progress someone is trying to make when a particular circumstance creates a struggle or aspiration. The Christensen Institute’s current theory page defines JTBD as a lens for the circumstances and forces that drive decisions, and says products and services are “hired” when jobs arise. ([christenseninstitute.org](https://www.christenseninstitute.org/theory/jobs-to-be-done/))\n\n**Progress in circumstances.** The phrase “progress” is crucial: the customer is trying to move from an unsatisfactory present state toward a better state, not merely complete a task. “Circumstances” are equally crucial because the same person may hire different solutions in different contexts, and the same product may be hired for different jobs at different times. The Institute’s explainer says the two components of a job are the progress sought and the circumstances in which that progress is sought. ([christenseninstitute.org](https://www.christenseninstitute.org/video/what-is-jobs-to-be-done-theory/))\n\n**Functional, social, and emotional dimensions.** Jobs are multidimensional. The functional dimension concerns the practical outcome; the social dimension concerns how the customer is seen by or relates to others; the emotional dimension concerns feelings such as anxiety, pride, relief, guilt, or reassurance. The Christensen Institute explicitly warns that JTBD goes beyond demographics and product attributes to expose functional, social, and emotional dimensions behind choice. ([christenseninstitute.org](https://www.christenseninstitute.org/theory/jobs-to-be-done/))\n\n**Forces of progress.** The decision to switch is not explained by “need” alone. The forces that favor change are the **push of the current situation** and the **pull of the new idea or solution**. The forces opposing change are **habits of the present** and **anxieties about the new solution**. A solution may perform the job well yet fail if anxiety, switching cost, learning burden, or allegiance to the current way outweigh the push and pull. ([christenseninstitute.org](https://www.christenseninstitute.org/graphic/the-forces-of-progress/))\n\n**Hiring and firing products.** Customers “hire” a product when it helps them make progress; they “fire” it when it fails, when circumstances change, or when another option performs the job better. This metaphor also reframes competition: competitors are not limited to products in the same category. They include any alternative the customer might use to get the same job done, including doing nothing or sticking with an old routine. Christensen’s milkshake discussion makes this point explicitly by treating bananas, donuts, bagels, coffee, and candy as competitors for the morning commute job. ([hbr.org](https://hbr.org/podcast/2020/01/revisiting-jobs-to-be-done-with-clayton-christensen))\n\n**Experience and organization around the job.** The framework is not only about product features. Christensen argues that companies differentiate by building the surrounding experiences, processes, and brand around the job. In the HBR interview, he contrasts “better product than competitors” thinking with designing the experiences customers need to get the job done. ([hbr.org](https://hbr.org/podcast/2020/01/revisiting-jobs-to-be-done-with-clayton-christensen))\n\n## Book-grounded examples\n\n**Morning milkshake.** In the canonical fast-food example, researchers observed that many milkshakes were purchased early in the morning by commuters, taken to cars, and consumed alone. Interviews revealed that the milkshake was doing a morning job: making a long commute less boring, occupying one hand, being clean and cupholder-compatible, and delaying hunger. The real competitors were not only other milkshakes but bananas, bagels, donuts, coffee, and similar options. The same product could be hired later in the day for a different parent-child treat job, implying a different performance profile. ([library.hbs.edu](https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing))\n\n**Condominiums and the dining-room table.** In the condominium example, a Detroit-area builder targeted downsizing retirees and divorced single parents with attractive units and luxury finishes but struggled to convert visits into sales. Bob Moesta’s interviews with actual buyers revealed that the “dining room table” symbolized family continuity and the emotional difficulty of moving. The solution was not just changing unit features but reducing the anxiety of transition through larger dining areas, storage, moving help, and a sorting room. The example demonstrates that the job was not merely “buy a smaller home” but make a major life transition without severing identity, memory, and family meaning. ([christenseninstitute.org](https://www.christenseninstitute.org/theory/jobs-to-be-done/))\n\n## Qualifications and common misreadings\n\nJTBD should not be reduced to a slogan such as “customers hire products.” The causal insight comes from the full structure: progress, circumstance, functional/social/emotional dimensions, and the forces that enable or block switching. A superficial “job statement” that ignores anxiety, habit, or the old solution will miss why people do not adopt even an apparently superior product. ([christenseninstitute.org](https://www.christenseninstitute.org/graphic/the-forces-of-progress/))\n\nThe theory also does not say demographics, personas, or product data are useless; rather, it says they are usually insufficient as causal explanations. HBS Working Knowledge quotes Christensen’s point that demographic categories may correlate with purchase but do not cause it. For an editor, the safe formulation is: conventional customer data can help locate patterns, but the job explains the choice. ([library.hbs.edu](https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing))\n\nDo not conflate JTBD with disruptive innovation. Christensen is associated with both, but *Competing Against Luck* is about explaining customer choice and improving innovation predictability; disruption theory addresses competitive dynamics in markets. A PDMA review notes that the book addresses a gap between disruption theory and the practical work of implementing successful innovation. ([pdma.org](https://www.pdma.org/page/review_competing_aga?utm_source=openai))\n\nResearch caveat: the public official materials emphasize qualitative observation and interviews—milkshake observation, buyer interviews, switch stories—rather than presenting the theory as a statistically guaranteed forecasting model. The digest should describe the book’s “predictability” claim as a managerial theory of causation, not as a promise that every JTBD-informed product will succeed. ([library.hbs.edu](https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing))\n\n## Metadata check\n\n**Title:** *Competing Against Luck: The Story of Innovation and Customer Choice*. **Authors:** Clayton M. Christensen, Taddy Hall, Karen Dillon, and David S. Duncan. **Original publication:** October 4, 2016, HarperBusiness / HarperCollins. The Christensen Institute page gives the date and authors; Google Books lists HarperCollins, October 4, 2016, and 288 pages. ([christenseninstitute.org](https://www.christenseninstitute.org/book/competing-against-luck/?utm_source=openai))\n\nEdition details vary slightly by format and cataloging. Google Books lists 288 pages and ebook ISBN 9780062435637; a Sage review records the hardback as 266 pages with ISBN 978-0-06-243561-3, likely counting main text differently from front/back matter. I found no evidence in inspected sources of materially different revised content affecting the digest. ([books.google.com](https://books.google.com/books?id=zGd_CwAAQBAJ))\n\n## Sources\n\n- [Clayton Christensen Institute — *Competing Against Luck: The Story of Innovation and Customer Choice*](https://www.christenseninstitute.org/book/competing-against-luck/) — Official institute book page supporting thesis, authorship, publication date, and “hire to do a job” framing.\n- [Google Books — *Competing Against Luck* bibliographic page](https://books.google.com/books?id=zGd_CwAAQBAJ) — Supports title, authors, publisher, publication date, page count, ISBN metadata, and official book description.\n- [Clayton Christensen Institute — Jobs to Be Done Theory](https://www.christenseninstitute.org/theory/jobs-to-be-done/) — Supports definitions of jobs, progress, circumstances, functional/social/emotional dimensions, and the milkshake and condominium examples.\n- [Clayton Christensen Institute — The Forces of Progress](https://www.christenseninstitute.org/graphic/the-forces-of-progress/) — Supports the four-force framework: push, pull, habit, and anxiety.\n- [Clayton Christensen Institute — What is Jobs to Be Done Theory?](https://www.christenseninstitute.org/video/what-is-jobs-to-be-done-theory/) — Supports current institute explanation of progress plus circumstances, forces, and competition beyond product categories.\n- [Harvard Business School Working Knowledge — “Clay Christensen’s Milkshake Marketing”](https://www.library.hbs.edu/working-knowledge/clay-christensens-milkshake-marketing) — Supports the milkshake research method, morning commute job, competing alternatives, and distinction between correlation and causation.\n- [Harvard Business Review IdeaCast — “Revisiting ‘Jobs To Be Done’ with Clayton Christensen”](https://hbr.org/podcast/2020/01/revisiting-jobs-to-be-done-with-clayton-christensen) — Supports Christensen’s own explanation of the milkshake case, category-crossing competition, and organizing around jobs.\n- [Harvard Business Review — “Know Your Customers’ ‘Jobs to Be Done’”](https://hbr.org/2016/09/know-your-customers-jobs-to-be-done) — Supports the book-adjacent HBR formulation of the problem: innovation is hit-or-miss when firms focus on customer profiles and product categories rather than the job.\n- [Sage Journals / Global Business Review — Review of *Competing Against Luck*](https://journals.sagepub.com/doi/10.1177/0972150917700718) — Supports independent bibliographic cross-check for title, authors, publisher, year, page count, and hardback ISBN."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 4
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 58931,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 4154,
+    "output_tokens_details": {
+      "reasoning_tokens": 1794
+    },
+    "total_tokens": 63085
+  },
+  "user": null,
+  "metadata": {}
+}

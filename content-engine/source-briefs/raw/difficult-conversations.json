@@ -1,0 +1,792 @@
+{
+  "id": "resp_032085a3a299f29e016a5480ecabe4819bb02b8ce144585d83",
+  "object": "response",
+  "created_at": 1783922924,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923014,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_032085a3a299f29e016a5480ed80c4819b85e3cbd4f661c91f",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Difficult Conversations Douglas Stone Bruce Patton Sheila Heen official site",
+          "Difficult Conversations Douglas Stone Bruce Patton Sheila Heen Penguin Random House",
+          "Harvard Negotiation Project Difficult Conversations Stone Patton Heen",
+          "Difficult Conversations authors official guide third story feelings identity conversation contribution blame"
+        ],
+        "query": "Difficult Conversations Douglas Stone Bruce Patton Sheila Heen official site",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://hls.harvard.edu/faculty/sheila-heen/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/722989/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/"
+          },
+          {
+            "type": "url",
+            "url": "https://hls.harvard.edu/bibliography/difficult-conversations-how-to-discuss-what-matters-most-3d-ed/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/"
+          },
+          {
+            "type": "url",
+            "url": "https://hls.harvard.edu/today/next-spat-with-your-partner-try-silence-says-negotiation-expert-sheila-heen/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.vpal.harvard.edu/learning-negotiate-making-mistakes"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/difficult-conversations"
+          },
+          {
+            "type": "url",
+            "url": "https://hls.harvard.edu/today/getting-the-best-from-a-difficult-situation/"
+          },
+          {
+            "type": "url",
+            "url": "https://hls.harvard.edu/faculty/douglas-stone/"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/2016/03/when-to-skip-a-difficult-conversation"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/negotiation-training-daily/negotiation-books-a-negotiation-reading-list/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguin.co.uk/books/24713/difficult-conversations-by-heen-bruce-pattondouglas-stonesheila/9780140277821"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.law.harvard.edu/hnlr/wp-content/uploads/sites/91/2013/12/18HarvNegotLRev1-Riskin.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://eye.hms.harvard.edu/sites/g/files/omnuum9886/files/eye/files/difficult-conversations-summary.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/dbcr29.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://admiredleadership-wp.carney.co/wp-content/uploads/2022/07/BOOKsummary_Difficult-Conversations.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://highpointjourney.com/wp-content/uploads/2016/04/Synopsis%E2%80%94Difficult-Conversations.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/PON-09-10-Anual-Report-Public.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.03284"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1706.05125"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2212.09072"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1805.05345"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a5480f029a8819b8f67e400977f637c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_032085a3a299f29e016a5480f0ea68819b8a32d2029cf85aed",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:stoneandheen.com Difficult Conversations what happened feelings identity conversation",
+          "site:stoneandheen.com \"Third Story\" \"Difficult Conversations\"",
+          "site:pon.harvard.edu \"Difficult Conversations\" \"Third Story\" \"Stone\" \"Heen\"",
+          "site:pon.harvard.edu \"Difficult Conversations\" \"contribution\" \"blame\""
+        ],
+        "query": "site:stoneandheen.com Difficult Conversations what happened feelings identity conversation",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/mediation/think-like-a-mediator/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/wp-content/uploads/images/posts/dbcr29.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/conflict-resolution/elements-conflict-diagnose-whats-gone-wrong/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/difficult-conversations"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/sheila-heen"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/thanks-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/learning-resources"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/books"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/training-consulting"
+          },
+          {
+            "type": "url",
+            "url": "https://www.stoneandheen.com/speaking"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a5480f2e0e8819b94d7590eb944ec53",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_032085a3a299f29e016a5480f33e6c819bbdd8846ad1e1aa9f",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.penguinrandomhouse.com/books/722989/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/"
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a5480f4c3a4819b88a4bc96ea94bb14",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_032085a3a299f29e016a5480f59a7c819b8d04e23b92b949fc",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"Difficult talks spike anxiety. Learning conversations can help\" Stone Heen Washington Post",
+          "\"Difficult Conversations\" \"Learning Conversation\" Stone Heen",
+          "\"Difficult Conversations\" \"What Happened\" \"Feelings\" \"Identity\" official excerpt",
+          "\"Difficult Conversations\" \"expression without accusation\""
+        ],
+        "query": "\"Difficult talks spike anxiety. Learning conversations can help\" Stone Heen Washington Post",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.getstoryshots.com/books/difficult-conversations-summary/"
+          },
+          {
+            "type": "url",
+            "url": "https://asc67.org/ASC_Previous_Problems/R7/Commercial/2017%20Region%207%20Commercial%20Problem%20HP/01%20Final%20Problem%20Statement/X.8.1%20-%20Understanding%20the%20Obstacles%20of%20Difficult%20Conversations.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://carmenrodrigueza.wordpress.com/2013/03/23/difficult-conversations-douglas-stone-bruce-patton-sheila-heen/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.washingtonpost.com/sitemap/2023/9/1/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.deployyourself.com/book-review/difficult-conversations-douglas-stone-bruce-patton-sheila-heen/"
+          },
+          {
+            "type": "url",
+            "url": "https://backend.quickread.com/storage/books/ebooks/douglas_stone_bruce_patton_sheila_heen_difficult_conversations_208.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mfri.purdue.edu/wp-content/uploads/2020/06/WeTellEachOtherTheTruth.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.fuelmeasure.com/docs/Douglas%20Stone%20-%20Difficult%20Conversations%20.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://pulserevops.com/sales-book-summaries/bs0226"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ncjw.org/wp-content/uploads/2020/06/Navigating-Difficult-Conversations_Chart_2020.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://insightbooks.app/books/difficult-conversations"
+          },
+          {
+            "type": "url",
+            "url": "https://www.globalleadership.org/podcast/ep-031-sheila-heen-with-jeff-lockyer"
+          },
+          {
+            "type": "url",
+            "url": "https://admiredleadership.com/book-summaries/difficult-conversations/"
+          },
+          {
+            "type": "url",
+            "url": "https://discover.bklynlibrary.org/item?b=12785245"
+          },
+          {
+            "type": "url",
+            "url": "https://www.tosummarise.com/book-summary-difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen/"
+          },
+          {
+            "type": "url",
+            "url": "https://historicalthings.wordpress.com/difficult-conversation/the-three-conversations/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a5480f89ec0819bbc0d1b3df15aed2c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_032085a3a299f29e016a5480f9ee20819bbe741407f5edc7fd",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://journals.law.harvard.edu/hnlr/wp-content/uploads/sites/91/2013/12/18HarvNegotLRev1-Riskin.pdf"
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a5480fb65f4819ba5b4aecc5387907e",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_032085a3a299f29e016a5480fca5f0819b94510d87bf95255a",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Difficult Conversations table of contents sort out three conversations shifting to learning stance official",
+          "WorldCat Difficult Conversations How to Discuss What Matters Most 1999 Stone Patton Heen",
+          "Library of Congress Difficult Conversations How to Discuss What Matters Most Stone Patton Heen 1999",
+          "Open Library Difficult Conversations Douglas Stone Bruce Patton Sheila Heen 1999"
+        ],
+        "query": "Difficult Conversations table of contents sort out three conversations shifting to learning stance official",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/es/title/Difficult-conversations-%3A-how-to-discuss-what-matters-most/oclc/1033650655"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/es/title/difficult-conversations-how-to-discuss-what-matters-most/oclc/1245572885?ht=edition&referer=null"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/de/title/difficult-conversations-how-to-discuss-what-matters-most/oclc/40200290"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/fr/title/Difficult-conversations-%3A-how-to-discuss-what-matters-most/oclc/1033650655"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/it/title/Difficult-conversations-how-to-discuss-what-matters-most/oclc/1222535345"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/it/title/Difficult-conversations-%3A-how-to-discuss-what-matters-most/oclc/1245572885"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/it/title/difficult-conversations-how-to-discuss-what-matters-most/oclc/245917274"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/title/Difficult-conversations/oclc/40683837"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/es/title/300129822"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Difficult_Conversations.html?id=Vj7CEAAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Difficult_Conversations.html?id=Rh5xQgAACAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://cir.nii.ac.jp/crid/1970304959830535853"
+          },
+          {
+            "type": "url",
+            "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://luys.am/attachments/stone_douglas_patton_bruceetal-difficult_conversations_how_to_discuss_what_matters_most.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://meh.religioused.org/DifficultConversations.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2005.04245"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2006.00691"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2302.07268"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1810.11118"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a54810155c8819bab65f04a07f506bd",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_032085a3a299f29e016a5481019010819b9fd1fb139b898029",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a54810419ac819bb5c30f3388641bf9",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_032085a3a299f29e016a5481043130819ba11908bec00a667a",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"Speak for Yourself with Clarity and Power\" \"Difficult Conversations\" Stone Heen",
+          "\"Difficult Conversations\" \"Feelings are not accusations\"",
+          "\"Difficult Conversations\" \"Expressing yourself\" \"accusation\" \"Stone\" \"Heen\"",
+          "\"Difficult Conversations\" \"Don't present your conclusions as the truth\""
+        ],
+        "query": "\"Speak for Yourself with Clarity and Power\" \"Difficult Conversations\" Stone Heen",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://lawcat.berkeley.edu/record/393118"
+          },
+          {
+            "type": "url",
+            "url": "https://www.deliberatedirections.com/wp-content/uploads/2022/09/Difficult-Conversations-Script.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.lancasterlawoffice.com/wp-content/uploads/Stone-Patton-Heen-Difficult-Conversations5.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://studylib.net/doc/28326679/ipc-stone-patton-heen-"
+          },
+          {
+            "type": "url",
+            "url": "https://www.unidesktesting.motion.ac.in/uconstryctx/67E332A/ifealll/85E400A117/difficult%2Bconversations%2Bdouglas%2Bstone.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.api.motion.ac.in/%2460319131/jombarkp/csognde/bixtindq/difficult%2Bconversations%2Bdouglas%2Bstone.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://utdirect.utexas.edu/apps/student/coursedocs/courses/nlogon/download/13868220/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.topperlearning.motion.ac.in/%2B97496502/diowardw/qslidut/gbuasth/difficult%2Bconversations%2Bdouglas%2Bstone.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://bookdialogues.com/blog/book_pages/books/difficultconversations_en.html"
+          },
+          {
+            "type": "url",
+            "url": "https://loveinteract.com/overbearing-mother-in-law-boundaries/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.studeersnel.nl/nl/document/vrije-universiteit-amsterdam/interpersoonlijke-communicatie/difficult-conversations-book-interpersonal-communication/14954416"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bookey.app/book/difficult-conversations-by-douglas-stone/qa"
+          },
+          {
+            "type": "url",
+            "url": "https://www.riseandgrowtherapy.co.uk/insights/repair-after-a-fight-a-step-by-step-guide-to-rebuilding-safety-and-trust"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bookey.app/book/difficult-conversations-by-douglas-stone"
+          },
+          {
+            "type": "url",
+            "url": "https://charles.io/difficult-conversations-douglas-stone/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.linkedin.com/advice/3/what-mistakes-should-you-avoid-when-de-escalating-mjiqf"
+          },
+          {
+            "type": "url",
+            "url": "https://eqbench.com/results/eqbench3_reports/moonshotai__kimi-k2-5.html"
+          },
+          {
+            "type": "url",
+            "url": "https://www.simplypsychology.org/what-to-talk-about-with-your-boyfriend.html"
+          },
+          {
+            "type": "url",
+            "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/722989/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/"
+          },
+          {
+            "type": "url",
+            "url": "https://search.worldcat.org/de/title/difficult-conversations-how-to-discuss-what-matters-most/oclc/40200290?utm_source=openai"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_032085a3a299f29e016a548107bb2c819bba4d40d15ef7cd52",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_032085a3a299f29e016a5481125c48819bb9b32567107778e4",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 1225,
+              "start_index": 1068,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1972,
+              "start_index": 1815,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2830,
+              "start_index": 2673,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3629,
+              "start_index": 3472,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4567,
+              "start_index": 4410,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5429,
+              "start_index": 5272,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6221,
+              "start_index": 6091,
+              "title": "Strategies for difficult conversations to resolve conflict, lower anxiety - The Washington Post",
+              "url": "https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6884,
+              "start_index": 6785,
+              "title": "Case Study of Conflict Management: To Resolve Disputes and Manage Conflicts, Assume a Neutral 3rd Party Role - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7753,
+              "start_index": 7596,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8334,
+              "start_index": 8177,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8924,
+              "start_index": 8825,
+              "title": "Case Study of Conflict Management: To Resolve Disputes and Manage Conflicts, Assume a Neutral 3rd Party Role - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9501,
+              "start_index": 9371,
+              "title": "Strategies for difficult conversations to resolve conflict, lower anxiety - The Washington Post",
+              "url": "https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10011,
+              "start_index": 9854,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10459,
+              "start_index": 10302,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10829,
+              "start_index": 10699,
+              "title": "Strategies for difficult conversations to resolve conflict, lower anxiety - The Washington Post",
+              "url": "https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11269,
+              "start_index": 11112,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11722,
+              "start_index": 11565,
+              "title": "Difficul_9780143137597_all_2p_r1.indd",
+              "url": "https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12057,
+              "start_index": 11958,
+              "title": "Case Study of Conflict Management: To Resolve Disputes and Manage Conflicts, Assume a Neutral 3rd Party Role - PON - Program on Negotiation at Harvard Law School",
+              "url": "https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12665,
+              "start_index": 12494,
+              "title": "Difficult Conversations by Douglas Stone, Bruce Patton, Sheila Heen: 9780143137597 | PenguinRandomHouse.com: Books",
+              "url": "https://www.penguinrandomhouse.com/books/722989/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13411,
+              "start_index": 13261,
+              "title": "Difficult conversations : how to discuss what matters most | WorldCat.org",
+              "url": "https://search.worldcat.org/de/title/difficult-conversations-how-to-discuss-what-matters-most/oclc/40200290?utm_source=openai"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Difficult Conversations* by Douglas Stone, Bruce Patton, and Sheila Heen\n\n## Central argument\n\n*Difficult Conversations* argues that conversations feel “difficult” not mainly because of the topic but because people enter them in a **message-delivery stance**: they try to prove what happened, establish bad intent, assign blame, suppress or weaponize feelings, and defend a fragile self-image. The book’s core move is to reframe the goal from winning, accusing, or avoiding into a **learning conversation**: each person investigates how both parties understand the situation, how each has been affected, what each contributed, what feelings and identity stakes are present, and what can be done going forward. The tension it resolves is the familiar trap between **avoidance** and **confrontation**: avoiding lets resentment and the problem persist, while confronting from certainty often triggers defensiveness and damages the relationship. The authors’ alternative is not softness or surrender; it is a structured way to be both candid and curious. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n## Mechanisms and frameworks\n\n### The three conversations\n\nThe book’s organizing claim is that every difficult conversation contains three simultaneous conversations: the **What Happened? Conversation**, the **Feelings Conversation**, and the **Identity Conversation**. The public exchange is only the surface; much of the action is what people are thinking and feeling but not saying. In the opening Jack/Michael example, the spoken dispute is about a flawed earnings chart, but the hidden layers include anger, embarrassment, pressure, status, friendship, competence, and self-respect. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n### What Happened? Conversation\n\nThe What Happened? Conversation concerns facts, interpretations, intentions, and responsibility: who did what, what it meant, who is right, and who is at fault. The book says people commonly make three mistakes here. First, they treat their story as the truth rather than as a partial interpretation shaped by different information and values. Second, they assume they know the other person’s intentions, even though intentions are internal and often mixed or unknown. Third, they frame the situation as blame, which looks backward and seeks fault or punishment, rather than contribution, which maps how each person’s actions or inactions helped produce the result. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n### Contribution rather than blame\n\nContribution is not the same as moral equivalence. The authors do not say harm disappears, that responsibility is evenly shared, or that misconduct should never have consequences. The mechanism is diagnostic: if blame asks, “Who is guilty?” contribution asks, “How did our actions interact to create this outcome, and what can we change?” A person may have contributed by avoiding a topic, failing to clarify expectations, escalating tone, or tolerating a pattern. This matters because problem-solving depends on seeing the system that produced the conflict, not merely extracting an admission of fault. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n### Feelings Conversation\n\nThe Feelings Conversation concerns what people feel, whether those feelings are seen as legitimate, and whether they are expressed, denied, or leaked indirectly. The book’s claim is not “vent everything.” Rather, unaddressed feelings often drive the conversation anyway—through sarcasm, withdrawal, defensiveness, impatience, or exaggerated claims. The learning-conversation version treats feelings as data to be understood: what each person felt, how they interpreted treatment, and what feelings need acknowledgment before practical problem-solving can work. The authors also note scope conditions: sometimes discussing feelings is not safe or not worth taking on, but lack of skill should not become a blanket reason to avoid all emotional content. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n### Identity Conversation\n\nThe Identity Conversation is the internal conversation about what the situation says about “me”: whether I am competent, good, worthy, loyal, lovable, fair, or respected. It explains why seemingly small issues can produce disproportionate anxiety. A raise request may threaten one’s image as a valued employee; turning down a creative proposal may threaten one’s image as supportive or visionary. The skill is to “ground” identity by replacing all-or-nothing self-judgments with a more complex self-image: I can be competent and still make mistakes; good and still hurt someone; caring and still set limits. This helps people stay balanced enough to listen and speak clearly. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n### The learning stance\n\nA learning stance replaces “I must deliver my conclusion” with “I have information to share and things to learn.” It assumes each side has different information, perceptions, interests, feelings, and identity stakes. This does not require abandoning convictions or power; it changes the order and posture of the conversation. Inquiry and listening come before persuasion, because people are more able to take in information when their own perspective has been heard. Sheila Heen describes this as shifting from proving oneself right to understanding why the other person sees it differently and helping them understand one’s own view. ([washingtonpost.com](https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/))\n\n### The third story\n\nThe **third story** is the opening frame a mediator or neutral observer might use. It is neither “my story” nor “your story”; it names the gap between the two stories in terms both parties could recognize. Instead of beginning with an accusation, the speaker describes the difference to be explored. This reduces immediate defensiveness because the other person is not cast as the problem in the first sentence. The third story is not a sugarcoated setup for delivering a verdict; it only works if the speaker is genuinely willing to learn. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/))\n\n### Expression without accusation\n\nThe book’s official chapter language is “speak for yourself with clarity and power,” while “expression without accusation” is a useful editorial shorthand. The framework is: state your own perceptions, feelings, impact, contribution, and identity stakes without presenting your conclusions as the whole truth or your feelings as proof of the other person’s bad intent. In practice, this means separating impact from intent, naming feelings without judgment or attribution, acknowledging your contribution, and explaining where your story comes from. It is not passive “I-statements” as a formula; it is disciplined self-expression that keeps the other person able to listen. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n## Book-grounded examples\n\n- **Jack and Michael / the earnings chart.** In the official 2023 excerpt, Jack rushes to produce a prospectus for Michael, an error appears in the earnings chart, and Michael demands a reprint. The example demonstrates the three-conversation structure: the surface issue is the chart; the hidden issues include pressure, hurt, friendship, professional competence, blame, and unspoken feelings. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n- **Brad and Frank / late sales reports.** The Program on Negotiation’s official adaptation uses two sales representatives who disagree about weekly report deadlines. Brad’s accusatory opening would likely trigger defensiveness; the third-story opening frames the issue as different views about deadlines, allowing Brad to learn that Frank prioritizes active sales leads over reporting. The example demonstrates how a neutral opening can uncover interests and enable a practical tradeoff. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/))\n\n- **Political disagreement, workload, and screen-time conflicts.** In a 2023 article by Stone and Heen, they show third-story openings for arguing with a relative about taxation, discussing workload with a supervisor, and talking with a child about screen time. These examples demonstrate that the goal is not immediate conversion but mapping the disagreement, understanding facts/values/fears, and then problem-solving with less defensiveness. ([washingtonpost.com](https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/))\n\n- **Raise request and rejected creative campaign.** The official excerpt uses asking for a raise and turning down a social media campaign to illustrate identity stakes: the apparent issue may be money or a business decision, but the anxiety comes from what the outcome might imply about competence, respect, helpfulness, or being seen as the villain. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n## Qualifications and common misreadings\n\n- **Not every conversation should be had immediately.** The authors acknowledge that someone may be grieving, angry, confused, unsafe, or simply not ready; the book can still help a person sort through the issue before deciding whether to engage. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n- **Learning stance is not surrender.** Heen and Stone explicitly distinguish listening from giving up power: a person can still set expectations, clarify rules, and make decisions after taking the other person’s experience into account. ([washingtonpost.com](https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/))\n\n- **Contribution is not victim-blaming.** “Map contribution” can be misread as “everyone is equally at fault.” The sources support a narrower meaning: understand the interaction system so future outcomes can change, while still recognizing impact, consequences, and unequal roles. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n- **Feelings are not a license to dump.** The Feelings Conversation calls for understanding and expressing feelings without judgments or attributions, not for unfiltered accusation. The authors also say feelings sometimes should not be discussed if the context is unsafe or not worth the cost. ([d3m889aznlr23d.cloudfront.net](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf))\n\n- **The third story is not a tactic for manipulation.** If used merely to soften an accusation before returning to “my verdict,” it collapses back into message delivery. Its premise is genuine curiosity about the gap between stories. ([pon.harvard.edu](https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/))\n\n- **Research basis is practitioner-oriented.** Publisher and author materials describe the book as based on years of Harvard Negotiation Project research and consultations; the source base is negotiation pedagogy, case analysis, and practice rather than a single experimental study. Treat “research-based” as grounded in applied negotiation work, not as a claim that every technique has been separately validated in randomized trials. ([penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/722989/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/))\n\n## Metadata check\n\nTitle: *Difficult Conversations: How to Discuss What Matters Most*. Authors: Douglas Stone, Bruce Patton, and Sheila Heen. The original U.S. hardcover was published by Viking in 1999; WorldCat and library records also show 1999 UK publication by Michael Joseph and a 2000 Penguin paperback. The 2010 10th-anniversary/second edition added a new preface and a “ten questions” section. The 2023 third edition is 400 pages, published by Penguin Books, and is described by the publisher as thoroughly updated to address race, culture, gender, power, social media, and technology. ([search.worldcat.org](https://search.worldcat.org/de/title/difficult-conversations-how-to-discuss-what-matters-most/oclc/40200290?utm_source=openai))\n\n## Sources\n\n- [Penguin Random House — *Difficult Conversations* third edition](https://www.penguinrandomhouse.com/books/722989/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/) — Supports current publisher metadata, author listing, 2023 third-edition details, and publisher description of the framework and edition updates.\n\n- [Official 2023 excerpt PDF — Introduction and Chapter 1](https://d3m889aznlr23d.cloudfront.net/img/events/458823294/assets/847b8772.3rdeddifficultconversationsintroandchapter1.pdf) — Primary source for the three conversations, Jack/Michael example, learning stance, contribution system, feelings and identity frameworks, and caveats about readiness/safety.\n\n- [Stone & Heen official site — *Difficult Conversations*](https://www.stoneandheen.com/difficult-conversations) — Supports author/publisher positioning, applied use, research/practice framing, and reception.\n\n- [Stone & Heen official site — Learning Resources](https://www.stoneandheen.com/learning-resources) — Supports official author-linked media context, including the Oprah episode and the “doubling technique” reference.\n\n- [Program on Negotiation, Harvard Law School — “Telling the Third Story”](https://www.pon.harvard.edu/daily/conflict-resolution/telling-the-third-story/) — Supports the third-story concept and Brad/Frank workplace example.\n\n- [Washington Post — “Difficult talks spike anxiety. Learning conversations can help”](https://www.washingtonpost.com/wellness/2023/09/01/difficult-conversations-conflict-resolution-strategies/) — Author-written source supporting learning conversation, third-story openings, and examples involving politics, workload, and screen time.\n\n- [Harvard Law Today — “Getting the Best from a Difficult Situation”](https://hls.harvard.edu/today/getting-the-best-from-a-difficult-situation/) — Supports Heen’s institutional role, the exploration/learning stance, and the book’s current third-edition status and global use.\n\n- [Harvard Law School faculty page — Sheila Heen](https://hls.harvard.edu/faculty/sheila-heen/) — Supports author credentials, Harvard Negotiation Project connection, and edition history references.\n\n- [Program on Negotiation course brochure PDF — Difficult Conversations training](https://www.pon.harvard.edu/wp-content/uploads/images/posts/dbcr29.pdf) — Supports the applied teaching framework: three internal conversations, partisan perceptions, intent/impact, contribution vs. blame, feelings, identity, and when to raise or let go.\n\n- [Berkeley Law Library catalog record — 2010 edition](https://lawcat.berkeley.edu/record/393118) — Supports table of contents, 2010 edition status, and chapter titles including contribution, third story, listening, expression, and problem-solving.\n\n- [WorldCat record — 1999 Viking edition](https://search.worldcat.org/de/title/difficult-conversations-how-to-discuss-what-matters-most/oclc/40200290) — Supports original U.S. 1999 publication metadata, authorship, publisher, ISBNs, and subject classification.\n\n- [Google Books — 2023 edition listing](https://books.google.com/books/about/Difficult_Conversations.html?id=Vj7CEAAAQBAJ) — Supports 2023 bibliographic data and contents overview.\n\n- [Google Books — 1999 Michael Joseph listing](https://books.google.com/books/about/Difficult_Conversations.html?id=Rh5xQgAACAAJ) — Supports UK 1999 publication metadata and author listing."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 5
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 64066,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 4640,
+    "output_tokens_details": {
+      "reasoning_tokens": 1418
+    },
+    "total_tokens": 68706
+  },
+  "user": null,
+  "metadata": {}
+}

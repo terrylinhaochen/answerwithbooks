@@ -1,0 +1,912 @@
+{
+  "id": "resp_0dd55c5664cc8cb6016a547f0b7bb0819b9d711f451c580450",
+  "object": "response",
+  "created_at": 1783922443,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783922521,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f0c9d70819b8aa145a084a41203",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "April Dunford Obviously Awesome official book positioning framework competitive alternatives unique attributes value themes best-fit customers market category relevant trends",
+          "Obviously Awesome April Dunford official site positioning methodology steps competitive alternatives unique attributes value themes",
+          "Obviously Awesome publisher April Dunford 2019 book"
+        ],
+        "query": "April Dunford Obviously Awesome official book positioning framework competitive alternatives unique attributes value themes best-fit customers market category relevant trends",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Obviously_Awesome.html?id=IC7n0AEACAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aprildunford.com/books"
+          },
+          {
+            "type": "url",
+            "url": "https://abinoda.com/book/obviously-awesome"
+          },
+          {
+            "type": "url",
+            "url": "https://searchlab.nl/en/guides/positioning-for-small-business"
+          },
+          {
+            "type": "url",
+            "url": "https://www.lightdrop.com/pulse/book-obviously-awesome-positioning"
+          },
+          {
+            "type": "url",
+            "url": "https://www.autymate.com/book-summary/obviously-awesome"
+          },
+          {
+            "type": "url",
+            "url": "https://blas.com/obviously-awesome/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.peaka.com/blog/book-review-obviously-awesome/"
+          },
+          {
+            "type": "url",
+            "url": "https://brieflane.com/en/books/obviously-awesome"
+          },
+          {
+            "type": "url",
+            "url": "https://pmnorthstar.in/book/obviously-awesome-dunford"
+          },
+          {
+            "type": "url",
+            "url": "https://www.startuparchive.org/p/april-dunford-s-five-steps-of-product-positioning"
+          },
+          {
+            "type": "url",
+            "url": "https://usegavel.com/april-dunford/competitive-alternatives"
+          },
+          {
+            "type": "url",
+            "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://howwesolve.com/wp-content/uploads/2020/07/HWS-The-Entrepreneur%E2%80%99s-Handbook.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/obviously-awesome.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.thefastlaneforum.com/community/great-little-known-books.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://proyectoisi.frc.utn.edu.ar/data/detail/Download_PDFS/Obviously_Awesome_How_To_Nail_Product_Positioning.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.buildlearn.com/read-pdf/summary/obviously-awesome.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1602.01585"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2206.08754"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1909.10705"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1710.04037"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f0ef77c819b8dc78d445f4ec1ce",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f0f4e08819ba3c4570883f946ce",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:aprildunford.com positioning competitive alternatives unique attributes value themes market category trends",
+          "April Dunford positioning components relevant trends interview Obviously Awesome",
+          "April Dunford Obviously Awesome interview positioning framework market category competitive alternatives"
+        ],
+        "query": "site:aprildunford.com positioning competitive alternatives unique attributes value themes market category trends",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aprildunford.com/books"
+          },
+          {
+            "type": "url",
+            "url": "https://searchlab.nl/en/guides/positioning-for-small-business"
+          },
+          {
+            "type": "url",
+            "url": "https://usegavel.com/april-dunford/competitive-alternatives"
+          },
+          {
+            "type": "url",
+            "url": "https://www.levelingup.com/growth-everywhere-interview/april-dunford/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.iheart.com/podcast/269-one-knight-in-product-71451877/episode/april-dunford-obviously-awesome-20-330668385/"
+          },
+          {
+            "type": "url",
+            "url": "https://pmnorthstar.in/book/obviously-awesome-dunford"
+          },
+          {
+            "type": "url",
+            "url": "https://www.businessfloss.com/books/obviously-awesome"
+          },
+          {
+            "type": "url",
+            "url": "https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories"
+          },
+          {
+            "type": "url",
+            "url": "https://howtoes.blog/2024/04/14/obviously-awesome-book-summary/"
+          },
+          {
+            "type": "url",
+            "url": "https://learn.g2.com/saas-positioning-frameworks"
+          },
+          {
+            "type": "url",
+            "url": "https://www.positioning.show/competition-in-a-positioning-exercise/"
+          },
+          {
+            "type": "url",
+            "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://howwesolve.com/wp-content/uploads/2020/07/HWS-The-Entrepreneur%E2%80%99s-Handbook.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/obviously-awesome.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://durmonski.com/Obviously-Awesome-worksheet"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2206.08754"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2108.07258"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2011.03395"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1808.05630"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f133ed4819b8b05923e40e8efd5",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f134ba4819ba1d7b15aa82f5e1b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "April Dunford Medium Obviously Awesome positioning components",
+          "April Dunford product positioning 5 components competitive alternatives unique attributes value themes",
+          "site:aprildunford.medium.com positioning April Dunford competitive alternatives"
+        ],
+        "query": "April Dunford Medium Obviously Awesome positioning components",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.aprildunford.com/post/an-introduction-to-positioning"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aprildunford.com/books"
+          },
+          {
+            "type": "url",
+            "url": "https://www.startuparchive.org/p/april-dunford-s-five-steps-of-product-positioning"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aprildunford.com/post/a-quickstart-guide-to-positioning"
+          },
+          {
+            "type": "url",
+            "url": "https://searchlab.nl/en/guides/positioning-for-small-business"
+          },
+          {
+            "type": "url",
+            "url": "https://adudley.medium.com/book-review-and-analysis-obviously-awesome-by-april-dunford-c14ce4d05575"
+          },
+          {
+            "type": "url",
+            "url": "https://www.heinzmarketing.com/blog/five-components-of-effective-positioning-an-obviously-awesome-book-summary-part-2/"
+          },
+          {
+            "type": "url",
+            "url": "https://cmo-skills.com/docs/skills/positioning"
+          },
+          {
+            "type": "url",
+            "url": "https://www.wasilzafar.com/pages/series/marketing-strategy/marketing-strategy-product-gtm.html"
+          },
+          {
+            "type": "url",
+            "url": "https://www.nateliason.com/notes/obviously-awesome-april-dunford"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bigmoves.marketing/blog/how-to-position-complex-b2b-products-to-attract-the-right-b2b-buyers"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/obviously-awesome/"
+          },
+          {
+            "type": "url",
+            "url": "https://howwesolve.com/wp-content/uploads/2020/07/HWS-The-Entrepreneur%E2%80%99s-Handbook.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://businessofsoftware.org/wp-content/uploads/sites/11/2023/10/April-Dunford-_compressed.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.contentjam.com/wp-content/uploads/2019/06/CJ19-April-Dunford.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://durmonski.com/Obviously-Awesome-worksheet"
+          },
+          {
+            "type": "url",
+            "url": "https://www.spinach.ai/i/product-positioning-meeting-template.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.thefastlaneforum.com/community/great-little-known-books.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/0708.2090"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1506.08839"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2005.10402"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1510.01784"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f15dbf8819ba338f60ca26a0c77",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f15ebf8819ba35af9fa265c6722",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.aprildunford.com/post/an-introduction-to-positioning"
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f173e04819bb09d924f40608b61",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f177c54819ba9bf6e3abd191c54",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.aprildunford.com/post/a-quickstart-guide-to-positioning"
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f192b4c819b8f1b0c405f897513",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f1a2060819b9bbc85694d9065ad",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f1b4248819bb94b7e3bcae04177",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f1bd904819b8b963236baeaf4b2",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories"
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f1cddb4819bac939b87e06fd912",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f1e69e4819ba31db28ac43733bd",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Obviously Awesome second edition April Dunford 2026 ISBN",
+          "Obviously Awesome How to Nail Product Positioning second edition April Dunford 2026"
+        ],
+        "query": "Obviously Awesome second edition April Dunford 2026 ISBN",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Obviously_Awesome.html?id=dF3Z0QEACAAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.aprildunford.com/books"
+          },
+          {
+            "type": "url",
+            "url": "https://www.fnac.com/livre-numerique/a22648731/April-Dunford-Obviously-Awesome"
+          },
+          {
+            "type": "url",
+            "url": "https://www.kobo.com/us/en/ebook/obviously-awesome-1"
+          },
+          {
+            "type": "url",
+            "url": "https://play.google.com/store/audiobooks/details/Obviously_Awesome_How_to_Nail_Product_Positioning_?hl=en_US&id=AQAAAECaFWZV7M"
+          },
+          {
+            "type": "url",
+            "url": "https://www.audible.com/pd/Obviously-Awesome-Audiobook/B085L1MKYX"
+          },
+          {
+            "type": "url",
+            "url": "https://www.walmart.com/ip/19422020489"
+          },
+          {
+            "type": "url",
+            "url": "https://www.audiobooks.com/audiobook/obviously-awesome-how-to-nail-product-positioning-so-customers-get-it-buy-it-love-it-updated-and-expanded/1029048"
+          },
+          {
+            "type": "url",
+            "url": "https://www.everand.com/book/992693830/Obviously-Awesome-How-to-Nail-Product-Positioning-so-Customers-Get-it-Buy-it-Love-it"
+          },
+          {
+            "type": "url",
+            "url": "https://www.walmart.com/ip/19647857188"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/book/show/247591327-obviously-awesome"
+          },
+          {
+            "type": "url",
+            "url": "https://www.abebooks.com/9781999023058/Awesome-Nail-Product-Positioning-Customers-1999023056/plp"
+          },
+          {
+            "type": "url",
+            "url": "https://public.summaries.com/files/1-page-summary/obviously-awesome.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.thefastlaneforum.com/community/great-little-known-books.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://durmonski.com/Obviously-Awesome-worksheet"
+          },
+          {
+            "type": "url",
+            "url": "https://howwesolve.com/wp-content/uploads/2020/07/HWS-The-Entrepreneur%E2%80%99s-Handbook.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2108.07258"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1806.03822"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/0708.2090"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1409.0003"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f218144819ba4018c1125fc6e0a",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0dd55c5664cc8cb6016a547f21c9c8819b83660f6215cd1dfb",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.aprildunford.com/about"
+      }
+    },
+    {
+      "id": "rs_0dd55c5664cc8cb6016a547f22d69c819b90536be9bf3aa336",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0dd55c5664cc8cb6016a547f2d6fe0819b8466cdb1107f0b1f",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 1020,
+              "start_index": 934,
+              "title": "An Introduction to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/an-introduction-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1077,
+              "start_index": 1021,
+              "title": "Obviously Awesome - How to Nail Product Positioning so Customers Get it, Buy it, Love it",
+              "url": "https://www.aprildunford.com/books"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1575,
+              "start_index": 1489,
+              "title": "An Introduction to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/an-introduction-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2044,
+              "start_index": 1958,
+              "title": "An Introduction to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/an-introduction-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2101,
+              "start_index": 2045,
+              "title": "Obviously Awesome - How to Nail Product Positioning so Customers Get it, Buy it, Love it",
+              "url": "https://www.aprildunford.com/books"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2997,
+              "start_index": 2895,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3087,
+              "start_index": 2998,
+              "title": "Competition in a Positioning Exercise",
+              "url": "https://www.positioning.show/competition-in-a-positioning-exercise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3694,
+              "start_index": 3592,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3823,
+              "start_index": 3695,
+              "title": "Microsoft Word - Messaging Exercise.docx",
+              "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4490,
+              "start_index": 4362,
+              "title": "Microsoft Word - Messaging Exercise.docx",
+              "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5074,
+              "start_index": 4972,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5203,
+              "start_index": 5075,
+              "title": "Microsoft Word - Messaging Exercise.docx",
+              "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5904,
+              "start_index": 5818,
+              "title": "An Introduction to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/an-introduction-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6014,
+              "start_index": 5905,
+              "title": "New Thinking on Market Categories - Positioning with April Dunford | Wave AI Podcast Notes",
+              "url": "https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6604,
+              "start_index": 6502,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6707,
+              "start_index": 6605,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7548,
+              "start_index": 7459,
+              "title": "A Quickstart Guide to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/a-quickstart-guide-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8202,
+              "start_index": 8100,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8305,
+              "start_index": 8203,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8766,
+              "start_index": 8664,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9374,
+              "start_index": 9272,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9802,
+              "start_index": 9674,
+              "title": "Microsoft Word - Messaging Exercise.docx",
+              "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10141,
+              "start_index": 10052,
+              "title": "A Quickstart Guide to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/a-quickstart-guide-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10564,
+              "start_index": 10455,
+              "title": "New Thinking on Market Categories - Positioning with April Dunford | Wave AI Podcast Notes",
+              "url": "https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10858,
+              "start_index": 10756,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10961,
+              "start_index": 10859,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11355,
+              "start_index": 11227,
+              "title": "Microsoft Word - Messaging Exercise.docx",
+              "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12161,
+              "start_index": 12064,
+              "title": "Obviously Awesome: How to Nail Product Positioning So Customers Get It, Buy ... - April Dunford - Google Books",
+              "url": "https://books.google.com/books/about/Obviously_Awesome.html?id=IC7n0AEACAAJ"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12277,
+              "start_index": 12162,
+              "title": "Obviously Awesome: How to Nail Product Positioning So Customers Get It, Buy ... - April Dunford - Google Books",
+              "url": "https://books.google.com/books/about/Obviously_Awesome.html?id=dF3Z0QEACAAJ&utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12594,
+              "start_index": 12538,
+              "title": "Obviously Awesome - How to Nail Product Positioning so Customers Get it, Buy it, Love it",
+              "url": "https://www.aprildunford.com/books"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12947,
+              "start_index": 12861,
+              "title": "An Introduction to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/an-introduction-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13311,
+              "start_index": 13222,
+              "title": "A Quickstart Guide to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/a-quickstart-guide-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13401,
+              "start_index": 13312,
+              "title": "A Quickstart Guide to Positioning  - April Dunford",
+              "url": "https://www.aprildunford.com/post/a-quickstart-guide-to-positioning"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13867,
+              "start_index": 13765,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13970,
+              "start_index": 13868,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14073,
+              "start_index": 13971,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14176,
+              "start_index": 14074,
+              "title": "April Dunford: Positioning For Growth - How To Make Complex Products Obviously Awesome – Business of Software",
+              "url": "https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14617,
+              "start_index": 14489,
+              "title": "Microsoft Word - Messaging Exercise.docx",
+              "url": "https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14999,
+              "start_index": 14910,
+              "title": "Competition in a Positioning Exercise",
+              "url": "https://www.positioning.show/competition-in-a-positioning-exercise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 15413,
+              "start_index": 15304,
+              "title": "New Thinking on Market Categories - Positioning with April Dunford | Wave AI Podcast Notes",
+              "url": "https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 15735,
+              "start_index": 15638,
+              "title": "Obviously Awesome: How to Nail Product Positioning So Customers Get It, Buy ... - April Dunford - Google Books",
+              "url": "https://books.google.com/books/about/Obviously_Awesome.html?id=IC7n0AEACAAJ"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 16083,
+              "start_index": 15968,
+              "title": "Obviously Awesome: How to Nail Product Positioning So Customers Get It, Buy ... - April Dunford - Google Books",
+              "url": "https://books.google.com/books/about/Obviously_Awesome.html?id=dF3Z0QEACAAJ&utm_source=openai"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Obviously Awesome* by April Dunford\n\n## Central argument\n\nApril Dunford’s core thesis is that positioning is not a slogan, tagline, brand story, or “fill-in-the-blanks” messaging statement; it is the deliberate act of creating the right market context so the right customers can quickly understand why a product is uniquely valuable to them. Her working definition is that positioning shows how a product leads at delivering something a well-defined customer group cares about. The book resolves a common startup tension: teams may have a strong product and happy customers, yet prospects remain confused because the product is being compared to the wrong alternatives, placed in the wrong category, or explained through features rather than customer value. Dunford’s official materials repeatedly frame positioning as the foundation for marketing, sales, and go-to-market strategy, not a cosmetic copywriting layer. ([aprildunford.com](https://www.aprildunford.com/post/an-introduction-to-positioning)) ([aprildunford.com](https://www.aprildunford.com/books))\n\nThe practical tension is that traditional positioning statements assume the team already knows the correct market category, competitors, value, and target customers. Dunford argues that most products could plausibly be framed in multiple categories, against different competitors, for different customer segments; therefore the real work is choosing the combination that makes the product’s strengths obvious. ([aprildunford.com](https://www.aprildunford.com/post/an-introduction-to-positioning))\n\n## Mechanisms and frameworks\n\nDunford breaks positioning into five interdependent components: competitive alternatives, differentiated features or capabilities, customer value, target customer segmentation, and market category. Her official book page also identifies “relevant trends” as a separate lever that can be layered onto positioning once the category and value are clear. ([aprildunford.com](https://www.aprildunford.com/post/an-introduction-to-positioning)) ([aprildunford.com](https://www.aprildunford.com/books))\n\n**Competitive alternatives** are the starting point. They are not every company that could theoretically compete with you, and not necessarily direct product competitors. They are what a customer would use or do if your product did not exist: another tool, a spreadsheet, a manual process, hiring someone, or doing nothing. The causal role is foundational: a feature is only “unique” relative to the real alternative in the customer’s mind. If the team chooses the wrong comparison set, it will identify the wrong differentiators and then build the wrong value story. Dunford’s later podcast notes sharpen this further: competitive alternatives are broader than direct competitors but narrower than imagined future threats, and they should reflect what appears on actual customer shortlists. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([positioning.show](https://www.positioning.show/competition-in-a-positioning-exercise/))\n\n**Unique attributes** are the capabilities, features, relationships, expertise, or other defensible properties the product has that the alternatives do not. Dunford distinguishes attributes from value: “easier to use,” for example, is often not an attribute by itself unless the team can name the product mechanism that makes it easier. An editor should preserve this sequence: alternatives establish the comparison; unique attributes identify the difference; value explains why the difference matters. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([assets.super.so](https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf))\n\n**Value themes** are the customer-relevant outcomes enabled by clusters of attributes. Dunford’s messaging template says features and benefits usually map to a small number of value themes, often fewer than four, because customers do not choose a product for a long list of reasons. Value themes are therefore not a restatement of features; they are the main business or operational impacts that make the product worth choosing. Proof belongs with value: the team should record evidence that the product can deliver the promised result. ([assets.super.so](https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf))\n\n**Best-fit customers** are the customers who care intensely about the value the product uniquely delivers. In the framework, customer segmentation comes after value because the “best” customer is defined by fit with the differentiated value, not by demographic convenience or total addressable market ambition. Dunford’s template describes customer segments as specific groups that care about the value and can be recognized by relevant characteristics, environment, or behavior. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([assets.super.so](https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf))\n\n**Market category** is the frame of reference that makes the value obvious. It sets off buyer assumptions about competitors, expected features, intended users, and price. Dunford distinguishes three broad styles: competing head-to-head in an existing category; narrowing an existing category to become a “big fish” in a smaller pond; or creating a new category. The first generally favors market leaders or strong challengers. The second is often the practical startup path. The third is expensive and risky because customers must first learn the problem and category before they can use the category as context. ([aprildunford.com](https://www.aprildunford.com/post/an-introduction-to-positioning)) ([pod.wave.co](https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories))\n\n**Relevant trends** are not market categories. A market category is something customers buy; a trend is a timely theme—such as AI, cloud, GDPR, or blockchain—that can make the category feel urgent or contemporary. Dunford’s warning is that teams can overemphasize a trend and become baffling, or attach themselves to a trend without a real product connection and become unserious. Trends should answer “why now?” after the product already has a clear category and differentiated value. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/))\n\n## Book-grounded examples\n\n**The “Microsoft Access killer” repositioned as an embeddable database for mobile devices.** Dunford’s official quickstart article recounts an early product that struggled when positioned as a Microsoft Access competitor. Customer interviews revealed that a small number of users were succeeding because the product let mobile sales or field-service teams work with SQL databases away from the office and sync later. Reframing it as an embeddable database for mobile devices changed the comparison set and made the SQL/mobile value clear. This demonstrates the whole chain: real use cases revealed best-fit customers; those customers exposed the meaningful attributes; the team chose a category that highlighted the value. ([aprildunford.com](https://www.aprildunford.com/post/a-quickstart-guide-to-positioning))\n\n**CRM for investment banks.** In a Business of Software talk, Dunford describes a company competing as generic enterprise CRM against Siebel and failing to explain why it mattered. A relationship-modeling capability resonated strongly with investment bankers. Repositioning as CRM for investment banks avoided a losing head-to-head frame and made the special value legible to a narrower, high-fit segment. This demonstrates “big fish, small pond” positioning and the way a qualified category can turn a large competitor’s generality into a weakness. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/))\n\n**Spreadsheet or intern as the real alternative.** Dunford uses the example of startups naming other obscure startups as competitors while customers say they would use a spreadsheet or hire an intern if the product disappeared. The example demonstrates why competitive alternatives must come from customer behavior, not founder imagination or analyst maps. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/))\n\n**Redgate and “database DevOps.”** Dunford’s Business of Software talk describes Redgate, a database tools company, noticing GDPR and DevOps conversations among customers. The company developed a “database DevOps” point of view that connected an existing product suite to a relevant trend without abandoning the underlying database-tools context. Dunford uses it to show how trends can increase urgency and coherence when they sit at the intersection of product strength, category, and customer concern. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/))\n\n## Qualifications and common misreadings\n\nDo not present the book as a generic “write a better value proposition” manual. Dunford’s argument is strategic: messaging comes after positioning, and sales collateral should align with the positioning canvas rather than inventing fresh claims each time. ([assets.super.so](https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf))\n\nDo not collapse “competitors” into “competitive alternatives.” Dunford explicitly warns against phantom competitors—companies that could compete in theory but do not appear in real deals. Positioning against those companies can dilute the message. ([aprildunford.com](https://www.aprildunford.com/post/a-quickstart-guide-to-positioning))\n\nDo not imply that new category creation is the default ambition. Dunford’s later materials stress “do no harm” in category choice, start with the current category, consider qualifiers or adjacent categories, and create a new category only when no existing frame points customers toward the differentiated value. ([pod.wave.co](https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories))\n\nDo not treat trends as positioning by themselves. “AI,” “blockchain,” or a regulatory trend can create urgency, but the product still needs a clear category and a credible value connection. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/))\n\nScope condition: Dunford’s official template says it is built with a B2B startup in mind and may be less directly applicable to B2C companies. That does not invalidate the framework, but a public digest should not overclaim universal consumer-brand applicability. ([assets.super.so](https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf))\n\n## Metadata check\n\nTitle: *Obviously Awesome: How to Nail Product Positioning So Customers Get It, Buy It, Love It*. Author: April Dunford. Original publication: Ambient Press, 2019; Google Books lists the 2019 edition at 189 pages with ISBN 9781999023010. A second, updated and expanded edition appeared in 2026 through Ambient Press; Google Books lists it as edition 2, 198 pages, ISBN 9781999023058. The public digest requested for the 2019 book should foreground the original five-part positioning method and 10-step execution process, while noting that later materials expand and refine points such as differentiated value, market category choice, testing through sales narrative, and common mistakes. ([books.google.com](https://books.google.com/books/about/Obviously_Awesome.html?id=IC7n0AEACAAJ)) ([books.google.com](https://books.google.com/books/about/Obviously_Awesome.html?id=dF3Z0QEACAAJ&utm_source=openai))\n\n## Sources\n\n- [April Dunford — *Obviously Awesome* official book page](https://www.aprildunford.com/books) — Supports the book’s premise, official positioning of the book, five-component learning promise, trends, templates, and updated/expanded edition note. ([aprildunford.com](https://www.aprildunford.com/books))\n- [April Dunford — “An Introduction to Positioning”](https://www.aprildunford.com/post/an-introduction-to-positioning) — Supports Dunford’s definition of positioning, the context-setting concept, the critique of positioning statements, and the five core components. ([aprildunford.com](https://www.aprildunford.com/post/an-introduction-to-positioning))\n- [April Dunford — “A Quickstart Guide to Positioning”](https://www.aprildunford.com/post/a-quickstart-guide-to-positioning) — Supports the Microsoft Access/embeddable database example, basic framework overview, and warnings about phantom competitors and category creation. ([aprildunford.com](https://www.aprildunford.com/post/a-quickstart-guide-to-positioning)) ([aprildunford.com](https://www.aprildunford.com/post/a-quickstart-guide-to-positioning))\n- [Business of Software — “Positioning for Growth: How to Make Complex Products Obviously Awesome”](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/) — Supports the dependency sequence among alternatives, attributes, value, customers, and category; verifies the spreadsheet/intern, CRM for investment banks, Redgate, and trend examples. ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/)) ([businessofsoftware.org](https://businessofsoftware.org/talks/positioning-for-growth-april-dunford/))\n- [April Dunford messaging document template PDF](https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf) — Supports the positioning canvas fields, the relationship between positioning and messaging, value-theme guidance, proof, and B2B startup scope caveat. ([assets.super.so](https://assets.super.so/a87f8dee-7a01-4538-a79b-69772a25799a/files/8f99aac9-ea80-461d-8e48-52045d1ae891.pdf))\n- [Positioning with April Dunford — “Competition in a Positioning Exercise”](https://www.positioning.show/competition-in-a-positioning-exercise/) — Supports later clarification that competitive alternatives should be real customer shortlist options, not generic problems or imagined threats. ([positioning.show](https://www.positioning.show/competition-in-a-positioning-exercise/))\n- [Wave podcast notes — “New Thinking on Market Categories”](https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories) — Supports later 2026 clarifications about market-category choice, “do no harm,” qualifiers/adjacent categories, and the risks of category creation. ([pod.wave.co](https://pod.wave.co/podcast/positioning-with-april-dunford/new-thinking-on-market-categories))\n- [Google Books — 2019 edition bibliographic record](https://books.google.com/books/about/Obviously_Awesome.html?id=IC7n0AEACAAJ) — Supports title, authorship, publisher, year, ISBN, and page count for the original edition. ([books.google.com](https://books.google.com/books/about/Obviously_Awesome.html?id=IC7n0AEACAAJ))\n- [Google Books — 2026 second edition bibliographic record](https://books.google.com/books/about/Obviously_Awesome.html?id=dF3Z0QEACAAJ) — Supports second-edition metadata and the note that the 2026 edition is updated and expanded. ([books.google.com](https://books.google.com/books/about/Obviously_Awesome.html?id=dF3Z0QEACAAJ&utm_source=openai))"
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 4
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 62560,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 4142,
+    "output_tokens_details": {
+      "reasoning_tokens": 1217
+    },
+    "total_tokens": 66702
+  },
+  "user": null,
+  "metadata": {}
+}

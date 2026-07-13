@@ -1,0 +1,1126 @@
+{
+  "id": "resp_059c342e060afbc3016a5481a9a6a0819bbd5da70f4cfda5f4",
+  "object": "response",
+  "created_at": 1783923113,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923219,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_059c342e060afbc3016a5481ab088c819bbf6b924cc6399767",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Julia Galef The Scout Mindset official site soldier scout mindset",
+          "The Scout Mindset Julia Galef Portfolio Penguin Random House",
+          "Julia Galef The Scout Mindset interview directionally motivated reasoning calibration updating",
+          "The Scout Mindset reader guide Julia Galef publisher"
+        ],
+        "query": "Julia Galef The Scout Mindset official site soldier scout mindset",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://juliagalef.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://penguinrandomhousesecondaryeducation.com/wp/author/?authorid=2148202"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/The_Scout_Mindset.html?id=I4l0DwAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.ca/books/555240/the-scout-mindset-by-julia-galef/9780735217553"
+          },
+          {
+            "type": "url",
+            "url": "https://proassets.planetadelibros.com/usuaris/libros_contenido/arxius/52/51979_La_mentalidad_del_explorador.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://libcatalog.sacredheart.edu/cgi-bin/koha/opac-detail.pl?biblionumber=149898"
+          },
+          {
+            "type": "url",
+            "url": "https://spn.org/blog/an-interview-with-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://longnow.org/talks/02018-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.everand.com/book/769195574/The-Scout-Mindset-Why-Some-People-See-Things-Clearly-and-Others-Don-t"
+          },
+          {
+            "type": "url",
+            "url": "https://podscripts.co/podcasts/afford-anything/the-scout-mindset-with-julia-galef"
+          },
+          {
+            "type": "url",
+            "url": "https://www.rootquarterly.com/root-quarterly/2022/4/22/scoutmindset"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/ca/podcast/the-scout-mindset-with-julia-galef/id1079598542?i=1000523850774"
+          },
+          {
+            "type": "url",
+            "url": "https://www.imperial.ac.uk/media/imperial-college/staff/education-development-unit/public/What-is-Intelligence%2C-and-how-and-why-is-it-important-to-you.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mbs.works/wp-content/uploads/2021/08/2PPwMBS-Julia-Galef-Transcript.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://mentalimmunityproject.org/wp-content/uploads/2024/07/The-Scout-Mindset_What-Works-Series_MIMIC.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://nhpqi.ca/admin/resources/docs/book-review-the-scout-mindset.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rss.org.uk/RSS/media/File-library/News/2022/Report_Healthcare_serial_killer_or_coincidence_statistical_issues_in_investigation_of_suspected_medical_misconduct_Sept_2022_FINAL.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2012.01538"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1803.01296"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2605.04496"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2004.07769"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481ad8b6c819badb7f2847cc6deff",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481ae0cbc819ba694a72d372b7119",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:juliagalef.com \"The Scout Mindset\" \"calibration\"",
+          "site:juliagalef.com \"The Scout Mindset\" \"identity\"",
+          "Julia Galef TED Why you think you're right even if you're wrong scout soldier",
+          "Julia Galef The Scout Mindset excerpt"
+        ],
+        "query": "site:juliagalef.com \"The Scout Mindset\" \"calibration\"",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.ted.com/talks/julia_galef_why_you_think_you_re_right_even_if_you_re_wrong"
+          },
+          {
+            "type": "url",
+            "url": "https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/"
+          },
+          {
+            "type": "url",
+            "url": "https://juliagalef.com/calibration/"
+          },
+          {
+            "type": "url",
+            "url": "https://ed.ted.com/lessons/pkeqPuzO"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ted.com/speakers/julia_galef"
+          },
+          {
+            "type": "url",
+            "url": "https://ed.ted.com/blog/2018/09/07/why-you-think-youre-right-even-when-youre-wrong"
+          },
+          {
+            "type": "url",
+            "url": "https://blog.ed.ted.com/2018/09/07/why-you-think-youre-right-even-when-youre-wrong/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.emotionalintelligence.ca/2020/08/why-you-think-youre-right-even-if-youre-wrong/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.springest.net/tedtalks/why-you-think-you-re-right-even-if-you-re-wrong-julia-galef"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/quotes/65572070-the-scout-mindset-why-some-people-see-things-clearly-and-others-don-t"
+          },
+          {
+            "type": "url",
+            "url": "https://juliagalef.com/my-book/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.imperial.ac.uk/media/imperial-college/staff/education-development-unit/public/What-is-Intelligence%2C-and-how-and-why-is-it-important-to-you.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://files-backend.assets.thrillshare.com/documents/asset/uploaded_file/3682/Dhs/c2d434b5-bffd-46f8-8a6c-20b802a0e2a1/AP_Seminar_Summer_Work_2025.pdf?disposition=inline"
+          },
+          {
+            "type": "url",
+            "url": "https://www.marcialpons.es/media/pdf/51979_La_mentalidad_del_explorador.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://15771494504280676988.googlegroups.com/attach/468732c90ccc9/The-Scout-Mindset-Why-Some-People-See-Things-Clearly-and-Others-Dont.pdf?part=0.1&vt=ANaJVrGfwoW-oUJoO-zPzFqokV1hZYEEW36M5S6vi2kKk4GGYJy75-PiBVPAyKx8xudHLSr2vVrwZWfJ3DAvKKgEHoStfAZDJGkUjNsdKYP71aMARdDzFXo"
+          },
+          {
+            "type": "url",
+            "url": "https://nhpqi.ca/admin/resources/docs/book-review-the-scout-mindset.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rationallyspeakingpodcast.org/wp-content/uploads/2020/11/rs254transcript.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2605.04496"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2004.11222"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1508.05169"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2004.07769"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481b181f0819b8ade6af2cb4f024b",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481b1c4e4819b8126fb6505f46036",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Julia Galef The Scout Mindset interview Behavioral Scientist",
+          "Julia Galef The Scout Mindset interview EconTalk",
+          "Julia Galef Scout Mindset podcast interview identity beliefs correction",
+          "Julia Galef Scout Mindset \"directionally motivated reasoning\""
+        ],
+        "query": "Julia Galef The Scout Mindset interview Behavioral Scientist",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://julianprester.com/bookshelf/the-scout-mindset/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+          },
+          {
+            "type": "url",
+            "url": "https://simplecast.econtalk.org/episodes/julia-galef-on-the-scout-mindset"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/the-scout-mindset-ft-julia-galef/id1390384827?i=1000523003248"
+          },
+          {
+            "type": "url",
+            "url": "https://www.rootquarterly.com/root-quarterly/2022/4/22/scoutmindset"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/julia-galef-on-openness-bias-and-rationality/id1406534739?i=1000517762564"
+          },
+          {
+            "type": "url",
+            "url": "https://spn.org/blog/an-interview-with-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://idthefuture.com/1887/"
+          },
+          {
+            "type": "url",
+            "url": "https://juliagalef.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.econtalk.org/extra/hold-your-identity-loosely-soldier/?to_print=true"
+          },
+          {
+            "type": "url",
+            "url": "https://music.amazon.co.uk/podcasts/c1e38a89-71a9-40af-8d3b-2d3e0e9997b8/episodes/e3de4f9f-e2f0-4a29-b639-7d9f2bf10387/the-wealthy-momentum-podcast-with-jimmy-nicholas-and-dr-dustin-burleson-julia-galef-on-the-scout-mindset-why-some-people-see-things-clearly-and-others-don%27t"
+          },
+          {
+            "type": "url",
+            "url": "https://longnow.org/talks/02018-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://rss.org.uk/RSS/media/File-library/News/2022/Report_Healthcare_serial_killer_or_coincidence_statistical_issues_in_investigation_of_suspected_medical_misconduct_Sept_2022_FINAL.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://nhpqi.ca/admin/resources/docs/book-review-the-scout-mindset.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://writewell.sh/showcase/the-reality-war.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.imperial.ac.uk/media/imperial-college/staff/education-development-unit/public/What-is-Intelligence%2C-and-how-and-why-is-it-important-to-you.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://philarchive.org/archive/AYOLAD"
+          },
+          {
+            "type": "url",
+            "url": "https://www.marcialpons.es/media/pdf/51979_La_mentalidad_del_explorador.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1803.01296"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2307.10010"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1909.13304"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2202.00125"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481b47fe0819bb6c9f8d8bace355d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481b48d64819bb3a8d8624ed65e32",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "The Scout Mindset table of contents Julia Galef calibration chapter update identity",
+          "\"The Scout Mindset\" \"Chapter Six\" calibration",
+          "\"The Scout Mindset\" \"hold your identity lightly\"",
+          "\"The Scout Mindset\" \"welcoming correction\" Julia Galef"
+        ],
+        "query": "The Scout Mindset table of contents Julia Galef calibration chapter update identity",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.eahongkong.org/calibration"
+          },
+          {
+            "type": "url",
+            "url": "https://insightbooks.app/books/the-scout-mindset"
+          },
+          {
+            "type": "url",
+            "url": "https://forum.effectivealtruism.org/posts/HDAXztEbjJsyHLKP7/outline-of-galef-s-scout-mindset"
+          },
+          {
+            "type": "url",
+            "url": "https://timjgordon.medium.com/book-review-the-scout-mindset-68d678c9bac4"
+          },
+          {
+            "type": "url",
+            "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.charterworks.com/scout-mindset-julia-galef-book-decision-making/"
+          },
+          {
+            "type": "url",
+            "url": "https://medium.com/%40rkgcode/the-scout-mindset-summary-hindi-%E0%A4%9C%E0%A5%82%E0%A4%B2%E0%A4%BF%E0%A4%AF%E0%A4%BE-%E0%A4%97%E0%A5%88%E0%A4%B2%E0%A5%87%E0%A4%AB-%E0%A4%95%E0%A5%80-%E0%A4%B5%E0%A4%B9-%E0%A4%95%E0%A4%BF%E0%A4%A4%E0%A4%BE%E0%A4%AC-%E0%A4%9C%E0%A5%8B-%E0%A4%86%E0%A4%AA%E0%A4%95%E0%A5%87-%E0%A4%B8%E0%A5%8B%E0%A4%9A%E0%A4%A8%E0%A5%87-%E0%A4%95%E0%A4%BE-%E0%A4%A4%E0%A4%B0%E0%A5%80%E0%A4%95%E0%A4%BE-%E0%A4%B9%E0%A4%AE%E0%A5%87%E0%A4%B6%E0%A4%BE-%E0%A4%95%E0%A5%87-%E0%A4%B2%E0%A4%BF%E0%A4%8F-%E0%A4%AC%E0%A4%A6%E0%A4%B2-d6bf843c9430"
+          },
+          {
+            "type": "url",
+            "url": "https://stacygreetermd.com/wp-content/uploads/2025/10/Greeter-Bridging-the-Gap-Slides.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.everand.com/book/769195574/The-Scout-Mindset-Why-Some-People-See-Things-Clearly-and-Others-Don-t"
+          },
+          {
+            "type": "url",
+            "url": "https://planspace.org/20210502-the_scout_mindset_by_galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.lesswrong.com/posts/nmLjCfGi8mTSgDtoa/when-beliefs-become-identities-truth-seeking-becomes-hard-1"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/the-scout-mindset-ft-julia-galef/id1390384827?i=1000523003248"
+          },
+          {
+            "type": "url",
+            "url": "https://merrimack-test.aspendiscovery.org/GroupedWork/e99d52d7-6b49-05ea-d003-500967ba1ecc-eng/Home"
+          },
+          {
+            "type": "url",
+            "url": "https://mentalimmunityproject.org/wp-content/uploads/2024/07/The-Scout-Mindset_What-Works-Series_MIMIC.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static.bookblaze.co/bookbite/books/book-file/9f6d86be-b7e6-4919-9a8d-5ded4ca33c82/687b8d793c35a.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.imperial.ac.uk/media/imperial-college/staff/education-development-unit/public/What-is-Intelligence%2C-and-how-and-why-is-it-important-to-you.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ucyottawa.com/wp-content/uploads/2025/03/MAKING-CHANGE-STICK-full-pdf.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://nhpqi.ca/admin/resources/docs/book-review-the-scout-mindset.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2004.07769"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1803.01296"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2402.01885"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481b70888819b92fce2807d273343",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481b72144819b8121b02cc4886f9a",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://juliagalef.com/my-book/"
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481b8a6d8819b91c6b901f6e59c48",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481b8f568819b8670d4266508cd04",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/"
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481bad668819b941f486b54580394",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481bb4e7c819bbfd392b04bafd435",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://spn.org/blog/an-interview-with-julia-galef/"
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481bd8238819b8f7d8d676a88c5f1",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481be2460819ba778cbe8686a6bfb",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/"
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481c157b0819b8120c780d6276cd1",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481c1dc0c819bbbfb3c64b72287cc",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Julia Galef \"Can I believe\" \"Must I believe\" Scout Mindset",
+          "Julia Galef \"directionally motivated reasoning\" \"Can I believe\"",
+          "\"Can I believe\" \"Must I believe\" \"The Scout Mindset\"",
+          "\"directionally motivated reasoning\" \"The Scout Mindset\" Galef"
+        ],
+        "query": "Julia Galef \"Can I believe\" \"Must I believe\" Scout Mindset",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/author/quotes/18465951.Julia_Galef"
+          },
+          {
+            "type": "url",
+            "url": "https://www.rootquarterly.com/root-quarterly/2022/4/22/scoutmindset"
+          },
+          {
+            "type": "url",
+            "url": "https://www.captainswatch.org/2025/09/27/the-scout-mindset-and-related-concepts-explored/"
+          },
+          {
+            "type": "url",
+            "url": "https://scienceandculture.com/2023/12/why-science-needs-a-scout-mindset-lessons-from-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://dgozli.com/review-of-the-scout-mindset-by-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8940591/"
+          },
+          {
+            "type": "url",
+            "url": "https://readingraphics.com/book-summary-the-scout-mindset/"
+          },
+          {
+            "type": "url",
+            "url": "https://theleo.zone/books/the-scout-mindset/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.lesswrong.com/posts/ggDKTaBtZDSdSdsxf/the-scout-mindset-read-along"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bookey.app/book/the-scout-mindset/qa"
+          },
+          {
+            "type": "url",
+            "url": "https://podscripts.co/podcasts/afford-anything/the-scout-mindset-with-julia-galef"
+          },
+          {
+            "type": "url",
+            "url": "https://idanariav.com/docs/books/the-scout-mindset-book"
+          },
+          {
+            "type": "url",
+            "url": "https://cdn.bookey.app/files/pdf/book/en/the-scout-mindset.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rss.org.uk/RSS/media/File-library/News/2022/Report_Healthcare_serial_killer_or_coincidence_statistical_issues_in_investigation_of_suspected_medical_misconduct_Sept_2022_FINAL.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.oacbdd.org/clientuploads/emails/2023/Events/2023-Spring-Conference-Schedule-at-a-Glance.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://rationallyspeakingpodcast.org/wp-content/uploads/2020/11/rs256transcript.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481c59de8819b81fa44c73837517d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481c9f604819bb505fcd2ff599fb5",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Library of Congress The scout mindset Julia Galef 2021 LCCN 2020024770",
+          "WorldCat The scout mindset Julia Galef 2021 Portfolio",
+          "Penguin Books UK The Scout Mindset Julia Galef 2021 February 4",
+          "The Scout Mindset UK subtitle Perils Defensive Thinking Be Right More Often Julia Galef"
+        ],
+        "query": "Library of Congress The scout mindset Julia Galef 2021 LCCN 2020024770",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/The_Scout_Mindset.html?id=I4l0DwAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/quotes/65572070-the-scout-mindset-why-some-people-see-things-clearly-and-others-don-t"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL32024679M/The_Scout_Mindset"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/book/show/42276434"
+          },
+          {
+            "type": "url",
+            "url": "https://juliagalef.com/my-book/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hachette.co.uk/titles/julia-galef/the-scout-mindset/9780349427645/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/author/quotes/18465951.Julia_Galef"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books?id=wJ0jEAAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/quotes/65572070-the-scout-mindset-why-some-people-see-things-clearly-and-others-don-t?page=2"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/The_Scout_Mindset.html?id=q_R8DwAAQBAJ"
+          },
+          {
+            "type": "url",
+            "url": "https://www.librarycat.org/lib/bnk/item/226534912"
+          },
+          {
+            "type": "url",
+            "url": "https://www.imperial.ac.uk/media/imperial-college/staff/education-development-unit/public/What-is-Intelligence%2C-and-how-and-why-is-it-important-to-you.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://proassets.planetadelibros.com/usuaris/libros_contenido/arxius/52/51979_La_mentalidad_del_explorador.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.psc.ac.uk/docs/content/summer/reading.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://philarchive.org/archive/AYOLAD"
+          },
+          {
+            "type": "url",
+            "url": "https://philarchive.org/archive/AYOTPL"
+          },
+          {
+            "type": "url",
+            "url": "https://www.blueappleteacher.org/wp-content/uploads/2020/06/TAS-Soldier-vs-Scout.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2102.06361"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2004.07769"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2001.05424"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1803.01296"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481ce6dec819bb5282bef725600b2",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481ce96e8819bbcf1e228f99b9fc4",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.hachette.co.uk/titles/julia-galef/the-scout-mindset/9780349427645/"
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481d36b10819baaac7eec0ae43d0c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481dba38c819b815b6fba49681547",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8940591/"
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481de43d0819bb740ce23cd5fa8d8",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_059c342e060afbc3016a5481dfb07c819b9e1b01fdb1ee6255",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Afford Anything Julia Galef Scout Mindset official transcript motivated reasoning",
+          "\"The Scout Mindset\" \"Afford Anything\" Julia Galef \"Can I believe\"",
+          "\"Julia Galef\" \"Can I believe this\" \"Must I believe this\" interview",
+          "\"Julia Galef\" \"directionally motivated reasoning\" interview"
+        ],
+        "query": "Afford Anything Julia Galef Scout Mindset official transcript motivated reasoning",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://podscripts.co/podcasts/afford-anything/the-scout-mindset-with-julia-galef"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ted.com/talks/julia_galef_why_you_think_you_re_right_even_if_you_re_wrong?view=transcript"
+          },
+          {
+            "type": "url",
+            "url": "https://forum.effectivealtruism.org/posts/pxALB46SEkwNbfiNS/the-motivated-reasoning-critique-of-effective-altruism"
+          },
+          {
+            "type": "url",
+            "url": "https://quillette.com/2022/02/04/five-lessons-from-julia-galefs-the-scout-mindset/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mga.edu/arts-letters/english/gpa/docs/jgpa-vol-11-2022-2023.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mbs.works/wp-content/uploads/2021/08/2PPwMBS-Julia-Galef-Transcript.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://thevoroscope.com/2026/05/20/reqm-6/"
+          },
+          {
+            "type": "url",
+            "url": "https://podcast.unmistakablecreative.com/julia-galef-the-benefits-of-seeing-the-world-as-it-is/"
+          },
+          {
+            "type": "url",
+            "url": "https://rss.org.uk/RSS/media/File-library/News/2022/Report_Healthcare_serial_killer_or_coincidence_statistical_issues_in_investigation_of_suspected_medical_misconduct_Sept_2022_FINAL.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://beta.thestorygraph.com/book_reviews/3b9ac1f7-b983-479c-b232-9e42f500fe78"
+          },
+          {
+            "type": "url",
+            "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+          },
+          {
+            "type": "url",
+            "url": "https://blog.ed.ted.com/2018/09/07/why-you-think-youre-right-even-when-youre-wrong/"
+          },
+          {
+            "type": "url",
+            "url": "https://podofjake.com/wp-content/uploads/2021/06/pod-of-jake-transcript-67-julia-galef-1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.befreed.ai/ko/book/the-scout-mindset-by-julia-galef"
+          },
+          {
+            "type": "url",
+            "url": "https://www1.goramblers.org/plagiarism/pdf?ID=Mkw81-5418&title=outsider-test.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://jonathanmclatchie.com/why-apologists-need-a-scout-mindset-lessons-to-be-learned-from-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2602.10063"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2006.00418"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1205.4251"
+          },
+          {
+            "type": "url",
+            "url": "https://juliagalef.com/my-book/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/"
+          },
+          {
+            "type": "url",
+            "url": "https://juliagalef.com/calibration/"
+          },
+          {
+            "type": "url",
+            "url": "https://spn.org/blog/an-interview-with-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.everand.com/book/769195574/The-Scout-Mindset-Why-Some-People-See-Things-Clearly-and-Others-Don-t"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/"
+          },
+          {
+            "type": "url",
+            "url": "https://podscripts.co/podcasts/afford-anything/the-scout-mindset-with-julia-galef?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/The_Scout_Mindset.html?id=I4l0DwAAQBAJ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_059c342e060afbc3016a5481e43278819bbceb306df4d97c88",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_059c342e060afbc3016a5481e8e850819b9a6e0bb1a2cd25b5",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 996,
+              "start_index": 927,
+              "title": "My book – Julia Galef",
+              "url": "https://juliagalef.com/my-book/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1650,
+              "start_index": 1574,
+              "title": "Julia Galef on the Scout Mindset - Econlib",
+              "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2321,
+              "start_index": 2245,
+              "title": "Julia Galef on the Scout Mindset - Econlib",
+              "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3051,
+              "start_index": 2962,
+              "title": "Why you think you’re right, even when you’re wrong | ",
+              "url": "https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3622,
+              "start_index": 3546,
+              "title": "Julia Galef on the Scout Mindset - Econlib",
+              "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4064,
+              "start_index": 4009,
+              "title": "Calibration – Julia Galef",
+              "url": "https://juliagalef.com/calibration/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4565,
+              "start_index": 4501,
+              "title": "Divergent Thinking: Understanding the Scout Mindset with Julia Galef - State Policy Network",
+              "url": "https://spn.org/blog/an-interview-with-julia-galef/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5121,
+              "start_index": 5045,
+              "title": "Julia Galef on the Scout Mindset - Econlib",
+              "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5779,
+              "start_index": 5654,
+              "title": "The Scout Mindset by Julia Galef (Ebook) - Read free for 30 days",
+              "url": "https://www.everand.com/book/769195574/The-Scout-Mindset-Why-Some-People-See-Things-Clearly-and-Others-Don-t"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6442,
+              "start_index": 6353,
+              "title": "Why you think you’re right, even when you’re wrong | ",
+              "url": "https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6873,
+              "start_index": 6784,
+              "title": "Why you think you’re right, even when you’re wrong | ",
+              "url": "https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7547,
+              "start_index": 7438,
+              "title": "The Scout Mindset by Julia Galef: 9780735217553 | PenguinRandomHouse.com: Books",
+              "url": "https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7987,
+              "start_index": 7923,
+              "title": "Divergent Thinking: Understanding the Scout Mindset with Julia Galef - State Policy Network",
+              "url": "https://spn.org/blog/an-interview-with-julia-galef/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8395,
+              "start_index": 8331,
+              "title": "Divergent Thinking: Understanding the Scout Mindset with Julia Galef - State Policy Network",
+              "url": "https://spn.org/blog/an-interview-with-julia-galef/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8736,
+              "start_index": 8647,
+              "title": "Why you think you’re right, even when you’re wrong | ",
+              "url": "https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9066,
+              "start_index": 8948,
+              "title": "Afford Anything - The Scout Mindset, with Julia Galef Transcript and Discussion",
+              "url": "https://podscripts.co/podcasts/afford-anything/the-scout-mindset-with-julia-galef?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9418,
+              "start_index": 9342,
+              "title": "Julia Galef on the Scout Mindset - Econlib",
+              "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9690,
+              "start_index": 9635,
+              "title": "Calibration – Julia Galef",
+              "url": "https://juliagalef.com/calibration/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10019,
+              "start_index": 9943,
+              "title": "Julia Galef on the Scout Mindset - Econlib",
+              "url": "https://www.econtalk.org/julia-galef-on-the-scout-mindset/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10382,
+              "start_index": 10273,
+              "title": "The Scout Mindset by Julia Galef: 9780735217553 | PenguinRandomHouse.com: Books",
+              "url": "https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10791,
+              "start_index": 10694,
+              "title": "The Scout Mindset: See Things Clearly and Make Smarter Decisions - Julia Galef - Google Books",
+              "url": "https://books.google.com/books/about/The_Scout_Mindset.html?id=I4l0DwAAQBAJ"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *The Scout Mindset* by Julia Galef\n\n## Central argument\n\nJulia Galef’s thesis is that good judgment depends less on raw intelligence or formal logic than on a motivational stance: whether you want to defend a preferred conclusion or find out what is actually true. She names the defensive stance “soldier mindset” and the truth-seeking stance “scout mindset.” The soldier’s job is to attack and defend; the scout’s job is to map the terrain. The book argues that people can cultivate scout mindset through emotional skills, habits, and identity practices—not by becoming emotionless, but by redirecting emotions such as curiosity, pride, and security toward truth-seeking. Galef’s own site frames the book as a practical answer to how to avoid fooling yourself: recognizing error, seeking blind spots, testing assumptions, making better predictions, learning from disagreement, and noticing when you are wrong. ([juliagalef.com](https://juliagalef.com/my-book/?utm_source=openai))\n\nThe tension the book resolves is: if self-deception can protect confidence, morale, belonging, and motivation, why prefer realism? Galef’s answer is that the benefits of soldier mindset are often short-term or illusory, while an accurate map is usually more useful for decisions, relationships, leadership, investing, activism, and personal change. In interviews, she stresses that the book is aimed not mainly at people who reject truth-seeking, but at people who endorse it in theory while fearing it will make them unhappy, demotivated, less confident, or less persuasive. ([econtalk.org](https://www.econtalk.org/julia-galef-on-the-scout-mindset/))\n\n## Mechanisms and frameworks\n\n**Soldier versus scout mindset.** Soldier mindset is Galef’s umbrella term for reasoning that is motivated to protect a belief, identity, plan, or side. It includes rationalization, denial, wishful thinking, motivated reasoning, and some forms of confirmation bias. The metaphor is grounded in ordinary argument language: we “defend” positions, “attack” arguments, and “shoot down” objections. Scout mindset, by contrast, treats beliefs as a map: the goal is to represent reality as accurately as possible, including uncertainty and areas that may need revision. ([econtalk.org](https://www.econtalk.org/julia-galef-on-the-scout-mindset/))\n\n**Directionally motivated reasoning.** The relevant mechanism is not simply “bias” in the generic sense; it is reasoning pulled toward a desired answer. When evidence supports what we want, we apply a permissive standard; when it threatens what we want, we apply a harsher standard. TED’s official adaptation of Galef’s talk explains this through the Dreyfus case and the capital-punishment-study example: the same kind of evidence is judged differently depending on whether it helps one’s side. This matters because people in soldier mindset may sincerely experience themselves as objective while their standards shift beneath awareness. ([ideas.ted.com](https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/))\n\n**Identity and belief.** Galef’s later framework is that beliefs become harder to update when they become part of who we are. “Hold your identity lightly” does not mean avoid all labels or commitments; in EconTalk she says it can be practical and even valuable to identify with a cause. The key is to keep a distinction between what “my group/ideology says” and what “I currently believe,” and to regard support for movements as contingent on continued evidence that they are right or useful. ([econtalk.org](https://www.econtalk.org/julia-galef-on-the-scout-mindset/))\n\n**Calibration.** Calibration is the skill of matching confidence to reality. On her official calibration page, Galef defines it as having the appropriate degree of confidence: if many claims you mark 70% confident are true about 70% of the time, you are well calibrated. Calibration is not certainty-maximization; it is a way to keep uncertainty visible so that evidence can move you. ([juliagalef.com](https://juliagalef.com/calibration/))\n\n**Updating.** Updating is the scout habit of revising the map when new evidence arrives. In the SPN interview, Galef describes scouts as always open to revising their map from new information and different perspectives. In the Afford Anything transcript, she also emphasizes acting on one’s best guess while keeping in mind that new information can trigger reassessment; this guards against both overconfidence and analysis paralysis. ([spn.org](https://spn.org/blog/an-interview-with-julia-galef/))\n\n**Welcoming correction.** Galef does not present correction as naturally pleasant. In EconTalk, she explicitly says gratitude toward critics does not always work for her. Her practical move is to focus on future benefit: criticism can improve performance, decisions, or credibility if integrated. This is important for the digest: “welcome correction” should not be rendered as performative humility; it is an emotional and strategic reframing of correction as map-improvement. ([econtalk.org](https://www.econtalk.org/julia-galef-on-the-scout-mindset/))\n\n**Truth-seeking habits.** The book’s table of contents shows the practical arc: self-awareness, noticing bias, asking how sure you are, coping without illusions, motivation without self-deception, influence without overconfidence, being wrong, leaning into confusion, escaping echo chambers, and rethinking identity. SPN adds team-level practices: independent initial judgments before discussion, disagree-and-commit, and measurable criteria for evaluating whether a plan is working before incentives to rationalize become strong. ([everand.com](https://www.everand.com/book/769195574/The-Scout-Mindset-Why-Some-People-See-Things-Clearly-and-Others-Don-t))\n\n## Book-grounded examples\n\n**Dreyfus and Picquart.** Galef’s TED/TED Ideas material uses the Dreyfus affair to show soldier mindset: French officers treated weak or contrary evidence as confirmation of Dreyfus’s guilt. Colonel Georges Picquart demonstrates scout mindset because he continued investigating when evidence suggested Dreyfus might be innocent, despite sharing some of his peers’ prejudices and suffering consequences. This example demonstrates that scout mindset is not the absence of bias or preference; it is a stronger motivation to find out what is true. ([ideas.ted.com](https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/))\n\n**Capital punishment studies.** Galef’s TED adaptation uses reactions to studies about capital punishment to illustrate asymmetric scrutiny: people who support or oppose the policy tend to find flaws in evidence that threatens their side and accept evidence that supports it. This is a compact example of directionally motivated reasoning. ([ideas.ted.com](https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/))\n\n**Jeff Bezos, Warren Buffett, superforecasters, stranded-at-sea survival, Reddit, and modern partisan politics.** Publisher descriptions verify that these appear as examples in official materials. For a public digest, use them only at the level verified here unless the book itself is consulted for details: Bezos is tied to avoiding overconfidence; Buffett to investing strategies; superforecasters to outperforming intelligence analysts; the survival example to decision-making under extreme conditions; Reddit and partisan politics to modern tribal reasoning. ([penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/))\n\n**Leadership confidence.** In SPN, Galef distinguishes epistemic confidence from social confidence. Leaders need the latter—self-assured action and communication—but not false certainty about beliefs or plans. This example demonstrates that scout mindset is not passivity or weak leadership; it can improve persuasion by helping leaders see weaknesses and counterarguments. ([spn.org](https://spn.org/blog/an-interview-with-julia-galef/))\n\n**Ideological Turing Test.** Galef presents Bryan Caplan’s test as a scout habit: can you state an opposing view convincingly enough that observers cannot tell whether you hold it? She emphasizes that this is both cognitive and emotional, because it tests whether identity has become too fused with belief to allow charitable representation. ([spn.org](https://spn.org/blog/an-interview-with-julia-galef/))\n\n## Qualifications and common misreadings\n\nDo not frame the book as “logic beats emotion.” Galef’s TED material says scout mindset is also emotional; the shift is from defensiveness and shame to curiosity, groundedness, and pride in revising beliefs. ([ideas.ted.com](https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/))\n\nDo not frame scout mindset as indecision. Galef’s practical advice is compatible with acting on best guesses, especially when decisions are reversible, while keeping uncertainty visible enough to revise later. ([podscripts.co](https://podscripts.co/podcasts/afford-anything/the-scout-mindset-with-julia-galef?utm_source=openai))\n\nDo not frame it as “never identify with anything.” Galef explicitly prefers holding identity lightly over trying to eliminate identity altogether. The target is identity that makes beliefs feel like flags to defend rather than hypotheses or commitments that can be revised. ([econtalk.org](https://www.econtalk.org/julia-galef-on-the-scout-mindset/))\n\nDo not imply perfect objectivity. Calibration is an ideal benchmark, not a state humans fully achieve. Galef repeatedly uses qualifiers such as “as accurate as possible” and includes uncertainty as part of the map. ([juliagalef.com](https://juliagalef.com/calibration/))\n\nDo not treat “more data” as automatically scout-like. In EconTalk, Galef agrees that scientific-looking evidence can be over-trusted and that methods have limits; scout mindset requires evaluating the quality, scope, and applicability of information. ([econtalk.org](https://www.econtalk.org/julia-galef-on-the-scout-mindset/))\n\n## Metadata check\n\nThe U.S. edition is *The Scout Mindset: Why Some People See Things Clearly and Others Don’t*, by Julia Galef, published by Portfolio / Penguin Random House on April 13, 2021; the hardcover is listed at 288 pages, ISBN 9780735217553. ([penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/))\n\nEdition differences: U.K./international listings use alternate subtitles, including *See Things Clearly and Make Smarter Decisions*, but the core book is the same 2021 Galef work. Open Library also records multiple English editions, including Portfolio U.S. hardcover and Little, Brown/Hachette U.K. editions. ([books.google.com](https://books.google.com/books/about/The_Scout_Mindset.html?id=I4l0DwAAQBAJ))\n\n## Sources\n\n- [Julia Galef official book page](https://juliagalef.com/my-book/) — Supports the author’s own framing of the thesis, intended skill, and practical focus.  \n- [Penguin Random House: *The Scout Mindset*](https://www.penguinrandomhouse.com/books/555240/the-scout-mindset-by-julia-galef/) — Supports metadata, publisher description, examples, and U.S. publication details.  \n- [Julia Galef official calibration page](https://juliagalef.com/calibration/) — Supports the definition and role of calibration in chapter 6.  \n- [TED Talk: “Why you think you’re right — even if you’re wrong”](https://www.ted.com/talks/julia_galef_why_you_think_you_re_right_even_if_you_re_wrong) — Supports the soldier/scout contrast and the official TED framing.  \n- [TED Ideas adaptation by Julia Galef](https://ideas.ted.com/why-you-think-youre-right-even-when-youre-wrong/) — Supports Dreyfus/Picquart, motivated reasoning, capital punishment study example, and emotional basis of scout mindset.  \n- [EconTalk interview: “Julia Galef on the Scout Mindset”](https://www.econtalk.org/julia-galef-on-the-scout-mindset/) — Supports Galef’s explanations of soldier/scout mindset, goals of the book, criticism, identity, and caveats about evidence.  \n- [State Policy Network interview with Julia Galef](https://spn.org/an-interview-with-julia-galef/) — Supports practical team habits, updating, identity-lightly applied through the Ideological Turing Test, and confidence distinctions.  \n- [Google Books: U.K. edition listing](https://books.google.com/books/about/The_Scout_Mindset.html?id=I4l0DwAAQBAJ) — Supports alternate subtitle, U.K. metadata, and verified publisher examples.  \n- [Hachette U.K. listing](https://www.hachette.co.uk/titles/julia-galef/the-scout-mindset/9780349427645/) — Supports U.K. edition context, alternate publishing route, and verified example list.  \n- [Open Library edition record](https://openlibrary.org/books/OL32024679M/The_Scout_Mindset) — Supports cross-checking editions, ISBNs, page count, LCCN/OCLC, and publication date."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 7
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 89442,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 4767,
+    "output_tokens_details": {
+      "reasoning_tokens": 2083
+    },
+    "total_tokens": 94209
+  },
+  "user": null,
+  "metadata": {}
+}

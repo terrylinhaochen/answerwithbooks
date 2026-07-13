@@ -1,0 +1,222 @@
+{
+  "approved_at": "2026-07-12",
+  "purpose": "The first approved expansion wave from 21 to 45 published book digests.",
+  "books": [
+    {
+      "id": "obviously-awesome",
+      "title": "Obviously Awesome",
+      "author": "April Dunford",
+      "year": 2019,
+      "tags": ["business", "positioning", "marketing", "product"],
+      "order": 21,
+      "required_concepts": ["competitive alternatives", "unique attributes", "value themes", "best-fit customers", "market category", "relevant trends"]
+    },
+    {
+      "id": "traction",
+      "title": "Traction",
+      "author": "Gabriel Weinberg and Justin Mares",
+      "year": 2015,
+      "tags": ["business", "startups", "growth", "marketing"],
+      "order": 22,
+      "required_concepts": ["nineteen traction channels", "Bullseye framework", "outer ring brainstorming", "middle ring testing", "inner ring focus", "fifty-percent rule"]
+    },
+    {
+      "id": "competing-against-luck",
+      "title": "Competing Against Luck",
+      "author": "Clayton M. Christensen, Taddy Hall, Karen Dillon, and David S. Duncan",
+      "year": 2016,
+      "tags": ["business", "product", "customer research", "innovation"],
+      "order": 23,
+      "required_concepts": ["jobs to be done", "progress in circumstances", "functional social and emotional dimensions", "forces of progress", "hiring and firing products", "milkshake and condominium examples"]
+    },
+    {
+      "id": "playing-to-win",
+      "title": "Playing to Win",
+      "author": "A.G. Lafley and Roger L. Martin",
+      "year": 2013,
+      "tags": ["business", "strategy", "management", "competitive advantage"],
+      "order": 24,
+      "required_concepts": ["strategy as choice", "winning aspiration", "where to play", "how to win", "required capabilities", "management systems", "reverse engineering choices"]
+    },
+    {
+      "id": "the-goal",
+      "title": "The Goal",
+      "author": "Eliyahu M. Goldratt and Jeff Cox",
+      "year": 1984,
+      "tags": ["business", "operations", "systems", "management"],
+      "order": 25,
+      "required_concepts": ["goal of a system", "throughput inventory and operating expense", "bottlenecks", "dependent events and statistical fluctuations", "Herbie example", "five focusing steps"]
+    },
+    {
+      "id": "continuous-discovery-habits",
+      "title": "Continuous Discovery Habits",
+      "author": "Teresa Torres",
+      "year": 2021,
+      "tags": ["business", "product", "customer research", "experiments"],
+      "order": 26,
+      "required_concepts": ["weekly customer touchpoints", "product trio", "desired outcome", "opportunity solution tree", "experience interviews", "assumption mapping", "small tests"]
+    },
+    {
+      "id": "the-design-of-everyday-things",
+      "title": "The Design of Everyday Things",
+      "author": "Don Norman",
+      "year": 1988,
+      "tags": ["technology", "design", "usability", "psychology"],
+      "order": 27,
+      "required_concepts": ["affordances and signifiers", "mapping", "constraints", "feedback", "conceptual models", "gulfs of execution and evaluation", "seven stages of action", "human error as design evidence"]
+    },
+    {
+      "id": "radical-candor",
+      "title": "Radical Candor",
+      "author": "Kim Scott",
+      "year": 2017,
+      "tags": ["relationships", "communication", "management", "feedback"],
+      "order": 28,
+      "required_concepts": ["care personally", "challenge directly", "ruinous empathy", "obnoxious aggression", "manipulative insincerity", "soliciting criticism", "guidance and growth management"]
+    },
+    {
+      "id": "the-fearless-organization",
+      "title": "The Fearless Organization",
+      "author": "Amy C. Edmondson",
+      "year": 2018,
+      "tags": ["relationships", "leadership", "teams", "management"],
+      "order": 29,
+      "required_concepts": ["psychological safety", "interpersonal risk", "reporting errors", "learning behavior", "setting the stage", "inviting participation", "responding productively", "safety is not comfort or low standards"]
+    },
+    {
+      "id": "difficult-conversations",
+      "title": "Difficult Conversations",
+      "author": "Douglas Stone, Bruce Patton, and Sheila Heen",
+      "year": 1999,
+      "tags": ["relationships", "communication", "conflict", "negotiation"],
+      "order": 30,
+      "required_concepts": ["what happened conversation", "feelings conversation", "identity conversation", "contribution rather than blame", "the third story", "learning stance", "expression without accusation"]
+    },
+    {
+      "id": "getting-to-yes",
+      "title": "Getting to Yes",
+      "author": "Roger Fisher, William Ury, and Bruce Patton",
+      "year": 1981,
+      "tags": ["negotiation", "communication", "decisions", "relationships"],
+      "order": 31,
+      "required_concepts": ["separate people from problem", "interests rather than positions", "options for mutual gain", "objective criteria", "BATNA", "principled negotiation", "power through alternatives"]
+    },
+    {
+      "id": "noise",
+      "title": "Noise",
+      "author": "Daniel Kahneman, Olivier Sibony, and Cass R. Sunstein",
+      "year": 2021,
+      "tags": ["decisions", "judgment", "management", "evidence"],
+      "order": 32,
+      "required_concepts": ["bias versus noise", "level noise", "pattern noise", "occasion noise", "noise audit", "decision hygiene", "independent judgments", "mediating assessments protocol"]
+    },
+    {
+      "id": "superforecasting",
+      "title": "Superforecasting",
+      "author": "Philip E. Tetlock and Dan Gardner",
+      "year": 2015,
+      "tags": ["decisions", "forecasting", "judgment", "uncertainty"],
+      "order": 33,
+      "required_concepts": ["Good Judgment Project", "Brier scores", "foxes and hedgehogs", "base rates", "Fermi estimation", "calibration", "frequent belief updating", "tournament feedback"]
+    },
+    {
+      "id": "thinking-in-bets",
+      "title": "Thinking in Bets",
+      "author": "Annie Duke",
+      "year": 2018,
+      "tags": ["decisions", "uncertainty", "judgment", "probability"],
+      "order": 34,
+      "required_concepts": ["resulting", "decision quality versus outcome", "beliefs as bets", "probabilistic confidence", "decision groups", "premortems and backcasts", "decision records"]
+    },
+    {
+      "id": "the-scout-mindset",
+      "title": "The Scout Mindset",
+      "author": "Julia Galef",
+      "year": 2021,
+      "tags": ["decisions", "judgment", "psychology", "learning"],
+      "order": 35,
+      "required_concepts": ["soldier versus scout mindset", "directionally motivated reasoning", "identity and belief", "calibration", "updating", "welcoming correction", "truth-seeking habits"]
+    },
+    {
+      "id": "thinking-in-systems",
+      "title": "Thinking in Systems",
+      "author": "Donella H. Meadows",
+      "year": 2008,
+      "tags": ["technology", "systems", "decisions", "planning"],
+      "order": 36,
+      "required_concepts": ["stocks and flows", "feedback loops", "delays", "resilience", "bounded rationality", "system traps", "leverage points", "behavior over time"]
+    },
+    {
+      "id": "accelerate",
+      "title": "Accelerate",
+      "author": "Nicole Forsgren, Jez Humble, and Gene Kim",
+      "year": 2018,
+      "tags": ["technology", "operations", "management", "quality"],
+      "order": 37,
+      "required_concepts": ["delivery performance measures", "lead time", "deployment frequency", "recovery time", "change failure rate", "continuous delivery", "architecture", "Westrum culture", "research limitations"]
+    },
+    {
+      "id": "team-topologies",
+      "title": "Team Topologies",
+      "author": "Matthew Skelton and Manuel Pais",
+      "year": 2019,
+      "tags": ["technology", "teams", "management", "systems"],
+      "order": 38,
+      "required_concepts": ["Conway's law", "cognitive load", "stream-aligned team", "platform team", "enabling team", "complicated-subsystem team", "collaboration", "X-as-a-service", "facilitating interaction"]
+    },
+    {
+      "id": "slow-productivity",
+      "title": "Slow Productivity",
+      "author": "Cal Newport",
+      "year": 2024,
+      "tags": ["productivity", "work", "burnout", "priorities"],
+      "order": 39,
+      "required_concepts": ["pseudo-productivity", "knowledge-work measurement", "do fewer things", "work at a natural pace", "obsess over quality", "seasonality", "visible activity versus valuable output"]
+    },
+    {
+      "id": "make-it-stick",
+      "title": "Make It Stick",
+      "author": "Peter C. Brown, Henry L. Roediger III, and Mark A. McDaniel",
+      "year": 2014,
+      "tags": ["career", "learning", "skill-building", "psychology"],
+      "order": 40,
+      "required_concepts": ["retrieval practice", "spacing", "interleaving", "variation", "generation", "elaboration", "reflection", "desirable difficulties", "illusions of mastery"]
+    },
+    {
+      "id": "working-identity",
+      "title": "Working Identity",
+      "author": "Herminia Ibarra",
+      "year": 2003,
+      "tags": ["career", "work", "experiments", "life-design"],
+      "order": 41,
+      "required_concepts": ["possible selves", "career transition through action", "crafting experiments", "shifting connections", "making sense of experience", "liminal period", "identity is revised through practice"]
+    },
+    {
+      "id": "the-happiness-trap",
+      "title": "The Happiness Trap",
+      "author": "Russ Harris",
+      "year": 2007,
+      "tags": ["health", "psychology", "behavior-change", "relationships"],
+      "order": 42,
+      "required_concepts": ["acceptance and commitment therapy", "control agenda", "cognitive defusion", "acceptance", "present-moment awareness", "self as context", "values", "committed action"]
+    },
+    {
+      "id": "scarcity",
+      "title": "Scarcity",
+      "author": "Sendhil Mullainathan and Eldar Shafir",
+      "year": 2013,
+      "tags": ["health", "decisions", "psychology", "systems"],
+      "order": 43,
+      "required_concepts": ["tunneling", "bandwidth tax", "trade-off thinking", "slack", "juggling", "scarcity traps", "Indian sugarcane farmer research", "designing around limited bandwidth"]
+    },
+    {
+      "id": "the-good-life",
+      "title": "The Good Life",
+      "author": "Robert Waldinger and Marc Schulz",
+      "year": 2023,
+      "tags": ["health", "relationships", "wellbeing", "life-design"],
+      "order": 44,
+      "required_concepts": ["Harvard Study of Adult Development", "relationship quality", "social fitness", "attention", "emotional regulation", "repair and maintenance", "relationships as dynamic systems"]
+    }
+  ]
+}

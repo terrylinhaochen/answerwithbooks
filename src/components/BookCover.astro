@@ -35,6 +35,30 @@ const palettes: Record<string, { cover: string; band: string; ink: string; line:
   'the-wisdom-of-crowds': { cover: '#0877d9', band: '#ffbd2e', ink: '#fffefa', line: '#062b4f' },
   'thinking-fast-and-slow': { cover: '#9c114c', band: '#ffd51f', ink: '#fff8e8', line: '#35071b' },
   'zero-to-one': { cover: '#f04b32', band: '#fff4dc', ink: '#fff4dc', line: '#4b1008' },
+  'obviously-awesome': { cover: '#ff4f87', band: '#ffe44d', ink: '#fff8eb', line: '#4b0921' },
+  'traction': { cover: '#0847c7', band: '#ffcf29', ink: '#fff8e8', line: '#031b4c' },
+  'competing-against-luck': { cover: '#d84718', band: '#83ffb5', ink: '#fff5df', line: '#4c1404' },
+  'playing-to-win': { cover: '#5a24b8', band: '#f7ef4f', ink: '#fff8e8', line: '#200748' },
+  'the-goal': { cover: '#0d6b5e', band: '#ffbf38', ink: '#fff8e8', line: '#042b26' },
+  'continuous-discovery-habits': { cover: '#f04b2e', band: '#7cffd5', ink: '#fff5df', line: '#4c1007' },
+  'the-design-of-everyday-things': { cover: '#f2b70a', band: '#1234a5', ink: '#211800', line: '#4c3600' },
+  'radical-candor': { cover: '#e52945', band: '#8bffce', ink: '#fff5e8', line: '#4b0712' },
+  'the-fearless-organization': { cover: '#008c78', band: '#ffdf43', ink: '#fff8e8', line: '#042e27' },
+  'difficult-conversations': { cover: '#8238a7', band: '#ffcb45', ink: '#fff7e8', line: '#2c0c3a' },
+  'getting-to-yes': { cover: '#1673d1', band: '#ffcb3c', ink: '#fff8e8', line: '#06284c' },
+  'noise': { cover: '#3d4259', band: '#ff5d73', ink: '#fff8e8', line: '#151824' },
+  'superforecasting': { cover: '#1252a4', band: '#f9e643', ink: '#fff8e8', line: '#061f43' },
+  'thinking-in-bets': { cover: '#7b1644', band: '#57e6d2', ink: '#fff6e8', line: '#2d0718' },
+  'the-scout-mindset': { cover: '#007b91', band: '#ffda42', ink: '#fff8e8', line: '#032d35' },
+  'thinking-in-systems': { cover: '#126442', band: '#f4dc49', ink: '#fff8e8', line: '#05291b' },
+  'accelerate': { cover: '#ef3c28', band: '#58f2d0', ink: '#fff6e8', line: '#4c0c04' },
+  'team-topologies': { cover: '#3151c6', band: '#ffb936', ink: '#fff8e8', line: '#0d1c52' },
+  'slow-productivity': { cover: '#315b50', band: '#ffcc4a', ink: '#fff8e8', line: '#122a25' },
+  'make-it-stick': { cover: '#d42e74', band: '#ffdb35', ink: '#fff8e8', line: '#490a27' },
+  'working-identity': { cover: '#3f46a6', band: '#ff9f43', ink: '#fff8e8', line: '#151947' },
+  'the-happiness-trap': { cover: '#e15b1a', band: '#68efcb', ink: '#fff6e8', line: '#4b1805' },
+  'scarcity': { cover: '#702f84', band: '#ffd33d', ink: '#fff8e8', line: '#280d31' },
+  'the-good-life': { cover: '#bf315e', band: '#ffd34d', ink: '#fff7e8', line: '#430b20' },
 };
 
 const palette = palettes[book.id] ?? { cover: '#263747', band: '#e7d7b8', ink: '#fbf4e8', line: '#102338' };
@@ -44,6 +68,9 @@ const coverTitles: Record<string, string> = {
   'the-structure-of-scientific-revolutions': 'Scientific Revolutions',
   'never-split-the-difference': 'Never Split',
   'so-good-they-cant-ignore-you': 'So Good',
+  'continuous-discovery-habits': 'Discovery Habits',
+  'the-design-of-everyday-things': 'Everyday Things',
+  'the-fearless-organization': 'Fearless Organization',
 };
 const coverTitle = coverTitles[book.id] ?? book.data.title;
 const longTitleClass = coverTitle.length > 24 ? 'book-cover--long-title' : '';

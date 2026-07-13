@@ -1,0 +1,1106 @@
+{
+  "id": "resp_0af7abe5680ff89c016a5482e3bb288199a1935f780bf50395",
+  "object": "response",
+  "created_at": 1783923427,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923529,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_0af7abe5680ff89c016a5482e469d0819999ad5fbf0ceb2788",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Sendhil Mullainathan Scarcity book official site",
+          "Eldar Shafir Scarcity book official site",
+          "Scarcity why having too little means so much publisher page",
+          "Sendhil Mullainathan Eldar Shafir scarcity bandwidth tunneling slack sugarcane farmers"
+        ],
+        "query": "Sendhil Mullainathan Scarcity book official site",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.publishersweekly.com/978-0-8050-9264-6"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/research/"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/category/books/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.theguardian.com/books/2013/aug/23/scarcity-sendhil-mullainathan-eldar-shafir"
+          },
+          {
+            "type": "url",
+            "url": "https://thatgurjot.com/book-notes/scarcity/"
+          },
+          {
+            "type": "url",
+            "url": "https://ndlsearch.ndl.go.jp/en/books/R100000136-I1970304959961524356"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/wp-content/uploads/2019/08/Mullainathan_2018-August.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.harvardmagazine.com/2015/05/the-science-of-scarcity"
+          },
+          {
+            "type": "url",
+            "url": "https://www.vitalsource.com/products/scarcity-sendhil-mullainathan-eldar-v9781429943451"
+          },
+          {
+            "type": "url",
+            "url": "https://www.deloitte.com/us/en/insights/topics/leadership/scarcity-mind-set-improving-decision-making.html"
+          },
+          {
+            "type": "url",
+            "url": "https://www.purplecar.net/2013/09/book-review-scarcity/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.supersummary.com/scarcity/part-2-chapters-3-5-summary/"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.deloitte.com/content/dam/insights/articles/2024/scarcity-mind-set-improving-decision-making/dup-3074-doesscarcitymakeyoudumb.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.librarypublishing.arizona.edu/arizlrev/article/6917/galley/6391/download/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.crwdp.ca/sites/default/files/documentuploader/what_stops_us_from_working_10_years_later_full_version-20211123.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.thesustainableenterprisefieldbook.com/uploads/1/1/9/1/119133147/the_science_of_scarcity.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.nosue.org/app/download/7241483055/Professor%2BSendhil%2BMullainathan%2Bon%2BScarcity%2BHarvard.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1605.00634"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1406.5722"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1809.04578"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1609.05807"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5482e6c67c8199ace3911f5cff4aba",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a5482e7835c8199a09bb14fc400dc0e",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:press.princeton.edu Eldar Shafir Scarcity Mullainathan",
+          "Eldar Shafir Scarcity Princeton official",
+          "Scarcity Mullainathan Shafir interview bandwidth tunneling official",
+          "Poverty Impedes Cognitive Function sugarcane farmers Science 2013 Mullainathan Shafir Zhao Mani"
+        ],
+        "query": "site:press.princeton.edu Eldar Shafir Scarcity Mullainathan",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://collaborate.princeton.edu/en/persons/eldar-shafir/"
+          },
+          {
+            "type": "url",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/23990553/"
+          },
+          {
+            "type": "url",
+            "url": "https://shafir.scholar.princeton.edu/publications/poverty-impede-cognitive-function"
+          },
+          {
+            "type": "url",
+            "url": "https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/povertyimpedescognitivefunction.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://agris.fao.org/search/en/providers/122535/records/65df4dce0f3e94b9e5d723e3"
+          },
+          {
+            "type": "url",
+            "url": "https://spia.princeton.edu/faculty/shafir"
+          },
+          {
+            "type": "url",
+            "url": "https://mbrg.bsg.ox.ac.uk/mind-and-behaviour-projects/poverty-impedes-cognitive-function"
+          },
+          {
+            "type": "url",
+            "url": "https://scholar.harvard.edu/files/sendhil/files/976.full_.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://collaborate.princeton.edu/en/projects/the-psychology-of-scarcity-ts-behavioral-causes-and-consequences/"
+          },
+          {
+            "type": "url",
+            "url": "https://psychology.princeton.edu/document/2221"
+          },
+          {
+            "type": "url",
+            "url": "https://paw.princeton.edu/article/psychology-why-decisions-suffer-when-we-go-without"
+          },
+          {
+            "type": "url",
+            "url": "https://www.sciencenews.org/article/poverty-may-tax-thinking-abilities"
+          },
+          {
+            "type": "url",
+            "url": "https://www.princeton.edu/~paw/web_exclusives/features/features_013002c.html"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5268424/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.princeton.edu/news/2006/10/19/researchers-seek-incorporate-street-psychology-economics"
+          },
+          {
+            "type": "url",
+            "url": "https://jjgecon.github.io/assets/ope_pdf/Poverty%20Impedes%20Cognitive%20Function%20%28Mani%20et%20al%202013%29.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://ir.princeton.edu/sites/g/files/toruqf2041/files/resource-links/annual_report_to_university_research_board_2014-2015.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1809.04578"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1304.1186"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1609.05807"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/physics/0004057"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5482ea1e2c8199b453a60811816c6d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a5482ea97708199a27c0731d957cbe8",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5482ec1d208199ad9249b05360aeef",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a5482ed1dc88199b2d117e86c27d78e",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "tunneling",
+        "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5482eec2848199bf0af1c744a5184c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a5482ef4a6081998374a9c306ee58a1",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Mullainathan Shafir Scarcity tunneling slack juggling bandwidth tax interview",
+          "\"Scarcity\" \"juggling\" \"Mullainathan\" \"Shafir\"",
+          "\"Scarcity\" \"slack\" \"Mullainathan\" \"Shafir\" \"tunneling\"",
+          "\"bandwidth tax\" \"Scarcity\" \"Mullainathan\" \"Shafir\""
+        ],
+        "query": "Mullainathan Shafir Scarcity tunneling slack juggling bandwidth tax interview",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.hookedtobooks.com/book-review-scarcity-why-having-so-little-means-so-much-sendhil-mullainathan-eldar-shafir/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.kitces.com/blog/scarcity-how-this-rather-innocuous-sounding-economics-concept-actually-impacts-decision-making/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/book/show/19171084"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+          },
+          {
+            "type": "url",
+            "url": "https://attraverso.lls.edu/2013/09/scarcity-why-having-too-little-means-so.html"
+          },
+          {
+            "type": "url",
+            "url": "https://thatgurjot.com/book-notes/scarcity/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/scarcity-book/"
+          },
+          {
+            "type": "url",
+            "url": "https://books.google.com/books/about/Scarcity.html?id=NTnjsTHrfj8C"
+          },
+          {
+            "type": "url",
+            "url": "https://beatobongco.com/book-highlights/book/scarcity"
+          },
+          {
+            "type": "url",
+            "url": "https://www.scribd.com/document/180838738/Excerpt-from-Scarcity-Why-Having-Too-Little-Means-So-Much-by-Sendhil-Mullainathan-and-Eldar-Shafir"
+          },
+          {
+            "type": "url",
+            "url": "https://insightbooks.app/books/scarcity"
+          },
+          {
+            "type": "url",
+            "url": "https://copedia.ir/wp-content/uploads/2024/09/Scarcity_-Why-Having-Too-Little-Sendhil-Mullainathan.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://spendtrak.app/blog/scarcity-mindset-spending"
+          },
+          {
+            "type": "url",
+            "url": "https://philpapers.org/archive/SISOTI.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/wp-content/uploads/2020/09/Publication-73.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://gotriangle.org/sites/default/files/feb_28_2024_revised.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://etd.ohiolink.edu/acprod/odb_etd/ws/send_file/send?accession=osu1721220510828748&disposition=inline"
+          },
+          {
+            "type": "url",
+            "url": "https://dhwctalumni.org/wp-content/uploads/2016/04/Duke-IHCPT-Issue-15-2015-Spring.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1609.05807"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1708.00043"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/physics/0004057"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1108.4142"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5482f2b15c819995c7ecf5d522e543",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a5482f383f88199ac937034f06adf69",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "On Point Scarcity Mullainathan Shafir transcript bandwidth poverty programs",
+          "\"Sendhil Mullainathan\" \"Scarcity\" \"transcript\" \"bandwidth\"",
+          "\"Eldar Shafir\" \"Scarcity\" interview \"bandwidth\" \"poverty\"",
+          "\"Bandwidth Costs in Poverty Programs\" Mullainathan Shafir official"
+        ],
+        "query": "On Point Scarcity Mullainathan Shafir transcript bandwidth poverty programs",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://publichealthpost.org/health-equity/eldar-shafir-policy-contexts-scarcity/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.timeshighereducation.com/books/scarcity-why-having-too-little-means-so-much-by-sendhil-mullainathan-and-eldar-shafir/2007116.article"
+          },
+          {
+            "type": "url",
+            "url": "https://podscripts.co/podcasts/3-takeaways/why-having-too-little-makes-people-perform-worse-and-become-more-impatient-impulsive-and-careless-princeton-behavioral-scientist-eldar-shafir-repost-113"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/pdf/scarcity-pdf-sendhil-mullainathan-and-eldar-shafir"
+          },
+          {
+            "type": "url",
+            "url": "https://www.westpac.co.nz/rednews/how-poverty-affects-cognitive-function-and-decision-making/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.montclair.edu/center-for-writing-excellence/montclair-book/montclair-book-archives/2014-montclair-book/resources/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.efworkslibrary.org/uploads/1/2/4/6/124640728/gpdrr_guide_12-20-19_final.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.librarypublishing.arizona.edu/arizlrev/article/6917/galley/6391/download/"
+          },
+          {
+            "type": "url",
+            "url": "https://pod.wave.co/podcast/the-cgd-podcast/scarcity-why-having-so-little-means-so-much-an-interview-with-sendhil-mullainathan"
+          },
+          {
+            "type": "url",
+            "url": "https://summarize.ing/video-98031-Eldar-Shafir-on-the-Psychology-of-Scarcity"
+          },
+          {
+            "type": "url",
+            "url": "https://copedia.ir/wp-content/uploads/2024/09/Scarcity_-Why-Having-Too-Little-Sendhil-Mullainathan.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.nsw.gov.au/sites/default/files/2021-05/Behavioural-Insights-Unit-Scarcity.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mws.sg/wp-content/uploads/2026/03/UV_2019_02_eng.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/5eb7442b63f95d461e642280/t/633b6c44331e5e247639ce3a/1664838725016/3%2BTakeaways%2B-%2BEldar%2BShafir%2B2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://app.thestorygraph.com/book_reviews/22986aa3-a430-4db5-b27b-be1245a6e30b?page=4&sort=latest"
+          },
+          {
+            "type": "url",
+            "url": "https://freakonomics.com/podcast/sendhil-mullainathan-explains-how-to-generate-an-idea-a-minute-part-2/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.researchgate.net/publication/287835220_Poverty_and_civil_rights_A_behavioral_economics_perspective"
+          },
+          {
+            "type": "url",
+            "url": "https://www.alexmthomas.com/tag/eldar-shafir/"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1809.04578"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2603.18716"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1609.05807"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2104.07761"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5482f998b08199b3a2ed7748156eff",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a5482fa16988199a39b39463c837f7c",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Shah Mullainathan Shafir scarcity mechanisms tunneling bandwidth 2012 Science",
+          "\"Some Consequences of Having Too Little\" Shah Mullainathan Shafir Science 2012 scarcity",
+          "\"Scarcity Frames Value\" Shah Mullainathan Shafir Psychological Science 2015",
+          "\"The Psychology of Scarcity\" Shafir Mullainathan"
+        ],
+        "query": "Shah Mullainathan Shafir scarcity mechanisms tunneling bandwidth 2012 Science",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://collaborate.princeton.edu/en/publications/scarcity-frames-value/"
+          },
+          {
+            "type": "url",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/23118192/"
+          },
+          {
+            "type": "url",
+            "url": "https://shafir.scholar.princeton.edu/document/15"
+          },
+          {
+            "type": "url",
+            "url": "https://shafir.scholar.princeton.edu/publications/some-consequences-having-too-little"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mindat.org/reference.php?id=2699835"
+          },
+          {
+            "type": "url",
+            "url": "https://www.rankless.org/hit-papers/10.1126/science.1222426"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/scarcity-frames-value/"
+          },
+          {
+            "type": "url",
+            "url": "https://whyy.org/episodes/the-psychology-of-scarcity/"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/some-consequences-of-having-too-little/"
+          },
+          {
+            "type": "url",
+            "url": "https://scholar.harvard.edu/files/sendhil/files/some_consequences_of_having_too_little.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.sciencedaily.com/releases/2015/02/150212131828.htm"
+          },
+          {
+            "type": "url",
+            "url": "https://www.economics.harvard.edu/news/professor-sendhil-mullainathan-scarcity-why-having-too-little-means-so-much"
+          },
+          {
+            "type": "url",
+            "url": "https://www.deepdyve.com/lp/sage/scarcity-frames-value-MWRDES5H6t"
+          },
+          {
+            "type": "url",
+            "url": "https://www.russellsage.org/research/grants/psychology-scarcity"
+          },
+          {
+            "type": "url",
+            "url": "https://www.nosue.org/app/download/7241483055/Professor%2BSendhil%2BMullainathan%2Bon%2BScarcity%2BHarvard.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://gwern.net/doc/psychology/cognitive-bias/2012-shah.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/scarcity_frames_value.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://scholar.harvard.edu/files/sendhil/files/mullainathan_3.15.16.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1301.2766"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1206.6945"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1208.5300"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2310.03689"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5482fdae808199adc76b947b9469b4",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a5482fe082481998e7d1c797208c249",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://sendhil.org/research/"
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a54830212cc8199bb59a3cb1e7fa437",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a54830263a4819989bd008cab299c4b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://scholar.harvard.edu/files/sendhil/files/some_consequences_of_having_too_little.pdf"
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a5483039ce08199b7ab86f9f907aac3",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a548304248c81999e30b4ffe00a1c32",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"A Scarcity Literature Mischaracterized with an Empirical Audit\" PNAS 2023 Shah Mullainathan Shafir Zhao",
+          "\"scarcity literature mischaracterized\" empirical audit",
+          "PNAS 2023 scarcity literature mischaracterized empirical audit"
+        ],
+        "query": "\"A Scarcity Literature Mischaracterized with an Empirical Audit\" PNAS 2023 Shah Mullainathan Shafir Zhao",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10293841/"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/wp-content/uploads/2025/07/shah-et-al-a-scarcity-literature-mischaracterized-with-an-empirical-audit.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9860137/"
+          },
+          {
+            "type": "url",
+            "url": "https://colab.ws/articles/10.1073%2Fpnas.2206054120"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8612349/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.jstor.org/stable/e27263765"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/53b2054de4b0f645fc35ac44/t/64c45016f8cb8d77ee7781c9/1690587159095/Empirical%2BAudits%2BPNAS.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/37166842/"
+          },
+          {
+            "type": "url",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/41712648/"
+          },
+          {
+            "type": "url",
+            "url": "https://sendhil.org/?p=2010"
+          },
+          {
+            "type": "url",
+            "url": "https://escholarship.org/content/qt2848d6gz/qt2848d6gz_noSplash_47eb7dce359f88b48ca237eba251d824.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/pdf/10.1177/09637214241283163?download=true"
+          },
+          {
+            "type": "url",
+            "url": "https://psychology.princeton.edu/document/3296"
+          },
+          {
+            "type": "url",
+            "url": "https://doi.org/10.1073/pnas.2217564120"
+          },
+          {
+            "type": "url",
+            "url": "https://doi.org/10.1073%2Fpnas.2319011121"
+          },
+          {
+            "type": "url",
+            "url": "https://doi.org/10.1073/pnas.2203150119%0A"
+          },
+          {
+            "type": "url",
+            "url": "https://academic.oup.com/pnasnexus/article/2/9/pgad285/7281311"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2310.02521"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1503.08367"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/cond-mat/0306203"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/cond-mat/0303516"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a548308778081999bd3921759dfc866",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a548308cdb08199856fb2b83d58b3e0",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8612349/"
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a54830a684081999d22d3d268c1e4bd",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_0af7abe5680ff89c016a54830b97bc81998baa3b0fd23fe506",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://ndlsearch.ndl.go.jp/en/books/R100000136-I1970304959961524356"
+      }
+    },
+    {
+      "id": "rs_0af7abe5680ff89c016a54830d5340819988698e39b588a3af",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_0af7abe5680ff89c016a54831814388199969d57a88a9d32d1",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 887,
+              "start_index": 811,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1521,
+              "start_index": 1445,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2429,
+              "start_index": 2353,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3207,
+              "start_index": 3070,
+              "title": "",
+              "url": "https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/povertyimpedescognitivefunction.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3895,
+              "start_index": 3792,
+              "title": "\n        Scarcity Frames Value\n      -  Princeton University",
+              "url": "https://collaborate.princeton.edu/en/publications/scarcity-frames-value/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4716,
+              "start_index": 4628,
+              "title": "Scarcity: Why Having Too Little Means So Much - Sendhil Mullainathan, Eldar Shafir - Google Books",
+              "url": "https://books.google.com/books/about/Scarcity.html?id=NTnjsTHrfj8C"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5411,
+              "start_index": 5304,
+              "title": "Eldar Shafir: Policy in the Contexts of Scarcity - Public Health Post",
+              "url": "https://publichealthpost.org/health-equity/eldar-shafir-policy-contexts-scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6117,
+              "start_index": 5976,
+              "title": "Professor Sendhil Mullainathan on Scarcity: Why Having Too Little Means So Much | Department of Economics",
+              "url": "https://www.economics.harvard.edu/news/professor-sendhil-mullainathan-scarcity-why-having-too-little-means-so-much"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6737,
+              "start_index": 6630,
+              "title": "Eldar Shafir: Policy in the Contexts of Scarcity - Public Health Post",
+              "url": "https://publichealthpost.org/health-equity/eldar-shafir-policy-contexts-scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7114,
+              "start_index": 7038,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7395,
+              "start_index": 7319,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7732,
+              "start_index": 7656,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8033,
+              "start_index": 7957,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8474,
+              "start_index": 8363,
+              "title": "Poverty Impedes Cognitive Function | Mind & Behaviour",
+              "url": "https://mbrg.bsg.ox.ac.uk/mind-and-behaviour-projects/poverty-impedes-cognitive-function"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8945,
+              "start_index": 8808,
+              "title": "",
+              "url": "https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/povertyimpedescognitivefunction.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9298,
+              "start_index": 9210,
+              "title": "Some consequences of having too little - PubMed",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/23118192/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9801,
+              "start_index": 9725,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10180,
+              "start_index": 10104,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10559,
+              "start_index": 10483,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11282,
+              "start_index": 11189,
+              "title": "Empirical audit and review and an assessment of evidentiary value in research on the psychological consequences of scarcity - PMC",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8612349/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11618,
+              "start_index": 11542,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12053,
+              "start_index": 11960,
+              "title": "Scarcity : why having too little means so much | NDL Search | National Diet Library",
+              "url": "https://ndlsearch.ndl.go.jp/en/books/R100000136-I1970304959961524356"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12332,
+              "start_index": 12256,
+              "title": "Scarcity",
+              "url": "https://us.macmillan.com/books/9781429943451/scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12521,
+              "start_index": 12475,
+              "title": "\n      Research |       Sendhil Mullainathan  ",
+              "url": "https://sendhil.org/research/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12791,
+              "start_index": 12674,
+              "title": "Poverty Impede Cognitive Function | Eldar Shafir",
+              "url": "https://shafir.scholar.princeton.edu/publications/poverty-impede-cognitive-function"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13170,
+              "start_index": 13033,
+              "title": "",
+              "url": "https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/povertyimpedescognitivefunction.pdf"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13491,
+              "start_index": 13380,
+              "title": "Poverty Impedes Cognitive Function | Mind & Behaviour",
+              "url": "https://mbrg.bsg.ox.ac.uk/mind-and-behaviour-projects/poverty-impedes-cognitive-function"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13782,
+              "start_index": 13679,
+              "title": "\n        Scarcity Frames Value\n      -  Princeton University",
+              "url": "https://collaborate.princeton.edu/en/publications/scarcity-frames-value/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14072,
+              "start_index": 13984,
+              "title": "Scarcity: Why Having Too Little Means So Much - Sendhil Mullainathan, Eldar Shafir - Google Books",
+              "url": "https://books.google.com/books/about/Scarcity.html?id=NTnjsTHrfj8C"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14389,
+              "start_index": 14282,
+              "title": "Eldar Shafir: Policy in the Contexts of Scarcity - Public Health Post",
+              "url": "https://publichealthpost.org/health-equity/eldar-shafir-policy-contexts-scarcity/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14650,
+              "start_index": 14562,
+              "title": "Harvard’s Sendhil Mullainathan on behavior and poverty | Harvard Magazine",
+              "url": "https://www.harvardmagazine.com/2015/05/the-science-of-scarcity"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 14993,
+              "start_index": 14819,
+              "title": "Scarcity: Why Having Too Little Means So Much, by Sendhil Mullainathan and Eldar Shafir | Times Higher Education (THE)",
+              "url": "https://www.timeshighereducation.com/books/scarcity-why-having-too-little-means-so-much-by-sendhil-mullainathan-and-eldar-shafir/2007116.article"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 15258,
+              "start_index": 15165,
+              "title": "Empirical audit and review and an assessment of evidentiary value in research on the psychological consequences of scarcity - PMC",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8612349/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 15520,
+              "start_index": 15427,
+              "title": "Scarcity : why having too little means so much | NDL Search | National Diet Library",
+              "url": "https://ndlsearch.ndl.go.jp/en/books/R100000136-I1970304959961524356"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Scarcity* by Sendhil Mullainathan and Eldar Shafir\n\n## Central argument\n\n*Scarcity: Why Having Too Little Means So Much* argues that scarcity is not only an external shortage of money, time, food, companionship, or other resources; it also creates a distinctive psychology. When people feel they have less than they need, the shortage captures attention. This produces a real benefit—sharper focus on the urgent deficit—but it also imposes costs: neglected priorities, reduced cognitive bandwidth, weaker executive control, and decisions that can perpetuate the original shortage. The publisher’s excerpt frames the thesis as a tension between scarcity’s narrow gain and its wider damage: scarcity helps people manage pressing needs, but makes them less effective outside the immediate tunnel. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))\n\nThe book’s important move is to bridge everyday scarcity and poverty without equating them. Busy professionals, dieters, lonely people, and people living in poverty all experience attentional capture; but poverty is more extreme because the stakes are higher, the environment is less forgiving, and the bandwidth tax is likely larger. The authors explicitly do not claim scarcity is the only cause of poverty or that culture, institutions, and economics do not matter; instead, they argue scarcity has “its own logic” that operates alongside those forces. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))\n\n## Mechanisms and frameworks\n\n**Tunneling** is the narrowing of attention caused by scarcity. The mind prioritizes what is urgent inside the tunnel—an overdue bill, a deadline, hunger, loneliness—and filters out other concerns. Tunneling explains both the **focus dividend** and the **tunneling tax**. The focus dividend is the improved performance on the focal task: a deadline can concentrate effort, hunger sharpens attention to food-related cues, and limited money can make trade-offs salient. The tunneling tax is what gets neglected: preventive care, future bills, maintenance, long-term planning, relationships, or administrative steps that are important but not currently urgent. The Macmillan excerpt grounds this in attention capture: scarcity changes what people notice, weigh, deliberate about, and ultimately decide. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))\n\n**Bandwidth tax** is distinct from tunneling. Tunneling describes where attention goes; bandwidth tax describes the mental capacity consumed by scarcity. Mullainathan and Shafir use “bandwidth” for cognitive capacity and executive control—resources needed for problem-solving, planning, impulse control, patience, and remembering. Scarcity reduces available bandwidth not because poor or busy people are inherently less capable, but because managing scarcity occupies mental resources. The Science sugarcane paper makes this point directly: the same farmers performed worse before harvest, when poorer, than after harvest, when less poor. ([shafir.scholar.princeton.edu](https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/povertyimpedescognitivefunction.pdf))\n\n**Trade-off thinking** is scarcity’s effect on valuation. People under scarcity see opportunity costs more clearly: spending on one thing means giving up another. Later work by Shah, Shafir, and Mullainathan shows that when scarcity influences cognition, people focus on pressing needs and recognize the trade-offs required against those needs; these trade-offs can make valuations more consistent and less swayed by irrelevant context. This is not simply “bad thinking.” It can be more economically disciplined, but it also means choices feel relentless and psychologically costly. ([collaborate.princeton.edu](https://collaborate.princeton.edu/en/publications/scarcity-frames-value/))\n\n**Slack** is the buffer that lets people absorb shocks, mistakes, delays, and small inefficiencies without cascading into crisis. In the book’s logic, abundance is not merely having more; it includes unused room—extra time, savings, social support, predictable systems, or administrative help. Slack makes mistakes survivable. Without slack, ordinary events become emergencies: a late bus, a fee, a child-care problem, a missed appointment, or an unexpected bill can trigger borrowing, deadline pressure, or further neglect. Google Books’ indexed terms confirm slack, suitcase, packing, shocks, borrowing, and scarcity traps as recurring book concepts, though the accessible preview does not provide full passages for all of them. ([books.google.com](https://books.google.com/books/about/Scarcity.html?id=NTnjsTHrfj8C))\n\n**Juggling** is the ongoing movement from one urgent demand to the next when there is too little slack. It follows from tunneling: because the tunnel privileges the next ball about to fall, people solve problems locally and temporarily. Juggling is not just being busy; it is being forced to continually reallocate scarce resources under pressure. Shafir’s later policy interview gives the practical version: two people can have the same income, but the one without automatic deposits, predictable pay, reliable transportation, or stable systems will have to juggle scarcity much more. ([publichealthpost.org](https://publichealthpost.org/health-equity/eldar-shafir-policy-contexts-scarcity/))\n\n**Scarcity traps** occur when scarcity-induced behavior worsens future scarcity. Tunneling leads to neglected maintenance or planning; bandwidth tax increases forgetfulness and impulsive decisions; lack of slack turns small shocks into costly crises; borrowing solves the immediate problem but creates future obligations. The trap is not moral failure. It is a feedback loop between context and cognition. Harvard’s economics department summary describes the book as examining a scarcity mindset that narrows perspective and perpetuates lack by limiting options. ([economics.harvard.edu](https://www.economics.harvard.edu/news/professor-sendhil-mullainathan-scarcity-why-having-too-little-means-so-much))\n\n**Designing around limited bandwidth** means reducing cognitive load rather than merely giving information or adding requirements. Programs should simplify forms, time decisions for moments of higher bandwidth, use reminders, defaults, automatic deposits/payments, reliable schedules, and forgiving rules. Shafir’s Boston University interview is especially useful here: policy should not add complicated obstacles for people already managing scarcity, because poverty often means less money and less bandwidth. ([publichealthpost.org](https://publichealthpost.org/health-equity/eldar-shafir-policy-contexts-scarcity/))\n\n## Book-grounded examples\n\n- **Hunger and food words:** The excerpt reports that hungry participants recognized food-related words such as cake more quickly, showing that scarcity captures attention automatically, not merely by conscious choice. This demonstrates tunneling at the perceptual level. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))  \n- **Thirst and water cues:** The excerpt similarly notes faster recognition of water-related words among thirsty subjects, reinforcing that different scarcities can produce similar attentional capture. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))  \n- **Poor children estimating coins:** Poorer children overestimated coin sizes, especially higher-value coins, while accurately estimating similar cardboard disks. This shows that monetary scarcity can alter perception and make scarce resources loom larger. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))  \n- **Loneliness and social perception:** Lonely subjects performed better at reading facial emotions and recalling social diary content, illustrating the focus dividend: scarcity can sharpen attention to the scarce domain. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))  \n- **New Jersey mall financial scenarios:** In the Science study, lower-income mall participants performed worse on cognitive tasks after contemplating a large financial problem, while higher-income participants were not similarly affected; robustness checks tested alternative explanations such as math anxiety and incentives. ([mbrg.bsg.ox.ac.uk](https://mbrg.bsg.ox.ac.uk/mind-and-behaviour-projects/poverty-impedes-cognitive-function))  \n- **Indian sugarcane farmers:** The same farmers in Tamil Nadu were tested before and after harvest. Before harvest, when money was scarce, they performed worse; after harvest, when less poor, they performed better. The study reports that time available, nutrition, work effort, and measured stress did not explain the difference. ([shafir.scholar.princeton.edu](https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/povertyimpedescognitivefunction.pdf))  \n- **Family Feud-style scarcity experiments:** Reviews of the book and the authors’ 2012 Science paper note game-like lab tasks used to show that having fewer resources changes attention—participants engage more deeply with some problems while neglecting others. ([pubmed.ncbi.nlm.nih.gov](https://pubmed.ncbi.nlm.nih.gov/23118192/?utm_source=openai))\n\n## Qualifications and common misreadings\n\nDo not reduce the book to “poor people make bad decisions.” Its thesis is situational: scarcity taxes anyone’s bandwidth, and poverty is especially damaging because the scarcity is chronic, high-stakes, and embedded in unforgiving systems. The authors explicitly reject personality-only explanations, but they also do not deny institutions, culture, markets, and material resources. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))\n\nDo not treat scarcity as all downside. The book emphasizes that scarcity can improve focus within the tunnel and sharpen trade-off thinking. The public digest should preserve the dual effect: scarcity makes people more attentive to urgent needs and less able to manage everything outside those needs. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))\n\nDo not overstate the evidence as final. The publisher excerpt calls the book a “science in the making” and an invitation rather than the last word. The authors also note that the magnitude of effects varies by domain and that poverty is likely more consequential than milder time scarcity or dieting. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))\n\nReplication and scope should be handled carefully. A 2021 PNAS empirical audit questioned parts of the broader scarcity literature, while a 2023 PNAS response by Shah, Zhao, Mullainathan, and Shafir argued that the audit mischaracterized the field by including studies not about resource scarcity, deviating from selection criteria, and using lower-fidelity replications. For an editor, the safe wording is: the scarcity framework is influential and supported by several prominent studies, but later metascientific debate means claims should be phrased as a framework with evidence and active debate, not settled universal law. ([pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov/articles/PMC8612349/?utm_source=openai))\n\n## Metadata check\n\nTitle: *Scarcity: Why Having Too Little Means So Much*. Authors: Sendhil Mullainathan and Eldar Shafir. Original U.S. publication: Times Books / Henry Holt / Macmillan, 2013; Macmillan lists the ebook on sale September 3, 2013, 304 pages. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))\n\nEdition note: The U.K. Allen Lane edition was also published in 2013 and is cataloged as “Originally published: New York: Times Books.” Google Books also lists a 2014 edition titled *Scarcity: The New Science of Having Less and How It Defines Our Lives*; no source inspected showed a material conceptual difference relevant to this digest. ([ndlsearch.ndl.go.jp](https://ndlsearch.ndl.go.jp/en/books/R100000136-I1970304959961524356))\n\n## Sources\n\n- **Macmillan official publisher page / excerpt** — Supports the title, authorship, publication details, thesis, “science in the making” caveat, and official examples of attention capture. ([us.macmillan.com](https://us.macmillan.com/books/9781429943451/scarcity/))  \n- **Sendhil Mullainathan official research page** — Confirms the book entry and related scarcity research in the author’s own bibliography. ([sendhil.org](https://sendhil.org/research/))  \n- **Eldar Shafir Princeton publication page for “Poverty Impedes Cognitive Function”** — Confirms the Science article metadata and author connection. ([shafir.scholar.princeton.edu](https://shafir.scholar.princeton.edu/publications/poverty-impede-cognitive-function))  \n- **Mani, Mullainathan, Shafir, and Zhao, “Poverty Impedes Cognitive Function,” Science PDF hosted by Princeton** — Primary source for the New Jersey mall and Indian sugarcane farmer findings, including causal interpretation and controls. ([shafir.scholar.princeton.edu](https://shafir.scholar.princeton.edu/sites/g/files/toruqf4226/files/povertyimpedescognitivefunction.pdf))  \n- **Oxford Mind & Behaviour project page on “Poverty Impedes Cognitive Function”** — Provides accessible methodological detail on the mall experiments and the Tamil Nadu sugarcane farmer natural experiment. ([mbrg.bsg.ox.ac.uk](https://mbrg.bsg.ox.ac.uk/mind-and-behaviour-projects/poverty-impedes-cognitive-function))  \n- **Princeton Pure page for “Scarcity Frames Value”** — Supports trade-off thinking and the claim that scarcity can make valuations more consistent by making opportunity costs salient. ([collaborate.princeton.edu](https://collaborate.princeton.edu/en/publications/scarcity-frames-value/))  \n- **Google Books record for *Scarcity*** — Confirms bibliographic details, edition variants, and indexed book terms including bandwidth tax, slack, juggling, scarcity trap, suitcase, and trade-offs. ([books.google.com](https://books.google.com/books/about/Scarcity.html?id=NTnjsTHrfj8C))  \n- **Boston University Public Health Post interview with Eldar Shafir** — Supports policy implications: reduce obstacles, account for limited bandwidth, and distinguish income from ease of managing scarcity. ([publichealthpost.org](https://publichealthpost.org/health-equity/eldar-shafir-policy-contexts-scarcity/))  \n- **Harvard Magazine profile, “The Science of Scarcity”** — Supports the policy design implication that bandwidth should be treated as a core resource in program design. ([harvardmagazine.com](https://www.harvardmagazine.com/2015/05/the-science-of-scarcity))  \n- **Times Higher Education interview with Sendhil Mullainathan** — Supports the “empathy bridge” framing and cautions against dogmatic economics or blaming the poor. ([timeshighereducation.com](https://www.timeshighereducation.com/books/scarcity-why-having-too-little-means-so-much-by-sendhil-mullainathan-and-eldar-shafir/2007116.article))  \n- **PNAS audit and response records** — Supports the qualification that the later scarcity evidence base has been debated and should not be presented as beyond dispute. ([pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov/articles/PMC8612349/?utm_source=openai))  \n- **National Diet Library / CiNii bibliographic record** — Confirms the 2013 Allen Lane U.K. edition and that it was originally published in New York by Times Books. ([ndlsearch.ndl.go.jp](https://ndlsearch.ndl.go.jp/en/books/R100000136-I1970304959961524356))"
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 6
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 77274,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 4687,
+    "output_tokens_details": {
+      "reasoning_tokens": 1809
+    },
+    "total_tokens": 81961
+  },
+  "user": null,
+  "metadata": {}
+}

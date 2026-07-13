@@ -1,0 +1,1050 @@
+{
+  "id": "resp_02c68bdf3cf99172016a5480917364819bb7a120447818a54b",
+  "object": "response",
+  "created_at": 1783922833,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783922924,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_02c68bdf3cf99172016a54809222d4819ba7a503772db17104",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Kim Scott Radical Candor official site care personally challenge directly framework ruinous empathy obnoxious aggression manipulative insincerity",
+          "Radical Candor Kim Scott publisher page 2017 St. Martin's Press",
+          "Kim Scott Radical Candor official excerpt reader guide guidance growth management soliciting criticism",
+          "Kim Scott interview Radical Candor care personally challenge directly soliciting criticism"
+        ],
+        "query": "Kim Scott Radical Candor official site care personally challenge directly framework ruinous empathy obnoxious aggression manipulative insincerity",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.infoq.com/podcasts/radical-candor/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/podcast/faq-kim-scott-6-27"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/llms.txt"
+          },
+          {
+            "type": "url",
+            "url": "https://blog.dropbox.com/topics/work-culture/kim-scott-interview"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/the-most-important-thing-leaders-should-think-about-in-2026"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2020/02/defining-radical-candor-and-how-to-do-it"
+          },
+          {
+            "type": "url",
+            "url": "https://www.jordanharbinger.com/kim-scott-care-personally-challenge-directly-with-radical-candor/"
+          },
+          {
+            "type": "url",
+            "url": "https://lattice.com/interviews/kim-scott"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ted.com/talks/kim_scott_how_to_lead_with_radical_candor?view=transcript"
+          },
+          {
+            "type": "url",
+            "url": "https://www.paulaxtell.com/qa-with-kim-scott-author-of-radical-candor-part-i/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ted.com/podcasts/how-to-be-a-better-human/why-kim-scott-thinks-you-need-to-ask-for-feedback-transcript"
+          },
+          {
+            "type": "url",
+            "url": "https://www.quickanddirtytips.com/qdtarchive/how-to-be-radically-candid-qa-with-kim-scott-part-1/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2021/11/Radical-Candor-One-Pager.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.essexpartners.com/wp-content/uploads/2019/08/Episode-39-Kim-Scott-Radical-Candor.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/hubfs/Radical-Candor-Book-Club.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2020/09/The-Feedback-Loop-Intensive-Syllabus-Oct-2020.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://thefutureorganization.com/wp-content/uploads/2022/04/Kim-Scott-Transcript.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/Radical-Candor-Gather-Case-Study.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2005.11463"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2104.12653"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1811.00207"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1602.01103"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a5480944ee4819bb0f38b28e465092d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a548094b400819b9ac8ef38ab522d62",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:radicalcandor.com Radical Candor glossary care personally challenge directly ruinous empathy",
+          "Radical Candor Kim Scott Macmillan publisher original publication date 2017",
+          "Radical Candor fully revised updated edition 2019 Kim Scott revised title",
+          "Radical Candor book official Kim Scott growth management rock stars superstars guidance"
+        ],
+        "query": "site:radicalcandor.com Radical Candor glossary care personally challenge directly ruinous empathy",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/frequently-asked-questions"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/glossary"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/what-is-radical-candor"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/stop-ruinous-empathy"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/for-you"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/criticism-ruinous-empathy"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/podcast/s1-e4-ruinous-empathy-and-criticism"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/ruinous-empathy-waste-time"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/criticism-obnoxious-aggression-story"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/radical-candor-not-brutal-honesty"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/video-spinach-teeth"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/ruinous-empathy-client-relationships"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2022/05/Radical-Candor-One-Pager_1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2021/07/Radical-Candor-Practice-Workbook.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2020/09/The-Feedback-Loop-Intensive-Syllabus-Oct-2020.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/6_Steps_Radical-Candor_v2.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/Radical-Candor-Practice-Workbook_22.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2021/02/RCS3Ep2_transcript.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2301.02396"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1303.7274"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1908.09203"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1606.07772"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a54809777ac819bbef060638130ce06",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Radical Candor Kim Scott Macmillan book page",
+          "Radical Candor Kim Scott St Martin's Press publication date March 2017 ISBN",
+          "Radical Candor Kim Scott Amazon publication date March 2017",
+          "Radical Candor Kim Scott 2017 publisher page"
+        ],
+        "query": "Radical Candor Kim Scott Macmillan book page",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781250245786/radicalcandorfullyrevisedupdatededition/"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781250235374/radicalcandorfullyrevisedupdatededition/"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781427283139/radicalcandorbeakickassbosswithoutlosingyourhumanity/"
+          },
+          {
+            "type": "url",
+            "url": "https://academic.macmillan.com/author/kimscott/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/the-book"
+          },
+          {
+            "type": "url",
+            "url": "https://www.panmacmillan.com/authors/kim-scott/radical-candor/9781529038347"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781427292513"
+          },
+          {
+            "type": "url",
+            "url": "https://www.panmacmillan.com/authors/kim-scott/23859"
+          },
+          {
+            "type": "url",
+            "url": "https://www.goodreads.com/work/editions/50329793-radical-candor-be-a-kickass-boss-without-losing-your-humanity"
+          },
+          {
+            "type": "url",
+            "url": "https://openlibrary.org/books/OL28143427M/Radical_Candor"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781250623768"
+          },
+          {
+            "type": "url",
+            "url": "https://libcatalog.neit.edu/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=69914"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/hubfs/Radical-Candor-Book-Club.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/55dbfccee4b08731143170b6/t/599c86ed579fb31fe9ae20db/1503430383855/radical%2Bcandor%2B-%2Bkim%2Bscott.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/hubfs/242159484/RC_TrustGap_NotLinkedIn%20%281%29.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://agenceelianebenisti.com/wp-content/uploads/2017/02/St.-Martins-Press_London-2017.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1611.02682"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1801.03604"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1809.07354"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1601.05484"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a548099a418819b8d8996326e7bb817",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a54809ac028819bb513e0c0e2d95c92",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:radicalcandor.com Kim Scott Sheryl Sandberg um Radical Candor story",
+          "site:radicalcandor.com Radical Candor Bob story fired ruinous empathy book",
+          "site:radicalcandor.com Radical Candor Larry Page email obnoxious aggression story",
+          "site:radicalcandor.com Radical Candor Russ Laraway career conversations growth management rock star superstar"
+        ],
+        "query": "site:radicalcandor.com Kim Scott Sheryl Sandberg um Radical Candor story",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/criticism-obnoxious-aggression-story"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/criticism-ruinous-empathy"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/how-to-have-career-conversations"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/praise-manipulative-insincerity"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/llms-full.txt"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/podcast/s4-mini-episode-1-the-bob-story-a-tale-of-ruinous-empathy"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/podcast/s4-e1-rock-star-mode-versus-superstar-mode"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/emotional-labor-covid-19"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/keeping-it-real"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/radical-candor-not-labeling-people"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/what-to-do-when-youre-being-radically-candid-but-everybody-thinks-youre-a-jerk/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/big-3-leadership-framework"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/Radical-Candor-Quiz.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/Radical-Candor-One-Pager.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/Radical-Candor-Case-Study-Double.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/6_Steps_Radical-Candor_v2.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/hubfs/Radical-Candor-Book-Club.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a54809d8934819ba104337d2facaaf3",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a54809d9dbc819ba444513785d838ac",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"Radical Candor\" \"Sheryl Sandberg\" \"um\" \"toothpaste\"",
+          "\"Kim Scott\" \"Sheryl Sandberg\" \"um\" \"Radical Candor\"",
+          "site:radicalcandor.com \"um\" \"Sheryl\" \"Radical Candor\"",
+          "\"Radical Candor\" \"dentist\" \"Sheryl Sandberg\""
+        ],
+        "query": "\"Radical Candor\" \"Sheryl Sandberg\" \"um\" \"toothpaste\"",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://tonyreiss.com/2018/10/22/giving-feedback-using-radical-candor-or-candour-for-the-brits/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mypwh.org/blog/leading-with-radical-candor-during-performance-review-season"
+          },
+          {
+            "type": "url",
+            "url": "https://crisp.co/podcast/episode-25-kim-scott/"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/178-author-of-radical-candor-kim-scott-uncommon-sense/id1510985491?i=1000645840026"
+          },
+          {
+            "type": "url",
+            "url": "https://www.middlemarketcenter.org/expert-perspectives/lead-by-caring-and-challenging-an-interview-with-radical-candor-author-kim-scott"
+          },
+          {
+            "type": "url",
+            "url": "https://quizlet.com/469884852/radical-candor-kim-scott-flash-cards/"
+          },
+          {
+            "type": "url",
+            "url": "https://matterapp.com/blog/what-is-radical-candor"
+          },
+          {
+            "type": "url",
+            "url": "https://3plusinternational.com/why-im-using-radical-candor/"
+          },
+          {
+            "type": "url",
+            "url": "https://thecoachingroom.com.au/blog/learning-radical-candor-to-become-a-better-boss/"
+          },
+          {
+            "type": "url",
+            "url": "https://realcasestories.blogspot.com/2016/02/radical-candor-being-good-boss.html"
+          },
+          {
+            "type": "url",
+            "url": "https://builtin.com/articles/radical-candor"
+          },
+          {
+            "type": "url",
+            "url": "https://fasterthannormal.co/mental-models/radical-candor"
+          },
+          {
+            "type": "url",
+            "url": "https://www.sandelman.ca/tmp/nicefourletterword.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.essexpartners.com/wp-content/uploads/2019/08/Episode-39-Kim-Scott-Radical-Candor.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.ssjs.fi/wp-content/uploads/2025/03/InsightBites-Radical-Candor.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://thefutureorganization.com/wp-content/uploads/2022/04/Kim-Scott-Transcript.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a5480a03bf8819baf7af34602357446",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a5480a0aa1c819b88063840e6d6eee1",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.radicalcandor.com/glossary"
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a5480a43244819b8796031482790d02",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a5480a47c58819b85850822ac75636d",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.radicalcandor.com/our-approach"
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a5480a66374819ba6ce79468cb079aa",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a5480a6c974819bb9f58ae283c3de15",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "find_in_page",
+        "pattern": "Care Personally",
+        "url": "https://www.radicalcandor.com/our-approach"
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a5480a8ab4c819b821230872587288c",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a5480a91450819b840e2190285a871e",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:radicalcandor.com order of operations solicit feedback Radical Candor get before you give",
+          "site:radicalcandor.com \"How to Get and Give Feedback\" \"Order of Operations\" Radical Candor",
+          "site:radicalcandor.com \"get before you give\" \"Radical Candor\""
+        ],
+        "query": "site:radicalcandor.com order of operations solicit feedback Radical Candor get before you give",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/how-to-give-and-receive-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/glossary"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/listening-to-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/frequently-asked-questions"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/how-to-gauge-your-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/feedback-training-for-leaders"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/gauging-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/asking-for-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/tag/gauging-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/why-feedback-fails-how-to-fix-it"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/handle-bad-manager-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/podcast/s3-mini-episode-5-how-to-get-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2020/09/The-Feedback-Loop-Intensive-Syllabus-Oct-2020.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2021/03/Direct-Reports-and-Radical-Candor_-5-Tips-for-Giving-Guidance-and-Feedback-1-1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/hubfs/Your%20Upward%20Feedback%20Starter%20Kit.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://radicalcandor.com/hubfs/6_Steps_Radical-Candor_v2.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a5480ac7a14819ba3bca9e5b19d4743",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_02c68bdf3cf99172016a5480ad4540819badf88819c7fd94ef",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "First Round Review Radical Candor Kim Scott rock stars superstars career conversations",
+          "First Round Review Radical Candor Surprising Secret to Being a Good Boss Kim Scott guidance growth management",
+          "First Round Review \"Radical Candor\" \"rock star\" \"superstar\""
+        ],
+        "query": "First Round Review Radical Candor Kim Scott rock stars superstars career conversations",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/rock-star-vs-superstar-radical-candor/"
+          },
+          {
+            "type": "url",
+            "url": "https://review.firstround.com/articles/kim-scott/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/podcast/s4-e1-rock-star-mode-versus-superstar-mode"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/rolling-out-radical-candor-part-one"
+          },
+          {
+            "type": "url",
+            "url": "https://review.firstround.com/radical-candor-the-surprising-secret-to-being-a-good-boss/"
+          },
+          {
+            "type": "url",
+            "url": "https://static1.squarespace.com/static/5d0c5fb70255180001cae9e1/t/619473fa4ef75a6875c42bf3/1637118970724/Radical%2BCandor%2BBook%2BReview.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://richardatlas.com/2020/02/04/rock-stars-vs-superstars-at-work/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/listening-to-feedback"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/podcast/dont-let-a-bad-boss-derail-you-6-18"
+          },
+          {
+            "type": "url",
+            "url": "https://videohighlight.com/v/4yODalLQ2lM?aiFormatted=false&language=en&mediaType=youtube&summaryType=default"
+          },
+          {
+            "type": "url",
+            "url": "https://review.firstround.com/our-6-must-reads-for-managers-to-give-feedback-that-helps-people-grow/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.editorsreads.com/books/radical-candor/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.linkedin.com/pulse/you-rock-star-superstar-jp-jefferson-ms-kiwkc"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2021/08/6-ways-to-Encourage-Feedback-Between-Others.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://usafp.org/wp-content/uploads/2022/02/Leadership-Book-Club-RADICAL-CANDOR-BE-A-KICK-ASS-BOSS.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2021/03/Direct-Reports-and-Radical-Candor_-5-Tips-for-Giving-Guidance-and-Feedback-1-1.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/wp-content/uploads/2021/11/Radical-Candor-_-Performance-Development-Conversations_NEW.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2002.09054"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1709.04749"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1308.0237"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1902.08654"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781427292513"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/our-approach"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2020/02/defining-radical-candor-and-how-to-do-it"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/how-to-give-and-receive-feedback?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/how-to-have-career-conversations"
+          },
+          {
+            "type": "url",
+            "url": "https://www.middlemarketcenter.org/expert-perspectives/lead-by-caring-and-challenging-an-interview-with-radical-candor-author-kim-scott"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/criticism-ruinous-empathy"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/criticism-obnoxious-aggression-story"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/blog/praise-manipulative-insincerity"
+          },
+          {
+            "type": "url",
+            "url": "https://www.radicalcandor.com/frequently-asked-questions"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781250245786/radicalcandorfullyrevisedupdatededition/?utm_source=openai"
+          },
+          {
+            "type": "url",
+            "url": "https://us.macmillan.com/books/9781250235374/radicalcandorfullyrevisedupdatededition/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_02c68bdf3cf99172016a5480b27828819b8e390402b98ba28d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_02c68bdf3cf99172016a5480bd6e58819b9087e1f504bb9914",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 832,
+              "start_index": 766,
+              "title": "Radical Candor: Be a Kick-Ass Boss Without Losing Your Humanity",
+              "url": "https://us.macmillan.com/books/9781427292513"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1408,
+              "start_index": 1343,
+              "title": "Our Approach: Kim Scott's Feedback Framework",
+              "url": "https://www.radicalcandor.com/our-approach"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1857,
+              "start_index": 1792,
+              "title": "Our Approach: Kim Scott's Feedback Framework",
+              "url": "https://www.radicalcandor.com/our-approach"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2269,
+              "start_index": 2204,
+              "title": "Our Approach: Kim Scott's Feedback Framework",
+              "url": "https://www.radicalcandor.com/our-approach"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2986,
+              "start_index": 2901,
+              "title": "Defining Radical Candor – and How to Do It",
+              "url": "https://hbr.org/podcast/2020/02/defining-radical-candor-and-how-to-do-it"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3456,
+              "start_index": 3391,
+              "title": "Our Approach: Kim Scott's Feedback Framework",
+              "url": "https://www.radicalcandor.com/our-approach"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3853,
+              "start_index": 3788,
+              "title": "Our Approach: Kim Scott's Feedback Framework",
+              "url": "https://www.radicalcandor.com/our-approach"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4245,
+              "start_index": 4180,
+              "title": "Our Approach: Kim Scott's Feedback Framework",
+              "url": "https://www.radicalcandor.com/our-approach"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4854,
+              "start_index": 4746,
+              "title": "How to Get and Give Feedback Using the Radical Candor Order of Operations",
+              "url": "https://www.radicalcandor.com/blog/how-to-give-and-receive-feedback?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5606,
+              "start_index": 5503,
+              "title": "Rock Star Mode Versus Superstar Mode 4 | 1",
+              "url": "https://www.radicalcandor.com/podcast/s4-e1-rock-star-mode-versus-superstar-mode"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6084,
+              "start_index": 5994,
+              "title": "How to Have Radically Candid Career Conversations",
+              "url": "https://www.radicalcandor.com/blog/how-to-have-career-conversations"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6768,
+              "start_index": 6605,
+              "title": "\n\tLead by Caring and Challenging: An Interview with “Radical Candor” Author Kim Scott\n",
+              "url": "https://www.middlemarketcenter.org/expert-perspectives/lead-by-caring-and-challenging-an-interview-with-radical-candor-author-kim-scott"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7320,
+              "start_index": 7237,
+              "title": "Criticism & Ruinous Empathy",
+              "url": "https://www.radicalcandor.com/blog/criticism-ruinous-empathy"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7822,
+              "start_index": 7728,
+              "title": "Criticism & Obnoxious Aggression",
+              "url": "https://www.radicalcandor.com/blog/criticism-obnoxious-aggression-story"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8252,
+              "start_index": 8163,
+              "title": "Praise & Manipulative Insincerity — Kim's Story",
+              "url": "https://www.radicalcandor.com/blog/praise-manipulative-insincerity"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8635,
+              "start_index": 8556,
+              "title": "Answers To Frequently Asked Questions (FAQs)",
+              "url": "https://www.radicalcandor.com/frequently-asked-questions"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9071,
+              "start_index": 9006,
+              "title": "Our Approach: Kim Scott's Feedback Framework",
+              "url": "https://www.radicalcandor.com/our-approach"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10180,
+              "start_index": 10055,
+              "title": "Radical Candor: Fully Revised & Updated Edition",
+              "url": "https://us.macmillan.com/books/9781250245786/radicalcandorfullyrevisedupdatededition/?utm_source=openai"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10577,
+              "start_index": 10511,
+              "title": "Radical Candor: Be a Kick-Ass Boss Without Losing Your Humanity",
+              "url": "https://us.macmillan.com/books/9781427292513"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10857,
+              "start_index": 10750,
+              "title": "Radical Candor: Fully Revised & Updated Edition",
+              "url": "https://us.macmillan.com/books/9781250235374/radicalcandorfullyrevisedupdatededition/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11246,
+              "start_index": 11121,
+              "title": "Radical Candor: Fully Revised & Updated Edition",
+              "url": "https://us.macmillan.com/books/9781250245786/radicalcandorfullyrevisedupdatededition/?utm_source=openai"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Radical Candor* by Kim Scott\n\n## Central argument\n\nKim Scott’s core claim is that effective management depends on building relationships in which people can both **Care Personally** and **Challenge Directly**. The book rejects a false choice many managers feel trapped by: either be “nice” and avoid difficult truths, or be blunt and damage relationships. Scott argues that the best bosses are neither pushovers nor jerks; they create relationships strong enough to support clear praise, clear criticism, better decisions, stronger teams, and collaborative results. Macmillan’s 2017 publisher page frames the book around three boss responsibilities: creating a feedback culture, building a cohesive team, and achieving results the team is proud of. ([us.macmillan.com](https://us.macmillan.com/books/9781427292513))\n\nThe tension the book resolves is both social and managerial. Socially, people are trained not to say hard things; professionally, managers are also told to be “professional,” which can become code for leaving humanity out of work. Scott’s framework says the solution is not more command-and-control management but a culture of guidance: specific, sincere praise and kind, clear criticism. The author’s official site explicitly describes Radical Candor as a move from command-and-control toward collaboration. ([radicalcandor.com](https://www.radicalcandor.com/our-approach))\n\n## Mechanisms and frameworks\n\n**Care Personally** is the relationship dimension. It means treating colleagues as whole people, not merely units of output. On the official site, Scott’s team describes this as bringing humanity to work, showing enough vulnerability to create safety for others, and caring about people’s success as human beings, not only about their job performance. ([radicalcandor.com](https://www.radicalcandor.com/our-approach))\n\n**Challenge Directly** is the clarity and standards dimension. It means saying what needs to be said about what is working and what is not, while recognizing that one’s view may be incomplete. The official site is careful to distinguish direct challenge from claiming possession of objective truth: the manager shares a humble opinion directly. ([radicalcandor.com](https://www.radicalcandor.com/our-approach))\n\n**Radical Candor** is the combination of high care and high challenge. It applies to both praise and criticism. Praise should be specific and sincere, not vague approval; criticism should be kind and clear, not softened until the message disappears. Scott also prefers the word “guidance” to “feedback,” because the practice includes both praise and criticism and is meant to help people do more of what works and less of what does not. HBR’s interview with Scott emphasizes that Radical Candor is not just a boss criticizing an employee; it begins with soliciting criticism and includes giving more useful praise than criticism. ([hbr.org](https://hbr.org/podcast/2020/02/defining-radical-candor-and-how-to-do-it))\n\nThe three failure modes are distinct:\n\n- **Ruinous Empathy** = care without challenge. The manager wants to spare someone’s short-term feelings and therefore withholds, dilutes, or delays useful information. It may feel kind, but it denies the person a chance to improve or make an informed decision. The official site includes vague praise and sugarcoated criticism in this quadrant, not only silence. ([radicalcandor.com](https://www.radicalcandor.com/our-approach))\n- **Obnoxious Aggression** = challenge without care. The feedback may be direct, and may even be factually right, but it lands as disrespectful, humiliating, or unhelpful because it lacks care, humility, or attention to the listener. The official site equates this with “brutal honesty” and stresses that it is not Radical Candor. ([radicalcandor.com](https://www.radicalcandor.com/our-approach))\n- **Manipulative Insincerity** = neither care nor challenge. This is the political, self-protective quadrant: flattery to someone’s face, harsher criticism behind their back, avoidance, or agreement one does not mean. Scott treats it as especially corrosive because it prevents the other person from knowing where they stand. ([radicalcandor.com](https://www.radicalcandor.com/our-approach))\n\n**Soliciting criticism** is not optional polish; it is the entry point. Scott’s “order of operations” is to get feedback, give feedback, gauge how it lands, and encourage feedback between others. The reason is practical and ethical: a leader has more standing to challenge others after proving they can receive challenge themselves. Official material recommends a go-to question, tolerating the awkward silence, listening to understand, and rewarding the candor so people will risk giving it again. ([radicalcandor.com](https://www.radicalcandor.com/blog/how-to-give-and-receive-feedback?utm_source=openai))\n\n**Guidance and growth management** connect the feedback framework to team design. Scott separates “guidance” from annual performance bureaucracy: useful guidance is ongoing, specific, and aimed at helping people grow. Growth management also requires understanding what trajectory each person wants and can sustain. Radical Candor distinguishes **rock star mode**—gradual growth, stability, deep expertise, reliability—from **superstar mode**—steep growth, rapid learning, appetite for new challenges. These are modes, not fixed identities. A healthy team needs both, and a manager should not treat steady mastery as inferior to rapid advancement. ([radicalcandor.com](https://www.radicalcandor.com/podcast/s4-e1-rock-star-mode-versus-superstar-mode))\n\nA practical tool for growth management is **Career Conversations**, a Russ Laraway framework included in Radical Candor materials: discuss the person’s life story to understand motivations, their dreams to understand long-term direction, and a present action plan to connect current work to future goals. This is how “care personally” becomes managerial practice rather than sentiment. ([radicalcandor.com](https://www.radicalcandor.com/blog/how-to-have-career-conversations))\n\n## Book-grounded examples\n\n**Sheryl Sandberg and Scott’s presentation tic.** Scott repeatedly tells the story of giving a successful Google presentation and receiving direct guidance from Sheryl Sandberg about overusing “um.” Sandberg first praised what went well, then offered a concrete observation, suggested a coach, and became more direct only when Scott brushed it off. Scott presents this as Radical Candor because Sandberg had already demonstrated support and then challenged her clearly enough that she acted. ([middlemarketcenter.org](https://www.middlemarketcenter.org/expert-perspectives/lead-by-caring-and-challenging-an-interview-with-radical-candor-author-kim-scott))\n\n**Bob and ruinous empathy.** In Scott’s startup story, “Bob” was underperforming badly, but Scott delayed direct criticism for months because she liked him and did not want to hurt him. By the time she acted, his performance had damaged the team and firing him became the only realistic option. The example demonstrates that withholding criticism can be more harmful than timely directness: Bob lost the chance to fix the problem or choose a better-fit role earlier. ([radicalcandor.com](https://www.radicalcandor.com/blog/criticism-ruinous-empathy))\n\n**Larry Page email and obnoxious aggression.** Scott’s official materials recount that she sent a critical email about a Google policy disagreement to a large group including Larry Page. The point is not that disagreement was forbidden; it is that the delivery was public, accusatory, insufficiently humble, and not grounded in enough understanding of Page’s view. This illustrates challenge without care. ([radicalcandor.com](https://www.radicalcandor.com/blog/criticism-obnoxious-aggression-story))\n\n**Overcorrecting into manipulative insincerity.** In a follow-up to the Larry Page episode, Scott says that after realizing she had been too aggressive, she slid into insincerity by pretending agreement she did not feel. The lesson is that the cure for obnoxious aggression is not less challenge; it is adding care while staying truthful. ([radicalcandor.com](https://www.radicalcandor.com/blog/praise-manipulative-insincerity))\n\n## Qualifications and common misreadings\n\nThe largest misreading is equating Radical Candor with “brutal honesty.” Scott’s official FAQ explicitly rejects that: without care, directness is Obnoxious Aggression. Saying one is acting “in the spirit of Radical Candor” does not excuse acting like a jerk. ([radicalcandor.com](https://www.radicalcandor.com/frequently-asked-questions))\n\nThe quadrants are also **not personality types**. Scott’s official site warns against putting people’s names in boxes; the framework is a compass for conversations, not a diagnostic label. This matters editorially because a digest should not describe someone as “an obnoxiously aggressive person,” but as a person who acted from that quadrant in a particular exchange. ([radicalcandor.com](https://www.radicalcandor.com/our-approach))\n\nThe model is experience-based management advice, not a controlled scientific theory. Scott draws heavily on her work at Google, Apple, startups, and coaching contexts. Treat evidence claims cautiously: the framework is a practical vocabulary and set of managerial habits, not proof that a single feedback style will produce uniform results in all organizations.\n\nLater revisions matter. The 2019 fully revised and updated edition added a new preface, afterword, and a performance-review bonus chapter. Scott’s later book *Radical Respect* also responds to criticism that Radical Candor can be harder or riskier for people facing stereotypes or workplace injustice; she recounts feedback from a Black woman CEO who worried that even compassionate criticism could trigger the “angry Black woman” stereotype. A public digest should mention that candor depends on respect, power, identity, and context; managers cannot ignore bias and expect the same conversational risks for everyone. ([us.macmillan.com](https://us.macmillan.com/books/9781250245786/radicalcandorfullyrevisedupdatededition/?utm_source=openai))\n\n## Metadata check\n\n- **Title, original U.S. edition:** *Radical Candor: Be a Kick-Ass Boss Without Losing Your Humanity*.\n- **Author:** Kim Scott, also listed by libraries and Goodreads as Kim Malone Scott.\n- **Original publication year:** 2017; Macmillan lists the original audiobook on sale March 14, 2017, and copyright 2017. ([us.macmillan.com](https://us.macmillan.com/books/9781427292513))\n- **Publisher/imprint:** St. Martin’s Press / Macmillan ecosystem; Macmillan’s current pages include both the 2017 original and the 2019 fully revised and updated edition. ([us.macmillan.com](https://us.macmillan.com/books/9781250235374/radicalcandorfullyrevisedupdatededition/))\n- **Edition difference:** The 2019 edition is materially relevant because it adds a new preface, afterword, and performance-review bonus chapter; however, the core framework—Care Personally + Challenge Directly and the three failure quadrants—remains continuous. ([us.macmillan.com](https://us.macmillan.com/books/9781250245786/radicalcandorfullyrevisedupdatededition/?utm_source=openai))\n\n## Sources\n\n- [Radical Candor official approach page](https://www.radicalcandor.com/our-approach) — Supports the core two-axis framework, definitions of the three failure quadrants, and warnings against using the model as labels.\n- [Radical Candor FAQ](https://www.radicalcandor.com/frequently-asked-questions) — Supports distinctions between Radical Candor and brutal honesty, the meaning of Care Personally, and the collaborative goal of the framework.\n- [Radical Candor glossary](https://www.radicalcandor.com/glossary) — Supports canonical definitions for Care Personally, Challenge Directly, rock star mode, superstar mode, Career Conversations, and edition-linked terminology.\n- [Macmillan 2017 edition page](https://us.macmillan.com/books/9781427292513/radicalcandorbeakickassbosswithoutlosingyourhumanity/) — Supports metadata, publication date, copyright year, author, and the publisher’s description of the book’s thesis and managerial responsibilities.\n- [Macmillan 2019 fully revised edition page](https://us.macmillan.com/books/9781250235374/radicalcandorfullyrevisedupdatededition/) — Supports edition differences and the publisher’s account of the revised edition.\n- [Official Radical Candor post on ruinous empathy / Bob story](https://www.radicalcandor.com/blog/criticism-ruinous-empathy) — Supports the verified book-grounded Bob example and the causal harm of delayed criticism.\n- [Official Radical Candor post on obnoxious aggression / Larry Page email](https://www.radicalcandor.com/blog/criticism-obnoxious-aggression-story) — Supports the verified example of public, arrogant criticism as challenge without care.\n- [Official Radical Candor post on manipulative insincerity](https://www.radicalcandor.com/blog/praise-manipulative-insincerity) — Supports the Larry Page follow-up example and the distinction between apology and false agreement.\n- [Official Radical Candor post on Career Conversations](https://www.radicalcandor.com/blog/how-to-have-career-conversations) — Supports growth management through life story, dreams, and action planning.\n- [Official Radical Candor podcast page on rock star versus superstar mode](https://www.radicalcandor.com/podcast/s4-e1-rock-star-mode-versus-superstar-mode) — Supports the distinction between gradual and steep growth trajectories and the warning not to make them fixed labels.\n- [Official Radical Candor post on the feedback order of operations](https://www.radicalcandor.com/blog/how-to-give-and-receive-feedback) — Supports soliciting feedback before giving it, plus Get/Give/Gauge/Encourage.\n- [HBR podcast interview with Kim Scott](https://hbr.org/podcast/2020/02/defining-radical-candor-and-how-to-do-it) — Supports Scott’s clarification that Radical Candor is not mainly boss-to-employee criticism and begins with soliciting criticism.\n- [National Center for the Middle Market interview with Kim Scott](https://www.middlemarketcenter.org/expert-perspectives/lead-by-caring-and-challenging-an-interview-with-radical-candor-author-kim-scott) — Supports the Sheryl Sandberg presentation-feedback example in Scott’s own explanation.\n- [Macmillan page for *Radical Respect*](https://us.macmillan.com/books/9781250623768/radicalrespect/) — Supports later qualification about respect, identity, bias, and the limits of applying candor without attention to workplace power dynamics."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 7
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 72419,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 3584
+    },
+    "output_tokens": 4609,
+    "output_tokens_details": {
+      "reasoning_tokens": 1630
+    },
+    "total_tokens": 77028
+  },
+  "user": null,
+  "metadata": {}
+}

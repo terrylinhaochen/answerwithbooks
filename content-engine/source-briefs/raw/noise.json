@@ -1,0 +1,838 @@
+{
+  "id": "resp_03e0e6866bab762c016a548146c85c819990410888dfad18e4",
+  "object": "response",
+  "created_at": 1783923014,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1783923113,
+  "error": null,
+  "frequency_penalty": 0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 16000,
+  "max_tool_calls": null,
+  "model": "gpt-5.5-2026-04-23",
+  "moderation": null,
+  "output": [
+    {
+      "id": "ws_03e0e6866bab762c016a5481477a08819985823438eeaeb642",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "Noise Daniel Kahneman Olivier Sibony Cass Sunstein official publisher page noise audit decision hygiene mediating assessments protocol",
+          "Daniel Kahneman Noise official website bias noise level noise pattern noise occasion noise",
+          "Noise A Flaw in Human Judgment official excerpt mediating assessments protocol",
+          "Olivier Sibony Noise book decision hygiene interview"
+        ],
+        "query": "Noise Daniel Kahneman Olivier Sibony Cass Sunstein official publisher page noise audit decision hygiene mediating assessments protocol",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.socialsciencespace.com/2021/05/olivier-sibony-on-decision-making/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+          },
+          {
+            "type": "url",
+            "url": "https://www.euronews.com/business/2024/03/11/dont-listen-to-your-gut-how-is-noise-and-bias-making-you-a-bad-boss"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hec.edu/en/school/news/hec-uk-masterclass-professor-olivier-sibony-london"
+          },
+          {
+            "type": "url",
+            "url": "https://www.pme.ch/business/olivier-sibony-explique-pourquoi-le-bruit-fausse-nos-decisions/yn17xzh"
+          },
+          {
+            "type": "url",
+            "url": "https://podcasts.apple.com/us/podcast/noise-with-olivier-sibony/id1450867110?i=1000523352829"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hec.edu/en/faculty-research/news/hec-academic-makes-noise-study-flaw-human-judgment"
+          },
+          {
+            "type": "url",
+            "url": "https://oliviersibony.com/"
+          },
+          {
+            "type": "url",
+            "url": "https://oxford-review.com/noise/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hec.edu/fr/faculte-et-recherche/actualites/noise-une-analyse-des-faiblesses-du-jugement-humain-qui-fait-du-bruit"
+          },
+          {
+            "type": "url",
+            "url": "https://hbr.org/podcast/2021/05/why-smart-people-sometimes-make-bad-decisions"
+          },
+          {
+            "type": "url",
+            "url": "https://www.capital-four.com/news-and-insights/interview-olivier-sibony-on-noise-in-decision-making"
+          },
+          {
+            "type": "url",
+            "url": "https://www.planathinking.com/wp-content/uploads/2023/10/Does-your-%E2%80%98dirty-decision-environment-create-noisy-results.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://pup-assets.imgix.net/onix/images/9780691273464/9780691273419.pdf?fm=pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://mckinsey.com/~/media/mckinsey/business%20functions/strategy%20and%20corporate%20finance/our%20insights/mckinsey%20on%20finance%20number%2078/mof78-final-rgb.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/pdf/10.1177/02560909231180073"
+          },
+          {
+            "type": "url",
+            "url": "https://4918719.fs1.hubspotusercontent-na1.net/hubfs/4918719/MIAB_Culture%20Conncection_Noise.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2412.02724"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1512.06974"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/1203.5050"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2006.08680"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a548149de6c81998c155b237e72d660",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a54814a63a08199844963218234d113",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "site:hachettebookgroup.com Noise A Flaw in Human Judgment Daniel Kahneman Sibony Sunstein",
+          "site:penguinrandomhouse.com books Noise A Flaw in Human Judgment Kahneman Sibony Sunstein",
+          "site:thedecisionlab.com Cass Sunstein Daniel Kahneman Noise interview",
+          "site:behavioralscientist.org Noise Kahneman Sibony Sunstein interview"
+        ],
+        "query": "site:hachettebookgroup.com Noise A Flaw in Human Judgment Daniel Kahneman Sibony Sunstein",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/598266/noise-by-daniel-kahneman-olivier-sibony-and-cass-r-sunstein/9781984832061/"
+          },
+          {
+            "type": "url",
+            "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451390/?lens=little-brown"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/690485/nudge-by-richard-h-thaler-and-cass-r-sunstein/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/790349/on-liberalism-by-cass-r-sunstein/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/17199/noise-by-darin-bradley/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/805118/separation-of-powers-by-cass-r-sunstein/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/182462/traffic-by-tom-vanderbilt/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/656698/noise-water-meat-by-douglas-kahn/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/305826/the-signal-and-the-noise-by-nate-silver/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.penguinrandomhouse.com/books/176226/the-black-swan-second-edition-by-nassim-nicholas-taleb/9780679604181/"
+          },
+          {
+            "type": "url",
+            "url": "https://behavioralscientist.org/remembering-daniel-kahneman-a-mosaic-of-memories-and-lessons/"
+          },
+          {
+            "type": "url",
+            "url": "https://images.penguinrandomhouse.com/promo_image/9781683693086_9433.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://images.penguinrandomhouse.com/promo_image/9780451526779_5417.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://images.penguinrandomhouse.com/promo_image/9780451530837_5138.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://ebookassets.penguinrandomhouse.com/Assets/teachersandlibrarians/guides/pdf/tl-guide-richard-peck.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://images.penguinrandomhouse.com/teachers_guides/9780375823374.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://assets.penguinrandomhouse.com/wp-content/uploads/2017/04/20152641/1704141413.pdf"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a54814d943c81999a25a9d864a5d9e4",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a54814e9368819995839d13ebecdd25",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://oliviersibony.com/"
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a54814f9fd08199bdacf090985fcab8",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a54815030488199a384fcf50077adc1",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451390/?lens=little-brown"
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a548151b3e881999f3de5d2c51358fb",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a548151ed2c8199bbba1d3fd9586b42",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a5481536df8819994c9d6e87e43119f",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a548153d4ac81999004ff512674282d",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"mediating assessments protocol\" \"Noise\" Kahneman Sibony Sunstein",
+          "\"mediating assessments\" Kahneman Sibony Sunstein official",
+          "\"MAP\" \"Noise\" \"Kahneman\" \"Sibony\"",
+          "\"mediating assessments protocol\" Olivier Sibony"
+        ],
+        "query": "\"mediating assessments protocol\" \"Noise\" Kahneman Sibony Sunstein",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.theuncertaintyproject.org/tools/the-mediating-assessments-protocol"
+          },
+          {
+            "type": "url",
+            "url": "https://www.c-sqd.com/article/mediating-assessments-protocol"
+          },
+          {
+            "type": "url",
+            "url": "https://www.tandfonline.com/doi/full/10.1080/09332480.2024.2416879"
+          },
+          {
+            "type": "url",
+            "url": "https://www.prnewswire.com/news-releases/in-a-significant-new-paper-published-in-mit-sloan-management-review-nobel-laureate-daniel-kahneman-and-strategy-professors-dan-lovallo-and-olivier-sibony-introduce-a-new-approach-to-making-smarter-strategic-decisions-300805463.html"
+          },
+          {
+            "type": "url",
+            "url": "https://www.biggerplate.com/Mindmap/SeQjUtoQ/noise---a-flaw-in-human-judgement"
+          },
+          {
+            "type": "url",
+            "url": "https://williammeller.com/noise-by-daniel-kahneman/"
+          },
+          {
+            "type": "url",
+            "url": "https://sbi.sydney.edu.au/making-better-decisions-every-time/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/decision-hygiene/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.eatonvance.com/content/dam/im/assets/publication/thought-leadership/consilient-observer/article_bintheredonethat_us.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://documentacion.fundacionmapfre.org/documentacion/publico/es/bib/169580.do"
+          },
+          {
+            "type": "url",
+            "url": "https://anyflip.com/iozev/yuxt/basic/251-300"
+          },
+          {
+            "type": "url",
+            "url": "https://trunin.com/en/2022/02/noise-part3-noise-in-predictive-judgments/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/pdf/noise-pdf-daniel-kahneman-olivier-sibony-and-cass-sunstein"
+          },
+          {
+            "type": "url",
+            "url": "https://one.oecd.org/document/TAD/CA/APM/WP%282024%296/FINAL/en/pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://virtualmmx.ddns.net/gbooks/NoiseAFlawinHumanJudgment.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://s3.amazonaws.com/voicebucketvoitto/pdf/ingles/Noise%20-%20Daniel%20Kahneman.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://joygenea.com/wp-content/uploads/2023/12/2024-JoyGenea-BOOK-LIST-for.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.tandfonline.com/doi/pdf/10.1080/09332480.2024.2416879"
+          },
+          {
+            "type": "url",
+            "url": "https://arxiv.org/abs/2208.11618"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a5481572df88199bebcb59c4563a47f",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a548157829c81998bcb83ce8599daeb",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.prnewswire.com/news-releases/in-a-significant-new-paper-published-in-mit-sloan-management-review-nobel-laureate-daniel-kahneman-and-strategy-professors-dan-lovallo-and-olivier-sibony-introduce-a-new-approach-to-making-smarter-strategic-decisions-300805463.html"
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a548159afc88199af7573c6bb04baed",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a54815a36b881999242a937516239e6",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://readnoise.com/"
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a54815bab508199a92558a0f7d7f020",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a54815c43848199a2ab66abb86ff904",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451390/?lens=little-brown"
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a54815d8bc88199a4d8c50b182ff0de",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a54815e01208199ab9f72a15ff9aaf2",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "queries": [
+          "\"level noise\" \"pattern noise\" \"occasion noise\" Kahneman",
+          "\"pattern noise\" \"occasion noise\" \"Noise\" \"Kahneman\"",
+          "\"level noise\" \"pattern noise\" \"Noise: A Flaw\"",
+          "\"system noise\" \"level noise\" \"pattern noise\" \"occasion noise\""
+        ],
+        "query": "\"level noise\" \"pattern noise\" \"occasion noise\" Kahneman",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.shortform.com/blog/daniel-kahneman-noise/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.nature.com/articles/s41598-026-49775-7"
+          },
+          {
+            "type": "url",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1111/ijsa.70034"
+          },
+          {
+            "type": "url",
+            "url": "https://www.researchgate.net/figure/Types-of-noise-categorized-by-Kahneman-et-al-13-System-noise-which-can-be-subdivided_fig1_389069335"
+          },
+          {
+            "type": "url",
+            "url": "https://michiganlawreview.org/journal/shutting-out-noise-and-understanding-artificial-intelligence/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.theactuarymagazine.org/improving-strategic-risk-management/"
+          },
+          {
+            "type": "url",
+            "url": "https://studylib.net/doc/27322971/books.yossr.com-noise-a-flaw-in-human-judgment"
+          },
+          {
+            "type": "url",
+            "url": "https://www.snifferquant.com/gyantal/Incode/books2020/Noise%2CbyDanielKahneman%2C2022.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8926459/"
+          },
+          {
+            "type": "url",
+            "url": "https://simonharling.blog/book/noise/"
+          },
+          {
+            "type": "url",
+            "url": "https://readingraphics.com/book-summary-noise/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.tandfonline.com/doi/full/10.1080/1612197X.2025.2453462"
+          },
+          {
+            "type": "url",
+            "url": "https://journals.sagepub.com/doi/10.1177/26339137221078593"
+          },
+          {
+            "type": "url",
+            "url": "https://bmcmedinformdecismak.biomedcentral.com/counter/pdf/10.1186/s12911-025-02905-z.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://bransch.trafikverket.se/contentassets/709c27f38b2f46499a5a157c77a323a2/2024/introduktion-till-beteendeekonomi_240125.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://www.globiginvestments.com/attachments/article/164/Noise--A%20Flaw%20in%20Uman%20Judgement.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://documents1.worldbank.org/curated/en/099112525193022279/pdf/P507130-9862fdfb-f792-48c4-95fd-54d18cd40891.pdf"
+          },
+          {
+            "type": "url",
+            "url": "https://brage.inn.no/inn-xmlui/bitstream/handle/11250/2989002/Rune%20Lier%20Masteroppgave%202021.PDF?isAllowed=y&sequence=1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a548169ef008199bf10b1f311bf6784",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "ws_03e0e6866bab762c016a54816a4dac8199b31a1d69e85c2c30",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "open_page",
+        "url": "https://journals.sagepub.com/doi/10.1177/26339137221078593"
+      }
+    },
+    {
+      "id": "rs_03e0e6866bab762c016a54816b988881998a63ec640b99a68d",
+      "type": "reasoning",
+      "content": [],
+      "summary": []
+    },
+    {
+      "id": "msg_03e0e6866bab762c016a54817a5f208199806918fe6d944100",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [
+            {
+              "type": "url_citation",
+              "end_index": 670,
+              "start_index": 629,
+              "title": "Home - The Noise Book",
+              "url": "https://readnoise.com/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 1244,
+              "start_index": 1135,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2044,
+              "start_index": 1910,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2314,
+              "start_index": 2205,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 2877,
+              "start_index": 2743,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 3499,
+              "start_index": 3365,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4202,
+              "start_index": 4118,
+              "title": "An exchange of letters on the role of noise in collective intelligence - Daniel Kahneman, David C Krakauer, Olivier Sibony, Cass Sunstein, David Wolpert, 2022 ",
+              "url": "https://journals.sagepub.com/doi/10.1177/26339137221078593"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 4751,
+              "start_index": 4710,
+              "title": "Home - The Noise Book",
+              "url": "https://readnoise.com/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5043,
+              "start_index": 4959,
+              "title": "An exchange of letters on the role of noise in collective intelligence - Daniel Kahneman, David C Krakauer, Olivier Sibony, Cass Sunstein, David Wolpert, 2022 ",
+              "url": "https://journals.sagepub.com/doi/10.1177/26339137221078593"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5441,
+              "start_index": 5332,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 5762,
+              "start_index": 5653,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6223,
+              "start_index": 6089,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 6706,
+              "start_index": 6572,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7144,
+              "start_index": 7010,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 7440,
+              "start_index": 7331,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8180,
+              "start_index": 7888,
+              "title": "In a significant new paper published in MIT Sloan Management Review, Nobel laureate Daniel Kahneman and strategy professors Dan Lovallo and Olivier Sibony introduce a new approach to making smarter strategic decisions.",
+              "url": "https://www.prnewswire.com/news-releases/in-a-significant-new-paper-published-in-mit-sloan-management-review-nobel-laureate-daniel-kahneman-and-strategy-professors-dan-lovallo-and-olivier-sibony-introduce-a-new-approach-to-making-smarter-strategic-decisions-300805463.html"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 8446,
+              "start_index": 8362,
+              "title": "Making better decisions – every time – Sydney Business Insights (SBI)",
+              "url": "https://sbi.sydney.edu.au/making-better-decisions-every-time/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9039,
+              "start_index": 8935,
+              "title": "Noise by Daniel Kahneman & Olivier Sibony & Cass R. Sunstein | Hachette Book Group",
+              "url": "https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451406/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9334,
+              "start_index": 9293,
+              "title": "Home - The Noise Book",
+              "url": "https://readnoise.com/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 9669,
+              "start_index": 9560,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10096,
+              "start_index": 9962,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10370,
+              "start_index": 10315,
+              "title": "How Noise Causes Problems with Our Decision-Making Capability",
+              "url": "https://oxford-review.com/noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 10652,
+              "start_index": 10611,
+              "title": "Home - The Noise Book",
+              "url": "https://readnoise.com/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11174,
+              "start_index": 11065,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11472,
+              "start_index": 11363,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 11764,
+              "start_index": 11655,
+              "title": "A Conversation with Daniel Kahneman About 'Noise' - By Evan Nesterak - Behavioral Scientist",
+              "url": "https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12083,
+              "start_index": 11949,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12321,
+              "start_index": 12237,
+              "title": "An exchange of letters on the role of noise in collective intelligence - Daniel Kahneman, David C Krakauer, Olivier Sibony, Cass Sunstein, David Wolpert, 2022 ",
+              "url": "https://journals.sagepub.com/doi/10.1177/26339137221078593"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 12646,
+              "start_index": 12512,
+              "title": "Organizations’ system noise creates errors in decision making | McKinsey",
+              "url": "https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13018,
+              "start_index": 12914,
+              "title": "Noise by Daniel Kahneman & Olivier Sibony & Cass R. Sunstein | Hachette Book Group",
+              "url": "https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451406/"
+            },
+            {
+              "type": "url_citation",
+              "end_index": 13249,
+              "start_index": 13127,
+              "title": "Noise by Daniel Kahneman & Olivier Sibony & Cass R. Sunstein | Hachette Book Group",
+              "url": "https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451390/?lens=little-brown"
+            }
+          ],
+          "logprobs": [],
+          "text": "# Source brief: *Noise: A Flaw in Human Judgment* — Daniel Kahneman, Olivier Sibony, Cass R. Sunstein\n\n## Central argument\n\nThe book’s central thesis is that human judgment is damaged not only by **bias**—shared, directional error—but also by **noise**, the unwanted variability of judgments that should be similar or identical. The authors’ slogan-level claim, stated on the official book site, is that wherever there is human judgment, there is likely more noise than people expect; the publisher frames the book as explaining why people make bad judgments and how to improve them by controlling both noise and cognitive bias. ([readnoise.com](https://readnoise.com/))\n\nThe tension the book resolves is this: modern organizations often know how to talk about bias, because bias has a narrative and a cause, but they often fail to see inconsistency because it is statistical and only visible across cases. Kahneman tells *Behavioral Scientist* that bias is average error while noise is variability of error; he also emphasizes that noise cannot usually be diagnosed in a single judgment but becomes visible in a pattern of judgments. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/)) The book therefore shifts the editor’s frame from “Which bias caused this bad decision?” to “How variable is this decision system, and is that variability acceptable?”\n\n## Mechanisms and frameworks\n\n**Bias versus noise.** Bias is a directional tendency: a forecasting team may be consistently optimistic, or judges may be systematically severe. Noise is scatter: equally authorized judges, physicians, interviewers, underwriters, or evaluators produce different answers when the organization expects them to be broadly interchangeable. McKinsey’s interview with Kahneman and Sibony gives the clean distinction: bias is average error; noise is variability of error. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise)) In contexts with an objectively correct answer, the book uses the error equation: overall error, or mean squared error, equals bias squared plus noise squared. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/)) For evaluative judgments, the same intuition holds even when “truth” is harder to define: unjustified spread in outcomes is itself a quality problem.\n\n**System noise.** The book’s main target is **system noise**: unwanted variability within a system that is supposed to speak with one voice. Examples include judges in the same court, doctors facing similar diagnostic evidence, or insurance underwriters pricing the same risk. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise)) This is not ordinary disagreement in tastes, values, art, politics, or innovation; it is disagreement where the institution itself expects bounded consistency.\n\n**Level noise.** Level noise is variability in the average level of judgments across decision makers. One judge is generally harsher, one interviewer generally more forgiving, one performance rater generally generous. Sibony uses performance reviews to illustrate this: some raters are, on average, more generous than others. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise)) Level noise is often confused with bias because it looks stable, but the key is that the organization has many such individual “levels,” producing inconsistency across the system.\n\n**Pattern noise.** Pattern noise is variability in how judges respond to particular cases, beyond their general severity or leniency. Two judges might be equally severe on average but disagree sharply about which defendants, applicants, claims, or candidates deserve tougher treatment. The authors later clarified in a 2022 exchange that their system-noise framework breaks differences between judges into level noise and pattern noise. ([journals.sagepub.com](https://journals.sagepub.com/doi/10.1177/26339137221078593)) For an editor: level noise is “who is generally high or low?”; pattern noise is “which cases does each person treat as high or low?”\n\n**Occasion noise.** Occasion noise is within-person instability: the same judge, doctor, inspector, or interviewer might decide differently depending on timing, mood, sequence, fatigue, weather, or other irrelevant conditions. The official book site uses morning versus afternoon and Monday versus Wednesday as examples of the same professional making different judgments. ([readnoise.com](https://readnoise.com/)) The 2022 author exchange defines occasion noise as within-person variability and says it contributes to system noise, though the authors describe it as less central than differences between decision makers. ([journals.sagepub.com](https://journals.sagepub.com/doi/10.1177/26339137221078593))\n\n**Noise audit.** A noise audit measures system noise by giving multiple interchangeable decision makers the same realistic cases and asking for precise judgments, often numerical or scaled. Kahneman says the correct answer is not always needed; the audit can simply measure variability. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/)) The insurance-underwriting example is important: executives expected about 10% variation among underwriters, but the observed variation was roughly 55%, revealing a much noisier system than leadership imagined. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/))\n\n**Decision hygiene.** Decision hygiene is the book’s umbrella term for preventive practices that reduce noise before specific errors are visible. Sibony compares it to hygiene because it is preventive rather than a cure for a named mistake; it can feel thankless because users do not know exactly which error they prevented. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise)) Core practices include breaking judgments into subjudgments, delaying holistic intuition, preserving independence before discussion, using relative rather than vague absolute scales where appropriate, selecting more competent judges, and sometimes replacing human judgment with rules, checklists, or algorithms while auditing those tools for bias. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise))\n\n**Independent judgments.** The book treats independence as a causal mechanism: if people discuss too early, social influence, anchoring, authority, and shared stories make errors correlated. Sibony recommends getting people to make judgments independently and only then aggregating or discussing them. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise)) Kahneman similarly says that decision hygiene asks people to break up a problem, make fact-based assessments, keep assessments independent, and delay intuition rather than eliminate it. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/))\n\n**Mediating Assessments Protocol.** MAP is the book’s structured method for complex decisions. It originated in work by Kahneman, Dan Lovallo, and Sibony and was incorporated into *Noise* as a general-purpose decision-hygiene tool. The MIT Sloan Management Review release describes MAP as defining key assessments in advance, using fact-based independent assessments, and postponing the final evaluation until the assessment profile is complete. ([prnewswire.com](https://www.prnewswire.com/news-releases/in-a-significant-new-paper-published-in-mit-sloan-management-review-nobel-laureate-daniel-kahneman-and-strategy-professors-dan-lovallo-and-olivier-sibony-introduce-a-new-approach-to-making-smarter-strategic-decisions-300805463.html)) Sydney Business Insights summarizes the same logic as delaying intuition: define assessment criteria, use independently made fact-based assessments, then make the final evaluation. ([sbi.sydney.edu.au](https://sbi.sydney.edu.au/making-better-decisions-every-time/)) The public digest should explain MAP as a way to stop teams from deciding too early and then retrofitting evidence to a favored story.\n\n## Book-grounded examples\n\n- **Judicial sentencing.** The publisher, official site, McKinsey interview, and *Behavioral Scientist* interview all use judges giving different sentences for similar or identical crimes. This demonstrates system noise and the justice problem: citizens face a lottery when the system expects like cases to be treated alike. ([hachettebookgroup.com](https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451406/))  \n- **Doctors and diagnoses.** The official book site and publisher describe two doctors in the same city giving different diagnoses to identical patients. This demonstrates that noise is not just corporate inconvenience; it can affect health outcomes. ([readnoise.com](https://readnoise.com/))  \n- **Insurance underwriters.** Kahneman’s interview describes underwriters judging exactly the same thing and producing far more variability than executives expected. This is the cleanest verified example for a noise audit. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/))  \n- **Performance ratings.** Sibony says performance reviews contain level noise and occasion noise, with much of the rating unrelated to actual performance. This example is useful for explaining how organizational assessments can become noisy even when forms and scales appear standardized. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise))  \n- **Fingerprint and forensic judgments.** Sibony’s Oxford Review interview says fingerprint identification is a judgment and therefore subject to noise, even in a domain people often imagine to be nearly infallible. ([oxford-review.com](https://oxford-review.com/noise/))  \n- **Customer complaints, food inspectors, and job interviews.** The official site uses these as everyday organizational examples: outcomes can depend on who happens to answer the phone, inspect the restaurant, or interview the candidate. ([readnoise.com](https://readnoise.com/))\n\n## Qualifications and common misreadings\n\nDo not present the book as saying that all variability is bad. The authors define noise as **unwanted** variability; diversity of taste, creativity, pluralism, and specialized perspectives can be desirable. Kahneman explicitly says the relevant target is an organization that wants to speak with one voice, while film reviewers or creative teams need not be identical. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/))\n\nDo not present decision hygiene as eliminating judgment or intuition. Kahneman says the goal is to delay intuition, not ban it; people resist systems that make them feel like automatons. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/)) Also avoid claiming that noise can be eliminated. Kahneman says noise, like bias, can be reduced but not completely removed unless life is governed entirely by rules and algorithms. ([behavioralscientist.org](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/))\n\nDo not imply that algorithms are automatically fair. Sibony says algorithms can remove human inconsistency, but they can also introduce systematic bias if trained or designed poorly. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise)) Also note cost-benefit limits: the authors later clarified that because noise reduction has costs, the benefits may not always justify the intervention. ([journals.sagepub.com](https://journals.sagepub.com/doi/10.1177/26339137221078593))\n\nFinally, treat the book as ambitious but not the last word. Kahneman called the project somewhat premature or “green,” noting that a larger research program would ideally take much longer. ([mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise))\n\n## Metadata check\n\nConfirmed title: *Noise: A Flaw in Human Judgment*. Confirmed authors: Daniel Kahneman, Olivier Sibony, and Cass R. Sunstein. The original U.S. hardcover was published by Little, Brown Spark on May 18, 2021, with 464 pages and ISBN 9780316451406. ([hachettebookgroup.com](https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451406/)) The trade paperback listed by Hachette is also 464 pages and went on sale May 31, 2022, ISBN 9780316451390. ([hachettebookgroup.com](https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451390/?lens=little-brown)) No material content differences between editions were identified from publisher pages; the differences found are format, publication date, and ISBN.\n\n## Sources\n\n- [Official book site: *The Noise Book*](https://readnoise.com/) — Supports the public-facing thesis, author bios, official examples, and the definition of noise as variability in judgments that should be identical.  \n- [Hachette / Little, Brown Spark hardcover page](https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451406/) — Confirms title, authors, U.S. hardcover publication date, publisher, page count, ISBN, and publisher description.  \n- [Hachette / Little, Brown Spark paperback page](https://www.hachettebookgroup.com/titles/daniel-kahneman/noise/9780316451390/?lens=little-brown) — Confirms paperback date, format, page count, ISBN, and edition metadata.  \n- [Penguin Random House audiobook page](https://www.penguinrandomhouse.com/books/598266/noise-by-daniel-kahneman-olivier-sibony-and-cass-r-sunstein/9781984832061/) — Confirms audiobook publication details and broad field list covered by the book.  \n- [McKinsey interview: “Sounding the alarm on system noise”](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/sounding-the-alarm-on-system-noise) — Supports bias/noise distinction, system noise, decision hygiene, independent judgments, performance-review examples, scales, and algorithms.  \n- [Behavioral Scientist interview with Daniel Kahneman](https://behavioralscientist.org/a-conversation-with-daniel-kahneman-about-noise/) — Supports the error equation, noise audit, underwriter example, decision-hygiene logic, qualifications, and limits.  \n- [HEC Paris interview with Olivier Sibony](https://www.hec.edu/en/faculty-research/news/hec-academic-makes-noise-study-flaw-human-judgment) — Supports author affiliation, book framing, noise neglect, fields of application, and the claim that noise is a major source of error alongside bias.  \n- [Oxford Review interview transcript with Olivier Sibony](https://oxford-review.com/noise/) — Supports the narrow definition of judgment, unwanted variability, and examples from medicine, sentencing, x-rays, and fingerprinting.  \n- [MIT Sloan Management Review press release on MAP](https://www.prnewswire.com/news-releases/in-a-significant-new-paper-published-in-mit-sloan-management-review-nobel-laureate-daniel-kahneman-and-strategy-professors-dan-lovallo-and-olivier-sibony-introduce-a-new-approach-to-making-smarter-strategic-decisions-300805463.html) — Supports origins and steps of the Mediating Assessments Protocol.  \n- [Sydney Business Insights on MAP](https://sbi.sydney.edu.au/making-better-decisions-every-time/) — Supports the “delay intuition” formulation and practical MAP steps.  \n- [Collective Intelligence exchange by Kahneman, Sibony, Sunstein et al.](https://journals.sagepub.com/doi/10.1177/26339137221078593) — Supports later clarification on system noise, level noise, pattern noise, occasion noise, cost-benefit limits, and the authors’ definition of noise as unwanted variability."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "medium",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": false,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "required",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 4
+    }
+  },
+  "tools": [
+    {
+      "type": "web_search",
+      "filters": {
+        "blocked_domains": [
+          "reddit.com",
+          "quora.com",
+          "wikipedia.org",
+          "blinkist.com",
+          "headwayapp.co"
+        ]
+      },
+      "return_token_budget": "default",
+      "search_content_types": [
+        "text"
+      ],
+      "search_context_size": "high",
+      "user_location": {
+        "type": "approximate",
+        "city": null,
+        "country": "US",
+        "region": null,
+        "timezone": null
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 83011,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 4739,
+    "output_tokens_details": {
+      "reasoning_tokens": 1651
+    },
+    "total_tokens": 87750
+  },
+  "user": null,
+  "metadata": {}
+}
