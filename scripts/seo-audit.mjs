@@ -117,7 +117,7 @@ for (const file of htmlFiles) {
     if (path !== '/editorial/' && !faqBlocks.length) fail(`${path}: indexable page has no FAQPage JSON-LD`);
     if (path !== '/editorial/' && !visibleFaq) fail(`${path}: indexable page has no visible FAQ/Q&A section`);
     if (isCatalogDetail && !articleBlocks.length) fail(`${path}: catalog detail page has no Article JSON-LD`);
-    if (isCatalogDetail && !/<a\b[^>]*href=["']\/editorial\/["'][^>]*>Terry Chen<\/a>/i.test(html)) {
+    if (isCatalogDetail && !/<a\b[^>]*href=["']\/editorial\/["'][^>]*>Answer with Books<\/a>/i.test(html)) {
       fail(`${path}: catalog detail page has no visible linked editor byline`);
     }
     if (isAnswerDetail && !/<details\b(?=[^>]*\bopen\b)(?=[^>]*\bdata-source-brief\b)[^>]*>/i.test(html)) {

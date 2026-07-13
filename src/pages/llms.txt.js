@@ -13,7 +13,7 @@ export async function GET() {
   const body = `# Answer with Books
 
 Answer with Books turns recurring internet questions into short, book-grounded how-to guides.
-The site is maintained by Terry Chen.
+The site is maintained by Answer with Books.
 
 ## Best Entry Points
 

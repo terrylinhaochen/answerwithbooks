@@ -101,8 +101,8 @@ const jsonLd = [
     datePublished: answer.data.date.toISOString(),
     dateModified: answer.data.date.toISOString(),
     image: new URL(answerImage, 'https://answerwithbooks.com').href,
-    author: { '@type': 'Person', name: 'Terry Chen', url: 'https://terrylinhaochen.github.io' },
-    publisher: { '@id': 'https://answerwithbooks.com/#person' },
+    author: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
+    publisher: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
     inLanguage: 'en',
     isAccessibleForFree: true,
     wordCount: answerWordCount,
@@ -157,7 +157,7 @@ const jsonLd = [
           {answer.data.question}
         </h1>
         <p class="mt-4 text-sm text-faint">
-          By <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Terry Chen</a>
+          By <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Answer with Books</a>
           <span aria-hidden="true"> · </span>
           <time datetime={answer.data.date.toISOString()}>{dateFmt}</time>
         </p>

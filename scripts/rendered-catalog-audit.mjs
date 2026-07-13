@@ -76,7 +76,7 @@ try {
       entryFailures.push(`meta description length ${state.descriptionLength}`);
     }
     if (!state.article) entryFailures.push('missing Article JSON-LD');
-    if (state.byline !== 'Terry Chen') entryFailures.push('missing linked Terry Chen byline');
+    if (state.byline !== 'Answer with Books') entryFailures.push('missing linked Answer with Books byline');
     if (entry.collection === 'answers' && state.sourceBriefOpen !== true) {
       entryFailures.push('source brief is not expanded by default');
     }
