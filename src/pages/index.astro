@@ -64,6 +64,7 @@ const carouselItems = carouselIds
     },
   }));
 const installCommand = 'npx answer-with-books install --skill --api';
+const iosAppHref = 'https://github.com/terrylinhaochen/answer-with-books-ios';
 const siteDescription = 'Read thoughtful book digests, then use the agent that knows you to turn the right ideas into personalized advice.';
 const homeFaqs = [
   {
@@ -84,7 +85,7 @@ const homeFaqs = [
   {
     question: 'What would a paid subscription unlock?',
     answer:
-      'The paid version should unlock a fuller catalog, personal saved books, custom books, private shelves, community demand signals, and agent/API access.',
+      'The paid version should unlock a fuller catalog, personal saved books, premium audio overviews, custom books, private shelves, community demand signals, and agent/API access.',
   },
   {
     question: 'Can I use this with my AI tools?',
@@ -172,6 +173,9 @@ const jsonLd = [
           </a>
           <a href="/answers/" class="awb-pill awb-pill-outline transition-colors">
             Explore answers
+          </a>
+          <a href={iosAppHref} class="awb-pill awb-pill-outline transition-colors">
+            Download iOS app
           </a>
         </div>
       </div>
@@ -272,6 +276,63 @@ const jsonLd = [
             <p class="mt-3 text-sm leading-relaxed text-soft">{text}</p>
           </article>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="ios-app" class="awb-section pb-16">
+    <div class="awb-panel grid grid-cols-1 overflow-hidden lg:grid-cols-[0.92fr_1.08fr]">
+      <div class="border-b border-line px-5 py-9 sm:px-7 lg:border-b-0 lg:border-r lg:py-11">
+        <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Native iOS app</p>
+        <h2 class="mt-3 max-w-md font-serif text-4xl leading-tight">
+          Ask what is top of mind. Listen to the shelf.
+        </h2>
+        <p class="mt-4 max-w-lg leading-relaxed text-soft">
+          The mobile app keeps the flow narrow: type a live question, choose the matched books, then read or play a personalized overview.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href={iosAppHref} class="awb-pill awb-pill-primary transition-colors">
+            Download iOS app
+          </a>
+          <a href="/answers/how-to-decide-what-to-do-with-your-career-next/" class="awb-pill awb-pill-outline transition-colors">
+            See example route
+          </a>
+        </div>
+        <p class="mt-4 text-sm leading-relaxed text-faint">
+          TestFlight/App Store link can replace this repo link when the public build is ready.
+        </p>
+      </div>
+
+      <div class="bg-wash px-5 py-9 sm:px-7 lg:py-11">
+        <div class="mx-auto max-w-sm rounded-[2.2rem] border border-ink/10 bg-card p-3 shadow-[0_24px_70px_rgba(18,15,13,0.14)]">
+          <div class="rounded-[1.7rem] border border-line bg-paper p-4">
+            <div class="flex items-center justify-between">
+              <div class="h-8 w-8 rounded-full bg-ink"></div>
+              <span class="rounded-full bg-card px-3 py-1.5 font-sans text-xs font-semibold text-ink shadow-sm">Premium</span>
+            </div>
+
+            <div class="pt-24">
+              <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Audio overview</p>
+              <h3 class="mt-2 font-serif text-3xl leading-tight">15 min matched session</h3>
+              <p class="mt-3 text-sm leading-relaxed text-soft">
+                A one-minute personalized setup, a fixed summary overview, and a thirty-second tie-back to the next move.
+              </p>
+            </div>
+
+            <div class="mt-6 space-y-2">
+              {[
+                ['1 min', 'Personalized setup'],
+                ['13.5 min', 'Fixed summary overview'],
+                ['30 sec', 'Final tie-back'],
+              ].map(([duration, label]) => (
+                <div class="flex items-center justify-between rounded-2xl border border-line bg-card px-4 py-3">
+                  <span class="font-sans text-sm font-semibold text-ink">{label}</span>
+                  <span class="font-sans text-xs font-semibold text-faint">{duration}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
