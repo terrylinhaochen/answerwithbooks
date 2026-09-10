@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import FaqList from '../../components/FaqList.astro';
+import { faqJsonLd } from '../../lib/seo';
+import { workplaceGuides } from '../../lib/workplace-guides';
+export function getStaticPaths() { return workplaceGuides.map(guide => ({ params: { slug: guide.slug }, props: { guide } })); }
+const { guide } = Astro.props;
+const faqs = [
+  { question: 'Is this real customer or company data?', answer: 'No. All practice inputs in this tutorial are fictional. Replace them with real material only if your organization permits using it in the AI assistant you choose.' },
+  { question: 'Does checking the boxes certify my output?', answer: 'No. The checklist is a self-review aid, not an automated assessment or certification. It is saved only in this browser. You remain responsible for checking the result and obtaining any approvals.' },
+];
+---
+<Base title={guide.title} description={guide.description} path={`/guides/${guide.slug}/`} jsonLd={[faqJsonLd(`https://answerwithbooks.com/guides/${guide.slug}/`, faqs)]}>
+  <article class="mx-auto max-w-3xl px-5 pt-10 sm:pt-14" data-guide={guide.slug}>
+    <a href="/guides/" class="text-sm text-soft hover:text-ink">← All guides</a>
+    <p class="mt-8 text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
+    <h1 class="mt-4 font-serif text-4xl leading-tight sm:text-5xl">{guide.title}</h1>
+    <p class="mt-5 text-lg leading-relaxed text-soft">{guide.description}</p>
+    <div class="mt-7 border-l-2 border-ink pl-5"><p class="text-sm font-semibold">What you’ll make</p><p class="mt-2 leading-relaxed text-soft">{guide.outcome}</p></div>
+    <nav aria-label="Tutorial sections" class="mt-8 flex flex-wrap gap-2 text-sm"><a class="awb-pill awb-pill-outline" href="#practice">Practice data</a><a class="awb-pill awb-pill-outline" href="#prompt">The prompt</a><a class="awb-pill awb-pill-outline" href="#review">Review your work</a></nav>
+    <section class="mt-12"><h2 class="font-serif text-3xl">The workflow</h2><ol class="mt-6 grid gap-7">{guide.steps.map((step, i) => <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-sm" aria-hidden="true">{i+1}</span><div><h3 class="text-lg font-semibold">{step.title}</h3><p class="mt-2 leading-relaxed text-soft">{step.body}</p></div></li>)}</ol></section>
+    <section id="practice" class="mt-12 scroll-mt-28"><div class="flex flex-wrap items-center justify-between gap-3"><h2 class="font-serif text-3xl">Practice data</h2><button type="button" class="awb-pill awb-pill-outline text-sm" data-copy-target="practice-text">Copy practice data</button></div><p class="mt-3 text-sm text-faint">Fictional inputs · Safe to use for this exercise</p><pre id="practice-text" class="practice-block mt-5">{guide.sample}</pre></section>
+    <section id="prompt" class="mt-12 scroll-mt-28"><div class="flex flex-wrap items-center justify-between gap-3"><h2 class="font-serif text-3xl">Run the prompt</h2><button type="button" class="awb-pill awb-pill-primary text-sm" data-copy-target="prompt-text">Copy prompt</button></div><p class="mt-3 leading-relaxed text-soft">Paste this into your approved assistant, then replace the placeholder with the practice data above.</p><pre id="prompt-text" class="practice-block mt-5">{guide.prompt}</pre></section>
+    <section class="mt-12"><h2 class="font-serif text-3xl">What a good result notices</h2><p class="mt-3 text-soft">Wording will vary. These are the important distinctions to check.</p><pre class="practice-block mt-5">{guide.expected}</pre></section>
+    <section id="review" class="mt-12 scroll-mt-28"><h2 class="font-serif text-3xl">Review your work</h2><p class="mt-3 text-sm text-soft">Self-review · Saved on this browser only</p><div class="mt-5 grid gap-3">{guide.checks.map((check, i) => <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-card p-4"><input type="checkbox" data-guide-check={i} class="mt-1 h-5 w-5 shrink-0 accent-black" /><span>{check}</span></label>)}</div><p class="mt-4 text-sm text-soft" data-guide-progress aria-live="polite"></p></section>
+    <section class="mt-10 rounded-2xl border border-line p-6"><h2 class="font-serif text-2xl">Test it with a change</h2><p class="mt-3 leading-relaxed text-soft">{guide.stretch}</p></section>
+    <aside class="mt-10 border-t border-line pt-8"><p class="text-sm text-faint">The thinking behind the workflow</p><a class="mt-3 inline-block font-serif text-2xl underline decoration-line underline-offset-4" href={`/books/${guide.book.slug}/`}>{guide.book.title}</a><p class="mt-3 leading-relaxed text-soft">{guide.book.connection}</p></aside>
+    <p id="copy-status" class="mt-4 text-sm text-soft" role="status"></p>
+  </article>
+  <FaqList items={faqs} />
+</Base>
+<style>.practice-block { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.75; padding: 1.5rem; border: 1px solid var(--color-line); border-radius: 1rem; background: var(--color-card); }</style>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-target]').forEach(button => {
+    const original = button.textContent;
+    button.addEventListener('click', async () => {
+      const text = document.getElementById(button.dataset.copyTarget!)?.textContent ?? '';
+      try { await navigator.clipboard.writeText(text); button.textContent = 'Copied'; setTimeout(() => button.textContent = original, 1800); }
+      catch { document.getElementById('copy-status')!.textContent = 'Copy is unavailable. Select the text above and copy it manually.'; }
+    });
+  });
+  const guide = document.querySelector<HTMLElement>('[data-guide]');
+  const checks = [...document.querySelectorAll<HTMLInputElement>('[data-guide-check]')];
+  const key = `awb-guide-practice:${guide?.dataset.guide}`;
+  try { const saved = JSON.parse(localStorage.getItem(key) ?? '[]'); checks.forEach((input, i) => input.checked = Array.isArray(saved) && saved[i] === true); } catch {}
+  const update = () => { const count = checks.filter(input => input.checked).length; document.querySelector('[data-guide-progress]')!.textContent = `${count} of ${checks.length} checks reviewed${count === checks.length ? '. Try the variation below next.' : '.'}`; };
+  checks.forEach(input => input.addEventListener('change', () => { try { localStorage.setItem(key, JSON.stringify(checks.map(input => input.checked))); } catch {} update(); }));
+  update();
+</script>

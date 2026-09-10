@@ -1,0 +1,37 @@
+<section class="mt-8 mb-10" data-book-additions hidden>
+  <h2 class="font-serif text-2xl">Your additions</h2>
+  <p class="mt-2 text-sm text-soft">Books you’ve confirmed, including requests for new digests.</p>
+  <div class="mt-4 grid gap-3 sm:grid-cols-2" data-book-additions-list></div>
+</section>
+<script>
+  import { supabase } from '../lib/supabase';
+  import { readAdditions, additionsKey, sameBook, type BookAddition } from '../lib/book-intake';
+  const root = document.querySelector<HTMLElement>('[data-book-additions]')!;
+  const list = root.querySelector('[data-book-additions-list]')!;
+  let activeUserId: string | undefined;
+  function render() {
+    const additions = readAdditions(activeUserId); root.hidden = !additions.length; list.replaceChildren();
+    for (const addition of additions) {
+      const card = document.createElement('article'); card.className = 'rounded-2xl border border-line bg-card p-4';
+      const title = document.createElement(addition.slug ? 'a' : 'h3'); title.textContent = addition.title;
+      title.className = 'font-serif text-xl text-ink'; if (title instanceof HTMLAnchorElement) title.href = `/books/${encodeURIComponent(addition.slug!)}/`;
+      const author = document.createElement('p'); author.className = 'mt-1 text-sm text-soft'; author.textContent = addition.author;
+      const status = document.createElement('p'); status.className = 'mt-3 text-xs text-faint';
+      status.textContent = addition.slug ? 'Digest ready · Saved to your books' : addition.status === 'declined' ? 'Request reviewed' : addition.status === 'reviewing' ? 'Digest under review' : 'Digest requested';
+      card.append(title, author, status); list.append(card);
+    }
+  }
+  async function refresh() {
+    const { data } = await supabase.auth.getSession(); activeUserId = data.session?.user.id; render();
+    if (!activeUserId) return;
+    const { data: rows, error } = await supabase.from('book_requests').select('id,title,author,status,created_at,external_id,matched_book_slug').eq('user_id', activeUserId).order('created_at', { ascending: false }).limit(100);
+    if (!error && rows) {
+      const remote: BookAddition[] = rows.map((row) => ({ id: row.id, title: row.title, author: row.author, status: row.status, createdAt: row.created_at, externalId: row.external_id, slug: row.matched_book_slug }));
+      const local = readAdditions(activeUserId).filter((item) => !remote.some((other) => sameBook(item, other)));
+      try { localStorage.setItem(additionsKey(activeUserId), JSON.stringify([...remote, ...local].slice(0,100))); } catch { /* Keep the current shelf if storage is unavailable. */ }
+      render();
+    }
+  }
+  window.addEventListener('awb:book-added', () => { void refresh(); });
+  void refresh();
+</script>

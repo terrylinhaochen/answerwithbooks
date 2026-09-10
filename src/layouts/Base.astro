@@ -11,6 +11,7 @@ export interface Props {
   imageAlt?: string;
   robots?: string;
   jsonLd?: object | object[];
+  readingMode?: boolean;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
   imageAlt = 'Answer with Books turns reader questions into book-grounded insights',
   robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
   jsonLd,
+  readingMode = false,
 } = Astro.props;
 const site = 'https://answerwithbooks.com';
 const canonical = new URL(path, site).href;
@@ -41,9 +43,9 @@ const gaMeasurementIds = (
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const nav = [
-  { href: '/books/', label: 'Books' },
-  { href: '/answers/', label: 'Answers' },
-  { href: '/skills/', label: 'Skills' },
+  { href: '/books/', label: 'Books', prefixes: ['/books/'] },
+  { href: '/guides/', label: 'Guides', prefixes: ['/guides/', '/answers/'] },
+  { href: '/skills/', label: 'Tools', prefixes: ['/tools/', '/skills/', '/speed-read/'] },
 ];
 const current = Astro.url.pathname;
 ---
@@ -107,7 +109,7 @@ const current = Astro.url.pathname;
     }
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink">
-    <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
+    {!readingMode && <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
       <div class="awb-header mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
         <a href="/" class="awb-brand" aria-label="Answer with Books home">Answer with Books</a>
         <div class="awb-header__actions flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
@@ -116,8 +118,8 @@ const current = Astro.url.pathname;
               nav.map((item) => (
                 <a
                   href={item.href}
-                  aria-current={current.startsWith(item.href) ? 'page' : undefined}
-                  class={`awb-nav__link ${current.startsWith(item.href) ? 'awb-nav__link--current' : ''}`}
+                  aria-current={item.prefixes.some((prefix) => current.startsWith(prefix)) ? 'page' : undefined}
+                  class={`awb-nav__link ${item.prefixes.some((prefix) => current.startsWith(prefix)) ? 'awb-nav__link--current' : ''}`}
                 >
                   {item.label}
                 </a>
@@ -140,20 +142,20 @@ const current = Astro.url.pathname;
           </a>
         </div>
       </div>
-    </header>
+    </header>}
 
     <main class="flex-1 w-full">
       <slot />
     </main>
 
-    <footer class="border-t border-line mt-20 bg-paper">
+    {!readingMode && <footer class="border-t border-line mt-20 bg-paper">
       <div class="mx-auto max-w-6xl px-5 py-10 text-sm text-soft">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <p>Answer with Books — books distilled into usable answers.</p>
           <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Editorial method</a>
         </div>
       </div>
-    </footer>
+    </footer>}
 
     <script>
       import { supabase } from '../lib/supabase';

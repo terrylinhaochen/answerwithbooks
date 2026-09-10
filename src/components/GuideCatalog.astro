@@ -1,0 +1,276 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import AnswerRow from './AnswerRow.astro';
+import FaqList from './FaqList.astro';
+import QuestionInvite from './QuestionInvite.astro';
+import { faqJsonLd } from '../lib/seo';
+import { workplaceGuides } from '../lib/workplace-guides';
+import { CANONICAL_TOPICS, topicsForTags } from '../lib/topics';
+
+const answers = (await getCollection('answers')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const books = await getCollection('books');
+const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
+const answerCategories = CANONICAL_TOPICS.map((topic) => ({
+  slug: topic.slug,
+  label: topic.label,
+  description: topic.description,
+  count: answers.filter((answer) => topicsForTags(answer.data.tags).some((answerTopic) => answerTopic.slug === topic.slug)).length,
+}));
+const { path = '/answers/' } = Astro.props;
+const url = `https://answerwithbooks.com${path}`;
+const faqs = [
+  {
+    question: 'What makes these answers different from normal book summaries?',
+    answer:
+      'Each answer is an agent-ready brief for a specific problem. It supplies an initial decision rule and source books; the installed skill uses your harness context to produce the final personalized digest.',
+  },
+  {
+    question: 'How are answers chosen?',
+    answer:
+      'Answers are chosen from recurring practical questions, then matched to books that can make the answer more useful than generic advice.',
+  },
+  {
+    question: 'How many books does each answer use?',
+    answer:
+      'Most answers draw on one to three books so the synthesis stays focused and the source trail remains easy to inspect.',
+  },
+];
+const jsonLd = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: 'Answer with Books briefs',
+    description:
+      'Agent-ready problem briefs grounded in source-book digests and designed for personalized advice.',
+    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+    mainEntity: { '@id': `${url}#itemlist` },
+  },
+  {
+    '@type': 'ItemList',
+    '@id': `${url}#itemlist`,
+    itemListElement: answers.map((answer, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: answer.data.question,
+      url: `https://answerwithbooks.com/answers/${answer.id}/`,
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Answer with Books', item: 'https://answerwithbooks.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Answers', item: url },
+    ],
+  },
+  {
+    ...faqJsonLd(url, faqs),
+  },
+];
+---
+
+<Base
+  title={path === '/guides/' ? 'Guides' : 'Answers'}
+  description={path === '/guides/' ? 'Explore the original book-grounded answer library, plus hands-on AI tutorials for meeting follow-ups, customer feedback, and decision memos.' : 'Real questions framed as agent-ready briefs, each grounded in source-book digests and ready for personalized advice.'}
+  path={path}
+  jsonLd={jsonLd}
+>
+  <section class="awb-section pt-16 pb-8">
+    <p class="awb-eyebrow">Guides</p>
+    <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">Areas top of mind</h1>
+    <p class="awb-copy mt-4 max-w-2xl">
+      Explore questions you’re thinking about, with useful ideas from books and practical next steps.
+    </p>
+    <a href="#ai-tutorials" class="mt-5 inline-block text-sm underline underline-offset-4 decoration-line">New: hands-on AI tutorials ↓</a>
+  </section>
+
+  <section class="awb-section pb-6">
+    <div class="awb-panel p-4 sm:p-5" data-answer-filter>
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <label class="block min-w-0 lg:w-[26rem]">
+          <span class="awb-eyebrow">Search insights</span>
+          <input
+            type="search"
+            placeholder="Search business, technology, productivity, decisions..."
+            class="awb-input mt-2"
+            data-filter-search
+          />
+        </label>
+        <button
+          type="button"
+          class="awb-pill awb-pill-primary w-fit"
+          data-filter-all
+          data-filter-category="all"
+        >
+          All insights
+        </button>
+      </div>
+
+      <div class="mt-6">
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <p class="awb-eyebrow">Browse by category</p>
+            <p class="mt-1 text-sm text-soft">Broad paths into the shelf and insight library.</p>
+          </div>
+          <p class="text-sm text-faint" data-filter-count>{answers.length} insights</p>
+        </div>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-label="Browse answers by category">
+          {answerCategories.map((category) => (
+            <button
+              type="button"
+              class="awb-card-link group flex min-h-[8.75rem] flex-col p-4 text-left"
+              data-filter-category={category.slug}
+            >
+              <span class="font-sans text-xs uppercase tracking-[0.16em] text-faint">{category.count} insights</span>
+              <span class="mt-2 font-serif text-xl leading-tight group-hover:text-accent">{category.label}</span>
+              <span class="mt-2 text-sm leading-relaxed text-soft">{category.description}</span>
+            </button>
+          ))}
+        </div>
+        <p class="mt-3 hidden text-sm text-faint" data-filter-empty>No insights match this view.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="awb-section pb-16 pt-2">
+    <div class="mb-6"><QuestionInvite /></div>
+    <div class="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3" data-filter-list>
+      {answers.map((answer) => (
+        <div
+          class="h-full"
+          data-filter-item
+          data-tags={JSON.stringify(answer.data.tags)}
+          data-categories={JSON.stringify(topicsForTags(answer.data.tags).map((topic) => topic.slug))}
+          data-search={`${answer.data.question} ${answer.data.description} ${answer.data.tags.join(' ')} ${answer.data.books.map((slug) => bookTitles.get(slug) ?? slug).join(' ')}`.toLowerCase()}
+        >
+          <AnswerRow answer={answer} bookTitles={bookTitles} />
+        </div>
+      ))}
+    </div>
+    <div
+      class="mt-6 flex flex-col gap-3 border-t border-line pt-5 text-sm text-soft sm:flex-row sm:items-center sm:justify-between"
+      data-pagination
+    >
+      <p data-pagination-summary>Showing all insights</p>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          class="awb-page-button"
+          data-pagination-prev
+        >
+          Previous
+        </button>
+        <span class="font-sans text-xs uppercase tracking-[0.14em] text-faint" data-pagination-page>Page 1 of 1</span>
+        <button
+          type="button"
+          class="awb-page-button"
+          data-pagination-next
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </section>
+  <section id="ai-tutorials" class="awb-section scroll-mt-28 pb-10" aria-labelledby="ai-tutorials-heading">
+    <p class="awb-eyebrow">Learn by doing</p>
+    <h2 id="ai-tutorials-heading" class="mt-3 font-serif text-4xl">Hands-on AI tutorials</h2>
+    <p class="mt-4 max-w-2xl text-soft">Practice a work task with sample inputs, copyable prompts, and a checklist for reviewing the result.</p>
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      {workplaceGuides.map(guide => (
+        <a href={`/guides/${guide.slug}/`} class="awb-card-link flex flex-col p-5">
+          <p class="text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
+          <h3 class="mt-4 font-serif text-2xl leading-tight">{guide.title}</h3>
+          <p class="mt-3 flex-1 leading-relaxed text-soft">{guide.description}</p>
+          <span class="mt-5 text-sm font-semibold">Start tutorial →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <FaqList items={faqs} eyebrow="Answer Q&A" title="How these guides work" width="wide" />
+
+  <script>
+    const root = document.querySelector<HTMLElement>('[data-answer-filter]');
+    const list = document.querySelector<HTMLElement>('[data-filter-list]');
+    const search = root?.querySelector<HTMLInputElement>('[data-filter-search]');
+    const buttons = Array.from(root?.querySelectorAll<HTMLButtonElement>('[data-filter-category]') ?? []);
+    const count = root?.querySelector<HTMLElement>('[data-filter-count]');
+    const empty = root?.querySelector<HTMLElement>('[data-filter-empty]');
+    const items = Array.from(list?.querySelectorAll<HTMLElement>('[data-filter-item]') ?? []);
+    const pageSize = 9;
+    let activeCategory = 'all';
+    let currentPage = 1;
+
+    const pagination = document.querySelector<HTMLElement>('[data-pagination]');
+    const paginationSummary = pagination?.querySelector<HTMLElement>('[data-pagination-summary]');
+    const paginationPage = pagination?.querySelector<HTMLElement>('[data-pagination-page]');
+    const previous = pagination?.querySelector<HTMLButtonElement>('[data-pagination-prev]');
+    const next = pagination?.querySelector<HTMLButtonElement>('[data-pagination-next]');
+
+    const render = () => {
+      const query = search?.value.trim().toLowerCase() ?? '';
+      const matches = items.filter((item) => {
+        const categories = JSON.parse(item.dataset.categories ?? '[]') as string[];
+        const matchesCategory = activeCategory === 'all' || categories.includes(activeCategory);
+        const matchesQuery = !query || item.dataset.search?.includes(query);
+        return Boolean(matchesCategory && matchesQuery);
+      });
+      const total = matches.length;
+      const pageCount = Math.max(1, Math.ceil(total / pageSize));
+      currentPage = Math.min(currentPage, pageCount);
+      const start = total === 0 ? 0 : (currentPage - 1) * pageSize;
+      const end = Math.min(start + pageSize, total);
+      const pageItems = new Set(matches.slice(start, end));
+
+      for (const item of items) item.hidden = !pageItems.has(item);
+
+      if (count) count.textContent = `${total} insight${total === 1 ? '' : 's'}`;
+      if (empty) empty.classList.toggle('hidden', total > 0);
+      if (pagination) pagination.hidden = total <= pageSize;
+      if (paginationSummary) {
+        paginationSummary.textContent =
+          total === 0 ? 'No insights found' : `Showing ${start + 1}-${end} of ${total} insights`;
+      }
+      if (paginationPage) paginationPage.textContent = `Page ${currentPage} of ${pageCount}`;
+      if (previous) previous.disabled = currentPage <= 1;
+      if (next) next.disabled = currentPage >= pageCount;
+      for (const button of buttons) {
+        const isActive = button.dataset.filterCategory === activeCategory;
+        if (button.dataset.filterAll !== undefined) {
+          button.classList.toggle('awb-pill-primary', isActive);
+          button.classList.toggle('awb-pill-outline', !isActive);
+        } else {
+          button.dataset.active = String(isActive);
+        }
+      }
+    };
+
+    const resetAndRender = () => {
+      currentPage = 1;
+      render();
+    };
+
+    search?.addEventListener('input', resetAndRender);
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const nextCategory = button.dataset.filterCategory ?? 'all';
+        activeCategory = nextCategory === activeCategory ? 'all' : nextCategory;
+        resetAndRender();
+      });
+    });
+    previous?.addEventListener('click', () => {
+      currentPage -= 1;
+      render();
+    });
+    next?.addEventListener('click', () => {
+      currentPage += 1;
+      render();
+    });
+    render();
+  </script>
+</Base>

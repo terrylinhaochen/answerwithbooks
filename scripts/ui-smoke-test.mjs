@@ -42,7 +42,9 @@ try {
 
   await testHomeInteractions(page);
   await testSkills(page);
+  await testWorkplaceGuides(page);
   await testBookPersonalization(page);
+  await testSpeedReader(page);
   await testBookEditorialSlice(page);
   await testIllustrationContrast(page);
   await testFilters(page);
@@ -91,7 +93,7 @@ try {
   );
 
   await context.close();
-  console.log('UI smoke test passed: skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, book requests, content feedback, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
+  console.log('UI smoke test passed: additive workplace guides, original Skills page, speed-reader matching, skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, book requests, content feedback, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
 } finally {
   if (browser) await browser.close();
   server.closeAllConnections();
@@ -148,17 +150,119 @@ async function testFilters(page) {
 }
 
 async function testBookRequest(page) {
+  await page.route('https://openlibrary.org/search.json**', (route) => fulfillJson(route, { docs: [{ key: '/works/OL1708060W', title: 'The Art of Gathering', author_name: ['Priya Parker'], first_publish_year: 2018 }] }));
   await page.goto('/books/', { waitUntil: 'domcontentloaded' });
-  await assertVisibleText(page, '[data-open-book-request]', 'Add a book');
   await page.locator('[data-open-book-request]').click();
-  await page.locator('[data-book-request-dialog]').waitFor({ state: 'visible' });
-  await page.locator('[data-book-request-form] input[name="title"]').fill('The Design of Everyday Things');
-  await page.locator('[data-book-request-form] input[name="author"]').fill('Don Norman');
-  await page.locator('[data-book-request-form] textarea[name="note"]').fill('Useful for product and interface decisions.');
+  await page.locator('#book-query').fill('The Mom Test');
+  const before = supabaseRequests.filter((request) => request.kind === 'book-request-insert').length;
+  await page.locator('[data-book-match]').click();
+  await assertVisibleText(page, '[data-book-candidates]', 'The Mom Test');
+  assert.equal(supabaseRequests.filter((request) => request.kind === 'book-request-insert').length, before, 'Matching must not save before confirmation');
+  const bookEmail = page.locator('[data-book-request-form] input[name="email"]');
+  assert.equal(await page.locator('[name="remember"]').count(), 0);
+  assert.equal(await bookEmail.getAttribute('required'), '');
   await page.locator('[data-book-request-submit]').click();
-  await expectText(page.locator('[data-book-request-status]'), /Request received/);
+  assert.equal(await bookEmail.evaluate(input => input.validity.valueMissing), true);
+  assert.equal(supabaseRequests.filter(request => request.kind === 'book-request-insert').length, before, 'Missing email must not save');
+  await bookEmail.fill('not-an-email');
+  await page.locator('[data-book-request-submit]').click();
+  assert.equal(await bookEmail.evaluate(input => input.validity.typeMismatch), true);
+  assert.equal(supabaseRequests.filter(request => request.kind === 'book-request-insert').length, before, 'Invalid email must not save');
+  await bookEmail.fill('shelf@example.test');
+
+  await page.locator('[data-book-request-submit]').click();
+  await assertVisibleText(page, '[data-added-title]', 'Added to your shelf');
+  assert.equal(await page.locator('[data-added-read]').getAttribute('href'), '/books/the-mom-test/');
+  const row = supabaseRequests.filter((request) => request.kind === 'book-request-insert').at(-1).body;
+  assert.equal(row.title, 'The Mom Test'); assert.equal(row.matched_book_slug, 'the-mom-test');
+  assert.equal(row.requester_email, 'shelf@example.test'); assert.equal(row.input_kind, 'name');
   await page.locator('[data-close-book-request]').first().click();
-  assert.equal(await page.locator('[data-book-request-dialog]').isVisible(), false);
+  await assertVisibleText(page, '[data-book-additions]', 'The Mom Test');
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, '[data-book-additions]', 'The Mom Test');
+  await page.locator('[data-open-book-request]').click();
+  assert.equal(await page.locator('[name="email"]').inputValue(), '');
+  await page.locator('#book-query').fill('The Mom Test'); await page.locator('[data-book-match]').click();
+  await page.locator('[name="email"]').fill('shelf@example.test');
+  await page.locator('[data-book-request-submit]').click();
+  await assertVisibleText(page, '[data-added-title]', 'Already on your shelf');
+  assert.equal(supabaseRequests.filter((request) => request.kind === 'book-request-insert').length, before + 1, 'Repeated confirmation should not create a duplicate');
+  await page.locator('[data-book-add-another]').click();
+  await page.locator('#book-query').fill('The Art of Gathering'); await page.locator('[data-book-match]').click();
+  await assertVisibleText(page, '[data-book-candidates]', 'Priya Parker');
+  await page.locator('[name="email"]').fill('shelf@example.test');
+  await page.locator('[data-book-request-submit]').click();
+  await assertVisibleText(page, '[data-added-description]', 'Digest requested');
+  assert.equal(await page.evaluate(() => localStorage.getItem('awb:book-add-email')), null);
+  assert.equal(supabaseRequests.filter((request) => request.kind === 'book-request-insert').at(-1).body.external_id, '/works/OL1708060W');
+  await page.locator('[data-book-add-another]').click();
+  await page.locator('[data-book-file]').setInputFiles({ name: 'bad.pdf', mimeType: 'application/pdf', buffer: Buffer.from('not a pdf') });
+  await page.locator('[data-book-match]').click();
+  await expectText(page.locator('[data-book-request-status]'), /valid PDF/);
+  assert.equal(await page.locator('[data-book-identify-form]').isVisible(), true);
+  await page.locator('[data-clear-book-file]').click();
+  await page.locator('[data-book-manual]').click();
+  await page.locator('[name="email"]').fill('shelf@example.test');
+  await page.locator('[name="title"]').fill('A New Book'); await page.locator('input[name="author"]').fill('An Author');
+  await page.route('https://*.supabase.co/rest/v1/book_requests', (route) => fulfillJson(route, { message: 'Temporary error' }, 500));
+  await page.locator('[data-book-request-submit]').click();
+  await expectText(page.locator('[data-book-request-status]'), /couldn’t save/);
+  assert.equal(await page.locator('[name="title"]').inputValue(), 'A New Book');
+  assert.equal(await page.locator('[data-book-request-submit]').isEnabled(), true);
+  await page.unroute('https://*.supabase.co/rest/v1/book_requests');
+  await page.locator('[data-close-book-request]').first().click();
+  await page.unroute('https://openlibrary.org/search.json**');
+}
+
+async function testWorkplaceGuides(page) {
+  await page.goto('/guides/');
+  assert.deepEqual((await page.locator('nav[aria-label="Main"] a').allTextContents()).map(text => text.trim()), ['Books', 'Guides', 'Tools']);
+  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Guides');
+  const questionEntry = page.locator('[data-question-invite] a');
+  assert.equal(await questionEntry.getAttribute('href'), 'https://forms.gle/bd5By1m4Vko9sn4g6');
+  assert.doesNotMatch(await page.locator('[data-question-invite]').textContent(), /Sign in to save/);
+  await page.goto('/');
+  assert.equal(await page.locator('[data-question-invite] a').count(), 1);
+  const slugs = ['meeting-notes-to-action-plan', 'customer-feedback-to-evidence', 'evidence-to-decision-memo'];
+  for (const slug of slugs) {
+    await page.goto(`/guides/${slug}/`);
+    assert.equal(await page.locator('h1').count(), 1);
+    assert.equal(await page.locator('[data-guide-check]').count(), 4);
+    await page.locator('[data-copy-target="practice-text"]').click();
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), await page.locator('#practice-text').textContent());
+    await page.locator('[data-copy-target="prompt-text"]').click();
+    const prompt = await page.evaluate(() => navigator.clipboard.readText());
+    assert.ok(prompt.length > 300);
+    await page.locator('[data-guide-check]').first().check();
+    await page.reload();
+    assert.equal(await page.locator('[data-guide-check]').first().isChecked(), true);
+    assert.match(await page.locator('[data-guide-progress]').textContent(), /1 of 4/);
+    const source = page.locator('article aside a');
+    const response = await page.request.get(await source.getAttribute('href'));
+    assert.equal(response.status(), 200, 'source book should exist');
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'guide should fit mobile');
+  }
+  await page.goto('/tools/');
+  await page.waitForURL('**/skills/');
+  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Tools');
+  assert.equal(await page.locator('h1').textContent(), 'Give your agent a shelf it can call.');
+  assert.equal(await page.locator('[data-prompt-builder]').count(), 0);
+  await page.locator('[data-copy-skill]').click();
+  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'npx answer-with-books install --skill --api');
+  await page.goto('/guides/');
+  assert.equal(await page.locator('h1').textContent(), 'Areas top of mind');
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
+  assert.equal(await page.locator('#ai-tutorials a').count(), 3);
+  await page.locator('[data-filter-search]').fill('pivot');
+  assert.ok(await page.locator('[data-filter-item]:visible').count() > 0);
+  await page.locator('[data-filter-search]').fill('no-such-guide-xyz');
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), 0);
+  assert.equal(await page.locator('[data-filter-empty]').isVisible(), true);
+  assert.equal(await page.locator('#ai-tutorials a').count(), 3, 'tutorial additions should remain available');
+  await page.goto('/answers/');
+  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Guides');
+  await page.goto('/skills/');
+  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Tools');
 }
 
 async function testSkills(page) {
@@ -178,7 +282,7 @@ async function testBookPersonalization(page) {
   assert.equal(await page.locator('[data-book-personalizer] details').count(), 0);
   const personalizerTop = await page.locator('[data-book-personalizer]').evaluate((element) => element.getBoundingClientRect().top);
   const digestTop = await page.locator('.prose-awb').evaluate((element) => element.getBoundingClientRect().top);
-  assert.ok(personalizerTop < digestTop, 'personalization should appear before the digest body');
+  assert.ok(personalizerTop > digestTop, 'personalization should appear after the digest body');
   await page.locator('[data-ai-provider="claude"]').click();
   assert.equal(await page.evaluate(() => localStorage.getItem('awb:preferred-ai')), 'claude');
   await expectText(page.locator('[data-personalize-button]'), /Personalize in Claude/);
@@ -211,6 +315,85 @@ async function testBookPersonalization(page) {
   const chatGptDestination = new URL(await page.locator('[data-personalize-button]').getAttribute('href'));
   assert.equal(chatGptDestination.origin + chatGptDestination.pathname, 'https://chatgpt.com/');
   assert.match(chatGptDestination.searchParams.get('q'), /Start a personalized reading experience for Atomic Habits/);
+}
+
+
+async function testSpeedReader(page) {
+  for (const [id, title] of [['the-mom-test', 'The Mom Test'], ['designing-your-life', 'Designing Your Life']]) {
+    await page.goto(`/books/${id}/`, { waitUntil: 'domcontentloaded' });
+    await page.getByRole('link', { name: 'Speed read this book' }).click();
+    await assertVisibleText(page, '[data-reader-book]', title);
+    assert.equal(await page.locator('nav[aria-label="Main"]').count(), 0);
+    assert.equal(await page.locator('[data-reader-chapters]').getAttribute('open'), null);
+    const firstWord = await page.locator('[data-reader-current]').textContent();
+    assert.notEqual(firstWord, 'Ready');
+    await page.getByRole('button', { name: 'Play', exact: true }).click();
+    await page.waitForFunction((word) => document.querySelector('[data-reader-current]').textContent !== word, firstWord);
+    await page.getByRole('button', { name: 'Pause', exact: true }).click();
+    const pausedWord = await page.locator('[data-reader-current]').textContent();
+    await page.waitForTimeout(450);
+    assert.equal(await page.locator('[data-reader-current]').textContent(), pausedWord, 'Pause should stop word advancement');
+    await page.getByRole('button', { name: 'Restart section' }).click();
+    assert.equal(await page.locator('[data-reader-current]').textContent(), firstWord);
+    await page.locator('[data-reader-chapters] summary').click();
+    const chapter = page.locator('[data-chapter-index="1"]');
+    const chapterTitle = (await chapter.textContent()).replace(/^2\. /, '');
+    await chapter.click();
+    await assertVisibleText(page, 'h1', chapterTitle);
+    await assertVisibleText(page, '[data-reader-book]', title);
+    assert.equal(await page.locator('[data-reader-chapters]').getAttribute('open'), null);
+    await page.getByRole('button', { name: 'Read text', exact: true }).click();
+    assert.equal(await page.locator('[data-reader-text]').isVisible(), true);
+    assert.equal(await page.locator('[data-reader-stage]').isVisible(), false);
+    assert.ok((await page.locator('[data-reader-text]').textContent()).length > 100);
+    await page.getByRole('button', { name: 'Speed read', exact: true }).click();
+    assert.equal(await page.locator('[data-reader-stage]').isVisible(), true);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await assertVisibleText(page, 'h1', chapterTitle);
+    await page.locator('[data-reader-exit]').click();
+    assert.equal(new URL(page.url()).pathname, `/books/${id}/`);
+  }
+  await page.goto('/speed-read/?q=Should%20I%20quit%20my%20job%20or%20test%20another%20career%20path%20first%3F', { waitUntil: 'domcontentloaded' });
+  await expectText(page.locator('[data-reader-book]'), /Designing Your Life|So Good They Can't Ignore You/);
+  assert.match(await page.locator('[data-reader-exit]').getAttribute('href'), /^\/answers\//);
+  assert.notEqual(await page.locator('[data-reader-current]').textContent(), 'Ready');
+  await page.goto('/speed-read/?book=the-mom-test&section=1', { waitUntil: 'domcontentloaded' });
+  const backward = page.getByRole('button', { name: 'Backward', exact: true });
+  const forward = page.getByRole('button', { name: 'Forward', exact: true });
+  assert.equal(await backward.isDisabled(), true);
+  assert.equal(await forward.isEnabled(), true);
+  const sectionWords = (await page.locator('[data-reader-text] p').allTextContents()).join(' ').split(/\s+/);
+  await forward.click();
+  assert.equal(await page.locator('[data-reader-current]').textContent(), sectionWords[1]);
+  await forward.click();
+  assert.equal(await page.locator('[data-reader-current]').textContent(), sectionWords[2]);
+  await backward.click();
+  assert.equal(await page.locator('[data-reader-current]').textContent(), sectionWords[1]);
+  await backward.click();
+  assert.equal(await backward.isDisabled(), true);
+  await page.locator('h1').click();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await page.locator('[data-reader-current]').textContent(), sectionWords[1]);
+  await page.keyboard.press('ArrowLeft');
+  assert.equal(await backward.isDisabled(), true);
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
+  await page.waitForFunction(() => !document.querySelector('[data-reader-backward]').disabled);
+  await backward.click();
+  const pausedWord = await page.locator('[data-reader-current]').textContent();
+  await page.waitForTimeout(500);
+  assert.equal(await page.locator('[data-reader-current]').textContent(), pausedWord, 'Stepping must pause playback');
+  await page.locator('h1').click();
+  for (let index = 0; index < sectionWords.length; index++) await page.keyboard.press('ArrowRight');
+  assert.equal(await forward.isDisabled(), true);
+  assert.equal(await page.locator('[data-reader-current]').textContent(), sectionWords.at(-1));
+  await backward.click();
+  assert.equal(await forward.isEnabled(), true);
+  await page.getByRole('button', { name: 'Read text', exact: true }).click();
+  assert.equal(await backward.isDisabled(), true);
+  assert.equal(await forward.isDisabled(), true);
+  await page.goto('/speed-read/?book=missing-book', { waitUntil: 'domcontentloaded' });
+  await assertVisibleText(page, 'h1', 'Book not found');
+  assert.equal(await page.locator('[data-reader-play]').isEnabled(), false);
 }
 
 async function testBookEditorialSlice(page) {
@@ -302,7 +485,12 @@ async function testOnboardingSignupProfileAndShelf(page) {
 
   await page.goto('/books/atomic-habits/', { waitUntil: 'domcontentloaded' });
   await page.locator('[data-save-book]').click();
-  await expectText(page.locator('[data-save-book]'), /Saved - remove/);
+  assert.equal(await page.locator('[data-save-book]').getAttribute('aria-pressed'), 'true');
+  assert.equal(await page.locator('[data-save-book]').getAttribute('aria-label'), 'Remove saved book');
+  assert.equal(await page.locator('[data-save-book] svg').count(), 1, 'Saving must preserve the bookmark icon');
+  await page.locator('[data-save-book]').click();
+  assert.equal(await page.locator('[data-save-book]').getAttribute('aria-pressed'), 'false');
+  await page.locator('[data-save-book]').click();
   await page.goto('/my-books/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#library-content:not(.hidden)');
   await assertVisibleText(page, '#saved-list', 'Atomic Habits');
@@ -516,6 +704,8 @@ async function handleSupabaseRoute(route) {
     supabaseRequests.push({ kind: 'profile-upsert', method, body });
     return fulfillJson(route, Array.isArray(body) ? body : [body], 201);
   }
+
+  if (url.pathname === '/rest/v1/book_requests' && method === 'GET') return fulfillJson(route, []);
 
   if (url.pathname === '/rest/v1/book_requests' && method === 'POST') {
     supabaseRequests.push({ kind: 'book-request-insert', method, body });

@@ -170,6 +170,12 @@ const jsonLd = [
           >
             Save answer
           </button>
+          <a
+            href={`/speed-read/?q=${encodeURIComponent(answer.data.question)}`}
+            class="awb-pill awb-pill-outline"
+          >
+            Speed-read sources
+          </a>
           {topics.map((topic) => (
             <a
               href={`/topics/${topic.slug}/`}

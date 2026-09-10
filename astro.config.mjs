@@ -12,6 +12,8 @@ const utilityPaths = [
   '/community/',
   '/acquired-intelligence/',
   '/ask/',
+  '/tools/',
+  '/speed-read/',
   '/404/',
 ];
 

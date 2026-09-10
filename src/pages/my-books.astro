@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import BookAdditions from '../components/BookAdditions.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
 import { CANONICAL_TOPICS } from '../lib/topics';
 import { communityMaps } from '../lib/user-library';
@@ -60,6 +61,8 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
           description="The goal is not generic reading progress. It is a trail of recurring questions, source books, and next questions the system can use to help you explore better."
         />
       </div>
+
+      <BookAdditions />
 
       <div class="mt-12 grid gap-8 lg:grid-cols-2">
         <section class="awb-card-link p-5 sm:p-6">

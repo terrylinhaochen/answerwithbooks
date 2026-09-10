@@ -1,0 +1,331 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const cleanMarkdown = (value: string) => value
+  .replace(/<figure[\s\S]*?<\/figure>/g, '')
+  .replace(/<svg[\s\S]*?<\/svg>/g, '')
+  .replace(/```[\s\S]*?```/g, '')
+  .replace(/<[^>]+>/g, '')
+  .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  .replace(/^#{1,6}\s+/gm, '')
+  .replace(/[*_`>~]/g, '')
+  .replace(/&nbsp;/g, ' ')
+  .replace(/\n{3,}/g, '\n\n')
+  .trim();
+
+const books = await getCollection('books');
+const answers = await getCollection('answers');
+const payload = {
+  books: books.map((book) => {
+    const body = book.body ?? '';
+    const chunks = body.split(/^##\s+/m);
+    const sections = chunks.map((chunk, index) => {
+      const lineEnd = chunk.indexOf('\n');
+      return {
+        title: index === 0 ? 'Introduction' : cleanMarkdown(chunk.slice(0, lineEnd)),
+        text: cleanMarkdown(index === 0 ? chunk : chunk.slice(lineEnd + 1)),
+      };
+    }).filter((section) => section.text.length > 100);
+    return { id: book.id, title: book.data.title, sections };
+  }),
+  answers: answers.map((answer) => ({
+    id: answer.id, question: answer.data.question, description: answer.data.description,
+    books: answer.data.books, tags: answer.data.tags,
+  })),
+};
+const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c');
+---
+
+<Base title="Focused reading" description="Read a book digest one section at a time, with centered words and an adjustable reading pace." path="/speed-read/" robots="noindex, follow" readingMode>
+  <div class="reader" data-speed-reader-app>
+    <header class="reader-header">
+      <a class="reader-exit" href="/books/" data-reader-exit aria-label="Back to book">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg>
+        <span>Back</span>
+      </a>
+      <span class="reader-book" data-reader-book>Focused reading</span>
+      <details class="chapters" data-reader-chapters>
+        <summary aria-label="Choose chapter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1" /></svg>
+          <span data-reader-chapter-count>Chapters</span>
+        </summary>
+        <div class="chapter-menu">
+          <p class="chapter-caption">Digest sections</p>
+          <div data-reader-chapter-list></div>
+        </div>
+      </details>
+    </header>
+
+    <section class="reading-area" aria-label="Reading content">
+      <h1 data-reader-title>Choose a book to start reading</h1>
+      <div class="word-stage" data-reader-stage aria-label="Word by word reader">
+        <span class="word-ghost word-before" data-reader-prev aria-hidden="true"></span>
+        <span class="word-focus" data-reader-current>Ready</span>
+        <span class="word-ghost word-after" data-reader-next aria-hidden="true"></span>
+      </div>
+      <article class="chapter-text" data-reader-text hidden aria-label="Full section text"></article>
+      <p class="reader-status" data-reader-status role="status"></p>
+    </section>
+
+    <footer class="reader-controls">
+      <div class="playback">
+        <button type="button" class="step-button" data-reader-backward aria-label="Backward" title="Backward (←)" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="m19 5-9 7 9 7V5ZM5 5v14" /></svg>
+        </button>
+        <button type="button" class="play-button" data-reader-play disabled>Play</button>
+        <button type="button" class="step-button" data-reader-forward aria-label="Forward" title="Forward (→)" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="m5 5 9 7-9 7V5Zm14 0v14" /></svg>
+        </button>
+        <label class="speed-control"><span class="sr-only">Reading speed</span><select data-reader-wpm aria-label="Reading speed"><option value="200">200 wpm</option><option value="300" selected>300 wpm</option><option value="450">450 wpm</option><option value="600">600 wpm</option><option value="750">750 wpm</option></select></label>
+      </div>
+      <div class="reader-bottom"><span data-reader-progress-label>0%</span><button type="button" data-reader-reset aria-label="Restart section">Restart</button><button type="button" data-reader-text-toggle>Read text</button></div>
+      <div class="reader-progress" role="progressbar" aria-label="Section progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-reader-progress></span></div>
+    </footer>
+    <noscript><p class="reader-status">Enable JavaScript for focused reading, or <a href="/books/the-mom-test/">read the book digest</a>.</p></noscript>
+  </div>
+
+  <script id="speed-reader-data" type="application/json" set:html={payloadJson}></script>
+  <script>
+    type Section = { title: string; text: string };
+    type Book = { id: string; title: string; sections: Section[] };
+    type Chapter = Section & { book: Book; sectionIndex: number };
+    type Answer = { id: string; question: string; description: string; books: string[]; tags: string[] };
+    const root = document.querySelector<HTMLElement>('[data-speed-reader-app]')!;
+    const data = JSON.parse(document.querySelector('#speed-reader-data')!.textContent!) as { books: Book[]; answers: Answer[] };
+    const node = <T extends HTMLElement>(name: string) => root.querySelector<T>(`[data-reader-${name}]`)!;
+    const params = new URLSearchParams(location.search);
+    const bookById = new Map(data.books.map((book) => [book.id, book]));
+    const requestedBook = params.get('book');
+    const question = params.get('q') || params.get('question') || '';
+    const tokens = question.toLowerCase().match(/[a-z]{3,}/g)?.filter((word) => !['the', 'and', 'how', 'should', 'what', 'with', 'for', 'that', 'this', 'first', 'another'].includes(word)) ?? [];
+    const score = (text: string) => tokens.reduce((sum, word) => sum + (text.toLowerCase().includes(word) ? 1 : 0), 0);
+    const matchedAnswer = question ? data.answers.map((answer) => ({ answer, score: score(`${answer.question} ${answer.description} ${answer.tags.join(' ')}`) })).filter((item) => item.score > 0).sort((a, b) => b.score - a.score)[0]?.answer : undefined;
+    const selectedBooks = requestedBook
+      ? [bookById.get(requestedBook)].filter(Boolean) as Book[]
+      : matchedAnswer ? matchedAnswer.books.map((id) => bookById.get(id)).filter(Boolean) as Book[]
+      : question ? data.books.filter((book) => score(book.sections.map((section) => section.text).join(' ')) > 0).sort((a, b) => score(b.sections.map((s) => s.text).join(' ')) - score(a.sections.map((s) => s.text).join(' '))).slice(0, 2)
+      : [bookById.get('the-mom-test')!];
+    let chapters: Chapter[] = selectedBooks.flatMap((book) => book.sections.map((section, sectionIndex) => ({ ...section, book, sectionIndex })));
+    if (question && !requestedBook) chapters.sort((a, b) => score(`${b.title} ${b.text}`) - score(`${a.title} ${a.text}`));
+    let wordIndex = 0;
+    let words: string[] = [];
+    let timer: number | undefined;
+    let playing = false;
+    let textMode = false;
+    const playButton = node<HTMLButtonElement>('play');
+    const chapterToggle = node<HTMLDetailsElement>('chapters');
+    const stage = node('stage');
+    const textView = node('text');
+    const speed = node<HTMLSelectElement>('wpm');
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let wordAnimation: Animation | undefined;
+    let displayedWordIndex = -1;
+    function fitWords() {
+      if (textMode) return;
+      const current = node('current');
+      current.style.fontSize = '';
+      const available = stage.clientWidth * 0.56;
+      const width = current.getBoundingClientRect().width;
+      if (width > available && available > 0) {
+        current.style.fontSize = `${parseFloat(getComputedStyle(current).fontSize) * available / width}px`;
+      }
+      stage.style.setProperty('--focus-half', `${current.getBoundingClientRect().width / 2}px`);
+    }
+    function paint() {
+
+      node('prev').textContent = words[wordIndex - 1] ?? '';
+      node('current').textContent = words[wordIndex] ?? 'Ready';
+      node('next').textContent = words[wordIndex + 1] ?? '';
+      fitWords();
+      node<HTMLButtonElement>('backward').disabled = textMode || wordIndex === 0 || !words.length;
+      node<HTMLButtonElement>('forward').disabled = textMode || wordIndex >= words.length - 1 || !words.length;
+      if (displayedWordIndex !== wordIndex) {
+        wordAnimation?.cancel();
+        if (!reducedMotion.matches) wordAnimation = node('current').animate([{ opacity: 0.78 }, { opacity: 1 }], { duration: 70, easing: 'ease-out' });
+        displayedWordIndex = wordIndex;
+      }
+      const progress = words.length > 1 ? Math.round(wordIndex / (words.length - 1) * 100) : 0;
+      node('progress').style.width = `${progress}%`;
+      node('progress').parentElement!.setAttribute('aria-valuenow', String(progress));
+      node('progress-label').textContent = `${progress}%`;
+      playButton.textContent = playing ? 'Pause' : wordIndex === words.length - 1 && words.length ? 'Replay' : 'Play';
+    }
+    function pause() {
+      window.clearTimeout(timer);
+      timer = undefined;
+      playing = false;
+      paint();
+    }
+    function seek(index: number) {
+      if (!words.length || textMode) return;
+      pause();
+      wordIndex = Math.max(0, Math.min(words.length - 1, index));
+      node('status').textContent = '';
+      paint();
+    }
+    function tick() {
+
+      const punctuationDelay = /[.!?][”’"\x27)]*$/.test(words[wordIndex]) ? 1.8 : /[,;:][”’"\x27)]*$/.test(words[wordIndex]) ? 1.25 : 1;
+      timer = window.setTimeout(() => {
+        if (wordIndex >= words.length - 1) {
+          pause();
+          node('status').textContent = 'Section complete';
+          return;
+        }
+        wordIndex++;
+        paint();
+        tick();
+      }, 60000 / Number(speed.value) * punctuationDelay);
+    }
+    function togglePlay() {
+      if (!words.length || textMode) return;
+      if (playing) return pause();
+      if (wordIndex === words.length - 1) wordIndex = 0;
+      node('status').textContent = '';
+      playing = true;
+      chapterToggle.open = false;
+      paint();
+      tick();
+    }
+    function loadChapter(index: number) {
+      pause();
+      const chapter = chapters[index];
+      if (!chapter) return;
+      words = chapter.text.split(/\s+/).filter(Boolean);
+      wordIndex = 0;
+      node('book').textContent = chapter.book.title;
+      node('title').textContent = chapter.title;
+      document.title = `${chapter.title} — ${chapter.book.title}`;
+      node('chapter-count').textContent = `${index + 1} / ${chapters.length}`;
+      const exit = node<HTMLAnchorElement>('exit');
+      exit.href = matchedAnswer && !requestedBook ? `/answers/${matchedAnswer.id}/` : `/books/${chapter.book.id}/`;
+      exit.setAttribute('aria-label', matchedAnswer && !requestedBook ? 'Back to answer' : `Back to ${chapter.book.title}`);
+      textView.replaceChildren(...chapter.text.split(/\n\s*\n/).map((paragraph) => {
+        const element = document.createElement('p');
+        element.textContent = paragraph;
+        return element;
+      }));
+      node('status').textContent = '';
+      playButton.disabled = textMode || !words.length;
+      chapterToggle.open = false;
+      root.querySelectorAll<HTMLButtonElement>('[data-chapter-index]').forEach((button) => {
+        if (Number(button.dataset.chapterIndex) === index) button.setAttribute('aria-current', 'true');
+        else button.removeAttribute('aria-current');
+      });
+      if (requestedBook) {
+        const url = new URL(location.href);
+        url.searchParams.set('section', String(chapter.sectionIndex));
+        history.replaceState(null, '', url);
+      }
+      paint();
+    }
+    chapters.forEach((chapter, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.chapterIndex = String(index);
+      button.textContent = `${index + 1}. ${chapter.title}`;
+      if (selectedBooks.length > 1) {
+        const label = document.createElement('small');
+        label.textContent = chapter.book.title;
+        button.append(label);
+      }
+      button.addEventListener('click', () => { loadChapter(index); chapterToggle.querySelector('summary')?.focus(); });
+      node('chapter-list').append(button);
+    });
+    playButton.addEventListener('click', togglePlay);
+    node('backward').addEventListener('click', () => seek(wordIndex - 1));
+    node('forward').addEventListener('click', () => seek(wordIndex + 1));
+    window.addEventListener('resize', fitWords);
+    document.fonts.ready.then(fitWords);
+
+    node('reset').addEventListener('click', () => { pause(); wordIndex = 0; node('status').textContent = ''; paint(); });
+    speed.addEventListener('change', () => { if (playing) { pause(); togglePlay(); } });
+    node('text-toggle').addEventListener('click', () => {
+      pause();
+      textMode = !textMode;
+      stage.hidden = textMode;
+      textView.hidden = !textMode;
+      root.classList.toggle('text-mode', textMode);
+      node('text-toggle').textContent = textMode ? 'Speed read' : 'Read text';
+      playButton.disabled = textMode || !words.length;
+      paint();
+    });
+    chapterToggle.addEventListener('toggle', () => { if (chapterToggle.open) pause(); });
+    document.addEventListener('click', (event) => { if (!chapterToggle.contains(event.target as Node)) chapterToggle.open = false; });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+    window.addEventListener('pagehide', pause);
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') { chapterToggle.open = false; pause(); }
+      if (event.target instanceof Element && event.target.closest('button, a, input, select, textarea, summary, [contenteditable]')) return;
+      if (event.code === 'Space') { event.preventDefault(); togglePlay(); }
+      if (!textMode && ['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.preventDefault();
+        seek(wordIndex + (event.key === 'ArrowRight' ? 1 : -1));
+
+      }
+    });
+    const sectionIndex = Number(params.get('section') ?? 0);
+    if (chapters.length) loadChapter(requestedBook && Number.isInteger(sectionIndex) && sectionIndex >= 0 && sectionIndex < chapters.length ? sectionIndex : 0);
+    else {
+      node('title').textContent = requestedBook ? 'Book not found' : 'No matching sections';
+      node('status').textContent = 'Return to the library to choose a book.';
+      node('text-toggle').hidden = true;
+      chapterToggle.hidden = true;
+    }
+  </script>
+  <style>
+    .reader { min-height: 100svh; display: flex; flex-direction: column; background: #faf9f6; color: #292824; }
+    .reader-header { display: grid; grid-template-columns: 1fr minmax(0, 2fr) 1fr; align-items: center; gap: 16px; padding: 28px 40px; font-size: 13px; color: #77756e; }
+    .reader-exit { display: inline-flex; align-items: center; gap: 6px; justify-self: start; }
+    .reader-book { text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chapters { position: relative; justify-self: end; }
+    .chapters summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; white-space: nowrap; }
+    .chapters summary::-webkit-details-marker { display: none; }
+    .chapters summary:hover, .reader-exit:hover { color: #292824; }
+    .chapter-menu { position: absolute; z-index: 10; top: calc(100% + 8px); right: 0; width: min(360px, calc(100vw - 40px)); max-height: 65svh; overflow-y: auto; padding: 12px; border: 1px solid #e8e6df; border-radius: 16px; background: #fffefa; box-shadow: 0 16px 50px #24221b14; }
+    .chapter-caption { padding: 8px 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+    .chapter-menu :global(button) { display: block; width: 100%; text-align: left; padding: 12px 10px; border-radius: 8px; font-size: 14px; line-height: 1.45; color: #5e5a53; }
+    .chapter-menu :global(button:hover), .chapter-menu :global(button[aria-current]) { background: #f0eee7; color: #24221b; }
+    .chapter-menu :global(small) { display: block; font-size: 11px; color: #8b877e; margin-top: 4px; }
+    .reading-area { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 36px 24px; min-height: 360px; }
+    h1 { font-family: var(--font-serif); font-weight: 400; text-align: center; font-size: clamp(22px, 3vw, 32px); line-height: 1.3; max-width: 660px; margin: 0 0 64px; }
+    .word-stage { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 1100px; height: 130px; }
+    .word-focus { flex-shrink: 0; font-family: var(--font-serif); font-weight: 400; color: #454940; font-size: clamp(32px, 4vw, 48px); line-height: 1.3; text-align: center; white-space: nowrap; }
+    .word-ghost { position: absolute; width: max(0px, calc(50% - var(--focus-half, 80px) - 22px)); overflow: hidden; white-space: nowrap; font-family: var(--font-serif); font-size: clamp(24px, 3vw, 34px); filter: blur(.45px); color: #82867b; opacity: .64; }
+    .word-before { right: calc(50% + var(--focus-half, 80px) + 22px); text-align: right; }
+    .word-after { left: calc(50% + var(--focus-half, 80px) + 22px); text-align: left; }
+    .reader-status { min-height: 20px; font-size: 12px; color: #89867e; text-align: center; margin-top: 32px; }
+    .reader-controls { width: min(520px, calc(100% - 48px)); margin: 0 auto; padding: 20px 0 32px; }
+    .playback { display: flex; justify-content: center; align-items: center; gap: 18px; flex-wrap: wrap; }
+    button, select { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .4; }
+    .step-button { display: grid; place-items: center; color: #77756e; width: 44px; height: 44px; border-radius: 50%; }
+    .step-button:hover:not(:disabled) { color: #454940; background: #f0eee7; }
+    .play-button { min-width: 100px; padding: 13px 24px; background: #4d5548; color: #fffefa; border-radius: 28px; font-size: 14px; }
+    .speed-control select { background: transparent; color: #77756e; font-size: 12px; padding: 10px 0; }
+    .reader-bottom { display: flex; justify-content: space-between; margin: 32px 0 12px; color: #89867e; font-size: 11px; }
+    .reader-bottom button:hover { color: #292824; }
+    .reader-progress { height: 2px; background: #eae7df; }
+    .reader-progress span { display: block; width: 0; height: 100%; background: #89867e; }
+    .chapter-text { width: 100%; max-width: 640px; font-family: var(--font-serif); font-size: 23px; line-height: 1.7; }
+    .chapter-text :global(p + p) { margin-top: 1.2em; }
+    .reader:not(.text-mode) h1 { transform: translateY(clamp(-48px, -5vh, -24px)); }
+    .text-mode .reading-area { justify-content: flex-start; }
+    .text-mode h1 { margin-bottom: 40px; }
+    [hidden] { display: none !important; }
+    @media (max-width: 640px) {
+      .reader-header { padding: 16px; gap: 8px; font-size: 12px; }
+      .reader-exit span { display: none; }
+      .reader-exit { padding: 10px; }
+      .reader-header { grid-template-columns: 40px minmax(0, 1fr) auto; }
+      .word-ghost { font-size: 24px; }
+      .playback { gap: 10px; }
+      .play-button { min-width: 76px; padding: 12px 18px; }
+      h1 { margin-bottom: 40px; }
+    }
+    :is(button, a, select, summary):focus-visible { outline: 2px solid #77756e; outline-offset: 5px; }
+  </style>
+</Base>

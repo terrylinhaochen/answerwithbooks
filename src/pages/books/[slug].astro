@@ -161,18 +161,36 @@ const jsonLd = [
           Digest by <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Answer with Books</a>
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-4">
-          <button
-            type="button"
-            data-save-book={book.id}
-            data-title={book.data.title}
-            class="awb-pill awb-pill-outline cursor-pointer"
-          >
-            Save this book
-          </button>
+          <div class="book-actions" role="group" aria-label="Book actions">
+            <button
+              type="button"
+              data-save-book={book.id}
+              data-title={book.data.title}
+              class="book-action"
+              aria-label="Save this book"
+              aria-pressed="false"
+              title="Save this book"
+            >
+              <svg class="bookmark-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17l-6-4-6 4V4Z" />
+              </svg>
+            </button>
+            <a
+              href={`/speed-read/?book=${book.id}`}
+              class="book-action"
+              aria-label="Speed read this book"
+              title="Speed read this book"
+            >
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 5c-3-2-6-2-10-1v15c4-1 7-1 10 1 3-2 6-2 10-1V4c-4-1-7-1-10 1Zm0 0v15" />
+                <path d="m15 8 4 3-4 3V8Z" fill="currentColor" stroke-width="1" />
+              </svg>
+            </a>
+          </div>
           {topics.map((topic) => (
             <a
               href={`/topics/${topic.slug}/`}
-              class="inline-flex min-h-8 items-center rounded-full border border-line px-3 py-1 text-xs text-soft font-sans hover:border-accent hover:text-accent"
+              class="inline-flex min-h-8 items-center rounded-full bg-wash px-3 py-1 text-xs text-soft font-sans hover:text-ink"
             >
               {topic.label}
             </a>
@@ -181,8 +199,6 @@ const jsonLd = [
       </div>
       <BookCover book={book} size="lg" class="justify-self-start lg:justify-self-end" priority />
     </header>
-
-    <BookDigestPersonalizer title={book.data.title} author={book.data.author} bookUrl={url} />
 
     <section class="mt-6 grid gap-5 lg:grid-cols-2">
       <div class="awb-card-link p-6 text-[1rem] leading-relaxed">
@@ -205,10 +221,14 @@ const jsonLd = [
       </div>
     </section>
 
-    <ContentFeedback contentType="book" contentSlug={book.id} contentTitle={book.data.title} />
+    <BookDigestPersonalizer title={book.data.title} author={book.data.author} bookUrl={url} />
   </article>
 
   <FaqList items={faqs} eyebrow="Book Q&A" title="How this book is used" width="medium" />
+
+  <div class="mx-auto max-w-5xl px-5 pb-12">
+    <ContentFeedback contentType="book" contentSlug={book.id} contentTitle={book.data.title} />
+  </div>
 
   {
     answers.length > 0 && (
@@ -241,7 +261,10 @@ const jsonLd = [
       };
       const paint = () => {
         const saved = read().includes(slug);
-        btn.textContent = saved ? 'Saved - remove' : 'Save this book';
+        const label = saved ? 'Remove saved book' : 'Save this book';
+        btn.setAttribute('aria-label', label);
+        btn.setAttribute('aria-pressed', String(saved));
+        btn.title = label;
       };
       btn.addEventListener('click', () => {
         const list = read();
@@ -252,4 +275,11 @@ const jsonLd = [
       paint();
     }
   </script>
+  <style>
+    .book-actions { display: flex; align-items: center; gap: 8px; padding-right: 16px; border-right: 1px solid var(--color-line); }
+    .book-action { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; color: var(--color-ink); background: var(--color-card); border: 1px solid var(--color-line); cursor: pointer; transition: background 150ms ease, border-color 150ms ease; }
+    .book-action:hover { background: var(--color-wash); border-color: var(--color-ink); }
+    .book-action:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+    .book-action[aria-pressed="true"] .bookmark-icon { fill: currentColor; }
+  </style>
 </Base>

@@ -1,0 +1,215 @@
+---
+import type { BookCandidate } from '../lib/book-intake';
+interface Props { catalog: BookCandidate[] }
+const { catalog } = Astro.props;
+---
+<dialog id="book-request-dialog" class="add-book-dialog" data-book-request-dialog aria-labelledby="book-request-title">
+  <header class="add-book-header">
+    <div><p class="awb-eyebrow">Your shelf</p><h2 id="book-request-title" class="mt-2 font-serif text-3xl">Add a book</h2></div>
+    <button type="button" class="close-add" data-close-book-request aria-label="Close book request">×</button>
+  </header>
+  <div class="add-book-body">
+    <form data-book-identify-form>
+      <label for="book-query" class="block text-sm font-medium">Book title, author, or ISBN</label>
+      <input id="book-query" name="query" class="awb-input mt-2" placeholder="e.g. The Mom Test" maxlength="200" autocomplete="off" />
+      <div class="upload-divider">or</div>
+      <label class="book-dropzone" data-book-dropzone>
+        <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5" /></svg>
+        <span>Choose a cover image or PDF</span>
+        <small>Drag and drop · JPG, PNG, WebP or PDF · up to 10 MB</small>
+        <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" data-book-file aria-label="Cover image or PDF" />
+      </label>
+      <div class="file-choice" hidden data-book-file-choice><span data-book-filename></span><button type="button" data-clear-book-file aria-label="Remove selected file">Remove</button></div>
+      <p class="privacy-note">Files are read on your device. Only confirmed book details are saved.</p>
+      <button type="submit" class="awb-pill awb-pill-primary mt-5 w-full" data-book-match>Find book</button>
+    </form>
+
+    <form data-book-request-form hidden>
+      <p class="text-sm text-soft mb-4" data-match-guidance>Is this the right book?</p>
+      <div class="candidate-list" data-book-candidates role="group" aria-label="Matching books"></div>
+      <details class="edit-book" data-edit-book>
+        <summary>Edit book details</summary>
+        <label>Book title<input name="title" class="awb-input mt-2" maxlength="200" required /></label>
+        <label>Author<input name="author" class="awb-input mt-2" maxlength="200" required /></label>
+      </details>
+      <label class="block text-sm mt-5">Email<input name="email" type="email" required class="awb-input mt-2" maxlength="320" autocomplete="email" placeholder="you@example.com" /></label>
+      <label class="book-request-trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+      <p class="text-sm text-soft mt-4" data-book-confirm-note></p>
+      <div class="add-book-footer">
+        <button type="button" class="awb-pill awb-pill-outline" data-book-try-again>Back</button>
+        <button type="submit" class="awb-pill awb-pill-primary" data-book-request-submit>Confirm &amp; add</button>
+      </div>
+    </form>
+
+    <section data-book-added hidden>
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <h3 class="font-serif text-3xl mt-4" data-added-title>Added to your shelf</h3>
+      <p class="mt-3 text-soft" data-added-description></p>
+      <div class="add-book-footer"><button type="button" class="awb-pill awb-pill-outline" data-book-add-another>Add another</button><a class="awb-pill awb-pill-primary" data-added-read hidden>Read digest</a><button type="button" class="awb-pill awb-pill-primary" data-close-book-request data-added-done>Done</button></div>
+    </section>
+    <p class="mt-4 text-sm text-soft" data-book-request-status role="status" aria-live="polite"></p>
+    <button type="button" class="manual-entry" data-book-manual>Can’t find it? Enter the details</button>
+  </div>
+</dialog>
+<script id="add-book-catalog" type="application/json" set:html={JSON.stringify(catalog).replace(/</g, '\\u003c')} />
+<script>
+  import { supabase } from '../lib/supabase';
+  import { extractBookText, matchBooks, rememberAddition, readAdditions, sameBook, normalizeBook, type BookCandidate, type BookAddition } from '../lib/book-intake';
+  const dialog = document.querySelector<HTMLDialogElement>('[data-book-request-dialog]')!;
+  const find = <T extends HTMLElement>(selector: string) => dialog.querySelector<T>(selector)!;
+  const identifyForm = find<HTMLFormElement>('[data-book-identify-form]');
+  const confirmForm = find<HTMLFormElement>('[data-book-request-form]');
+  const success = find('[data-book-added]');
+  const status = find('[data-book-request-status]');
+  const query = find<HTMLInputElement>('#book-query');
+  const fileInput = find<HTMLInputElement>('[data-book-file]');
+  const title = find<HTMLInputElement>('[name="title"]');
+  const author = find<HTMLInputElement>('[name="author"]');
+  const email = find<HTMLInputElement>('[name="email"]');
+  const matchButton = find<HTMLButtonElement>('[data-book-match]');
+  const submit = find<HTMLButtonElement>('[data-book-request-submit]');
+  const manual = find<HTMLButtonElement>('[data-book-manual]');
+  const catalog = JSON.parse(document.querySelector('#add-book-catalog')!.textContent!) as BookCandidate[];
+  let file: File | undefined;
+  let selected: BookCandidate | undefined;
+  let controller: AbortController | undefined;
+  let saving = false;
+  let inputKind: 'name' | 'image' | 'pdf' = 'name';
+  let submissionId = crypto.randomUUID();
+  const message = (text: string) => { status.textContent = text; };
+  const stopSearch = () => { controller?.abort(); controller = undefined; matchButton.disabled = false; matchButton.textContent = 'Find book'; };
+  function reset() {
+    stopSearch(); file = undefined; selected = undefined; submissionId = crypto.randomUUID();
+    identifyForm.reset(); confirmForm.reset();
+    identifyForm.hidden = false; confirmForm.hidden = true; success.hidden = true; manual.hidden = false;
+    find('[data-book-file-choice]').hidden = true;
+    find<HTMLDetailsElement>('[data-edit-book]').open = false;
+    message('');
+    try { localStorage.removeItem('awb:book-add-email'); } catch { /* Legacy email storage may be unavailable. */ }
+    void supabase.auth.getSession().then(({ data }) => { if (!email.value) email.value = data.session?.user.email || ''; });
+  }
+  function selectBook(book: BookCandidate) {
+    selected = book; title.value = book.title; author.value = book.author; submissionId = crypto.randomUUID();
+    dialog.querySelectorAll<HTMLButtonElement>('[data-book-candidate]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.bookCandidate === book.title + book.author)));
+    find('[data-book-confirm-note]').textContent = book.slug ? 'This digest is ready. We’ll add it to your saved books.' : 'We’ll save this book to your shelf and request a digest.';
+    find<HTMLDetailsElement>('[data-edit-book]').open = !book.title || !book.author;
+  }
+  function showCandidates(books: BookCandidate[], offline = false) {
+    identifyForm.hidden = true; confirmForm.hidden = false; success.hidden = true;
+    const list = find('[data-book-candidates]'); list.replaceChildren();
+    for (const book of books) {
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'book-candidate'; button.dataset.bookCandidate = book.title + book.author;
+      const label = document.createElement('strong'); label.textContent = book.title;
+      const detail = document.createElement('span'); detail.textContent = [book.author || 'Author unknown', book.year, book.slug ? 'Digest ready' : 'New to the shelf'].filter(Boolean).join(' · ');
+      button.append(label, detail); button.addEventListener('click', () => selectBook(book)); list.append(button);
+    }
+    find('[data-match-guidance]').textContent = books.length ? 'Is this the right book?' : offline ? 'Book search is unavailable. You can still add the details below.' : 'No confident match. Add or correct the title and author below.';
+    selectBook(books[0] ?? { title: query.value.trim(), author: '' });
+    manual.hidden = true; message('');
+    if (!books.length) title.focus(); else list.querySelector('button')?.focus();
+  }
+  const setFile = (next?: File) => {
+    stopSearch(); file = next; message('');
+    find('[data-book-file-choice]').hidden = !file;
+    find('[data-book-filename]').textContent = file?.name || '';
+  };
+  document.querySelector('[data-open-book-request]')?.addEventListener('click', () => { reset(); dialog.showModal(); query.focus(); });
+  for (const close of dialog.querySelectorAll<HTMLButtonElement>('[data-close-book-request]')) close.addEventListener('click', () => { if (!saving) dialog.close(); });
+  dialog.addEventListener('cancel', (event) => { if (saving) event.preventDefault(); });
+  dialog.addEventListener('close', stopSearch);
+  dialog.addEventListener('click', (event) => { if (event.target === dialog && !saving) dialog.close(); });
+  fileInput.addEventListener('change', () => setFile(fileInput.files?.[0]));
+  find('[data-clear-book-file]').addEventListener('click', () => { fileInput.value = ''; setFile(); });
+  const dropzone = find('[data-book-dropzone]');
+  dropzone.addEventListener('dragover', (event) => { event.preventDefault(); });
+  dropzone.addEventListener('drop', (event) => { event.preventDefault(); if (!matchButton.disabled) setFile(event.dataTransfer?.files[0]); });
+  query.addEventListener('input', stopSearch);
+  identifyForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!file && !query.value.trim()) { message('Enter a book title or choose a file.'); query.focus(); return; }
+    stopSearch(); const active = new AbortController(); controller = active;
+    matchButton.disabled = true; matchButton.textContent = 'Finding book…';
+    try {
+      inputKind = file ? (/\.pdf$/i.test(file.name) || file.type === 'application/pdf' ? 'pdf' : 'image') : 'name';
+      const extracted = file ? await extractBookText(file, active.signal, message) : '';
+      active.signal.throwIfAborted();
+      const text = query.value.trim() || extracted;
+      if (text.trim().length < 3) throw new Error('We couldn’t find a title in this file. Try a clearer cover or type the title.');
+      message('Matching the book…');
+      const result = await matchBooks(text, catalog, active.signal);
+      if (!active.signal.aborted) showCandidates(result.books, result.offline);
+    } catch (error) { if (!active.signal.aborted) message(error instanceof Error ? error.message : 'Could not identify the book. Try its title.'); }
+    finally { if (controller === active) { matchButton.disabled = false; matchButton.textContent = 'Find book'; } }
+  });
+  manual.addEventListener('click', () => { stopSearch(); inputKind = 'name'; showCandidates([]); });
+  find('[data-book-try-again]').addEventListener('click', () => { if (!saving) { confirmForm.hidden = true; identifyForm.hidden = false; manual.hidden = false; message(''); query.focus(); } });
+  find('[data-book-add-another]').addEventListener('click', () => { reset(); query.focus(); });
+  confirmForm.addEventListener('submit', async (event) => {
+    event.preventDefault(); if (saving || find<HTMLInputElement>('[name="website"]').value) return;
+    email.value = email.value.trim();
+    if (!email.checkValidity()) { email.reportValidity(); return; }
+    const book: BookCandidate = { title: title.value.trim(), author: author.value.trim() };
+    if (!book.title || !book.author) { find<HTMLDetailsElement>('[data-edit-book]').open = true; message('Add the title and author to confirm this book.'); return; }
+    const unchanged = selected && normalizeBook(book.title) === normalizeBook(selected.title) && normalizeBook(book.author) === normalizeBook(selected.author);
+    if (unchanged) Object.assign(book, selected);
+    const localMatch = catalog.find((item) => sameBook(item, book)); if (localMatch) Object.assign(book, localMatch);
+    saving = true; submit.disabled = true; submit.textContent = 'Adding…'; message('');
+    dialog.querySelectorAll<HTMLButtonElement>('[data-close-book-request], [data-book-try-again]').forEach((button) => button.disabled = true);
+    try {
+      const { data } = await supabase.auth.getSession();
+      const existing = readAdditions(data.session?.user.id).find((item) => sameBook(item, book));
+      const addition: BookAddition = existing ?? { ...book, id: submissionId, status: 'pending', createdAt: new Date().toISOString() };
+      if (!existing) {
+        const { error } = await supabase.from('book_requests').insert({ id: addition.id, user_id: data.session?.user.id ?? null,
+          title: book.title, author: book.author, note: '', requester_email: email.value.trim(),
+          source_path: '/books/', input_kind: inputKind, external_id: book.externalId || null, matched_book_slug: book.slug || null,
+        });
+        if (error && error.code !== '23505') throw error;
+      }
+      let localSaved = true;
+      try {
+        rememberAddition(addition, data.session?.user.id);
+      } catch { localSaved = false; }
+      confirmForm.hidden = true; success.hidden = false; manual.hidden = true;
+      find('[data-added-title]').textContent = existing ? 'Already on your shelf' : 'Added to your shelf';
+      find('[data-added-description]').textContent = `${book.title}${book.author ? ` by ${book.author}` : ''}. ${book.slug ? 'Your digest is ready to read.' : 'Digest requested — you can find this book under Your additions.'}${localSaved ? '' : ' Saved in our system, but this browser could not remember it.'}`;
+      const read = find<HTMLAnchorElement>('[data-added-read]'); read.hidden = !book.slug; if (book.slug) read.href = `/books/${book.slug}/`;
+      find('[data-added-done]').hidden = !!book.slug;
+      message(''); find('[data-added-title]').setAttribute('tabindex', '-1'); find('[data-added-title]').focus();
+    } catch { message('We couldn’t save the book. Your details are still here — please try again.'); }
+    finally {
+      saving = false; submit.disabled = false; submit.textContent = 'Confirm & add';
+      dialog.querySelectorAll<HTMLButtonElement>('[data-close-book-request], [data-book-try-again]').forEach((button) => button.disabled = false);
+    }
+  });
+</script>
+<style>
+  .add-book-dialog { border: 1px solid var(--color-line); border-radius: 24px; padding: 0; width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); margin: auto; color: var(--color-ink); background: var(--color-card); box-shadow: 0 30px 100px #0003; }
+  .add-book-dialog::backdrop { background: #18171466; backdrop-filter: blur(4px); }
+  .add-book-header { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px 20px; border-bottom: 1px solid var(--color-line); }
+  .close-add { width: 36px; height: 36px; border-radius: 50%; background: var(--color-wash); font-size: 24px; color: var(--color-soft); }
+  .add-book-body { padding: 24px 28px; }
+  .upload-divider { text-align: center; color: var(--color-faint); font-size: 12px; margin: 18px 0; }
+  .book-dropzone { position: relative; display: flex; align-items: center; flex-direction: column; gap: 10px; border: 1px dashed var(--color-line); border-radius: 16px; padding: 24px 12px; font-size: 14px; cursor: pointer; background: var(--color-paper); }
+  .book-dropzone small { font-size: 11px; color: var(--color-faint); text-align: center; }
+  .book-dropzone input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+  .book-dropzone:focus-within { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  .privacy-note { font-size: 11px; line-height: 1.6; color: var(--color-faint); margin-top: 12px; }
+  .file-choice { display: flex; align-items: center; gap: 12px; justify-content: space-between; margin-top: 12px; font-size: 12px; }
+  .file-choice span { overflow-wrap: anywhere; }
+  .file-choice button, .manual-entry { text-decoration: underline; text-underline-offset: 3px; }
+  .manual-entry { display: block; margin: 18px auto 0; font-size: 12px; color: var(--color-soft); }
+  .candidate-list { display: grid; gap: 10px; }
+  .candidate-list :global(.book-candidate) { width: 100%; padding: 16px; border: 1px solid var(--color-line); border-radius: 14px; text-align: left; }
+  .candidate-list :global(.book-candidate[aria-pressed="true"]) { border-color: var(--color-ink); background: var(--color-wash); }
+  .candidate-list :global(strong) { display: block; font-family: var(--font-serif); font-size: 22px; font-weight: 400; }
+  .candidate-list :global(span) { display: block; font-size: 12px; color: var(--color-soft); margin-top: 4px; }
+  .edit-book { margin-top: 16px; font-size: 12px; color: var(--color-soft); }
+  .edit-book summary { cursor: pointer; }
+  .edit-book label { display: block; margin-top: 12px; }
+  .add-book-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; }
+  .book-request-trap { position: absolute; left: -10000px; }
+  .success-mark { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--color-wash); font-size: 24px; }
+  button { cursor: pointer; } button:disabled { opacity: .5; cursor: default; }
+  [hidden] { display: none !important; }
+</style>
