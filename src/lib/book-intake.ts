@@ -1,7 +1,7 @@
-export type BookCandidate = { title: string; author: string; slug?: string; externalId?: string; year?: number };
+export type BookCandidate = { title: string; author: string; slug?: string; externalId?: string; year?: number; digestUrl?: string };
 export type BookAddition = BookCandidate & { id: string; status: string; createdAt: string };
 export const additionsKey = (userId?: string) => `awb:book-additions:${userId || 'guest'}`;
-export const normalizeBook = (text: string) => text.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+export const normalizeBook = (text: string) => text.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 export const sameBook = (a: BookCandidate, b: BookCandidate) => (a.slug && b.slug ? a.slug === b.slug : a.externalId && b.externalId ? a.externalId === b.externalId : normalizeBook(a.title) === normalizeBook(b.title) && normalizeBook(a.author) === normalizeBook(b.author));
 export function readAdditions(userId?: string): BookAddition[] {
   try { const result = JSON.parse(localStorage.getItem(additionsKey(userId)) || '[]'); return Array.isArray(result) ? result.filter((item) => typeof item.title === 'string' && typeof item.author === 'string').slice(0, 100) : []; } catch { return []; }
@@ -23,10 +23,10 @@ export async function matchBooks(query: string, catalog: BookCandidate[], signal
     const title = normalizeBook(book.title);
     const tokens = title.split(' ').filter((word) => word.length > 2 && !['the', 'and', 'for', 'with'].includes(word));
     const ratio = tokens.length ? tokens.filter((word) => normalized.split(' ').includes(word)).length / tokens.length : 0;
-    return { book, score: normalized.includes(title) ? 2 + title.length / 100 : ratio };
+    return { book, score: (title && normalized.includes(title)) ? 2 + title.length / 100 : ratio };
   }).filter((item) => item.score >= .75).sort((a, b) => b.score - a.score);
   if (local[0]?.score >= 2) return { books: local.slice(0, 3).map((item) => item.book) };
-  const titleQuery = query.split(/\n/).map((line) => line.trim()).filter((line) => line.length > 2 && !/isbn|copyright|published|all rights/i.test(line)).slice(0, 3).join(' ').slice(0, 180);
+  const titleQuery = query.split(/\n/).map((line) => line.trim()).filter((line) => line.length > 0 && !/isbn|copyright|published|all rights/i.test(line)).slice(0, 3).join(' ').slice(0, 180);
   const url = new URL('https://openlibrary.org/search.json');
   url.searchParams.set('q', titleQuery);
   url.searchParams.set('fields', 'key,title,author_name,first_publish_year');

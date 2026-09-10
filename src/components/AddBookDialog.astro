@@ -1,11 +1,11 @@
 ---
 import type { BookCandidate } from '../lib/book-intake';
-interface Props { catalog: BookCandidate[] }
-const { catalog } = Astro.props;
+interface Props { catalog: BookCandidate[]; sourcePath?: string; title?: string; bookBaseUrl?: string }
+const { catalog, sourcePath = '/books/', title: dialogTitle = 'Add a book', bookBaseUrl = '' } = Astro.props;
 ---
-<dialog id="book-request-dialog" class="add-book-dialog" data-book-request-dialog aria-labelledby="book-request-title">
+<dialog id="book-request-dialog" class="add-book-dialog" data-book-request-dialog data-source-path={sourcePath} data-book-base-url={bookBaseUrl} aria-labelledby="book-request-title">
   <header class="add-book-header">
-    <div><p class="awb-eyebrow">Your shelf</p><h2 id="book-request-title" class="mt-2 font-serif text-3xl">Add a book</h2></div>
+    <div><p class="awb-eyebrow">Your shelf</p><h2 id="book-request-title" class="mt-2 font-serif text-3xl">{dialogTitle}</h2></div>
     <button type="button" class="close-add" data-close-book-request aria-label="Close book request">×</button>
   </header>
   <div class="add-book-body">
@@ -20,7 +20,7 @@ const { catalog } = Astro.props;
         <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" data-book-file aria-label="Cover image or PDF" />
       </label>
       <div class="file-choice" hidden data-book-file-choice><span data-book-filename></span><button type="button" data-clear-book-file aria-label="Remove selected file">Remove</button></div>
-      <p class="privacy-note">Files are read on your device. Only confirmed book details are saved.</p>
+      <p class="privacy-note">Files are read on your device. Extracted text may be used to search Open Library. Only confirmed book details are saved.</p>
       <button type="submit" class="awb-pill awb-pill-primary mt-5 w-full" data-book-match>Find book</button>
     </form>
 
@@ -134,7 +134,7 @@ const { catalog } = Astro.props;
       const extracted = file ? await extractBookText(file, active.signal, message) : '';
       active.signal.throwIfAborted();
       const text = query.value.trim() || extracted;
-      if (text.trim().length < 3) throw new Error('We couldn’t find a title in this file. Try a clearer cover or type the title.');
+      if (!text.trim()) throw new Error('We couldn’t find a title in this file. Try a clearer cover or type the title.');
       message('Matching the book…');
       const result = await matchBooks(text, catalog, active.signal);
       if (!active.signal.aborted) showCandidates(result.books, result.offline);
@@ -162,7 +162,7 @@ const { catalog } = Astro.props;
       if (!existing) {
         const { error } = await supabase.from('book_requests').insert({ id: addition.id, user_id: data.session?.user.id ?? null,
           title: book.title, author: book.author, note: '', requester_email: email.value.trim(),
-          source_path: '/books/', input_kind: inputKind, external_id: book.externalId || null, matched_book_slug: book.slug || null,
+          source_path: dialog.dataset.sourcePath || '/books/', input_kind: inputKind, external_id: book.externalId || null, matched_book_slug: book.slug || null,
         });
         if (error && error.code !== '23505') throw error;
       }
@@ -173,7 +173,7 @@ const { catalog } = Astro.props;
       confirmForm.hidden = true; success.hidden = false; manual.hidden = true;
       find('[data-added-title]').textContent = existing ? 'Already on your shelf' : 'Added to your shelf';
       find('[data-added-description]').textContent = `${book.title}${book.author ? ` by ${book.author}` : ''}. ${book.slug ? 'Your digest is ready to read.' : 'Digest requested — you can find this book under Your additions.'}${localSaved ? '' : ' Saved in our system, but this browser could not remember it.'}`;
-      const read = find<HTMLAnchorElement>('[data-added-read]'); read.hidden = !book.slug; if (book.slug) read.href = `/books/${book.slug}/`;
+      const read = find<HTMLAnchorElement>('[data-added-read]'); read.hidden = !book.slug; if (book.slug) read.href = book.digestUrl || `${dialog.dataset.bookBaseUrl || ''}/books/${book.slug}/`;
       find('[data-added-done]').hidden = !!book.slug;
       message(''); find('[data-added-title]').setAttribute('tabindex', '-1'); find('[data-added-title]').focus();
     } catch { message('We couldn’t save the book. Your details are still here — please try again.'); }

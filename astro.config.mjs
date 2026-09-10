@@ -13,6 +13,7 @@ const utilityPaths = [
   '/acquired-intelligence/',
   '/ask/',
   '/tools/',
+  '/embed/book-upload/',
   '/speed-read/',
   '/404/',
 ];

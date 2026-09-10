@@ -93,7 +93,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c');
     type Chapter = Section & { book: Book; sectionIndex: number };
     type Answer = { id: string; question: string; description: string; books: string[]; tags: string[] };
     const root = document.querySelector<HTMLElement>('[data-speed-reader-app]')!;
-    const data = JSON.parse(document.querySelector('#speed-reader-data')!.textContent!) as { books: Book[]; answers: Answer[] };
+    const data = JSON.parse(document.querySelector('#speed-reader-data')!.textContent!) as { books: Book[]; answers: Answer[]; bookBasePath?: string };
     const node = <T extends HTMLElement>(name: string) => root.querySelector<T>(`[data-reader-${name}]`)!;
     const params = new URLSearchParams(location.search);
     const bookById = new Map(data.books.map((book) => [book.id, book]));
@@ -201,7 +201,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c');
       document.title = `${chapter.title} — ${chapter.book.title}`;
       node('chapter-count').textContent = `${index + 1} / ${chapters.length}`;
       const exit = node<HTMLAnchorElement>('exit');
-      exit.href = matchedAnswer && !requestedBook ? `/answers/${matchedAnswer.id}/` : `/books/${chapter.book.id}/`;
+      exit.href = matchedAnswer && !requestedBook ? `/answers/${matchedAnswer.id}/` : `${data.bookBasePath || '/books/'}${chapter.book.id}/`;
       exit.setAttribute('aria-label', matchedAnswer && !requestedBook ? 'Back to answer' : `Back to ${chapter.book.title}`);
       textView.replaceChildren(...chapter.text.split(/\n\s*\n/).map((paragraph) => {
         const element = document.createElement('p');
