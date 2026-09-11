@@ -1,0 +1,33 @@
+---
+import Base from './Base.astro';
+import { legalIdentity, legalLastUpdated } from '../lib/legal';
+interface Props { title: string; description: string; path: string; }
+const { title, description, path } = Astro.props;
+---
+<Base title={title} description={description} path={path}>
+  <article class="legal-page mx-auto max-w-3xl px-5 py-14 sm:py-20">
+    <p class="text-xs font-semibold uppercase tracking-[0.1em] text-soft">AWB · Answer with Books</p>
+    <h1 class="mt-4 font-serif text-5xl leading-tight sm:text-6xl">{title}</h1>
+    <p class="mt-5 text-sm text-soft" data-legal-updated>Last updated: {legalLastUpdated}</p>
+    <div class="legal-copy mt-10"><slot /></div>
+    <section class="legal-copy mt-10 border-t border-line pt-8" id="contact">
+      <h2>Contact</h2>
+      <p>Operator: {legalIdentity.operatorName}</p>
+      <p>For questions, privacy requests, or newsletter opt-outs, email <a href={`mailto:${legalIdentity.contactEmail}`}>{legalIdentity.contactEmail}</a>.</p>
+    </section>
+    <nav class="mt-10 flex gap-5 text-sm underline underline-offset-4" aria-label="Legal pages">
+      <a href="/terms/" aria-current={path === '/terms/' ? 'page' : undefined}>Terms</a>
+      <a href="/privacy/" aria-current={path === '/privacy/' ? 'page' : undefined}>Privacy Policy</a>
+    </nav>
+  </article>
+</Base>
+<style>
+  .legal-copy :global(h2){font:500 28px/1.25 var(--font-serif);margin:32px 0 12px;color:var(--color-ink)}
+  .legal-copy :global(h2:first-child){margin-top:0}
+  .legal-copy :global(p),.legal-copy :global(li){font-size:16px;line-height:1.8;color:var(--color-soft)}
+  .legal-copy :global(p){margin:12px 0}
+  .legal-copy :global(ul){list-style:disc;padding-left:22px;margin:16px 0}
+  .legal-copy :global(li){margin:8px 0}
+  .legal-copy :global(strong){font-weight:600;color:var(--color-ink)}
+  .legal-copy :global(a){text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+</style>

@@ -1,22 +1,47 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import ReadingPersonalizer from '../../components/ReadingPersonalizer.astro';
+import ContentFeedback from '../../components/ContentFeedback.astro';
+import { buildGuideReadingPrompt } from '../../lib/reading-handoff';
 import FaqList from '../../components/FaqList.astro';
 import { faqJsonLd } from '../../lib/seo';
 import { workplaceGuides } from '../../lib/workplace-guides';
 export function getStaticPaths() { return workplaceGuides.map(guide => ({ params: { slug: guide.slug }, props: { guide } })); }
 const { guide } = Astro.props;
+const url = `https://answerwithbooks.com/guides/${guide.slug}/`;
+const sourceBook = (await getCollection('books')).find(book => book.id === guide.book.slug);
+const guideText = [
+  `# ${guide.title}`, guide.description,
+  `## What you will make\n${guide.outcome}`,
+  `## The workflow\n${guide.steps.map((step, index) => `${index + 1}. ${step.title}\n${step.body}`).join('\n\n')}`,
+  `## Practice data (fictional)\n${guide.sample}`,
+  `## Run the prompt\n${guide.prompt}`,
+  `## What a good result notices\n${guide.expected}`,
+  `## Review your work\n${guide.checks.map(check => `- ${check}`).join('\n')}`,
+  `## Test it with a change\n${guide.stretch}`,
+  `## The thinking behind the workflow\n${guide.book.title}\n${guide.book.connection}`,
+].join('\n\n');
+const readingPrompt = buildGuideReadingPrompt({
+  title: guide.title, url, guide: guideText,
+  sourceBooks: sourceBook ? [{
+    title: sourceBook.data.title, author: sourceBook.data.author,
+    url: `https://answerwithbooks.com/books/${sourceBook.id}/`, digest: sourceBook.body ?? '',
+  }] : [],
+});
 const faqs = [
   { question: 'Is this real customer or company data?', answer: 'No. All practice inputs in this tutorial are fictional. Replace them with real material only if your organization permits using it in the AI assistant you choose.' },
   { question: 'Does checking the boxes certify my output?', answer: 'No. The checklist is a self-review aid, not an automated assessment or certification. It is saved only in this browser. You remain responsible for checking the result and obtaining any approvals.' },
 ];
 ---
 <Base title={guide.title} description={guide.description} path={`/guides/${guide.slug}/`} jsonLd={[faqJsonLd(`https://answerwithbooks.com/guides/${guide.slug}/`, faqs)]}>
-  <article class="mx-auto max-w-3xl px-5 pt-10 sm:pt-14" data-guide={guide.slug}>
+  <article class="mx-auto max-w-5xl px-5 pt-16 pb-10" data-guide={guide.slug}>
     <a href="/guides/" class="text-sm text-soft hover:text-ink">← All guides</a>
     <p class="mt-8 text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
     <h1 class="mt-4 font-serif text-4xl leading-tight sm:text-5xl">{guide.title}</h1>
     <p class="mt-5 text-lg leading-relaxed text-soft">{guide.description}</p>
     <div class="mt-7 border-l-2 border-ink pl-5"><p class="text-sm font-semibold">What you’ll make</p><p class="mt-2 leading-relaxed text-soft">{guide.outcome}</p></div>
+    <section data-reading-content class="mt-10 rounded-2xl border border-line bg-card px-5 py-6 sm:px-7 sm:py-8">
     <nav aria-label="Tutorial sections" class="mt-8 flex flex-wrap gap-2 text-sm"><a class="awb-pill awb-pill-outline" href="#practice">Practice data</a><a class="awb-pill awb-pill-outline" href="#prompt">The prompt</a><a class="awb-pill awb-pill-outline" href="#review">Review your work</a></nav>
     <section class="mt-12"><h2 class="font-serif text-3xl">The workflow</h2><ol class="mt-6 grid gap-7">{guide.steps.map((step, i) => <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-sm" aria-hidden="true">{i+1}</span><div><h3 class="text-lg font-semibold">{step.title}</h3><p class="mt-2 leading-relaxed text-soft">{step.body}</p></div></li>)}</ol></section>
     <section id="practice" class="mt-12 scroll-mt-28"><div class="flex flex-wrap items-center justify-between gap-3"><h2 class="font-serif text-3xl">Practice data</h2><button type="button" class="awb-pill awb-pill-outline text-sm" data-copy-target="practice-text">Copy practice data</button></div><p class="mt-3 text-sm text-faint">Fictional inputs · Safe to use for this exercise</p><pre id="practice-text" class="practice-block mt-5">{guide.sample}</pre></section>
@@ -26,8 +51,14 @@ const faqs = [
     <section class="mt-10 rounded-2xl border border-line p-6"><h2 class="font-serif text-2xl">Test it with a change</h2><p class="mt-3 leading-relaxed text-soft">{guide.stretch}</p></section>
     <aside class="mt-10 border-t border-line pt-8"><p class="text-sm text-faint">The thinking behind the workflow</p><a class="mt-3 inline-block font-serif text-2xl underline decoration-line underline-offset-4" href={`/books/${guide.book.slug}/`}>{guide.book.title}</a><p class="mt-3 leading-relaxed text-soft">{guide.book.connection}</p></aside>
     <p id="copy-status" class="mt-4 text-sm text-soft" role="status"></p>
+    </section>
+
+    <ReadingPersonalizer kind="guide" prompt={readingPrompt} />
   </article>
-  <FaqList items={faqs} />
+<FaqList items={faqs} eyebrow="Guide Q&A" title="How to use this guide" width="medium" />
+<div class="mx-auto max-w-5xl px-5 pb-12">
+  <ContentFeedback contentType="answer" contentSlug={guide.slug} contentTitle={guide.title} />
+</div>
 </Base>
 <style>.practice-block { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.75; padding: 1.5rem; border: 1px solid var(--color-line); border-radius: 1rem; background: var(--color-card); }</style>
 <script>

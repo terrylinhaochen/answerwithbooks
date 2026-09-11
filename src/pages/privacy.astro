@@ -1,0 +1,50 @@
+---
+import Legal from '../layouts/Legal.astro';
+import AnalyticsPreference from '../components/AnalyticsPreference.astro';
+---
+<Legal title="Privacy Policy" description="How AWB's current website handles newsletter emails, account data, book requests, browser storage, and third-party services." path="/privacy/">
+  <h2>1. Scope</h2>
+  <p>This policy describes the AWB (Answer with Books) website at answerwithbooks.com. It does not replace the policies of external AI providers, Google, Open Library, Substack, or other sites you choose to visit. AnswerWithBooks operates AWB; our contact details are below. This notice covers the public website, not a separately contracted enterprise service.</p>
+
+  <h2>2. Information you provide</h2>
+  <ul>
+    <li><strong>Newsletter:</strong> your email, opt-in timestamp and consent version, signup page and origin, and delivery or opt-out status. These records are stored in Supabase. Account signup, book requests, and feedback are not automatically newsletter opt-ins.</li>
+    <li><strong>Account and personalization:</strong> email and authentication information handled by Supabase Auth, together with focus areas, goals, shelf preferences, and other setup information you choose to save.</li>
+    <li><strong>Book requests and feedback:</strong> confirmed book title and author, optional notes, required request email, match identifiers, source page, submission time and status, and account identifier when applicable. Feedback includes your rating, comment, and the page it concerns.</li>
+    <li><strong>Content maps:</strong> titles, questions, source notes, matched books and guides, visibility choice, and account attribution. Signed-in submissions can be saved in Supabase as well as in your browser.</li>
+  </ul>
+
+  <h2>3. Files and book matching</h2>
+  <p>The book-identification feature reads cover images and PDFs in your browser; it does not upload the original file to our book-request database. When a local match is unavailable, a short query made from the title or extracted text can be sent to Open Library to look for a match. Confirmed details and your email are sent to Supabase when you submit a request. File-reading libraries may download supporting software or language data from external content-delivery services.</p>
+  <p>The separate content-mapping tool can save the text you paste or load from a file when you submit a map. Do not assume all file-derived text stays on your device. Review the text and visibility setting before saving.</p>
+
+  <h2>4. Browser storage, analytics, and technical data</h2>
+  <p>Browser storage keeps authentication sessions, saved books and answers, reading activity, preferences, onboarding details, book additions, and content maps. Local-only information is specific to that browser. Clearing site data can remove it and sign you out; it does not delete information already saved on our servers.</p>
+  <p>Google Analytics is optional and stays off until you choose to allow it below. If allowed, Google receives usage and device information and may use analytics cookies. We disable advertising-personalization signals, omit query strings and fragments from the initial page URL sent to analytics, and do not initialize analytics on account, login, or submission pages. Withdraw through Privacy choices in the footer. Global Privacy Control and Do Not Track browser signals keep analytics off. An allowed preference expires after 180 days; clearing storage resets it to off. Google Fonts still receives technical requests to display typography when analytics is off.</p>
+  <p>Hosting and service providers process technical request data, such as IP addresses and browser details, to deliver and protect the service. The newsletter application uses a daily keyed hash derived from the requesting IP for rate limiting, rather than storing the raw IP in its signup table. Infrastructure logs may separately retain request information.</p>
+
+  <AnalyticsPreference />
+
+  <h2>5. How information is used and shared</h2>
+  <p>Information is used to provide accounts and requested features, remember preferences, review book requests and feedback, maintain security, and manage newsletter opt-ins. Supabase supports authentication, database storage, and signup processing; hosting providers deliver the site; Google supports analytics, fonts, and external question forms; Open Library supports optional book matching.</p>
+  <p>Where applicable privacy law requires a processing basis, requested account features are provided to perform our agreement with you; optional analytics and newsletter signup rely on your consent. Security, abuse prevention, and service support serve our legitimate interest in operating a reliable service, subject to your rights. We may also process information to meet legal obligations.</p>
+  <p>The native newsletter currently stores signups without sending emails or automatically syncing them to Substack. If we use Substack or another email provider to deliver the newsletter, opted-in addresses and necessary subscription records may be transferred for that purpose. An account or book-request email is not permission to import you into a marketing list.</p>
+  <p><strong>Public sharing:</strong> choosing a public content map makes its information available to other visitors. The separate account-email attribution field is removed when a map becomes public. This does not remove personal information you write inside a title, question, or source note. Review the entire submission before choosing public sharing. Removing a public record cannot remove copies others have already made. We may also disclose information when required by law or to address fraud, security incidents, or legal claims, limited to what is reasonably needed.</p>
+
+  <h2>6. External AI</h2>
+  <p>The book-personalization controls copy a guide and instructions and open your chosen AI provider. The provider receives the content when you submit it there; its policies determine how that submission is used or retained. This website does not automatically import your ChatGPT history. A preference indicating interest in connecting ChatGPT is not a live connection.</p>
+
+  <h2>7. Retention, security, and your choices</h2>
+  <p>We retain records to provide requested features, resolve support or security issues, and meet applicable obligations. We consider whether the account or request remains active, whether the information is still needed, and whether a legal or security reason requires retention. Server records are removed through account-management or administrative processes; there is no general automatic deletion schedule. Newsletter rate-limit buckets older than one day are cleaned up on a subsequent signup request. Minimal opt-out records may need to remain to avoid resubscribing someone who has withdrawn consent.</p>
+  <p>You can browse public books and guides without an account or newsletter subscription. An email is required for newsletter signup, accounts, and book requests; without it, those features cannot be completed. You can skip optional information, avoid public sharing, and clear browser storage. Clearing local storage does not cancel newsletter consent or erase server records.</p>
+  <p>We use access controls, including Supabase row-level security and a server-only newsletter write path, but no online system can guarantee absolute security. Service providers may process information outside your location. Our configured Supabase project is hosted in the United States; other providers may process information in additional countries with different privacy protections. Enterprise processing agreements and international-transfer safeguards must be assessed under a separate agreement before confidential workplace data is provided.</p>
+
+  <h2>8. Privacy requests and newsletter opt-outs</h2>
+  <p>Email the contact below to request access, correction, deletion, or a copy of your information. Explain the request and which account or submission it concerns; do not send passwords or identity documents with the initial request. We may ask for proportionate verification before disclosing account information or making a destructive change.</p>
+  <p>To withdraw a saved newsletter opt-in, email us from the subscribed address with “Unsubscribe” in the subject or message. You do not need an AWB account or to explain your decision. We process opt-outs promptly and before further marketing sends; a minimal suppression record may remain so you are not added again. Opting out does not erase your account or prevent necessary security emails.</p>
+  <p>Depending on your location and applicable law, you may also have rights to restrict processing, object to certain uses, receive portable data, appeal a request decision, or complain to your local privacy regulator. Withdrawal of consent does not affect earlier lawful processing. We explain requests we cannot fulfill, subject to applicable law. AWB does not make employment, credit, or similarly significant decisions about you; book and guide matching is a learning aid.</p>
+
+  <h2>9. Audience and updates</h2>
+  <p>AWB is intended for workplace and adult learning, not as a service directed to children. If you believe a child has provided personal information, contact the operator. We update the revision date when this policy changes and provide additional notice of material changes where required.</p>
+  <p>Read the <a href="/terms/">Terms of Use</a> for the conditions of using AWB.</p>
+</Legal>

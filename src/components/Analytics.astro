@@ -1,0 +1,77 @@
+---
+interface Props { ids: string[]; }
+const { ids } = Astro.props;
+---
+<script is:inline define:vars={{ ids }}>
+  (() => {
+    const key = 'awb:analytics-consent:v1';
+    const maxAge = 180 * 24 * 60 * 60 * 1000;
+    const blocked = navigator.globalPrivacyControl === true || navigator.doNotTrack === '1';
+    let choice = 'off';
+    let loaded = false;
+    try {
+      const stored = JSON.parse(localStorage.getItem(key) || 'null');
+      if (stored?.value === 'on' && Number.isFinite(stored.at) && stored.at <= Date.now() && Date.now() - stored.at < maxAge) choice = 'on';
+    } catch { /* No storage or invalid preference: analytics stays off. */ }
+    if (blocked) choice = 'off';
+    const disable = () => ids.forEach(id => { window[`ga-disable-${id}`] = true; });
+    const clearAnalyticsCookies = () => {
+      const labels = location.hostname.split('.');
+      const domains = ['', ...labels.map((_, i) => `; domain=${labels.slice(i).join('.')}`)];
+      for (const part of document.cookie.split(';')) {
+        const name = part.trim().split('=')[0];
+        if (!/^_ga(?:_|$)|^_gid$|^_gat(?:_|$)/.test(name)) continue;
+        domains.forEach(domain => { document.cookie = `${name}=; Max-Age=0; path=/${domain}; SameSite=Lax`; });
+      }
+    };
+    const load = () => {
+      // Account, submitted-content, and auth routes never initialize analytics.
+      const privateRoute = /^\/(login|signup|auth|profile|my-books|onboarding|upload|ask|embed)(\/|$)/.test(location.pathname);
+      if (loaded || blocked || choice !== 'on' || !ids.length || privateRoute) return;
+      loaded = true;
+      window.dataLayer = window.dataLayer || [];
+      const gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag = gtag;
+      ids.forEach(id => { window[`ga-disable-${id}`] = false; });
+      gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+      gtag('js', new Date());
+      ids.forEach(id => gtag('config', id, {
+        allow_google_signals: false, allow_ad_personalization_signals: false,
+        page_location: location.origin + location.pathname, page_referrer: '',
+        cookie_expires: 15552000,
+      }));
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ids[0])}`;
+      script.dataset.awbAnalytics = '';
+      document.head.appendChild(script);
+    };
+    const render = () => {
+      document.querySelectorAll('[data-analytics-status]').forEach(node => {
+        node.textContent = blocked ? 'Analytics is off because your browser requests no tracking.' : `Optional analytics is ${choice}. This choice applies to this browser.`;
+      });
+      document.querySelectorAll('[data-analytics-choice]').forEach(button => {
+        button.disabled = blocked && button.dataset.analyticsChoice === 'on';
+        button.setAttribute('aria-pressed', String(button.dataset.analyticsChoice === choice));
+      });
+    };
+    disable();
+    if (choice === 'off') clearAnalyticsCookies();
+    load();
+    document.addEventListener('DOMContentLoaded', render);
+    document.addEventListener('click', event => {
+      const button = event.target.closest?.('[data-analytics-choice]');
+      if (!button || (blocked && button.dataset.analyticsChoice === 'on')) return;
+      choice = button.dataset.analyticsChoice === 'on' ? 'on' : 'off';
+      try { localStorage.setItem(key, JSON.stringify({ value: choice, at: Date.now() })); } catch { /* Applies to this page only. */ }
+      if (choice === 'off') {
+        disable(); clearAnalyticsCookies(); render();
+        // Unload listeners installed by the third-party library after withdrawal.
+        if (loaded) location.reload();
+      } else { load(); render(); }
+    });
+    window.addEventListener('storage', event => {
+      if (event.key === key || event.key === null) { disable(); location.reload(); }
+    });
+  })();
+</script>

@@ -187,7 +187,6 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
     };
     type RemoteMapRow = {
       id: string;
-      author_email: string | null;
       title: string;
       problem: string;
       source_note: string | null;
@@ -207,7 +206,7 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
       books: row.books ?? [],
       answers: row.answers ?? [],
       visibility: row.visibility,
-      author: row.author_email ? row.author_email.split('@')[0] : 'Reader',
+      author: 'Reader',
       createdAt: row.created_at,
     });
 
@@ -351,7 +350,7 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
 
       const { data: remoteOwnRows } = await supabase
         .from('content_maps')
-        .select('id, author_email, title, problem, source_note, topics, books, answers, visibility, created_at')
+        .select('id, title, problem, source_note, topics, books, answers, visibility, created_at')
         .eq('user_id', data.session.user.id)
         .order('created_at', { ascending: false });
       for (const map of ((remoteOwnRows ?? []) as RemoteMapRow[]).map(remoteRowToMap)) {
@@ -371,7 +370,7 @@ const topicLabels = Object.fromEntries(CANONICAL_TOPICS.map((topic) => [topic.sl
       if (remoteCollectionIds.length > 0) {
         const { data: remoteCollectedRows } = await supabase
           .from('content_maps')
-          .select('id, author_email, title, problem, source_note, topics, books, answers, visibility, created_at')
+          .select('id, title, problem, source_note, topics, books, answers, visibility, created_at')
           .in('id', remoteCollectionIds);
         for (const map of ((remoteCollectedRows ?? []) as RemoteMapRow[]).map(remoteRowToMap)) {
           collectedMapEmpty.classList.add('hidden');

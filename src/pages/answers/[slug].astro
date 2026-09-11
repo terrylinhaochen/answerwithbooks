@@ -3,7 +3,8 @@ import { getCollection, render } from 'astro:content';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Base from '../../layouts/Base.astro';
-import AgentDigestHandoff from '../../components/AgentDigestHandoff.astro';
+import ReadingPersonalizer from '../../components/ReadingPersonalizer.astro';
+import { buildGuideReadingPrompt } from '../../lib/reading-handoff';
 import AnswerCover from '../../components/AnswerCover.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookCover from '../../components/BookCover.astro';
@@ -55,11 +56,22 @@ const dateFmt = answer.data.date.toLocaleDateString('en-US', {
 });
 
 const url = `https://answerwithbooks.com/answers/${answer.id}/`;
+const readingPrompt = buildGuideReadingPrompt({
+  title: answer.data.question,
+  url,
+  guide: `# ${answer.data.question}\n\n## Decision rule\n${answer.data.description}\n\n${answer.body ?? ''}`,
+  sourceBooks: sourceBooks.map(book => ({
+    title: book.data.title,
+    author: book.data.author,
+    url: `https://answerwithbooks.com/books/${book.id}/`,
+    digest: book.body ?? '',
+  })),
+});
 const answerCoverPath = fileURLToPath(new URL(`../../../public/answer-covers/${answer.id}.jpg`, import.meta.url));
 const answerImage = existsSync(answerCoverPath) ? `/answer-covers/${answer.id}.jpg` : '/og.svg';
 const breadcrumbs = [
   { name: 'AWB', url: 'https://answerwithbooks.com/' },
-  { name: 'Answers', url: 'https://answerwithbooks.com/answers/' },
+  { name: 'Guides', url: 'https://answerwithbooks.com/guides/' },
   { name: answer.data.question, url },
 ];
 const faqs = [
@@ -68,13 +80,13 @@ const faqs = [
     answer: answer.data.description,
   },
   {
-    question: 'Which books is this answer grounded in?',
-    answer: `This answer draws on ${compactList(sourceBookTitles, 'the source shelf')} and links back to each source book for deeper reading.`,
+    question: 'Which books is this guide grounded in?',
+    answer: `This guide draws on ${compactList(sourceBookTitles, 'the source shelf')} and links back to each source book for deeper reading.`,
   },
   {
-    question: 'How do I make this answer personal?',
+    question: 'How do I make this guide personal?',
     answer:
-      'Copy the agent handoff prompt. The installed AWB skill reads this brief and its source-book digests, then adapts them using context your agent already knows about you.',
+      'Choose your preferred AI in Personalize, then copy the guide and open it. The full guide, source-book digests, and reading instructions are included; paste them into your AI to connect the ideas to context you have actually shared. No link access or skill installation is required.',
   },
 ];
 const jsonLd = [
@@ -142,18 +154,18 @@ const jsonLd = [
   ogType="article"
   jsonLd={jsonLd}
 >
-  <article class="mx-auto max-w-5xl px-5 pt-16 pb-16">
+  <article class="mx-auto max-w-5xl px-5 pt-16 pb-10">
     <nav aria-label="Breadcrumb" class="mb-8 text-sm text-soft">
       <ol class="flex flex-wrap items-center gap-2">
         <li><a href="/" class="hover:text-accent">Home</a></li>
         <li aria-hidden="true">/</li>
-        <li><a href="/answers/" class="hover:text-accent">Answers</a></li>
+        <li><a href="/guides/" class="hover:text-accent">Guides</a></li>
       </ol>
     </nav>
 
     <header class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] lg:items-start">
       <div>
-        <p class="awb-eyebrow">Answer brief</p>
+        <p class="awb-eyebrow">Guide</p>
         <h1 class="mt-3 text-wrap break-words font-serif text-4xl leading-tight sm:text-5xl">
           {answer.data.question}
         </h1>
@@ -162,24 +174,26 @@ const jsonLd = [
           <span aria-hidden="true"> · </span>
           <time datetime={answer.data.date.toISOString()}>{dateFmt}</time>
         </p>
-        <div class="mt-6 flex flex-wrap items-center gap-2">
+        <div class="mt-6 flex flex-wrap items-center gap-4">
+          <div class="guide-actions" role="group" aria-label="Guide actions">
           <button
             type="button"
             data-save-answer={answer.id}
-            class="awb-pill awb-pill-outline cursor-pointer"
+            class="guide-action" aria-label="Save this guide" aria-pressed="false" title="Save this guide"
           >
-            Save answer
+<svg class="bookmark-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M6 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17l-6-4-6 4V4Z" /></svg>
           </button>
           <a
             href={`/speed-read/?q=${encodeURIComponent(answer.data.question)}`}
-            class="awb-pill awb-pill-outline"
+            class="guide-action" aria-label="Speed read source books" title="Speed read source books"
           >
-            Speed-read sources
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5c-3-2-6-2-10-1v15c4-1 7-1 10 1 3-2 6-2 10-1V4c-4-1-7-1-10 1Zm0 0v15" /><path d="m15 8 4 3-4 3V8Z" fill="currentColor" stroke-width="1" /></svg>
           </a>
+          </div>
           {topics.map((topic) => (
             <a
               href={`/topics/${topic.slug}/`}
-              class="inline-flex min-h-8 items-center rounded-full border border-line px-3 py-1 text-xs text-soft font-sans hover:border-accent hover:text-accent"
+              class="inline-flex min-h-8 items-center rounded-full bg-wash px-3 py-1 text-xs text-soft font-sans hover:text-ink"
             >
               {topic.label}
             </a>
@@ -222,29 +236,20 @@ const jsonLd = [
       </div>
     </section>
 
-    <AgentDigestHandoff
-      question={answer.data.question}
-      answerUrl={url}
-      sourceBooks={sourceBooks.map((book) => ({
-        title: book.data.title,
-        url: `https://answerwithbooks.com/books/${book.id}/`,
-      }))}
-    />
-
-    <details open data-source-brief class="mt-10 rounded-2xl border border-line bg-card px-5 py-4 sm:px-7">
-      <summary class="cursor-pointer font-serif text-2xl text-ink">Read the general source brief</summary>
-      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-soft">
-        This is the non-personalized editorial starting point. Use the agent handoff above when your own context should change the advice.
-      </p>
-      <div class="prose-awb prose-awb--aligned mt-8">
+    <section data-reading-content class="mt-10 rounded-2xl border border-line bg-card px-5 py-6 sm:px-7 sm:py-8">
+      <div class="prose-awb prose-awb--aligned">
         <Content />
       </div>
-    </details>
+    </section>
 
-    <ContentFeedback contentType="answer" contentSlug={answer.id} contentTitle={answer.data.question} />
+    <ReadingPersonalizer kind="guide" prompt={readingPrompt} />
   </article>
 
-  <FaqList items={faqs} eyebrow="Answer brief Q&A" title="How to use this brief" width="medium" />
+  <FaqList items={faqs} eyebrow="Guide Q&A" title="How to use this guide" width="medium" />
+
+  <div class="mx-auto max-w-5xl px-5 pb-12">
+    <ContentFeedback contentType="answer" contentSlug={answer.id} contentTitle={answer.data.question} />
+  </div>
 
   {
     relatedAnswers.length > 0 && (
@@ -274,9 +279,10 @@ const jsonLd = [
 
       const paint = () => {
         const active = readJson<string[]>(key, []).includes(id);
-        button.textContent = active ? onText : offText;
-        button.classList.toggle('awb-pill-primary', active);
-        button.classList.toggle('awb-pill-outline', !active);
+        const label = active ? onText : offText;
+        button.setAttribute('aria-label', label);
+        button.setAttribute('aria-pressed', String(active));
+        button.title = label;
       };
 
       button.addEventListener('click', () => {
@@ -286,6 +292,13 @@ const jsonLd = [
       paint();
     };
 
-    wireToggle('[data-save-answer]', SAVED_ANSWERS_KEY, 'Save answer', 'Saved - remove');
+    wireToggle('[data-save-answer]', SAVED_ANSWERS_KEY, 'Save this guide', 'Remove saved guide');
   </script>
+  <style>
+    .guide-actions { display:flex;align-items:center;gap:8px;padding-right:16px;border-right:1px solid var(--color-line) }
+    .guide-action { display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;color:var(--color-ink);background:var(--color-card);border:1px solid var(--color-line);cursor:pointer;transition:background 150ms ease,border-color 150ms ease }
+    .guide-action:hover { background:var(--color-wash);border-color:var(--color-ink) }
+    .guide-action:focus-visible { outline:2px solid var(--color-ink);outline-offset:3px }
+    .guide-action[aria-pressed=true] .bookmark-icon { fill:currentColor }
+  </style>
 </Base>

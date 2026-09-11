@@ -535,24 +535,27 @@ async function testMappingAndCommunityCollection(page) {
   await page.goto('/answers/how-to-fix-user-interviews-that-are-not-teaching-you-anything/', {
     waitUntil: 'domcontentloaded',
   });
-  assert.equal(await page.locator('[data-source-brief]').evaluate((details) => details.open), true);
-  await assertVisibleText(page, '[data-source-brief] .prose-awb', 'Find the broken link before changing the script');
-  assert.equal(await page.locator('[data-source-brief] .awb-line-illustration').count(), 1);
-  const sourceBrief = await page.locator('[data-source-brief] .prose-awb').innerText();
+  assert.equal(await page.locator('[data-reading-content]').isVisible(), true);
+  await assertVisibleText(page, '[data-reading-content] .prose-awb', 'Find the broken link before changing the script');
+  assert.equal(await page.locator('[data-reading-content] .awb-line-illustration').count(), 1);
+  const sourceBrief = await page.locator('[data-reading-content] .prose-awb').innerText();
   assert.doesNotMatch(sourceBrief, /When this lens breaks|Best paired with|Related books/);
   assert.ok(
-    await page.locator('[data-source-brief] .prose-awb p').count() >
-      await page.locator('[data-source-brief] .prose-awb li').count(),
+    await page.locator('[data-reading-content] .prose-awb p').count() >
+      await page.locator('[data-reading-content] .prose-awb li').count(),
     'answer source brief should be prose-led rather than list-led'
   );
-  await page.locator('[data-copy-agent-prompt]').click();
-  await expectText(page.locator('[data-copy-agent-prompt]'), /Copied/);
+  // Keep this smoke test local; destination behavior is tested separately.
+  await page.locator('[data-personalize-button]').evaluate(a => { a.removeAttribute('target'); a.setAttribute('href','#personalize'); });
+  await page.locator('[data-personalize-button]').click();
+  await expectText(page.locator('[data-personalize-status]'), /copied/);
   const agentPrompt = await page.evaluate(() => navigator.clipboard.readText());
-  assert.match(agentPrompt, /Use the installed Answer with Books skill/);
+  assert.match(agentPrompt, /Guide Reading Contract \(self-contained\)/);
   assert.match(agentPrompt, /how-to-fix-user-interviews-that-are-not-teaching-you-anything/);
-  assert.match(agentPrompt, /context you already know about my goals, constraints, prior attempts/);
+  assert.match(agentPrompt, /never invent my goals, constraints, prior attempts/);
+  assert.match(agentPrompt, /BEGIN SOURCE-BOOK EDITORIAL DIGEST/);
   await page.locator('[data-save-answer]').click();
-  await expectText(page.locator('[data-save-answer]'), /Saved - remove/);
+  assert.equal(await page.locator('[data-save-answer]').getAttribute('aria-pressed'),'true');
   await assertVisibleText(page, '[data-content-feedback]', 'Was this useful?');
   await page.locator('[data-content-feedback] [data-feedback-choice="not_helpful"]').click();
   await page.locator('[data-content-feedback] textarea[name="comment"]').fill('The decision boundary could be more specific.');

@@ -312,7 +312,6 @@ const answerTitles = Object.fromEntries(answers.map((answer) => [answer.id, answ
           .from('content_maps')
           .insert({
             user_id: activeSession.user.id,
-            author_email: activeSession.user.email,
             title: map.title,
             problem: map.problem,
             source_note: map.sourceNote,

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import NewsletterModal from '../components/NewsletterModal.astro';
+import Analytics from '../components/Analytics.astro';
 import { newsletterSignupUrl } from '../lib/newsletter';
 
 export interface Props {
@@ -96,19 +97,7 @@ const current = Astro.url.pathname;
     />
 
     {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
-    {
-      gaMeasurementIds.length > 0 && (
-        <>
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementIds[0]}`} />
-          <script
-            is:inline
-            set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());${gaMeasurementIds
-              .map((id) => `gtag('config','${id}');`)
-              .join('')}`}
-          />
-        </>
-      )
-    }
+    <Analytics ids={gaMeasurementIds} />
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink">
     {!readingMode && <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
@@ -160,6 +149,9 @@ const current = Astro.url.pathname;
         <div class="flex flex-wrap items-center justify-between gap-3">
           <p>AWB · Answer with Books — practical AI for non-technical teams.</p>
           <a href="/newsletter/" class="underline underline-offset-4 hover:text-ink">Newsletter</a>
+          <a href="/terms/" class="underline underline-offset-4 hover:text-ink">Terms</a>
+          <a href="/privacy/" class="underline underline-offset-4 hover:text-ink">Privacy Policy</a>
+          <a href="/privacy/#privacy-choices" class="underline underline-offset-4 hover:text-ink">Privacy choices</a>
           <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Editorial method</a>
         </div>
       </div>

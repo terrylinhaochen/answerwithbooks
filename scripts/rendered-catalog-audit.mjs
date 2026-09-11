@@ -48,7 +48,7 @@ try {
         return types.includes('Article');
       });
       const description = document.querySelector('meta[name="description"]')?.getAttribute('content')?.trim() ?? '';
-      const sourceBrief = document.querySelector('details[data-source-brief]');
+      const sourceBrief = document.querySelector('[data-reading-content]');
       return {
         bodyLength: document.body.innerText.trim().length,
         h1: document.querySelector('h1')?.textContent?.trim() ?? '',
@@ -56,7 +56,7 @@ try {
         descriptionLength: description.length,
         article,
         byline: document.querySelector('a[href="/editorial/"]')?.textContent?.trim() ?? '',
-        sourceBriefOpen: sourceBrief?.open ?? null,
+        sourceBriefOpen: Boolean(sourceBrief && sourceBrief.getBoundingClientRect().height > 0),
         illustration: Boolean(document.querySelector('.awb-line-illustration, .digest-illustration')),
         errorOverlay: Boolean(document.querySelector('.vite-error-overlay, #webpack-dev-server-client-overlay')),
         containsPlaceholder: [...document.body.querySelectorAll('*')].some((element) => {
@@ -76,7 +76,7 @@ try {
       entryFailures.push(`meta description length ${state.descriptionLength}`);
     }
     if (!state.article) entryFailures.push('missing Article JSON-LD');
-    if (state.byline !== 'Answer with Books') entryFailures.push('missing linked Answer with Books byline');
+    if (!['AWB','Answer with Books'].includes(state.byline)) entryFailures.push('missing linked Answer with Books byline');
     if (entry.collection === 'answers' && state.sourceBriefOpen !== true) {
       entryFailures.push('source brief is not expanded by default');
     }

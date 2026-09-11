@@ -1,0 +1,18 @@
+<section class="analytics-preference" id="privacy-choices" aria-labelledby="analytics-heading">
+  <h2 id="analytics-heading">Your analytics choice</h2>
+  <p>Optional Google Analytics helps us understand website usage. It stays off unless you allow it. You can keep using AWB either way.</p>
+  <div class="analytics-preference__buttons">
+    <button type="button" data-analytics-choice="on" aria-pressed="false">Allow analytics</button>
+    <button type="button" data-analytics-choice="off" aria-pressed="true">Keep analytics off</button>
+  </div>
+  <p data-analytics-status role="status">Optional analytics is off.</p>
+  <noscript><p>JavaScript is disabled, so analytics is not loaded.</p></noscript>
+</section>
+<style>
+  .analytics-preference{margin:28px 0;padding:24px;border:1px solid var(--color-line);border-radius:20px;background:var(--color-wash)}
+  .analytics-preference__buttons{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
+  button{padding:11px 18px;border:1px solid var(--color-line);border-radius:999px;background:var(--color-paper);color:var(--color-ink);font:500 14px/1.5 var(--font-sans);cursor:pointer}
+  button[aria-pressed=true]{border-color:var(--color-ink)}
+  button:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}
+  button:disabled{opacity:.5;cursor:default}
+</style>

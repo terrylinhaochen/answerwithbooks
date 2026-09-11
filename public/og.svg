@@ -2,8 +2,8 @@
   <rect width="1200" height="630" fill="#faf8f3"/>
   <rect x="76" y="78" width="1048" height="474" rx="12" fill="#fffdf8" stroke="#e4dbcd" stroke-width="2"/>
   <text x="118" y="148" fill="#8c3b2a" font-family="Georgia, serif" font-size="28" font-weight="700">AWB</text>
-  <text x="118" y="250" fill="#221e1a" font-family="Georgia, serif" font-size="64" font-weight="700">Practical AI skills</text>
-  <text x="118" y="332" fill="#221e1a" font-family="Georgia, serif" font-size="64" font-weight="700">for every team.</text>
+  <text x="118" y="250" fill="#221e1a" font-family="Georgia, serif" font-size="64" font-weight="700">Learn what matters</text>
+  <text x="118" y="332" fill="#221e1a" font-family="Georgia, serif" font-size="64" font-weight="700">to you, right now.</text>
   <text x="118" y="492" fill="#756d64" font-family="Georgia, serif" font-size="26">Hands-on guides and workflows that help non-technical teams</text>
   <text x="118" y="528" fill="#756d64" font-family="Georgia, serif" font-size="26">put AI to work.</text>
   <g transform="translate(887 144)">

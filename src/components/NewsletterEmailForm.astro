@@ -12,7 +12,7 @@ const id = `newsletter-${crypto.randomUUID()}`;
     <div class="newsletter-email__trap" aria-hidden="true">
       <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
     </div>
-    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you agree to receive the AWB newsletter. You can unsubscribe at any time.</p>
+    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you agree to receive emails from AWB. You can unsubscribe at any time. View our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
     <p id={`${id}-status`} class="newsletter-email__status" role="status" aria-live="polite" data-newsletter-status></p>
   </form>
   <noscript><p class="newsletter-email__note">Enable JavaScript to sign up here, or <a href={newsletterSignupUrl}>subscribe on Substack</a>.</p></noscript>

@@ -13,7 +13,7 @@ try {
   await button.waitFor();
   assert.equal(await page.locator('iframe[data-substack-embed]').count(),0);
   assert.equal(await page.getByText('CS@Northwestern, GenAI Product@Tiktok',{exact:false}).count(),0);
-  assert.equal(await form.locator('.newsletter-email__note').innerText(),'By subscribing, you agree to receive the AWB newsletter. You can unsubscribe at any time.');
+  assert.equal(await form.locator('.newsletter-email__note').innerText(),'By subscribing, you agree to receive emails from AWB. You can unsubscribe at any time. View our Terms and Privacy Policy.');
   await input.fill('invalid');await button.click();
   assert.equal(await input.evaluate(e=>e.checkValidity()),false);
   await page.route(endpoint, route=>route.fulfill({status:503,contentType:'application/json',body:'{"error":"unavailable"}'}));
@@ -46,7 +46,7 @@ try {
   console.log('LIVE: browser → deployed signup endpoint returned 202; verify and delete synthetic record separately.');
  }
  const noJs=await browser.newPage({javaScriptEnabled:false});await noJs.goto('http://127.0.0.1:4321/');
- assert.equal(await noJs.locator('.newsletter-signup a').getAttribute('href'),'https://terrychen.substack.com/subscribe');
+ assert.equal(await noJs.getByRole('link',{name:'subscribe on Substack',exact:true}).getAttribute('href'),'https://terrychen.substack.com/subscribe');
  assert.equal(await noJs.locator('.newsletter-signup button').isDisabled(),true);
  await noJs.close();
  console.log('PASS: native signup desktop/mobile, validation, retry, rate limit, success, no iframe/old bio, no-JS fallback. UI states mocked except explicitly enabled live check.');
