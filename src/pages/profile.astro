@@ -1,137 +1,237 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import BookAdditions from '../components/BookAdditions.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
+
+// Build-time book metadata, shipped as a data island for the client script.
+const books = await getCollection('books');
+const answers = await getCollection('answers');
+const bookMeta = Object.fromEntries(
+  books.map((b) => [b.id, { title: b.data.title, author: b.data.author }])
+);
+const answerMeta = Object.fromEntries(
+  answers.map((answer) => [
+    answer.id,
+    {
+      question: answer.data.question,
+      description: answer.data.description,
+      books: answer.data.books,
+    },
+  ])
+);
 ---
 
 <Base
   title="Profile"
-  description="Track your AWB activity, saved books, and insight exploration profile."
+  description="Your saved books, guides, reading activity, and preferences on AWB."
   path="/profile/"
   robots="noindex, follow"
 >
-  <section data-profile-loading class="awb-section pb-16 pt-16">
-    <p class="awb-eyebrow">Profile</p>
-    <p class="mt-3 font-serif text-4xl leading-tight">Checking your session...</p>
-  </section>
+  <section class="awb-section pt-16 pb-24">
+    <div id="library-loading" class="text-soft">Checking your session…</div>
 
-  <section data-profile-shell class="awb-section hidden pb-16 pt-16">
-    <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
-      <div>
-        <p class="awb-eyebrow">Profile</p>
-        <h1 class="mt-3 max-w-3xl font-serif text-5xl leading-tight">
-          Your insight trail.
-        </h1>
-        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">
-          Track the book-backed moves you return to, then use that behavior to surface what to read, ask, and apply next.
-        </p>
-      </div>
-      <div class="flex flex-wrap gap-3">
-        <a
-          href="/my-books/"
-          data-profile-primary
-          class="awb-pill awb-pill-primary"
-        >
-          Open dashboard
-        </a>
-        <a
-          href="/answers/"
-          class="awb-pill awb-pill-outline"
-        >
-          Explore insights
-        </a>
-      </div>
-    </div>
-
-    <section data-onboarding-summary class="awb-panel mt-8 hidden px-5 py-6 sm:px-6">
-      <div class="grid gap-5 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
+    <div id="library-content" class="hidden">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
         <div>
-          <p class="awb-eyebrow">Personalization setup</p>
-          <h2 class="mt-3 font-serif text-3xl leading-tight">
-            Your shelf has a starting point.
-          </h2>
-          <p class="mt-3 text-sm leading-relaxed text-soft" data-onboarding-sync>
-            Saved in this browser.
+          <p class="awb-eyebrow">Profile</p>
+          <h1 class="mt-3 max-w-lg font-serif text-5xl leading-tight">
+            Welcome back<span id="user-name"></span>.
+          </h1>
+          <p class="mt-5 max-w-lg text-lg leading-relaxed text-soft">
+            Your saved books, useful guides, and reading activity—all in one place.
           </p>
+          <div class="mt-7 flex flex-wrap gap-3"><a href="/books/" class="awb-pill awb-pill-primary">Explore books</a><a href="/guides/" class="awb-pill awb-pill-outline">Explore guides</a></div>
         </div>
-        <div class="grid gap-3 sm:grid-cols-3">
-          <div class="awb-card-link p-4">
-            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Focus</p>
-            <p class="mt-2 font-serif text-xl leading-tight" data-onboarding-focus></p>
-          </div>
-          <div class="awb-card-link p-4">
-            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Shelf</p>
-            <p class="mt-2 font-serif text-xl leading-tight" data-onboarding-shelf></p>
-          </div>
-          <div class="awb-card-link p-4">
-            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">Top of mind</p>
-            <p class="mt-2 text-sm leading-relaxed text-soft" data-onboarding-goal></p>
-          </div>
-          <div class="awb-card-link p-4 sm:col-span-3">
-            <p class="font-sans text-xs uppercase tracking-[0.16em] text-faint">ChatGPT</p>
-            <p class="mt-2 text-sm leading-relaxed text-soft" data-onboarding-chatgpt></p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <div class="mt-10">
-      <ActivityPanel
-        eyebrow="Reading activity"
-        title="A map of the useful insights you keep needing."
-        description="Open insights, save books, and let repeated behavior reveal the questions and book lenses worth keeping close."
-        showDetails={false}
-        showLink={false}
-      />
+        <ActivityPanel
+          eyebrow="Your activity"
+          title="Your reading activity."
+          description="See the books and questions you return to." class="min-w-0" showLink={false} showDetails={false}
+        />
+      </div>
+
+      <BookAdditions />
+
+      <div class="mt-12 grid gap-8 lg:grid-cols-2">
+        <section class="awb-card-link p-5 sm:p-6">
+          <h2 class="awb-eyebrow border-b border-line pb-3">
+            Saved books
+          </h2>
+          <ul id="saved-list" class="divide-y divide-line"></ul>
+          <p id="saved-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+            Nothing saved yet. Browse <a href="/books/" class="text-accent underline underline-offset-4 decoration-1">the shelf</a>
+            and hit "Save this book" on any book.
+          </p>
+        </section>
+
+        <section class="awb-card-link p-5 sm:p-6">
+          <h2 class="awb-eyebrow border-b border-line pb-3">
+            Saved answers
+          </h2>
+          <ul id="saved-answer-list" class="divide-y divide-line"></ul>
+          <p id="saved-answer-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+            Nothing saved yet. Open <a href="/answers/" class="text-accent underline underline-offset-4 decoration-1">an answer</a>
+            and save the ones you want to return to.
+          </p>
+        </section>
+      </div>
+
+      <section class="awb-panel mt-8 p-5 sm:p-6">
+        <div class="flex flex-col gap-3 border-b border-line pb-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="awb-eyebrow">Open questions</p>
+            <h2 class="mt-2 font-serif text-3xl leading-tight text-ink">Honest misses waiting for a stronger answer.</h2>
+          </div>
+          <a href="/skills/" class="awb-pill awb-pill-outline">Install the agent skill</a>
+        </div>
+        <ul id="open-question-list" class="divide-y divide-line"></ul>
+        <p id="open-question-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
+          No open questions yet. Questions captured by the agent skill appear here when the shelf has no strong published answer.
+        </p>
+      </section>
+
+      <section id="preferences" class="awb-panel mt-8 p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3"><h2 class="awb-eyebrow">Your preferences</h2><a href="/onboarding/start/?from=profile" class="text-sm underline underline-offset-4">Edit preferences</a></div>
+        <p id="profile-email" class="mt-3 text-sm text-soft break-all"></p>
+        <p id="profile-preferences" class="mt-3 text-soft">Choose the topics and questions you want to explore.</p>
+      </section>
+
+      <p class="mt-10">
+        <button
+          type="button"
+          id="signout-btn"
+          class="awb-pill awb-pill-outline cursor-pointer"
+        >
+          Sign out
+        </button>
+      </p>
     </div>
   </section>
+
+  <script type="application/json" id="book-meta" set:html={JSON.stringify(bookMeta)} />
+  <script type="application/json" id="answer-meta" set:html={JSON.stringify(answerMeta)} />
 
   <script>
     import { supabase } from '../lib/supabase';
-    import { readOnboardingProfile, persistOnboardingProfile, hasPendingOnboarding } from '../lib/onboarding';
+    import { readOnboardingProfile, hasPendingOnboarding, persistOnboardingProfile } from '../lib/onboarding';
+    import {
+      OPEN_QUESTIONS_KEY,
+      SAVED_ANSWERS_KEY,
+      SAVED_BOOKS_KEY,
+      readJson,
+    } from '../lib/user-library';
 
-    const primary = document.querySelector<HTMLAnchorElement>('[data-profile-primary]');
-    const summary = document.querySelector<HTMLElement>('[data-onboarding-summary]');
-    const shell = document.querySelector<HTMLElement>('[data-profile-shell]');
-    const loading = document.querySelector<HTMLElement>('[data-profile-loading]');
-    const focusNode = document.querySelector<HTMLElement>('[data-onboarding-focus]');
-    const shelfNode = document.querySelector<HTMLElement>('[data-onboarding-shelf]');
-    const goalNode = document.querySelector<HTMLElement>('[data-onboarding-goal]');
-    const chatgptNode = document.querySelector<HTMLElement>('[data-onboarding-chatgpt]');
-    const syncNode = document.querySelector<HTMLElement>('[data-onboarding-sync]');
-
-    const renderOnboardingSummary = (profile: ReturnType<typeof readOnboardingProfile>, synced = false) => {
-      if (!profile || !summary) return;
-      summary.classList.remove('hidden');
-      if (focusNode) focusNode.textContent = profile.focus.length > 0 ? profile.focus.join(', ') : 'Not chosen yet';
-      if (shelfNode) shelfNode.textContent = profile.shelf;
-      if (goalNode) goalNode.textContent = profile.goal || 'No current top of mind yet.';
-      if (chatgptNode) {
-        chatgptNode.textContent =
-          profile.chatgpt?.intent === 'connect'
-            ? `Marked for future ChatGPT connection${profile.chatgpt.useCase ? `: ${profile.chatgpt.useCase}` : '.'}`
-            : 'Not requested yet.';
+    const loading = document.getElementById('library-loading')!;
+    const content = document.getElementById('library-content')!;
+    const userName = document.getElementById('user-name')!;
+    const savedList = document.getElementById('saved-list')!;
+    const savedEmpty = document.getElementById('saved-empty')!;
+    const savedAnswerList = document.getElementById('saved-answer-list')!;
+    const savedAnswerEmpty = document.getElementById('saved-answer-empty')!;
+    const openQuestionList = document.getElementById('open-question-list')!;
+    const openQuestionEmpty = document.getElementById('open-question-empty')!;
+    const signoutBtn = document.getElementById('signout-btn')!;
+    const bookMeta: Record<string, { title: string; author: string }> = JSON.parse(
+      document.getElementById('book-meta')!.textContent ?? '{}'
+    );
+    const answerMeta: Record<string, { question: string; description: string; books: string[] }> = JSON.parse(
+      document.getElementById('answer-meta')!.textContent ?? '{}'
+    );
+    const appendSimpleLink = (
+      list: HTMLElement,
+      href: string,
+      title: string,
+      meta: string,
+      description?: string
+    ) => {
+      const li = document.createElement('li');
+      li.className = 'py-4';
+      const a = document.createElement('a');
+      a.href = href;
+      a.className =
+        'font-serif text-lg text-ink hover:text-accent underline underline-offset-4 decoration-line hover:decoration-accent';
+      a.textContent = title;
+      const span = document.createElement('span');
+      span.className = 'text-sm text-faint ml-2';
+      span.textContent = meta;
+      li.append(a, span);
+      if (description) {
+        const p = document.createElement('p');
+        p.className = 'mt-2 text-sm leading-relaxed text-soft';
+        p.textContent = description;
+        li.appendChild(p);
       }
-      if (syncNode) syncNode.textContent = synced ? 'Synced to your account.' : 'Saved in this browser.';
+      list.appendChild(li);
     };
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!primary) return;
-      if (!data.session) {
-        window.location.replace('/onboarding/start/?from=profile');
-        return;
-      }
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
+      window.location.href = '/login/';
+    } else {
+      const email = data.session.user.email ?? '';
+      userName.textContent = email ? `, ${email.split('@')[0]}` : '';
 
-      loading?.classList.add('hidden');
-      shell?.classList.remove('hidden');
+      const saved = readJson<string[]>(SAVED_BOOKS_KEY, []);
+      const known = saved.filter((slug) => bookMeta[slug]);
 
-      if (hasPendingOnboarding()) {
-        persistOnboardingProfile(supabase, data.session).then(() => {
-          renderOnboardingSummary(readOnboardingProfile(), true);
-        });
+      if (known.length === 0) {
+        savedEmpty.classList.remove('hidden');
       } else {
-        const metadataProfile = data.session.user.user_metadata?.answer_with_books_onboarding;
-        renderOnboardingSummary(readOnboardingProfile() || metadataProfile, Boolean(metadataProfile));
+        for (const slug of known) {
+          appendSimpleLink(savedList, `/books/${slug}/`, bookMeta[slug].title, bookMeta[slug].author);
+        }
       }
-    });
+
+      const savedAnswers = readJson<string[]>(SAVED_ANSWERS_KEY, []).filter((slug) => answerMeta[slug]);
+      if (savedAnswers.length === 0) {
+        savedAnswerEmpty.classList.remove('hidden');
+      } else {
+        for (const slug of savedAnswers) {
+          appendSimpleLink(
+            savedAnswerList,
+            `/answers/${slug}/`,
+            answerMeta[slug].question,
+            `${answerMeta[slug].books.length} source ${answerMeta[slug].books.length === 1 ? 'book' : 'books'}`,
+            answerMeta[slug].description
+          );
+        }
+      }
+
+      const openQuestions = readJson<Array<{ question: string; context: string; createdAt: string }>>(OPEN_QUESTIONS_KEY, []);
+      if (openQuestions.length === 0) {
+        openQuestionEmpty.classList.remove('hidden');
+      } else {
+        for (const item of openQuestions) {
+          appendSimpleLink(
+            openQuestionList,
+            `/skills/`,
+            item.question,
+            'Needs a stronger published answer',
+            item.context || undefined
+          );
+        }
+      }
+
+      loading.classList.add('hidden');
+      content.classList.remove('hidden');
+      document.getElementById('profile-email')!.textContent = email;
+      const showPreferences = () => {
+        const prefs = data.session.user.user_metadata?.answer_with_books_onboarding || readOnboardingProfile();
+        if (!prefs) return;
+        const focus = Array.isArray(prefs.focus) ? prefs.focus.filter(value => typeof value === 'string').join(', ') : '';
+        document.getElementById('profile-preferences')!.textContent = [focus, typeof prefs.goal === 'string' ? prefs.goal : ''].filter(Boolean).join(' · ') || 'Choose the topics and questions you want to explore.';
+      };
+      showPreferences();
+      if (hasPendingOnboarding()) void persistOnboardingProfile(supabase, data.session).then(showPreferences);
+
+
+      signoutBtn.addEventListener('click', async () => {
+        signoutBtn.setAttribute('disabled', '');
+        const { error } = await supabase.auth.signOut();
+        if (error) { signoutBtn.removeAttribute('disabled'); signoutBtn.textContent = 'Try signing out again'; return; }
+        window.location.href = '/';
+      });
+    }
   </script>
 </Base>

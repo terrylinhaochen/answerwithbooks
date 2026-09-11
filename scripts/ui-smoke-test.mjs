@@ -512,6 +512,7 @@ async function testLoginAndSignout(page) {
 
   await page.goto('/login/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#login-form');
+  await page.locator('[data-login-mode]').click();
   await page.locator('#email').fill('reader@example.test');
   await page.locator('#password').fill('awb-Test-Password-123!');
   await page.locator('#submit-btn').click();

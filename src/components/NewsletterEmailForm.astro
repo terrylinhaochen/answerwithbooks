@@ -15,9 +15,31 @@ const id = `newsletter-${crypto.randomUUID()}`;
     <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you agree to receive emails from AWB. You can unsubscribe at any time. View our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
     <p id={`${id}-status`} class="newsletter-email__status" role="status" aria-live="polite" data-newsletter-status></p>
   </form>
+  <p class="newsletter-email__note" data-account-login>Already have an account? <a href="/login/">Log in</a></p>
+<section class="newsletter-account" hidden data-account-step>
+  <h3 tabindex="-1" data-account-title>Make it your shelf.</h3>
+  <p data-account-copy></p>
+  <div class="newsletter-account__actions">
+    <button type="button" data-activate-account>Activate my account</button>
+    <button type="button" class="newsletter-account__secondary" data-skip-account>Not now</button>
+    <a href="/guides/" hidden data-account-explore>Explore guides</a>
+    <button type="button" class="newsletter-account__secondary" hidden data-account-resume>Activate account</button>
+  </div>
+  <p class="newsletter-email__note" data-account-consent>By activating an account, you agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a>. Newsletter preferences remain separate.</p>
+  <p class="newsletter-email__status" role="status" aria-live="polite" data-account-status></p>
+  <button type="button" class="newsletter-account__reset" data-signup-reset>Use a different email</button>
+</section>
   <noscript><p class="newsletter-email__note">Enable JavaScript to sign up here, or <a href={newsletterSignupUrl}>subscribe on Substack</a>.</p></noscript>
 </div>
 <style>
+  .newsletter-email [hidden]{display:none!important}
+  .newsletter-account{margin-top:20px;border-top:1px solid var(--color-line);padding-top:24px}
+  .newsletter-account h3{font:500 30px/1.15 var(--font-serif);outline:none}
+  .newsletter-account>[data-account-copy]{margin-top:12px;font:400 15px/1.6 var(--font-sans);color:var(--color-soft);overflow-wrap:anywhere}
+  .newsletter-account__actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}
+  .newsletter-account__actions a{display:inline-flex;min-height:48px;align-items:center;padding:12px 24px;border-radius:999px;background:var(--color-ink);color:white;font:600 15px/1.4 var(--font-sans);text-decoration:none}
+  .newsletter-account .newsletter-account__secondary{background:transparent;color:var(--color-soft);border:1px solid var(--color-line)}
+  .newsletter-account .newsletter-account__reset{margin-top:14px;min-height:36px;padding:0;background:transparent;color:var(--color-soft);font-size:12px;text-decoration:underline;text-underline-offset:3px}
   .newsletter-email{width:100%;max-width:560px}
   .newsletter-email__field{display:flex;align-items:center;gap:8px;padding:7px;border:1px solid var(--color-line);border-radius:999px;background:#fff}
   .newsletter-email__field:focus-within{outline:2px solid var(--color-ink);outline-offset:3px}
@@ -34,40 +56,5 @@ const id = `newsletter-${crypto.randomUUID()}`;
   @media(max-width:480px){.newsletter-email button{padding:12px 18px}.newsletter-email input[type=email]{padding-left:10px}}
 </style>
 <script>
-  const url = import.meta.env.PUBLIC_SUPABASE_URL;
-  const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-  document.querySelectorAll<HTMLFormElement>('[data-newsletter-email-form]').forEach(form => {
-    const input = form.querySelector<HTMLInputElement>('[name=email]')!;
-    const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
-    const status = form.querySelector<HTMLElement>('[data-newsletter-status]')!;
-    let pending = false;
-    const message = (text: string, error = false) => { status.textContent = text; status.dataset.error = String(error); };
-    if (!url || !key) { message('Signup is temporarily unavailable. Please try again later.', true); return; }
-    button.disabled = false;
-    input.addEventListener('input', () => input.setCustomValidity(''));
-    form.addEventListener('submit', async event => {
-      event.preventDefault();
-      if (pending) return;
-      input.value = input.value.trim();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) input.setCustomValidity('Enter a valid email address.');
-      if (!form.reportValidity()) return;
-      pending = true; button.disabled = true; button.textContent = 'Saving…'; form.setAttribute('aria-busy', 'true'); message('');
-      try {
-        const response = await fetch(`${url}/functions/v1/newsletter-signup`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json', apikey: key, Authorization: `Bearer ${key}` },
-          body: JSON.stringify({ email: input.value.toLowerCase(), consent: true, consentVersion: 'awb-newsletter-v1', sourcePath: location.pathname, website: new FormData(form).get('website') || '' }),
-          signal: AbortSignal.timeout(15000),
-        });
-        const result = await response.json();
-        if (!response.ok || result.accepted !== true) {
-          throw new Error(response.status === 429 ? 'Too many attempts. Please try again in an hour.' : 'We could not save your signup. Please try again.');
-        }
-        form.reset(); input.disabled = true; button.textContent = 'Saved';
-        message('Thanks—your email has been saved for the AWB newsletter.');
-      } catch (error) {
-        message(error instanceof Error && error.name === 'Error' ? error.message : 'We could not save your signup. Please try again.', true);
-        button.disabled = false; button.textContent = 'Subscribe';
-      } finally { pending = false; form.removeAttribute('aria-busy'); }
-    });
-  });
+  import '../lib/newsletter-flow';
 </script>

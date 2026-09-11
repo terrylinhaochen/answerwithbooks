@@ -7,6 +7,8 @@ try {
  for(const width of [1280,390]) {
   await page.setViewportSize({width,height:950});
   await page.goto('http://127.0.0.1:4321/');
+  await page.evaluate(()=>sessionStorage.clear());
+  await page.reload();
   const form=page.locator('.newsletter-signup form');
   const input=form.getByRole('textbox',{name:'Email address'});
   const button=form.getByRole('button',{name:'Subscribe'});
@@ -28,8 +30,9 @@ try {
   await page.route(endpoint,async route=>{payload=route.request().postDataJSON();await route.fulfill({status:202,contentType:'application/json',body:'{"accepted":true}'});});
   await button.click();await form.getByRole('status').filter({hasText:'your email has been saved'}).waitFor();
   assert.equal(payload.email,'reader@example.com');assert.equal(payload.consent,true);assert.equal(payload.consentVersion,'awb-newsletter-v1');
-  assert.equal(await input.isDisabled(),true);
+  assert.equal(await form.locator('input[type=email]').isDisabled(),true);
   await page.unroute(endpoint);
+  await page.evaluate(()=>sessionStorage.clear());
   await page.goto('http://127.0.0.1:4321/');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   await page.screenshot({path:`/tmp/arda-native-signup-${width}.png`});
@@ -47,7 +50,7 @@ try {
  }
  const noJs=await browser.newPage({javaScriptEnabled:false});await noJs.goto('http://127.0.0.1:4321/');
  assert.equal(await noJs.getByRole('link',{name:'subscribe on Substack',exact:true}).getAttribute('href'),'https://terrychen.substack.com/subscribe');
- assert.equal(await noJs.locator('.newsletter-signup button').isDisabled(),true);
+ assert.equal(await noJs.locator('.newsletter-signup button[type=submit]').isDisabled(),true);
  await noJs.close();
  console.log('PASS: native signup desktop/mobile, validation, retry, rate limit, success, no iframe/old bio, no-JS fallback. UI states mocked except explicitly enabled live check.');
 } finally {await browser.close();}

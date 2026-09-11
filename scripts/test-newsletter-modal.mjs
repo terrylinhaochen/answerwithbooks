@@ -9,6 +9,11 @@ try {
   await page.setViewportSize({width,height:900});
   for(const route of ['/','/skills/','/newsletter/']) {
    await page.goto(base+route);
+   assert.equal(await page.locator('header').getByRole('link',{name:'Get started',exact:true}).count(),0);
+   assert.equal(await page.locator('header [data-open-newsletter]').count(),1);
+   assert.equal(await page.locator('header .awb-account-links a:visible').count(),1,'Subscribe is the only signed-out header CTA');
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+   if(width===390) assert.ok((await page.locator('header .awb-brand').boundingBox()).width<100,'Mobile logo stays compact');
    const modal=page.locator('[data-newsletter-modal]');
    assert.equal(await modal.count(),1);
    assert.equal(await modal.evaluate(d=>d.open),false,'Never auto-open a popup');
@@ -43,5 +48,5 @@ try {
  await noJs.goto(base+'/');
  assert.equal(await noJs.locator('[data-open-newsletter]').first().getAttribute('href'),'https://terrychen.substack.com/subscribe');
  await noJs.close();assert.deepEqual(errors,[]);
- console.log(JSON.stringify({passed:true,viewports:[1280,390],routes:3,closeButton:true,escape:true,backdrop:true,focusRestored:true,noJsFallback:true,emailSignup:'Native email form; no emails submitted',errors},null,2));
+ console.log(JSON.stringify({passed:true,singleSubscribeCta:true,viewports:[1280,390],routes:3,closeButton:true,escape:true,backdrop:true,focusRestored:true,noJsFallback:true,emailSignup:'Native email form; no emails submitted',errors},null,2));
 } finally {await browser.close();}

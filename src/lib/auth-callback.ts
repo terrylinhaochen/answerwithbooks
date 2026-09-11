@@ -12,18 +12,18 @@ export const consumeAuthCallback = async (
   const refreshToken = hash.get('refresh_token');
 
   if (code) {
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     stripAuthParams(url);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) return { session: null, handled: true, error: error.message };
     return { session: data.session, handled: true };
   }
 
   if (accessToken && refreshToken) {
+    stripAuthParams(url);
     const { data, error } = await supabase.auth.setSession({
       access_token: accessToken,
       refresh_token: refreshToken,
     });
-    stripAuthParams(url);
     if (error) return { session: null, handled: true, error: error.message };
     return { session: data.session, handled: true };
   }

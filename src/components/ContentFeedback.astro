@@ -24,10 +24,6 @@ const { contentType, contentSlug, contentTitle } = Astro.props;
 
     <form class="grid gap-4" data-feedback-form>
       <input type="hidden" name="sentiment" value="" />
-      <div class="flex flex-wrap gap-2" role="group" aria-label="Was this content useful?">
-        <button type="button" class="awb-pill awb-pill-outline cursor-pointer" data-feedback-choice="helpful" aria-pressed="false">Yes</button>
-        <button type="button" class="awb-pill awb-pill-outline cursor-pointer" data-feedback-choice="not_helpful" aria-pressed="false">Not yet</button>
-      </div>
       <label>
         <span class="sr-only">What was useful or missing?</span>
         <textarea
@@ -42,10 +38,14 @@ const { contentType, contentSlug, contentTitle } = Astro.props;
         <span>Website</span>
         <input name="website" tabindex="-1" autocomplete="off" />
       </label>
-      <div class="flex flex-wrap items-center gap-3">
-        <button type="submit" class="awb-pill awb-pill-primary cursor-pointer" data-feedback-submit disabled>Submit feedback</button>
-        <p class="hidden text-sm text-soft" role="status" aria-live="polite" data-feedback-status></p>
+      <div class="flex flex-wrap items-center justify-between gap-3" data-feedback-actions>
+        <div class="flex items-center gap-2" role="group" aria-label="Was this content useful?">
+          <button type="button" class="awb-pill awb-pill-outline cursor-pointer" data-feedback-choice="helpful" aria-pressed="false">Yes</button>
+          <button type="button" class="awb-pill awb-pill-outline cursor-pointer" data-feedback-choice="not_helpful" aria-pressed="false">Not yet</button>
+        </div>
+        <button type="submit" class="awb-pill awb-pill-primary ml-auto cursor-pointer" data-feedback-submit disabled>Submit feedback</button>
       </div>
+      <p class="hidden text-sm text-soft" role="status" aria-live="polite" data-feedback-status></p>
     </form>
   </div>
 </section>

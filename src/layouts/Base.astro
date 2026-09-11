@@ -126,13 +126,6 @@ const current = Astro.url.pathname;
           >
             Profile
           </a>
-          <a
-            href="/onboarding/start/"
-            data-onboarding-link
-            class="awb-nav__action"
-          >
-            Get started
-          </a>
           </div>
         </div>
       </div>
@@ -192,17 +185,19 @@ const current = Astro.url.pathname;
       }
 
       // Keep the account nav state client-side because this site is statically rendered.
-      const link = document.querySelector('[data-auth-link]');
-      const onboardingLink = document.querySelector('[data-onboarding-link]');
-      if (link) {
-        supabase.auth.getSession().then(({ data }) => {
-          if (data.session) {
-            link.textContent = 'Profile';
-            link.classList.remove('hidden');
-            onboardingLink?.classList.add('hidden');
-          }
+      const renderAccountNav = (signedIn: boolean) => {
+        document.querySelector('[data-auth-link]')?.classList.toggle('hidden', !signedIn);
+        document.querySelectorAll<HTMLElement>('[data-open-newsletter], [data-hide-when-signed-in]').forEach(element => {
+          element.hidden = signedIn;
+          element.style.display = signedIn ? 'none' : '';
         });
-      }
+        if (signedIn) {
+          const modal = document.querySelector<HTMLDialogElement>('[data-newsletter-modal]');
+          if (modal?.open) modal.close();
+        }
+      };
+      supabase.auth.onAuthStateChange((_event, session) => renderAccountNav(Boolean(session)));
+      supabase.auth.getSession().then(({ data }) => renderAccountNav(Boolean(data.session))).catch(() => renderAccountNav(false));
     </script>
   </body>
 </html>

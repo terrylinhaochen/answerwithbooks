@@ -43,7 +43,7 @@ const providers = [
           ))}
         </div>
         <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="mt-3 flex min-h-11 w-full items-center justify-center rounded-full border border-white bg-white px-5 py-2.5 font-sans text-sm font-semibold text-ink transition hover:bg-white/90" data-personalize-button>
-          Copy guide &amp; open ChatGPT
+          Copy prompt &amp; open ChatGPT
         </a>
       </div>
     </div>
@@ -52,11 +52,11 @@ const providers = [
       Your choice is remembered. Personalization follows the
       <a class="underline decoration-white/30 underline-offset-4 hover:decoration-white" href={skillUrl} target="_blank" rel="noreferrer">AWB skill</a>.
     </p>
-<p class="mt-2 text-sm text-white/60">Copies the guide and instructions. Paste them into your chosen AI; no link access needed.</p>
-    <details class="mt-3 text-sm text-white/70">
-      <summary class="cursor-pointer">View or copy prompt</summary>
+<p class="mt-2 text-sm text-white/60">Copies the full prompt. When your AI opens, paste with ⌘V (Mac) or Ctrl+V (Windows).</p>
+    <div hidden class="mt-3 text-sm text-white/70" data-personalize-fallback>
       <textarea readonly rows="9" aria-label="Personalized reading prompt" class="mt-3 w-full rounded-xl bg-white p-4 text-ink" data-personalize-prompt>{prompt}</textarea>
-    </details>
+      <button type="button" class="mt-3 rounded-full bg-white px-4 py-2 font-semibold text-ink" data-copy-reading-prompt>Copy prompt only</button>
+    </div>
   </div>
 </section>
 
@@ -67,6 +67,8 @@ const providers = [
     const action = root.querySelector<HTMLAnchorElement>('[data-personalize-button]');
     const prompt = root.querySelector<HTMLTextAreaElement>('[data-personalize-prompt]');
     const status = root.querySelector<HTMLElement>('[data-personalize-status]');
+    const copyOnly = root.querySelector<HTMLButtonElement>('[data-copy-reading-prompt]');
+    let copying = false;
 
     const providerName = (provider: string) => provider === 'chatgpt'
       ? 'ChatGPT'
@@ -85,10 +87,11 @@ const providers = [
         option.classList.toggle('opacity-65', !active);
       });
       if (action && selected) {
+        action.dataset.promptCopied = 'false';
         action.dataset.selectedProvider = selected.dataset.aiProvider;
         action.dataset.selectedUrl = selected.dataset.aiUrl;
         action.href = selected.dataset.aiUrl ?? 'https://chatgpt.com/';
-        action.textContent = `Copy guide & open ${providerName(selected.dataset.aiProvider ?? 'chatgpt')}`;
+        action.textContent = `Copy prompt & open ${providerName(selected.dataset.aiProvider ?? 'chatgpt')}`;
       }
     };
 
@@ -111,21 +114,49 @@ const providers = [
       if (status) status.textContent = `${providerName(provider)} will open when you personalize.`;
     }));
 
-    action?.addEventListener('click', async () => {
-      if (!prompt) return;
+    const copyPrompt = async (openAI: boolean) => {
+      if (!prompt || !action || copying) return;
+      copying = true;
       const provider = action.dataset.selectedProvider ?? 'chatgpt';
+      const destination = action.dataset.selectedUrl ?? 'https://chatgpt.com/';
+      action.setAttribute('aria-busy', 'true');
+      action.textContent = 'Copying prompt…';
+      options.forEach(option => { option.disabled = true; });
+      if (copyOnly) copyOnly.disabled = true;
       try {
+        if (!prompt.value.trim()) throw new Error('Empty prompt');
+        // Keep focus on this document until the clipboard operation resolves.
+        // Native anchor navigation used to race this asynchronous write in Chrome.
         await navigator.clipboard.writeText(prompt.value);
-        action.textContent = 'Prompt copied';
-        if (status) status.textContent = `Guide and instructions copied. Paste them into ${providerName(provider)} to begin; no browsing is needed.`;
+        action.dataset.promptCopied = 'true';
+        action.textContent = `Open ${providerName(provider)}`;
+        if (status) status.textContent = `Prompt copied. Paste it into ${providerName(provider)} with ⌘V on Mac or Ctrl+V on Windows. If the tab didn’t open, use Open ${providerName(provider)}.`;
+        // This may be popup-blocked after the await. The action above becomes a
+        // normal link, so a second click always provides a user-initiated fallback.
+        if (openAI) window.open(destination, '_blank', 'noopener,noreferrer');
       } catch {
-        if (status) status.textContent = 'Automatic copy was blocked. Select and copy the guide below, then paste it into your AI.';
-        const fallback = prompt.closest('details');
-        if (fallback) fallback.open = true;
+        action.dataset.promptCopied = 'false';
+        action.textContent = `Copy prompt & open ${providerName(provider)}`;
+        if (status) status.textContent = 'Automatic copy was blocked. The prompt is selected below—press ⌘C on Mac or Ctrl+C on Windows, then open your AI and paste it.';
+        const fallback = prompt.closest<HTMLElement>('[data-personalize-fallback]');
+        if (fallback) fallback.hidden = false;
         prompt.focus();
         prompt.select();
+        prompt.setSelectionRange(0, prompt.value.length);
+      } finally {
+        copying = false;
+        action.removeAttribute('aria-busy');
+        options.forEach(option => { option.disabled = false; });
+        if (copyOnly) copyOnly.disabled = false;
       }
-      window.setTimeout(() => paint(provider), 2600);
+    };
+
+    action?.addEventListener('click', event => {
+      if (action.dataset.promptCopied === 'true' && !copying) return;
+      event.preventDefault();
+      void copyPrompt(true);
     });
+    copyOnly?.addEventListener('click', () => { void copyPrompt(false); });
+
   }
 </script>

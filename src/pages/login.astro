@@ -14,7 +14,7 @@ import Base from '../layouts/Base.astro';
       Welcome back. Your <a href="/my-books/" class="text-accent underline underline-offset-4 decoration-1">saved books</a> are waiting.
     </p>
 
-    <form id="login-form" class="mt-8 space-y-5" novalidate>
+    <form id="login-form" method="post" class="mt-8 space-y-5">
       <div>
         <label for="email" class="block text-sm font-sans text-soft mb-1.5">Email</label>
         <input
@@ -26,13 +26,14 @@ import Base from '../layouts/Base.astro';
           class="awb-input"
         />
       </div>
-      <div>
+      <div hidden data-password-field>
         <label for="password" class="block text-sm font-sans text-soft mb-1.5">Password</label>
         <input
           id="password"
           name="password"
           type="password"
           required
+          disabled
           autocomplete="current-password"
           class="awb-input"
         />
@@ -41,84 +42,22 @@ import Base from '../layouts/Base.astro';
       <button
         type="submit"
         id="submit-btn"
+        disabled
         class="awb-pill awb-pill-primary w-full cursor-pointer"
       >
-        Log in
+        Send sign-in link
       </button>
     </form>
+    <noscript><p class="mt-4 text-sm text-soft">Enable JavaScript to sign in securely.</p></noscript>
+    <button type="button" data-login-mode class="mt-4 text-sm text-soft underline underline-offset-4 cursor-pointer">Use a password instead</button>
 
     <p class="mt-6 text-sm text-soft">
       No account yet?
-      <a href="/signup/" data-signup-link class="text-accent underline underline-offset-4 decoration-1">Create one</a>.
+      <a href="/newsletter/" data-signup-link class="text-accent underline underline-offset-4 decoration-1">Create one</a>.
     </p>
   </section>
 
   <script>
-    import { supabase } from '../lib/supabase';
-    import { consumeAuthCallback } from '../lib/auth-callback';
-    import { hasPendingOnboarding, persistOnboardingProfile } from '../lib/onboarding';
-
-    const form = document.getElementById('login-form') as HTMLFormElement;
-    const message = document.getElementById('form-message') as HTMLParagraphElement;
-    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-    const loginCopy = document.querySelector<HTMLElement>('[data-login-copy]');
-    const signupLink = document.querySelector<HTMLAnchorElement>('[data-signup-link]');
-    const from = new URLSearchParams(window.location.search).get('from');
-    const fromOnboarding = from === 'onboarding';
-    const fromUpload = from === 'upload';
-    const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
-    const redirectAfterAuth = pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
-
-    if (pendingOnboarding) {
-      if (loginCopy) {
-        loginCopy.textContent = 'Log in to sync the setup you just created to your profile.';
-      }
-      if (signupLink) signupLink.href = '/signup/?from=onboarding';
-    } else if (fromUpload) {
-      if (loginCopy) loginCopy.textContent = 'Log in to map content to your personal shelf.';
-      if (signupLink) signupLink.href = '/signup/?from=upload';
-    }
-
-    const finishAuth = async (session, error, silent = false) => {
-      if (error || !session) {
-        if (silent) return;
-        message.textContent = error ?? 'Email link did not return a session. Try logging in again.';
-        message.classList.remove('hidden');
-        return;
-      }
-      if (pendingOnboarding) await persistOnboardingProfile(supabase, session);
-      window.location.href = redirectAfterAuth;
-    };
-
-    consumeAuthCallback(supabase).then(async (result) => {
-      if (result.handled) {
-        await finishAuth(result.session, result.error);
-        return;
-      }
-      const { data } = await supabase.auth.getSession();
-      await finishAuth(data.session, undefined, true);
-    });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      message.classList.add('hidden');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Logging in…';
-
-      const formData = new FormData(form);
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: String(formData.get('email')).trim(),
-        password: String(formData.get('password')),
-      });
-
-      if (error) {
-        message.textContent = error.message;
-        message.classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Log in';
-        return;
-      }
-      await finishAuth(data.session);
-    });
+    import '../lib/login';
   </script>
 </Base>

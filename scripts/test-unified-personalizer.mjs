@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 
 const base = 'http://127.0.0.1:4321';
 const readBody = (collection,slug) => readFileSync(`src/content/${collection}/${slug}.md`,'utf8').replace(/^---\s*\n[\s\S]*?\n---\s*\n/,'').trim();
-const bookSlugs = ['the-mom-test','the-crowd'];
+const bookSlugs = ['the-mom-test','the-crowd','zero-to-one'];
 const answerSlugs = ['how-to-validate-an-idea-without-fooling-yourself','how-to-fix-user-interviews-that-are-not-teaching-you-anything'];
 const tutorialSlugs = ['meeting-notes-to-action-plan','customer-feedback-to-evidence','evidence-to-decision-memo'];
 const routes = [...bookSlugs.map(slug=>`/books/${slug}/`), ...answerSlugs.map(slug=>`/answers/${slug}/`), ...tutorialSlugs.map(slug=>`/guides/${slug}/`)];
@@ -32,6 +32,8 @@ try {
     const isBook = route.startsWith('/books/');
     const root = page.locator('[data-reading-personalizer]');
     assert.equal(await root.count(),1);
+    assert.equal(await root.locator('details, summary').count(),0,'No prompt dropdown');
+    assert.equal(await root.locator('[data-personalize-fallback]').isVisible(),false,'Prompt hidden in normal flow');
     assert.equal(await root.locator('[data-ai-provider]').count(),4);
     assert.equal(await page.locator('[data-agent-digest]').count(),0);
     assert.ok(await root.getByRole('heading',{name:`Connect this ${isBook?'book':'guide'} to your experience.`,exact:true}).count());
@@ -92,11 +94,11 @@ try {
   }
   await page.goto(base+'/answers/'+answerSlugs[0]+'/');
   await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:()=>Promise.reject(Error('Blocked'))},configurable:true}));
-  const popupPromise = page.waitForEvent('popup');
+  const beforeFailure = context.pages().length;
   await page.locator('[data-personalize-button]').click();
-  await (await popupPromise).close();
-  await page.waitForFunction(()=>document.querySelector('[data-personalize-prompt]').closest('details').open);
+  await page.waitForFunction(()=>document.querySelector('[data-personalize-prompt]').closest('[data-personalize-fallback]').hidden === false);
   assert.ok(await page.locator('[data-personalize-prompt]').evaluate(el=>el.selectionEnd===el.value.length));
+  assert.equal(context.pages().length,beforeFailure,'Failed copy must not navigate');
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({passed:true,catalogPages,sampleRoutes:routes.length,providers:4,fullGuideAndSources:true,sectionOrder:true,mobile:true,clipboard:true,manualFallback:true,rememberedChoice:true,tutorialsPreserved:true,externalAI:'mocked; no AI response or personal data submission tested'},null,2));
 } finally {await browser.close();}

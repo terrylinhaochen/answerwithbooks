@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
+import { newsletterSignupUrl } from '../lib/newsletter';
 import BookCover from '../components/BookCover.astro';
 import BookRow from '../components/BookRow.astro';
 import AnswerRow from '../components/AnswerRow.astro';
@@ -133,12 +134,12 @@ const jsonLd = [
   },
   {
     '@type': 'SiteNavigationElement',
-    name: ['Books', 'Guides', 'Tools', 'Get started'],
+    name: ['Books', 'Guides', 'Tools', 'Subscribe'],
     url: [
       'https://answerwithbooks.com/books/',
       'https://answerwithbooks.com/guides/',
       'https://answerwithbooks.com/skills/',
-      'https://answerwithbooks.com/onboarding/start/',
+      'https://answerwithbooks.com/newsletter/',
     ],
   },
   {
@@ -165,7 +166,7 @@ const jsonLd = [
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-soft">
           Hands-on guides and workflows that help non-technical teams put AI to work.
         </p>
-        <div class="mt-8"><NewsletterSignup /></div>
+        <div class="mt-8" data-hide-when-signed-in><NewsletterSignup /></div>
       </div>
 
       <div id="ideas-for-work" class="awb-panel flex min-w-0 flex-col justify-center p-5">
@@ -373,7 +374,7 @@ const jsonLd = [
             </p>
           </div>
           <div class="flex flex-wrap gap-3 text-sm">
-            <a href="/signup/" class="awb-pill awb-pill-primary min-h-0 px-4 py-2 transition-colors">Create account</a>
+            <a href={newsletterSignupUrl} data-open-newsletter aria-haspopup="dialog" class="awb-pill awb-pill-primary min-h-0 px-4 py-2 transition-colors">Subscribe</a>
             <a href="/skills/" class="awb-pill awb-pill-outline min-h-0 px-4 py-2 transition-colors">
               Explore skill
             </a>
