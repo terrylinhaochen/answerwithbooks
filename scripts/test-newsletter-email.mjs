@@ -3,6 +3,7 @@ import {chromium} from 'playwright';
 const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
 const page=await browser.newPage();
 const endpoint='**/functions/v1/newsletter-signup';
+await page.route('**/auth/v1/otp**',r=>r.fulfill({status:200,contentType:'application/json',body:'{}'}));
 try {
  for(const width of [1280,390]) {
   await page.setViewportSize({width,height:950});
@@ -15,7 +16,7 @@ try {
   await button.waitFor();
   assert.equal(await page.locator('iframe[data-substack-embed]').count(),0);
   assert.equal(await page.getByText('CS@Northwestern, GenAI Product@Tiktok',{exact:false}).count(),0);
-  assert.equal(await form.locator('.newsletter-email__note').innerText(),'By subscribing, you agree to receive emails from AWB. You can unsubscribe at any time. View our Terms and Privacy Policy.');
+  assert.equal(await form.locator('.newsletter-email__note').innerText(),'By subscribing, you sign up for an AWB account and newsletter and agree to our Terms and Privacy Policy. You can unsubscribe from the newsletter at any time.');
   await input.fill('invalid');await button.click();
   assert.equal(await input.evaluate(e=>e.checkValidity()),false);
   await page.route(endpoint, route=>route.fulfill({status:503,contentType:'application/json',body:'{"error":"unavailable"}'}));

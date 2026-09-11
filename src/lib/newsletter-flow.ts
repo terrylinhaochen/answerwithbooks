@@ -7,7 +7,6 @@ let state = readSignupFlow();
 let subscribing = false;
 let activating = false;
 let accountError = '';
-let alreadySignedIn = false;
 const url = import.meta.env.PUBLIC_SUPABASE_URL;
 const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
@@ -38,29 +37,15 @@ function render() {
     message.textContent = 'Thanks—your email has been saved for the AWB newsletter.';
     message.dataset.error = 'false';
     const sent = state.stage === 'sent';
-    const done = state.stage === 'done';
-    root.querySelector<HTMLElement>('[data-account-title]')!.textContent = done ? 'You’re all set.' : sent ? 'Check your email.' : 'Make it your shelf.';
-    root.querySelector<HTMLElement>('[data-account-copy]')!.textContent = done
-      ? alreadySignedIn ? 'You’re already signed in. Your shelf is ready.' : 'Keep exploring. You can activate your free account whenever you’re ready.'
-      : sent ? `Open the sign-in link in the email to ${state.email}. It activates a new account or signs you into your existing one.`
-      : `Save books and reading progress with a free account. We’ll send a sign-in link to ${state.email}—no password needed.`;
-    const activate = root.querySelector<HTMLButtonElement>('[data-activate-account]')!;
+    root.querySelector<HTMLElement>('[data-account-title]')!.textContent = activating ? 'Finishing your signup…' : sent ? 'Check your email.' : 'Finish your signup.';
+    root.querySelector<HTMLElement>('[data-account-copy]')!.textContent = sent
+      ? `We sent a verification link to ${state.email}. Confirm your email to go straight to your AWB profile—no password needed.`
+      : `Your newsletter signup is saved. ${activating ? 'Sending' : 'Retry sending'} the verification link to ${state.email} to finish your AWB signup.`;
+    const activate = root.querySelector<HTMLButtonElement>('[data-resend-verification]')!;
     const remaining = Math.max(0, Math.ceil((state.resendAt - Date.now()) / 1000));
-    activate.hidden = done;
     activate.disabled = activating || remaining > 0;
-    activate.textContent = activating ? 'Sending link…' : remaining > 0 ? `Resend in ${remaining}s` : sent ? 'Resend sign-in link' : 'Activate my account';
-    root.querySelector<HTMLElement>('[data-account-consent]')!.hidden = done || sent;
+    activate.textContent = activating ? 'Sending email…' : remaining > 0 ? `Resend in ${remaining}s` : sent ? 'Resend verification email' : 'Retry verification email';
     root.querySelector<HTMLElement>('[data-account-status]')!.textContent = accountError;
-    const skip = root.querySelector<HTMLButtonElement>('[data-skip-account]')!;
-    skip.hidden = done;
-    skip.disabled = activating;
-    skip.textContent = sent ? 'Keep browsing' : 'Not now';
-    const explore = root.querySelector<HTMLAnchorElement>('[data-account-explore]')!;
-    explore.hidden = !done;
-    explore.href = alreadySignedIn ? '/my-books/' : '/guides/';
-    explore.textContent = alreadySignedIn ? 'Open my shelf' : 'Explore guides';
-    const resume = root.querySelector<HTMLButtonElement>('[data-account-resume]')!;
-    resume.hidden = !done || alreadySignedIn;
     root.querySelector<HTMLButtonElement>('[data-signup-reset]')!.disabled = activating;
   }
 }
@@ -69,7 +54,7 @@ function focusStep(root: HTMLElement) {
   root.querySelector<HTMLElement>('[data-account-title]')?.focus({ preventScroll: true });
 }
 
-async function activate(root: HTMLElement) {
+async function sendVerification(root: HTMLElement) {
   if (!state || activating || state.resendAt > Date.now()) return;
   activating = true;
   accountError = '';
@@ -77,8 +62,8 @@ async function activate(root: HTMLElement) {
   try {
     const { data } = await supabase.auth.getSession();
     if (data.session?.user.email?.toLowerCase() === state.email && data.session.user.email_confirmed_at) {
-      alreadySignedIn = true;
-      setState({ ...state, stage: 'done' });
+      writeSignupFlow(null);
+      window.location.replace('/profile/');
       return;
     }
     const { error } = await supabase.auth.signInWithOtp({
@@ -130,6 +115,7 @@ for (const root of roots) {
       const result = await response.json();
       if (!response.ok || result.accepted !== true) throw new Error(response.status === 429 ? 'Too many attempts. Please try again in an hour.' : 'We could not save your signup. Please try again.');
       setState({ email, stage: 'account', savedAt: Date.now(), resendAt: 0 });
+      await sendVerification(root);
       focusStep(root);
     } catch (error) {
       message.textContent = error instanceof Error && error.name === 'Error' ? error.message : 'We could not save your signup. Please try again.';
@@ -139,16 +125,10 @@ for (const root of roots) {
       render();
     }
   });
-  root.querySelector('[data-activate-account]')?.addEventListener('click', () => activate(root));
-  root.querySelector('[data-skip-account]')?.addEventListener('click', () => {
-    if (state && !activating) { accountError = ''; setState({ ...state, stage: 'done' }); focusStep(root); }
-  });
-  root.querySelector('[data-account-resume]')?.addEventListener('click', () => {
-    if (state) { setState({ ...state, stage: 'account' }); focusStep(root); }
-  });
+  root.querySelector('[data-resend-verification]')?.addEventListener('click', () => sendVerification(root));
   root.querySelector('[data-signup-reset]')?.addEventListener('click', () => {
     if (activating) return;
-    accountError = ''; alreadySignedIn = false;
+    accountError = '';
     setState(null);
     for (const other of roots) {
       other.querySelector<HTMLFormElement>('form')!.reset();
@@ -163,12 +143,11 @@ if (!url || !key) for (const root of roots) root.querySelector<HTMLElement>('[da
 window.setInterval(() => {
   if (!state || activating) return;
   if (Date.now() - state.savedAt >= SIGNUP_FLOW_TTL) writeSignupFlow(null);
-  if (!state.resendAt || state.stage === 'done') return;
+  if (!state.resendAt) return;
   const remaining = Math.max(0, Math.ceil((state.resendAt - Date.now()) / 1000));
   for (const root of roots) {
-    const button = root.querySelector<HTMLButtonElement>('[data-activate-account]')!;
+    const button = root.querySelector<HTMLButtonElement>('[data-resend-verification]')!;
     button.disabled = remaining > 0;
-    button.textContent = remaining > 0 ? `Resend in ${remaining}s` : state.stage === 'sent' ? 'Resend sign-in link' : 'Activate my account';
+    button.textContent = remaining > 0 ? `Resend in ${remaining}s` : state.stage === 'sent' ? 'Resend verification email' : 'Retry verification email';
   }
 }, 1000);
-

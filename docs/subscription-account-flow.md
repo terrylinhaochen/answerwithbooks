@@ -2,15 +2,13 @@
 
 The homepage, newsletter page, and Subscribe popup use one shared component and client controller.
 
-1. Enter an email and explicitly subscribe. The existing newsletter endpoint records newsletter consent.
-2. In the same interface, optionally choose **Activate my account**. Supabase Auth sends a magic link to the same normalized email with `shouldCreateUser: true`, handling both new and existing accounts. No password or second email entry is required.
-3. The link returns to `/auth/confirm/`, validates the session with Supabase Auth, removes auth tokens from the URL, and offers **Open my shelf**.
+1. Enter an email and choose **Subscribe**. The visible consent covers both an AWB account and the newsletter.
+2. The existing newsletter endpoint records newsletter consent; the client then automatically requests a Supabase email link with `shouldCreateUser: true` for the same email. There is no separate activation or skip button.
+3. The email link returns to `/auth/confirm/`, verifies the user with Auth, strips credentials from the URL, and redirects straight to `/profile/`. There is no confirmation-success page to click through.
 
-Skipping activation does not cancel a newsletter opt-in. Activation failures do not rerun newsletter submission. Account creation is never triggered simply by subscribing, opening the modal, or refreshing. Newsletter opt-out status remains managed separately; auth success must not be used to overwrite newsletter consent or mark an address as a verified newsletter subscriber.
+The two service calls are not an atomic transaction. If Auth email delivery fails, newsletter consent may already be saved. The UI states that clearly and retries only the Auth email request, with a 60-second cooldown. Refreshing never sends another email automatically. Existing newsletter opt-outs are preserved; verification is not used to overwrite consent. Returning-user login does not submit newsletter consent.
 
-UI continuity uses `awb:signup-flow:v1` in this tab's session storage with a 30-minute TTL. It holds email, UI step, and resend cooldown only. It is not authorization or proof of subscription. Starting over or completing account activation clears it. No email is placed in a page URL. Resending is explicit and has a 60-second client cooldown in addition to Supabase's own rate limits.
-
-Returning users use **Log in → Send sign-in link** without another newsletter submission. That path sets `shouldCreateUser: false`, keeps account existence private, and retains password login as a secondary compatibility option for existing accounts. Expired links lead there, not back through newsletter consent. The legacy password signup route remains available for existing account-only onboarding/integration links.
+UI continuity uses `awb:signup-flow:v2` in this tab for 30 minutes. Older optional-activation state is not reused as consent for the combined flow. It is UI state, never proof of identity. Successful verification or starting over clears it. A legacy password signup remains for account-only integration/onboarding links.
 
 ## Hosting prerequisites
 
@@ -22,7 +20,7 @@ Returning users use **Log in → Send sign-in link** without another newsletter 
 
 ## Verification boundaries
 
-`scripts/test-subscribe-account-flow.mjs` exercises the real local UI against mocked newsletter and Auth endpoints: one email, optional activation, new/returning request contract, shared modal state, reload, skip, rate limit/retry, URL stripping, successful/expired callback, and session-state expiry.
+`scripts/test-subscribe-account-flow.mjs` exercises the real local UI against mocked newsletter and Auth endpoints: one-click combined signup, shared modal state, refresh without email resending, partial-failure recovery, direct verified redirect to Profile, and expired-link handling.
 
 Live delivery remains a separate acceptance check: approve one recipient address, request one link through the rendered UI, open the received link, and confirm the signed-in shelf. A mocked callback or HTTP acceptance is not proof of inbox delivery.
 

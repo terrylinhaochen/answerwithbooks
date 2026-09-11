@@ -1,12 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
 ---
-<Base title="Activate your account" description="Secure email sign-in for your AWB account." path="/auth/confirm/" robots="noindex, follow">
+<Base title="Confirm your email" description="Secure email sign-in for your AWB account." path="/auth/confirm/" robots="noindex, follow">
   <section class="mx-auto max-w-lg px-5 py-20">
     <p class="awb-eyebrow">Your AWB account</p>
     <h1 class="mt-3 font-serif text-4xl" data-confirm-title>Signing you in…</h1>
     <p class="mt-5 leading-relaxed text-soft" role="status" data-confirm-status>Please wait while we verify your email link.</p>
-    <a href="/my-books/" class="awb-pill awb-pill-primary mt-6 hidden" data-confirm-continue>Open my shelf</a>
     <div class="mt-6 hidden" data-confirm-retry>
       <a href="/login/" class="awb-pill awb-pill-primary">Request a new link</a>
       <p class="mt-4 text-sm text-soft">Your newsletter preferences are unchanged. You can request another email link or use an existing password.</p>
@@ -16,10 +15,8 @@ import Base from '../../layouts/Base.astro';
     import { supabase } from '../../lib/supabase';
     import { consumeAuthCallback } from '../../lib/auth-callback';
     import { writeSignupFlow } from '../../lib/signup-session';
-    import { hasPendingOnboarding, persistOnboardingProfile } from '../../lib/onboarding';
     const title = document.querySelector<HTMLElement>('[data-confirm-title]')!;
     const status = document.querySelector<HTMLElement>('[data-confirm-status]')!;
-    const next = document.querySelector<HTMLAnchorElement>('[data-confirm-continue]')!;
     const retry = document.querySelector<HTMLElement>('[data-confirm-retry]')!;
     (async () => {
       try {
@@ -29,13 +26,8 @@ import Base from '../../layouts/Base.astro';
         if (!session) throw new Error('missing-session');
         const { data, error } = await supabase.auth.getUser();
         if (error || !data.user?.email_confirmed_at) throw new Error('unverified-session');
-        let profileSaved = true;
-        if (hasPendingOnboarding()) profileSaved = (await persistOnboardingProfile(supabase, session)).ok;
         writeSignupFlow(null);
-        title.textContent = 'Your account is ready.';
-        status.textContent = profileSaved ? 'You’re signed in. Save books and continue reading from your shelf.' : 'You’re signed in. Your earlier setup is still saved in this browser; profile syncing needs another try.';
-        next.classList.remove('hidden');
-        document.querySelector('[data-auth-link]')?.classList.remove('hidden');
+        window.location.replace('/profile/');
       } catch {
         title.textContent = 'Let’s try a fresh link.';
         status.textContent = 'This link may have expired or already been used. Request another sign-in link to continue.';

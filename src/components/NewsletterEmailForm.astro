@@ -12,20 +12,14 @@ const id = `newsletter-${crypto.randomUUID()}`;
     <div class="newsletter-email__trap" aria-hidden="true">
       <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
     </div>
-    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you agree to receive emails from AWB. You can unsubscribe at any time. View our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
+    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you sign up for an AWB account and newsletter and agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. You can unsubscribe from the newsletter at any time.</p>
     <p id={`${id}-status`} class="newsletter-email__status" role="status" aria-live="polite" data-newsletter-status></p>
   </form>
   <p class="newsletter-email__note" data-account-login>Already have an account? <a href="/login/">Log in</a></p>
 <section class="newsletter-account" hidden data-account-step>
-  <h3 tabindex="-1" data-account-title>Make it your shelf.</h3>
+  <h3 tabindex="-1" data-account-title>Check your email.</h3>
   <p data-account-copy></p>
-  <div class="newsletter-account__actions">
-    <button type="button" data-activate-account>Activate my account</button>
-    <button type="button" class="newsletter-account__secondary" data-skip-account>Not now</button>
-    <a href="/guides/" hidden data-account-explore>Explore guides</a>
-    <button type="button" class="newsletter-account__secondary" hidden data-account-resume>Activate account</button>
-  </div>
-  <p class="newsletter-email__note" data-account-consent>By activating an account, you agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a>. Newsletter preferences remain separate.</p>
+  <div class="newsletter-account__actions"><button type="button" data-resend-verification>Resend verification email</button></div>
   <p class="newsletter-email__status" role="status" aria-live="polite" data-account-status></p>
   <button type="button" class="newsletter-account__reset" data-signup-reset>Use a different email</button>
 </section>
