@@ -10,10 +10,10 @@ export async function GET() {
   const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
   const topics = collectTopics(answers, books);
 
-  const body = `# Answer with Books
+  const body = `# AWB
 
-Answer with Books turns recurring internet questions into short, book-grounded how-to guides.
-The site is maintained by Answer with Books.
+AWB turns recurring internet questions into short, book-grounded how-to guides.
+The site is maintained by AWB.
 
 ## Best Entry Points
 

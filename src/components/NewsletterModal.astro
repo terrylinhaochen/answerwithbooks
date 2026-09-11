@@ -1,0 +1,67 @@
+---
+import NewsletterEmailForm from './NewsletterEmailForm.astro';
+---
+<dialog class="newsletter-modal" data-newsletter-modal aria-labelledby="newsletter-modal-title">
+  <div class="newsletter-modal__body">
+    <button type="button" class="newsletter-modal__close" data-close-newsletter aria-label="Close newsletter signup" autofocus>×</button>
+    <h2 id="newsletter-modal-title">Subscribe to AWB</h2>
+    <div class="newsletter-modal__handoff"><NewsletterEmailForm /></div>
+  </div>
+</dialog>
+<style>
+ .newsletter-modal{width:min(540px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--color-line);border-radius:24px;background:var(--color-paper);color:var(--color-ink);margin:auto;overflow:auto;box-shadow:0 24px 100px #0003}
+ .newsletter-modal::backdrop{background:rgb(12 10 9 / .45);backdrop-filter:blur(5px)}
+ .newsletter-modal__body{position:relative;padding:48px 36px 36px}
+ .newsletter-modal__close{position:absolute;right:14px;top:12px;width:40px;height:40px;border-radius:50%;font-size:28px;line-height:1;cursor:pointer;color:var(--color-soft)}
+ .newsletter-modal__close:hover{background:var(--color-wash)}
+ .newsletter-modal__close:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px}
+ .newsletter-modal__eyebrow{font:600 12px/1.4 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--color-soft);margin-bottom:20px}
+ .newsletter-modal h2{font:500 clamp(30px,6vw,40px)/1.08 var(--font-serif);margin:0 0 18px}
+ #newsletter-modal-description{font-size:16px;line-height:1.6;color:var(--color-soft)}
+ .newsletter-modal__handoff{margin-top:28px}.newsletter-modal__handoff>.awb-pill{width:100%;min-height:48px}
+ .newsletter-modal__note,.newsletter-modal__fallback{font-size:13px;line-height:1.6;color:var(--color-soft);margin-top:16px}
+ .newsletter-modal__fallback{display:inline-block;text-decoration:underline;text-underline-offset:3px}
+ .newsletter-modal__embed{margin-top:24px}
+ [data-newsletter-loading]{font-size:14px;color:var(--color-soft);margin-bottom:12px}
+ @media(max-width:480px){.newsletter-modal__body{padding:48px 24px 28px}}
+</style>
+<script>
+ const modal = document.querySelector<HTMLDialogElement>('[data-newsletter-modal]');
+ if (modal) {
+   let opener: HTMLElement | null = null;
+   let previousOverflow: string | null = null;
+   const restorePage = () => {
+     if (previousOverflow === null) return;
+     document.body.style.overflow = previousOverflow;
+     previousOverflow = null;
+     opener?.focus();
+   };
+   const closeModal = () => { modal.close(); restorePage(); };
+   document.addEventListener('click', event => {
+     const target = event.target instanceof Element ? event.target.closest<HTMLElement>('[data-open-newsletter]') : null;
+     if (!target || !(event instanceof MouseEvent) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+     if (typeof modal.showModal !== 'function') return;
+     event.preventDefault();
+     if (modal.open) return;
+     opener = target;
+     previousOverflow = document.body.style.overflow;
+     modal.showModal();
+     document.body.style.overflow = 'hidden';
+   });
+   modal.querySelector('[data-close-newsletter]')?.addEventListener('click', closeModal);
+   modal.addEventListener('keydown', event => {
+     if (event.key !== 'Tab') return;
+     const items = Array.from(modal.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], iframe, input:not([disabled]), [tabindex="0"]')).filter(item => item.getClientRects().length > 0);
+     const first = items[0], last = items[items.length - 1];
+     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+   });
+
+   modal.addEventListener('click', event => {
+     const bounds = modal.getBoundingClientRect();
+     if (event.target === modal && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) closeModal();
+   });
+   modal.addEventListener('cancel', event => { event.preventDefault(); closeModal(); });
+   modal.addEventListener('close', () => { if (!modal.open) restorePage(); });
+ }
+</script>

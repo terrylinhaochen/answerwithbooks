@@ -1,0 +1,73 @@
+---
+import { newsletterSignupUrl } from '../lib/newsletter';
+const id = `newsletter-${crypto.randomUUID()}`;
+---
+<div class="newsletter-email" data-newsletter-email>
+  <form data-newsletter-email-form method="post" aria-label="Subscribe to AWB">
+    <div class="newsletter-email__field">
+      <label class="sr-only" for={id}>Email address</label>
+      <input id={id} name="email" type="email" placeholder="Enter email" autocomplete="email" inputmode="email" required maxlength="254" aria-describedby={`${id}-consent ${id}-status`} />
+      <button type="submit" disabled>Subscribe</button>
+    </div>
+    <div class="newsletter-email__trap" aria-hidden="true">
+      <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+    </div>
+    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you agree to receive the AWB newsletter. You can unsubscribe at any time.</p>
+    <p id={`${id}-status`} class="newsletter-email__status" role="status" aria-live="polite" data-newsletter-status></p>
+  </form>
+  <noscript><p class="newsletter-email__note">Enable JavaScript to sign up here, or <a href={newsletterSignupUrl}>subscribe on Substack</a>.</p></noscript>
+</div>
+<style>
+  .newsletter-email{width:100%;max-width:560px}
+  .newsletter-email__field{display:flex;align-items:center;gap:8px;padding:7px;border:1px solid var(--color-line);border-radius:999px;background:#fff}
+  .newsletter-email__field:focus-within{outline:2px solid var(--color-ink);outline-offset:3px}
+  .newsletter-email input[type=email]{flex:1;min-width:0;width:100%;border:0;background:transparent;padding:12px 16px;font:400 16px/1.5 var(--font-sans);color:var(--color-ink);outline:none}
+  .newsletter-email input::placeholder{color:var(--color-soft)}
+  .newsletter-email button{flex-shrink:0;min-height:48px;padding:12px 24px;border-radius:999px;background:var(--color-ink);color:#fff;font:600 15px/1.4 var(--font-sans);cursor:pointer}
+  .newsletter-email button:disabled{opacity:.6;cursor:default}
+  .newsletter-email button:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}
+  .newsletter-email__note,.newsletter-email__status{font:400 12px/1.6 var(--font-sans);color:var(--color-soft);margin:12px 0 0}
+  .newsletter-email__status:empty{display:none}
+  .newsletter-email__status[data-error=true]{color:#a12a20}
+  .newsletter-email__trap{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .newsletter-email a{text-decoration:underline;text-underline-offset:3px}
+  @media(max-width:480px){.newsletter-email button{padding:12px 18px}.newsletter-email input[type=email]{padding-left:10px}}
+</style>
+<script>
+  const url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+  document.querySelectorAll<HTMLFormElement>('[data-newsletter-email-form]').forEach(form => {
+    const input = form.querySelector<HTMLInputElement>('[name=email]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const status = form.querySelector<HTMLElement>('[data-newsletter-status]')!;
+    let pending = false;
+    const message = (text: string, error = false) => { status.textContent = text; status.dataset.error = String(error); };
+    if (!url || !key) { message('Signup is temporarily unavailable. Please try again later.', true); return; }
+    button.disabled = false;
+    input.addEventListener('input', () => input.setCustomValidity(''));
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (pending) return;
+      input.value = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) input.setCustomValidity('Enter a valid email address.');
+      if (!form.reportValidity()) return;
+      pending = true; button.disabled = true; button.textContent = 'Saving…'; form.setAttribute('aria-busy', 'true'); message('');
+      try {
+        const response = await fetch(`${url}/functions/v1/newsletter-signup`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', apikey: key, Authorization: `Bearer ${key}` },
+          body: JSON.stringify({ email: input.value.toLowerCase(), consent: true, consentVersion: 'awb-newsletter-v1', sourcePath: location.pathname, website: new FormData(form).get('website') || '' }),
+          signal: AbortSignal.timeout(15000),
+        });
+        const result = await response.json();
+        if (!response.ok || result.accepted !== true) {
+          throw new Error(response.status === 429 ? 'Too many attempts. Please try again in an hour.' : 'We could not save your signup. Please try again.');
+        }
+        form.reset(); input.disabled = true; button.textContent = 'Saved';
+        message('Thanks—your email has been saved for the AWB newsletter.');
+      } catch (error) {
+        message(error instanceof Error && error.name === 'Error' ? error.message : 'We could not save your signup. Please try again.', true);
+        button.disabled = false; button.textContent = 'Subscribe';
+      } finally { pending = false; form.removeAttribute('aria-busy'); }
+    });
+  });
+</script>

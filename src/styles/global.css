@@ -290,6 +290,8 @@ h3,
   box-shadow: 0 10px 26px rgb(12 10 9 / 0.035);
 }
 
+.awb-account-links { display:flex; align-items:center; gap:0.5rem; }
+
 .awb-nav__link,
 .awb-nav__action,
 .awb-nav__cta {
@@ -369,6 +371,8 @@ h3,
     padding-inline: 1rem;
     padding-block: 0.65rem;
   }
+
+  .awb-account-links { grid-column:2; grid-row:1; justify-self:end; }
 
   .awb-header__actions {
     display: contents;

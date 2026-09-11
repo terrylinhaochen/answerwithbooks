@@ -31,7 +31,7 @@ const jsonLd = [
     '@type': 'CollectionPage',
     '@id': `${url}#webpage`,
     url,
-    name: 'Answer with Books topics',
+    name: 'AWB topics',
     description: 'Browse book-grounded guides by practical topic.',
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
@@ -51,7 +51,7 @@ const jsonLd = [
     '@type': 'BreadcrumbList',
     '@id': `${url}#breadcrumb`,
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Answer with Books', item: 'https://answerwithbooks.com/' },
+      { '@type': 'ListItem', position: 1, name: 'AWB', item: 'https://answerwithbooks.com/' },
       { '@type': 'ListItem', position: 2, name: 'Topics', item: url },
     ],
   },
@@ -63,7 +63,7 @@ const jsonLd = [
 
 <Base
   title="Topics"
-  description="Browse Answer with Books by broad life and work topics: career, relationships, health, technology, business, negotiation, productivity, and decisions."
+  description="Browse AWB by broad life and work topics: career, relationships, health, technology, business, negotiation, productivity, and decisions."
   path="/topics/"
   jsonLd={jsonLd}
 >

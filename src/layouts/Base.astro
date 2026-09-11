@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import NewsletterModal from '../components/NewsletterModal.astro';
+import { newsletterSignupUrl } from '../lib/newsletter';
 
 export interface Props {
   title: string;
@@ -20,14 +22,14 @@ const {
   path = Astro.url.pathname,
   ogType = 'website',
   image = '/og.svg',
-  imageAlt = 'Answer with Books turns reader questions into book-grounded insights',
+  imageAlt = 'AWB turns reader questions into book-grounded insights',
   robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
   jsonLd,
   readingMode = false,
 } = Astro.props;
 const site = 'https://answerwithbooks.com';
 const canonical = new URL(path, site).href;
-const fullTitle = path === '/' ? title : `${title} — Answer with Books`;
+const fullTitle = path === '/' ? title : `${title} — AWB`;
 const imageUrl = new URL(image, site).href;
 const structuredData = Array.isArray(jsonLd)
   ? { '@context': 'https://schema.org', '@graph': jsonLd }
@@ -57,9 +59,9 @@ const current = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="author" content="Answer with Books" />
-    <meta name="application-name" content="Answer with Books" />
-    <meta name="apple-mobile-web-app-title" content="Answer with Books" />
+    <meta name="author" content="AWB" />
+    <meta name="application-name" content="AWB" />
+    <meta name="apple-mobile-web-app-title" content="AWB" />
     <meta name="robots" content={robots} />
     <meta name="googlebot" content={robots} />
     {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
@@ -68,11 +70,11 @@ const current = Astro.url.pathname;
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" type="application/rss+xml" title="Answer with Books" href="/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="AWB" href="/feed.xml" />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Answer with Books" />
+    <meta property="og:site_name" content="AWB" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -111,7 +113,7 @@ const current = Astro.url.pathname;
   <body class="min-h-screen flex flex-col bg-paper text-ink">
     {!readingMode && <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
       <div class="awb-header mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
-        <a href="/" class="awb-brand" aria-label="Answer with Books home">Answer with Books</a>
+        <a href="/" class="awb-brand" aria-label="AWB home">AWB</a>
         <div class="awb-header__actions flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
           <nav aria-label="Main" class="awb-nav">
             {
@@ -126,6 +128,8 @@ const current = Astro.url.pathname;
               ))
             }
           </nav>
+          <div class="awb-account-links">
+          <a class="awb-nav__cta" href={newsletterSignupUrl} data-open-newsletter aria-haspopup="dialog">Subscribe</a>
           <a
             href="/profile/"
             data-auth-link
@@ -136,13 +140,16 @@ const current = Astro.url.pathname;
           <a
             href="/onboarding/start/"
             data-onboarding-link
-            class="awb-nav__cta"
+            class="awb-nav__action"
           >
             Get started
           </a>
+          </div>
         </div>
       </div>
     </header>}
+
+    {!readingMode && <NewsletterModal />}
 
     <main class="flex-1 w-full">
       <slot />
@@ -151,7 +158,8 @@ const current = Astro.url.pathname;
     {!readingMode && <footer class="border-t border-line mt-20 bg-paper">
       <div class="mx-auto max-w-6xl px-5 py-10 text-sm text-soft">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <p>Answer with Books — books distilled into usable answers.</p>
+          <p>AWB · Answer with Books — practical AI for non-technical teams.</p>
+          <a href="/newsletter/" class="underline underline-offset-4 hover:text-ink">Newsletter</a>
           <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Editorial method</a>
         </div>
       </div>

@@ -11,7 +11,7 @@ order: 2
 
 ## What the book is about
 
-Thinking, Fast and Slow is useful on Answer with Books because it turns a broad area of decision making, psychology, and judgment into a concrete way to think. A map of the two systems that run your mind — and the predictable ways the fast one fools you.
+Thinking, Fast and Slow is useful on AWB because it turns a broad area of decision making, psychology, and judgment into a concrete way to think. A map of the two systems that run your mind — and the predictable ways the fast one fools you.
 
 The public page should not work like a compressed chapter summary. Its job is to preserve the usable judgment: when the book helps, what kind of problem it clarifies, and what mistake it prevents a reader from making. In this case, the book is most relevant when you make judgments under uncertainty for a living — hiring, investing, forecasting, designing — and want to know where your intuition is trustworthy and where it is confidently wrong.
 

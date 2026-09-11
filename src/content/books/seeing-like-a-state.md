@@ -11,7 +11,7 @@ order: 4
 
 ## What the book is about
 
-Seeing Like a State is useful on Answer with Books because it turns a broad area of systems, planning, and institutions into a concrete way to think. Why grand schemes to improve the human condition fail: they replace messy local knowledge with tidy maps, then mistake the map for the territory.
+Seeing Like a State is useful on AWB because it turns a broad area of systems, planning, and institutions into a concrete way to think. Why grand schemes to improve the human condition fail: they replace messy local knowledge with tidy maps, then mistake the map for the territory.
 
 The public page should not work like a compressed chapter summary. Its job is to preserve the usable judgment: when the book helps, what kind of problem it clarifies, and what mistake it prevents a reader from making. In this case, the book is most relevant when you design systems for other people — software, processes, org charts, cities — and want to understand why clean top-down plans keep being defeated by messy reality.
 

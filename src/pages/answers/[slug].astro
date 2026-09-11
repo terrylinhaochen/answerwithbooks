@@ -58,7 +58,7 @@ const url = `https://answerwithbooks.com/answers/${answer.id}/`;
 const answerCoverPath = fileURLToPath(new URL(`../../../public/answer-covers/${answer.id}.jpg`, import.meta.url));
 const answerImage = existsSync(answerCoverPath) ? `/answer-covers/${answer.id}.jpg` : '/og.svg';
 const breadcrumbs = [
-  { name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
+  { name: 'AWB', url: 'https://answerwithbooks.com/' },
   { name: 'Answers', url: 'https://answerwithbooks.com/answers/' },
   { name: answer.data.question, url },
 ];
@@ -74,7 +74,7 @@ const faqs = [
   {
     question: 'How do I make this answer personal?',
     answer:
-      'Copy the agent handoff prompt. The installed Answer with Books skill reads this brief and its source-book digests, then adapts them using context your agent already knows about you.',
+      'Copy the agent handoff prompt. The installed AWB skill reads this brief and its source-book digests, then adapts them using context your agent already knows about you.',
   },
 ];
 const jsonLd = [
@@ -102,8 +102,8 @@ const jsonLd = [
     datePublished: answer.data.date.toISOString(),
     dateModified: answer.data.date.toISOString(),
     image: new URL(answerImage, 'https://answerwithbooks.com').href,
-    author: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
-    publisher: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
+    author: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'AWB', url: 'https://answerwithbooks.com/' },
+    publisher: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'AWB', url: 'https://answerwithbooks.com/' },
     inLanguage: 'en',
     isAccessibleForFree: true,
     wordCount: answerWordCount,
@@ -158,7 +158,7 @@ const jsonLd = [
           {answer.data.question}
         </h1>
         <p class="mt-4 text-sm text-faint">
-          By <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Answer with Books</a>
+          By <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">AWB</a>
           <span aria-hidden="true"> · </span>
           <time datetime={answer.data.date.toISOString()}>{dateFmt}</time>
         </p>

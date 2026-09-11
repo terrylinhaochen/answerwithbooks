@@ -4,10 +4,10 @@ import FaqList from '../components/FaqList.astro';
 import { faqJsonLd } from '../lib/seo';
 
 const installCommand = 'npx answer-with-books install --skill --api';
-const description = 'Install the Answer with Books agent skill and give your AI a problem-first, book-grounded shelf it can call while you work.';
+const description = 'Install the AWB agent skill and give your AI a problem-first, book-grounded shelf it can call while you work.';
 const faqs = [
   {
-    question: 'What does the Answer with Books skill do?',
+    question: 'What does the AWB skill do?',
     answer: 'It retrieves the closest published answers and relevant source books for a live question, then helps the agent adapt those lenses to the user’s context.',
   },
   {
@@ -23,7 +23,7 @@ const jsonLd = [
   {
     '@type': 'SoftwareApplication',
     '@id': 'https://answerwithbooks.com/skills/#agent-skill',
-    name: 'Answer with Books agent skill',
+    name: 'AWB agent skill',
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Any environment with Node.js and an agent that supports skills',
     description,

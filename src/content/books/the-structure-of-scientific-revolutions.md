@@ -11,7 +11,7 @@ order: 5
 
 ## What the book is about
 
-The Structure of Scientific Revolutions is useful on Answer with Books because it turns a broad area of science, paradigms, and epistemology into a concrete way to think. Science doesn't progress by smooth accumulation — it alternates between puzzle-solving within a paradigm and rare, wrenching revolutions that replace it.
+The Structure of Scientific Revolutions is useful on AWB because it turns a broad area of science, paradigms, and epistemology into a concrete way to think. Science doesn't progress by smooth accumulation — it alternates between puzzle-solving within a paradigm and rare, wrenching revolutions that replace it.
 
 The public page should not work like a compressed chapter summary. Its job is to preserve the usable judgment: when the book helps, what kind of problem it clarifies, and what mistake it prevents a reader from making. In this case, the book is most relevant when you're deciding whether to keep refining the current approach or throw it out — in research, strategy, or engineering — and want a vocabulary for telling incremental progress from a dying framework.
 
