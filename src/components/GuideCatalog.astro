@@ -2,10 +2,12 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import AnswerRow from './AnswerRow.astro';
+import GuideCover from './GuideCover.astro';
 import FaqList from './FaqList.astro';
 import QuestionInvite from './QuestionInvite.astro';
 import { faqJsonLd } from '../lib/seo';
 import { workplaceGuides } from '../lib/workplace-guides';
+import { capabilityGuides } from '../lib/capability-guides';
 import { CANONICAL_TOPICS, topicsForTags } from '../lib/topics';
 
 const answers = (await getCollection('answers')).sort(
@@ -76,7 +78,7 @@ const jsonLd = [
 
 <Base
   title={path === '/guides/' ? 'Guides' : 'Answers'}
-  description={path === '/guides/' ? 'Explore the original book-grounded answer library, plus hands-on AI tutorials for meeting follow-ups, customer feedback, and decision memos.' : 'Real questions framed as agent-ready briefs, each grounded in source-book digests and ready for personalized advice.'}
+  description={path === '/guides/' ? 'Practical AI guides for GitHub lead research, X discourse analysis, and audience handoffs, alongside book-backed answers to real questions.' : 'Real questions framed as agent-ready briefs, each grounded in source-book digests and ready for personalized advice.'}
   path={path}
   jsonLd={jsonLd}
 >
@@ -86,7 +88,6 @@ const jsonLd = [
     <p class="awb-copy mt-4 max-w-2xl">
       Explore questions you’re thinking about, with useful ideas from books and practical next steps.
     </p>
-    <a href="#ai-tutorials" class="mt-5 inline-block text-sm underline underline-offset-4 decoration-line">New: hands-on AI tutorials ↓</a>
   </section>
 
   <section class="awb-section pb-6">
@@ -137,8 +138,37 @@ const jsonLd = [
     </div>
   </section>
 
+  <section id="ai-tutorials" class="awb-section scroll-mt-28 pb-12 pt-6" aria-labelledby="practical-guides-heading">
+    <p class="awb-eyebrow">Learn by doing</p>
+    <h2 id="practical-guides-heading" class="mt-3 font-serif text-4xl">Practical AI guides</h2>
+    <p class="mt-4 max-w-2xl text-soft">Find relevant leads, understand a conversation, and turn research into a record you can use.</p>
+    <div class="mt-6 grid gap-4 md:grid-cols-3" data-capability-guides>
+      {capabilityGuides.map(guide => (
+        <a href={`/guides/${guide.slug}/`} class="awb-card-link flex flex-col p-5">
+          <GuideCover slug={guide.slug} class="mb-5" />
+          <p class="text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
+          <h3 class="mt-4 font-serif text-2xl leading-tight">{guide.title}</h3>
+          <p class="mt-3 flex-1 leading-relaxed text-soft">{guide.description}</p>
+          <span class="mt-5 text-sm font-semibold">Open guide →</span>
+        </a>
+      ))}
+    </div>
+    <details class="mt-6 border-b border-line pb-5">
+      <summary class="w-fit cursor-pointer text-sm font-semibold">More work guides</summary>
+      <div class="mt-5 grid gap-4 md:grid-cols-3">
+        {workplaceGuides.map(guide => (
+          <a href={`/guides/${guide.slug}/`} class="awb-card-link flex flex-col p-5">
+            <p class="text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
+            <h3 class="mt-4 font-serif text-2xl leading-tight">{guide.title}</h3>
+            <p class="mt-3 flex-1 leading-relaxed text-soft">{guide.description}</p>
+            <span class="mt-5 text-sm font-semibold">Open guide →</span>
+          </a>
+        ))}
+      </div>
+    </details>
+  </section>
+
   <section class="awb-section pb-16 pt-2">
-    <div class="mb-6"><QuestionInvite /></div>
     <div class="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3" data-filter-list>
       {answers.map((answer) => (
         <div
@@ -175,21 +205,7 @@ const jsonLd = [
         </button>
       </div>
     </div>
-  </section>
-  <section id="ai-tutorials" class="awb-section scroll-mt-28 pb-10" aria-labelledby="ai-tutorials-heading">
-    <p class="awb-eyebrow">Learn by doing</p>
-    <h2 id="ai-tutorials-heading" class="mt-3 font-serif text-4xl">Hands-on AI tutorials</h2>
-    <p class="mt-4 max-w-2xl text-soft">Practice a work task with sample inputs, copyable prompts, and a checklist for reviewing the result.</p>
-    <div class="mt-6 grid gap-4 md:grid-cols-3">
-      {workplaceGuides.map(guide => (
-        <a href={`/guides/${guide.slug}/`} class="awb-card-link flex flex-col p-5">
-          <p class="text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
-          <h3 class="mt-4 font-serif text-2xl leading-tight">{guide.title}</h3>
-          <p class="mt-3 flex-1 leading-relaxed text-soft">{guide.description}</p>
-          <span class="mt-5 text-sm font-semibold">Start tutorial →</span>
-        </a>
-      ))}
-    </div>
+    <div class="mt-10"><QuestionInvite /></div>
   </section>
 
   <FaqList items={faqs} eyebrow="Answer Q&A" title="How these guides work" width="wide" />

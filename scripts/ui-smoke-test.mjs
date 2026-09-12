@@ -243,36 +243,77 @@ async function testWorkplaceGuides(page) {
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'guide should fit mobile');
   }
   await page.goto('/tools/');
-  await page.waitForURL('**/skills/');
+  await page.waitForURL('**/tools/');
   assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Tools');
-  assert.equal(await page.locator('h1').textContent(), 'Give your agent a shelf it can call.');
+  assert.equal(await page.locator('h1').textContent(), 'One API. One setup.');
   assert.equal(await page.locator('[data-prompt-builder]').count(), 0);
-  await page.locator('[data-copy-skill]').click();
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'npx answer-with-books install --skill --api');
+  await page.locator('#install [data-open-setup]').click();
+  await page.locator('#tools-setup input[value="codex"]').check();
+  await page.locator('#tools-setup [data-setup-next]').click();
+  await page.locator('[data-copy-install]').click();
+  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), `Set up ${new URL(page.url()).origin}/tools/awb-tools/SKILL.md`);
   await page.goto('/guides/');
   assert.equal(await page.locator('h1').textContent(), 'Areas top of mind');
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
-  assert.equal(await page.locator('#ai-tutorials a').count(), 3);
+  assert.equal(await page.locator('[data-capability-guides] a').count(), 3);
   await page.locator('[data-filter-search]').fill('pivot');
   assert.ok(await page.locator('[data-filter-item]:visible').count() > 0);
   await page.locator('[data-filter-search]').fill('no-such-guide-xyz');
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 0);
   assert.equal(await page.locator('[data-filter-empty]').isVisible(), true);
-  assert.equal(await page.locator('#ai-tutorials a').count(), 3, 'tutorial additions should remain available');
+  assert.equal(await page.locator('[data-capability-guides] a').count(), 3, 'guide additions should remain available');
   await page.goto('/answers/');
   assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Guides');
   await page.goto('/skills/');
+  await page.waitForURL('**/tools/');
   assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Tools');
 }
 
 async function testSkills(page) {
   await page.goto('/ask/', { waitUntil: 'domcontentloaded' });
-  await page.waitForURL('**/skills/');
-  await assertVisibleText(page, 'h1', 'Give your agent a shelf it can call');
-  assert.equal(await page.locator('textarea').count(), 0);
-  await page.locator('[data-copy-skill]').click();
-  await expectText(page.locator('[data-copy-skill]'), /Copied/);
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'npx answer-with-books install --skill --api');
+  await page.waitForURL('**/tools/');
+  await assertVisibleText(page, 'h1', 'One API. One setup.');
+  assert.equal(await page.locator('[data-tool-capabilities] article').count(), 4);
+  assert.equal(await page.locator('[data-agent-task-form]').count(), 0);
+  await page.locator('#install [data-open-setup]').click();
+  const setup = page.locator('#tools-setup');
+  assert.equal(await setup.isVisible(), true);
+  assert.equal(await setup.locator('[data-setup-next]').isDisabled(), true);
+  await setup.locator('input[value="codex"]').check();
+  await setup.locator('[data-setup-next]').click();
+  await expectText(setup.locator('[data-selected-agent]'), /Codex/);
+  await setup.locator('[data-copy-install]').click();
+  await expectText(setup.locator('[data-install-status]'), /Copied/);
+  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), `Set up ${new URL(page.url()).origin}/tools/awb-tools/SKILL.md`);
+  await setup.locator('[data-setup-next]').click();
+  assert.equal(await setup.locator('[data-setup-next]').isDisabled(), true);
+  await expectText(setup.locator('[data-setup-title]'), /Create your account/);
+  assert.equal(await setup.locator('[data-connection-ack]').count(), 0);
+  assert.equal(await setup.locator('[data-tools-signup-form]').isVisible(), true);
+  await setup.locator('[data-tools-auth-mode="login"]').click();
+  assert.equal(await setup.locator('[data-tools-signup-form]').isVisible(), false);
+  assert.equal(await setup.locator('[data-tools-login-form]').isVisible(), true);
+  await setup.locator('[data-tools-auth-mode="signup"]').click();
+  assert.equal(await setup.locator('[data-tools-signup-form]').isVisible(), true);
+  assert.equal(await setup.locator('[data-tools-login-form]').isVisible(), false);
+  assert.equal(await setup.locator('[data-try-tool]').count(), 4);
+  await page.keyboard.press('Escape');
+  assert.equal(await setup.isVisible(), false);
+
+  for (const id of ['github-leads', 'x-discourse', 'tinker-audience', 'book-answers']) {
+    await page.locator(`[data-open-tool="${id}"]`).click();
+    const detail = page.locator(`[data-tool-detail="${id}"]`);
+    assert.equal(await detail.isVisible(), true);
+    await detail.getByRole('tab', { name: 'CLI', exact: true }).click();
+    assert.equal(await detail.locator('[data-endpoint-panel="1"]').isVisible(), true);
+    await detail.getByRole('tab', { name: 'API', exact: true }).click();
+    assert.equal(await detail.locator('[data-endpoint-panel="2"]').isVisible(), true);
+    if (id === 'book-answers') await expectText(detail.locator('[data-endpoint-panel="2"]'), /not a capability/);
+    else await expectText(detail.locator('[data-endpoint-panel="2"]'), new RegExp(id));
+    await page.keyboard.press('Escape');
+    assert.equal(await detail.isVisible(), false);
+    assert.equal(await page.locator(`[data-open-tool="${id}"]`).evaluate(el => el === document.activeElement), true);
+  }
 }
 
 async function testBookPersonalization(page) {

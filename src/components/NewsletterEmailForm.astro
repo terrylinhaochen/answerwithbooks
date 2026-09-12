@@ -1,13 +1,14 @@
 ---
 import { newsletterSignupUrl } from '../lib/newsletter';
 const id = `newsletter-${crypto.randomUUID()}`;
+const { submitLabel = 'Subscribe' } = Astro.props;
 ---
-<div class="newsletter-email" data-newsletter-email>
+<div class="newsletter-email" data-newsletter-email data-submit-label={submitLabel}>
   <form data-newsletter-email-form method="post" aria-label="Subscribe to AWB">
     <div class="newsletter-email__field">
       <label class="sr-only" for={id}>Email address</label>
       <input id={id} name="email" type="email" placeholder="Enter email" autocomplete="email" inputmode="email" required maxlength="254" aria-describedby={`${id}-consent ${id}-status`} />
-      <button type="submit" disabled>Subscribe</button>
+      <button type="submit" disabled>{submitLabel}</button>
     </div>
     <div class="newsletter-email__trap" aria-hidden="true">
       <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
