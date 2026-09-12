@@ -7,12 +7,12 @@ interface Props {
 const { id, categories, count } = Astro.props;
 ---
 
-<div class="guide-filters" data-guide-filter data-answer-filter={id === 'career-learning' ? '' : undefined}>
+<div class="guide-filters" data-guide-filter data-answer-filter>
   <div class="filter-heading">
     <label for={`${id}-search`} class="awb-eyebrow">Search guides</label>
     <p class="text-sm text-faint" data-filter-count aria-live="polite">{count} guides</p>
   </div>
-  <input id={`${id}-search`} type="search" placeholder={id === 'practical-ai' ? 'Search AI tasks, research, audiences…' : 'Search career, learning, decisions…'} class="awb-input mt-2" data-filter-search />
+  <input id={`${id}-search`} type="search" placeholder="Search AI workflows, career, learning, and more…" class="awb-input mt-2" data-filter-search />
   <div class="category-filters" aria-label="Filter guides by category">
     <button type="button" class="category-filter" data-filter-category="all" aria-pressed="true">All categories</button>
     {categories.map(category => <button type="button" class="category-filter" data-filter-category={category.slug} aria-pressed="false" title={category.description}>{category.label}<span class="category-count">{category.count}</span></button>)}

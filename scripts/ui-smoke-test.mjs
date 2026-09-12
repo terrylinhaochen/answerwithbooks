@@ -116,13 +116,12 @@ async function testHomeInteractions(page) {
 
 async function testFilters(page) {
   await page.goto('/answers/', { waitUntil: 'domcontentloaded' });
-  await page.getByRole('tab', { name: 'Career & Learning', exact: true }).click();
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
-  await page.locator('#career-learning [data-filter-search]').fill('pivot');
-  await expectText(page.locator('#career-learning [data-filter-count]'), /guide/);
-  await assertVisibleText(page, '#career-learning [data-filter-list]', 'pivot');
-  await page.locator('#career-learning [data-filter-search]').fill('zzzz-no-answer');
-  await expectText(page.locator('#career-learning [data-filter-empty]'), /No guides match/);
+  await page.locator('[data-guide-catalog] [data-filter-search]').fill('pivot');
+  await expectText(page.locator('[data-guide-catalog] [data-filter-count]'), /guide/);
+  await assertVisibleText(page, '[data-guide-catalog] [data-filter-list]', 'pivot');
+  await page.locator('[data-guide-catalog] [data-filter-search]').fill('zzzz-no-answer');
+  await expectText(page.locator('[data-guide-catalog] [data-filter-empty]'), /No guides match/);
 
   await page.goto('/books/', { waitUntil: 'domcontentloaded' });
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
@@ -255,16 +254,15 @@ async function testWorkplaceGuides(page) {
   assert.equal(await page.evaluate(() => navigator.clipboard.readText()), `Set up ${new URL(page.url()).origin}/tools/awb-tools/SKILL.md`);
   await page.goto('/guides/');
   assert.equal(await page.locator('h1').textContent(), 'Curated guides to help you get started.');
-  assert.equal(await page.locator('[data-filter-item]:visible').count(), 3);
-  assert.equal(await page.locator('[data-capability-guides] a').count(), 3);
-  await page.getByRole('tab', { name: 'Career & Learning', exact: true }).click();
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
-  await page.locator('#career-learning [data-filter-search]').fill('pivot');
+  assert.equal(await page.locator('[data-capability-guide]').count(), 3);
+  assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
+  await page.locator('[data-guide-catalog] [data-filter-search]').fill('pivot');
   assert.ok(await page.locator('[data-filter-item]:visible').count() > 0);
-  await page.locator('#career-learning [data-filter-search]').fill('no-such-guide-xyz');
+  await page.locator('[data-guide-catalog] [data-filter-search]').fill('no-such-guide-xyz');
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 0);
-  assert.equal(await page.locator('#career-learning [data-filter-empty]').isVisible(), true);
-  assert.equal(await page.locator('[data-capability-guides] a').count(), 3, 'guide additions should remain available');
+  assert.equal(await page.locator('[data-guide-catalog] [data-filter-empty]').isVisible(), true);
+  assert.equal(await page.locator('[data-capability-guide]').count(), 3, 'guide additions should remain available');
   await page.goto('/answers/');
   assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Guides');
   await page.goto('/skills/');

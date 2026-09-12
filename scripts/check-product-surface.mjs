@@ -24,13 +24,16 @@ for (const route of ['guides', 'answers']) {
   const html = read(route);
   assert.match(html, /Curated guides to help you get started\./);
   assert.doesNotMatch(html, /New: hands-on AI tutorials|More work guides/);
-  assert.equal((html.match(/role="tab"/g) || []).length, 2);
-  assert.equal((html.match(/role="tabpanel"/g) || []).length, 2);
-  assert.match(html, /data-guide-tab="practical-ai"/);
-  assert.match(html, /data-guide-tab="career-learning"/);
+  assert.doesNotMatch(html, /role="tab"|role="tabpanel"|data-guide-tab/);
+  assert.equal((html.match(/<div\b[^>]*data-filter-list[^>]*>/g) || []).length, 1);
+  assert.equal((html.match(/data-pagination aria-label/g) || []).length, 1);
   assert.match(html, /Showing 1–6 of/);
-  const careerCards = [...html.matchAll(/<div\b[^>]*data-filter-item[^>]*>/g)].map(match => match[0]);
-  assert.equal(careerCards.filter(card => !/\bhidden(?:\s|>)/.test(card)).length, 6, 'Render only six career cards before JavaScript loads');
+  assert.match(html, /data-filter-category="ai"/);
+  assert.match(html, /Featured guides/);
+  assert.equal((html.match(/data-featured-guide=/g) || []).length, 3);
+  assert.equal((html.match(/data-guide-ai-tag/g) || []).length, 6);
+  const cards = [...html.matchAll(/<(?:a|div)\b[^>]*data-filter-item[^>]*>/g)].map(match => match[0]);
+  assert.equal(cards.filter(card => !/\bhidden(?:\s|>)/.test(card)).length, 6, 'Render only six guides total before JavaScript loads');
   for (const [slug, cover] of Object.entries(guideCovers)) {
     assert.ok(html.includes(`href="/guides/${slug}/"`), `${route}: ${slug} is discoverable`);
     assert.ok(html.includes(`data-guide-cover="${slug}"`), `${route}: ${slug} has its cover`);

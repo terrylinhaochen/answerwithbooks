@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import AnswerRow from './AnswerRow.astro';
-import GuideCover from './GuideCover.astro';
+import PracticalGuideCard from './PracticalGuideCard.astro';
 import GuideFilters from './GuideFilters.astro';
 import GuidePagination from './GuidePagination.astro';
 import FaqList from './FaqList.astro';
@@ -16,16 +16,19 @@ const answers = (await getCollection('answers')).sort(
 );
 const books = await getCollection('books');
 const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
-const answerCategories = CANONICAL_TOPICS.map((topic) => ({
+const practicalGuides = capabilityGuides.map(guide => ({
+  ...guide,
+  categories: ['ai', ...topicsForTags(guide.audience.toLowerCase().split(' · ')).map(topic => topic.slug)],
+}));
+const guideCount = practicalGuides.length + answers.length;
+const featuredGuides = practicalGuides.slice(0, 3);
+const categories = [{ slug: 'ai', label: 'AI', description: 'Practical workflows for using AI at work.', count: practicalGuides.length }, ...CANONICAL_TOPICS.map((topic) => ({
   slug: topic.slug,
   label: topic.label,
   description: topic.description,
-  count: answers.filter((answer) => topicsForTags(answer.data.tags).some((answerTopic) => answerTopic.slug === topic.slug)).length,
-}));
-const practicalCategories = [...new Set(capabilityGuides.flatMap(guide => guide.audience.split(' · ')))].map(label => ({
-  slug: label.toLowerCase(), label,
-  count: capabilityGuides.filter(guide => guide.audience.split(' · ').includes(label)).length,
-}));
+  count: answers.filter((answer) => topicsForTags(answer.data.tags).some((answerTopic) => answerTopic.slug === topic.slug)).length
+    + practicalGuides.filter(guide => guide.categories.includes(topic.slug)).length,
+}))];
 const { path = '/answers/' } = Astro.props;
 const url = `https://answerwithbooks.com${path}`;
 const faqs = [
@@ -94,46 +97,40 @@ const jsonLd = [
     </p>
   </section>
 
-  <section class="awb-section pb-16" data-guide-catalog>
-    <div class="guide-tabs" role="tablist" aria-label="Guide collections" data-guide-tabs>
-      <button type="button" id="tab-practical-ai" class="guide-tab" role="tab" aria-selected="true" aria-controls="practical-ai" data-guide-tab="practical-ai">Practical AI</button>
-      <button type="button" id="tab-career-learning" class="guide-tab" role="tab" aria-selected="false" aria-controls="career-learning" tabindex="-1" data-guide-tab="career-learning">Career &amp; Learning</button>
-    </div>
-    <section id="practical-ai" role="tabpanel" aria-labelledby="tab-practical-ai" tabindex="0" data-guide-panel="practical-ai">
-      <span id="ai-tutorials" class="scroll-mt-28"></span>
-      <h2 class="font-serif text-3xl">Practical AI guides</h2>
-      <p class="mt-3 max-w-2xl text-soft">Step-by-step workflows for research, audience insights, and getting work done with AI.</p>
-      <GuideFilters id="practical-ai" categories={practicalCategories} count={capabilityGuides.length} />
-      <div class="grid gap-4 md:grid-cols-3 scroll-mt-28" data-capability-guides data-filter-list>
-        {capabilityGuides.map((guide, index) => (
-          <a href={`/guides/${guide.slug}/`} class="awb-card-link flex flex-col p-5" data-filter-item data-categories={JSON.stringify(guide.audience.toLowerCase().split(' · '))} data-search={`${guide.title} ${guide.description} ${guide.audience}`.toLowerCase()} hidden={index >= 6}>
-            <GuideCover slug={guide.slug} class="mb-5" />
-            <p class="text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
-            <h3 class="mt-4 font-serif text-2xl leading-tight">{guide.title}</h3>
-            <p class="mt-3 flex-1 leading-relaxed text-soft">{guide.description}</p>
-            <span class="mt-5 text-sm font-semibold">Open guide →</span>
-          </a>
-        ))}
+  <section class="awb-section pb-12" aria-labelledby="featured-guides-title" data-featured-guides>
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h2 id="featured-guides-title" class="font-serif text-3xl">Featured guides</h2>
+        <p class="mt-2 text-soft">Three practical ways to put AI to work.</p>
       </div>
-      <GuidePagination count={capabilityGuides.length} />
-    </section>
-    <section id="career-learning" role="tabpanel" aria-labelledby="tab-career-learning" tabindex="0" data-guide-panel="career-learning" hidden>
-      <h2 class="font-serif text-3xl">Career &amp; learning guides</h2>
-      <p class="mt-3 max-w-2xl text-soft">Book-backed perspectives on your career, habits, relationships, and the decisions that matter to you.</p>
-      <GuideFilters id="career-learning" categories={answerCategories} count={answers.length} />
-      <div class="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3 scroll-mt-28" data-filter-list>
+      <a href="#all-guides" class="text-sm font-semibold hover:text-soft">Browse all guides ↓</a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
+      {featuredGuides.map(guide => <PracticalGuideCard guide={guide} featured />)}
+    </div>
+  </section>
+
+  <section id="all-guides" class="awb-section scroll-mt-28 pb-16" aria-labelledby="all-guides-title" data-guide-catalog>
+    <span id="practical-ai" class="scroll-mt-28"></span>
+    <span id="career-learning" class="scroll-mt-28"></span>
+    <span id="ai-tutorials" class="scroll-mt-28"></span>
+    <h2 id="all-guides-title" class="font-serif text-3xl">All guides</h2>
+    <GuideFilters id="guides" categories={categories} count={guideCount} />
+    <div class="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3 scroll-mt-28" data-filter-list>
+        {practicalGuides.map((guide, index) => (
+          <PracticalGuideCard guide={guide} hidden={index >= 6} />
+        ))}
         {answers.map((answer, index) => (
-          <div class="h-full" data-filter-item data-categories={JSON.stringify(topicsForTags(answer.data.tags).map(topic => topic.slug))} data-search={`${answer.data.question} ${answer.data.description} ${answer.data.tags.join(' ')} ${answer.data.books.map(slug => bookTitles.get(slug) ?? slug).join(' ')}`.toLowerCase()} hidden={index >= 6}>
+          <div class="h-full" data-filter-item data-categories={JSON.stringify(topicsForTags(answer.data.tags).map(topic => topic.slug))} data-search={`${answer.data.question} ${answer.data.description} ${answer.data.tags.join(' ')} ${answer.data.books.map(slug => bookTitles.get(slug) ?? slug).join(' ')}`.toLowerCase()} hidden={index + practicalGuides.length >= 6}>
             <AnswerRow answer={answer} bookTitles={bookTitles} />
           </div>
         ))}
-      </div>
-      <GuidePagination count={answers.length} />
-    </section>
+    </div>
+    <GuidePagination count={guideCount} />
     <div class="mt-10"><QuestionInvite /></div>
     <noscript>
-      <style is:inline>@layer base{[data-guide-panel][hidden],[data-guide-panel] [data-filter-item][hidden]{display:block!important}}[data-guide-tabs],[data-guide-filter],[data-pagination]{display:none!important}</style>
-      <p class="mt-6 text-sm text-soft">All guides are shown because JavaScript is off. Enable it to use tabs, search, and pagination.</p>
+      <style is:inline>@layer base{[data-guide-catalog] [data-filter-item][hidden]{display:block!important}}[data-guide-filter],[data-pagination]{display:none!important}</style>
+      <p class="mt-6 text-sm text-soft">All guides are shown because JavaScript is off. Enable it to use search and pagination.</p>
     </noscript>
   </section>
 
@@ -143,7 +140,3 @@ const jsonLd = [
     import '../lib/guide-catalog';
   </script>
 </Base>
-
-<style>
-  .guide-tabs{display:flex;gap:28px;border-bottom:1px solid var(--color-line);margin-bottom:32px}.guide-tab{padding:14px 2px;border-bottom:2px solid transparent;font-size:15px;font-weight:600;color:var(--color-soft);cursor:pointer}.guide-tab[aria-selected=true]{color:var(--color-ink);border-color:var(--color-ink)}.guide-tab:focus-visible,[role=tabpanel]:focus-visible{outline:2px solid var(--color-ink);outline-offset:4px}[data-guide-panel]{scroll-margin-top:100px}[hidden]{display:none!important}
-</style>

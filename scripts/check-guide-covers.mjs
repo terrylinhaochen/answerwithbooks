@@ -33,7 +33,7 @@ for (const slug of slugs) {
 assert.equal(hashes.size, 3, 'Each guide has its own illustration');
 for (const catalog of ['guides', 'answers']) {
   const html = await fs.readFile(path.join(root, 'dist', catalog, 'index.html'), 'utf8');
-  assert.equal((html.match(/data-guide-cover=/g) || []).length, 3, `${catalog}: all three covers`);
+  assert.equal((html.match(/data-guide-cover=/g) || []).length, 6, `${catalog}: three covers in featured and the full collection`);
   for (const slug of slugs) {
     const card = html.match(new RegExp(`<a\\b[^>]*href="/guides/${slug}/"[^>]*>([\\s\\S]*?)</a>`))?.[1];
     assert.ok(card?.includes(`data-guide-cover="${slug}"`), `${catalog}: entire illustrated card linked`);
