@@ -253,7 +253,7 @@ async function testWorkplaceGuides(page) {
   await page.locator('[data-copy-install]').click();
   assert.equal(await page.evaluate(() => navigator.clipboard.readText()), `Set up ${new URL(page.url()).origin}/tools/awb-tools/SKILL.md`);
   await page.goto('/guides/');
-  assert.equal(await page.locator('h1').textContent(), 'Areas top of mind');
+  assert.equal(await page.locator('h1').textContent(), 'Curated guides to help you get started.');
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
   assert.equal(await page.locator('[data-capability-guides] a').count(), 3);
   await page.locator('[data-filter-search]').fill('pivot');
