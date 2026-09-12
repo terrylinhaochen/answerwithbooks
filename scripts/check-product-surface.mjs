@@ -11,6 +11,8 @@ assert.equal((skills.match(/data-open-tool=/g) || []).length, 4);
 assert.equal((skills.match(/data-tool-detail=/g) || []).length, 4);
 assert.doesNotMatch(skills, /data-endpoint-tab|data-endpoint-panel|data-key-secret/);
 assert.match(skills, /Paid hiring is not available yet/);
+assert.equal((skills.match(/data-task-card/g) || []).length >= 4, true);
+assert.doesNotMatch(skills, /A task to start with|Copy task for your agent/);
 for (const route of ['tools', 'books', 'guides']) {
   const html = read(route);
   const nav = html.match(/<nav\b[^>]*aria-label="Main"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
@@ -22,6 +24,13 @@ for (const route of ['guides', 'answers']) {
   const html = read(route);
   assert.match(html, /Curated guides to help you get started\./);
   assert.doesNotMatch(html, /New: hands-on AI tutorials|More work guides/);
+  assert.equal((html.match(/role="tab"/g) || []).length, 2);
+  assert.equal((html.match(/role="tabpanel"/g) || []).length, 2);
+  assert.match(html, /data-guide-tab="practical-ai"/);
+  assert.match(html, /data-guide-tab="career-learning"/);
+  assert.match(html, /Showing 1–6 of/);
+  const careerCards = [...html.matchAll(/<div\b[^>]*data-filter-item[^>]*>/g)].map(match => match[0]);
+  assert.equal(careerCards.filter(card => !/\bhidden(?:\s|>)/.test(card)).length, 6, 'Render only six career cards before JavaScript loads');
   for (const [slug, cover] of Object.entries(guideCovers)) {
     assert.ok(html.includes(`href="/guides/${slug}/"`), `${route}: ${slug} is discoverable`);
     assert.ok(html.includes(`data-guide-cover="${slug}"`), `${route}: ${slug} has its cover`);

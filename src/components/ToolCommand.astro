@@ -1,11 +1,12 @@
 ---
-interface Props { value: string; label?: string; install?: boolean; dynamic?: string; compact?: boolean; }
-const { value, label = 'Copy', install = false, dynamic, compact = false } = Astro.props;
+interface Props { value: string; label?: string; install?: boolean; dynamic?: string; compact?: boolean; task?: boolean; preview?: string; }
+const { value, label = 'Copy', install = false, dynamic, compact = false, task = false, preview } = Astro.props;
 ---
-<div class="tool-command" data-tool-command>
-  <div class:list={['tool-command__row', { compact }]}>
-    <pre hidden={compact}><code data-command-text data-dynamic-command={dynamic} data-install-command={install ? '' : undefined}>{value}</code></pre>
-    <button type="button" data-copy-command data-copy-install={install ? '' : undefined} aria-label={label === 'Copy' ? 'Copy command' : label} disabled>{label}</button>
+<div class="tool-command" data-tool-command data-task-card={task ? '' : undefined}>
+  <div class:list={['tool-command__row', { compact, task }]}>
+    {task && <p class="task-preview">{preview}</p>}
+    <pre hidden={compact || task}><code data-command-text data-dynamic-command={dynamic} data-install-command={install ? '' : undefined}>{value}</code></pre>
+    <button type="button" data-copy-command data-copy-install={install ? '' : undefined} aria-label={label === 'Copy' ? 'Copy command' : label} disabled>{task && <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></svg>}{label}</button>
   </div>
   <p class="tool-command__status" data-copy-status data-install-status={install ? '' : undefined} role="status" aria-live="polite"></p>
   <label class="tool-command__fallback" hidden data-copy-fallback>Select and copy
@@ -13,6 +14,7 @@ const { value, label = 'Copy', install = false, dynamic, compact = false } = Ast
   </label>
 </div>
 <style>
+  .tool-command[data-task-card]{margin-top:24px}.tool-command__row.task{flex-direction:column;align-items:stretch;gap:18px;padding:20px}.task-preview{font-size:15px;line-height:1.7;color:var(--color-ink)}.task button{display:inline-flex;align-items:center;justify-content:center;gap:8px;align-self:flex-end;min-height:38px;padding:8px 12px;border:1px solid var(--color-line);background:var(--color-paper);text-decoration:none}.task button:hover{border-color:var(--color-soft)}
   pre[hidden]{display:none}.tool-command__row.compact{padding:0;border:0;background:transparent}.compact button{padding-left:0;text-decoration:underline;text-underline-offset:3px}
   .tool-command{min-width:0;margin-top:12px}.tool-command__row{display:flex;align-items:flex-start;gap:12px;border:1px solid var(--color-line);border-radius:12px;background:var(--color-wash);padding:14px}
   pre{flex:1;min-width:0;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.75}button{flex:none;min-height:32px;padding:4px 10px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer}button:hover{background:var(--color-paper)}button:disabled{opacity:.4;cursor:default}button:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px}

@@ -17,23 +17,20 @@ try {
     assert.equal(await page.getByText('Hands-on AI tutorials', { exact: true }).count(), 0);
     assert.equal(await page.locator('[data-question-invite]').count(), 1);
     assert.equal(await page.locator('[data-question-invite] a').getAttribute('href'), 'https://forms.gle/bd5By1m4Vko9sn4g6');
-    assert.ok(await page.evaluate(() => {
-      const before = (a, b) => Boolean(document.querySelector(a).compareDocumentPosition(document.querySelector(b)) & Node.DOCUMENT_POSITION_FOLLOWING);
-      return before('[data-answer-filter]', '[data-capability-guides]')
-        && before('[data-capability-guides]', '[data-filter-list]')
-        && before('[data-filter-list]', '[data-pagination]')
-        && before('[data-pagination]', '[data-question-invite]');
-    }));
-    assert.equal(await page.locator('[data-filter-item]:visible').count(), 9);
-    const firstPageTitle = await page.locator('[data-filter-item]:visible h3').first().textContent();
-    await page.locator('[data-pagination-next]').click();
-    assert.match(await page.locator('[data-pagination-page]').textContent(), /Page 2 of/);
-    assert.notEqual(await page.locator('[data-filter-item]:visible h3').first().textContent(), firstPageTitle);
-    await page.locator('[data-pagination-prev]').click();
-    await page.locator('[data-filter-search]').fill('no-such-insight-8fa21');
-    assert.equal(await page.locator('[data-filter-item]:visible').count(), 0);
-    assert.ok(await page.locator('[data-question-invite]').isVisible());
-    await page.locator('[data-filter-search]').fill('');
+    const practical = page.getByRole('tabpanel', { name: 'Practical AI', exact: true });
+    const career = page.getByRole('tabpanel', { name: 'Career & Learning', exact: true });
+    assert.ok(await practical.isVisible());
+    assert.equal(await career.isVisible(), false);
+    assert.equal(await page.locator('[data-filter-item]:visible').count(), 3);
+    assert.equal(await practical.locator('[data-pagination]').isVisible(), false);
+    await practical.locator('[data-filter-category="marketing"]').click();
+    assert.equal(await practical.locator('[data-filter-item]:visible').count(), 1);
+    await practical.locator('[data-filter-search]').fill('GitHub');
+    assert.equal(await practical.locator('[data-filter-item]:visible').count(), 0);
+    assert.ok(await practical.locator('[data-filter-empty]').isVisible());
+    await practical.locator('[data-filter-category="all"]').click();
+    assert.equal(await practical.locator('[data-filter-item]:visible').count(), 1);
+    await practical.locator('[data-filter-search]').fill('');
     assert.equal(await page.getByText('More work guides', { exact: true }).count(), 0);
     for (const slug of legacy) assert.equal(await page.locator(`a[href="/guides/${slug}/"]`).count(), 0);
     for (const slug of slugs) {
@@ -42,6 +39,51 @@ try {
       await cover.evaluate(image => image.decode());
       assert.ok(await cover.evaluate(image => image.complete && image.naturalWidth > 0));
     }
+    await page.getByRole('tab', { name: 'Career & Learning', exact: true }).click();
+    assert.equal(await practical.isVisible(), false);
+    assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
+    const total = await career.locator('[data-filter-item]').count();
+    const pages = Math.ceil(total / 6);
+    const visited = [];
+    for (let current = 1; current <= pages; current++) {
+      const cards = career.locator('[data-filter-item]:visible');
+      assert.equal(await cards.count(), Math.min(6, total - (current - 1) * 6));
+      visited.push(...await cards.locator('h3 a').evaluateAll(links => links.map(link => link.getAttribute('href'))));
+      assert.equal(await career.locator('[data-pagination-page]').textContent(), `Page ${current} of ${pages}`);
+      if (current < pages) await career.locator('[data-pagination-next]').click();
+    }
+    assert.equal(new Set(visited).size, total, 'Every guide is reachable exactly once');
+    assert.ok(await career.locator('[data-pagination-next]').isDisabled());
+    await career.locator('[data-filter-category="career"]').click();
+    assert.equal(await career.locator('[data-filter-item]:visible').count(), 2);
+    assert.equal(await career.locator('[data-pagination]').isVisible(), false);
+    await career.locator('[data-filter-category="business"]').click();
+    await career.locator('[data-pagination-next]').click();
+    const position = await career.locator('[data-pagination-page]').textContent();
+    const careerTitles = await career.locator('[data-filter-item]:visible h3').allTextContents();
+    await page.getByRole('tab', { name: 'Practical AI', exact: true }).click();
+    await practical.locator('[data-filter-search]').fill('GitHub');
+    await page.getByRole('tab', { name: 'Career & Learning', exact: true }).click();
+    assert.equal(await career.locator('[data-pagination-page]').textContent(), position);
+    assert.deepEqual(await career.locator('[data-filter-item]:visible h3').allTextContents(), careerTitles);
+    await career.locator('[data-filter-search]').fill('no-such-insight-8fa21');
+    assert.equal(await page.locator('[data-filter-item]:visible').count(), 0);
+    assert.ok(await career.locator('[data-filter-empty]').isVisible());
+    assert.ok(await page.locator('[data-question-invite]').isVisible());
+    const activeTab = page.getByRole('tab', { name: 'Career & Learning', exact: true });
+    await activeTab.focus();
+    await page.keyboard.press('ArrowLeft');
+    assert.ok(await practical.isVisible());
+    assert.equal(await practical.locator('[data-filter-search]').inputValue(), 'GitHub');
+    await page.keyboard.press('End');
+    assert.ok(await career.isVisible());
+    await page.reload();
+    assert.ok(await career.isVisible(), 'Reload restores the selected tab');
+    assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
+    if (catalog === 'guides') await page.screenshot({ path: '/tmp/awb-guides-career.png' });
+    assert.ok(await page.evaluate(() => [...document.querySelectorAll('[data-guide-panel]')].every(panel => Boolean(panel.compareDocumentPosition(document.querySelector('[data-question-invite]')) & Node.DOCUMENT_POSITION_FOLLOWING))));
+    await page.goto(`${base}/${catalog}/#ai-tutorials`);
+    assert.ok(await practical.isVisible(), 'Old practical-guide anchors still work');
   }
   await page.goto(`${base}/guides/`);
   await page.screenshot({ path: '/tmp/awb-guides-desktop.png' });
@@ -52,6 +94,12 @@ try {
     await page.goto(`${base}/guides/`);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     if (width === 390) await page.screenshot({ path: '/tmp/awb-guides-mobile.png' });
+    await page.getByRole('tab', { name: 'Career & Learning', exact: true }).click();
+    assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    await page.locator('#career-learning [data-pagination-next]').click();
+    assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
+    await page.getByRole('tab', { name: 'Practical AI', exact: true }).click();
     for (const slug of slugs) {
       assert.equal((await page.goto(`${base}/guides/${slug}/`)).status(), 200);
       assert.ok(await page.locator('[data-guide]').isVisible());
@@ -84,8 +132,15 @@ try {
   for (const slug of legacy) assert.equal((await page.goto(`${base}/guides/${slug}/`)).status(), 200);
   await page.goto(`${base}/guides/tinker-audience-to-client-sheet/`);
   await page.waitForURL(`${base}/guides/audience-enrichment/`);
+  const noScript = await browser.newContext({ javaScriptEnabled: false });
+  const fallback = await noScript.newPage();
+  await fallback.goto(`${base}/guides/`);
+  assert.equal(await fallback.locator('[data-guide-panel]:visible').count(), 2);
+  assert.equal(await fallback.locator('[data-guide-tabs]').isVisible(), false);
+  assert.equal(await fallback.locator('[data-filter-item]:visible').count(), await fallback.locator('[data-filter-item]').count(), 'All guide links remain reachable without JavaScript');
+  await noScript.close();
   assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ passed: true, newGuides: 3, originalGuidesPreserved: 3, catalogs: 2, questionAfterGuides: true, pagination: true, search: true, clipboard: true, reviewPersistence: true, personalization: true, desktopAndMobile: true, externalResearchExecuted: false }, null, 2));
+  console.log(JSON.stringify({ passed: true, newGuides: 3, originalGuidesPreserved: 3, catalogs: 2, separateTabs: true, pageSize: 6, independentFiltersAndPageState: true, keyboardTabs: true, questionAfterGuides: true, pagination: true, search: true, clipboard: true, reviewPersistence: true, personalization: true, desktopAndMobile: true, externalResearchExecuted: false }, null, 2));
 } finally {
   await browser.close();
 }

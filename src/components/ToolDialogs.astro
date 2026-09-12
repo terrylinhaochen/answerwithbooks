@@ -62,11 +62,9 @@ import { agentOptions, availableTools, getToolDetail, buildInstallInstruction, b
         <h3>Bring this skill to your agent</h3>
         <p class="muted">{tool.endpoint ? 'Choose your agent, then give it a task. Research access requires an invitation during the private preview.' : 'Connect the AWB skill to your agent, or open a book and choose Personalize to begin with its reading material.'}</p>
         <button type="button" class="primary-button skill-connect" data-open-setup>Connect your agent →</button>
-        <p class="step-label">A task to start with</p>
-        <p class="muted">{tool.example}</p>
-        <ToolCommand value={buildExamplePrompt(tool.id)} label="Copy task for your agent" compact />
+        <ToolCommand value={buildExamplePrompt(tool.id)} preview={tool.example} label="Copy task" task />
       </div>
-      <a class="text-link guide-link" href={tool.guide}>{tool.endpoint ? 'Read the full guide' : 'Explore the books'} ↗</a>
+      <a class="text-link guide-link" href={tool.guide}>{tool.endpoint ? 'Read the full guide' : 'Explore the books'} →</a>
     </div>
   </dialog>;
 })}

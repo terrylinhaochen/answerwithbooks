@@ -1,0 +1,14 @@
+---
+const { count } = Astro.props;
+---
+<nav class="guide-pagination" data-pagination aria-label="Guide pages" hidden={count <= 6}>
+  <p data-pagination-summary aria-live="polite">Showing 1–{Math.min(count, 6)} of {count} guides</p>
+  <div class="pagination-buttons">
+    <button type="button" class="awb-page-button" data-pagination-prev disabled>Previous</button>
+    <span class="text-xs text-faint" data-pagination-page>Page 1 of {Math.max(1, Math.ceil(count / 6))}</span>
+    <button type="button" class="awb-page-button" data-pagination-next disabled={count <= 6}>Next</button>
+  </div>
+</nav>
+<style>
+  .guide-pagination{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--color-line);padding-top:20px;margin-top:24px;font-size:14px;color:var(--color-soft)}.pagination-buttons{display:flex;align-items:center;gap:14px}[hidden]{display:none!important}
+</style>

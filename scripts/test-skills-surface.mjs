@@ -31,7 +31,12 @@ try {
       assert.ok(await detail.getByText('What you get', { exact: true }).isVisible());
       assert.equal(await detail.getByRole('tab').count(), 0);
       assert.doesNotMatch(await detail.innerText(), /POST \/v1|curl |npm run|Endpoint Detail|Pricing not set/);
-      await detail.getByRole('button', { name: 'Copy task for your agent', exact: true }).click();
+      const taskCard = detail.locator('[data-task-card]');
+      assert.equal(await taskCard.count(), 1);
+      assert.ok(await taskCard.getByText(tool.example, { exact: true }).isVisible());
+      assert.doesNotMatch(await detail.innerText(), /A task to start with|Copy task for your agent/);
+      assert.equal(await taskCard.getByRole('link').count(), 0, 'Guide link is separate from the task card');
+      await taskCard.getByRole('button', { name: 'Copy task', exact: true }).click();
       await page.waitForFunction(() => [...document.querySelectorAll('dialog[open] [data-copy-status]')].some(el => el.textContent === 'Copied.'));
       assert.equal(await page.evaluate(() => navigator.clipboard.readText()), buildExamplePrompt(tool.id));
       if (tool.id === 'github-leads') await page.screenshot({ path: `/tmp/awb-skill-detail-${width}.png` });

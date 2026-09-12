@@ -1,0 +1,25 @@
+---
+interface Props {
+  id: string;
+  categories: { slug: string; label: string; count: number; description?: string }[];
+  count: number;
+}
+const { id, categories, count } = Astro.props;
+---
+
+<div class="guide-filters" data-guide-filter data-answer-filter={id === 'career-learning' ? '' : undefined}>
+  <div class="filter-heading">
+    <label for={`${id}-search`} class="awb-eyebrow">Search guides</label>
+    <p class="text-sm text-faint" data-filter-count aria-live="polite">{count} guides</p>
+  </div>
+  <input id={`${id}-search`} type="search" placeholder={id === 'practical-ai' ? 'Search AI tasks, research, audiences…' : 'Search career, learning, decisions…'} class="awb-input mt-2" data-filter-search />
+  <div class="category-filters" aria-label="Filter guides by category">
+    <button type="button" class="category-filter" data-filter-category="all" aria-pressed="true">All categories</button>
+    {categories.map(category => <button type="button" class="category-filter" data-filter-category={category.slug} aria-pressed="false" title={category.description}>{category.label}<span class="category-count">{category.count}</span></button>)}
+  </div>
+  <p class="empty-state text-sm text-soft" data-filter-empty hidden>No guides match this view. Try another search or category.</p>
+</div>
+
+<style>
+  .guide-filters{margin:24px 0}.filter-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}.category-filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.category-filter{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid var(--color-line);border-radius:999px;font-size:13px;line-height:1.4;color:var(--color-soft);background:var(--color-paper);cursor:pointer}.category-filter:hover{border-color:var(--color-soft)}.category-filter[aria-pressed=true]{background:var(--color-ink);border-color:var(--color-ink);color:var(--color-paper)}.category-count{font-size:11px;opacity:.65}.category-filter:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}.empty-state{padding:24px 0 0}[hidden]{display:none!important}
+</style>
