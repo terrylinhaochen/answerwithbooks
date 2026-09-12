@@ -1,11 +1,9 @@
 import { buildInstallInstruction, getAgentSetup, canAdvanceSetup } from './tool-catalog.mjs';
 import { readToolsAuthContext, toolsAuthPaths, isVerifiedToolsUser } from './tools-auth.mjs';
 import { supabase } from './supabase';
-import { setupToolAccountAccess } from './tool-account-access';
 import { setupToolAuth } from './tool-auth-form';
 
 const setup = document.querySelector<HTMLDialogElement>('#tools-setup')!;
-const accountAccess = setupToolAccountAccess(setup.querySelector<HTMLElement>('[data-tool-access]')!);
 const dialogs = [...document.querySelectorAll<HTMLDialogElement>('[data-tools-dialog]')];
 let step = 0;
 let selectedAgent = '';
@@ -16,7 +14,7 @@ const resumeContext = readToolsAuthContext(location.pathname, location.search);
 let pendingResume = Boolean(resumeContext);
 const next = setup.querySelector<HTMLButtonElement>('[data-setup-next]')!;
 const back = setup.querySelector<HTMLButtonElement>('[data-setup-back]')!;
-const titles = ['Which agent are you using?', 'Set up AWB Skill', 'Create your account', 'Try it out'];
+const titles = ['Which agent are you using?', 'Add AWB to your agent', 'Create your account', 'Choose your first task'];
 let previousOverflow: string | null = null;
 const openers = new WeakMap<HTMLDialogElement, HTMLElement>();
 
@@ -38,7 +36,6 @@ dialogs.forEach(dialog => {
       openers.get(dialog)?.focus();
     }
     if (dialog === setup && !setup.open) {
-      accountAccess.clearSecret();
       accountForm.clearPasswords();
       const url = new URL(location.href);
       for (const name of ['setup', 'agent']) url.searchParams.delete(name);
@@ -110,12 +107,10 @@ async function refreshAccount() {
     const result = sessionData.session ? await supabase.auth.getUser() : null;
     if (revision !== authRevision) return;
     signedIn = Boolean(result && !result.error && isVerifiedToolsUser(result.data.user));
-    accountAccess.setIdentity(signedIn ? result!.data.user!.id : null);
     setup.querySelector<HTMLElement>('[data-tools-auth-status]')!.textContent = '';
   } catch {
     if (revision !== authRevision) return;
     signedIn = false;
-    accountAccess.setIdentity(null);
     setup.querySelector<HTMLElement>('[data-tools-auth-status]')!.textContent = 'We couldn’t check your sign-in. Please try again.';
   }
   renderAccount();
@@ -125,7 +120,7 @@ async function refreshAccount() {
     selectAgent(resumeContext.agentId);
     const radio = setup.querySelector<HTMLInputElement>(`input[value="${resumeContext.agentId}"]`);
     if (radio) radio.checked = true;
-    // Return to the account/key step, not past newly provisioned credentials.
+    // Preserve the sign-in return step before showing task examples.
     step = new URLSearchParams(location.search).get('setup') === 'install' ? 1 : 2;
     openDialog(setup, document.querySelector<HTMLElement>('#install [data-open-setup]')!);
     renderStep();
@@ -182,21 +177,6 @@ document.querySelectorAll<HTMLButtonElement>('[data-copy-command]').forEach(butt
       manual.value = value; fallback.hidden = false; manual.focus(); manual.select();
       status.textContent = 'Select and copy the text below.';
     }
-  });
-});
-
-dialogs.filter(dialog => dialog !== setup).forEach(dialog => {
-  const tabs = [...dialog.querySelectorAll<HTMLButtonElement>('[data-endpoint-tab]')];
-  const selectTab = (selected: HTMLButtonElement) => {
-    tabs.forEach(tab => { const active = tab === selected; tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1; });
-    dialog.querySelectorAll<HTMLElement>('[data-endpoint-panel]').forEach(panel => { panel.hidden = panel.dataset.endpointPanel !== selected.dataset.endpointTab; });
-  };
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => selectTab(tab));
-    tab.addEventListener('keydown', event => {
-      const target = event.key === 'ArrowRight' ? tabs[(index + 1) % tabs.length] : event.key === 'ArrowLeft' ? tabs[(index + tabs.length - 1) % tabs.length] : event.key === 'Home' ? tabs[0] : event.key === 'End' ? tabs[tabs.length - 1] : null;
-      if (target) { event.preventDefault(); selectTab(target); target.focus(); }
-    });
   });
 });
 

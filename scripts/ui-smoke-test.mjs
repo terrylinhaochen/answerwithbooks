@@ -216,7 +216,7 @@ async function testBookRequest(page) {
 
 async function testWorkplaceGuides(page) {
   await page.goto('/guides/');
-  assert.deepEqual((await page.locator('nav[aria-label="Main"] a').allTextContents()).map(text => text.trim()), ['Books', 'Guides', 'Tools']);
+  assert.deepEqual((await page.locator('nav[aria-label="Main"] a').allTextContents()).map(text => text.trim()), ['Books', 'Guides', 'Skills']);
   assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Guides');
   const questionEntry = page.locator('[data-question-invite] a');
   assert.equal(await questionEntry.getAttribute('href'), 'https://forms.gle/bd5By1m4Vko9sn4g6');
@@ -244,8 +244,8 @@ async function testWorkplaceGuides(page) {
   }
   await page.goto('/tools/');
   await page.waitForURL('**/tools/');
-  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Tools');
-  assert.equal(await page.locator('h1').textContent(), 'One API. One setup.');
+  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Skills');
+  assert.equal(await page.locator('h1').textContent(), 'Browse and hire skills on demand.');
   assert.equal(await page.locator('[data-prompt-builder]').count(), 0);
   await page.locator('#install [data-open-setup]').click();
   await page.locator('#tools-setup input[value="codex"]').check();
@@ -266,13 +266,13 @@ async function testWorkplaceGuides(page) {
   assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Guides');
   await page.goto('/skills/');
   await page.waitForURL('**/tools/');
-  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Tools');
+  assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Skills');
 }
 
 async function testSkills(page) {
   await page.goto('/ask/', { waitUntil: 'domcontentloaded' });
   await page.waitForURL('**/tools/');
-  await assertVisibleText(page, 'h1', 'One API. One setup.');
+  await assertVisibleText(page, 'h1', 'Browse and hire skills on demand.');
   assert.equal(await page.locator('[data-tool-capabilities] article').count(), 4);
   assert.equal(await page.locator('[data-agent-task-form]').count(), 0);
   await page.locator('#install [data-open-setup]').click();
@@ -304,12 +304,10 @@ async function testSkills(page) {
     await page.locator(`[data-open-tool="${id}"]`).click();
     const detail = page.locator(`[data-tool-detail="${id}"]`);
     assert.equal(await detail.isVisible(), true);
-    await detail.getByRole('tab', { name: 'CLI', exact: true }).click();
-    assert.equal(await detail.locator('[data-endpoint-panel="1"]').isVisible(), true);
-    await detail.getByRole('tab', { name: 'API', exact: true }).click();
-    assert.equal(await detail.locator('[data-endpoint-panel="2"]').isVisible(), true);
-    if (id === 'book-answers') await expectText(detail.locator('[data-endpoint-panel="2"]'), /not a capability/);
-    else await expectText(detail.locator('[data-endpoint-panel="2"]'), new RegExp(id));
+    assert.equal(await detail.getByRole('tab').count(), 0);
+    assert.equal(await detail.getByText('What you get', { exact: true }).isVisible(), true);
+    assert.equal(await detail.getByRole('button', { name: 'Connect your agent' }).count(), 1);
+    assert.doesNotMatch(await detail.innerText(), /POST \/v1|curl |npm run|Endpoint Detail/);
     await page.keyboard.press('Escape');
     assert.equal(await detail.isVisible(), false);
     assert.equal(await page.locator(`[data-open-tool="${id}"]`).evaluate(el => el === document.activeElement), true);

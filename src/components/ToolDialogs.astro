@@ -4,8 +4,7 @@ import ToolAuthForm from './ToolAuthForm.astro';
 import AgentIcon from './AgentIcon.astro';
 import skill from '../../public/tools/awb-tools/SKILL.md?raw';
 import { grokSkillSetup } from '../lib/tool-skill-package.mjs';
-import ToolAccountAccess from './ToolAccountAccess.astro';
-import { agentOptions, availableTools, getToolDetail, installSkillPath, buildInstallInstruction, bookSkillCommand, apiPreviewOrigin, buildExamplePrompt, buildApiCommand, buildCliCommand, inspectApiCommand, pollApiCommand } from '../lib/tool-catalog.mjs';
+import { agentOptions, availableTools, getToolDetail, buildInstallInstruction, buildExamplePrompt } from '../lib/tool-catalog.mjs';
 ---
 
 <dialog class="tools-dialog setup-dialog" id="tools-setup" data-tools-dialog aria-labelledby="setup-title">
@@ -35,9 +34,9 @@ import { agentOptions, availableTools, getToolDetail, installSkillPath, buildIns
       <div data-tools-account-guest>
         <ToolAuthForm />
       </div>
-      <div data-tools-account-member hidden><h3 class="account-heading">You’re signed in.</h3><p class="muted">Connect your agent with a personal key, or continue to explore the tools.</p><ToolAccountAccess /></div>
+      <div data-tools-account-member hidden><h3 class="account-heading">You’re signed in.</h3><p class="muted">Explore the skills and prepare a task for your agent.</p></div>
       <p class="small-note" data-tools-auth-status role="status" aria-live="polite"></p>
-      <p class="small-note">Research API access is in private preview and is separate from account signup.</p>
+      <p class="small-note">Hosted research skills are in private preview. Signing in does not activate paid hiring.</p>
     </section>
     <section data-setup-step="3" hidden>
       <p class="muted">Choose a task, copy it, and send it to your agent.</p>
@@ -51,51 +50,21 @@ import { agentOptions, availableTools, getToolDetail, installSkillPath, buildIns
 {availableTools.map(item => {
   const tool = getToolDetail(item.id);
   return <dialog class="tools-dialog endpoint-dialog" id={`tool-${tool.id}`} data-tools-dialog data-tool-detail={tool.id} aria-labelledby={`detail-title-${tool.id}`}>
-    <header class="dialog-header"><h2 id={`detail-title-${tool.id}`}>Endpoint detail</h2><span class="status-pill">{tool.status}</span><button type="button" class="dialog-close" data-close-tools aria-label="Close endpoint detail" autofocus>×</button></header>
+    <header class="dialog-header"><h2 id={`detail-title-${tool.id}`}>About this skill</h2><span class="status-pill">{tool.endpoint ? 'Private preview' : 'Book skill'}</span><button type="button" class="dialog-close" data-close-tools aria-label="Close skill details" autofocus>×</button></header>
     <div class="dialog-body">
       <h3 class="detail-name">{tool.name}</h3>
       <dl class="detail-fields">
-        <div><dt>Provider / sources</dt><dd>{tool.provider}</dd></div>
-        <div><dt>{tool.endpoint ? 'Endpoint' : 'Integration'}</dt><dd><code>{tool.endpoint || 'AWB book skill'}</code></dd></div>
-        <div><dt>{tool.endpoint ? 'Capability' : 'Skill'}</dt><dd><code>{tool.endpoint ? tool.id : 'answer-with-books'}</code></dd></div>
-        <div><dt>Price</dt><dd>{tool.price}<p class="small-note">{tool.endpoint ? 'Completed requests are metered, not billed by the platform yet. Provider costs may apply.' : 'The separate book integration may use your agent’s model allowance.'}</p></dd></div>
-        <div class="wide"><dt>Description</dt><dd>{tool.description}{tool.scope && <p class="small-note">{tool.scope}</p>}</dd></div>
-        <div class="wide"><dt>Categories</dt><dd class="category-row">{tool.categories.map(category => <span class="category-pill">{category}</span>)}</dd></div>
+        <div class="wide"><dt>What it does</dt><dd>{tool.description}{tool.scope && <p class="small-note">{tool.scope}</p>}</dd></div>
+        <div class="wide"><dt>What you get</dt><dd>{tool.deliverable}</dd></div>
+        <div class="wide"><dt>Useful for</dt><dd class="category-row">{tool.categories.map(category => <span class="category-pill">{category}</span>)}</dd></div>
       </dl>
       <div class="endpoint-usage">
-        <h3>Use this {tool.endpoint ? 'endpoint' : 'skill'}</h3>
-        <div class="endpoint-tabs" role="tablist" aria-label={`Instructions for ${tool.name}`}>
-          {['AI agent', 'CLI', 'API'].map((label, index) => <button type="button" role="tab" id={`${tool.id}-tab-${index}`} aria-controls={`${tool.id}-panel-${index}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-endpoint-tab={index}>{label}</button>)}
-        </div>
-        <section role="tabpanel" id={`${tool.id}-panel-0`} aria-labelledby={`${tool.id}-tab-0`} tabindex="0" data-endpoint-panel="0">
-          <p class="step-label">1. Set up with your agent</p>
-          <ToolCommand value={tool.endpoint ? buildInstallInstruction() : bookSkillCommand} dynamic={tool.endpoint ? 'install' : undefined} />
-          {tool.endpoint ? <button type="button" class="text-link" data-open-setup>Choose your agent & follow setup →</button> : <p class="small-note">Run this command in a Node-enabled terminal to install the AWB book integration.</p>}
-          <p class="step-label">2. {tool.endpoint ? 'Connect your platform key' : 'Open the book shelf'}</p>
-          <p class="muted">{tool.endpoint ? 'Sign in through setup to manage your personal platform keys. Research access requires approval during the private preview. Store your key in your agent’s secure environment—not in chat.' : 'Book advice uses the separate AWB book skill, not the research API. Book pages also offer a Personalize flow with reading material to copy into your AI.'}</p>
-          <p class="step-label">3. Ask your agent</p><ToolCommand value={buildExamplePrompt(tool.id)} label="Copy task" />
-        </section>
-        <section role="tabpanel" id={`${tool.id}-panel-1`} aria-labelledby={`${tool.id}-tab-1`} tabindex="0" hidden data-endpoint-panel="1">
-          {tool.endpoint ? <>
-            <p class="step-label">1. Use the configured Capability Lab checkout</p>
-            <p class="muted">Requires Node 22.12+ and the project from your administrator. The research CLI is not a published npm package.</p>
-            <ToolCommand value="npm install" />
-            <p class="step-label">2. Configure your platform connection</p>
-            <p class="muted">Store <code>CAPABILITY_API_KEY</code> and <code>CAPABILITY_BASE_URL</code> in the checkout’s private <code>.env</code> file or secure environment. Do not commit that file.</p>
-            <p class="step-label">3. Run this capability</p><ToolCommand value={buildCliCommand(tool.id)} />
-            <p class="small-note">Run from the project directory. The client creates a request, polls its status, and prints the final JSON. This runs research and may incur provider costs.</p>
-          </> : <><p class="step-label">Install the book integration</p><ToolCommand value={bookSkillCommand} /><p class="muted">Requires Node and npm. Follow the installer’s instructions, then ask your agent a book-backed question.</p></>}
-        </section>
-        <section role="tabpanel" id={`${tool.id}-panel-2`} aria-labelledby={`${tool.id}-tab-2`} tabindex="0" hidden data-endpoint-panel="2">
-          {tool.endpoint ? <>
-            <p class="muted">Base URL: <code>{apiPreviewOrigin}</code> (local preview). Configure <code>CAPABILITY_BASE_URL</code> and your secret <code>CAPABILITY_API_KEY</code> before using these examples.</p>
-            <p class="step-label">1. Inspect the capability catalog</p><ToolCommand value={inspectApiCommand} />
-            <p class="step-label">2. Create a research request</p><ToolCommand value={buildApiCommand(tool.id)} />
-            <p class="small-note">Requires <code>uuidgen</code>. Save the idempotency key if retrying: reuse it only for identical input. Each fresh key starts a new request and may incur provider costs.</p>
-            <p class="step-label">3. Get the result</p><ToolCommand value={pollApiCommand} />
-            <p class="small-note">The POST returns 202 with a run ID. Replace REPLACE_WITH_RUN_ID and poll this GET until completed or failed. Do not repeat the POST to check progress.</p>
-          </> : <div class="connection-note"><strong>Separate book integration</strong><p>Book-backed answers are not a capability of <code>POST /v1/run</code>. Use the AI agent or CLI instructions to install the book skill.</p></div>}
-        </section>
+        <h3>Bring this skill to your agent</h3>
+        <p class="muted">{tool.endpoint ? 'Choose your agent, then give it a task. Research access requires an invitation during the private preview.' : 'Connect the AWB skill to your agent, or open a book and choose Personalize to begin with its reading material.'}</p>
+        <button type="button" class="primary-button skill-connect" data-open-setup>Connect your agent →</button>
+        <p class="step-label">A task to start with</p>
+        <p class="muted">{tool.example}</p>
+        <ToolCommand value={buildExamplePrompt(tool.id)} label="Copy task for your agent" compact />
       </div>
       <a class="text-link guide-link" href={tool.guide}>{tool.endpoint ? 'Read the full guide' : 'Explore the books'} ↗</a>
     </div>
@@ -103,6 +72,7 @@ import { agentOptions, availableTools, getToolDetail, installSkillPath, buildIns
 })}
 
 <style>
+  .skill-connect{margin-top:20px}
   :global(html:has(dialog[data-tools-dialog][open])){overflow:hidden;scrollbar-width:none}
   :global(html:has(dialog[data-tools-dialog][open])::-webkit-scrollbar){display:none}
   .tools-dialog{scrollbar-width:none;-ms-overflow-style:none}.tools-dialog::-webkit-scrollbar{display:none;width:0;height:0}

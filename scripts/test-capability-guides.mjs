@@ -34,9 +34,14 @@ try {
     assert.equal(await page.locator('[data-filter-item]:visible').count(), 0);
     assert.ok(await page.locator('[data-question-invite]').isVisible());
     await page.locator('[data-filter-search]').fill('');
-    await page.getByText('More work guides', { exact: true }).click();
-    for (const slug of legacy) assert.ok(await page.locator(`a[href="/guides/${slug}/"]`).isVisible());
-    await page.getByText('More work guides', { exact: true }).click();
+    assert.equal(await page.getByText('More work guides', { exact: true }).count(), 0);
+    for (const slug of legacy) assert.equal(await page.locator(`a[href="/guides/${slug}/"]`).count(), 0);
+    for (const slug of slugs) {
+      const cover = page.locator(`[data-guide-cover="${slug}"] img`);
+      await cover.scrollIntoViewIfNeeded();
+      await cover.evaluate(image => image.decode());
+      assert.ok(await cover.evaluate(image => image.complete && image.naturalWidth > 0));
+    }
   }
   await page.goto(`${base}/guides/`);
   await page.screenshot({ path: '/tmp/awb-guides-desktop.png' });

@@ -30,8 +30,8 @@ assert.match(skill, /save this document as `awb-tools\/SKILL.md`/);
 for (const tool of availableTools) {
   const example = buildExamplePrompt(tool.id);
   assert.ok(example.includes(tool.example));
-  if (tool.kind === 'API') assert.ok(example.includes(`select ${tool.id}`));
-  else assert.match(example, /not the research API/);
+  if (tool.kind === 'API') assert.ok(example.includes(`call ${tool.id}`));
+  else assert.match(example, /does not require research access/);
   assert.match(example, /Do not send outreach or publish/);
   assert.ok(fs.existsSync(built(`${tool.guide}index.html`)), 'Guide or book route exists');
 }
@@ -54,7 +54,7 @@ for (const agent of agentOptions) {
 }
 assert.equal(getAgentSetup('claude-ai').agent.method, 'upload');
 assert.equal(getAgentSetup('grok-bot').agent.method, 'saved-skill');
-assert.match(getAgentSetup('claude-ai').note, /reachable HTTPS API/);
+assert.match(getAgentSetup('claude-ai').note, /require an invitation/);
 assert.match(getAgentSetup('cursor').note, /marketplace plugin is not available yet/);
 for (const agent of agentOptions.filter(agent => agent.available)) {
   const paths = toolsAuthPaths(agent.id);
@@ -108,22 +108,20 @@ assert.ok(captureShell(inspectApiCommand, 'curl').includes(`${apiPreviewOrigin}/
 assert.ok(captureShell(pollApiCommand, 'curl').includes(`${apiPreviewOrigin}/v1/runs/REPLACE_WITH_RUN_ID`));
 
 const html = fs.readFileSync(built('tools/index.html'), 'utf8');
-assert.match(html, /One API\. One setup\./);
+assert.match(html, /Browse and hire skills on demand\./);
 assert.equal((html.match(/<button\b[^>]*data-copy-install/g) || []).length, 1);
 assert.equal((html.match(/<article\b[^>]*data-capability=/g) || []).length, 4);
 assert.equal((html.match(/<main\b/g) || []).length, 1, 'Single page landmark');
 assert.ok(html.includes(`href="${installSkillPath}"`));
 assert.ok(html.includes(buildInstallInstruction()));
-assert.ok(html.includes('POST /v1/run'));
 const mainInstall = html.split('id="install"')[1].split('</section>')[0];
 assert.doesNotMatch(mainInstall, /data-copy-install|POST \/v1\/run|One platform key|Local API preview|View skill/);
 assert.ok(html.includes('id="book-skill"'), 'Existing homepage link still resolves');
 for (const removed of ['data-agent-task-form', 'id="models"', 'id="source-tools"', 'data-book-skill-panel']) assert.ok(!html.includes(removed));
 assert.doesNotMatch(html, /name="api.?key"/i, 'Do not collect provider credentials');
 const secretInputs = html.match(/<input\b[^>]*type="password"[^>]*>/g) || [];
-assert.equal(secretInputs.length, 3, 'Two account password inputs and one readonly generated key display');
-const keyDisplay = secretInputs.find(input => input.includes('data-key-secret'));
-assert.match(keyDisplay, /readonly/);
+assert.equal(secretInputs.length, 2, 'Only account password inputs, no API-key setup');
+assert.doesNotMatch(html, /data-key-secret|data-tool-account-access/);
 assert.ok(secretInputs.some(input => input.includes('autocomplete="new-password"')));
 assert.ok(secretInputs.some(input => input.includes('autocomplete="current-password"')));
 assert.doesNotMatch(html, /Download skill instructions/);
@@ -144,22 +142,18 @@ assert.doesNotMatch(source + client, /fetch\(|localStorage|sessionStorage/);
 assert.match(client, /manual\.value = value/);
 assert.match(client, /manual\.select\(\)/);
 assert.match(client, /dialog\.showModal\(\)/);
-assert.match(client, /ArrowRight/);
-assert.match(client, /ArrowLeft/);
 assert.doesNotMatch(html, /powered by Fireworks|fireworks\.svg|Research reasoning powered/i);
 assert.equal((html.match(/<input\b[^>]*name="tools-agent"/g) || []).length, 9);
 assert.equal((html.match(/<section\b[^>]*data-setup-step=/g) || []).length, 4);
 assert.equal((html.match(/<dialog\b[^>]*data-tool-detail=/g) || []).length, 4);
 assert.equal((html.match(/<button\b[^>]*data-open-tool=/g) || []).length, 4);
-assert.equal((html.match(/role="tabpanel"/g) || []).length, 12);
-assert.equal((html.match(/role="tab"/g) || []).length, 12);
-for (const { id } of availableTools) for (let tab = 0; tab < 3; tab++) {
-  assert.ok(html.includes(`aria-controls="${id}-panel-${tab}"`));
-  assert.ok(html.includes(`id="${id}-panel-${tab}"`));
-  assert.ok(html.includes(`aria-labelledby="${id}-tab-${tab}"`));
+assert.equal((html.match(/role="tabpanel"/g) || []).length, 0);
+assert.equal((html.match(/role="tab"/g) || []).length, 0);
+for (const { id } of availableTools) {
+  assert.ok(html.includes(getToolDetail(id).deliverable));
 }
-assert.match(html, /Research API access is in private preview and is separate from account signup/);
-assert.match(html, /Pricing not set/);
+assert.match(html, /Hosted research skills are in private preview\. Signing in does not activate paid hiring/);
+assert.match(html, /Paid hiring is not available yet/);
 assert.doesNotMatch(html, /Connect your API|I’ve configured the API|data-api-ack|page does not verify the connection/);
 assert.equal((html.match(/data-try-tool=/g) || []).length, 4);
 assert.match(html, /data-tools-auth-mode="signup"/);
@@ -169,4 +163,4 @@ assert.match(client, /isVerifiedToolsUser\(result\.data\.user\)/);
 assert.match(fs.readFileSync('src/lib/tool-auth-form.ts', 'utf8'), /shouldCreateUser: false/);
 assert.match(fs.readFileSync('src/pages/auth/confirm.astro', 'utf8'), /toolsContext\?\.returnTo \|\| '\/profile\/'/);
 assert.match(fs.readFileSync('src/lib/newsletter-flow.ts', 'utf8'), /readToolsAuthContext\(location\.pathname, location\.search\)\?\.confirm/);
-console.log(JSON.stringify({ passed: true, listedTools: 4, apiCapabilities: 3, agentOptions: 9, setupSteps: 4, detailPanels: 4, instructionTabs: 12, shellExamplesMockTested: true, originAwareSetup: true, installDocumentPackaged: true, bookSetupPreserved: true, browserInteractionTested: false, paidProviderCalls: 0 }, null, 2));
+console.log(JSON.stringify({ passed: true, listedSkills: 4, apiCapabilities: 3, agentOptions: 9, setupSteps: 4, detailPanels: 4, instructionTabs: 0, shellExamplesMockTested: true, originAwareSetup: true, installDocumentPackaged: true, bookSetupPreserved: true, browserInteractionTested: false, paidProviderCalls: 0 }, null, 2));

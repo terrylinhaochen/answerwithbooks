@@ -6,7 +6,6 @@ import GuideCover from './GuideCover.astro';
 import FaqList from './FaqList.astro';
 import QuestionInvite from './QuestionInvite.astro';
 import { faqJsonLd } from '../lib/seo';
-import { workplaceGuides } from '../lib/workplace-guides';
 import { capabilityGuides } from '../lib/capability-guides';
 import { CANONICAL_TOPICS, topicsForTags } from '../lib/topics';
 
@@ -153,19 +152,6 @@ const jsonLd = [
         </a>
       ))}
     </div>
-    <details class="mt-6 border-b border-line pb-5">
-      <summary class="w-fit cursor-pointer text-sm font-semibold">More work guides</summary>
-      <div class="mt-5 grid gap-4 md:grid-cols-3">
-        {workplaceGuides.map(guide => (
-          <a href={`/guides/${guide.slug}/`} class="awb-card-link flex flex-col p-5">
-            <p class="text-sm text-faint">{guide.minutes} min · {guide.audience}</p>
-            <h3 class="mt-4 font-serif text-2xl leading-tight">{guide.title}</h3>
-            <p class="mt-3 flex-1 leading-relaxed text-soft">{guide.description}</p>
-            <span class="mt-5 text-sm font-semibold">Open guide →</span>
-          </a>
-        ))}
-      </div>
-    </details>
   </section>
 
   <section class="awb-section pb-16 pt-2">

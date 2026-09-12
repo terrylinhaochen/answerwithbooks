@@ -7,24 +7,25 @@ import { availableTools, installSkillPath } from '../lib/tool-catalog.mjs';
 const icons = { 'github-leads': githubIcon, 'tinker-audience': exaIcon };
 ---
 
-<Base title="Tools" description="One setup for research tools in your own agent. Explore GitHub research, X analysis, audience enrichment, and the AWB book skill." path="/tools/">
+<Base title="Skills" description="Browse specialized skills for research, audience insights, and book-backed decisions. Connect them to the agent you already use." path="/tools/">
   <div class="awb-section py-12 sm:py-16">
     <header class="mb-8">
-      <p class="awb-eyebrow">Tools</p>
-      <h1 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">One API. One setup.</h1>
-      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">Connect the tools. Let your agent choose what to use.</p>
+      <p class="awb-eyebrow">Skills</p>
+      <h1 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">Browse and hire skills on demand.</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">Find the right expertise for your task. Bring it to the agent you already use.</p>
     </header>
 
     <section id="install" class="awb-panel scroll-mt-28 p-5 sm:p-7" aria-labelledby="install-heading">
       <div class="flex flex-wrap items-start justify-between gap-3">
-        <div><h2 id="install-heading" class="font-serif text-2xl">Connect your agent</h2><p class="mt-2 text-sm text-soft">Choose your agent. Install once. Start using the tools.</p></div>
-        <button type="button" class="awb-pill bg-ink text-white disabled:opacity-50" data-open-setup disabled>Set up your agent →</button>
+        <div><h2 id="install-heading" class="font-serif text-2xl">Works with your agent</h2><p class="mt-2 text-sm text-soft">Choose your agent and add the skills you need.</p></div>
+        <button type="button" class="awb-pill bg-ink text-white disabled:opacity-50" data-open-setup disabled>Connect your agent →</button>
       </div>
       <noscript><p class="mt-4 text-sm text-soft">Enable JavaScript for guided setup, or <a href={installSkillPath}>read the skill instructions</a>.</p></noscript>
     </section>
 
     <section id="available-tools" class="mt-10 scroll-mt-28" aria-labelledby="available-tools-heading">
-      <div class="mb-5 flex items-end justify-between gap-4"><h2 id="available-tools-heading" class="font-serif text-3xl">Available tools</h2><span class="text-sm text-faint">{availableTools.length} capabilities</span></div>
+      <div class="mb-5 flex items-end justify-between gap-4"><h2 id="available-tools-heading" class="font-serif text-3xl">Explore skills</h2><span class="text-sm text-faint">{availableTools.length} skills</span></div>
+      <p class="mb-5 text-sm text-soft">Research skills are in private preview. Paid hiring is not available yet.</p>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-tool-capabilities>
         {availableTools.map(tool => (
           <article id={tool.id === 'book-answers' ? 'book-skill' : undefined} class="awb-panel min-w-0 scroll-mt-28 overflow-hidden" data-capability={tool.id}>
@@ -33,13 +34,12 @@ const icons = { 'github-leads': githubIcon, 'tinker-audience': exaIcon };
               <span class="flex size-10 items-center justify-center rounded-lg bg-wash" aria-hidden="true">
                 {icons[tool.id as keyof typeof icons] ? <img src={icons[tool.id as keyof typeof icons]} width="25" height="25" alt="" /> : <span class:list={['font-semibold', tool.id === 'x-discourse' ? 'text-2xl' : 'text-xs']}>{tool.id === 'x-discourse' ? 'X' : 'AWB'}</span>}
               </span>
-              <span class="text-xs font-medium text-faint">{tool.kind}</span>
+              <span class="text-xs font-medium text-faint">{tool.kind === 'API' ? 'Private preview' : 'Book skill'}</span>
             </span>
             <span class="mt-4 font-serif text-2xl leading-tight" role="heading" aria-level="3">{tool.name}</span>
             <span class="mt-3 flex-1 text-sm leading-relaxed text-soft">{tool.description}</span>
             {tool.scope && <span class="mt-2 text-xs leading-relaxed text-faint">{tool.scope}</span>}
-            <span class="mt-4 text-xs font-medium text-faint">{tool.provider}</span>
-            <span class="mt-5 flex items-center justify-between gap-2 border-t border-line pt-4 text-sm"><code class="text-xs">{tool.kind === 'API' ? 'POST /v1/run' : 'AWB book skill'}</code><span aria-hidden="true">↗</span></span>
+            <span class="mt-5 flex items-center justify-between gap-2 border-t border-line pt-4 text-sm"><span>Explore skill</span><span aria-hidden="true">↗</span></span>
             </button>
           </article>
         ))}
