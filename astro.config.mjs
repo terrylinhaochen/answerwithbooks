@@ -12,7 +12,7 @@ const utilityPaths = [
   '/community/',
   '/acquired-intelligence/',
   '/ask/',
-  '/tools/',
+  '/skills/',
   '/embed/book-upload/',
   '/speed-read/',
   '/404/',
@@ -26,6 +26,7 @@ export default defineConfig({
   devToolbar: { enabled: false },
   trailingSlash: 'always',
   redirects: {
+    '/guides/tinker-audience-to-client-sheet/': '/guides/audience-enrichment/',
     '/answers/how-do-i-know-if-my-startup-idea-is-any-good/':
       '/answers/how-to-validate-an-idea-without-fooling-yourself/',
     '/answers/what-does-the-mom-test-teach-about-user-interviews/':

@@ -1,0 +1,89 @@
+---
+import { guideCovers } from '../lib/guide-covers.mjs';
+
+interface Props {
+  slug: string;
+  class?: string;
+  priority?: boolean;
+}
+const { slug, priority = false } = Astro.props;
+const cover = guideCovers[slug as keyof typeof guideCovers];
+---
+
+{cover && (
+  <span
+    class={`guide-cover ${Astro.props.class ?? ''}`}
+    style={`--guide-cover-background: ${cover.background}`}
+    data-guide-cover={slug}
+    aria-hidden="true"
+  >
+    <img
+      src={cover.src}
+      alt=""
+      width="1536"
+      height="864"
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+      fetchpriority={priority ? 'high' : 'auto'}
+    />
+    <span class="guide-cover__label">
+      <span class="guide-cover__topic">{cover.topic}</span>
+      <span class="guide-cover__title">{cover.label}</span>
+    </span>
+  </span>
+)}
+
+<style>
+  /* Same illustrated, 16:9 treatment as AnswerCover, without a nested link. */
+  .guide-cover {
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    background: var(--guide-cover-background);
+    box-shadow: 0 12px 24px rgb(34 30 26 / 0.08);
+    container-type: inline-size;
+  }
+
+  .guide-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .guide-cover__label {
+    position: absolute;
+    inset: 0 auto 0 0;
+    display: flex;
+    width: 49%;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(0.8rem, 5cqi, 1.45rem);
+    color: #fffaf0;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.22);
+  }
+
+  .guide-cover__topic {
+    margin-bottom: 0.55rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .guide-cover__title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 8cqi, 2.1rem);
+    font-weight: 700;
+    line-height: 1.02;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+</style>

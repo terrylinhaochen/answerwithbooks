@@ -1,0 +1,119 @@
+---
+import ToolCommand from './ToolCommand.astro';
+import ToolAuthForm from './ToolAuthForm.astro';
+import AgentIcon from './AgentIcon.astro';
+import skill from '../../public/tools/awb-tools/SKILL.md?raw';
+import { grokSkillSetup } from '../lib/tool-skill-package.mjs';
+import ToolAccountAccess from './ToolAccountAccess.astro';
+import { agentOptions, availableTools, getToolDetail, installSkillPath, buildInstallInstruction, bookSkillCommand, apiPreviewOrigin, buildExamplePrompt, buildApiCommand, buildCliCommand, inspectApiCommand, pollApiCommand } from '../lib/tool-catalog.mjs';
+---
+
+<dialog class="tools-dialog setup-dialog" id="tools-setup" data-tools-dialog aria-labelledby="setup-title">
+  <div class="setup-progress" role="progressbar" aria-label="Setup progress" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" data-setup-progress><span></span></div>
+  <header class="dialog-header"><span class="awb-mark" aria-hidden="true">AWB</span><h2 id="setup-title" tabindex="-1" data-setup-title>Which agent are you using?</h2><button type="button" class="dialog-close" data-close-tools aria-label="Close setup">×</button></header>
+  <div class="dialog-body">
+    <section data-setup-step="0">
+      <p class="muted">Choose your agent for the right setup instructions.</p>
+      <fieldset class="agent-grid"><legend class="sr-only">Choose your agent</legend>
+        {agentOptions.map(agent => <label class="agent-choice"><input type="radio" name="tools-agent" value={agent.id} /><AgentIcon id={agent.id} /><span>{agent.name}</span><span class="agent-check" aria-hidden="true">✓</span></label>)}
+      </fieldset>
+    </section>
+    <section data-setup-step="1" hidden>
+      <div class="selected-agent">{agentOptions.map(agent => <span data-selected-agent-icon={agent.id} hidden><AgentIcon id={agent.id} /></span>)}<p class="step-label">Setting up AWB for <strong data-selected-agent></strong></p></div>
+      <p class="muted" data-agent-guidance></p>
+      <div data-agent-skill>
+        <ToolCommand value={buildInstallInstruction()} dynamic="install" install />
+      </div>
+      <div data-agent-upload hidden>
+        <ol class="agent-steps"><li>Get the AWB skill package.</li><li>In Claude, open <strong>Customize → Skills → + → Create skill → Upload a skill</strong>.</li><li>Upload the ZIP, enable the skill, and turn on code execution if prompted.</li></ol>
+        <a class="primary-button skill-package" href="/tools/awb-tools.zip" download="awb-tools.zip">Get Claude skill</a>
+      </div>
+      <div data-agent-saved-skill hidden><ToolCommand value={grokSkillSetup(skill)} label="Copy Grok Bot setup" compact /><p class="small-note">Copies the full skill, so Grok Bot doesn’t need to open this local website. After saving it, enable AWB for your Bot and use / to find the skill.</p></div>
+      <p class="small-note" data-agent-note></p>
+    </section>
+    <section data-setup-step="2" hidden>
+      <div data-tools-account-guest>
+        <ToolAuthForm />
+      </div>
+      <div data-tools-account-member hidden><h3 class="account-heading">You’re signed in.</h3><p class="muted">Connect your agent with a personal key, or continue to explore the tools.</p><ToolAccountAccess /></div>
+      <p class="small-note" data-tools-auth-status role="status" aria-live="polite"></p>
+      <p class="small-note">Research API access is in private preview and is separate from account signup.</p>
+    </section>
+    <section data-setup-step="3" hidden>
+      <p class="muted">Choose a task, copy it, and send it to your agent.</p>
+      <div class="try-grid">{availableTools.map(tool => <div class="try-card" data-try-tool={tool.id}><h3>{tool.name}</h3><p class="small-note">{tool.description}</p><ToolCommand value={buildExamplePrompt(tool.id)} label="Copy task" compact /></div>)}</div>
+      <p class="small-note">Your agent checks access before running research. Copying a task does not execute it.</p>
+    </section>
+  </div>
+  <footer class="dialog-footer"><button type="button" class="plain-button" data-setup-back hidden>← Back</button><span class="step-count" data-step-count>1 of 4</span><button type="button" class="primary-button" data-setup-next disabled>Next →</button></footer>
+</dialog>
+
+{availableTools.map(item => {
+  const tool = getToolDetail(item.id);
+  return <dialog class="tools-dialog endpoint-dialog" id={`tool-${tool.id}`} data-tools-dialog data-tool-detail={tool.id} aria-labelledby={`detail-title-${tool.id}`}>
+    <header class="dialog-header"><h2 id={`detail-title-${tool.id}`}>Endpoint detail</h2><span class="status-pill">{tool.status}</span><button type="button" class="dialog-close" data-close-tools aria-label="Close endpoint detail" autofocus>×</button></header>
+    <div class="dialog-body">
+      <h3 class="detail-name">{tool.name}</h3>
+      <dl class="detail-fields">
+        <div><dt>Provider / sources</dt><dd>{tool.provider}</dd></div>
+        <div><dt>{tool.endpoint ? 'Endpoint' : 'Integration'}</dt><dd><code>{tool.endpoint || 'AWB book skill'}</code></dd></div>
+        <div><dt>{tool.endpoint ? 'Capability' : 'Skill'}</dt><dd><code>{tool.endpoint ? tool.id : 'answer-with-books'}</code></dd></div>
+        <div><dt>Price</dt><dd>{tool.price}<p class="small-note">{tool.endpoint ? 'Completed requests are metered, not billed by the platform yet. Provider costs may apply.' : 'The separate book integration may use your agent’s model allowance.'}</p></dd></div>
+        <div class="wide"><dt>Description</dt><dd>{tool.description}{tool.scope && <p class="small-note">{tool.scope}</p>}</dd></div>
+        <div class="wide"><dt>Categories</dt><dd class="category-row">{tool.categories.map(category => <span class="category-pill">{category}</span>)}</dd></div>
+      </dl>
+      <div class="endpoint-usage">
+        <h3>Use this {tool.endpoint ? 'endpoint' : 'skill'}</h3>
+        <div class="endpoint-tabs" role="tablist" aria-label={`Instructions for ${tool.name}`}>
+          {['AI agent', 'CLI', 'API'].map((label, index) => <button type="button" role="tab" id={`${tool.id}-tab-${index}`} aria-controls={`${tool.id}-panel-${index}`} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1} data-endpoint-tab={index}>{label}</button>)}
+        </div>
+        <section role="tabpanel" id={`${tool.id}-panel-0`} aria-labelledby={`${tool.id}-tab-0`} tabindex="0" data-endpoint-panel="0">
+          <p class="step-label">1. Set up with your agent</p>
+          <ToolCommand value={tool.endpoint ? buildInstallInstruction() : bookSkillCommand} dynamic={tool.endpoint ? 'install' : undefined} />
+          {tool.endpoint ? <button type="button" class="text-link" data-open-setup>Choose your agent & follow setup →</button> : <p class="small-note">Run this command in a Node-enabled terminal to install the AWB book integration.</p>}
+          <p class="step-label">2. {tool.endpoint ? 'Connect your platform key' : 'Open the book shelf'}</p>
+          <p class="muted">{tool.endpoint ? 'Sign in through setup to manage your personal platform keys. Research access requires approval during the private preview. Store your key in your agent’s secure environment—not in chat.' : 'Book advice uses the separate AWB book skill, not the research API. Book pages also offer a Personalize flow with reading material to copy into your AI.'}</p>
+          <p class="step-label">3. Ask your agent</p><ToolCommand value={buildExamplePrompt(tool.id)} label="Copy task" />
+        </section>
+        <section role="tabpanel" id={`${tool.id}-panel-1`} aria-labelledby={`${tool.id}-tab-1`} tabindex="0" hidden data-endpoint-panel="1">
+          {tool.endpoint ? <>
+            <p class="step-label">1. Use the configured Capability Lab checkout</p>
+            <p class="muted">Requires Node 22.12+ and the project from your administrator. The research CLI is not a published npm package.</p>
+            <ToolCommand value="npm install" />
+            <p class="step-label">2. Configure your platform connection</p>
+            <p class="muted">Store <code>CAPABILITY_API_KEY</code> and <code>CAPABILITY_BASE_URL</code> in the checkout’s private <code>.env</code> file or secure environment. Do not commit that file.</p>
+            <p class="step-label">3. Run this capability</p><ToolCommand value={buildCliCommand(tool.id)} />
+            <p class="small-note">Run from the project directory. The client creates a request, polls its status, and prints the final JSON. This runs research and may incur provider costs.</p>
+          </> : <><p class="step-label">Install the book integration</p><ToolCommand value={bookSkillCommand} /><p class="muted">Requires Node and npm. Follow the installer’s instructions, then ask your agent a book-backed question.</p></>}
+        </section>
+        <section role="tabpanel" id={`${tool.id}-panel-2`} aria-labelledby={`${tool.id}-tab-2`} tabindex="0" hidden data-endpoint-panel="2">
+          {tool.endpoint ? <>
+            <p class="muted">Base URL: <code>{apiPreviewOrigin}</code> (local preview). Configure <code>CAPABILITY_BASE_URL</code> and your secret <code>CAPABILITY_API_KEY</code> before using these examples.</p>
+            <p class="step-label">1. Inspect the capability catalog</p><ToolCommand value={inspectApiCommand} />
+            <p class="step-label">2. Create a research request</p><ToolCommand value={buildApiCommand(tool.id)} />
+            <p class="small-note">Requires <code>uuidgen</code>. Save the idempotency key if retrying: reuse it only for identical input. Each fresh key starts a new request and may incur provider costs.</p>
+            <p class="step-label">3. Get the result</p><ToolCommand value={pollApiCommand} />
+            <p class="small-note">The POST returns 202 with a run ID. Replace REPLACE_WITH_RUN_ID and poll this GET until completed or failed. Do not repeat the POST to check progress.</p>
+          </> : <div class="connection-note"><strong>Separate book integration</strong><p>Book-backed answers are not a capability of <code>POST /v1/run</code>. Use the AI agent or CLI instructions to install the book skill.</p></div>}
+        </section>
+      </div>
+      <a class="text-link guide-link" href={tool.guide}>{tool.endpoint ? 'Read the full guide' : 'Explore the books'} ↗</a>
+    </div>
+  </dialog>;
+})}
+
+<style>
+  :global(html:has(dialog[data-tools-dialog][open])){overflow:hidden;scrollbar-width:none}
+  :global(html:has(dialog[data-tools-dialog][open])::-webkit-scrollbar){display:none}
+  .tools-dialog{scrollbar-width:none;-ms-overflow-style:none}.tools-dialog::-webkit-scrollbar{display:none;width:0;height:0}
+  .selected-agent{display:flex;align-items:center;gap:10px;margin-bottom:24px}.selected-agent .step-label{margin:0}.selected-agent>span{display:inline-flex}.agent-steps{padding-left:22px;margin-top:18px;font-size:14px;line-height:1.7;color:var(--color-soft)}.agent-steps li+li{margin-top:14px}.skill-package{display:inline-flex;margin-top:24px}.setup-dialog[data-account-card=true]{width:min(480px,calc(100vw - 24px))}.setup-dialog[data-account-card=true] .dialog-header{padding:8px 12px 0;border:0;position:relative;justify-content:flex-end;background:transparent}.setup-dialog[data-account-card=true] .dialog-header>.awb-mark{display:none}.setup-dialog[data-account-card=true] .dialog-header h2{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}.setup-dialog[data-account-card=true] .dialog-body{padding:0 36px 20px}.setup-dialog[data-account-card=true] .dialog-footer{padding:14px 24px;font-size:12px}.setup-dialog[data-account-card=true] [data-setup-next]{display:none}.setup-dialog[data-account-card=true] [data-tools-auth-status]:empty{display:none}.setup-dialog[data-account-card=true] [data-setup-step="2"]>.small-note:last-child{font-size:11px;text-align:center;margin-top:18px}
+  [hidden]{display:none!important}.tools-dialog{padding:0;border:1px solid var(--color-line);color:var(--color-ink);background:var(--color-paper);box-shadow:0 24px 100px #0002;overflow:auto;overscroll-behavior:contain}.tools-dialog::backdrop{background:rgb(20 20 20 / .28);backdrop-filter:blur(4px)}
+  .agent-choice small{display:block;margin-top:4px;font-size:11px;font-weight:400;color:var(--color-faint)}.account-heading{font-size:28px;font-weight:600;margin-bottom:14px}.account-actions{display:flex;justify-content:center;align-items:center;gap:40px;margin:32px 0 16px}.account-actions .primary-button{min-width:170px}.account-login-button{padding:12px 20px;cursor:pointer;font-size:16px}.account-form{margin-top:28px;padding-top:24px;border-top:1px solid var(--color-line)}.account-form label{display:block;font-size:14px;margin-bottom:8px}.account-form input{margin-bottom:16px}.account-form :global([data-account-login]){display:none}.account-form :global(.newsletter-email){max-width:none}.account-form :global(.newsletter-email input){margin-bottom:0}.account-form [data-tools-login-submit]{margin-top:2px}.account-form :global([data-account-title]){font-size:24px}
+  .setup-dialog{width:min(720px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;border-radius:20px}.endpoint-dialog{width:min(600px,calc(100vw - 24px));height:calc(100dvh - 24px);max-height:none;margin:12px 12px 12px auto;border-radius:18px}
+  .dialog-header{display:flex;align-items:center;gap:14px;padding:22px 28px;border-bottom:1px solid var(--color-line);position:sticky;top:0;background:var(--color-paper);z-index:1}.dialog-header h2{flex:1;font-size:19px;font-weight:600;line-height:1.4}.dialog-header h2:focus{outline:none}.awb-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:8px;background:var(--color-ink);color:var(--color-paper);font-size:11px;font-weight:700}.dialog-close{width:32px;height:32px;font-size:26px;cursor:pointer;color:var(--color-soft);border-radius:8px}.dialog-close:hover{background:var(--color-wash)}
+  .dialog-body{padding:28px}.dialog-footer{position:sticky;bottom:0;display:flex;align-items:center;gap:14px;padding:20px 28px;background:var(--color-paper);border-top:1px solid var(--color-line)}.step-count{margin-left:auto;color:var(--color-faint);font-size:13px}.primary-button{background:var(--color-ink);color:var(--color-paper);border-radius:9px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer}.primary-button:disabled{opacity:.35;cursor:default}.plain-button{font-size:14px;cursor:pointer}.muted{color:var(--color-soft);font-size:15px;line-height:1.7}.muted code{font-size:13px;overflow-wrap:anywhere}.small-note{font-size:13px;line-height:1.6;color:var(--color-faint);margin-top:10px}.step-label{font-size:14px;font-weight:500;margin-top:24px;line-height:1.6}.step-label:first-child{margin-top:0}.text-link{display:inline-block;font-size:14px;margin-top:14px;text-decoration:underline;text-underline-offset:4px;cursor:pointer;color:var(--color-soft)}
+  .agent-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}.agent-choice{position:relative;display:flex;align-items:center;gap:8px;min-height:60px;padding:14px;border:1px solid var(--color-line);border-radius:10px;font-size:14px;font-weight:500;cursor:pointer}.agent-choice:hover{background:var(--color-wash)}.agent-choice input{position:absolute;opacity:0;width:1px;height:1px}.agent-choice:has(input:checked){border-color:var(--color-ink);background:var(--color-wash);box-shadow:inset 0 0 0 1px var(--color-ink)}.agent-choice:has(input:focus-visible){outline:2px solid var(--color-ink);outline-offset:3px}.agent-check{margin-left:auto;visibility:hidden}.agent-choice:has(input:checked) .agent-check{visibility:visible}.setup-progress{height:3px;background:var(--color-wash)}.setup-progress span{display:block;width:25%;height:100%;background:var(--color-ink)}
+  .connection-note{padding:18px;border:1px solid var(--color-line);border-radius:12px;background:var(--color-wash);margin-top:20px;font-size:14px;line-height:1.7}.connection-note p{color:var(--color-soft);margin-top:6px}.try-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}.try-card{padding:20px;border-radius:12px;background:var(--color-wash)}.try-card h3{font-size:15px;font-weight:600}
+  .status-pill,.category-pill{display:inline-flex;border-radius:999px;background:var(--color-wash);padding:5px 10px;font-size:12px;color:var(--color-soft)}.detail-name{font-family:var(--font-serif);font-size:30px;line-height:1.2;margin-bottom:28px}.detail-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.detail-fields .wide{grid-column:1/-1}.detail-fields dt{font-size:13px;color:var(--color-faint);margin-bottom:8px}.detail-fields dd{font-size:15px;line-height:1.6;overflow-wrap:anywhere}.detail-fields code{font-size:13px;background:var(--color-wash);padding:5px 7px;border-radius:5px}.category-row{display:flex;gap:8px;flex-wrap:wrap}.endpoint-usage{margin-top:28px;padding-top:24px;border-top:1px solid var(--color-line)}.endpoint-usage h3{font-size:15px;font-weight:600}.endpoint-tabs{display:flex;gap:6px;margin:18px 0 24px;border-bottom:1px solid var(--color-line)}.endpoint-tabs button{padding:12px 16px;border-bottom:2px solid transparent;font-size:14px;color:var(--color-faint);cursor:pointer}.endpoint-tabs button[aria-selected=true]{border-color:var(--color-ink);color:var(--color-ink)}.guide-link{margin-top:30px}button:focus-visible,a:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}
+  @media(max-width:560px){.agent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dialog-header{padding:18px}.dialog-header h2{font-size:17px}.dialog-body{padding:22px 18px}.dialog-footer{padding:18px}.endpoint-dialog{width:100vw;height:100dvh;margin:0;border-radius:0;border:0;max-width:none}.detail-fields{gap:20px}.detail-name{font-size:28px}.status-pill{font-size:11px}.account-actions{gap:12px}.account-actions .primary-button{min-width:130px}.try-grid{grid-template-columns:1fr}}
+</style>

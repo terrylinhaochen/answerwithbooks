@@ -1,0 +1,38 @@
+---
+import github from '@lobehub/icons-static-svg/icons/github.svg?url';
+import google from '@lobehub/icons-static-svg/icons/google-color.svg?url';
+---
+<div class="tool-auth" data-tool-auth>
+  <div class="auth-brand" aria-hidden="true">AWB</div>
+  <h3 data-auth-heading>Create your account</h3>
+  <p class="auth-welcome" data-auth-welcome>Welcome! A few details and you’re ready to go.</p>
+  <div class="social-options" aria-label="Social sign-in">
+    <button type="button" data-oauth-provider="github" disabled><img src={github} width="20" height="20" alt="" />GitHub</button>
+    <button type="button" data-oauth-provider="google" disabled><img src={google} width="20" height="20" alt="" />Google</button>
+  </div>
+  <p class="auth-status" data-oauth-status role="status" aria-live="polite"></p>
+  <div class="auth-divider"><span>or</span></div>
+  <form data-tools-signup-form>
+    <div class="name-fields">
+      <label>First name<input name="firstName" autocomplete="given-name" placeholder="First name" required maxlength="80" /></label>
+      <label>Last name<input name="lastName" autocomplete="family-name" placeholder="Last name" required maxlength="80" /></label>
+    </div>
+    <label>Username<input name="username" autocomplete="username" minlength="3" maxlength="30" pattern="[a-zA-Z0-9_\-]{3,30}" title="3–30 letters, numbers, underscores, or hyphens" required /></label>
+    <label>Email address<input name="email" type="email" autocomplete="email" placeholder="Enter your email address" required maxlength="254" /></label>
+    <label>Password<span class="password-field"><input id="tools-signup-password" name="password" type="password" autocomplete="new-password" placeholder="Enter your password" minlength="8" maxlength="128" required /><button type="button" data-toggle-password="tools-signup-password" aria-label="Show password" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></span></label>
+    <label class="auth-consent"><input name="consent" type="checkbox" required /><span>I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>, and to receive the AWB newsletter. Unsubscribe anytime.</span></label>
+    <button class="auth-submit" type="submit">Continue <span aria-hidden="true">→</span></button>
+  </form>
+  <form data-tools-login-form hidden>
+    <label>Email address<input name="email" type="email" autocomplete="email" placeholder="Enter your email address" required maxlength="254" /></label>
+    <label>Password<span class="password-field"><input id="tools-login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" maxlength="128" required /><button type="button" data-toggle-password="tools-login-password" aria-label="Show password" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></span></label>
+    <button class="auth-submit" type="submit">Sign in <span aria-hidden="true">→</span></button>
+    <button type="button" class="magic-link" data-tools-magic-link>Email me a sign-in link instead</button>
+  </form>
+  <p class="auth-status" data-tools-form-status role="status" aria-live="polite"></p>
+  <div class="auth-switch"><span data-auth-switch-copy>Already have an account?</span> <button type="button" data-tools-auth-mode="login">Sign in</button><button type="button" data-tools-auth-mode="signup" hidden>Sign up</button></div>
+</div>
+<style>
+  [hidden]{display:none!important}.tool-auth{max-width:400px;margin:auto}.auth-brand{display:grid;place-items:center;margin:0 auto 22px;width:52px;height:52px;border-radius:10px;background:var(--color-ink);color:var(--color-paper);font-size:16px;font-weight:750;letter-spacing:-.04em}.tool-auth h3{text-align:center;font-size:22px;font-weight:650;line-height:1.3}.auth-welcome{text-align:center;font-size:14px;color:var(--color-soft);margin-top:8px;line-height:1.5}.social-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}.social-options button{display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--color-line);border-radius:8px;min-height:42px;font-size:14px}.social-options button:disabled{opacity:.5;cursor:not-allowed}.social-note{text-align:center;font-size:11px;color:var(--color-faint);margin-top:8px}.auth-divider{display:flex;align-items:center;gap:18px;color:var(--color-faint);font-size:13px;margin:20px 0}.auth-divider:before,.auth-divider:after{content:'';height:1px;background:var(--color-line);flex:1}form>label,.name-fields{margin-bottom:18px}.tool-auth label{display:block;font-size:13px;font-weight:500;line-height:1.5}.tool-auth input:not([type=checkbox]){display:block;width:100%;min-width:0;height:42px;margin-top:7px;padding:9px 12px;border:1px solid var(--color-line);border-radius:8px;background:var(--color-paper);font-size:14px;color:var(--color-ink);box-shadow:0 1px 2px #00000004}.tool-auth input::placeholder{color:var(--color-faint)}.tool-auth input:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px}.name-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.password-field{display:block;position:relative}.password-field input{padding-right:44px!important}.password-field button{position:absolute;right:2px;top:1px;width:40px;height:40px;display:grid;place-items:center;color:var(--color-faint);cursor:pointer}.tool-auth .auth-consent{display:flex;align-items:flex-start;gap:9px;font-size:12px;font-weight:400;line-height:1.6;margin:22px 0}.auth-consent input{flex:none;width:16px;height:16px;accent-color:var(--color-ink);margin-top:2px}.auth-consent a{text-decoration:underline;text-underline-offset:3px}.auth-submit{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:43px;border-radius:8px;background:var(--color-ink);color:var(--color-paper);font-size:14px;font-weight:500;cursor:pointer}.auth-submit:disabled{opacity:.5;cursor:wait}.magic-link{display:block;margin:18px auto 0;text-decoration:underline;text-underline-offset:3px;font-size:13px;cursor:pointer}.auth-status{font-size:13px;line-height:1.6;color:var(--color-soft);margin-top:14px}.auth-status:empty{display:none}.auth-status[data-error=true]{color:#9e2929}.auth-switch{margin-top:25px;border-top:1px solid var(--color-line);padding-top:20px;text-align:center;color:var(--color-soft);font-size:13px}.auth-switch button{font-weight:600;color:var(--color-ink);cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}
+  @media(max-width:380px){.name-fields{grid-template-columns:1fr;gap:18px}}
+</style>

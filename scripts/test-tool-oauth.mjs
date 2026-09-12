@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import { createClient } from '@supabase/supabase-js';
+import { buildToolOAuthRequest, validateOAuthDestination, getOAuthProviders, storeOAuthConsent, readOAuthConsent, clearOAuthConsent, finishOAuthNewsletter } from '../src/lib/tool-oauth.mjs';
+
+const values = new Map();
+const storage = { getItem: key => values.get(key) || null, setItem: (key, value) => values.set(key, value), removeItem: key => values.delete(key) };
+const attemptId = '12345678-1234-4321-9876-123456789abc';
+const now = Date.now();
+const client = createClient('https://oauth-test.supabase.co', 'test-public-key', { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+for (const provider of ['google', 'github']) {
+  const request = buildToolOAuthRequest({ provider, agentId: 'openclaw', origin: 'http://127.0.0.1:4321', attemptId });
+  assert.equal(request.options.skipBrowserRedirect, true);
+  assert.doesNotMatch(request.options.scopes, /repo|calendar|drive|contacts/);
+  const { data, error } = await client.auth.signInWithOAuth(request);
+  assert.equal(error, null);
+  const destination = validateOAuthDestination(data.url, 'https://oauth-test.supabase.co', provider);
+  const url = new URL(destination);
+  assert.equal(url.searchParams.get('redirect_to'), request.options.redirectTo);
+  assert.equal(url.searchParams.get('provider'), provider);
+  storeOAuthConsent(storage, { attemptId, provider, agentId: 'openclaw', now });
+  const search = new URL(request.options.redirectTo).search;
+  const consent = readOAuthConsent(storage, search, now + 100);
+  assert.equal(consent.provider, provider);
+  assert.equal(readOAuthConsent(storage, search.replace(attemptId, 'different-attempt'), now), null);
+  assert.equal(readOAuthConsent(storage, search.replace('openclaw', 'codex'), now), null);
+  assert.equal(readOAuthConsent(storage, search, now + 31 * 60000), null);
+  assert.equal(readOAuthConsent(storage, search, now - 100), null);
+  assert.doesNotMatch([...values.values()].join(''), /email|password|access_token|refresh_token/);
+  const sent = [];
+  const user = { id: 'test-user', email: 'test@example.com', email_confirmed_at: '2026-09-11', identities: [{ provider }] };
+  assert.equal(await finishOAuthNewsletter({ consent, user, subscribe: async email => sent.push(email) }), true);
+  assert.deepEqual(sent, ['test@example.com']);
+  await assert.rejects(finishOAuthNewsletter({ consent, user: { ...user, email_confirmed_at: null }, subscribe: async () => assert.fail('Unverified user') }));
+  await assert.rejects(finishOAuthNewsletter({ consent, user: { ...user, identities: [] }, subscribe: async () => assert.fail('Wrong provider') }));
+  assert.equal(await finishOAuthNewsletter({ consent: null, user, subscribe: async () => assert.fail('No consent') }), false);
+  clearOAuthConsent(storage); assert.equal(readOAuthConsent(storage, search, now), null);
+}
+for (const provider of ['github;malicious', 'saml', '']) assert.throws(() => buildToolOAuthRequest({ provider, agentId: 'codex', origin: 'https://answerwithbooks.com' }));
+assert.throws(() => buildToolOAuthRequest({ provider: 'google', agentId: '../login', origin: 'https://answerwithbooks.com' }));
+assert.throws(() => buildToolOAuthRequest({ provider: 'google', agentId: 'codex', origin: 'http://untrusted.example' }));
+for (const destination of ['https://evil.example/auth/v1/authorize?provider=google', 'https://oauth-test.supabase.co/not-auth?provider=google', 'https://oauth-test.supabase.co/auth/v1/authorize?provider=github']) assert.throws(() => validateOAuthDestination(destination, 'https://oauth-test.supabase.co', 'google'));
+assert.deepEqual(await getOAuthProviders({ baseUrl: 'https://oauth-test.supabase.co', publicKey: 'test', fetcher: async () => new Response(JSON.stringify({ external: { google: true, github: false } })) }), { google: true, github: false });
+assert.deepEqual(await getOAuthProviders({ baseUrl: 'https://oauth-test.supabase.co', publicKey: 'test', fetcher: async () => new Response(JSON.stringify({ external: { google: 'true' } })) }), { google: false, github: false });
+await assert.rejects(getOAuthProviders({ baseUrl: 'https://oauth-test.supabase.co', publicKey: 'test', fetcher: async () => new Response('', { status: 503 }) }));
+console.log(JSON.stringify({ passed: true, realSdkOAuthUrls: 2, minimalScopes: true, callbackBinding: true, consentAndNewsletter: true, liveSignIns: 0 }));

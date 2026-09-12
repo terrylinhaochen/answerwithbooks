@@ -18,7 +18,8 @@ The site is maintained by AWB.
 ## Best Entry Points
 
 - Home: ${site}/
-- Agent skill: ${site}/skills/
+- Tools and agent connections: ${site}/tools/
+- Book skill: ${site}/tools/#book-skill
 - Guides: ${site}/answers/
 - Source books: ${site}/books/
 - Topics: ${site}/topics/

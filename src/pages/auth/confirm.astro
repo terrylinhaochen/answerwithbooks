@@ -1,11 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 ---
-<Base title="Confirm your email" description="Secure email sign-in for your AWB account." path="/auth/confirm/" robots="noindex, follow">
+<Base title="Confirm your account" description="Secure sign-in for your AWB account." path="/auth/confirm/" robots="noindex, follow">
   <section class="mx-auto max-w-lg px-5 py-20">
     <p class="awb-eyebrow">Your AWB account</p>
     <h1 class="mt-3 font-serif text-4xl" data-confirm-title>Signing you in…</h1>
-    <p class="mt-5 leading-relaxed text-soft" role="status" data-confirm-status>Please wait while we verify your email link.</p>
+    <p class="mt-5 leading-relaxed text-soft" role="status" data-confirm-status>Please wait while we confirm your sign-in.</p>
+    <button type="button" class="awb-pill awb-pill-primary mt-5" data-newsletter-retry hidden>Retry newsletter signup</button>
     <div class="mt-6 hidden" data-confirm-retry>
       <a href="/login/" class="awb-pill awb-pill-primary">Request a new link</a>
       <p class="mt-4 text-sm text-soft">Your newsletter preferences are unchanged. You can request another email link or use an existing password.</p>
@@ -15,9 +16,35 @@ import Base from '../../layouts/Base.astro';
     import { supabase } from '../../lib/supabase';
     import { consumeAuthCallback } from '../../lib/auth-callback';
     import { writeSignupFlow } from '../../lib/signup-session';
+    import { readToolsAuthContext } from '../../lib/tools-auth.mjs';
+    import { readOAuthConsent, clearOAuthConsent, finishOAuthNewsletter } from '../../lib/tool-oauth.mjs';
+    import { registerToolNewsletter } from '../../lib/tool-newsletter';
+    const toolsContext = readToolsAuthContext(location.pathname, location.search);
+    let consent: ReturnType<typeof readOAuthConsent> = null;
+    try { consent = readOAuthConsent(sessionStorage, location.search); } catch { /* Email sign-in does not require consent storage. */ }
     const title = document.querySelector<HTMLElement>('[data-confirm-title]')!;
     const status = document.querySelector<HTMLElement>('[data-confirm-status]')!;
     const retry = document.querySelector<HTMLElement>('[data-confirm-retry]')!;
+    const newsletterRetry = document.querySelector<HTMLButtonElement>('[data-newsletter-retry]')!;
+    if (toolsContext) retry.querySelector<HTMLAnchorElement>('a')!.href = toolsContext.returnTo;
+    const finishNewsletter = async () => {
+      newsletterRetry.disabled = true;
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) throw new Error('invalid-session');
+        await finishOAuthNewsletter({ consent, user: data.user, subscribe: registerToolNewsletter });
+        clearOAuthConsent(sessionStorage);
+        window.location.replace(toolsContext?.returnTo || '/profile/');
+      } catch {
+        title.textContent = 'Your account is ready.';
+        status.textContent = 'You’re signed in, but we couldn’t save your newsletter subscription. Retry, or continue to your tools.';
+        newsletterRetry.hidden = false;
+        retry.classList.remove('hidden');
+        retry.querySelector<HTMLAnchorElement>('a')!.textContent = 'Continue to tools';
+        retry.querySelector<HTMLElement>('p')!.textContent = 'Your account works independently of this newsletter retry.';
+      } finally { newsletterRetry.disabled = false; }
+    };
+    newsletterRetry.addEventListener('click', finishNewsletter);
     (async () => {
       try {
         const result = await consumeAuthCallback(supabase);
@@ -27,8 +54,10 @@ import Base from '../../layouts/Base.astro';
         const { data, error } = await supabase.auth.getUser();
         if (error || !data.user?.email_confirmed_at) throw new Error('unverified-session');
         writeSignupFlow(null);
-        window.location.replace('/profile/');
+        if (consent) { await finishNewsletter(); return; }
+        window.location.replace(toolsContext?.returnTo || '/profile/');
       } catch {
+        if (consent) { try { clearOAuthConsent(sessionStorage); } catch { /* Preserve the auth error. */ } }
         title.textContent = 'Let’s try a fresh link.';
         status.textContent = 'This link may have expired or already been used. Request another sign-in link to continue.';
         retry.classList.remove('hidden');

@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import { emailRedirectTo } from './auth-callback';
 import { readSignupFlow, writeSignupFlow, SIGNUP_FLOW_TTL, type SignupFlowState } from './signup-session';
+import { readToolsAuthContext } from './tools-auth.mjs';
 
 const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-newsletter-email]'));
 let state = readSignupFlow();
@@ -28,7 +29,7 @@ function render() {
     form.querySelector<HTMLElement>('.newsletter-email__note')!.hidden = !!state;
     input.disabled = !!state || subscribing;
     submit.disabled = !!state || subscribing || !url || !key;
-    submit.textContent = subscribing ? 'Saving…' : state ? 'Saved' : 'Subscribe';
+    submit.textContent = subscribing ? 'Saving…' : state ? 'Saved' : root.dataset.submitLabel || 'Subscribe';
     form.setAttribute('aria-busy', String(subscribing));
     panel.hidden = !state;
     root.querySelector<HTMLElement>('[data-account-login]')!.hidden = !!state;
@@ -39,7 +40,7 @@ function render() {
     const sent = state.stage === 'sent';
     root.querySelector<HTMLElement>('[data-account-title]')!.textContent = activating ? 'Finishing your signup…' : sent ? 'Check your email.' : 'Finish your signup.';
     root.querySelector<HTMLElement>('[data-account-copy]')!.textContent = sent
-      ? `We sent a verification link to ${state.email}. Confirm your email to go straight to your AWB profile—no password needed.`
+      ? `We sent a verification link to ${state.email}. Confirm your email to ${readToolsAuthContext(location.pathname, location.search) ? 'return to your tool setup' : 'go straight to your AWB profile'}—no password needed.`
       : `Your newsletter signup is saved. ${activating ? 'Sending' : 'Retry sending'} the verification link to ${state.email} to finish your AWB signup.`;
     const activate = root.querySelector<HTMLButtonElement>('[data-resend-verification]')!;
     const remaining = Math.max(0, Math.ceil((state.resendAt - Date.now()) / 1000));
@@ -63,12 +64,12 @@ async function sendVerification(root: HTMLElement) {
     const { data } = await supabase.auth.getSession();
     if (data.session?.user.email?.toLowerCase() === state.email && data.session.user.email_confirmed_at) {
       writeSignupFlow(null);
-      window.location.replace('/profile/');
+      window.location.replace(readToolsAuthContext(location.pathname, location.search)?.returnTo || '/profile/');
       return;
     }
     const { error } = await supabase.auth.signInWithOtp({
       email: state.email,
-      options: { shouldCreateUser: true, emailRedirectTo: emailRedirectTo('/auth/confirm/') },
+      options: { shouldCreateUser: true, emailRedirectTo: emailRedirectTo(readToolsAuthContext(location.pathname, location.search)?.confirm || '/auth/confirm/') },
     });
     // Cool down even after an ambiguous network failure: avoid duplicate emails.
     state = { ...state, resendAt: Date.now() + 60000 };

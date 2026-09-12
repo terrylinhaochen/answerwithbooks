@@ -1,0 +1,15 @@
+---
+import openclaw from '@lobehub/icons-static-svg/icons/openclaw.svg?url';
+import hermes from '@lobehub/icons-static-svg/icons/hermesagent.svg?url';
+import claude from '@lobehub/icons-static-svg/icons/claude.svg?url';
+import codex from '@lobehub/icons-static-svg/icons/codex.svg?url';
+import grok from '@lobehub/icons-static-svg/icons/grok.svg?url';
+import opencode from '@lobehub/icons-static-svg/icons/opencode.svg?url';
+import cursor from '@lobehub/icons-static-svg/icons/cursor.svg?url';
+const icons: Record<string, string> = { openclaw, hermes, 'claude-ai': claude, 'claude-code': claude, codex, 'grok-bot': grok, opencode, cursor };
+const { id } = Astro.props;
+---
+<span class="agent-icon" data-agent-icon={id} aria-hidden="true">
+  {icons[id] ? <img src={icons[id]} alt="" width="24" height="24" /> : <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg>}
+</span>
+<style>.agent-icon{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none}.agent-icon img{width:100%;height:100%;object-fit:contain}</style>

@@ -1,0 +1,19 @@
+<section class="tool-access" data-tool-access aria-labelledby="api-access-heading">
+  <div class="access-heading"><h3 id="api-access-heading">Your API keys</h3><button type="button" data-access-refresh>Refresh</button></div>
+  <p role="status" aria-live="polite" data-access-status>Checking research access…</p>
+  <form data-access-create hidden>
+    <label for="api-key-label">Key name</label>
+    <div class="key-row"><input id="api-key-label" name="label" value="My agent" required maxlength="60" autocomplete="off" /><button type="submit">Create API key</button></div>
+  </form>
+  <div data-access-secret hidden>
+    <p><strong>Save your key now.</strong> It cannot be shown again.</p>
+    <div class="key-row"><input type="password" readonly aria-label="New API key" autocomplete="off" data-key-secret /><button type="button" data-key-reveal>Show</button><button type="button" data-key-copy>Copy key</button></div>
+    <div class="key-actions"><button type="button" data-key-download>Download connection file</button><button type="button" data-key-check>Check connection</button></div>
+    <p class="access-note">Keep the file private. Load it into your agent’s secure environment; never paste keys into chat or commit them.</p>
+    <p role="status" aria-live="polite" data-key-status></p>
+  </div>
+  <ul data-access-keys aria-label="Your keys"></ul>
+</section>
+<style>
+  [hidden]{display:none!important}.tool-access{margin-top:24px;border-top:1px solid var(--color-line);padding-top:22px;font-size:14px;line-height:1.6}.access-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.access-heading h3{font-size:18px;font-weight:600}.tool-access button{cursor:pointer;font:inherit;white-space:nowrap;text-decoration:underline;text-underline-offset:3px}.tool-access button:disabled{opacity:.4;cursor:default}.tool-access button:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}.tool-access [role=status]{color:var(--color-soft);margin:10px 0;overflow-wrap:anywhere}.tool-access form{margin-top:18px}.tool-access label{display:block;margin-bottom:6px}.key-row{display:flex;align-items:center;gap:12px;margin:10px 0}.key-row input{width:100%;min-width:0;border:1px solid var(--color-line);border-radius:8px;padding:10px 12px;background:white;font:inherit}.key-row button[type=submit]{background:var(--color-ink);color:white;padding:10px 15px;border-radius:8px;text-decoration:none}.key-actions{display:flex;gap:20px;flex-wrap:wrap}.tool-access [data-access-secret]{background:var(--color-wash);padding:16px;border-radius:10px;margin-top:18px}.access-note{font-size:13px;color:var(--color-soft);margin-top:12px}.tool-access ul{list-style:none;padding:0;margin-top:18px}.tool-access :global(li){display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--color-line)}.tool-access :global(li span){overflow-wrap:anywhere}.tool-access :global(li small){display:block;color:var(--color-soft);font-size:12px}@media(max-width:480px){.key-row{flex-wrap:wrap}.key-row input{flex-basis:100%}}
+</style>

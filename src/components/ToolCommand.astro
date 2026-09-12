@@ -1,0 +1,20 @@
+---
+interface Props { value: string; label?: string; install?: boolean; dynamic?: string; compact?: boolean; }
+const { value, label = 'Copy', install = false, dynamic, compact = false } = Astro.props;
+---
+<div class="tool-command" data-tool-command>
+  <div class:list={['tool-command__row', { compact }]}>
+    <pre hidden={compact}><code data-command-text data-dynamic-command={dynamic} data-install-command={install ? '' : undefined}>{value}</code></pre>
+    <button type="button" data-copy-command data-copy-install={install ? '' : undefined} aria-label={label === 'Copy' ? 'Copy command' : label} disabled>{label}</button>
+  </div>
+  <p class="tool-command__status" data-copy-status data-install-status={install ? '' : undefined} role="status" aria-live="polite"></p>
+  <label class="tool-command__fallback" hidden data-copy-fallback>Select and copy
+    <textarea aria-label="Text to copy manually" rows="5" readonly></textarea>
+  </label>
+</div>
+<style>
+  pre[hidden]{display:none}.tool-command__row.compact{padding:0;border:0;background:transparent}.compact button{padding-left:0;text-decoration:underline;text-underline-offset:3px}
+  .tool-command{min-width:0;margin-top:12px}.tool-command__row{display:flex;align-items:flex-start;gap:12px;border:1px solid var(--color-line);border-radius:12px;background:var(--color-wash);padding:14px}
+  pre{flex:1;min-width:0;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.75}button{flex:none;min-height:32px;padding:4px 10px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer}button:hover{background:var(--color-paper)}button:disabled{opacity:.4;cursor:default}button:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px}
+  .tool-command__status{font-size:13px;color:var(--color-soft);margin-top:6px}.tool-command__status:empty{display:none}.tool-command__fallback{display:block;margin-top:12px;font-size:14px}.tool-command__fallback[hidden]{display:none}textarea{display:block;width:100%;margin-top:8px;border:1px solid var(--color-line);border-radius:8px;background:var(--color-paper);padding:10px;font:13px/1.6 monospace}
+</style>
