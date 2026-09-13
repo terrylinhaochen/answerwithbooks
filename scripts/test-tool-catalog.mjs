@@ -6,9 +6,9 @@ import { availableTools, bookSkillCommand, installSkillPath, apiPreviewOrigin, b
 import { toolsAuthPaths, readToolsAuthContext, isVerifiedToolsUser } from '../src/lib/tools-auth.mjs';
 const built = file => path.join(process.env.AWB_TEST_DIST || 'dist', file);
 
-const apiIds = ['github-leads', 'x-discourse', 'tinker-audience'];
+const apiIds = ['github-leads', 'x-discourse', 'tinker-audience', 'product-feedback-analysis'];
 assert.deepEqual(availableTools.filter(tool => tool.kind === 'API').map(tool => tool.id), apiIds);
-assert.equal(new Set(availableTools.map(tool => tool.id)).size, 4);
+assert.equal(new Set(availableTools.map(tool => tool.id)).size, 5);
 for (const origin of ['http://127.0.0.1:4321', 'http://localhost:4321', 'http://[::1]:4321', 'https://answerwithbooks.com', 'https://preview.example.com']) {
   assert.equal(buildInstallInstruction(origin), `Set up ${origin}${installSkillPath}`);
 }
@@ -85,7 +85,7 @@ function captureShell(command, program) {
   assert.equal(result.status, 0, result.stderr);
   return JSON.parse(result.stdout);
 }
-for (const id of apiIds) {
+for (const id of apiIds.filter(id => id !== 'product-feedback-analysis')) {
   const detail = getToolDetail(id);
   assert.equal(detail.endpoint, 'POST /v1/run');
   assert.equal(detail.price, 'Pricing not set');
@@ -98,6 +98,10 @@ for (const id of apiIds) {
   assert.equal(args.includes('+'), false, 'No stray continuation characters');
   assert.deepEqual(captureShell(buildCliCommand(id), 'npm'), ['run', 'call', '--', id, detail.example]);
 }
+assert.throws(() => buildToolRequest('product-feedback-analysis'), /authorized original feedback/);
+assert.throws(() => buildCliCommand('product-feedback-analysis'), /structured feedback/);
+const feedback = [{ id: 'source-1', text: 'An authorized original quote.', sourceType: 'customer_feedback' }];
+assert.deepEqual(buildToolRequest('product-feedback-analysis', feedback).feedback, feedback);
 const original = availableTools[0].example;
 try {
   availableTools[0].example = "Find developers whose project's focus is infrastructure; do not run $(anything).";
@@ -110,7 +114,7 @@ assert.ok(captureShell(pollApiCommand, 'curl').includes(`${apiPreviewOrigin}/v1/
 const html = fs.readFileSync(built('tools/index.html'), 'utf8');
 assert.match(html, /Browse and hire skills on demand\./);
 assert.equal((html.match(/<button\b[^>]*data-copy-install/g) || []).length, 1);
-assert.equal((html.match(/<article\b[^>]*data-capability=/g) || []).length, 4);
+assert.equal((html.match(/<article\b[^>]*data-capability=/g) || []).length, 5);
 assert.equal((html.match(/<main\b/g) || []).length, 1, 'Single page landmark');
 assert.ok(html.includes(`href="${installSkillPath}"`));
 assert.ok(html.includes(buildInstallInstruction()));
@@ -120,8 +124,9 @@ assert.ok(html.includes('id="book-skill"'), 'Existing homepage link still resolv
 for (const removed of ['data-agent-task-form', 'id="models"', 'id="source-tools"', 'data-book-skill-panel']) assert.ok(!html.includes(removed));
 assert.doesNotMatch(html, /name="api.?key"/i, 'Do not collect provider credentials');
 const secretInputs = html.match(/<input\b[^>]*type="password"[^>]*>/g) || [];
-assert.equal(secretInputs.length, 2, 'Only account password inputs, no API-key setup');
-assert.doesNotMatch(html, /data-key-secret|data-tool-account-access/);
+assert.equal(secretInputs.length, 3, 'Account passwords plus one read-only private connection key');
+assert.match(html, /type="password"[^>]*readonly[^>]*data-key-secret/);
+assert.match(html, /data-tool-account-access/);
 assert.ok(secretInputs.some(input => input.includes('autocomplete="new-password"')));
 assert.ok(secretInputs.some(input => input.includes('autocomplete="current-password"')));
 assert.doesNotMatch(html, /Download skill instructions/);
@@ -145,8 +150,8 @@ assert.match(client, /dialog\.showModal\(\)/);
 assert.doesNotMatch(html, /powered by Fireworks|fireworks\.svg|Research reasoning powered/i);
 assert.equal((html.match(/<input\b[^>]*name="tools-agent"/g) || []).length, 9);
 assert.equal((html.match(/<section\b[^>]*data-setup-step=/g) || []).length, 4);
-assert.equal((html.match(/<dialog\b[^>]*data-tool-detail=/g) || []).length, 4);
-assert.equal((html.match(/<button\b[^>]*data-open-tool=/g) || []).length, 4);
+assert.equal((html.match(/<dialog\b[^>]*data-tool-detail=/g) || []).length, 5);
+assert.equal((html.match(/<button\b[^>]*data-open-tool=/g) || []).length, 5);
 assert.equal((html.match(/role="tabpanel"/g) || []).length, 0);
 assert.equal((html.match(/role="tab"/g) || []).length, 0);
 for (const { id } of availableTools) {
@@ -155,7 +160,7 @@ for (const { id } of availableTools) {
 assert.match(html, /Hosted research skills are in private preview\. Signing in does not activate paid hiring/);
 assert.match(html, /Paid hiring is not available yet/);
 assert.doesNotMatch(html, /Connect your API|I’ve configured the API|data-api-ack|page does not verify the connection/);
-assert.equal((html.match(/data-try-tool=/g) || []).length, 4);
+assert.equal((html.match(/data-try-tool=/g) || []).length, 5);
 assert.match(html, /data-tools-auth-mode="signup"/);
 assert.match(html, /data-tools-auth-mode="login"/);
 assert.match(client, /supabase\.auth\.getUser\(\)/);
@@ -163,4 +168,4 @@ assert.match(client, /isVerifiedToolsUser\(result\.data\.user\)/);
 assert.match(fs.readFileSync('src/lib/tool-auth-form.ts', 'utf8'), /shouldCreateUser: false/);
 assert.match(fs.readFileSync('src/pages/auth/confirm.astro', 'utf8'), /toolsContext\?\.returnTo \|\| '\/profile\/'/);
 assert.match(fs.readFileSync('src/lib/newsletter-flow.ts', 'utf8'), /readToolsAuthContext\(location\.pathname, location\.search\)\?\.confirm/);
-console.log(JSON.stringify({ passed: true, listedSkills: 4, apiCapabilities: 3, agentOptions: 9, setupSteps: 4, detailPanels: 4, instructionTabs: 0, shellExamplesMockTested: true, originAwareSetup: true, installDocumentPackaged: true, bookSetupPreserved: true, browserInteractionTested: false, paidProviderCalls: 0 }, null, 2));
+console.log(JSON.stringify({ passed: true, listedSkills: 5, apiCapabilities: 4, agentOptions: 9, setupSteps: 4, detailPanels: 5, instructionTabs: 0, shellExamplesMockTested: true, originAwareSetup: true, installDocumentPackaged: true, bookSetupPreserved: true, browserInteractionTested: false, paidProviderCalls: 0 }, null, 2));

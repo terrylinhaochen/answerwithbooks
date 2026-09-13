@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Billing" description="Your AWB skill usage, balance, and payment history." path="/billing/" robots="noindex, follow">
+  <section class="awb-section py-12 sm:py-16" data-billing>
+    <header class="flex flex-wrap items-start justify-between gap-5"><div><a class="text-sm text-soft" href="/profile/">← Your account</a><h1 class="mt-4 font-serif text-4xl sm:text-5xl">Billing</h1><p class="mt-3 text-soft">One balance for your managed skills. Your own agent subscription is separate.</p></div><a href="/tools/" class="awb-pill">Browse skills →</a></header>
+    <p class="mt-8 rounded-xl bg-wash p-4 text-sm text-soft" data-billing-status role="status">Checking your account…</p>
+    <div class="mt-5" data-billing-signin hidden><a href="/login/" class="awb-pill awb-pill-primary">Sign in to view billing</a></div>
+    <div class="mt-8 grid gap-4 sm:grid-cols-3">{[['Available balance','availableCents'],['In progress','heldCents'],['Spent this month','spentThisMonthCents']].map(([label,key]) => <div class="awb-panel p-6"><p class="text-sm text-soft">{label}</p><p class="mt-3 font-serif text-3xl" data-billing-amount={key}>—</p></div>)}</div>
+    <div class="mt-6 space-y-3" data-topup-controls hidden>
+      <div class="flex flex-wrap items-center gap-3"><label class="text-sm" for="topup-amount" data-topup-label>Add credits</label><select id="topup-amount" class="awb-pill" data-topup-amount></select><button type="button" class="awb-pill awb-pill-primary" data-topup disabled>Continue to checkout</button></div>
+      <label class="flex items-start gap-2 text-sm text-soft"><input class="mt-1" type="checkbox" data-credit-consent /> <span>I agree to the <a class="underline" data-credit-terms target="_blank" rel="noopener noreferrer">credit terms</a>.</span></label>
+      <p class="text-xs text-faint" data-topup-help>AWB is a Crowdlisten product. Payments are collected by Crowdlisten.</p>
+    </div>
+    <button type="button" class="mt-4 text-sm underline text-soft" data-refresh-billing>Refresh balance</button>
+    <p class="mt-3 text-xs text-faint" data-payment-return hidden>Returning from checkout does not confirm a payment. Your balance updates after Stripe confirms it; refresh if it is still pending.</p>
+    <section class="mt-10 awb-panel p-5 sm:p-7" aria-label="Billing history">
+      <div class="billing-tabs" role="tablist" aria-label="Billing history">{[['usage','Usage'],['transactions','Transactions'],['receipts','Receipts']].map(([id,label], index) => <button type="button" id={`billing-tab-${id}`} role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls={`billing-panel-${id}`} tabindex={index === 0 ? 0 : -1} data-billing-tab={id}>{label}</button>)}</div>
+      {['usage','transactions','receipts'].map((id,index) => <div id={`billing-panel-${id}`} role="tabpanel" aria-labelledby={`billing-tab-${id}`} data-billing-panel={id} hidden={index !== 0}><p class="py-8 text-sm text-soft" data-billing-empty={id}>Connect your account to see your {id}.</p><ul class="billing-list" data-billing-list={id}></ul></div>)}
+    </section>
+    <p class="mt-6 text-sm leading-relaxed text-faint">A completed skill run is one usage item. Viewing a saved result or checking progress does not start another task. Failed tasks release their unused reservation.</p>
+    <dialog data-run-dialog class="awb-panel max-h-[85dvh] w-[min(720px,calc(100vw-32px))] overflow-auto p-6 m-auto"><div class="flex items-center justify-between gap-3"><h2 class="font-serif text-2xl">Task result</h2><button class="awb-pill" type="button" data-close-run aria-label="Close task result">×</button></div><div class="mt-5" data-run-content></div></dialog>
+  </section>
+</Base>
+<script>import '../lib/billing-page';</script>
+<style>.billing-tabs{display:flex;gap:8px;border-bottom:1px solid var(--color-line)}.billing-tabs button{padding:12px 14px;font-size:14px;border-bottom:2px solid transparent;cursor:pointer}.billing-tabs button[aria-selected=true]{border-color:var(--color-ink)}.billing-list :global(li){display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;border-bottom:1px solid var(--color-line)}.billing-list :global(small){display:block;color:var(--color-faint);margin-top:5px}.billing-list :global(button),.billing-list :global(a){text-decoration:underline;text-underline-offset:4px;cursor:pointer}dialog::backdrop{background:#0005;backdrop-filter:blur(3px)}[data-run-content] :global(p){margin:12px 0;color:var(--color-soft);line-height:1.7;overflow-wrap:anywhere}[data-run-content] :global(h3){font-weight:600;margin-top:20px}[data-run-content] :global(pre){white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;margin-top:14px}[hidden]{display:none!important}</style>

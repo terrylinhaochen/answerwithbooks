@@ -2,12 +2,14 @@ import { buildInstallInstruction, getAgentSetup, canAdvanceSetup } from './tool-
 import { readToolsAuthContext, toolsAuthPaths, isVerifiedToolsUser } from './tools-auth.mjs';
 import { supabase } from './supabase';
 import { setupToolAuth } from './tool-auth-form';
+import { setupToolAccountAccess } from './tool-account-access';
 
 const setup = document.querySelector<HTMLDialogElement>('#tools-setup')!;
 const dialogs = [...document.querySelectorAll<HTMLDialogElement>('[data-tools-dialog]')];
 let step = 0;
 let selectedAgent = '';
 const accountForm = setupToolAuth(setup.querySelector<HTMLElement>('[data-tool-auth]')!, () => selectedAgent);
+const accountAccess = setupToolAccountAccess(setup.querySelector<HTMLElement>('[data-tool-account-access]')!);
 let signedIn = false;
 let authRevision = 0;
 const resumeContext = readToolsAuthContext(location.pathname, location.search);
@@ -37,6 +39,7 @@ dialogs.forEach(dialog => {
     }
     if (dialog === setup && !setup.open) {
       accountForm.clearPasswords();
+      accountAccess.clearSecret();
       const url = new URL(location.href);
       for (const name of ['setup', 'agent']) url.searchParams.delete(name);
       history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
@@ -107,10 +110,12 @@ async function refreshAccount() {
     const result = sessionData.session ? await supabase.auth.getUser() : null;
     if (revision !== authRevision) return;
     signedIn = Boolean(result && !result.error && isVerifiedToolsUser(result.data.user));
+    accountAccess.setIdentity(signedIn ? result!.data.user!.id : null);
     setup.querySelector<HTMLElement>('[data-tools-auth-status]')!.textContent = '';
   } catch {
     if (revision !== authRevision) return;
     signedIn = false;
+    accountAccess.setIdentity(null);
     setup.querySelector<HTMLElement>('[data-tools-auth-status]')!.textContent = 'We couldn’t check your sign-in. Please try again.';
   }
   renderAccount();

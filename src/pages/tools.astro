@@ -1,10 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import githubIcon from '@lobehub/icons-static-svg/icons/github.svg?url';
-import exaIcon from '@lobehub/icons-static-svg/icons/exa.svg?url';
 import ToolDialogs from '../components/ToolDialogs.astro';
+import SkillTool from '../components/SkillTool.astro';
 import { availableTools, installSkillPath } from '../lib/tool-catalog.mjs';
-const icons = { 'github-leads': githubIcon, 'tinker-audience': exaIcon };
+import { jobFunctions } from '../lib/skill-discovery.mjs';
 ---
 
 <Base title="Skills" description="Browse specialized skills for research, audience insights, and book-backed decisions. Connect them to the agent you already use." path="/tools/">
@@ -12,7 +11,7 @@ const icons = { 'github-leads': githubIcon, 'tinker-audience': exaIcon };
     <header class="mb-8">
       <p class="awb-eyebrow">Skills</p>
       <h1 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">Browse and hire skills on demand.</h1>
-      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">Find the right expertise for your task. Bring it to the agent you already use.</p>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">Find expertise for your next task. Get useful results in the agent you already use.</p>
     </header>
 
     <section id="install" class="awb-panel scroll-mt-28 p-5 sm:p-7" aria-labelledby="install-heading">
@@ -24,27 +23,29 @@ const icons = { 'github-leads': githubIcon, 'tinker-audience': exaIcon };
     </section>
 
     <section id="available-tools" class="mt-10 scroll-mt-28" aria-labelledby="available-tools-heading">
-      <div class="mb-5 flex items-end justify-between gap-4"><h2 id="available-tools-heading" class="font-serif text-3xl">Explore skills</h2><span class="text-sm text-faint">{availableTools.length} skills</span></div>
-      <p class="mb-5 text-sm text-soft">Research skills are in private preview. Paid hiring is not available yet.</p>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-tool-capabilities>
+      <div class="mb-5 flex flex-wrap items-end justify-between gap-4"><h2 id="available-tools-heading" class="font-serif text-3xl">Find a skill for your work</h2><label class="skill-search"><span class="sr-only">Search skills</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input type="search" placeholder="Search tasks, outcomes, or tools" data-skill-search /></label></div>
+      <div class="role-filters" role="group" aria-label="Filter skills by job function">{jobFunctions.map(role => <button type="button" data-skill-role={role.id} aria-pressed={role.id === 'all' ? 'true' : 'false'} title={role.description}>{role.label}</button>)}</div>
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-2"><p class="text-sm text-soft">Managed skills are in private preview. Paid hiring is not available yet.</p><p class="text-sm text-faint" data-skill-count role="status">{availableTools.length} skills</p></div>
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-tool-capabilities>
         {availableTools.map(tool => (
           <article id={tool.id === 'book-answers' ? 'book-skill' : undefined} class="awb-panel min-w-0 scroll-mt-28 overflow-hidden" data-capability={tool.id}>
             <button type="button" class="tool-card" data-open-tool={tool.id} aria-haspopup="dialog" aria-controls={`tool-${tool.id}`} disabled>
-            <span class="flex items-center justify-between gap-3">
-              <span class="flex size-10 items-center justify-center rounded-lg bg-wash" aria-hidden="true">
-                {icons[tool.id as keyof typeof icons] ? <img src={icons[tool.id as keyof typeof icons]} width="25" height="25" alt="" /> : <span class:list={['font-semibold', tool.id === 'x-discourse' ? 'text-2xl' : 'text-xs']}>{tool.id === 'x-discourse' ? 'X' : 'AWB'}</span>}
-              </span>
-              <span class="text-xs font-medium text-faint">{tool.kind === 'API' ? 'Private preview' : 'Book skill'}</span>
-            </span>
+            <span class="flex items-center justify-between gap-3"><span class="text-sm font-medium">{tool.publisher}</span><span class="rounded-full bg-wash px-2 py-1 text-xs text-faint">{tool.kind === 'API' ? 'Private preview' : 'Your agent'}</span></span>
             <span class="mt-4 font-serif text-2xl leading-tight" role="heading" aria-level="3">{tool.name}</span>
             <span class="mt-3 flex-1 text-sm leading-relaxed text-soft">{tool.description}</span>
+            <span class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2" aria-label="Tools used"><span class="text-xs text-faint">Uses</span>{tool.tools.map(id => <SkillTool id={id} />)}</span>
+            <span class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-faint">{tool.roles.map(id => <span>{jobFunctions.find(role => role.id === id)?.label}</span>)}</span>
             {tool.scope && <span class="mt-2 text-xs leading-relaxed text-faint">{tool.scope}</span>}
-            <span class="mt-5 flex items-center justify-between gap-2 border-t border-line pt-4 text-sm"><span>Explore skill</span><span aria-hidden="true">↗</span></span>
+            <span class="mt-5 flex items-center justify-between gap-2 border-t border-line pt-4 text-sm"><span>View skill</span><span aria-hidden="true">→</span></span>
             </button>
           </article>
         ))}
       </div>
+      <div class="awb-panel p-8 text-center" data-skill-empty hidden><h3 class="font-serif text-2xl">No matching skills yet</h3><p class="mt-2 text-soft">Try another task or browse all job functions.</p><button type="button" class="awb-pill mt-4" data-skill-reset>Show all skills</button></div>
+      <nav class="mt-6 flex items-center justify-center gap-4" aria-label="Skills pagination" data-skill-pagination hidden><button type="button" class="awb-pill" data-skill-prev>Previous</button><span class="text-sm text-soft" data-skill-page></span><button type="button" class="awb-pill" data-skill-next>Next</button></nav>
     </section>
+
+    <section class="mt-12 border-t border-line pt-8" aria-label="How skills work"><div class="grid gap-6 sm:grid-cols-3"><div><p class="awb-eyebrow">01 · Connect</p><h2 class="mt-2 font-serif text-xl">Use your own agent</h2><p class="mt-2 text-sm text-soft">Keep the context and conversation you already have.</p></div><div><p class="awb-eyebrow">02 · Choose</p><h2 class="mt-2 font-serif text-xl">Pick the task to hand off</h2><p class="mt-2 text-sm text-soft">Your agent selects the skill. Managed skills use the tools needed for the job.</p></div><div><p class="awb-eyebrow">03 · Review</p><h2 class="mt-2 font-serif text-xl">Get a result you can use</h2><p class="mt-2 text-sm text-soft">Inspect the evidence, limits, and recommended next step.</p></div></div></section>
 
     <ToolDialogs />
   </div>
@@ -52,8 +53,10 @@ const icons = { 'github-leads': githubIcon, 'tinker-audience': exaIcon };
 
 <script>
   import '../lib/tools-page';
+  import '../lib/skills-page';
 </script>
 
 <style>
   .tool-card{display:flex;flex-direction:column;width:100%;height:100%;padding:20px;text-align:left;cursor:pointer;background:transparent;transition:background .15s ease}.tool-card:hover{background:var(--color-wash)}.tool-card:focus-visible{outline:2px solid var(--color-ink);outline-offset:-3px;border-radius:15px}.tool-card:disabled{cursor:default}.tool-card>span:first-child,.tool-card>span:last-child{width:100%}
+  .skill-search{display:flex;align-items:center;gap:10px;border:1px solid var(--color-line);border-radius:12px;padding:10px 14px;min-width:min(100%,320px);background:var(--color-paper)}.skill-search input{min-width:0;width:100%;outline:none;font-size:14px}.skill-search:focus-within{outline:2px solid var(--color-ink)}.role-filters{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0}.role-filters button{border:1px solid var(--color-line);border-radius:999px;padding:9px 14px;font-size:13px;cursor:pointer}.role-filters button[aria-pressed=true]{color:white;background:var(--color-ink);border-color:var(--color-ink)}[data-capability][hidden]{display:none}
 </style>

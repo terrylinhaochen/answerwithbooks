@@ -17,7 +17,7 @@ export function createToolAccessClient(origin, getSession, request = fetch) {
     if (!origin) throw new Error('Research API access is not enabled on this deployment yet.');
     let response;
     try {
-      response = await request(origin + path, { ...init, headers: { Authorization: `Bearer ${token}`, ...(init.body ? { 'Content-Type': 'application/json' } : {}) }, redirect: 'error', signal: AbortSignal.timeout(12000), credentials: 'omit' });
+      response = await request(origin + path, { ...init, headers: { ...init.headers, Authorization: `Bearer ${token}`, ...(init.body ? { 'Content-Type': 'application/json' } : {}) }, redirect: 'error', signal: AbortSignal.timeout(12000), credentials: 'omit' });
     } catch { throw new Error('Could not connect to the research API. Check that it is running, then retry.'); }
     if (response.status === 204) return null;
     let data;
@@ -33,8 +33,17 @@ export function createToolAccessClient(origin, getSession, request = fetch) {
         KEY_RATE_LIMIT: 'Wait ten minutes before creating another key.',
         UNAUTHORIZED: 'This key is no longer active, or research access has been removed.',
         NOT_FOUND: 'This key no longer exists. Refresh your keys.',
+        BILLING_DISABLED: 'Payments are not enabled yet. No payment was taken.',
+        INVALID_TOPUP: 'Choose one of the listed credit amounts.',
+        POLICY_CONFIRMATION_REQUIRED: 'Review and accept the current credit terms before checkout.',
+        CHECKOUT_EXPIRED: 'That checkout is no longer open. Refresh billing before starting another.',
+        CHECKOUT_RATE_LIMIT: 'Wait before starting another checkout.',
+        PAYMENT_REVIEW: 'Your payments are under review. Contact support before adding funds or running another skill.',
+        INSUFFICIENT_FUNDS: 'Add funds before starting this task.',
       };
-      throw new Error(messages[data?.error?.code] || 'The request did not finish. Refresh your keys before trying again.');
+      const error = new Error(messages[data?.error?.code] || 'The request did not finish. Please refresh and try again.');
+      error.code = data?.error?.code;
+      throw error;
     }
     return data;
   }
@@ -44,6 +53,12 @@ export function createToolAccessClient(origin, getSession, request = fetch) {
     return call(path, session.access_token, init);
   }
   return {
+    billing: id => account('/account/billing', id),
+    checkout: (id, amountCents, requestKey, acceptedPolicyVersion) => account('/account/billing/checkout', id, { method: 'POST', headers: { 'Idempotency-Key': requestKey }, body: JSON.stringify({ amountCents, acceptedPolicyVersion }) }),
+    run: (id, runId) => {
+      if (!/^[\da-f-]{36}$/i.test(runId)) throw new Error('Invalid task identifier.');
+      return account(`/account/runs/${runId}`, id);
+    },
     list: id => account('/account/keys', id),
     create: (id, label) => account('/account/keys', id, { method: 'POST', body: JSON.stringify({ label }) }),
     revoke: (userId, keyId) => {

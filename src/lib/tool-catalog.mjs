@@ -1,13 +1,9 @@
+import skills from '../data/skills.json' with { type: 'json' };
 export const bookSkillCommand = 'npx answer-with-books install --skill --api';
 export const installSkillPath = '/tools/awb-tools/SKILL.md';
 export const apiPreviewOrigin = 'http://127.0.0.1:4318';
 
-export const availableTools = [
-  { id: 'github-leads', name: 'GitHub lead research', provider: 'GitHub', kind: 'API', description: 'Find relevant builders and projects, with evidence behind each lead.', guide: '/guides/github-lead-research/', example: 'Find developers building inference infrastructure who could benefit from our model-serving platform. Separate project fit from buying intent.' },
-  { id: 'x-discourse', name: 'X discourse analysis', provider: 'X', kind: 'API', description: 'Turn recent conversations into sourced themes and useful questions.', guide: '/guides/x-discourse-analysis/', example: 'What recurring frustrations do developers describe about AI coding tools this week? Separate first-hand experience from promotion and reposts.' },
-  { id: 'tinker-audience', name: 'Audience enrichment', provider: 'GitHub + Exa', kind: 'API', description: 'Verify GitHub-interest signals and enrich profiles with supporting sources.', scope: 'Currently scoped to Tinker/Cookbook interest.', guide: '/guides/audience-enrichment/', example: 'Build a Tinker/Cookbook-interest audience for a model-training platform campaign. Explain professional fit and missing evidence; return a reviewable table.' },
-  { id: 'book-answers', name: 'Book-backed answers', provider: 'AWB shelf', kind: 'Book skill', description: 'Apply useful book ideas to the problem you are working through.', guide: '/books/', example: 'Help me decide what to test before committing to a new product direction. Use relevant books and separate evidence from assumptions.' },
-];
+export const availableTools = skills;
 
 export const agentOptions = [
   { id: 'openclaw', name: 'OpenClaw', method: 'skill', available: true },
@@ -21,27 +17,13 @@ export const agentOptions = [
   { id: 'other', name: 'Other', method: 'skill', available: true },
 ];
 
-const categories = {
-  'github-leads': ['Growth', 'Sales'],
-  'x-discourse': ['Product', 'Marketing'],
-  'tinker-audience': ['Growth', 'Research'],
-  'book-answers': ['Learning', 'Decisions'],
-};
-
-const deliverables = {
-  'github-leads': 'A focused shortlist with public profiles, relevant projects, reasons for fit, and questions to investigate next.',
-  'x-discourse': 'A sourced briefing of recurring themes, disagreements, and first-hand feedback, with the sample limits made clear.',
-  'tinker-audience': 'A reviewable audience table with identity-linked sources, qualification notes, and a spreadsheet-ready export.',
-  'book-answers': 'A book-backed perspective on your question, with useful ideas, their limits, and a practical next step.',
-};
-
 export function getToolDetail(id) {
   const tool = availableTools.find(item => item.id === id);
   if (!tool) throw new Error('Choose a listed tool.');
   return {
-    ...tool, categories: categories[id], deliverable: deliverables[id],
+    ...tool,
     endpoint: tool.kind === 'API' ? 'POST /v1/run' : null,
-    status: tool.kind === 'API' ? 'Local preview' : 'Book skill',
+    status: tool.kind === 'API' ? 'Private preview' : 'Book skill',
     price: tool.kind === 'API' ? 'Pricing not set' : 'No research API charge',
   };
 }
@@ -69,9 +51,13 @@ export function canAdvanceSetup(step, agentId, signedIn) {
   return step === 1 || signedIn === true;
 }
 
-export function buildToolRequest(id) {
+export function buildToolRequest(id, feedback) {
   const tool = getToolDetail(id);
   if (!tool.endpoint) throw new Error('Book-backed answers use the separate book skill.');
+  if (id === 'product-feedback-analysis') {
+    if (!Array.isArray(feedback) || !feedback.length) throw new Error('Supply authorized original feedback records for CrowdListen analysis.');
+    return { capability: tool.id, request: tool.example, feedback };
+  }
   return { capability: tool.id, request: tool.example };
 }
 
@@ -103,6 +89,7 @@ export function buildApiCommand(id) {
 export function buildCliCommand(id) {
   const tool = getToolDetail(id);
   if (!tool.endpoint) return bookSkillCommand;
+  if (id === 'product-feedback-analysis') throw new Error('CrowdListen requires structured feedback; use the agent skill with authorized records.');
   return `npm run call -- ${tool.id} '${tool.example.replaceAll("'", "'\\''")}'`;
 }
 
@@ -119,7 +106,7 @@ export function buildExamplePrompt(id) {
   const tool = availableTools.find(item => item.id === id);
   if (!tool) throw new Error('Choose a listed tool.');
   const route = tool.kind === 'API'
-    ? `Use the AWB skill to call ${tool.id}. Check that research access is available before starting. If it is not connected, explain what is missing instead of simulating a result.`
+    ? `Use the AWB skill to call ${tool.id}. Check that research access is available before starting. If payment is enabled, show me the current price and confirm it before starting unless I have already approved that charge. If it is not connected, explain what is missing instead of simulating a result.`
     : `Use the AWB book skill. If it is not installed, explain the setup needed. This task uses the published book shelf and does not require research access.`;
   return `${route}\n\n${tool.example}\n\nReturn sources and limitations. Do not send outreach or publish to another system.`;
 }

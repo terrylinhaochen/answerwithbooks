@@ -53,12 +53,34 @@ test('errors are sanitized and key creation is never retried automatically', asy
     attempts++;
     return Response.json({ error: { code: 'UNKNOWN', message: 'private provider detail' } }, { status: 500 });
   });
-  await assert.rejects(client.create('u', 'Key'), error => /Refresh your keys/.test(error.message) && !error.message.includes('private provider'));
+  await assert.rejects(client.create('u', 'Key'), error => /refresh and try again/.test(error.message) && !error.message.includes('private provider'));
   assert.equal(attempts, 1);
   const pending = createToolAccessClient('https://api.example.com', session, async () => Response.json({ error: { code: 'ACCESS_PENDING' } }, { status: 403 }));
   await assert.rejects(pending.create('u', 'Key'), /requires approval/);
   const disabled = createToolAccessClient(null, session, async () => { throw new Error('must not fetch'); });
   await assert.rejects(disabled.list('u'), /not enabled/);
+});
+
+test('checkout carries explicit policy consent and a stable idempotency key with the account session', async () => {
+  const calls = [];
+  const session = async () => ({ user: { id: 'u' }, access_token: 'account-token' });
+  const client = createToolAccessClient('https://api.example.com', session, async (url, init) => { calls.push({ url, init }); return Response.json({ url: 'https://checkout.stripe.com/c/pay/fixture' }); });
+  await client.checkout('u', 1000, 'checkout-fixture', 'policy-v1');
+  assert.equal(calls[0].url, 'https://api.example.com/account/billing/checkout');
+  assert.equal(calls[0].init.headers.Authorization, 'Bearer account-token');
+  assert.equal(calls[0].init.headers['Idempotency-Key'], 'checkout-fixture');
+  assert.deepEqual(JSON.parse(calls[0].init.body), { amountCents: 1000, acceptedPolicyVersion: 'policy-v1' });
+  assert.equal(calls[0].init.redirect, 'error');
+  const expired = createToolAccessClient('https://api.example.com', session, async () => Response.json({ error: { code: 'CHECKOUT_EXPIRED' } }, { status: 409 }));
+  await assert.rejects(expired.checkout('u', 1000, 'expired-key', 'policy-v1'), error => error.code === 'CHECKOUT_EXPIRED' && /no longer open/.test(error.message));
+  const source = readFileSync('src/lib/billing-page.ts', 'utf8');
+  assert.match(source, /billing\.mode === 'live'/);
+  assert.match(source, /!consent\.checked/);
+  assert.match(source, /Date\.now\(\) - saved\.createdAt < 23 \* 3600000/);
+  const page = readFileSync('src/pages/billing.astro', 'utf8');
+  assert.match(page, /data-topup disabled/);
+  assert.match(page, /Returning from checkout does not confirm a payment/);
+  assert.doesNotMatch(page, /type="checkbox"[^>]*checked/);
 });
 
 test('one-time key controls clear secrets on close and identity changes', () => {
