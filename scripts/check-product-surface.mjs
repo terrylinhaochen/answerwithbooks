@@ -2,17 +2,28 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { guideCovers } from '../src/lib/guide-covers.mjs';
+import { availableTools, agentOptions } from '../src/lib/tool-catalog.mjs';
 
 const dist = process.env.AWB_TEST_DIST || 'dist';
 const read = route => fs.readFileSync(path.join(dist, route, 'index.html'), 'utf8');
 const skills = read('tools');
 assert.match(skills, /Browse and hire skills on demand\./);
-assert.equal((skills.match(/data-open-tool=/g) || []).length, 4);
-assert.equal((skills.match(/data-tool-detail=/g) || []).length, 4);
-assert.doesNotMatch(skills, /data-endpoint-tab|data-endpoint-panel|data-key-secret/);
+const skillIds = availableTools.map(tool => tool.id);
+assert.deepEqual(skillIds, ['github-leads', 'x-discourse', 'tinker-audience', 'product-feedback-analysis', 'book-answers']);
+assert.deepEqual([...skills.matchAll(/data-open-tool="([^"]+)"/g)].map(match => match[1]), skillIds);
+assert.deepEqual([...skills.matchAll(/data-tool-detail="([^"]+)"/g)].map(match => match[1]), skillIds);
+assert.doesNotMatch(skills, /data-endpoint-tab|data-endpoint-panel/);
+assert.equal((skills.match(/name="tools-agent"/g) || []).length, agentOptions.length);
+const keyField = skills.match(/<input\b[^>]*data-key-secret[^>]*>/)?.[0];
+assert.ok(keyField, 'Provide a masked field for the one-time personal connection key');
+assert.match(keyField, /type="password"/);
+assert.doesNotMatch(keyField, /\bvalue=/, 'Never include a connection key in the deployment artifact');
+assert.match(skills, /<div\b[^>]*data-access-secret[^>]*\bhidden\b/);
 assert.match(skills, /Paid hiring is not available yet/);
-assert.equal((skills.match(/data-task-card/g) || []).length >= 4, true);
-assert.doesNotMatch(skills, /A task to start with|Copy task for your agent/);
+assert.equal((skills.match(/data-task-card/g) || []).length, availableTools.length);
+assert.doesNotMatch(skills, /A task to start with/);
+assert.equal((skills.match(/<h3\b[^>]*>Copy task for your agent<\/h3>/g) || []).length, availableTools.length);
+assert.equal((skills.match(/Read the full guide/g) || []).length, availableTools.filter(tool => tool.kind === 'API').length);
 for (const route of ['tools', 'books', 'guides']) {
   const html = read(route);
   const nav = html.match(/<nav\b[^>]*aria-label="Main"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
@@ -45,4 +56,4 @@ for (const route of ['guides', 'answers']) {
     assert.ok(read(`guides/${slug}`), 'Keep old direct links working');
   }
 }
-console.log(JSON.stringify({ passed: true, skills: 4, illustratedGuides: 3, navigation: 'Books, Guides, Skills', deploymentAssetsPresent: true }, null, 2));
+console.log(JSON.stringify({ passed: true, skills: availableTools.length, illustratedGuides: Object.keys(guideCovers).length, navigation: 'Books, Guides, Skills', deploymentAssetsPresent: true, connectionKeyAbsentFromArtifact: true }, null, 2));

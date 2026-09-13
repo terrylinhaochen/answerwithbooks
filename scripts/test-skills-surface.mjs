@@ -18,7 +18,7 @@ try {
     assert.equal((await page.goto(`${base}/tools/`)).status(), 200);
     assert.equal(await page.locator('h1').innerText(), 'Browse and hire skills on demand.');
     assert.deepEqual((await page.locator('nav[aria-label="Main"] a').allTextContents()).map(t => t.trim()), ['Books', 'Guides', 'Skills']);
-    assert.equal(await page.locator('[data-open-tool]').count(), 4);
+    assert.equal(await page.locator('[data-open-tool]').count(), availableTools.length);
     assert.doesNotMatch(await page.locator('[data-tool-capabilities]').innerText(), /POST \/v1|CLI|One API|curl /);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     await page.screenshot({ path: `/tmp/awb-skills-${width}.png` });
@@ -34,7 +34,9 @@ try {
       const taskCard = detail.locator('[data-task-card]');
       assert.equal(await taskCard.count(), 1);
       assert.ok(await taskCard.getByText(tool.example, { exact: true }).isVisible());
-      assert.doesNotMatch(await detail.innerText(), /A task to start with|Copy task for your agent/);
+      assert.doesNotMatch(await detail.innerText(), /A task to start with/);
+      assert.ok(await detail.getByRole('heading', { name: 'Copy task for your agent', exact: true }).isVisible());
+      assert.ok(await detail.getByRole('link', { name: tool.kind === 'API' ? 'Read the full guide' : 'Explore the books' }).isVisible());
       assert.equal(await taskCard.getByRole('link').count(), 0, 'Guide link is separate from the task card');
       await taskCard.getByRole('button', { name: 'Copy task', exact: true }).click();
       await page.waitForFunction(() => [...document.querySelectorAll('dialog[open] [data-copy-status]')].some(el => el.textContent === 'Copied.'));
@@ -70,7 +72,10 @@ try {
       }
       await setup.locator('[data-setup-next]').click();
       assert.ok(await setup.locator('[data-tools-signup-form]').isVisible());
-      assert.equal(await setup.locator('[data-key-secret]').count(), 0);
+      assert.equal(await setup.locator('[data-key-secret]').count(), 1);
+      assert.equal(await setup.locator('[data-key-secret]').inputValue(), '');
+      assert.equal(await setup.locator('[data-key-secret]').getAttribute('type'), 'password');
+      assert.equal(await setup.locator('[data-access-secret]').isVisible(), false);
       for (const provider of ['github', 'google']) assert.ok(await setup.locator(`[data-oauth-provider="${provider}"]`).isVisible());
       await setup.locator('[data-tools-auth-mode="login"]').click();
       assert.ok(await setup.locator('[data-tools-login-form]').isVisible());
@@ -81,7 +86,7 @@ try {
     }
   }
   assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ passed: true, skills: 4, desktopAndMobile: true, agentSetup: ['Codex', 'Claude.ai', 'Grok Bot'], clipboard: true, focusRestoration: true, accountForms: true, realSignups: 0, researchCalls: 0 }, null, 2));
+  console.log(JSON.stringify({ passed: true, skills: availableTools.length, desktopAndMobile: true, agentSetup: ['Codex', 'Claude.ai', 'Grok Bot'], clipboard: true, focusRestoration: true, accountForms: true, realSignups: 0, researchCalls: 0 }, null, 2));
 } finally {
   await browser.close();
 }
