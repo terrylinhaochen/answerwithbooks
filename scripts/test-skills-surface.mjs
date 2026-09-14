@@ -17,6 +17,7 @@ try {
     await page.setViewportSize({ width, height: 1000 });
     assert.equal((await page.goto(`${base}/tools/`)).status(), 200);
     assert.equal(await page.locator('h1').innerText(), 'Browse and hire skills on demand.');
+    assert.equal(await page.locator('section[aria-label="How skills work"]').count(), 0, 'The setup steps belong in onboarding, not a duplicate page section');
     assert.deepEqual((await page.locator('nav[aria-label="Main"] a').allTextContents()).map(t => t.trim()), ['Books', 'Guides', 'Skills']);
     assert.equal(await page.locator('[data-open-tool]').count(), availableTools.length);
     assert.doesNotMatch(await page.locator('[data-tool-capabilities]').innerText(), /POST \/v1|CLI|One API|curl /);
@@ -38,6 +39,9 @@ try {
       assert.ok(await detail.getByRole('heading', { name: 'Copy task for your agent', exact: true }).isVisible());
       assert.ok(await detail.getByRole('link', { name: tool.kind === 'API' ? 'Read the full guide' : 'Explore the books' }).isVisible());
       assert.equal(await taskCard.getByRole('link').count(), 0, 'Guide link is separate from the task card');
+      assert.equal(await detail.locator('.skill-resource').count(), 1, 'One distinct guide resource row');
+      assert.equal(await detail.locator('.skill-connection-footer [data-open-setup]').count(), 1, 'Connection has its own primary-action footer');
+      assert.doesNotMatch(await detail.innerText(), /Choose your agent, then give it a task/);
       await taskCard.getByRole('button', { name: 'Copy task', exact: true }).click();
       await page.waitForFunction(() => [...document.querySelectorAll('dialog[open] [data-copy-status]')].some(el => el.textContent === 'Copied.'));
       assert.equal(await page.evaluate(() => navigator.clipboard.readText()), buildExamplePrompt(tool.id));

@@ -9,11 +9,6 @@ export function readAdditions(userId?: string): BookAddition[] {
 export function rememberAddition(addition: BookAddition, userId?: string) {
   const records = readAdditions(userId).filter((item) => !sameBook(item, addition));
   localStorage.setItem(additionsKey(userId), JSON.stringify([addition, ...records].slice(0, 100)));
-  if (addition.slug) {
-    let saved: string[] = [];
-    try { const value = JSON.parse(localStorage.getItem('awb:saved-books') || '[]'); if (Array.isArray(value)) saved = value; } catch { /* Start a clean shelf if storage was malformed. */ }
-    localStorage.setItem('awb:saved-books', JSON.stringify([...new Set([...saved, addition.slug])]));
-  }
   window.dispatchEvent(new CustomEvent('awb:book-added'));
 }
 

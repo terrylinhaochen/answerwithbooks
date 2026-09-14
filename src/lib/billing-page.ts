@@ -1,6 +1,8 @@
 import { supabase } from './supabase';
 import { createToolAccessClient, resolveResearchOrigin } from './tool-access-client.mjs';
 import { availableTools } from './tool-catalog.mjs';
+import { copyText } from './copy-text.mjs';
+import { formatRunResult } from './run-result.mjs';
 const root = document.querySelector<HTMLElement>('[data-billing]')!;
 const status = root.querySelector<HTMLElement>('[data-billing-status]')!;
 const client = createToolAccessClient(resolveResearchOrigin(import.meta.env.PUBLIC_CAPABILITY_API_URL, location.origin), async () => (await supabase.auth.getSession()).data.session);
@@ -24,8 +26,22 @@ root.querySelector<HTMLElement>('[data-payment-return]')!.hidden = new URL(locat
 const money = (cents: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
 const text = (tag: string, content: string) => { const el = document.createElement(tag); el.textContent = content; return el; };
 const dialog = root.querySelector<HTMLDialogElement>('[data-run-dialog]')!;
+let copyResult = { text: '', json: '' };
+const copyResultStatus = root.querySelector<HTMLElement>('[data-run-copy-status]')!;
+const copyManual = root.querySelector<HTMLTextAreaElement>('[data-run-copy-manual]')!;
+function clearResultCopy() {
+  copyResult = { text: '', json: '' }; copyResultStatus.textContent = ''; copyManual.value = ''; copyManual.hidden = true;
+  root.querySelectorAll<HTMLButtonElement>('[data-copy-run]').forEach(button => { button.disabled = true; });
+}
+dialog.addEventListener('close', clearResultCopy);
+root.querySelectorAll<HTMLButtonElement>('[data-copy-run]').forEach(button => button.addEventListener('click', async () => {
+  const value = copyResult[button.dataset.copyRun as 'text' | 'json']; const current = revision;
+  if (!value || !dialog.open) return;
+  try { await copyText(value, dialog); if (current === revision && dialog.open && Object.values(copyResult).includes(value)) copyResultStatus.textContent = button.dataset.copyRun === 'json' ? 'Structured result copied.' : 'Result, sources, and limitations copied.'; }
+  catch { if (current !== revision || !dialog.open || !Object.values(copyResult).includes(value)) return; copyManual.value = value; copyManual.hidden = false; copyManual.focus(); copyManual.select(); copyResultStatus.textContent = 'Copy was blocked. Select and copy the text below.'; }
+}));
 root.querySelector('[data-close-run]')!.addEventListener('click', () => dialog.close());
-function wipe() { dialog.close(); policyVersion = ''; consent.checked = false; checkoutButton.disabled = true; root.querySelector('[data-run-content]')!.replaceChildren(); root.querySelectorAll('[data-billing-list]').forEach(el => el.replaceChildren()); root.querySelectorAll('[data-billing-empty]').forEach(el => { (el as HTMLElement).hidden = false; el.textContent = 'Connect your account to see your history.'; }); root.querySelectorAll('[data-billing-amount]').forEach(el => { el.textContent = '—'; }); root.querySelector<HTMLElement>('[data-topup-controls]')!.hidden = true; }
+function wipe() { dialog.close(); clearResultCopy(); policyVersion = ''; consent.checked = false; checkoutButton.disabled = true; root.querySelector('[data-run-content]')!.replaceChildren(); root.querySelectorAll('[data-billing-list]').forEach(el => el.replaceChildren()); root.querySelectorAll('[data-billing-empty]').forEach(el => { (el as HTMLElement).hidden = false; el.textContent = 'Connect your account to see your history.'; }); root.querySelectorAll('[data-billing-amount]').forEach(el => { el.textContent = '—'; }); root.querySelector<HTMLElement>('[data-topup-controls]')!.hidden = true; }
 async function load() {
   const current = ++revision; wipe(); userId = null;
   root.querySelector<HTMLElement>('[data-billing-signin]')!.hidden = true;
@@ -69,7 +85,7 @@ async function load() {
             const requestRevision = revision; button.disabled = true;
             try {
               const run = await client.run(userId, row.id); if (requestRevision !== revision) return;
-              const content = root.querySelector('[data-run-content]')!; content.replaceChildren();
+              const content = root.querySelector('[data-run-content]')!; content.replaceChildren(); clearResultCopy();
               content.append(text('p', `Task ${run.id} · ${run.status}`));
               if (run.result) {
                 content.append(text('h3', run.result.answer.title), text('p', run.result.answer.summary));
@@ -77,6 +93,8 @@ async function load() {
                 for (const limitation of run.result.answer.limitations) content.append(text('p', limitation));
                 content.append(text('h3', 'Sources and structured result'), text('pre', JSON.stringify(run.result, null, 2)));
               } else content.append(text('p', run.error?.message || 'This task is still in progress. Reopen its result to check again.'));
+              copyResult = { text: formatRunResult(run), json: JSON.stringify(run, null, 2) };
+              root.querySelectorAll<HTMLButtonElement>('[data-copy-run]').forEach(button => { button.disabled = !copyResult[button.dataset.copyRun as 'text' | 'json']; });
               dialog.showModal();
             } catch (error) { if (requestRevision === revision) status.textContent = (error as Error).message; }
             finally { button.disabled = false; }

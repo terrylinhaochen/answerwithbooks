@@ -1,217 +1,61 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import BookAdditions from '../components/BookAdditions.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
+import AccountNav from '../components/AccountNav.astro';
 
-// Build-time book metadata, shipped as a data island for the client script.
-const books = await getCollection('books');
-const answers = await getCollection('answers');
-const bookMeta = Object.fromEntries(
-  books.map((b) => [b.id, { title: b.data.title, author: b.data.author }])
-);
-const answerMeta = Object.fromEntries(
-  answers.map((answer) => [
-    answer.id,
-    {
-      question: answer.data.question,
-      description: answer.data.description,
-      books: answer.data.books,
-    },
-  ])
-);
 ---
 
 <Base
   title="Profile"
-  description="Your saved books, guides, reading activity, and preferences on AWB."
+  description="Your account, reading activity, and preferences on AWB."
   path="/profile/"
   robots="noindex, follow"
 >
-  <section class="awb-section pt-16 pb-24">
+  <section class="awb-section profile-page">
+    <AccountNav active="profile" />
     <div id="library-loading" class="text-soft">Checking your session…</div>
 
     <div id="library-content" class="hidden">
-      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+      <header class="profile-header">
         <div>
-          <p class="awb-eyebrow">Profile</p>
-          <h1 class="mt-3 max-w-lg font-serif text-5xl leading-tight">
+          <p class="awb-eyebrow">Your account</p>
+          <h1 class="profile-title">
             Welcome back<span id="user-name"></span>.
           </h1>
-          <p class="mt-5 max-w-lg text-lg leading-relaxed text-soft">
-            Your saved books, useful guides, and reading activity—all in one place.
-          </p>
-          <div class="mt-7 flex flex-wrap gap-3"><a href="/books/" class="awb-pill awb-pill-primary">Explore books</a><a href="/guides/" class="awb-pill awb-pill-outline">Explore guides</a><a href="/billing/" class="awb-pill awb-pill-outline">Billing & task history</a></div>
+          <p id="profile-email" class="profile-email"></p>
         </div>
-
-        <ActivityPanel
-          eyebrow="Your activity"
-          title="Your reading activity."
-          description="See the books and questions you return to." class="min-w-0" showLink={false} showDetails={false}
-        />
-      </div>
+        <button type="button" id="signout-btn" class="profile-signout">Sign out</button>
+      </header>
 
       <BookAdditions />
 
-      <div class="mt-12 grid gap-8 lg:grid-cols-2">
-        <section class="awb-card-link p-5 sm:p-6">
-          <h2 class="awb-eyebrow border-b border-line pb-3">
-            Saved books
-          </h2>
-          <ul id="saved-list" class="divide-y divide-line"></ul>
-          <p id="saved-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
-            Nothing saved yet. Browse <a href="/books/" class="text-accent underline underline-offset-4 decoration-1">the shelf</a>
-            and hit "Save this book" on any book.
-          </p>
-        </section>
-
-        <section class="awb-card-link p-5 sm:p-6">
-          <h2 class="awb-eyebrow border-b border-line pb-3">
-            Saved answers
-          </h2>
-          <ul id="saved-answer-list" class="divide-y divide-line"></ul>
-          <p id="saved-answer-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
-            Nothing saved yet. Open <a href="/answers/" class="text-accent underline underline-offset-4 decoration-1">an answer</a>
-            and save the ones you want to return to.
-          </p>
-        </section>
-      </div>
-
-      <section class="awb-panel mt-8 p-5 sm:p-6">
-        <div class="flex flex-col gap-3 border-b border-line pb-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p class="awb-eyebrow">Open questions</p>
-            <h2 class="mt-2 font-serif text-3xl leading-tight text-ink">Honest misses waiting for a stronger answer.</h2>
-          </div>
-          <a href="/skills/" class="awb-pill awb-pill-outline">Install the agent skill</a>
-        </div>
-        <ul id="open-question-list" class="divide-y divide-line"></ul>
-        <p id="open-question-empty" class="hidden mt-5 text-soft leading-relaxed max-w-prose">
-          No open questions yet. Questions captured by the agent skill appear here when the shelf has no strong published answer.
-        </p>
-      </section>
-
-      <section id="preferences" class="awb-panel mt-8 p-5 sm:p-6">
-        <div class="flex flex-wrap items-center justify-between gap-3"><h2 class="awb-eyebrow">Your preferences</h2><a href="/onboarding/start/?from=profile" class="text-sm underline underline-offset-4">Edit preferences</a></div>
-        <p id="profile-email" class="mt-3 text-sm text-soft break-all"></p>
+      <section id="preferences" class="profile-card profile-preferences">
+        <div class="profile-card-heading"><h2>Your preferences</h2><a href="/onboarding/start/?from=profile">Edit preferences <span aria-hidden="true">→</span></a></div>
         <p id="profile-preferences" class="mt-3 text-soft">Choose the topics and questions you want to explore.</p>
       </section>
-
-      <p class="mt-10">
-        <button
-          type="button"
-          id="signout-btn"
-          class="awb-pill awb-pill-outline cursor-pointer"
-        >
-          Sign out
-        </button>
-      </p>
+      <div class="profile-activity"><ActivityPanel eyebrow="Your activity" title="Keep your learning going." description="Your reading activity on this browser." showLink={false} showDetails={false} /></div>
     </div>
   </section>
-
-  <script type="application/json" id="book-meta" set:html={JSON.stringify(bookMeta)} />
-  <script type="application/json" id="answer-meta" set:html={JSON.stringify(answerMeta)} />
 
   <script>
     import { supabase } from '../lib/supabase';
     import { readOnboardingProfile, hasPendingOnboarding, persistOnboardingProfile } from '../lib/onboarding';
-    import {
-      OPEN_QUESTIONS_KEY,
-      SAVED_ANSWERS_KEY,
-      SAVED_BOOKS_KEY,
-      readJson,
-    } from '../lib/user-library';
 
     const loading = document.getElementById('library-loading')!;
     const content = document.getElementById('library-content')!;
     const userName = document.getElementById('user-name')!;
-    const savedList = document.getElementById('saved-list')!;
-    const savedEmpty = document.getElementById('saved-empty')!;
-    const savedAnswerList = document.getElementById('saved-answer-list')!;
-    const savedAnswerEmpty = document.getElementById('saved-answer-empty')!;
-    const openQuestionList = document.getElementById('open-question-list')!;
-    const openQuestionEmpty = document.getElementById('open-question-empty')!;
     const signoutBtn = document.getElementById('signout-btn')!;
-    const bookMeta: Record<string, { title: string; author: string }> = JSON.parse(
-      document.getElementById('book-meta')!.textContent ?? '{}'
-    );
-    const answerMeta: Record<string, { question: string; description: string; books: string[] }> = JSON.parse(
-      document.getElementById('answer-meta')!.textContent ?? '{}'
-    );
-    const appendSimpleLink = (
-      list: HTMLElement,
-      href: string,
-      title: string,
-      meta: string,
-      description?: string
-    ) => {
-      const li = document.createElement('li');
-      li.className = 'py-4';
-      const a = document.createElement('a');
-      a.href = href;
-      a.className =
-        'font-serif text-lg text-ink hover:text-accent underline underline-offset-4 decoration-line hover:decoration-accent';
-      a.textContent = title;
-      const span = document.createElement('span');
-      span.className = 'text-sm text-faint ml-2';
-      span.textContent = meta;
-      li.append(a, span);
-      if (description) {
-        const p = document.createElement('p');
-        p.className = 'mt-2 text-sm leading-relaxed text-soft';
-        p.textContent = description;
-        li.appendChild(p);
-      }
-      list.appendChild(li);
-    };
 
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
       window.location.href = '/login/';
     } else {
       const email = data.session.user.email ?? '';
-      userName.textContent = email ? `, ${email.split('@')[0]}` : '';
-
-      const saved = readJson<string[]>(SAVED_BOOKS_KEY, []);
-      const known = saved.filter((slug) => bookMeta[slug]);
-
-      if (known.length === 0) {
-        savedEmpty.classList.remove('hidden');
-      } else {
-        for (const slug of known) {
-          appendSimpleLink(savedList, `/books/${slug}/`, bookMeta[slug].title, bookMeta[slug].author);
-        }
-      }
-
-      const savedAnswers = readJson<string[]>(SAVED_ANSWERS_KEY, []).filter((slug) => answerMeta[slug]);
-      if (savedAnswers.length === 0) {
-        savedAnswerEmpty.classList.remove('hidden');
-      } else {
-        for (const slug of savedAnswers) {
-          appendSimpleLink(
-            savedAnswerList,
-            `/answers/${slug}/`,
-            answerMeta[slug].question,
-            `${answerMeta[slug].books.length} source ${answerMeta[slug].books.length === 1 ? 'book' : 'books'}`,
-            answerMeta[slug].description
-          );
-        }
-      }
-
-      const openQuestions = readJson<Array<{ question: string; context: string; createdAt: string }>>(OPEN_QUESTIONS_KEY, []);
-      if (openQuestions.length === 0) {
-        openQuestionEmpty.classList.remove('hidden');
-      } else {
-        for (const item of openQuestions) {
-          appendSimpleLink(
-            openQuestionList,
-            `/skills/`,
-            item.question,
-            'Needs a stronger published answer',
-            item.context || undefined
-          );
-        }
-      }
+      const metadata = data.session.user.user_metadata;
+      const displayName = [metadata?.first_name, metadata?.full_name, metadata?.name].find(value => typeof value === 'string' && value.trim());
+      const firstName = displayName ? displayName.trim().split(/\s+/)[0] : email.split('@')[0];
+      userName.textContent = firstName ? `, ${firstName}` : '';
 
       loading.classList.add('hidden');
       content.classList.remove('hidden');
@@ -235,3 +79,6 @@ const answerMeta = Object.fromEntries(
     }
   </script>
 </Base>
+<style>
+  .profile-page{padding-top:44px;padding-bottom:80px}.profile-header{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:36px}.profile-header>div{min-width:0}.profile-title{margin-top:12px;font-family:var(--font-serif);font-size:clamp(30px,4vw,42px);line-height:1.2;overflow-wrap:anywhere}.profile-email{margin-top:12px;font-size:14px;color:var(--color-soft);overflow-wrap:anywhere}.profile-signout{font-size:13px;color:var(--color-soft);border:1px solid var(--color-line);padding:9px 15px;border-radius:8px;white-space:nowrap;cursor:pointer}.profile-signout:hover{color:var(--color-ink);background:var(--color-wash)}.profile-card{min-width:0;padding:24px;border:1px solid var(--color-line);border-radius:14px;background:var(--color-paper)}.profile-card-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}.profile-card-heading h2{font-size:16px;font-weight:600}.profile-card-heading a{font-size:13px;color:var(--color-soft);display:inline-flex;align-items:center;gap:8px}.profile-card-heading a:hover{text-decoration:underline;text-underline-offset:4px}.profile-preferences,.profile-activity{margin-top:24px}.profile-signout:focus-visible{outline:2px solid var(--color-ink);outline-offset:4px}@media(max-width:640px){.profile-page{padding-top:28px}.profile-header{align-items:flex-start;gap:12px}.profile-title{font-size:30px}.profile-card{padding:20px}.profile-card-heading{flex-wrap:wrap;gap:8px}.profile-preferences,.profile-activity{margin-top:16px}}
+</style>

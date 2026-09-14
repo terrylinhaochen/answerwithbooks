@@ -9,7 +9,7 @@ const dialogs = [...document.querySelectorAll<HTMLDialogElement>('[data-tools-di
 let step = 0;
 let selectedAgent = '';
 const accountForm = setupToolAuth(setup.querySelector<HTMLElement>('[data-tool-auth]')!, () => selectedAgent);
-const accountAccess = setupToolAccountAccess(setup.querySelector<HTMLElement>('[data-tool-account-access]')!);
+const accountAccess = setupToolAccountAccess(setup.querySelector<HTMLElement>('[data-tool-access]')!);
 let signedIn = false;
 let authRevision = 0;
 const resumeContext = readToolsAuthContext(location.pathname, location.search);

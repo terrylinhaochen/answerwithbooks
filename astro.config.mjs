@@ -7,6 +7,8 @@ const utilityPaths = [
   '/signup/',
   '/my-books/',
   '/profile/',
+  '/api-keys/',
+  '/billing/',
   '/onboarding/start/',
   '/upload/',
   '/community/',

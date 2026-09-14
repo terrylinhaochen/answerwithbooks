@@ -55,10 +55,7 @@ try {
       assert.ok(prompt.includes('never invent my goals'));
       if (route.startsWith('/answers/')) {
         assert.ok(prompt.includes(readBody('answers',slug)),'Full guide included');
-        const save = page.getByRole('button',{name:'Save this guide',exact:true});
-        await save.click();
-        assert.equal(await page.getByRole('button',{name:'Remove saved guide',exact:true}).getAttribute('aria-pressed'),'true');
-        await page.getByRole('button',{name:'Remove saved guide',exact:true}).click();
+        assert.equal(await page.locator('[data-save-answer]').count(),0);
         assert.ok(await page.getByRole('link',{name:'Speed read source books',exact:true}).count());
         const source = readFileSync(`src/content/answers/${slug}.md`,'utf8').match(/^books: \[(.*)\]/m)[1];
         for (const book of JSON.parse(`[${source}]`)) assert.ok(prompt.includes(readBody('books',book)),`Full source-book digest: ${book}`);

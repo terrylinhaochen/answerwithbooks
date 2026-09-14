@@ -1,5 +1,3 @@
-export const SAVED_BOOKS_KEY = 'awb:saved-books';
-export const SAVED_ANSWERS_KEY = 'awb:saved-answers';
 export const LIKED_ANSWERS_KEY = 'awb:liked-answers';
 export const USER_MAPS_KEY = 'awb:user-content-maps';
 export const COLLECTED_MAPS_KEY = 'awb:collected-content-maps';

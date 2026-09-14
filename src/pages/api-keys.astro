@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import AccountNav from '../components/AccountNav.astro';
+import ToolAccountAccess from '../components/ToolAccountAccess.astro';
+---
+<Base title="API keys" description="Create and manage the personal keys that connect your agent to AWB skills." path="/api-keys/" robots="noindex, follow">
+  <section class="awb-section keys-page" data-api-keys-page>
+    <AccountNav active="keys" />
+    <header><p class="awb-eyebrow">Your account</p><h1>API keys</h1><p>Manage the keys that connect your agents to AWB.</p></header>
+    <p class="session-status" data-keys-session-status role="status">Checking your account…</p>
+    <div data-keys-signin hidden><a class="awb-pill awb-pill-primary" href="/login/">Sign in to manage keys</a></div>
+    <div class="keys-panel" data-keys-content hidden><ToolAccountAccess standalone /></div>
+    <p class="keys-help"><a href="/tools/">Need help connecting your agent? <span aria-hidden="true">→</span></a></p>
+  </section>
+</Base>
+<script>import '../lib/api-keys-page';</script>
+<style>
+  .keys-page{padding-top:44px;padding-bottom:80px}.keys-page header h1{font-family:var(--font-serif);font-size:36px;line-height:1.2;margin-top:12px}.keys-page header>p:last-child{margin-top:12px;color:var(--color-soft);line-height:1.6}.keys-panel{margin-top:36px}.session-status{margin-top:28px;font-size:14px;color:var(--color-soft)}.keys-help{margin-top:32px;font-size:13px;color:var(--color-soft)}.keys-help a{color:var(--color-soft);text-decoration:underline;text-underline-offset:4px}[hidden]{display:none!important}@media(max-width:640px){.keys-page{padding-top:28px}.keys-page header h1{font-size:30px}}
+</style>

@@ -29,7 +29,6 @@ export function createToolAccessClient(origin, getSession, request = fetch) {
         ACCESS_PENDING: 'Your account is ready. Research API access requires approval during the private preview.',
         INVALID_ORIGIN: 'This website has not been connected to the research API yet.',
         AUTH_UNAVAILABLE: 'Account verification is temporarily unavailable. Please retry shortly.',
-        KEY_LIMIT: 'You have three active keys. Revoke one to create another.',
         KEY_RATE_LIMIT: 'Wait ten minutes before creating another key.',
         UNAUTHORIZED: 'This key is no longer active, or research access has been removed.',
         NOT_FOUND: 'This key no longer exists. Refresh your keys.',

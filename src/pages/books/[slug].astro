@@ -162,19 +162,6 @@ const jsonLd = [
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-4">
           <div class="book-actions" role="group" aria-label="Book actions">
-            <button
-              type="button"
-              data-save-book={book.id}
-              data-title={book.data.title}
-              class="book-action"
-              aria-label="Save this book"
-              aria-pressed="false"
-              title="Save this book"
-            >
-              <svg class="bookmark-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
-                <path d="M6 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17l-6-4-6 4V4Z" />
-              </svg>
-            </button>
             <a
               href={`/speed-read/?book=${book.id}`}
               class="book-action"
@@ -247,39 +234,10 @@ const jsonLd = [
     )
   }
 
-  <script>
-    const KEY = 'awb:saved-books';
-    const btn = document.querySelector<HTMLButtonElement>('[data-save-book]');
-    if (btn) {
-      const slug = btn.dataset.saveBook!;
-      const read = (): string[] => {
-        try {
-          return JSON.parse(localStorage.getItem(KEY) ?? '[]');
-        } catch {
-          return [];
-        }
-      };
-      const paint = () => {
-        const saved = read().includes(slug);
-        const label = saved ? 'Remove saved book' : 'Save this book';
-        btn.setAttribute('aria-label', label);
-        btn.setAttribute('aria-pressed', String(saved));
-        btn.title = label;
-      };
-      btn.addEventListener('click', () => {
-        const list = read();
-        const next = list.includes(slug) ? list.filter((s) => s !== slug) : [...list, slug];
-        localStorage.setItem(KEY, JSON.stringify(next));
-        paint();
-      });
-      paint();
-    }
-  </script>
   <style>
     .book-actions { display: flex; align-items: center; gap: 8px; padding-right: 16px; border-right: 1px solid var(--color-line); }
     .book-action { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; color: var(--color-ink); background: var(--color-card); border: 1px solid var(--color-line); cursor: pointer; transition: background 150ms ease, border-color 150ms ease; }
     .book-action:hover { background: var(--color-wash); border-color: var(--color-ink); }
     .book-action:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
-    .book-action[aria-pressed="true"] .bookmark-icon { fill: currentColor; }
   </style>
 </Base>

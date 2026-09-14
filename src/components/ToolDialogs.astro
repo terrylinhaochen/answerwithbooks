@@ -3,7 +3,7 @@ import ToolCommand from './ToolCommand.astro';
 import ToolAuthForm from './ToolAuthForm.astro';
 import AgentIcon from './AgentIcon.astro';
 import SkillTool from './SkillTool.astro';
-import AgentConnection from './AgentConnection.astro';
+import ToolAccountAccess from './ToolAccountAccess.astro';
 import { jobFunctions } from '../lib/skill-discovery.mjs';
 import skill from '../../public/tools/awb-tools/SKILL.md?raw';
 import { grokSkillSetup } from '../lib/tool-skill-package.mjs';
@@ -37,7 +37,7 @@ import { agentOptions, availableTools, getToolDetail, buildInstallInstruction, b
       <div data-tools-account-guest>
         <ToolAuthForm />
       </div>
-      <div data-tools-account-member hidden><h3 class="account-heading">You’re signed in.</h3><p class="muted">Connect once, then bring tasks to your own agent.</p><AgentConnection /></div>
+      <div data-tools-account-member hidden><h3 class="account-heading">You’re signed in.</h3><p class="muted">Create a key for your agent, then choose your first task.</p><ToolAccountAccess /></div>
       <p class="small-note" data-tools-auth-status role="status" aria-live="polite"></p>
       <p class="small-note">Hosted research skills are in private preview. Signing in does not activate paid hiring.</p>
     </section>
@@ -65,16 +65,24 @@ import { agentOptions, availableTools, getToolDetail, buildInstallInstruction, b
       <div class="endpoint-usage">
         <h3>Copy task for your agent</h3>
         <ToolCommand value={buildExamplePrompt(tool.id)} preview={tool.example} label="Copy task" task />
-        <a class="text-link guide-link" href={tool.guide}>{tool.endpoint ? 'Read the full guide' : 'Explore the books'} →</a>
-        <p class="muted">{tool.endpoint ? 'Choose your agent, then give it a task. Research access requires an invitation during the private preview.' : 'Connect the AWB skill to your agent, or open a book and choose Personalize to begin with its reading material.'}</p>
-        <button type="button" class="text-link skill-connect" data-open-setup>Connect your agent →</button>
+        <a class="skill-resource" href={tool.guide}>
+          <svg class="skill-resource-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14" /></svg>
+          <span class="skill-resource-copy"><span class="skill-resource-title">{tool.endpoint ? 'Read the full guide' : 'Explore the books'}</span><span class="skill-resource-description">{tool.endpoint ? 'See the workflow and examples.' : 'Find ideas for your next question.'}</span></span>
+          <span class="skill-resource-arrow" aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
+    <footer class="skill-connection-footer">
+      <div class="skill-connection-copy"><p class="skill-connection-title">Use this skill in your agent</p><p class="skill-connection-note">{tool.endpoint ? 'Private preview · Invitation required.' : 'Connect once, then bring your own questions.'}</p></div>
+      <button type="button" class="primary-button skill-connect" data-open-setup>Connect your agent <span aria-hidden="true">→</span></button>
+    </footer>
   </dialog>;
 })}
 
 <style>
-  .skill-connect{margin-top:20px}
+  .skill-resource{display:flex;align-items:center;gap:13px;margin-top:18px;padding:14px 0;color:var(--color-ink);text-decoration:none;border-radius:8px}.skill-resource:hover .skill-resource-title{text-decoration:underline;text-underline-offset:4px}.skill-resource-icon{flex:none;color:var(--color-soft)}.skill-resource-copy{display:grid;gap:4px;min-width:0}.skill-resource-title{font-size:14px;font-weight:500;line-height:1.5}.skill-resource-description{font-size:13px;line-height:1.5;color:var(--color-faint)}.skill-resource-arrow{margin-left:auto;color:var(--color-soft);font-size:18px}
+  .skill-connection-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;border-top:1px solid var(--color-line);padding:24px 28px}.skill-connection-copy{min-width:0}.skill-connection-title{font-size:14px;font-weight:600;line-height:1.5}.skill-connection-note{margin-top:5px;font-size:12px;line-height:1.6;color:var(--color-faint)}.skill-connect{display:inline-flex;align-items:center;justify-content:center;gap:12px;flex:none;min-height:44px;white-space:nowrap}.skill-connect:hover{opacity:.85}
+  @media(max-width:560px){.skill-connection-footer{align-items:stretch;flex-direction:column;gap:16px;padding:22px 18px}.skill-connect{width:100%}}
   :global(html:has(dialog[data-tools-dialog][open])){overflow:hidden;scrollbar-width:none}
   :global(html:has(dialog[data-tools-dialog][open])::-webkit-scrollbar){display:none}
   .tools-dialog{scrollbar-width:none;-ms-overflow-style:none}.tools-dialog::-webkit-scrollbar{display:none;width:0;height:0}

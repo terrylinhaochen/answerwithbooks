@@ -91,7 +91,7 @@ const { catalog, sourcePath = '/books/', title: dialogTitle = 'Add a book', book
   function selectBook(book: BookCandidate) {
     selected = book; title.value = book.title; author.value = book.author; submissionId = crypto.randomUUID();
     dialog.querySelectorAll<HTMLButtonElement>('[data-book-candidate]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.bookCandidate === book.title + book.author)));
-    find('[data-book-confirm-note]').textContent = book.slug ? 'This digest is ready. We’ll add it to your saved books.' : 'We’ll save this book to your shelf and request a digest.';
+    find('[data-book-confirm-note]').textContent = book.slug ? 'This digest is already available. You can open it after confirming.' : 'We’ll record your addition and request a digest.';
     find<HTMLDetailsElement>('[data-edit-book]').open = !book.title || !book.author;
   }
   function showCandidates(books: BookCandidate[], offline = false) {

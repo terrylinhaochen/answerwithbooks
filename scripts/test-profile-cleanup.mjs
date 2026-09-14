@@ -23,11 +23,16 @@ try {
   await page.evaluate(({token,user})=>localStorage.setItem('sb-yozeqanibszoxnowmvsm-auth-token',JSON.stringify({access_token:token,refresh_token:'mock-refresh',expires_at:Math.floor(Date.now()/1000)+3600,expires_in:3600,token_type:'bearer',user})),{token,user});
   await page.goto(base+'/my-books/');await page.waitForURL('**/profile/');
   await page.locator('#library-content').waitFor();
-  assert.ok(await page.getByRole('heading',{name:'Saved books',exact:true}).isVisible());
+  assert.equal(await page.getByRole('heading',{name:/Saved books|Saved guides/}).count(),0);
   assert.ok(await page.getByRole('heading',{name:'Your preferences',exact:true}).isVisible());
+  const accountNav=page.getByRole('navigation',{name:'Your account',exact:true});
+  assert.equal(await accountNav.getByRole('link').count(),3);
+  assert.equal(await accountNav.getByRole('link',{name:'Profile',exact:true}).getAttribute('aria-current'),'page');
+  assert.equal(await accountNav.getByRole('link',{name:'Billing',exact:true}).getAttribute('href'),'/billing/');
+  assert.equal(await accountNav.getByRole('link',{name:'API keys',exact:true}).getAttribute('href'),'/api-keys/');
   assert.match(await page.locator('#profile-preferences').textContent(),/Learn better/);
   assert.equal(await page.locator('a[href="/upload/"], a[href="/community/"]').count(),0);
-  assert.doesNotMatch(await page.locator('#library-content').innerText(),/Your mapped content|Collected maps|Open dashboard/);
+  assert.doesNotMatch(await page.locator('#library-content').innerText(),/Your mapped content|Collected maps|Open dashboard|Open questions|Honest misses|Explore books|Explore guides|Install the agent skill/);
   assert.equal(await page.locator('header [data-open-newsletter]').isVisible(),false);
   assert.ok(await page.locator('header [data-auth-link]').isVisible());
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
@@ -51,7 +56,7 @@ try {
   for(const width of [600,390]) {
    await page.setViewportSize({width,height:950});
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
-   const box=await page.getByRole('link',{name:name==='confirmation'?'Confirm email address':'Sign in to AWB',exact:true}).boundingBox();
+   const box=await page.getByRole('link',{name:name==='confirmation'?'Verify my email':'Verify and sign in to AWB',exact:true}).boundingBox();
    assert.ok(Math.abs(box.x+box.width/2-width/2)<3,'Email button centered');
    await page.screenshot({path:`/tmp/awb-email-${name}-${width}.png`});
   }

@@ -93,7 +93,7 @@ try {
   );
 
   await context.close();
-  console.log('UI smoke test passed: additive workplace guides, original Skills page, speed-reader matching, skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, book requests, content feedback, saved books, saved answers, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
+  console.log('UI smoke test passed: additive workplace guides, original Skills page, speed-reader matching, skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, book requests, content feedback, bookmark removal, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
 } finally {
   if (browser) await browser.close();
   server.closeAllConnections();
@@ -524,16 +524,10 @@ async function testOnboardingSignupProfileAndShelf(page) {
   assert.equal(await page.evaluate(() => localStorage.getItem('awb:onboarding:pending')), null);
 
   await page.goto('/books/atomic-habits/', { waitUntil: 'domcontentloaded' });
-  await page.locator('[data-save-book]').click();
-  assert.equal(await page.locator('[data-save-book]').getAttribute('aria-pressed'), 'true');
-  assert.equal(await page.locator('[data-save-book]').getAttribute('aria-label'), 'Remove saved book');
-  assert.equal(await page.locator('[data-save-book] svg').count(), 1, 'Saving must preserve the bookmark icon');
-  await page.locator('[data-save-book]').click();
-  assert.equal(await page.locator('[data-save-book]').getAttribute('aria-pressed'), 'false');
-  await page.locator('[data-save-book]').click();
+  assert.equal(await page.locator('[data-save-book]').count(), 0);
   await page.goto('/my-books/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#library-content:not(.hidden)');
-  await assertVisibleText(page, '#saved-list', 'Atomic Habits');
+  assert.equal(await page.locator('#saved-list, #saved-answer-list').count(), 0);
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await expectText(page.locator('[data-auth-link]'), /Profile/);
   assert.equal(await page.locator('[data-onboarding-link]').isHidden(), true);
@@ -595,8 +589,7 @@ async function testMappingAndCommunityCollection(page) {
   assert.match(agentPrompt, /how-to-fix-user-interviews-that-are-not-teaching-you-anything/);
   assert.match(agentPrompt, /never invent my goals, constraints, prior attempts/);
   assert.match(agentPrompt, /BEGIN SOURCE-BOOK EDITORIAL DIGEST/);
-  await page.locator('[data-save-answer]').click();
-  assert.equal(await page.locator('[data-save-answer]').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('[data-save-answer]').count(),0);
   await assertVisibleText(page, '[data-content-feedback]', 'Was this useful?');
   await page.locator('[data-content-feedback] [data-feedback-choice="not_helpful"]').click();
   await page.locator('[data-content-feedback] textarea[name="comment"]').fill('The decision boundary could be more specific.');

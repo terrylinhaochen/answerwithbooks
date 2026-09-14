@@ -43,12 +43,11 @@ const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
     }
   </div>
 
-  <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+  <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
     {[
       ['streak', 'Day streak'],
       ['questions', 'Questions opened'],
       ['books', 'Books explored'],
-      ['saved', 'Books saved'],
     ].map(([key, label]) => (
       <div class="rounded-2xl border border-line bg-wash/70 p-4">
         <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">{label}</p>
@@ -93,7 +92,7 @@ const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
       <div class="mt-5 grid gap-3 text-sm text-soft sm:grid-cols-3">
         {[
           ['Explore', 'Open answers that match recurring internet questions.'],
-          ['Ground', 'Save books that give the answer real source material.'],
+          ['Ground', 'Read the books behind each answer.'],
           ['Return', 'Let repeated behavior reveal what is actually top of mind.'],
         ].map(([label, text]) => (
           <div class="border-t border-line pt-3">
@@ -109,7 +108,6 @@ const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
 <script>
   const panels = document.querySelectorAll<HTMLElement>('[data-activity-panel]');
   const activityKey = 'awb:activity';
-  const savedKey = 'awb:saved-books';
 
   const readJson = <T,>(key: string, fallback: T): T => {
     try {
@@ -126,7 +124,6 @@ const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
       sections?: Record<string, number>;
       total?: number;
     }>(activityKey, {});
-    const saved = readJson<string[]>(savedKey, []);
     const days = activity.days ?? {};
     const sections = activity.sections ?? {};
     const today = new Date();
@@ -148,7 +145,6 @@ const cells = Array.from({ length: weeks * 7 }, (_, index) => index);
       setStat('streak', streak);
       setStat('questions', sections.answers ?? 0);
       setStat('books', sections.books ?? 0);
-      setStat('saved', saved.length);
 
       const cells = panel.querySelectorAll<HTMLElement>('[data-activity-cell]');
       const monthNodes = panel.querySelectorAll<HTMLElement>('[data-activity-month]');

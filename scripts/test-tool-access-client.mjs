@@ -88,6 +88,11 @@ test('one-time key controls clear secrets on close and identity changes', () => 
   const page = readFileSync('src/lib/tools-page.ts', 'utf8');
   const component = readFileSync('src/components/ToolAccountAccess.astro', 'utf8');
   assert.match(page, /clearSecret\(\)/);
+  const dialogs = readFileSync('src/components/ToolDialogs.astro', 'utf8');
+  assert.match(dialogs, /import ToolAccountAccess from/);
+  assert.match(dialogs, /<ToolAccountAccess\s*\/>/);
+  assert.match(page, /querySelector<HTMLElement>\('\[data-tool-access\]'\)/);
+  assert.match(component, /data-tool-access/);
   assert.match(page, /setIdentity\(null\)/);
   assert.match(source, /pagehide', clearSecret/);
   assert.match(source, /revision\+\+; busy = false; wipeSecret\(\)/);
@@ -96,4 +101,43 @@ test('one-time key controls clear secrets on close and identity changes', () => 
   assert.match(component, /type="password" readonly/);
   assert.match(component, /data-key-download/);
   assert.match(component, /data-key-check/);
+});
+
+test('account pages share navigation and standalone keys retain the verified-user guard', () => {
+  const nav = readFileSync('src/components/AccountNav.astro', 'utf8');
+  for (const href of ['/profile/', '/billing/', '/api-keys/']) assert.ok(nav.includes(`href: '${href}'`));
+  assert.match(nav, /aria-current=/);
+  assert.match(nav, /aria-label="Your account"/);
+  for (const [file, active] of [['profile', 'profile'], ['billing', 'billing'], ['api-keys', 'keys']]) {
+    const page = readFileSync(`src/pages/${file}.astro`, 'utf8');
+    assert.ok(page.includes(`<AccountNav active="${active}"`));
+    assert.match(page, /robots="noindex, follow"/);
+  }
+  const keys = readFileSync('src/pages/api-keys.astro', 'utf8');
+  const client = readFileSync('src/lib/api-keys-page.ts', 'utf8');
+  assert.match(keys, /data-keys-content hidden/);
+  assert.match(keys, /<ToolAccountAccess standalone/);
+  assert.match(client, /supabase\.auth\.getUser\(\)/);
+  assert.match(client, /email_confirmed_at/);
+  assert.match(client, /is_anonymous/);
+  assert.match(client, /current !== revision/);
+  assert.match(client, /access\.setIdentity\(null\)/);
+  assert.match(client, /onAuthStateChange/);
+  assert.match(client, /pagehide/);
+  const profile = readFileSync('src/pages/profile.astro', 'utf8');
+  assert.doesNotMatch(profile, /OPEN_QUESTIONS_KEY|Open questions|Honest misses|Explore books|Explore guides/);
+  assert.doesNotMatch(profile, /Saved books|Saved guides|SAVED_BOOKS_KEY|SAVED_ANSWERS_KEY/);
+  assert.match(profile, /Your preferences/);
+  assert.match(componentSource(), /data-key-dialog/);
+  assert.match(componentSource(), /data-key-revoke-dialog/);
+  assert.match(componentSource(), /<table class="keys-table"/);
+});
+
+const componentSource = () => readFileSync('src/components/ToolAccountAccess.astro', 'utf8');
+
+test('book and guide bookmarks are removed without deleting historical browser data', () => {
+  for (const file of ['src/pages/books/[slug].astro','src/pages/answers/[slug].astro','src/components/ActivityPanel.astro','src/lib/book-intake.ts']) {
+    const source = readFileSync(file, 'utf8');
+    assert.doesNotMatch(source, /data-save-book|data-save-answer|awb:saved-books|awb:saved-answers|Books saved/);
+  }
 });
