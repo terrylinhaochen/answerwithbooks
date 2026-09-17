@@ -24,7 +24,7 @@ export function getToolDetail(id) {
     ...tool,
     endpoint: tool.kind === 'API' ? 'POST /v1/run' : null,
     status: tool.kind === 'API' ? 'Private preview' : 'Book skill',
-    price: tool.kind === 'API' ? 'Pricing not set' : 'No research API charge',
+    price: tool.id === 'product-feedback-analysis' ? 'Usage based · 4× API and token cost' : tool.kind === 'API' ? 'Pricing not set' : 'No research API charge',
   };
 }
 
