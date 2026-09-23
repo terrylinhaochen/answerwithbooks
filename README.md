@@ -1,5 +1,3 @@
-> **Product consolidation — 2026-09-22:** Active product work has moved to Loops by CrowdListen at https://crowdlisten.com. This repository retains historical implementation and compatibility routes. Tracked source was archived before the front door changed; customer records and balances were not deleted.
-
 # 锦囊妙计 - Answer with Books
 
 ![Watercolor illustration of a sealed strategy pouch, books, and an agent harness](docs/assets/jinnang-miaoji-watercolor.jpg)

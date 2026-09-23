@@ -126,7 +126,7 @@ assert.doesNotMatch(html, /name="api.?key"/i, 'Do not collect provider credentia
 const secretInputs = html.match(/<input\b[^>]*type="password"[^>]*>/g) || [];
 assert.equal(secretInputs.length, 3, 'Account passwords plus one read-only private connection key');
 assert.match(html, /type="password"[^>]*readonly[^>]*data-key-secret/);
-assert.match(html, /data-tool-account-access/);
+assert.match(html, /data-tool-access/);
 assert.ok(secretInputs.some(input => input.includes('autocomplete="new-password"')));
 assert.ok(secretInputs.some(input => input.includes('autocomplete="current-password"')));
 assert.doesNotMatch(html, /Download skill instructions/);

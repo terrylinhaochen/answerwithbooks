@@ -39,21 +39,12 @@ try {
 
   await context.route('https://*.supabase.co/**', handleSupabaseRoute);
   const page = await context.newPage();
+  page.setDefaultTimeout(20_000);
 
-  await testHomeInteractions(page);
-  await testSkills(page);
-  await testWorkplaceGuides(page);
-  await testBookPersonalization(page);
-  await testSpeedReader(page);
-  await testBookEditorialSlice(page);
-  await testIllustrationContrast(page);
-  await testFilters(page);
-  await testBookRequest(page);
-  await testAuthRedirects(page);
-  await testOnboardingSignupProfileAndShelf(page);
-  await testLoginAndSignout(page);
-  await testEmailLinkCallback(page);
-  await testMappingAndCommunityCollection(page);
+  for (const check of [testHomeInteractions, testSkills, testWorkplaceGuides, testBookPersonalization, testSpeedReader, testBookEditorialSlice, testIllustrationContrast, testFilters, testBookRequest, testAuthRedirects, testOnboardingSignupProfileAndShelf, testLoginAndSignout, testEmailLinkCallback, testMappingAndCommunityCollection]) {
+    console.log('Checking '+check.name);
+    await check(page);
+  }
 
   assert.ok(
     supabaseRequests.some((request) => request.kind === 'signup'),
@@ -181,16 +172,16 @@ async function testBookRequest(page) {
   await page.reload({ waitUntil: 'domcontentloaded' });
   await assertVisibleText(page, '[data-book-additions]', 'The Mom Test');
   await page.locator('[data-open-book-request]').click();
-  assert.equal(await page.locator('[name="email"]').inputValue(), '');
+  assert.equal(await page.locator('[data-book-request-form] input[name="email"]').inputValue(), '');
   await page.locator('#book-query').fill('The Mom Test'); await page.locator('[data-book-match]').click();
-  await page.locator('[name="email"]').fill('shelf@example.test');
+  await page.locator('[data-book-request-form] input[name="email"]').fill('shelf@example.test');
   await page.locator('[data-book-request-submit]').click();
   await assertVisibleText(page, '[data-added-title]', 'Already on your shelf');
   assert.equal(supabaseRequests.filter((request) => request.kind === 'book-request-insert').length, before + 1, 'Repeated confirmation should not create a duplicate');
   await page.locator('[data-book-add-another]').click();
   await page.locator('#book-query').fill('The Art of Gathering'); await page.locator('[data-book-match]').click();
   await assertVisibleText(page, '[data-book-candidates]', 'Priya Parker');
-  await page.locator('[name="email"]').fill('shelf@example.test');
+  await page.locator('[data-book-request-form] input[name="email"]').fill('shelf@example.test');
   await page.locator('[data-book-request-submit]').click();
   await assertVisibleText(page, '[data-added-description]', 'Digest requested');
   assert.equal(await page.evaluate(() => localStorage.getItem('awb:book-add-email')), null);
@@ -202,7 +193,7 @@ async function testBookRequest(page) {
   assert.equal(await page.locator('[data-book-identify-form]').isVisible(), true);
   await page.locator('[data-clear-book-file]').click();
   await page.locator('[data-book-manual]').click();
-  await page.locator('[name="email"]').fill('shelf@example.test');
+  await page.locator('[data-book-request-form] input[name="email"]').fill('shelf@example.test');
   await page.locator('[name="title"]').fill('A New Book'); await page.locator('input[name="author"]').fill('An Author');
   await page.route('https://*.supabase.co/rest/v1/book_requests', (route) => fulfillJson(route, { message: 'Temporary error' }, 500));
   await page.locator('[data-book-request-submit]').click();
@@ -274,7 +265,7 @@ async function testSkills(page) {
   await page.goto('/ask/', { waitUntil: 'domcontentloaded' });
   await page.waitForURL('**/tools/');
   await assertVisibleText(page, 'h1', 'Browse and hire skills on demand.');
-  assert.equal(await page.locator('[data-tool-capabilities] article').count(), 4);
+  assert.equal(await page.locator('[data-tool-capabilities] article').count(), 5);
   assert.equal(await page.locator('[data-agent-task-form]').count(), 0);
   await page.locator('#install [data-open-setup]').click();
   const setup = page.locator('#tools-setup');
@@ -297,11 +288,11 @@ async function testSkills(page) {
   await setup.locator('[data-tools-auth-mode="signup"]').click();
   assert.equal(await setup.locator('[data-tools-signup-form]').isVisible(), true);
   assert.equal(await setup.locator('[data-tools-login-form]').isVisible(), false);
-  assert.equal(await setup.locator('[data-try-tool]').count(), 4);
+  assert.equal(await setup.locator('[data-try-tool]').count(), 5);
   await page.keyboard.press('Escape');
   assert.equal(await setup.isVisible(), false);
 
-  for (const id of ['github-leads', 'x-discourse', 'tinker-audience', 'book-answers']) {
+  for (const id of ['github-leads', 'x-discourse', 'tinker-audience', 'book-answers', 'product-feedback-analysis']) {
     await page.locator(`[data-open-tool="${id}"]`).click();
     const detail = page.locator(`[data-tool-detail="${id}"]`);
     assert.equal(await detail.isVisible(), true);
@@ -325,36 +316,31 @@ async function testBookPersonalization(page) {
   assert.ok(personalizerTop > digestTop, 'personalization should appear after the digest body');
   await page.locator('[data-ai-provider="claude"]').click();
   assert.equal(await page.evaluate(() => localStorage.getItem('awb:preferred-ai')), 'claude');
-  await expectText(page.locator('[data-personalize-button]'), /Personalize in Claude/);
+  await expectText(page.locator('[data-personalize-button]'), /Copy prompt & open Claude/);
   const claudeDestination = new URL(await page.locator('[data-personalize-button]').getAttribute('href'));
   assert.equal(claudeDestination.origin + claudeDestination.pathname, 'https://claude.ai/new');
-  assert.match(claudeDestination.searchParams.get('q'), /Start a personalized reading experience for Atomic Habits/);
-  assert.match(claudeDestination.searchParams.get('q'), /answerwithbooks\.com\/books\/atomic-habits/);
-  assert.match(claudeDestination.searchParams.get('q'), /Crowdlisten_books\/main\/skill\/answer-with-books\/SKILL\.md/);
-  assert.doesNotMatch(claudeDestination.searchParams.get('q'), /Use relevant context you already know/);
-  assert.doesNotMatch(claudeDestination.searchParams.get('q'), /End with one idea to remember/);
-
-  await page.locator('[data-personalize-button]').evaluate((element) => {
-    element.addEventListener('click', (event) => event.preventDefault(), { once: true });
-  });
+  assert.equal(claudeDestination.searchParams.has('q'), false, 'The reading prompt is copied, not sent through a URL');
+  await page.evaluate(() => { window.open = () => null; });
   await page.locator('[data-personalize-button]').click();
-  await expectText(page.locator('[data-personalize-button]'), /Prompt copied/);
+  await expectText(page.locator('[data-personalize-button]'), /Open Claude/);
+  await page.waitForFunction(() => document.querySelector('[data-personalize-button]').dataset.promptCopied === 'true');
   const prompt = await page.evaluate(() => navigator.clipboard.readText());
   assert.match(prompt, /Start a personalized reading experience for Atomic Habits/);
   assert.match(prompt, /answerwithbooks\.com\/books\/atomic-habits/);
   assert.match(prompt, /Crowdlisten_books\/main\/skill\/answer-with-books\/SKILL\.md/);
-  assert.match(prompt, /follow the skill's Book URL Contract, and begin/);
+  assert.match(prompt, /Book URL Contract \(self-contained\)/);
+  assert.match(prompt, /BEGIN EDITORIAL GUIDE/);
   assert.doesNotMatch(prompt, /Use relevant context you already know/);
-  assert.doesNotMatch(prompt, /End with one idea to remember/);
+  assert.match(prompt, /never invent my experience/);
 
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await expectText(page.locator('[data-personalize-button]'), /Personalize in Claude/);
+  await expectText(page.locator('[data-personalize-button]'), /Copy prompt & open Claude/);
   assert.equal(await page.locator('[data-ai-provider="claude"]').getAttribute('aria-pressed'), 'true');
 
   await page.locator('[data-ai-provider="chatgpt"]').click();
   const chatGptDestination = new URL(await page.locator('[data-personalize-button]').getAttribute('href'));
   assert.equal(chatGptDestination.origin + chatGptDestination.pathname, 'https://chatgpt.com/');
-  assert.match(chatGptDestination.searchParams.get('q'), /Start a personalized reading experience for Atomic Habits/);
+  assert.equal(chatGptDestination.searchParams.has('q'), false);
 }
 
 
@@ -488,8 +474,8 @@ async function testIllustrationContrast(page) {
 async function testAuthRedirects(page) {
   activeUser = null;
   await page.goto('/profile/', { waitUntil: 'domcontentloaded' });
-  await page.waitForURL('**/onboarding/start/?from=profile');
-  assert.match(page.url(), /\/onboarding\/start\/\?from=profile$/);
+  await page.waitForURL('**/login/');
+  assert.match(page.url(), /\/login\/$/);
 }
 
 async function testOnboardingSignupProfileAndShelf(page) {
@@ -515,13 +501,11 @@ async function testOnboardingSignupProfileAndShelf(page) {
   await page.locator('#password').fill('awb-Test-Password-123!');
   await page.locator('#submit-btn').click();
   await page.waitForURL('**/profile/?onboarded=1');
-  await page.waitForSelector('[data-profile-shell]:not(.hidden)');
-  await assertVisibleText(page, '[data-onboarding-focus]', 'business, career');
-  await assertVisibleText(page, '[data-onboarding-shelf]', 'owned');
-  await assertVisibleText(page, '[data-onboarding-goal]', 'customer interviews');
-  await assertVisibleText(page, '[data-onboarding-chatgpt]', 'Not requested yet.');
-  await assertVisibleText(page, '[data-onboarding-sync]', 'Synced to your account.');
-  assert.equal(await page.evaluate(() => localStorage.getItem('awb:onboarding:pending')), null);
+  await page.waitForSelector('#library-content:not(.hidden)');
+  await assertVisibleText(page, '#profile-preferences', 'business, career');
+  await assertVisibleText(page, '#profile-preferences', 'customer interviews');
+  await page.waitForFunction(() => localStorage.getItem('awb:onboarding:pending') === null);
+  assert.equal(activeUser.user_metadata.answer_with_books_onboarding.shelf, 'owned');
 
   await page.goto('/books/atomic-habits/', { waitUntil: 'domcontentloaded' });
   assert.equal(await page.locator('[data-save-book]').count(), 0);
@@ -550,7 +534,7 @@ async function testLoginAndSignout(page) {
   await page.locator('#email').fill('reader@example.test');
   await page.locator('#password').fill('awb-Test-Password-123!');
   await page.locator('#submit-btn').click();
-  await page.waitForURL('**/my-books/');
+  await page.waitForURL('**/profile/');
   await page.waitForSelector('#library-content:not(.hidden)');
   await assertVisibleText(page, '#library-content', 'Welcome back, reader');
 }
@@ -561,7 +545,7 @@ async function testEmailLinkCallback(page) {
   await page.goto(`/login/#access_token=${mockAccessToken}&refresh_token=mock-refresh-token&type=signup`, {
     waitUntil: 'domcontentloaded',
   });
-  await page.waitForURL('**/my-books/');
+  await page.waitForURL('**/profile/');
   await page.waitForSelector('#library-content:not(.hidden)');
   await assertVisibleText(page, '#library-content', 'Welcome back, reader');
 }
@@ -618,9 +602,9 @@ async function testMappingAndCommunityCollection(page) {
 
   await page.goto('/my-books/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#library-content:not(.hidden)');
-  await assertVisibleText(page, '#saved-answer-list', 'How to fix user interviews that are not teaching you anything');
-  await assertVisibleText(page, '#user-map-list', 'Customer interview map');
-  await assertVisibleText(page, '#collected-map-list', 'Customer interview map');
+  assert.equal(await page.locator('#saved-answer-list, #user-map-list, #collected-map-list').count(), 0, 'Profile keeps the consolidated account and reading interface');
+  assert.ok(remoteContentMaps.some(map => map.title === 'Customer interview map'), 'The map remains persisted');
+  assert.ok(remoteContentMapCollections.length > 0, 'The community collection remains persisted');
 }
 
 async function clearSupabaseBrowserState(page) {
