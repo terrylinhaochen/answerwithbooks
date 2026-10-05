@@ -57,7 +57,7 @@ async function run() {
  if(running)return;running=true;find('retry').hidden=true;
  try {
   if(!id)throw new Error('Choose a book from your shelf first.');
-  const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to AWB, then return to this private book link.');
+  const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to Answer with Books, then return to this private book link.');
   await paint((await bookWorker({action:'status',id})).job);
   while(current.status!=='ready') {
    const result=await bookWorker({action:'process',id});await paint(result.job);

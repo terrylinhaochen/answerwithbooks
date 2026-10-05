@@ -35,5 +35,5 @@ export function packageToolSkill(content) {
 }
 
 export function grokSkillSetup(content) {
-  return `Save the following as a named AWB Tools skill for this Grok Bot. Preserve its routing, API contract, and permission boundaries. Use the supported skill mechanism; do not claim it is installed unless it has actually been saved. Tell me how to enable and invoke it. Configure credentials only through secure settings, never in chat. Do not run a paid research task during setup. Cloud access requires an authorized HTTPS API, not localhost.\n\n${content}`;
+  return `Save the following as a named Answer with Books Tools skill for this Grok Bot. Preserve its routing, API contract, and permission boundaries. Use the supported skill mechanism; do not claim it is installed unless it has actually been saved. Tell me how to enable and invoke it. Configure credentials only through secure settings, never in chat. Do not run a paid research task during setup. Cloud access requires an authorized HTTPS API, not localhost.\n\n${content}`;
 }

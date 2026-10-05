@@ -5,7 +5,7 @@ export const jobFunctions = [
 ];
 export const skillTools = {
   github: 'GitHub', x: 'X', exa: 'Exa', crowdlisten: 'CrowdListen',
-  'feedback-library': 'Feedback sources', 'awb-shelf': 'AWB shelf',
+  'feedback-library': 'Feedback sources', 'awb-shelf': 'Answer with Books shelf',
 };
 export function discoverSkills(skills, { role = 'all', query = '', page = 1, pageSize = 6 } = {}) {
   const selectedRole = jobFunctions.some(item => item.id === role) ? role : 'all';

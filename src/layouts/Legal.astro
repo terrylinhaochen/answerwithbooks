@@ -6,7 +6,7 @@ const { title, description, path } = Astro.props;
 ---
 <Base title={title} description={description} path={path}>
   <article class="legal-page mx-auto max-w-3xl px-5 py-14 sm:py-20">
-    <p class="text-xs font-semibold uppercase tracking-[0.1em] text-soft">AWB · Answer with Books</p>
+    <p class="text-xs font-semibold uppercase tracking-[0.1em] text-soft">Answer with Books</p>
     <h1 class="mt-4 font-serif text-5xl leading-tight sm:text-6xl">{title}</h1>
     <p class="mt-5 text-sm text-soft" data-legal-updated>Last updated: {legalLastUpdated}</p>
     <div class="legal-copy mt-10"><slot /></div>

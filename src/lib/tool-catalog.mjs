@@ -34,11 +34,11 @@ export function getAgentSetup(id, origin) {
   return {
     agent,
     instruction: agent.method === 'skill' ? buildInstallInstruction(origin) : null,
-    heading: 'Add AWB to your agent',
-    guidance: id === 'claude-ai' ? 'Add AWB to your Claude skills.'
-      : id === 'grok-bot' ? 'In Grok Bot, paste the setup instructions and ask it to save AWB as a skill.'
+    heading: 'Add Answer with Books to your agent',
+    guidance: id === 'claude-ai' ? 'Add Answer with Books to your Claude skills.'
+      : id === 'grok-bot' ? 'In Grok Bot, paste the setup instructions and ask it to save Answer with Books as a skill.'
       : 'In your agent’s chat, send:',
-    note: id === 'cursor' ? 'Use the skill in Cursor’s agent chat. An AWB marketplace plugin is not available yet.'
+    note: id === 'cursor' ? 'Use the skill in Cursor’s agent chat. An Answer with Books marketplace plugin is not available yet.'
       : ['claude-ai', 'grok-bot'].includes(id) ? 'Hosted research skills require an invitation during the private preview. Adding the skill does not activate research access.' : '',
   };
 }
@@ -106,7 +106,7 @@ export function buildExamplePrompt(id) {
   const tool = availableTools.find(item => item.id === id);
   if (!tool) throw new Error('Choose a listed tool.');
   const route = tool.kind === 'API'
-    ? `Use the AWB skill to call ${tool.id}. Check that research access is available before starting. If payment is enabled, show me the current price and confirm it before starting unless I have already approved that charge. If it is not connected, explain what is missing instead of simulating a result.`
-    : `Use the AWB book skill. If it is not installed, explain the setup needed. This task uses the published book shelf and does not require research access.`;
+    ? `Use the Answer with Books skill to call ${tool.id}. Check that research access is available before starting. If payment is enabled, show me the current price and confirm it before starting unless I have already approved that charge. If it is not connected, explain what is missing instead of simulating a result.`
+    : `Use the Answer with Books book skill. If it is not installed, explain the setup needed. This task uses the published book shelf and does not require research access.`;
   return `${route}\n\n${tool.example}\n\nReturn sources and limitations. Do not send outreach or publish to another system.`;
 }

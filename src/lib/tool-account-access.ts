@@ -54,7 +54,7 @@ export function setupToolAccountAccess(root: HTMLElement) {
     const visibleKeys = keys.filter(key => !key.revokedAt);
     find('[data-access-table]').hidden = !visibleKeys.length;
     find('[data-access-empty]').hidden = !approved || visibleKeys.length > 0;
-    find('[data-access-count]').textContent = approved ? `${activeCount()} active ${activeCount() === 1 ? 'key' : 'keys'}` : 'Personal connections to AWB skills.';
+    find('[data-access-count]').textContent = approved ? `${activeCount()} active ${activeCount() === 1 ? 'key' : 'keys'}` : 'Personal connections to Answer with Books skills.';
     for (const key of visibleKeys) {
       const item = document.createElement('tr');
       const cell = (text: string) => { const td = document.createElement('td'); td.textContent = text; item.append(td); return td; };

@@ -97,7 +97,7 @@ form.addEventListener('submit', async event => {
       showMessage(error?.status === 429
         ? 'Too many email requests. Please wait a minute before trying again.'
         : error && error.status >= 500 ? 'We couldn’t send a link right now. Please try again shortly.'
-        : 'If this email has an AWB account, a sign-in link is on its way. Check your inbox and spam folder.');
+        : 'If this email has an Answer with Books account, a sign-in link is on its way. Check your inbox and spam folder.');
     }
   } catch {
     if (!passwordMode) resendAt = Date.now() + 60000;

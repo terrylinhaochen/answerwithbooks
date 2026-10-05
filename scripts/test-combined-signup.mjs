@@ -20,7 +20,7 @@ async function submit(){await root().getByRole('textbox',{name:'Email address'})
 try {
  for(const width of [1280,390]) {
   await page.setViewportSize({width,height:950});await reset();
-  assert.match(await root().locator('form .newsletter-email__note').innerText(),/AWB account and newsletter/);
+  assert.match(await root().locator('form .newsletter-email__note').innerText(),/Answer with Books account and newsletter/);
   await submit();
   await page.waitForFunction(()=>document.querySelector('[data-newsletter-email]').dataset.signupStage==='sent');
   assert.equal(calls.filter(c=>c.path.endsWith('/newsletter-signup')).length,1);

@@ -5,18 +5,18 @@ const Heading = standalone ? 'h2' : 'h3';
 ---
 <section class:list={['tool-access', { standalone }]} data-tool-access aria-labelledby="api-access-heading">
   <div class="access-heading">
-    <div><Heading id="api-access-heading">Your keys</Heading><p data-access-count>Personal connections to AWB skills.</p></div>
+    <div><Heading id="api-access-heading">Your keys</Heading><p data-access-count>Personal connections to Answer with Books skills.</p></div>
     <button type="button" class="key-button primary" data-key-open disabled aria-haspopup="dialog"><span aria-hidden="true">＋</span> Create API key</button>
   </div>
   <p class="access-status" role="status" aria-live="polite" data-access-status>Checking access…</p>
   <div class="keys-table-wrap" data-access-table hidden>
     <table class="keys-table"><caption class="sr-only">Your API keys</caption><thead><tr><th scope="col">Name</th><th scope="col">Key</th><th scope="col">Created</th><th scope="col">Status</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead><tbody data-access-keys></tbody></table>
   </div>
-  <div class="keys-empty" data-access-empty hidden><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 7a5 5 0 0 1-7 4.6L6 20H3v-3l8.4-8A5 5 0 1 1 21 7Z"/></svg><p data-key-empty-title>No active API keys</p><span data-key-empty-description>Create a key to connect your agent to AWB.</span></div>
+  <div class="keys-empty" data-access-empty hidden><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 7a5 5 0 0 1-7 4.6L6 20H3v-3l8.4-8A5 5 0 1 1 21 7Z"/></svg><p data-key-empty-title>No active API keys</p><span data-key-empty-description>Create a key to connect your agent to Answer with Books.</span></div>
   <div class="access-footer"><p>Copy new keys when created. Existing full keys cannot be recovered.</p><button type="button" class="key-text-button" data-access-refresh>Refresh</button></div>
   {!standalone && <div class="connection-card" data-api-connection hidden>
     <div class="connection-title"><h3>One connection for your skills</h3><a href="/tools/">Browse skills →</a></div>
-    <p>Your agent chooses the skill. AWB runs it and returns the result, sources, and limitations.</p>
+    <p>Your agent chooses the skill. Answer with Books runs it and returns the result, sources, and limitations.</p>
     <label for="account-api-address">API address</label>
     <div class="connection-address"><input id="account-api-address" data-api-address readonly autocomplete="off" /><button type="button" class="key-button" data-copy-api-address disabled aria-label="Copy API address">Copy</button></div>
     <button type="button" class="key-button connection-copy" data-copy-agent-connection disabled>Copy agent setup</button>

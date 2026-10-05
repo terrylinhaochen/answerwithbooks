@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import AccountNav from '../components/AccountNav.astro';
 ---
-<Base title="Billing" description="Manage AWB credits, skill usage, and receipts." path="/billing/" robots="noindex, follow">
+<Base title="Billing" description="Manage Answer with Books credits, skill usage, and receipts." path="/billing/" robots="noindex, follow">
   <section class="awb-section py-7 sm:py-11" data-billing>
     <AccountNav active="billing" />
     <header class="billing-heading"><div><p class="awb-eyebrow">Your account</p><h1 class="mt-3 font-serif text-4xl">Billing</h1><p class="mt-3 text-soft">Credits and usage, across all your skills and API keys.</p></div><button type="button" class="awb-pill" data-refresh-billing>Refresh</button></header>
@@ -25,10 +25,10 @@ import AccountNav from '../components/AccountNav.astro';
       <section class="awb-panel history-panel" aria-label="Recent skill tasks"><p data-billing-empty="usage" class="history-empty">Sign in to see your tasks.</p><ul class="billing-list" data-billing-list="usage"></ul></section>
     </div>
     {['transactions','receipts'].map(id => <div id={`billing-panel-${id}`} role="tabpanel" aria-labelledby={`billing-tab-${id}`} data-billing-panel={id} hidden><div class="section-heading"><div><h2>{id === 'transactions' ? 'Credit transactions' : 'Payment receipts'}</h2><p>{id === 'transactions' ? 'Credits added, task charges, refunds, and adjustments.' : 'Receipts for completed credit purchases.'}</p></div></div><section class="awb-panel history-panel"><p class="history-empty" data-billing-empty={id}>Sign in to see your {id}.</p><ul class="billing-list" data-billing-list={id}></ul></section></div>)}
-    <footer class="billing-footer"><a href="/api-keys/">Manage API keys</a><a href="mailto:terrychen2026@u.northwestern.edu?subject=AWB%20billing">Contact billing</a></footer>
+    <footer class="billing-footer"><a href="/api-keys/">Manage API keys</a><a href="mailto:terrychen2026@u.northwestern.edu?subject=Answer%20with%20Books%20billing">Contact billing</a></footer>
 
     <dialog data-topup-dialog aria-labelledby="topup-title" class="awb-panel billing-dialog"><header class="dialog-heading"><h2 id="topup-title" class="font-serif text-2xl">Add credits</h2><button class="awb-pill" type="button" data-close-topup aria-label="Close add credits">×</button></header>
-      <div data-topup-unavailable><p data-topup-unavailable-message class="mt-5 text-sm leading-relaxed text-soft">Checking payment availability…</p><a href="mailto:terrychen2026@u.northwestern.edu?subject=AWB%20credit%20purchases" class="mt-5 awb-pill">Contact billing →</a></div>
+      <div data-topup-unavailable><p data-topup-unavailable-message class="mt-5 text-sm leading-relaxed text-soft">Checking payment availability…</p><a href="mailto:terrychen2026@u.northwestern.edu?subject=Answer%20with%20Books%20credit%20purchases" class="mt-5 awb-pill">Contact billing →</a></div>
       <form data-topup-controls hidden><p class="mt-4 text-sm text-soft" data-topup-help>Secure checkout with Stripe. Payments are collected by Crowdlisten.</p><label class="topup-amount-label" for="topup-amount" data-topup-label>Credit amount</label><select id="topup-amount" class="topup-amount-select" data-topup-amount></select><label class="credit-consent"><input type="checkbox" data-credit-consent required /><span>I agree to the <a class="underline" data-credit-terms target="_blank" rel="noopener noreferrer">credit terms</a>.</span></label><button type="submit" class="awb-pill awb-pill-primary checkout-button" data-topup disabled>Continue to checkout</button><p class="mt-3 text-xs text-faint">Credits are added only after payment is confirmed. This does not enable automatic payments.</p></form>
       <p class="mt-4 text-sm text-soft" data-checkout-status role="status" aria-live="polite"></p>
     </dialog>

@@ -36,7 +36,7 @@ export function setupToolAuth(root: HTMLElement, getAgent: () => string) {
       try {
         const providers = await getOAuthProviders({ baseUrl: import.meta.env.PUBLIC_SUPABASE_URL, publicKey: import.meta.env.PUBLIC_SUPABASE_ANON_KEY });
         if (!providers[provider]) {
-          oauthStatus.textContent = `${label} sign-in needs to be enabled by the AWB administrator. Email sign-in is available below.`;
+          oauthStatus.textContent = `${label} sign-in needs to be enabled by the Answer with Books administrator. Email sign-in is available below.`;
           return;
         }
         const isSignup = !signup.hidden;
@@ -64,7 +64,7 @@ export function setupToolAuth(root: HTMLElement, getAgent: () => string) {
   root.querySelectorAll<HTMLButtonElement>('[data-tools-auth-mode]').forEach(button => button.addEventListener('click', () => {
     const isSignup = button.dataset.toolsAuthMode === 'signup';
     clearPasswords(); signup.hidden = !isSignup; login.hidden = isSignup; setStatus(''); oauthStatus.textContent = '';
-    root.querySelector<HTMLElement>('[data-auth-heading]')!.textContent = isSignup ? 'Create your account' : 'Sign in to AWB';
+    root.querySelector<HTMLElement>('[data-auth-heading]')!.textContent = isSignup ? 'Create your account' : 'Sign in to Answer with Books';
     root.querySelector<HTMLElement>('[data-auth-welcome]')!.textContent = isSignup ? 'Welcome! A few details and you’re ready to go.' : 'Welcome back. Continue with your account.';
     root.querySelector<HTMLElement>('[data-auth-switch-copy]')!.textContent = isSignup ? 'Already have an account?' : 'Don’t have an account?';
     root.querySelectorAll<HTMLButtonElement>('[data-tools-auth-mode]').forEach(other => { other.hidden = other.dataset.toolsAuthMode === (isSignup ? 'signup' : 'login'); });
@@ -113,7 +113,7 @@ export function setupToolAuth(root: HTMLElement, getAgent: () => string) {
     setBusy(true); setStatus('Requesting a sign-in link…');
     try {
       const { error } = await supabase.auth.signInWithOtp({ email: email.value.trim().toLowerCase(), options: { shouldCreateUser: false, emailRedirectTo: redirectTo } });
-      setStatus(error?.status === 429 ? 'Too many requests. Wait a minute before trying again.' : error && error.status >= 500 ? 'We couldn’t send a link right now. Please try again shortly.' : 'If you have an AWB account, a sign-in link is on its way. Confirm your email to return here.', Boolean(error?.status && error.status >= 429));
+      setStatus(error?.status === 429 ? 'Too many requests. Wait a minute before trying again.' : error && error.status >= 500 ? 'We couldn’t send a link right now. Please try again shortly.' : 'If you have an Answer with Books account, a sign-in link is on its way. Confirm your email to return here.', Boolean(error?.status && error.status >= 429));
     } catch { setStatus('We couldn’t confirm that the link was sent. Check your email before trying again.', true); }
     finally { retryAt = Date.now() + 60000; clearPasswords(); setBusy(false); }
   });

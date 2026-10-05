@@ -16,7 +16,7 @@ const resumeContext = readToolsAuthContext(location.pathname, location.search);
 let pendingResume = Boolean(resumeContext);
 const next = setup.querySelector<HTMLButtonElement>('[data-setup-next]')!;
 const back = setup.querySelector<HTMLButtonElement>('[data-setup-back]')!;
-const titles = ['Which agent are you using?', 'Add AWB to your agent', 'Create your account', 'Choose your first task'];
+const titles = ['Which agent are you using?', 'Add Answer with Books to your agent', 'Create your account', 'Choose your first task'];
 let previousOverflow: string | null = null;
 const openers = new WeakMap<HTMLDialogElement, HTMLElement>();
 
@@ -57,7 +57,7 @@ const renderStep = (focus = true) => {
   setup.dataset.accountCard = String(step === 2 && !signedIn);
   setup.querySelectorAll<HTMLElement>('[data-setup-step]').forEach(panel => { panel.hidden = Number(panel.dataset.setupStep) !== step; });
   const title = setup.querySelector<HTMLElement>('[data-setup-title]')!;
-  title.textContent = step === 1 && selectedAgent ? getAgentSetup(selectedAgent, location.origin).heading : step === 2 && signedIn ? 'Your AWB account' : titles[step];
+  title.textContent = step === 1 && selectedAgent ? getAgentSetup(selectedAgent, location.origin).heading : step === 2 && signedIn ? 'Your Answer with Books account' : titles[step];
   back.hidden = step === 0;
   next.textContent = step === 3 ? 'Done ✓' : 'Next →';
   next.disabled = !canAdvanceSetup(step, selectedAgent, signedIn);

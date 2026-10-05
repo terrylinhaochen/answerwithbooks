@@ -121,7 +121,7 @@ function renderHistory(name: string, rows: any[]) {
       for (const row of rows) {
         const li = document.createElement('li');
         const title = text('div', ''); title.className = 'row-details';
-        title.append(text('p', name === 'usage' ? availableTools.find(skill => skill.id === row.capability)?.name || row.capability : name === 'transactions' ? row.note || row.kind || 'Balance adjustment' : currentBillingMode === 'live' ? 'AWB payment receipt' : 'Test payment receipt'));
+        title.append(text('p', name === 'usage' ? availableTools.find(skill => skill.id === row.capability)?.name || row.capability : name === 'transactions' ? row.note || row.kind || 'Balance adjustment' : currentBillingMode === 'live' ? 'Answer with Books payment receipt' : 'Test payment receipt'));
         title.firstElementChild!.className = 'row-title';
         title.append(text('small', name === 'usage' ? `${row.status}${row.origin ? ' · ' + row.origin : ''} · ${new Date(row.createdAt).toLocaleString()} · Task ${row.id}` : row.createdAt ? new Date(row.createdAt).toLocaleString() : row.id));
         const charge = name === 'usage' ? usageCharge(row) : row.amountCents;

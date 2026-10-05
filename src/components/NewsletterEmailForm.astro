@@ -4,7 +4,7 @@ const id = `newsletter-${crypto.randomUUID()}`;
 const { submitLabel = 'Subscribe' } = Astro.props;
 ---
 <div class="newsletter-email" data-newsletter-email data-submit-label={submitLabel}>
-  <form data-newsletter-email-form method="post" aria-label="Subscribe to AWB">
+  <form data-newsletter-email-form method="post" aria-label="Subscribe to Answer with Books">
     <div class="newsletter-email__field">
       <label class="sr-only" for={id}>Email address</label>
       <input id={id} name="email" type="email" placeholder="Enter email" autocomplete="email" inputmode="email" required maxlength="254" aria-describedby={`${id}-consent ${id}-status`} />
@@ -13,7 +13,7 @@ const { submitLabel = 'Subscribe' } = Astro.props;
     <div class="newsletter-email__trap" aria-hidden="true">
       <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
     </div>
-    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you sign up for an AWB account and newsletter and agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. You can unsubscribe from the newsletter at any time.</p>
+    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you sign up for an Answer with Books account and newsletter and agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. You can unsubscribe from the newsletter at any time.</p>
     <p id={`${id}-status`} class="newsletter-email__status" role="status" aria-live="polite" data-newsletter-status></p>
   </form>
   <p class="newsletter-email__note" data-account-login>Already have an account? <a href="/login/">Log in</a></p>

@@ -1,13 +1,13 @@
 ---
 name: awb-tools
-description: Use AWB managed skills for evidence-backed GitHub leads, recent X discourse, Tinker/Cookbook audiences, or authorized product feedback analysis. Route book-backed advice to the AWB book skill. Select capabilities in the customer's agent; this is not a general-purpose web-search or outreach tool.
+description: Use Answer with Books managed skills for evidence-backed GitHub leads, recent X discourse, Tinker/Cookbook audiences, or authorized product feedback analysis. Route book-backed advice to the Answer with Books book skill. Select capabilities in the customer's agent; this is not a general-purpose web-search or outreach tool.
 ---
 
-# AWB Tools
+# Answer with Books Tools
 
 Keep task selection and routing in the customer's agent. The research service is Capability Lab, exposed through one execution endpoint. No MCP server is required.
 
-AWB is a Crowdlisten product. Customers authorize their own account; the operator manages upstream provider credentials. The hosted private preview meters completed tasks but does not collect customer payments. Check the live catalog for the current billing mode.
+Answer with Books is a Crowdlisten product. Customers authorize their own account; the operator manages upstream provider credentials. The hosted private preview meters completed tasks but does not collect customer payments. Check the live catalog for the current billing mode.
 
 ## Set up
 
@@ -17,7 +17,7 @@ Configure `CAPABILITY_BASE_URL` and `CAPABILITY_API_KEY` through the harness's s
 
 The hosted API is `https://crowdlisten-skills-api.vercel.app`. Use this as `CAPABILITY_BASE_URL` unless the user's connection file specifies another authorized deployment. The optional development API is `http://127.0.0.1:4318`, reachable only on the machine running it. The customer's agent needs an HTTP tool. If a connection or key is missing, explain the missing setup; do not simulate a successful connection.
 
-Sign in at the AWB website and open [API keys](https://answerwithbooks.com/api-keys/) or the Tools setup. Approved accounts can create, list, and revoke personal API keys; account signup alone does not grant research access. Copy the full key when it is created: the server retains only its hash and display prefix, so an existing full key cannot be recovered. The user can download `awb-tools.env` and provide its private local path for configuration instead of pasting the key into chat. Read only the two connection values, never execute the file as a script or print the secret, and keep it out of version control. If the bridge is disabled or access is pending, ask the operator to enable or approve access. Do not grant access or create keys merely to install the skill.
+Sign in at the Answer with Books website and open [API keys](https://answerwithbooks.com/api-keys/) or the Tools setup. Approved accounts can create, list, and revoke personal API keys; account signup alone does not grant research access. Copy the full key when it is created: the server retains only its hash and display prefix, so an existing full key cannot be recovered. The user can download `awb-tools.env` and provide its private local path for configuration instead of pasting the key into chat. Read only the two connection values, never execute the file as a script or print the secret, and keep it out of version control. If the bridge is disabled or access is pending, ask the operator to enable or approve access. Do not grant access or create keys merely to install the skill.
 
 Verify setup using authenticated `GET /v1/capabilities`. Report the capabilities actually returned. A configured provider means credentials are present, not proof that live execution succeeds. Do not run paid research merely to test installation.
 
@@ -28,7 +28,7 @@ Verify setup using authenticated `GET /v1/capabilities`. Report the capabilities
 | Find developers or organizations whose public projects fit an offer | `github-leads` | Project discovery, exact-profile inspection, sourced shortlist. Stars do not prove buying intent. |
 | Understand a recent conversation or product discussion on X | `x-discourse` | Bounded recent public-post sample. Separate first-hand feedback, promotion, and repetition. Not historical or population-wide analysis. |
 | Verify and enrich a Tinker/Cookbook-interest audience | `tinker-audience` | GitHub public-event/seed discovery, reverse-star checks, identity-bound Exa enrichment, and professional-fit assessment. |
-| Turn supplied product feedback into prioritized next steps | `product-feedback-analysis` | CrowdListen stores original records and generates cited findings. A workspace owner connects an AWB personal key in CrowdListen Settings → Billing. Supply authorized originals; this tool does not import from third-party accounts. |
+| Turn supplied product feedback into prioritized next steps | `product-feedback-analysis` | CrowdListen stores original records and generates cited findings. A workspace owner connects an Answer with Books personal key in CrowdListen Settings → Billing. Supply authorized originals; this tool does not import from third-party accounts. |
 
 Select a capability explicitly using the user's task and the live catalog. If two are needed, make two explicit requests. Send only the relevant brief, not the whole chat history. Clarify the offer or research question if needed.
 
@@ -53,7 +53,7 @@ Follow the billing contract returned by the catalog:
 
 - `metering-only`: send the normal task input. The platform records usage without collecting a customer payment. Provider calls still cost the operator money.
 - `quoteRequired: true`: the separate outcome-billing sandbox requires `POST /v1/quotes` with an idempotency key and `{ "input": <exact task input>, "campaign": <customer campaign identifier>, "maxUnits": <agreed maximum> }`. It supports up to 20 GitHub/audience accounts or one X brief; CrowdListen feedback is not priced in this sandbox. Show the returned `unit_cents`, `max_units`, maximum hold (`unit_cents * max_units`), contract and expiry. Once authorized and funded, call `/v1/run` with the exact quoted input plus `quoteId`. Do not guess `acceptedPriceCents` when this contract returns a null price.
-- CrowdListen `usagePricing`: this capability uses variable usage pricing instead of a fixed call price. An owner connects the shared AWB balance in CrowdListen Settings → Billing and authorizes a maximum per analysis. The charge is 4× provider API and token list cost, rounded up once to whole cents. The worker holds the approved limit before provider work and settles only fully reported costs; uncertain usage remains under review. Costs consumed by a failed analysis may still be charged. Customer-agent model and browser costs remain with that provider. Send the current `skillVersion`; do not invent an `acceptedPriceCents` for this usage contract.
+- CrowdListen `usagePricing`: this capability uses variable usage pricing instead of a fixed call price. An owner connects the shared Answer with Books balance in CrowdListen Settings → Billing and authorizes a maximum per analysis. The charge is 4× provider API and token list cost, rounded up once to whole cents. The worker holds the approved limit before provider work and settles only fully reported costs; uncertain usage remains under review. Costs consumed by a failed analysis may still be charged. Customer-agent model and browser costs remain with that provider. Send the current `skillVersion`; do not invent an `acceptedPriceCents` for this usage contract.
 - `pricingModel: "per-call"`: one successfully completed skill request is one billable call. Internal model/tool calls are included. Use the selected catalog entry's `version` as the request's `skillVersion`, and its non-null `priceCents` as `acceptedPriceCents`. Show the fixed price and bounded scope before starting unless already authorized. The price is held when queued, charged once on success, and released on failure or expiry. Polling and result retrieval are free. Do not submit outcome quotes to this deployment. Unknown contracts or missing prices require clarification, not a free run.
 
 Do not accept an increased price automatically or switch billing deployments to bypass funding or approval. Test balances are simulated, but upstream API calls can still incur real provider costs. Hosted production currently does not enable real-money billing.
@@ -77,7 +77,7 @@ Runs are available through `GET /v1/runs` and `GET /v1/runs/:id`, and in the acc
 
 ## Book-backed advice
 
-Book-backed answers use the separate AWB book skill, not Capability Lab's `/v1/run`. If the user wants this capability and it is absent, offer the existing install command in a Node-enabled environment:
+Book-backed answers use the separate Answer with Books book skill, not Capability Lab's `/v1/run`. If the user wants this capability and it is absent, offer the existing install command in a Node-enabled environment:
 
 ```sh
 npx answer-with-books install --skill --api

@@ -3,10 +3,10 @@ import Base from '../layouts/Base.astro';
 import AccountNav from '../components/AccountNav.astro';
 import ToolAccountAccess from '../components/ToolAccountAccess.astro';
 ---
-<Base title="API keys" description="Create and manage the personal keys that connect your agent to AWB skills." path="/api-keys/" robots="noindex, follow">
+<Base title="API keys" description="Create and manage the personal keys that connect your agent to Answer with Books skills." path="/api-keys/" robots="noindex, follow">
   <section class="awb-section keys-page" data-api-keys-page>
     <AccountNav active="keys" />
-    <header><p class="awb-eyebrow">Your account</p><h1>API keys</h1><p>Manage the keys that connect your agents to AWB.</p></header>
+    <header><p class="awb-eyebrow">Your account</p><h1>API keys</h1><p>Manage the keys that connect your agents to Answer with Books.</p></header>
     <p class="session-status" data-keys-session-status role="status">Checking your account…</p>
     <div data-keys-signin hidden><a class="awb-pill awb-pill-primary" href="/login/">Sign in to manage keys</a></div>
     <div class="keys-panel" data-keys-content hidden><ToolAccountAccess standalone /></div>

@@ -46,7 +46,7 @@ export const communityMaps: ContentMap[] = [
       'how-to-negotiate-salary-without-guessing-your-worth',
     ],
     visibility: 'public',
-    author: 'AWB',
+    author: 'Answer with Books',
     createdAt: '2026-07-01T12:00:00.000Z',
   },
   {
@@ -64,7 +64,7 @@ export const communityMaps: ContentMap[] = [
       'how-to-test-a-risky-idea-before-you-build-too-much',
     ],
     visibility: 'public',
-    author: 'AWB',
+    author: 'Answer with Books',
     createdAt: '2026-07-01T12:00:00.000Z',
   },
   {
@@ -81,7 +81,7 @@ export const communityMaps: ContentMap[] = [
       'how-to-delegate-without-losing-control',
     ],
     visibility: 'public',
-    author: 'AWB',
+    author: 'Answer with Books',
     createdAt: '2026-07-01T12:00:00.000Z',
   },
 ];

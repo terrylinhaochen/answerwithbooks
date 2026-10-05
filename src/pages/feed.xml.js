@@ -25,7 +25,7 @@ export async function GET() {
   const body = `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0">
       <channel>
-        <title>AWB</title>
+        <title>Answer with Books</title>
         <link>${site}/</link>
         <description>Practical questions answered with books.</description>
         <language>en-us</language>
