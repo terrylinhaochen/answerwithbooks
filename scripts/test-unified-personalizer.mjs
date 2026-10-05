@@ -7,7 +7,7 @@ const readBody = (collection,slug) => readFileSync(`src/content/${collection}/${
 const bookSlugs = ['the-mom-test','the-crowd','zero-to-one'];
 const answerSlugs = ['how-to-validate-an-idea-without-fooling-yourself','how-to-fix-user-interviews-that-are-not-teaching-you-anything'];
 const tutorialSlugs = ['meeting-notes-to-action-plan','customer-feedback-to-evidence','evidence-to-decision-memo'];
-const routes = [...bookSlugs.map(slug=>`/books/${slug}/`), ...answerSlugs.map(slug=>`/answers/${slug}/`), ...tutorialSlugs.map(slug=>`/guides/${slug}/`)];
+const routes = [...answerSlugs.map(slug=>`/answers/${slug}/`), ...tutorialSlugs.map(slug=>`/guides/${slug}/`)];
 const providers = {chatgpt:'https://chatgpt.com/',claude:'https://claude.ai/new',gemini:'https://gemini.google.com/app',grok:'https://grok.com/'};
 const browser = await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
 const context = await browser.newContext({permissions:['clipboard-read','clipboard-write']});
@@ -17,7 +17,7 @@ const errors = [];
 page.on('pageerror',e=>errors.push(e.message));
 try {
   let catalogPages = 0;
-  for (const collection of ['books','answers']) {
+  for (const collection of ['answers']) {
     for (const file of readdirSync(`src/content/${collection}`).filter(name=>name.endsWith('.md'))) {
       const slug = file.replace(/\.md$/,'');
       const html = readFileSync(`dist/${collection}/${slug}/index.html`,'utf8');

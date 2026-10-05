@@ -1,6 +1,6 @@
 <section class="mt-8 mb-10" data-book-additions hidden>
   <h2 class="font-serif text-2xl">Your additions</h2>
-  <p class="mt-2 text-sm text-soft">Books you’ve confirmed, including requests for new digests.</p>
+  <p class="mt-2 text-sm text-soft">Your private uploads and saved books.</p>
   <div class="mt-4 grid gap-3 sm:grid-cols-2" data-book-additions-list></div>
 </section>
 <script>
@@ -24,12 +24,17 @@
   async function refresh() {
     const { data } = await supabase.auth.getSession(); activeUserId = data.session?.user.id; render();
     if (!activeUserId) return;
+    const {data: jobs} = await supabase.from('book_processing_jobs').select('id,title,author,status,created_at').order('created_at',{ascending:false}).limit(100);
+    for(const job of jobs||[]) {
+      root.hidden=false;const card=document.createElement('a');card.href=`/your-book/?id=${encodeURIComponent(job.id)}`;card.className='rounded-2xl border border-line bg-card p-4';
+      const title=document.createElement('h3');title.className='font-serif text-xl';title.textContent=job.title;const info=document.createElement('p');info.className='mt-2 text-sm text-soft';info.textContent=job.status==='ready'?'Book, skill, and cover ready':'Open to continue processing';card.append(title,info);list.prepend(card);
+    }
     const { data: rows, error } = await supabase.from('book_requests').select('id,title,author,status,created_at,external_id,matched_book_slug').eq('user_id', activeUserId).order('created_at', { ascending: false }).limit(100);
     if (!error && rows) {
       const remote: BookAddition[] = rows.map((row) => ({ id: row.id, title: row.title, author: row.author, status: row.status, createdAt: row.created_at, externalId: row.external_id, slug: row.matched_book_slug }));
       const local = readAdditions(activeUserId).filter((item) => !remote.some((other) => sameBook(item, other)));
       try { localStorage.setItem(additionsKey(activeUserId), JSON.stringify([...remote, ...local].slice(0,100))); } catch { /* Keep the current shelf if storage is unavailable. */ }
-      render();
+      // Uploaded jobs above remain visible; legacy requests refresh next visit.
     }
   }
   window.addEventListener('awb:book-added', () => { void refresh(); });

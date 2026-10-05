@@ -16,3 +16,6 @@ node_modules/
 *.log
 scripts/tmp-*
 supabase/.temp/
+
+# Private uploaded books and generated drafts
+.book-processing/

@@ -55,16 +55,13 @@ context.
 
 ## Source Asset Pipeline
 
-For each new book:
+For each new private book:
 
-1. Add or upload the source file to the core ingestion layer.
-2. Run `npm run engine:ingest -- --candidate <book-id> --source <file>` to extract source text.
-3. Review `content-engine/ingestion-jobs/<book-id>.json` and `content-engine/book-drafts/<book-id>.md`.
-4. Distill the draft into a public book page in `src/content/books`.
-5. Run `npm run covers` for deterministic covers.
-6. Run `npm run covers:gemini` when model-generated cover art is desired.
-7. Match the book to CrowdListen demand packets and publish answer candidates.
+1. Run `npm run engine:ingest -- --candidate <book-id> --source <file>`.
+2. Follow `.book-processing/<job-id>/PROCESS.md` to create one grounded distillation.
+3. Run `npm run engine:compile -- --job <job-directory> --distillation <distillation.json>`.
+4. Review both `artifacts/book.md` and `artifacts/skill/`, including references and coverage gaps.
+5. Publication into `src/content/books` is a separate editorial decision. Private uploads are not published automatically.
+6. Public cover commands: `npm run covers` uses Gemini; `npm run covers:svg` generates deterministic SVGs.
 
-The ingestion command supports `.pdf`, `.txt`, and `.md`. PDF extraction uses the bundled Codex
-runtime's `pypdf` package when available and writes text into the sibling core ledger at
-`../core/research/book-text/<book-id>.txt`.
+The CLI supports PDF, TXT and Markdown; PDF extraction uses pypdf. Extracted text stays in the ignored private job directory. The hosted upload uses the dedicated `book-process` worker, private storage, resumable processing, automatic cover generation and a shared book/skill compiler. See [BOOK_TO_SKILL_INTEGRATION.md](../docs/BOOK_TO_SKILL_INTEGRATION.md) for runtime limits and upstream reuse boundaries.

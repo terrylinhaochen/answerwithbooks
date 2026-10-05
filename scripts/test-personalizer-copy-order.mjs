@@ -6,9 +6,9 @@ const context = await browser.newContext(); // No pre-granted clipboard permissi
 await context.route(/https:\/\/(chatgpt\.com|claude\.ai|gemini\.google\.com|grok\.com)\//, route => route.fulfill({contentType:'text/html', body:'<textarea aria-label="Paste test"></textarea>'}));
 const page = await context.newPage();
 try {
-  await page.goto('http://127.0.0.1:4321/books/zero-to-one/');
+  await page.goto('http://127.0.0.1:4321/answers/how-to-validate-an-idea-without-fooling-yourself/');
   const prompt = await page.locator('[data-personalize-prompt]').inputValue();
-  assert.ok(prompt.includes('Zero to One') && prompt.includes('Book URL Contract'));
+  assert.ok(prompt.includes('Guide Reading Contract'));
   await page.evaluate(() => {
     const write = navigator.clipboard.writeText.bind(navigator.clipboard);
     window.copyFinished = false;

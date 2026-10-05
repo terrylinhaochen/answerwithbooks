@@ -32,7 +32,9 @@
     "test:ui": "PATH=$HOME/.nvm/versions/node/v22.12.0/bin:$PATH node scripts/ui-smoke-test.mjs",
     "test:rendered-catalog": "PATH=$HOME/.nvm/versions/node/v22.12.0/bin:$PATH node scripts/rendered-catalog-audit.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "engine:compile": "node scripts/compile-book-artifacts.mjs",
+    "test:book-processing": "node --test scripts/test-book-processing.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",
@@ -41,6 +43,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^5.12.0",
+    "fflate": "0.8.2",
     "pdfjs-dist": "5.4.624",
     "tailwindcss": "^4.1.0",
     "tesseract.js": "7.0.0"
