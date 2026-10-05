@@ -1,0 +1,30 @@
+{
+  "repository": "https://github.com/virgiliojr94/book-to-skill",
+  "commit": "c108d25b0cb58e1bdc361f3de02ed9f37075152f",
+  "version": "1.4.0",
+  "license": "MIT",
+  "files": {
+    "book_to_skill/config.py": "e92a487f632db762f4dafff3188f6441809b4cba3bb88b0c6821a14e6a21ff2f",
+    "book_to_skill/pdf_inspector_integration.py": "e1f6790be272068a9d82ab2b2fe78cd1510dba12748bf9f9931514b759c6d1c2",
+    "book_to_skill/__init__.py": "9d18b99b2c417557244634073c6bb3fa52dcc58aad8fb1fc5f658599f0c3ab77",
+    "book_to_skill/cli.py": "2fe257d1c089ca5ecc68c6dde377087766b83d3e9c5393810c6bb5401dc97a91",
+    "book_to_skill/utils.py": "547f49d836192d9a3dd3960f2d4cffa2031c1cc59bff89e49013ba4e48c9054d",
+    "book_to_skill/exceptions.py": "bf9417993e577cea5130bc34f4241cafccd1dda1f2f1ac22a9e8a198cc9dedc8",
+    "book_to_skill/sanitize.py": "b2e251402d1a5f95cf6f7c9cc293b4c977612d9b0a96b77a234741d626404627",
+    "book_to_skill/__main__.py": "2207592e7bad6433302d258a4cfc9384a406373f59e49392a56d8389d08803ea",
+    "book_to_skill/dependencies.py": "42ada779fd8d8eed961790f4d49cadd1c824ec7a9cb7fbfd36f02a26c9b12988",
+    "book_to_skill/parsers/docx.py": "8a2f2ec693b3c24be987bd3f419a0ed82b8d2dc9d7a3783f5a880288617fedf3",
+    "book_to_skill/parsers/calibre.py": "ed2589e86408cb5e82f795a20ce3cf8e32a9f8307fd3e838ba3a7c466f200d42",
+    "book_to_skill/parsers/html.py": "dec7b3b84dc514469c050fa71bafcc8109956d2f296198e05d1bb20fce1bc2e6",
+    "book_to_skill/parsers/__init__.py": "a8f740712820f8729cd3b6adca799d17a23e0b80205a29e511791aafc97723f0",
+    "book_to_skill/parsers/pdf.py": "25c83c7e11941a62f7af54b61b435a51d6c74be5c4896062d95509230a5053c2",
+    "book_to_skill/parsers/rtf.py": "a1097455129d69249825fbd9a9acf3805cec3fcfab5ba5929f128f2c860dce49",
+    "book_to_skill/parsers/text.py": "d355f499d3184f2b96aa84ea8e55d72b2127c6b91ff9f90d43131c8039e1ee13",
+    "book_to_skill/parsers/epub.py": "31b8a9a873a0b7ed9338e9f4256096b06ec5bc6c836343f0ff4176606f173544",
+    "tools/validate_skill.py": "71a6c42e7c958b7d9158973ec7ee3d909a420df49248248dbd1d4b29daac0a80",
+    "tools/scan_generated_skill.py": "2566b9dfb1ff3b473f4daebea9a0dffc36f22bd8888b7e267c256ad5f1b87be3",
+    "LICENSE.md": "be9b04bccfb4bdab63de13663307c229c0aa5ca69b692e9c351ff7053da9faca",
+    "SKILL.md": "6a3d7ce3d3689020cd4089f8cad9c0a9f8237abfaf896ff20677031dac4592b1",
+    "pyproject.toml": "ce83ece6f52d395700c6d631e9e47aa87fa8b7c9149aa13bdb75d70c44141573"
+  }
+}

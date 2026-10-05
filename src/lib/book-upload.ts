@@ -1,3 +1,4 @@
+import {extractUpstream,analyzeUpstream} from './upstream-book';
 import { supabase } from './supabase';
 export async function bookWorker(body: Record<string,unknown>) {
  const { data, error } = await supabase.functions.invoke('book-process',{body});
@@ -10,8 +11,8 @@ export async function bookWorker(body: Record<string,unknown>) {
 }
 export async function extractFullBook(file:File,progress:(s:string)=>void) {
  if(file.size===0||file.size>10*1024*1024)throw new Error('Choose a non-empty book under 10 MB.');
- if(!/\.(pdf|txt|md)$/i.test(file.name))throw new Error('Choose a PDF, TXT, or Markdown book. Cover images are not book sources.');
- if(!/\.pdf$/i.test(file.name)) { const text=await file.text();if(text.includes('\0'))throw new Error('Choose a plain-text file.');return text; }
+ if(!/\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(file.name))throw new Error('Choose a PDF, EPUB, DOCX, HTML, RTF, or text book. Cover images are not book sources.');
+ if(!/\.pdf$/i.test(file.name)) { progress('Reading your book…');return extractUpstream(file); }
  const [pdfjs,{default:workerSrc}]=await Promise.all([import('pdfjs-dist'),import('pdfjs-dist/build/pdf.worker.min.mjs?url')]);
  pdfjs.GlobalWorkerOptions.workerSrc=workerSrc;
  const task=pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer()),isEvalSupported:false,enableXfa:false});
@@ -26,7 +27,7 @@ export async function extractFullBook(file:File,progress:(s:string)=>void) {
    if(value.trim().length<20 && n>2 && n<pdf.numPages-1) throw new Error('This PDF contains pages without readable text. Run OCR first, then upload the searchable PDF.');
    text+=`\n[Page ${n}]\n${value}\n`;page.cleanup();
    if(text.length>1200000)throw new Error('This book exceeds the current text limit.');
-  }return text;
+  }progress('Identifying the book structure…');return analyzeUpstream(text);
  }finally{await task.destroy();}
 }
 export function mountBookUpload() {
@@ -47,12 +48,12 @@ export function mountBookUpload() {
   try {
    const {data}=await supabase.auth.getSession();if(!data.session){login.hidden=false;throw new Error('Sign in first to keep your book private.');}
    status.textContent='Checking processing availability…';const health=await bookWorker({action:'health'});if(!health.available)throw new Error('Book processing is being connected. Please try again later.');
-   const text=await extractFullBook(file,s=>status.textContent=s);if(text.trim().length<100)throw new Error('Not enough readable text. Upload a searchable book source.');
+   const extraction=await extractFullBook(file,s=>status.textContent=s);const text=extraction.text;if(text.trim().length<100)throw new Error('Not enough readable text. Upload a searchable book source.');
    status.textContent='Saving your private book…';
    const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
-   const result=await bookWorker({action:'create',name:file.name,text,sha});
+   const result=await bookWorker({action:'create',name:file.name,text,sha,extraction:{...extraction,text:undefined}});
    if(result.upload) {
-    const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,file,{contentType:/\.pdf$/i.test(file.name)?'application/pdf':'text/plain'});
+    const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});
     if(error)throw new Error('Source upload failed. Choose the same book to retry.');
    }
    location.assign(`/your-book/?id=${encodeURIComponent(result.job.id)}`);

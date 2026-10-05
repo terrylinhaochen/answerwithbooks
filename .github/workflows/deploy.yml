@@ -41,6 +41,11 @@ jobs:
       - name: Verify signup backend (no email sent)
         run: node scripts/check-signup-backend.mjs
 
+      - name: Verify upstream book adaptation
+        run: |
+          python3 scripts/book-adapter/test_adapter.py
+          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs
+
       - name: Build
         run: npm run build
 

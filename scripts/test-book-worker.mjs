@@ -17,3 +17,15 @@ test('handoff contains usable context and both task modes with no installation p
  const prompt=bookAgentPrompt({title:'Example',author:'Author',url:'https://answerwithbooks.com/your-book/?id=private',digest:'READABLE CONTEXT',skill:'SKILL CONTEXT'});
  assert.match(prompt,/question or complete a task/);assert.match(prompt,/READABLE CONTEXT/);assert.match(prompt,/SKILL CONTEXT/);assert.match(prompt,/No installation or URL access is required/);
 });
+test('detected headings preserve source coverage and cannot invent titles',()=>{
+ const source='Front matter\nChapter 1: Trial\nChoose a safe test.\nChapter 2: Review\nInspect results.';
+ const result=splitSource(source,[{line:2,title:'Chapter 1: Trial'},{line:4,title:'Chapter 2: Review'},{line:5,title:'Fabricated'}]);
+ assert.deepEqual(result.chunks.map(c=>[c.start,c.end,c.title]),[[1,1,''],[2,3,'Chapter 1: Trial'],[4,5,'Chapter 2: Review']]);
+ assert.equal(result.text,source);assert.equal(validateSection({summary:'Review',sourceRefs:[{startLine:4,endLine:5}],ideas:[]},result.chunks[2],2).title,'Chapter 2: Review');
+});
+test('server sanitizer agrees with original Python for hidden characters and preserves ordinary Unicode',async()=>{
+ const {sanitizeSource}=await import('../supabase/functions/_shared/upstream-sanitize.mjs');
+ const {runBookAdapter}=await import('../src/lib/upstream-book-node.mjs');
+ const text='Chapter 1: Test\n中文 😀 '+[0x200b,0x200c,0x200d,0x2060,0x202e,0xfeff,0xe0001,0xe0020,0x61c].map(n=>String.fromCodePoint(n)).join('')+' ordinary text';
+ assert.equal(sanitizeSource(text),runBookAdapter({operation:'analyze',text}).text);
+});

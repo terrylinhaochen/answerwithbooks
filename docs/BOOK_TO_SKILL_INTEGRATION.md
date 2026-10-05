@@ -2,7 +2,7 @@
 
 ## Shipped architecture
 
-The website uploads a full source into a private Supabase bucket and creates an owner-scoped processing job. `book-process` is a dedicated authenticated Edge Function. The browser extracts every readable PDF page (or reads TXT/Markdown), retains the original file in private storage, and drives checkpointed processing requests. Keep the book page open; closing it saves progress and reopening resumes. This version is not an unattended background queue.
+The website uploads a full source into a private Supabase bucket and creates an owner-scoped processing job. `book-process` is a dedicated authenticated Edge Function. The browser extracts readable PDF pages with PDF.js, or uses the original upstream Python parsers for EPUB, DOCX, HTML, RTF, and text formats, retains the original file in private storage, and drives checkpointed processing requests. Keep the book page open; closing it saves progress and reopening resumes. This version is not an unattended background queue.
 
 Each source section is distilled once into original notes with bounded source-line references. A shared pure compiler creates `book.md`, `skill/SKILL.md`, chapter reference files, patterns, cheatsheet, glossary, and provenance. The reader and skill use that same intermediate representation. Source sections are not presented as verified original chapter boundaries. Extraction completeness and model fidelity are explicitly unverified; outputs are drafts. A generated cover is a separate last step, so a failed cover does not discard the book or skill.
 
@@ -12,9 +12,25 @@ The UI is Upload → Processing → Your book. No title search, cover identifica
 
 Reference: https://github.com/virgiliojr94/book-to-skill at c108d25b0cb58e1bdc361f3de02ed9f37075152f (1.4.0), MIT licensed.
 
-We have NOT vendored or executed upstream code. We adapted its entry skill + chapter references + patterns/glossary/cheatsheet organization. Its Python CLI extracts files; an agent follows its skill workflow to generate skills. It does not supply our hosted upload UI, private storage, resumable jobs, AWB book renderer, or cover generation.
+The integration now executes upstream code. Unmodified Python sources and tools are vendored with MIT attribution and SHA-256 checksums. The browser runs fixed adapter operations in an isolated, disposable Pyodide Web Worker; the native ingest/compile CLI calls the same adapter in Python. The runtime and source bundle are served from AWB's own origin. No book text is sent to a third-party extraction service. Original sources and extracted text are saved privately to AWB for generation.
 
-Upstream accepts PDF, EPUB, DOCX, RTF, TXT/TEXT, Markdown, RST, AsciiDoc, HTML/XHTML and Kindle files through Calibre. Folders and globs are supported by its CLI. This release accepts only PDF, TXT and Markdown, up to 10 MB / 1.2 million extracted characters. Scanned PDFs require OCR first. No EPUB, DOCX, Kindle, folder, or batch parity is claimed.
+| Upstream capability | AWB adaptation |
+| --- | --- |
+| EPUB, DOCX, HTML, RTF, text parsers | Original code runs in the upload worker; EPUB spine order and DOCX table order are retained. |
+| PDF extraction and optional Docling | Browser retains PDF.js; native CLI uses upstream's dispatcher and available local dependencies. OCR remains external. |
+| Invisible-character sanitizer | Original Python on extraction; server Unicode ranges generated from the same original function. |
+| Chapter/structure detection and token estimates | Original functions analyze extraction. Validated numeric heading positions guide bounded processing sections; detection is explicitly provisional. |
+| Agent generation workflow | Selected original philosophy, decision-cheatsheet priorities, and quality rules guide AWB's structured distillation. |
+| Skill validator | Original validator checks exports and native compilation. Structural errors disable copy/download pending repair. |
+| Generated-skill scanner | Original scanner runs before browser export and during CLI compilation; findings are advisory and visible. |
+| SKILL.md + chapters + patterns/glossary/cheatsheet | AWB's shared compiler creates these alongside the reader artifact, from one distillation. Source-supported decision rules appear in the cheatsheet. |
+| Calibre / Kindle, folder/glob input, multi-book synthesis, agent installation | Not added to the website. Optional native single-file Calibre support is inherited when installed; no browser parity is claimed. |
+
+Supported web inputs: PDF, EPUB, DOCX, RTF, HTML/HTM/XHTML, TXT/TEXT, MD/MARKDOWN, RST, ADOC/ASCIIDOC. Limits: 10 MB raw file, 1.2 million extracted characters, 60 processing sections. Archives are bounded before parsing (2,000 members, 40 MB expanded total, 12 MB per member, and compression-ratio checks). Scanned PDFs need OCR before upload. The original DOCX DTD/entity rejection remains active. These checks do not guarantee extraction completeness or semantic accuracy.
+
+The Python runtime adds an initial download of roughly 14 MB and is loaded only for extraction or export validation. A fresh worker isolates each operation and terminates after 90 seconds. Book contents are never evaluated as code. The native adapter disables automatic dependency installation.
+
+AWB continues to own authentication, private storage, resumable processing, book rendering, shelf placement, covers, and the single Copy to agent experience. Upstream's interactive purpose interviews, installation prompts, repository publishing, and local OS commands are intentionally not part of this upload flow.
 
 ## Runtime and access
 
@@ -32,6 +48,12 @@ Actions: health, create, status, process, delete. Delete removes the source, cov
 
 ## Verification
 
-`npm run test:book-processing` checks 8 integrity/compilation scenarios. `node --test scripts/test-book-worker.mjs` checks chunk coverage, citation boundaries and portable handoff. `node scripts/test-book-upload-ui.mjs` checks desktop/mobile upload-only UI and real clipboard behavior with fallback. Hosted acceptance uses isolated synthetic accounts and an authored source fixture; distinguish these checks from a full-length book quality evaluation.
+`npm run test:book-processing` checks 8 integrity/compilation scenarios, including original upstream validation and decision-rule preservation. `node --test scripts/test-book-worker.mjs` checks chunk coverage, detected-heading boundaries, citation boundaries and portable handoff. `node scripts/test-book-upload-ui.mjs` checks desktop/mobile upload-only UI and real clipboard behavior with fallback. Hosted acceptance uses isolated synthetic accounts and an authored source fixture; distinguish these checks from a full-length book quality evaluation.
 
 Release acceptance on 2026-10-05: 8 compiler integrity tests and 3 worker contract tests passed; the complete existing UI smoke suite passed, plus desktop/mobile upload and guide clipboard regressions. Two synthetic accounts verified worker/database/storage isolation. An authored Markdown source completed real provider-backed book, skill, and image generation, with fresh-client readback and ZIP validation. This does not certify full-length books, scans, or semantic accuracy across a corpus.
+
+## Adaptation verification (2026-10-05)
+
+The pinned upstream repository baseline passed 777 tests with 5 optional tests skipped, and `ruff check .` passed. AWB adapter tests cover EPUB reading order, DOCX paragraph/table order and entity rejection, HTML/RTF cleanup, archive limits, Unicode cleanup, fenced-heading exclusion, native dispatch, and original validation/scanning. `node scripts/test-upstream-browser.mjs` exercises those original Python modules in real Chrome. Use `AWB_TEST_ORIGIN` for a hosted runtime test. These are authored fixtures, not a full-length book quality benchmark.
+
+Authenticated adaptation acceptance: an authored two-chapter EPUB completed real provider-backed extraction → distillation → book/skill → cover → fresh-page/fresh-client readback → clipboard → ZIP. Original upstream validation ran before export. A second synthetic account was denied access through the function, database, and storage. Production worker version 4 carries the adaptation. The built static site passed the format-worker suite and existing UI regressions.

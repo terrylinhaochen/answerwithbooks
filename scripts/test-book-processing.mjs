@@ -14,7 +14,7 @@ async function fixture(t) {
   const data = { schemaVersion: 1, jobId: job.id, sourceSha256: job.source.sha256, textSha256: job.source.textSha256,
     book: { year: null, oneLiner: 'Learn from bounded trials and inspect the evidence.', readIf: 'You need to choose a reversible next step.', tags: ['decision-making'], thesis: 'A reversible trial can reduce uncertainty when its result is examined with care.' }, coverage: { scope: 'full-source', gaps: [] },
     chapters: [
-      { id: 'ch01', title: 'Reversible choices', summary: 'Use a bounded experiment for a decision that can safely be undone.', sourceRefs: [{ startLine: 4, endLine: 7 }], ideas: [{ name: 'Bounded trial', explanation: 'Limit exposure while gathering decision evidence.', whenToUse: 'The next action is reversible.', steps: ['Set a trial boundary and a measure of success.', 'Review the result before expanding.'], limits: 'Do not apply to irreversible harm.', sourceRefs: [{ startLine: 5, endLine: 7 }] }] },
+      { id: 'ch01', title: 'Reversible choices', summary: 'Use a bounded experiment for a decision that can safely be undone.', sourceRefs: [{ startLine: 4, endLine: 7 }], ideas: [{ name: 'Bounded trial', decisionRule: 'When reversal is safe, run a bounded trial because its result reduces uncertainty.', explanation: 'Limit exposure while gathering decision evidence.', whenToUse: 'The next action is reversible.', steps: ['Set a trial boundary and a measure of success.', 'Review the result before expanding.'], limits: 'Do not apply to irreversible harm.', sourceRefs: [{ startLine: 5, endLine: 7 }] }] },
       { id: 'ch02', title: 'Evidence review', summary: 'Distinguish observations from explanations and keep conflicting data visible.', sourceRefs: [{ startLine: 9, endLine: 12 }], ideas: [{ name: 'Observation check', explanation: 'Interpretations can outrun what the sample establishes.', whenToUse: 'A trial result will inform another decision.', steps: ['List observed and contradictory outcomes.'], limits: 'Small samples do not establish prevalence.', sourceRefs: [{ startLine: 10, endLine: 12 }] }] },
     ], glossary: [{ term: 'Bounded trial', definition: 'A reversible test with a stopping point.', chapterIds: ['ch01'] }],
   };
@@ -24,6 +24,8 @@ const compile = f => compileBookProcessing({ directory: f.directory, distillatio
 test('one extraction produces linked book and skill artifacts with matching source references', async t => {
   const f = await fixture(t); const result = await compile(f);
   assert.equal(result.manifest.status, 'drafts_ready');
+  assert.deepEqual(result.manifest.validation.upstream.errors, []);
+  assert.match(await readFile(path.join(result.directory, 'skill/cheatsheet.md'), 'utf8'), /Decision rule: When reversal is safe/);
   assert.equal(result.manifest.outputs.book.status, 'needs_review');
   assert.equal(result.manifest.outputs.skill.status, 'needs_review');
   assert.equal(result.manifest.validation.behavioralEvaluation, 'not_performed');

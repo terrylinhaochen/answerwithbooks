@@ -19,3 +19,8 @@ supabase/.temp/
 
 # Private uploaded books and generated drafts
 .book-processing/
+
+# Built from pinned dependencies and vendored upstream source
+public/book-runtime/
+__pycache__/
+*.pyc

@@ -1,3 +1,4 @@
+import {auditUpstream} from './upstream-book';
 import {zipSync,strToU8} from 'fflate';
 import {supabase} from './supabase';
 import {bookWorker} from './book-upload';
@@ -6,6 +7,16 @@ const root=document.querySelector<HTMLElement>('[data-private-book]')!;
 const find=<T extends HTMLElement>(name:string)=>root.querySelector<T>(`[data-job-${name}]`)!;
 const id=new URL(location.href).searchParams.get('id');
 let current:any, running=false, rendered=false;
+async function checkSkill(files:Record<string,string>) {
+ find<HTMLButtonElement>('copy').disabled=true;find<HTMLButtonElement>('download').disabled=true;find('audit-retry').hidden=true;
+ find('audit').textContent='Checking skill format and content…';
+ try {
+  const report=await auditUpstream(files);
+  find('audit').textContent=report.errors.length?'Skill needs repair: '+report.errors.join('; '):report.findings.length?`Skill structure passed. Review ${report.findings.length} flagged passage(s) before agent use: `+report.findings.slice(0,5).map(f=>`${f.path}:${f.line} (${f.rule_id})`).join('; '):'Skill structure checked. No advisory scan findings. This does not verify factual accuracy.';
+  find<HTMLButtonElement>('copy').disabled=report.errors.length>0;find<HTMLButtonElement>('download').disabled=report.errors.length>0;
+ } catch {find('audit').textContent='The skill check could not finish. Retry before exporting.';find('audit-retry').hidden=false;}
+}
+
 const renderMarkdown=(text:string)=>{
  const box=find('reading');box.replaceChildren();
  const body=text.replace(/^---\n[\s\S]*?\n---\n/,'').replace(/\n## Use this book in an agent[\s\S]*$/,'');
@@ -31,7 +42,7 @@ async function paint(job:any) {
  find('status').textContent=job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':`Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
  if(job.status==='ready')find('resume').hidden=true;
  if(job.artifacts&&!rendered) {
-  rendered=true;find('content').hidden=false;renderMarkdown(job.artifacts['book.md']);
+  rendered=true;find('content').hidden=false;renderMarkdown(job.artifacts['book.md']);void checkSkill(job.artifacts);
   const skill=Object.entries(job.artifacts).filter(([name])=>name.startsWith('skill/')).map(([name,value])=>`## ${name}\n${value}`).join('\n\n');
   find<HTMLTextAreaElement>('prompt').value=bookAgentPrompt({title:job.title,author:job.author,url:location.href,digest:job.artifacts['book.md'],skill});
   const {data}=await supabase.storage.from('private-books').createSignedUrl(`${job.user_id}/${job.id}/source`,3600);
@@ -55,6 +66,7 @@ async function run() {
  }catch(e){find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
  finally{running=false;}
 }
+find('audit-retry').addEventListener('click',()=>void checkSkill(current.artifacts));
 find('retry').addEventListener('click',()=>void run());
 find('copy').addEventListener('click',async()=>{
  const prompt=find<HTMLTextAreaElement>('prompt');

@@ -34,7 +34,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "engine:compile": "node scripts/compile-book-artifacts.mjs",
-    "test:book-processing": "node --test scripts/test-book-processing.mjs"
+    "test:book-processing": "node --test scripts/test-book-processing.mjs",
+    "predev": "node scripts/build-book-runtime.mjs",
+    "prebuild": "node scripts/build-book-runtime.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",
@@ -45,6 +47,7 @@
     "astro": "^5.12.0",
     "fflate": "0.8.2",
     "pdfjs-dist": "5.4.624",
+    "pyodide": "314.0.7",
     "tailwindcss": "^4.1.0",
     "tesseract.js": "7.0.0"
   },

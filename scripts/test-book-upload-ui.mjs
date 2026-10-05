@@ -14,7 +14,7 @@ try {
   await page.evaluate(()=>{navigator.clipboard.writeText=async()=>{throw new Error('denied');};});await page.getByRole('button',{name:'Copy to agent',exact:true}).click();assert.ok(await page.getByLabel('Book agent prompt').isVisible());
   await page.goto(origin+'/books/');await page.locator('[data-open-book-request]').click();
   assert.equal(await page.getByText('Is this the right book?',{exact:true}).count(),0);assert.equal(await page.getByText('Find a book',{exact:true}).count(),0);
-  assert.equal(await page.getByLabel('Book file').getAttribute('accept'),'.pdf,.txt,.md');
+  assert.match(await page.getByLabel('Book file').getAttribute('accept'),/\.epub,\.docx/);
   await page.getByLabel('Book file').setInputFiles({name:'example.txt',mimeType:'text/plain',buffer:Buffer.from('Example original source. '.repeat(40))});
   await page.getByRole('button',{name:'Create book & skill'}).click();await page.getByText('Sign in first to keep your book private.',{exact:true}).waitFor();
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
