@@ -3,6 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 const utilityPaths = [
+  '/shelf-preview/',
   '/login/',
   '/signup/',
   '/my-books/',

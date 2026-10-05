@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import ShelfHero from '../components/ShelfHero.astro';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
 import { newsletterSignupUrl } from '../lib/newsletter';
 import BookCover from '../components/BookCover.astro';
@@ -11,6 +12,7 @@ import FaqList from '../components/FaqList.astro';
 import QuestionInvite from '../components/QuestionInvite.astro';
 import { faqJsonLd } from '../lib/seo';
 
+const { preview = false } = Astro.props;
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 const answers = (await getCollection('answers')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -151,9 +153,12 @@ const jsonLd = [
 <Base
   title="Learn what matters to you, right now — AWB"
   description={siteDescription}
-  path="/"
+  path={preview ? "/shelf-preview/" : "/"}
+  robots={preview ? "noindex, nofollow" : undefined}
   jsonLd={jsonLd}
 >
+  <ShelfHero />
+
   <section id="home-intro" class="awb-section pb-14 pt-12 sm:pt-16 lg:pb-20 lg:pt-20">
     <div class="grid min-w-0 grid-cols-1 items-stretch gap-10 xl:grid-cols-[0.95fr_1.05fr] xl:gap-16">
       <div class="flex min-w-0 flex-col justify-center">

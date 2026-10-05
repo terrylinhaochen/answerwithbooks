@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BookCover from './BookCover.astro';
+const books = await getCollection('books');
+// Port of LandingLibraryShowcase in answer-with-books-ios at 8730b5c.
+const ids = ['the-mom-test','thinking-fast-and-slow','zero-to-one','designing-your-life','atomic-habits','deep-work','good-strategy-bad-strategy'];
+const featured = ids.map(id => books.find(book => book.id === id)).filter(Boolean);
+const rotation = [-4,2,-1,3,-2.5,1.5,4];
+const offset = [3,-5,0,-8,2,-4,4];
+---
+ <section id="home-shelf" class="awb-section shelf-entry" aria-label="Book library entry">
+  <div class="shelf-showcase">
+   <div class="shelf-label"><span>Book library</span><a href="/books/">{books.length} books <span aria-hidden="true">↗</span></a></div>
+   <div class="shelf-covers">
+    {featured.map((book,index)=><div class="shelf-cover" style={`--tilt:${rotation[index]}deg;--lift:${offset[index]}px;--layer:${index}`}><BookCover book={book!} size="lg" priority /></div>)}
+   </div>
+  </div>
+  <h2>What’s top of mind?</h2>
+  <p class="shelf-intro">Find a useful idea in a good book.<br />Read it here, then put it to work with your agent.</p>
+  <div class="shelf-actions"><a class="awb-pill awb-pill-primary" href="/books/">Browse the shelf <span aria-hidden="true">→</span></a></div>
+ </section>
+<style>
+ .shelf-entry{min-height:calc(100svh - var(--shelf-header-height,68px));box-sizing:border-box;padding-block:65px 56px;display:flex;align-items:center;flex-direction:column;justify-content:center;text-align:center}
+ .shelf-showcase{width:100%;padding:25px 32px 28px;border-radius:30px;background:linear-gradient(135deg,#ffffffb8,#ffffff50);border:1px solid #ffffffdd;box-shadow:0 24px 50px #35251c0c,inset 0 1px 0 #fff;backdrop-filter:blur(18px)}
+ .shelf-label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;letter-spacing:.025em;text-align:left}
+ .shelf-label a{color:var(--color-faint);font-weight:400}.shelf-label a:hover{text-decoration:underline}
+ .shelf-covers{height:205px;display:flex;align-items:flex-end;justify-content:center;padding:22px 0 10px}
+ .shelf-cover{width:105px;flex:0 1 105px;margin-left:-6px;transform:translateY(var(--lift)) rotate(var(--tilt));z-index:var(--layer);transition:transform .2s ease}
+ .shelf-cover:first-child{margin-left:0}
+ .shelf-cover:hover,.shelf-cover:focus-within{transform:translateY(-14px) rotate(0deg);z-index:10}
+ .shelf-cover :global(.book-cover){width:100%;box-shadow:0 12px 18px #1b100b25;border-radius:7px}
+ .shelf-entry h2{font-family:var(--font-serif);font-size:clamp(38px,4.5vw,62px);line-height:1.12;letter-spacing:-.04em;margin-top:42px}
+ .shelf-intro{font-size:18px;line-height:1.65;color:var(--color-soft);margin-top:16px}
+ .shelf-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:27px}.shelf-actions .awb-pill{min-height:46px;padding:12px 23px;gap:18px}
+ @media(max-width:600px){.shelf-entry{padding-block:35px 40px;}.shelf-showcase{padding:17px 15px 21px;border-radius:24px}.shelf-label{font-size:11px}.shelf-covers{height:115px;padding-top:15px;padding-bottom:6px}.shelf-cover{flex-basis:48px;width:48px;margin-left:-4px}.shelf-cover :global(.book-cover__title){font-size:7px!important}.shelf-cover :global(.book-cover__year){font-size:5px!important}.shelf-cover :global(.book-cover){--cover-pad-x:6px;--cover-pad-y:5px}.shelf-entry h2{margin-top:35px;font-size:38px}.shelf-intro{font-size:15px}.shelf-actions{gap:8px}.shelf-actions .awb-pill{padding:11px 17px;font-size:13px}}
+ @media(prefers-reduced-motion:reduce){.shelf-cover{transition:none}}
+</style>
+
+
+<script>
+ const shelf = document.querySelector<HTMLElement>('#home-shelf');
+ const header = document.querySelector<HTMLElement>('body > header');
+ if (shelf && header) {
+  const updateHeight = () => shelf.style.setProperty('--shelf-header-height', `${header.getBoundingClientRect().height}px`);
+  updateHeight();
+  new ResizeObserver(updateHeight).observe(header);
+ }
+</script>
