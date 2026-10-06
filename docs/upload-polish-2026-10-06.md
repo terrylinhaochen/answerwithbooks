@@ -1,0 +1,13 @@
+# Upload and reading interface fixes
+
+The source dialog accepts both drag-and-drop and the file picker. A selected file shows its name and size, with a Remove action. Empty, unsupported, multiple-file, and oversized selections are rejected before processing. The file picker remains keyboard accessible, drag hover is visible, dropping files outside the target does not navigate away, and the selection is locked during processing.
+
+The source limit is now 50 MB (52,428,800 bytes). One shared configuration feeds the interface, Python adapter, and Edge Function. Migration `20261006193000` raises only the private book bucket limit; privacy and MIME policies stay unchanged. The project storage limit already supports 50 MB. The worker and migration were deployed before the larger-file interface.
+
+The latest upstream book-to-skill extraction path, reviewed at commit `e180fc46365e8c1aab0120778cc8a40b9515324b`, processes local files without the 10 MB cap imposed by our adapter. It records size as metadata and includes streaming file hashing. The browser continues to reuse the existing pinned upstream format parsers; no vendor update was needed for this change. See [upstream extraction utilities](https://github.com/virgiliojr94/book-to-skill/blob/e180fc46365e8c1aab0120778cc8a40b9515324b/book_to_skill/utils.py).
+
+The 1.2 million character extraction limit, 1,500 PDF page limit, and OCR requirement remain. Archive expansion is bounded at 100 MB; entry-count, individual-component, encryption, and decompression-ratio checks remain in place.
+
+Speed Read now uses an 8 px corner radius instead of the 50 percent radius that stretched it into an oval. The homepage headline keeps “Turn what you read into” together, with “how you work.” on the second line. Responsive typography was checked at 320, 390, 768, 1280, and 1440 px without horizontal overflow.
+
+Validation includes real browser extraction of PDF, Markdown, and text; drag/drop selection and removal; rejection cases; a PDF over 12 MB; and the exact 50 MB browser-selection boundary. Python parser tests exercised illustrated EPUB and DOCX archives over 44 MB while preserving chapter order. The deployed storage and worker accepted exactly 50 MB, verified its source hash, rejected oversized declared metadata, and blocked anonymous reads. That live capacity fixture isolates storage and integrity validation; it does not generate a book or evaluate AI output quality. The temporary account and source were deleted, and no email or generation call was made. The nonsecret live receipt is in `verification/upload-polish-2026-10-06/live-capacity.json`.

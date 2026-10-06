@@ -4,7 +4,7 @@ const origin=process.env.AWB_TEST_ORIGIN||'http://127.0.0.1:4321';
 const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
 const errors=[];
 try {
- for(const width of [390,1280]) {
+ for(const width of [320,390,1280]) {
   const context=await browser.newContext({viewport:{width,height:900}});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   await page.goto(origin+'/books/zero-to-one/');
   assert.equal(await page.getByRole('button',{name:'Copy to agent',exact:true}).count(),1);

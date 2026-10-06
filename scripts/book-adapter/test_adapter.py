@@ -4,7 +4,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
-from adapter import extract, analyze, validate
+from adapter import extract, analyze, validate, MAX_BYTES, MAX_TEXT
 
 
 def fixtures(directory):
@@ -48,6 +48,20 @@ class AdapterTests(unittest.TestCase):
         self.assertNotIn('BAD_COMMENT',text); self.assertIn('observations',text); self.assertIn('中',text)
     def test_archive_limit(self):
         with self.assertRaisesRegex(ValueError,'decompression'): extract(self.root/'oversized.epub',browser=True)
+    def test_large_illustrated_sources_keep_text_and_order(self):
+        # Media makes real books large; the upstream parsers only extract text.
+        media = bytes(11 * 1024 * 1024)
+        for name in ['manual.epub', 'manual.docx']:
+            with zipfile.ZipFile(self.root/name, 'a', zipfile.ZIP_STORED) as archive:
+                for i in range(4): archive.writestr(f'media/image-{i}.bin', media)
+            self.assertGreater((self.root/name).stat().st_size, 40 * 1024 * 1024)
+            text=extract(self.root/name,browser=True)['text']
+            self.assertLess(text.index('Chapter 1'),text.index('Chapter 2'))
+    def test_file_and_text_limits_still_apply(self):
+        path=self.root/'too-large.epub'
+        with path.open('wb') as file: file.truncate(MAX_BYTES+1)
+        with self.assertRaisesRegex(ValueError,'50 MB'): extract(path,browser=True)
+        with self.assertRaisesRegex(ValueError,'text limit'): analyze('A'*(MAX_TEXT+1))
     def test_cleanup_structure_and_native_adapter(self):
         data=extract(self.root/'manual.md',browser=True)
         self.assertEqual(data['removedInvisible'],1); self.assertEqual(data['headings'][1]['line'],4)

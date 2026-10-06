@@ -167,7 +167,7 @@ const jsonLd = [
           <div class="book-actions" role="group" aria-label="Book actions">
             <a
               href={`/speed-read/?book=${book.id}`}
-              class="book-action" style="width:auto;padding:0 12px;gap:8px"
+              class="book-action"
               aria-label="Speed read this book"
               title="Speed read this book"
             >
@@ -242,7 +242,7 @@ const jsonLd = [
 
   <style>
     .book-actions { display: flex; align-items: center; gap: 8px; padding-right: 16px; border-right: 1px solid var(--color-line); }
-    .book-action { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; color: var(--color-ink); background: var(--color-card); border: 1px solid var(--color-line); cursor: pointer; transition: background 150ms ease, border-color 150ms ease; }
+    .book-action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px; gap: 8px; border-radius: 8px; color: var(--color-ink); background: var(--color-card); border: 1px solid var(--color-line); cursor: pointer; transition: background 150ms ease, border-color 150ms ease; }
     .book-action:hover { background: var(--color-wash); border-color: var(--color-ink); }
     .book-action:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
   </style>

@@ -9,6 +9,7 @@ for(const [name,hash] of Object.entries(manifest.files)) {
  if(name.endsWith('.py'))files[`vendor/book-to-skill/${name}`]=bytes.toString('utf8');
 }
 files['scripts/book-adapter/adapter.py']=await readFile(new URL('book-adapter/adapter.py',import.meta.url),'utf8');
+files['supabase/functions/_shared/book-upload-limits.json']=await readFile(new URL('../supabase/functions/_shared/book-upload-limits.json',import.meta.url),'utf8');
 const output=new URL('../public/book-runtime/',import.meta.url);await mkdir(output,{recursive:true});
 await writeFile(new URL('upstream.json',output),JSON.stringify({commit:manifest.commit,files}));
 const runtime=new URL('../node_modules/pyodide/',import.meta.url);

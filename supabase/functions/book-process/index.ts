@@ -5,6 +5,7 @@ import {exportBookFiles} from '../_shared/book-export.mjs';
 import {sanitizeSource} from '../_shared/upstream-sanitize.mjs';
 import { createClient } from 'npm:@supabase/supabase-js@2.49.8';
 import { splitSource } from '../_shared/book-sections.mjs';
+import uploadLimits from '../_shared/book-upload-limits.json' with {type:'json'};
 const url=Deno.env.get('SUPABASE_URL')!;
 const serviceKey=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db=createClient(url,serviceKey,{auth:{persistSession:false}});
@@ -23,7 +24,7 @@ async function step(job:any,token:string) {
  const patch:any={error:null,lease_until:null,lease_token:null,updated_at:new Date().toISOString()};
  if(job.status==='uploaded') {
   const source=requireOk(await db.storage.from('private-books').download(`${job.user_id}/${job.id}/source`));
-  if(source.size>10485760||await hash(await source.arrayBuffer())!==job.source_sha) throw new Error('The source upload is incomplete or changed. Upload the same file again.');
+  if(source.size>uploadLimits.maxFileBytes||await hash(await source.arrayBuffer())!==job.source_sha) throw new Error('The source upload is incomplete or changed. Upload the same file again.');
   patch.status='processing';
  } else if(job.cursor<job.chunks.length) {
   const chunk=job.chunks[job.cursor];
@@ -52,7 +53,7 @@ Deno.serve(async req=>{
   if(Number(req.headers.get('content-length')||0)>7000000)return reply({error:'Source too large'},413);
   const raw=await req.text();if(raw.length>2500000)return reply({error:'Source too large'},413);
   const input=JSON.parse(raw);
-  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:10485760});
+  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:uploadLimits.maxFileBytes,max_text_characters:uploadLimits.maxTextCharacters});
   const bearer=req.headers.get('authorization')?.replace(/^Bearer /i,'');if(!bearer)return reply({error:'Sign in to upload a private book.'},401);
   if(input.action==='repair') {
    if(!await verifyOperator(bearer,{url,serviceKey}))return reply({error:'Repair requires server operator authorization.'},403);
@@ -67,7 +68,8 @@ Deno.serve(async req=>{
   const user=auth.user;
   if(input.action==='create') {
    if(!providerKey())return reply({error:'Book processing is being connected. Please try again later.'},503);
-   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>1200000||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a readable book source under 10 MB.'},400);
+   if(input.size!==undefined&&(!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes))return reply({error:'Choose a non-empty source file up to 50 MB.'},400);
+   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to 1.2 million readable characters.'},400);
    const source=splitSource(sanitizeSource(input.text), input.extraction?.headings||[]);
    const result=await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:source.text,p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:source.chunks});
    if(result.error)return reply({error:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not create this book. Please retry.'},400);

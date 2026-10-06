@@ -1,14 +1,19 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+const temporary=await fs.mkdtemp(path.join(os.tmpdir(),'book-upload-test-'));
 const origin=process.env.AWB_TEST_ORIGIN||'http://127.0.0.1:4321';
 // Small original PDF fixture; the browser's real PDF.js extractor reads this file.
-function pdfFixture(searchable=true) {
+function pdfFixture(searchable=true,padding=0) {
  const objects=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R] /Count 4 >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
  for(let i=0;i<4;i++) {
   objects.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents ${5+i*2} 0 R >>`);
   const stream=searchable?`BT /F1 12 Tf 50 740 Td (Chapter ${i+1}: Evidence Marker ${i+1}) Tj 0 -20 Td (Use a bounded trial. Record the prediction and compare observations.) Tj 0 -20 Td (Review the evidence before changing the plan. Keep uncertainty visible.) Tj ET`:'';
   objects.push(`<< /Length ${Buffer.byteLength(stream)} >>\nstream\n${stream}\nendstream`);
  }
+ if(padding)objects.push(`<< /Length ${padding} >>\nstream\n${'A'.repeat(padding)}\nendstream`);
  let content='%PDF-1.4\n';const offsets=[0];
  objects.forEach((obj,i)=>{offsets.push(Buffer.byteLength(content));content+=`${i+1} 0 obj\n${obj}\nendobj\n`;});
  const start=Buffer.byteLength(content);content+=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`+offsets.slice(1).map(n=>`${String(n).padStart(10,'0')} 00000 n \n`).join('')+`trailer\n<< /Size ${objects.length+1} /Root 1 0 R >>\nstartxref\n${start}\n%%EOF\n`;
@@ -42,12 +47,32 @@ try {
   else assert.match(body.text,/Chapter 2: Review/);
   console.log(`PASS actual source-upload extraction: ${file.name}; mocked job creation, no generation or storage write.`);
  }
+ const drop=async files=>{
+  const transfer=await p.evaluateHandle(files=>{const data=new DataTransfer();for(const file of files)data.items.add(new File([file.text],file.name,{type:'text/plain'}));return data;},files);
+  await p.locator('[data-upload-drop]').dispatchEvent('dragenter',{dataTransfer:transfer});
+  assert.ok(await p.locator('[data-upload-drop]').evaluate(el=>el.classList.contains('is-dragging')));
+  await p.locator('[data-upload-drop]').dispatchEvent('drop',{dataTransfer:transfer});await transfer.dispose();
+  assert.equal(await p.locator('[data-upload-drop]').evaluate(el=>el.classList.contains('is-dragging')),false);
+ };
+ await drop([{name:'dropped-notes.md',text:source}]);
+ assert.equal(await p.locator('[data-upload-filename]').innerText(),'dropped-notes.md');
+ await p.locator('[data-upload-submit]').click();await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});
+ assert.equal(captured.at(-1).name,'dropped-notes.md');assert.equal(captured.at(-1).size,Buffer.byteLength(source));
+ await p.locator('[data-upload-clear]').click();assert.ok(await p.locator('[data-upload-submit]').isDisabled());assert.ok(await p.locator('[data-upload-selection]').isHidden());
+ await drop([{name:'one.md',text:source},{name:'two.md',text:source}]);await p.getByText('Choose one file at a time.',{exact:true}).waitFor();assert.ok(await p.locator('[data-upload-submit]').isDisabled());
+ await drop([{name:'program.exe',text:source}]);await p.getByText(/Choose a PDF, EPUB, DOCX/).waitFor();assert.ok(await p.locator('[data-upload-submit]').isDisabled());
+ const largePdf=path.join(temporary,'illustrated-book.pdf');await fs.writeFile(largePdf,pdfFixture(true,12*1024*1024));
+ await p.getByLabel('Source file').setInputFiles(largePdf);await p.locator('[data-upload-submit]').click();await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});
+ assert.ok(captured.at(-1).size>10*1024*1024);assert.match(captured.at(-1).text,/Evidence Marker 4/);
  const count=captured.length;
- for(const file of [{name:'empty.txt',mimeType:'text/plain',buffer:Buffer.alloc(0)},{name:'oversized.txt',mimeType:'text/plain',buffer:Buffer.alloc(10*1024*1024+1,65)}]) {
-  await p.getByLabel('Source file').setInputFiles(file);await p.locator('[data-upload-submit]').click();await p.getByText('Choose a non-empty source file under 10 MB.',{exact:true}).waitFor();assert.equal(captured.length,count);
+ const boundary=path.join(temporary,'boundary.pdf');const file=await fs.open(boundary,'w');await file.truncate(50*1024*1024);await file.close();
+ await p.getByLabel('Source file').setInputFiles(boundary);assert.equal(await p.locator('[data-upload-submit]').isDisabled(),false);
+ await fs.truncate(boundary,50*1024*1024+1);
+ for(const [file,message] of [[{name:'empty.txt',mimeType:'text/plain',buffer:Buffer.alloc(0)},'Choose a non-empty source file.'],[boundary,'Choose a source file up to 50 MB.']]) {
+  await p.getByLabel('Source file').setInputFiles(file);await p.getByText(message,{exact:true}).waitFor();assert.ok(await p.locator('[data-upload-submit]').isDisabled());assert.equal(captured.length,count);
  }
  await p.getByLabel('Source file').setInputFiles({name:'too-short.txt',mimeType:'text/plain',buffer:Buffer.from('Too short.')});await p.locator('[data-upload-submit]').click();await p.getByText('Not enough readable text. Upload a searchable document, paper, or book.',{exact:true}).waitFor();assert.equal(captured.length,count);
- console.log('PASS empty, oversized and insufficient-text uploads never create a job.');
+ console.log('PASS real drag/drop, replacement/removal, multiple-file and type rejection, 12 MB PDF extraction, exact 50 MB boundary, empty and insufficient-text rejection.');
  await p.getByLabel('Source file').setInputFiles({name:'scanned.pdf',mimeType:'application/pdf',buffer:pdfFixture(false)});await p.locator('[data-upload-submit]').click();await p.getByText(/This PDF contains pages without readable text/).waitFor({timeout:90000});assert.equal(captured.length,count,'unsearchable PDFs never reach generation');
  assert.deepEqual(provider,[]);console.log('PASS OCR-required message and zero provider calls.');
-}finally{await browser.close();}
+}finally{await browser.close();await fs.rm(temporary,{recursive:true,force:true});}

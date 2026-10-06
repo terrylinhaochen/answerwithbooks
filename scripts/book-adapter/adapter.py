@@ -27,8 +27,9 @@ from book_to_skill.parsers.text import read_text_file
 from validate_skill import audit
 from scan_generated_skill import scan_generated_skill
 
-MAX_BYTES = 10 * 1024 * 1024
-MAX_TEXT = 1_200_000
+LIMITS = json.loads((ROOT / 'supabase/functions/_shared/book-upload-limits.json').read_text())
+MAX_BYTES = LIMITS['maxFileBytes']
+MAX_TEXT = LIMITS['maxTextCharacters']
 WEB_EXTENSIONS = {'.epub', '.docx', '.html', '.htm', '.xhtml', '.rtf',
                   '.txt', '.text', '.md', '.markdown', '.rst', '.adoc', '.asciidoc'}
 
@@ -37,7 +38,7 @@ def check_archive(path):
     """Bound decompression before upstream stdlib parsers allocate content."""
     with zipfile.ZipFile(path) as archive:
         entries = archive.infolist()
-        if len(entries) > 2000 or sum(e.file_size for e in entries) > 40 * 1024 * 1024:
+        if len(entries) > 2000 or sum(e.file_size for e in entries) > LIMITS['maxArchiveExpandedBytes']:
             raise ValueError('This document archive is too large when expanded.')
         for entry in entries:
             if entry.flag_bits & 1:
@@ -51,7 +52,7 @@ def check_archive(path):
 def analyze(text, method='provided-text'):
     text, removed = sanitize_extracted_text(text)
     if len(text) > MAX_TEXT:
-        raise ValueError('This book exceeds the current text limit.')
+        raise ValueError('This source exceeds the 1.2 million character text limit. Split it into smaller documents.')
     if not text.strip() or '\x00' in text:
         raise ValueError('No usable text was found in this document.')
     # Match the server line normalization so citations and heading positions agree.
@@ -78,7 +79,7 @@ def analyze(text, method='provided-text'):
 def extract(path, browser=False):
     path = Path(path).resolve()
     if path.stat().st_size > MAX_BYTES:
-        raise ValueError('Choose a file under 10 MB.')
+        raise ValueError(f'Choose a source file up to {MAX_BYTES // 1024 // 1024} MB.')
     if path.suffix.lower() in {'.epub', '.docx'}:
         check_archive(path)
     with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
