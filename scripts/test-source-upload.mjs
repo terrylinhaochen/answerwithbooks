@@ -42,6 +42,12 @@ try {
   else assert.match(body.text,/Chapter 2: Review/);
   console.log(`PASS actual source-upload extraction: ${file.name}; mocked job creation, no generation or storage write.`);
  }
- const count=captured.length;await p.getByLabel('Source file').setInputFiles({name:'scanned.pdf',mimeType:'application/pdf',buffer:pdfFixture(false)});await p.locator('[data-upload-submit]').click();await p.getByText(/This PDF contains pages without readable text/).waitFor({timeout:90000});assert.equal(captured.length,count,'unsearchable PDFs never reach generation');
+ const count=captured.length;
+ for(const file of [{name:'empty.txt',mimeType:'text/plain',buffer:Buffer.alloc(0)},{name:'oversized.txt',mimeType:'text/plain',buffer:Buffer.alloc(10*1024*1024+1,65)}]) {
+  await p.getByLabel('Source file').setInputFiles(file);await p.locator('[data-upload-submit]').click();await p.getByText('Choose a non-empty source file under 10 MB.',{exact:true}).waitFor();assert.equal(captured.length,count);
+ }
+ await p.getByLabel('Source file').setInputFiles({name:'too-short.txt',mimeType:'text/plain',buffer:Buffer.from('Too short.')});await p.locator('[data-upload-submit]').click();await p.getByText('Not enough readable text. Upload a searchable document, paper, or book.',{exact:true}).waitFor();assert.equal(captured.length,count);
+ console.log('PASS empty, oversized and insufficient-text uploads never create a job.');
+ await p.getByLabel('Source file').setInputFiles({name:'scanned.pdf',mimeType:'application/pdf',buffer:pdfFixture(false)});await p.locator('[data-upload-submit]').click();await p.getByText(/This PDF contains pages without readable text/).waitFor({timeout:90000});assert.equal(captured.length,count,'unsearchable PDFs never reach generation');
  assert.deepEqual(provider,[]);console.log('PASS OCR-required message and zero provider calls.');
 }finally{await browser.close();}

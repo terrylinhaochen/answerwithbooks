@@ -26,7 +26,7 @@ const { ids } = Astro.props;
     };
     const load = () => {
       // Account, submitted-content, and auth routes never initialize analytics.
-      const privateRoute = /^\/(login|signup|auth|profile|my-books|onboarding|upload|ask|embed)(\/|$)/.test(location.pathname);
+      const privateRoute = /^\/(login|signup|auth|reset-password|profile|my-books|your-book|billing|api-keys|onboarding|upload|ask|embed)(\/|$)/.test(location.pathname);
       if (loaded || blocked || choice !== 'on' || !ids.length || privateRoute) return;
       loaded = true;
       window.dataLayer = window.dataLayer || [];

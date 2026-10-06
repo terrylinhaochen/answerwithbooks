@@ -8,6 +8,8 @@ const utilityPaths = [
   '/shelf-lab/',
   '/login/',
   '/signup/',
+  '/auth/confirm/',
+  '/reset-password/',
   '/my-books/',
   '/your-book/',
   '/profile/',

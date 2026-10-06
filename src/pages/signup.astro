@@ -11,10 +11,10 @@ import Base from '../layouts/Base.astro';
   <section data-surface="auth" class="mx-auto max-w-sm px-5 pt-20 pb-24">
     <h1 class="font-serif text-3xl">Create an account</h1>
     <p class="mt-3 text-soft text-[0.95rem]" data-signup-copy>
-      Your place to manage preferences, billing, and agent access.
+      Save your shelf and turn your sources into books and skills. Newsletter subscription is a separate choice.
     </p>
 
-    <form id="signup-form" class="mt-8 space-y-5" novalidate>
+    <form id="signup-form" class="mt-8 space-y-5">
       <div>
         <label for="email" class="block text-sm font-sans text-soft mb-1.5">Email</label>
         <input
@@ -40,6 +40,7 @@ import Base from '../layouts/Base.astro';
           class="awb-input"
         />
       </div>
+      <p class="text-xs leading-relaxed text-soft">By creating an account, you agree to the <a href="/terms/" class="underline">Terms</a> and <a href="/privacy/" class="underline">Privacy Policy</a>. This does not subscribe you to the newsletter.</p>
       <p id="form-message" role="alert" aria-live="polite" class="text-sm hidden"></p>
       <button
         type="submit"
@@ -49,6 +50,8 @@ import Base from '../layouts/Base.astro';
         Create account
       </button>
     </form>
+    <button type="button" data-resend-signup hidden class="mt-4 text-sm underline">Resend confirmation link</button>
+    <p class="mt-3 text-xs text-soft" data-signup-delivery hidden>Check spam and confirm the address is correct. A successful request does not confirm inbox delivery. If a link does not arrive, try your primary address or <a href="mailto:terrychen2026@u.northwestern.edu?subject=Account%20verification" class="underline">contact support</a>.</p>
 
     <p class="mt-6 text-sm text-soft">
       Already have one?
@@ -71,7 +74,7 @@ import Base from '../layouts/Base.astro';
     const fromUpload = from === 'upload';
     const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
     const redirectAfterAuth = from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
-    const authReturnPath = from === 'shelf' ? '/login/?from=shelf' : pendingOnboarding ? '/login/?from=onboarding' : fromUpload ? '/login/?from=upload' : '/login/';
+    const authReturnPath = from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/';
 
     if (from === 'shelf') {
       if (signupCopy) signupCopy.textContent = 'Create an account to choose and save your own book collection.';
@@ -113,11 +116,13 @@ import Base from '../layouts/Base.astro';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (!form.reportValidity() || submitBtn.disabled) return;
       message.classList.add('hidden');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Creating account…';
 
       const formData = new FormData(form);
+      try {
       const { data, error } = await supabase.auth.signUp({
         email: String(formData.get('email')).trim(),
         password: String(formData.get('password')),
@@ -125,7 +130,7 @@ import Base from '../layouts/Base.astro';
       });
 
       if (error) {
-        show(error.message, 'error');
+        show('We could not complete the request. Check your details or sign in if you already have an account.', 'error');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Create account';
         return;
@@ -142,8 +147,21 @@ import Base from '../layouts/Base.astro';
             : 'Almost there. Check your email for a confirmation link, then log in.',
           'ok'
         );
-        submitBtn.textContent = 'Confirmation email sent';
+        submitBtn.textContent = 'Account request accepted';
+        document.querySelector<HTMLElement>('[data-signup-delivery]')!.hidden = false;
+        resend.hidden = false; cooldown();
       }
+      } catch { show('We could not confirm the account request. Check your inbox before retrying.', 'error'); submitBtn.disabled=false; submitBtn.textContent='Create account'; }
+    });
+    const resend = document.querySelector<HTMLButtonElement>('[data-resend-signup]')!;
+    let retryAt = 0;
+    function cooldown() { retryAt = Date.now()+60000; resend.disabled=true; }
+    setInterval(() => { const seconds=Math.max(0,Math.ceil((retryAt-Date.now())/1000));resend.disabled=seconds>0;resend.textContent=seconds?`Resend in ${seconds}s`:'Resend confirmation link'; },1000);
+    resend.addEventListener('click',async()=>{
+      if(Date.now()<retryAt)return;cooldown();
+      try { const {error}=await supabase.auth.resend({type:'signup',email:(form.elements.namedItem('email') as HTMLInputElement).value.trim(),options:{emailRedirectTo:emailRedirectTo(authReturnPath)}});
+        show(error?'We could not resend the link. Wait a minute or contact support.':'If this address needs confirmation, a new link has been requested. Check your inbox and spam folder.',error?'error':'ok');
+      } catch { show('We could not confirm the resend. Please wait before retrying.','error'); }
     });
   </script>
 </Base>

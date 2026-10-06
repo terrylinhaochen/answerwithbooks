@@ -5,7 +5,7 @@ interface Props { book: CollectionEntry<'books'>; readingLink?: boolean; }
 const { book, readingLink = false } = Astro.props;
 ---
 <div class="copy-book-action" data-public-book-action>
- <div class="copy-book-actions"><button type="button" class="awb-pill awb-pill-primary" data-copy-public-book aria-label={`Copy ${book.data.title} to agent`}>Copy to agent <span aria-hidden="true">↗</span></button>{readingLink && <a href={`/books/${book.id}/`}>Open the book</a>}</div>
+ <div class="copy-book-actions"><button type="button" class="awb-pill awb-pill-primary" data-copy-public-book aria-label={`Copy ${book.data.title} to agent`}>Copy to agent</button>{readingLink && <a href={`/books/${book.id}/`}>Open the book</a>}</div>
  <p class="copy-book-status" role="status" data-public-book-status></p>
  <textarea hidden readonly class="awb-input" rows="7" aria-label={`${book.data.title} agent prompt`} data-public-book-prompt>{publicBookPrompt(book)}</textarea>
 </div>

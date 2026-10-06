@@ -29,3 +29,17 @@ test('server sanitizer agrees with original Python for hidden characters and pre
  const text='Chapter 1: Test\n中文 😀 '+[0x200b,0x200c,0x200d,0x2060,0x202e,0xfeff,0xe0001,0xe0020,0x61c].map(n=>String.fromCodePoint(n)).join('')+' ordinary text';
  assert.equal(sanitizeSource(text),runBookAdapter({operation:'analyze',text}).text);
 });
+test('fidelity gate rejects semantic drift even with valid line citations',async()=>{
+ const {requireFaithfulSection}=await import('../supabase/functions/_shared/book-fidelity.mjs');
+ assert.throws(()=>requireFaithfulSection({supported:false,issues:['Discarding actions changes the source meaning.']}),/changed meaning/);
+ assert.throws(()=>requireFaithfulSection({supported:true,issues:['Unsupported obligation']}),/source check/);
+ assert.throws(()=>requireFaithfulSection({supported:true}),/source check/);
+ requireFaithfulSection({supported:true,issues:[]});
+});
+test('legacy private downloads gain readable metadata and resolvable source lines',async()=>{
+ const {exportBookFiles}=await import('../supabase/functions/_shared/book-export.mjs');
+ const files=exportBookFiles({title:'The Team Manual',source_sha:'abcdef',source_text:'A source line\nSet a deadline.',artifacts:{'book.md':'# ## Chapter 1: Action\nSource S1:L2–L2.','skill/SKILL.md':'---\nname: book-uuid\ndescription: Bad grammar\n---\n# Book','skill/chapters/ch01.md':'# ## Chapter 1: Action\nSource S1:L2–L2.'}});
+ assert.equal(files['skill/source.txt'].split('\n')[1],'Set a deadline.');
+ assert.match(files['skill/SKILL.md'],/name: the-team-manual/);assert.match(files['skill/SKILL.md'],/\[source.txt\]\(source.txt\)/);
+ assert.doesNotMatch(files['skill/chapters/ch01.md'],/# ##/);assert.match(files['DOWNLOAD.md'],/private/);
+});

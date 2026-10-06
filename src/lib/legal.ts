@@ -3,4 +3,4 @@ export const legalIdentity = {
   operatorName: 'AnswerWithBooks',
   contactEmail: 'terrychen2026@u.northwestern.edu',
 };
-export const legalLastUpdated = 'October 5, 2026';
+export const legalLastUpdated = 'October 6, 2026';

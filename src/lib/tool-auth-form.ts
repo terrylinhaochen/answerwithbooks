@@ -2,8 +2,7 @@ import { supabase } from './supabase';
 import { emailRedirectTo } from './auth-callback';
 import { toolsAuthPaths } from './tools-auth.mjs';
 import { createToolAccount } from './tool-auth-client.mjs';
-import { buildToolOAuthRequest, getOAuthProviders, validateOAuthDestination, storeOAuthConsent, clearOAuthConsent } from './tool-oauth.mjs';
-import { registerToolNewsletter } from './tool-newsletter';
+import { buildToolOAuthRequest, getOAuthProviders, validateOAuthDestination, clearOAuthConsent } from './tool-oauth.mjs';
 
 export function setupToolAuth(root: HTMLElement, getAgent: () => string) {
   const signup = root.querySelector<HTMLFormElement>('[data-tools-signup-form]')!;
@@ -42,12 +41,12 @@ export function setupToolAuth(root: HTMLElement, getAgent: () => string) {
         const isSignup = !signup.hidden;
         const consent = signup.querySelector<HTMLInputElement>('[name="consent"]')!;
         if (isSignup && !consent.checked) {
-          oauthStatus.textContent = 'Please agree to the terms and newsletter signup below, then continue with your chosen provider.';
+          oauthStatus.textContent = 'Please agree to the terms below, then continue with your chosen provider.';
           consent.reportValidity(); return;
         }
         const attemptId = isSignup ? crypto.randomUUID() : undefined;
         clearOAuthConsent(sessionStorage);
-        if (attemptId) storeOAuthConsent(sessionStorage, { provider, agentId: getAgent(), attemptId });
+        // Account creation does not imply newsletter consent.
         const request = buildToolOAuthRequest({ provider, agentId: getAgent(), origin: location.origin, attemptId });
         const { data, error } = await supabase.auth.signInWithOAuth(request);
         if (error || !data.url) throw new Error('Sign-in unavailable');
@@ -89,7 +88,6 @@ export function setupToolAuth(root: HTMLElement, getAgent: () => string) {
     try {
       const result = await createToolAccount({ auth: supabase.auth, redirectTo,
         fields: { firstName: form.get('firstName'), lastName: form.get('lastName'), username: form.get('username'), email: form.get('email'), password: form.get('password'), consent: form.get('consent') === 'on' },
-        registerNewsletter: registerToolNewsletter,
       });
       setStatus(result.message, result.state === 'error');
       retryAt = Date.now() + 60000;

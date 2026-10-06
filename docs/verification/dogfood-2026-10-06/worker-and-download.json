@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "Real password authentication succeeds for an isolated test account. No email sent.",
+    "Supabase accepts the production recovery redirect; generated link only, no email sent.",
+    "Deployed worker returns 400 for empty source and malformed JSON.",
+    "Deployed worker generated a book, skill, and cover with source-fidelity checks.",
+    "Export has readable skill metadata, clean headings, exact extracted source, and resolvable citation lines.",
+    "A second authenticated account cannot export the source or artifacts.",
+    "Three-book limit is enforced; retrying the same source reuses its job.",
+    "Real signed-in mobile browser downloads a ZIP containing the source and checked skill.",
+    "Temporary test jobs, storage objects, and accounts removed."
+  ],
+  "emailsSent": 0,
+  "processingSeconds": 27,
+  "passed": true,
+  "cleaned": true,
+  "checkedAt": "2026-10-06T08:29:59.613Z"
+}

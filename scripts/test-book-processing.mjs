@@ -37,7 +37,7 @@ test('one extraction produces linked book and skill artifacts with matching sour
   for (const output of [book, chapter]) assert.ok(output.includes('S1:L5–L7'));
   assert.ok(book.includes('Bounded trial') && chapter.includes('Bounded trial'));
   for (const file of result.manifest.files) assert.ok((await readFile(path.join(result.directory, file.path))).length);
-  assert.equal((await readdir(result.directory)).includes('source.txt'), false);
+  assert.equal(await readFile(path.join(result.directory,'skill/source.txt'),'utf8'), text);
   assert.equal(JSON.parse(await readFile(path.join(result.directory, 'skill/provenance.json'), 'utf8')).jobId, f.job.id);
 });
 test('rejects source revision mismatch before producing either output', async t => {

@@ -13,7 +13,7 @@ let signups = [];
 let subscriptions = [];
 const deps = { fields, redirectTo, auth: { signUp: async value => { signups.push(value); return { data: { session: null }, error: null }; } }, registerNewsletter: async email => subscriptions.push(email) };
 assert.equal((await createToolAccount(deps)).state, 'confirmation');
-assert.deepEqual(subscriptions, ['demo@example.com']);
+assert.deepEqual(subscriptions, [], 'Account creation must not subscribe');
 assert.equal(signups[0].options.emailRedirectTo, redirectTo);
 assert.deepEqual(signups[0].options.data, { first_name: 'Demo', last_name: 'Reader', username: 'demo_reader' });
 assert.ok(!JSON.stringify(signups[0].options.data).includes(fields.password));
@@ -21,12 +21,12 @@ await assert.rejects(createToolAccount({ ...deps, redirectTo: 'javascript:alert(
 await assert.rejects(createToolAccount({ ...deps, redirectTo: 'https://example.com/elsewhere/' }));
 signups = [];
 const failedStore = await createToolAccount({ ...deps, registerNewsletter: async () => { throw new Error('server failure'); } });
-assert.equal(failedStore.state, 'error');
-assert.equal(signups.length, 0, 'Failed newsletter persistence must not silently create an account');
+assert.equal(failedStore.state, 'confirmation');
+assert.equal(signups.length, 1, 'Newsletter service must not affect account creation');
 assert.equal((await createToolAccount({ ...deps, auth: { signUp: async () => ({ data: { session: { id: 'test' } } }) } })).state, 'signed-in');
 for (const auth of [{ signUp: async () => ({ error: { status: 429 } }) }, { signUp: async () => { throw new Error('private provider diagnostic'); } }]) {
   const result = await createToolAccount({ ...deps, auth });
-  assert.equal(result.state, 'error'); assert.match(result.message, /newsletter signup is saved/);
+  assert.equal(result.state, 'error'); assert.doesNotMatch(result.message, /newsletter/);
   assert.doesNotMatch(result.message, /private provider diagnostic/);
 }
 

@@ -13,17 +13,11 @@ const { submitLabel = 'Subscribe' } = Astro.props;
     <div class="newsletter-email__trap" aria-hidden="true">
       <label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
     </div>
-    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you sign up for an Answer with Books account and newsletter and agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. You can unsubscribe from the newsletter at any time.</p>
+    <p id={`${id}-consent`} class="newsletter-email__note">By subscribing, you opt in to the Answer with Books newsletter and agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. You can unsubscribe at any time. This does not create an account.</p>
     <p id={`${id}-status`} class="newsletter-email__status" role="status" aria-live="polite" data-newsletter-status></p>
   </form>
   <p class="newsletter-email__note" data-account-login>Already have an account? <a href="/login/">Log in</a></p>
-<section class="newsletter-account" hidden data-account-step>
-  <h3 tabindex="-1" data-account-title>Check your email.</h3>
-  <p data-account-copy></p>
-  <div class="newsletter-account__actions"><button type="button" data-resend-verification>Resend verification email</button></div>
-  <p class="newsletter-email__status" role="status" aria-live="polite" data-account-status></p>
-  <button type="button" class="newsletter-account__reset" data-signup-reset>Use a different email</button>
-</section>
+  <p class="newsletter-email__note">Want to save books and create skills? <a href="/signup/">Create a free account</a>.</p>
   <noscript><p class="newsletter-email__note">Enable JavaScript to sign up here, or <a href={newsletterSignupUrl}>subscribe on Substack</a>.</p></noscript>
 </div>
 <style>

@@ -40,7 +40,7 @@ export function mountBookUpload() {
  const submit=dialog.querySelector<HTMLButtonElement>('[data-upload-submit]')!;
  const status=dialog.querySelector<HTMLElement>('[data-upload-status]')!;
  const login=dialog.querySelector<HTMLAnchorElement>('[data-upload-login]')!;
- document.querySelectorAll('[data-open-book-request]').forEach(button=>button.addEventListener('click',()=>{dialog.showModal();input.focus();}));
+ document.querySelectorAll('[data-open-book-request]').forEach(button=>button.addEventListener('click',()=>{dialog.showModal();input.focus();void supabase.auth.getSession().then(({data})=>{if(!busy)status.textContent=data.session?'Three new books per day.':'Sign in to save your book. Three new books per day.';});}));
  dialog.querySelector('[data-close-book-upload]')?.addEventListener('click',()=>dialog.close());
  let busy=false;
  dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});

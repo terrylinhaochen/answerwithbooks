@@ -37,7 +37,7 @@ const renderMarkdown=(text:string)=>{
 
 };
 async function paint(job:any) {
- current=job;find('title').textContent=job.title;find('author').textContent=job.author;
+ current=job;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
  find<HTMLProgressElement>('progress').value=job.status==='ready'?100:job.artifacts?90:Math.round(job.cursor/(job.total_sections+2)*85);
  find('status').textContent=job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':`Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
  if(job.status==='ready')find('resume').hidden=true;
@@ -73,9 +73,15 @@ find('copy').addEventListener('click',async()=>{
  try {await navigator.clipboard.writeText(prompt.value);find('copy-status').textContent='Copied. Paste into your agent and add your question or task.';}
  catch {prompt.hidden=false;prompt.focus();prompt.select();find('copy-status').textContent='Copy was blocked. Select and copy the prompt below.';}
 });
-find('download').addEventListener('click',()=>{
- const files=Object.fromEntries(Object.entries(current.artifacts).map(([path,text])=>[path,strToU8(String(text))]));
- const blob=new Blob([zipSync(files) as Uint8Array<ArrayBuffer>],{type:'application/zip'});
- const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='book-and-skill.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+find('download').addEventListener('click',async()=>{
+ const button=find<HTMLButtonElement>('download');button.disabled=true;
+ try {
+  const result=await bookWorker({action:'export',id});
+  const files=Object.fromEntries(Object.entries(result.files).map(([path,text])=>[path,strToU8(String(text))]));
+  const blob=new Blob([zipSync(files) as Uint8Array<ArrayBuffer>],{type:'application/zip'});
+  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='book-and-skill.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  find('copy-status').textContent='Downloaded with your private source text. Keep the bundle private and check the cited lines before use.';
+ } catch(e) {find('copy-status').textContent=e instanceof Error?e.message:'Download failed. Please retry.';}
+ finally {button.disabled=false;}
 });
 void run();

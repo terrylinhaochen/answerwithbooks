@@ -12,6 +12,7 @@ const Heading = standalone ? 'h2' : 'h3';
   <div class="keys-table-wrap" data-access-table hidden>
     <table class="keys-table"><caption class="sr-only">Your API keys</caption><thead><tr><th scope="col">Name</th><th scope="col">Key</th><th scope="col">Created</th><th scope="col">Status</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead><tbody data-access-keys></tbody></table>
   </div>
+  <p data-research-access-help class="mt-4 text-sm text-soft">Research access is a separate CrowdListen private preview. <a class="underline" href="mailto:terrychen2026@u.northwestern.edu?subject=CrowdListen%20research%20access%20request">Request research access</a> with your account email and intended task. Book uploads and downloaded skills do not need approval.</p>
   <div class="keys-empty" data-access-empty hidden><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 7a5 5 0 0 1-7 4.6L6 20H3v-3l8.4-8A5 5 0 1 1 21 7Z"/></svg><p data-key-empty-title>No active API keys</p><span data-key-empty-description>Create a key to connect your agent to Answer with Books.</span></div>
   <div class="access-footer"><p>Copy new keys when created. Existing full keys cannot be recovered.</p><button type="button" class="key-text-button" data-access-refresh>Refresh</button></div>
   {!standalone && <div class="connection-card" data-api-connection hidden>

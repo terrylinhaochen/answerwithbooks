@@ -16,7 +16,7 @@ try {
   await button.waitFor();
   assert.equal(await page.locator('iframe[data-substack-embed]').count(),0);
   assert.equal(await page.getByText('CS@Northwestern, GenAI Product@Tiktok',{exact:false}).count(),0);
-  assert.equal(await form.locator('.newsletter-email__note').innerText(),'By subscribing, you sign up for an Answer with Books account and newsletter and agree to our Terms and Privacy Policy. You can unsubscribe from the newsletter at any time.');
+  assert.equal(await form.locator('.newsletter-email__note').innerText(),'By subscribing, you opt in to the Answer with Books newsletter and agree to our Terms and Privacy Policy. You can unsubscribe at any time. This does not create an account.');
   await input.fill('invalid');await button.click();
   assert.equal(await input.evaluate(e=>e.checkValidity()),false);
   await page.route(endpoint, route=>route.fulfill({status:503,contentType:'application/json',body:'{"error":"unavailable"}'}));
@@ -29,7 +29,7 @@ try {
   await page.unroute(endpoint);
   let payload;
   await page.route(endpoint,async route=>{payload=route.request().postDataJSON();await route.fulfill({status:202,contentType:'application/json',body:'{"accepted":true}'});});
-  await button.click();await form.getByRole('status').filter({hasText:'your email has been saved'}).waitFor();
+  await button.click();await form.getByRole('status').filter({hasText:'Your newsletter request is saved'}).waitFor();
   assert.equal(payload.email,'reader@example.com');assert.equal(payload.consent,true);assert.equal(payload.consentVersion,'awb-newsletter-v1');
   assert.equal(await form.locator('input[type=email]').isDisabled(),true);
   await page.unroute(endpoint);
@@ -46,7 +46,7 @@ try {
   const response=page.waitForResponse(r=>r.url().includes('/functions/v1/newsletter-signup')&&r.request().method()==='POST');
   await form.getByRole('button',{name:'Subscribe'}).click();
   assert.equal((await response).status(),202);
-  await form.getByRole('status').filter({hasText:'your email has been saved'}).waitFor();
+  await form.getByRole('status').filter({hasText:'Your newsletter request is saved'}).waitFor();
   console.log('LIVE: browser → deployed signup endpoint returned 202; verify and delete synthetic record separately.');
  }
  const noJs=await browser.newPage({javaScriptEnabled:false});await noJs.goto('http://127.0.0.1:4321/');

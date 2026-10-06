@@ -44,8 +44,7 @@ const shelfOptions = [
               {
                 focusOptions.map((option) => (
                   <label class="awb-card-link group flex cursor-pointer items-center gap-3 p-4">
-                    <input class="peer sr-only" type="checkbox" name="focus" value={option.value} />
-                    <span aria-hidden="true" class="h-4 w-4 rounded-full border border-line group-has-[:checked]:border-accent group-has-[:checked]:bg-accent"></span>
+                    <input class="h-5 w-5 shrink-0 accent-accent" type="checkbox" name="focus" value={option.value} />
                     <span class="font-serif text-xl leading-tight text-ink group-has-[:checked]:text-accent">
                       {option.label}
                     </span>
@@ -66,7 +65,7 @@ const shelfOptions = [
               {
                 shelfOptions.map((option) => (
                   <label class="awb-card-link group flex cursor-pointer items-start gap-3 p-5">
-                    <input class="mt-1 accent-accent" type="radio" name="shelf" value={option.value} checked={option.value === 'public'} />
+                    <input class="mt-1 h-5 w-5 shrink-0 accent-accent" type="radio" name="shelf" value={option.value} checked={option.value === 'public'} />
                     <span>
                       <span class="block font-serif text-2xl leading-tight group-has-[:checked]:text-accent">
                         {option.label}
@@ -170,7 +169,7 @@ const shelfOptions = [
       return profile;
     };
 
-    const showStep = (step: number) => {
+    const showStep = (step: number, moveFocus = false) => {
       currentStep = Math.min(Math.max(step, 0), steps.length - 1);
       localStorage.setItem(STEP_KEY, String(currentStep));
       steps.forEach((node, index) => node.classList.toggle('hidden', index !== currentStep));
@@ -178,16 +177,23 @@ const shelfOptions = [
       if (next) next.classList.toggle('hidden', currentStep === steps.length - 1);
       if (submit) submit.classList.toggle('hidden', currentStep !== steps.length - 1);
       if (message) message.classList.add('hidden');
+      if (moveFocus) {
+        const active = steps[currentStep];
+        active.tabIndex = -1;
+        active.style.scrollMarginTop = '110px';
+        active.focus({preventScroll:true});
+        active.scrollIntoView({block:'start',behavior:'instant'});
+      }
     };
 
     back?.addEventListener('click', () => {
       snapshotProfile(false);
-      showStep(currentStep - 1);
+      showStep(currentStep - 1, true);
     });
 
     next?.addEventListener('click', () => {
       snapshotProfile(false);
-      showStep(currentStep + 1);
+      showStep(currentStep + 1, true);
     });
 
     form?.addEventListener('input', () => {
