@@ -22,12 +22,20 @@ def extract_docx_with_python_docx(docx_path: str) -> str | None:
         import docx
         validate_docx_xml_safety(docx_path)
         document = docx.Document(docx_path)
-        parts = [paragraph.text for paragraph in document.paragraphs if paragraph.text]
-        for table in document.tables:
-            for row in table.rows:
-                cells = [cell.text.strip() for cell in row.cells]
-                if any(cells):
-                    parts.append("\t".join(cells))
+        iter_inner_content = getattr(document, "iter_inner_content", None)
+        if not callable(iter_inner_content):
+            # Older python-docx releases lack the ordered block iterator. Let
+            # extract_docx() use its order-preserving stdlib fallback instead.
+            return None
+        parts = []
+        for block in iter_inner_content():
+            if hasattr(block, "rows"):
+                for row in block.rows:
+                    cells = [cell.text.strip() for cell in row.cells]
+                    if any(cells):
+                        parts.append("\t".join(cells))
+            elif hasattr(block, "text") and block.text:
+                parts.append(block.text)
         return "\n".join(parts)
     except ImportError:
         return None

@@ -1,6 +1,8 @@
 import {extractUpstream,analyzeUpstream} from './upstream-book';
 import { supabase } from './supabase';
 import uploadLimits from '../../supabase/functions/_shared/book-upload-limits.json';
+import {maxBatchFiles} from '../../supabase/functions/_shared/book-options.mjs';
+import type {SourceReport} from './upstream-book';
 const maxFileMB=uploadLimits.maxFileBytes/1024/1024;
 function validateFile(file:File) {
  if(file.size===0)throw new Error('Choose a non-empty source file.');
@@ -39,6 +41,7 @@ export async function extractFullBook(file:File,progress:(s:string)=>void) {
   progress('Identifying the source structure…');return analyzeUpstream(text);
  }finally{await task.destroy();}
 }
+type UploadItem = {file:File;report?:SourceReport;error?:string;message:string;jobId?:string};
 export function mountBookUpload() {
  const dialog=document.querySelector<HTMLDialogElement>('#book-upload-dialog');if(!dialog)return;
  const form=dialog.querySelector<HTMLFormElement>('form')!;
@@ -46,66 +49,96 @@ export function mountBookUpload() {
  const submit=dialog.querySelector<HTMLButtonElement>('[data-upload-submit]')!;
  const status=dialog.querySelector<HTMLElement>('[data-upload-status]')!;
  const login=dialog.querySelector<HTMLAnchorElement>('[data-upload-login]')!;
+ const queue=dialog.querySelector<HTMLAnchorElement>('[data-upload-queue]')!;
  const drop=dialog.querySelector<HTMLElement>('[data-upload-drop]')!;
- const dropTitle=dialog.querySelector<HTMLElement>('[data-upload-drop-title]')!;
- const selection=dialog.querySelector<HTMLElement>('[data-upload-selection]')!;
- const filename=dialog.querySelector<HTMLElement>('[data-upload-filename]')!;
- const filesize=dialog.querySelector<HTMLElement>('[data-upload-filesize]')!;
+ const list=dialog.querySelector<HTMLUListElement>('[data-upload-files]')!;
  const clear=dialog.querySelector<HTMLButtonElement>('[data-upload-clear]')!;
  const close=dialog.querySelector<HTMLButtonElement>('[data-close-book-upload]')!;
- let busy=false,valid=false,dragDepth=0;
- let selectedFile:File|null=null;
- function resetDrag(){dragDepth=0;drop.classList.remove('is-dragging');}
+ let busy=false,dragDepth=0,reviewed=false;
+ let items:UploadItem[]=[];
+ const pending=()=>items.filter(item=>!item.jobId&&!item.error);
+ function draw() {
+  list.replaceChildren();
+  for(const item of items) {
+   const row=document.createElement('li'),info=document.createElement('div');
+   const name=document.createElement(item.jobId?'a':'span');name.textContent=item.file.name;
+   if(name instanceof HTMLAnchorElement)name.href=`/your-book/?id=${item.jobId}`;
+   const detail=document.createElement('small');detail.textContent=item.error||item.message;
+   info.append(name,detail);row.append(info);
+   if(!item.jobId){const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label',`Remove ${item.file.name}`);remove.disabled=busy;remove.addEventListener('click',()=>{items=items.filter(other=>other!==item);draw();});row.append(remove);}
+   list.append(row);
+  }
+  clear.hidden=!items.length;clear.disabled=busy;
+  input.disabled=busy;close.disabled=busy;
+  form.querySelectorAll<HTMLSelectElement>('select').forEach(select=>select.disabled=busy);
+  submit.disabled=busy||!pending().length;
+  submit.textContent=reviewed?(form.elements.namedItem('mode') as HTMLSelectElement).value==='analysis'?'Analyze sources':'Create books & skills':'Review sources';
+  queue.hidden=!items.some(item=>item.jobId);
+  drop.setAttribute('aria-disabled',String(busy));
+ }
  function selectFiles(files:File[]) {
   if(busy)return;
-  selectedFile=files.length===1?files[0]:null;valid=false;login.hidden=true;
-  selection.hidden=!selectedFile;
-  filename.textContent=selectedFile?.name||'';
-  filesize.textContent=selectedFile?selectedFile.size>=1024*1024?`${(selectedFile.size/1024/1024).toFixed(1)} MB`:`${Math.ceil(selectedFile.size/1024)} KB`:'';
-  dropTitle.textContent=selectedFile?'Drop another file':'Drop your file here';
-  try {
-   if(files.length>1)throw new Error('Choose one file at a time.');
-   if(selectedFile){validateFile(selectedFile);valid=true;status.textContent='Ready to create your skill and book.';}
-   else status.textContent='Choose a source file first.';
-  }catch(error){status.textContent=error instanceof Error?error.message:'Choose a readable source file.';}
-  input.setAttribute('aria-invalid',String(!!selectedFile&&!valid));submit.disabled=!valid;
+  reviewed=false;login.hidden=true;
+  for(const file of files){
+   if(items.some(item=>item.file.name===file.name&&item.file.size===file.size&&item.file.lastModified===file.lastModified))continue;
+   if(items.length>=maxBatchFiles){status.textContent='Choose up to ten files per batch. Remove a file to add another.';draw();return;}
+   const item:UploadItem={file,message:`${(file.size/1024/1024).toFixed(1)} MB`};
+   try{validateFile(file);}catch(error){item.error=error instanceof Error?error.message:'Choose a readable source.';}
+   items.push(item);
+  }
+  status.textContent='Review the sources before processing. Each file gets its own book and skill.';draw();
  }
- input.addEventListener('change',()=>selectFiles(Array.from(input.files||[])));
- clear.addEventListener('click',()=>{input.value='';selectFiles([]);input.focus();});
+ const resetDrag=()=>{dragDepth=0;drop.classList.remove('is-dragging');};
+ input.addEventListener('change',()=>{selectFiles(Array.from(input.files||[]));input.value='';});
+ clear.addEventListener('click',()=>{items=[];reviewed=false;input.value='';draw();status.textContent='Choose your sources.';input.focus();});
+ form.querySelectorAll('select').forEach(select=>select.addEventListener('change',draw));
  drop.addEventListener('dragenter',event=>{event.preventDefault();if(!busy&&event.dataTransfer?.types.includes('Files')){dragDepth++;drop.classList.add('is-dragging');}});
  drop.addEventListener('dragover',event=>{event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect=busy?'none':'copy';});
  drop.addEventListener('dragleave',()=>{if(--dragDepth<=0)resetDrag();});
  drop.addEventListener('drop',event=>{
-  event.preventDefault();resetDrag();if(busy)return;
-  if(!event.dataTransfer?.types.includes('Files'))return;
-  input.value='';
-  const items=Array.from(event.dataTransfer?.items||[]);
-  if(items.some(item=>item.webkitGetAsEntry?.()?.isDirectory)){selectFiles([]);status.textContent='Choose a single file instead of a folder.';return;}
-  selectFiles(Array.from(event.dataTransfer?.files||[]));
+  event.preventDefault();resetDrag();if(busy||!event.dataTransfer?.types.includes('Files'))return;
+  const entries=Array.from(event.dataTransfer.items||[]);
+  if(entries.some(item=>item.webkitGetAsEntry?.()?.isDirectory)){status.textContent='Select files inside the folder, then drop them here.';return;}
+  selectFiles(Array.from(event.dataTransfer.files||[]));
  });
- // Prevent the browser from navigating to a file dropped outside the target.
  for(const eventName of ['dragover','drop'])document.addEventListener(eventName,event=>{if(dialog.open&&(event as DragEvent).dataTransfer?.types.includes('Files'))event.preventDefault();});
- document.querySelectorAll('[data-open-book-request]').forEach(button=>button.addEventListener('click',()=>{dialog.showModal();input.focus();void supabase.auth.getSession().then(({data})=>{if(!busy&&!selectedFile)status.textContent=data.session?'Three new books per day.':'Sign in to save your book. Three new books per day.';});}));
- close.addEventListener('click',()=>{if(!busy)dialog.close();});
- dialog.addEventListener('close',resetDrag);
- dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});
+ document.querySelectorAll('[data-open-book-request]').forEach(button=>button.addEventListener('click',()=>{dialog.showModal();input.focus();}));
+ close.addEventListener('click',()=>{if(!busy)dialog.close();});dialog.addEventListener('close',resetDrag);dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});
  form.addEventListener('submit',async event=>{
-  event.preventDefault();if(busy)return;
-  const file=selectedFile;if(!file||!valid)return;
-  busy=true;submit.disabled=true;input.disabled=true;clear.disabled=true;close.disabled=true;drop.setAttribute('aria-disabled','true');login.hidden=true;
+  event.preventDefault();if(busy||!pending().length)return;busy=true;draw();login.hidden=true;
   try {
-   const {data}=await supabase.auth.getSession();if(!data.session){login.hidden=false;throw new Error('Sign in first to keep your book private.');}
-   status.textContent='Checking processing availability…';const health=await bookWorker({action:'health'});if(!health.available)throw new Error('Book processing is being connected. Please try again later.');
-   const extraction=await extractFullBook(file,s=>status.textContent=s);const text=extraction.text;if(text.trim().length<100)throw new Error('Not enough readable text. Upload a searchable document, paper, or book.');
-   status.textContent='Saving your private book…';
-   const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
-   const result=await bookWorker({action:'create',name:file.name,size:file.size,text,sha,extraction:{...extraction,text:undefined}});
-   if(result.upload) {
-    const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});
-    if(error)throw new Error('Source upload failed. Choose the same source file to retry.');
+   const {data}=await supabase.auth.getSession();if(!data.session){login.hidden=false;throw new Error('Sign in first to keep your books private.');}
+   if(!reviewed){
+    for(const item of pending()){
+     try{
+      item.report=await extractFullBook(item.file,message=>{item.message=message;draw();});
+      if(item.report.text.trim().length<100)throw new Error('Not enough readable text. Upload a searchable document.');
+      item.message=`${item.report.text.trim().split(/\s+/).length.toLocaleString()} words · about ${item.report.estimatedTokens.toLocaleString()} source tokens · ${item.report.headings.length} detected headings`;
+     }catch(error){item.error=error instanceof Error?error.message:'Could not read this source.';}
+     draw();
+    }
+    reviewed=true;status.textContent=pending().length?'Sources reviewed. Processing sends their text to our AI provider. The estimates above describe the source, not a price or a guarantee of complete extraction.':'No readable sources remain. Remove these files and choose others.';
+    return;
    }
-   location.assign(`/your-book/?id=${encodeURIComponent(result.job.id)}`);
+   const health=await bookWorker({action:'health'});if(!health.available)throw new Error('Book processing is unavailable. Please try again later.');
+   const options=Object.fromEntries(['mode','depth','purpose'].map(name=>[name,(form.elements.namedItem(name) as HTMLSelectElement).value]));
+   status.textContent='Keep this dialog open until the files finish uploading. Processing then continues in the background.';
+   for(const item of pending()){
+    try {
+     item.message='Uploading…';draw();
+     const extraction=item.report!;
+     const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await item.file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
+     const result=await bookWorker({action:'create',name:item.file.name,size:item.file.size,text:extraction.text,sha,extraction:{...extraction,text:undefined},options});
+     if(result.upload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([item.file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});if(error)throw new Error('Upload failed. Remove this file and choose it again to retry.');}
+     await bookWorker({action:'enqueue',id:result.job.id});item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':'Saved · processing in the background';
+    }catch(error){item.error=error instanceof Error?error.message:'Upload failed. Remove this file and choose it again to retry.';}
+    draw();
+   }
+   const saved=items.filter(item=>item.jobId);status.textContent=`${saved.length} source${saved.length===1?'':'s'} saved. You can leave this page. ${items.some(item=>item.error)?'Some files need attention; your other sources will continue.':''}`;
+   window.dispatchEvent(new Event('awb:book-added'));
+   if(saved.length&&saved.length===items.length)location.assign(saved.length===1?`/your-book/?id=${saved[0].jobId}`:'/processing/');
   }catch(error){status.textContent=error instanceof Error?error.message:'Upload failed. Please try again.';}
-  finally{busy=false;submit.disabled=!valid;input.disabled=false;clear.disabled=false;close.disabled=false;drop.removeAttribute('aria-disabled');}
+  finally{busy=false;draw();}
  });
+ draw();
 }

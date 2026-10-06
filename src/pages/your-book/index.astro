@@ -8,16 +8,23 @@ import Base from '../../layouts/Base.astro';
    <div><p class="awb-eyebrow">Your book &amp; skill</p><h1 class="mt-3 font-serif text-4xl" data-job-title>Loading your book…</h1><p class="mt-3 text-soft" data-job-author></p></div>
    <img hidden data-job-cover alt="Generated book cover" class="w-44 rounded-xl" />
   </header>
-  <section class="mt-8 rounded-2xl border border-line p-5" aria-label="Processing progress"><p role="status" data-job-status>Checking your saved progress…</p><progress class="mt-4 w-full" data-job-progress max="100" value="0"></progress><p class="mt-3 text-sm text-soft" data-job-resume>Keep this page open while processing. You can return to this link to resume saved progress.</p><button hidden class="awb-pill mt-4" data-job-retry>Resume processing</button></section>
+  <section class="mt-8 rounded-2xl border border-line p-5" aria-label="Processing progress"><p role="status" data-job-status>Checking your saved progress…</p><progress class="mt-4 w-full" data-job-progress max="100" value="0"></progress><p class="mt-3 text-sm text-soft" data-job-resume>Your upload is saved. Processing continues in the background; you can return to this link any time.</p><div class="mt-4 flex flex-wrap gap-3"><button hidden class="awb-pill" data-job-retry>Resume processing</button><button hidden class="awb-pill" data-job-pause>Pause</button><a href="/processing/" class="awb-pill">View queue</a></div></section>
+  <section hidden class="mt-8 rounded-2xl border border-line bg-card p-6" data-job-analysis>
+   <h2 class="font-serif text-2xl">Your source analysis</h2><p class="mt-3 text-sm text-soft">Review these source-grounded notes. Creating the book and skill reuses this analysis.</p>
+   <div class="mt-4 flex flex-wrap gap-3"><button class="awb-pill awb-pill-primary" data-job-generate>Create book &amp; skill</button><button class="awb-pill" data-job-analysis-download>Download analysis</button></div>
+   <div class="mt-6 space-y-6" data-job-analysis-notes></div>
+  </section>
   <section hidden class="mt-8" data-job-content>
    <p class="mb-4 text-sm text-soft" data-job-quality hidden></p>
    <div class="flex flex-wrap gap-3"><button class="awb-pill awb-pill-primary" data-job-copy disabled>Copy to agent</button><button class="awb-pill" data-job-download disabled>Download book &amp; skill</button><a class="awb-pill" data-job-source>Original book</a><button class="awb-pill" data-job-previous hidden>Download previous version</button></div>
    <p class="mt-3 text-sm text-soft" role="status" data-job-copy-status>Give your agent a task: draft a plan, review a decision, or apply a framework. The prompt includes your book, skill instructions, and references.</p>
    <p class="mt-3 text-sm text-soft" role="status" data-job-audit></p><button hidden class="awb-pill mt-3" data-job-audit-retry>Retry skill check</button>
+   <div hidden class="mt-4 rounded-xl border border-line p-4" data-job-review><p class="text-sm">The upstream scanner flagged these passages. Review them in context before using the skill.</p><pre class="mt-3 whitespace-pre-wrap break-words text-xs" data-job-findings></pre><label class="mt-4 flex items-start gap-3 text-sm"><input type="checkbox" class="mt-1" data-job-review-accept />I reviewed these passages and accept this skill for my use.</label></div>
    <textarea hidden readonly rows="10" class="awb-input mt-3 w-full" aria-label="Book agent prompt" data-job-prompt></textarea>
    <div class="mt-8 rounded-2xl border border-line bg-card p-6 sm:p-8" data-job-reading></div>
    <p class="mt-6 text-sm text-soft">AI-generated draft. Check important claims against your original book. Source section references describe extraction ranges, not verified original chapter boundaries.</p>
   </section>
  </article>
  <script>import '../../lib/private-book';</script>
+ <style>progress{accent-color:var(--color-ink);height:6px;border:0;border-radius:8px;overflow:hidden}progress::-webkit-progress-bar{background:var(--color-line)}progress::-webkit-progress-value{background:var(--color-ink)}</style>
 </Base>

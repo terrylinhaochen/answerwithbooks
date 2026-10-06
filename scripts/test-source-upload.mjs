@@ -39,8 +39,10 @@ try {
  await p.route('https://api.openai.com/**',route=>{provider.push(route.request().url());return route.abort();});
  await p.goto(origin+'/tools/');await p.locator('[data-open-book-request]').first().click();
  const source='Chapter 1: Evidence\nUse a bounded trial and keep the observations. Review the prediction before changing the plan.\n\nChapter 2: Review\nCompare the result with the expected signal. Keep uncertainty visible, check the original source, and identify the next reversible action.';
+ const clear=async()=>{if(await p.locator('[data-upload-clear]').isVisible())await p.locator('[data-upload-clear]').click();};
+ const start=async()=>{await p.locator('[data-upload-submit]').click();await p.getByText(/Sources reviewed\./).waitFor({timeout:90000});await p.locator('[data-upload-submit]').click();};
  for(const file of [{name:'original-paper.pdf',mimeType:'application/pdf',buffer:pdfFixture()},{name:'research-notes.md',mimeType:'text/markdown',buffer:Buffer.from(source)},{name:'team-runbook.txt',mimeType:'text/plain',buffer:Buffer.from(source)}]) {
-  const before=captured.length;await p.getByLabel('Source file').setInputFiles(file);await p.locator('[data-upload-submit]').click();
+  const before=captured.length;await clear();await p.getByLabel('Source file').setInputFiles(file);await start();
   await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});
   assert.equal(captured.length,before+1);const body=captured.at(-1);assert.equal(body.name,file.name);assert.ok(body.text.length>100);assert.match(body.sha,/^[a-f0-9]{64}$/);
   if(file.name.endsWith('.pdf'))for(let n=1;n<=4;n++)assert.ok(body.text.includes(`Evidence Marker ${n}`));
@@ -54,25 +56,25 @@ try {
   await p.locator('[data-upload-drop]').dispatchEvent('drop',{dataTransfer:transfer});await transfer.dispose();
   assert.equal(await p.locator('[data-upload-drop]').evaluate(el=>el.classList.contains('is-dragging')),false);
  };
- await drop([{name:'dropped-notes.md',text:source}]);
- assert.equal(await p.locator('[data-upload-filename]').innerText(),'dropped-notes.md');
- await p.locator('[data-upload-submit]').click();await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});
+ await clear();await drop([{name:'dropped-notes.md',text:source}]);
+ assert.match(await p.locator('[data-upload-files]').innerText(),/dropped-notes.md/);
+ await start();await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});
  assert.equal(captured.at(-1).name,'dropped-notes.md');assert.equal(captured.at(-1).size,Buffer.byteLength(source));
- await p.locator('[data-upload-clear]').click();assert.ok(await p.locator('[data-upload-submit]').isDisabled());assert.ok(await p.locator('[data-upload-selection]').isHidden());
- await drop([{name:'one.md',text:source},{name:'two.md',text:source}]);await p.getByText('Choose one file at a time.',{exact:true}).waitFor();assert.ok(await p.locator('[data-upload-submit]').isDisabled());
+ await p.locator('[data-upload-clear]').click();assert.ok(await p.locator('[data-upload-submit]').isDisabled());assert.equal(await p.locator('[data-upload-files] li').count(),0);
+ await drop([{name:'one.md',text:source},{name:'two.md',text:source}]);assert.equal(await p.locator('[data-upload-files] li').count(),2);await start();await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).first().waitFor();assert.deepEqual(captured.slice(-2).map(x=>x.name),['one.md','two.md']);await clear();
  await drop([{name:'program.exe',text:source}]);await p.getByText(/Choose a PDF, EPUB, DOCX/).waitFor();assert.ok(await p.locator('[data-upload-submit]').isDisabled());
  const largePdf=path.join(temporary,'illustrated-book.pdf');await fs.writeFile(largePdf,pdfFixture(true,12*1024*1024));
- await p.getByLabel('Source file').setInputFiles(largePdf);await p.locator('[data-upload-submit]').click();await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});
+ await clear();await p.getByLabel('Source file').setInputFiles(largePdf);await start();await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});
  assert.ok(captured.at(-1).size>10*1024*1024);assert.match(captured.at(-1).text,/Evidence Marker 4/);
  const count=captured.length;
  const boundary=path.join(temporary,'boundary.pdf');const file=await fs.open(boundary,'w');await file.truncate(50*1024*1024);await file.close();
- await p.getByLabel('Source file').setInputFiles(boundary);assert.equal(await p.locator('[data-upload-submit]').isDisabled(),false);
+ await clear();await p.getByLabel('Source file').setInputFiles(boundary);assert.equal(await p.locator('[data-upload-submit]').isDisabled(),false);
  await fs.truncate(boundary,50*1024*1024+1);
  for(const [file,message] of [[{name:'empty.txt',mimeType:'text/plain',buffer:Buffer.alloc(0)},'Choose a non-empty source file.'],[boundary,'Choose a source file up to 50 MB.']]) {
-  await p.getByLabel('Source file').setInputFiles(file);await p.getByText(message,{exact:true}).waitFor();assert.ok(await p.locator('[data-upload-submit]').isDisabled());assert.equal(captured.length,count);
+  await clear();await p.getByLabel('Source file').setInputFiles(file);await p.getByText(message,{exact:true}).waitFor();assert.ok(await p.locator('[data-upload-submit]').isDisabled());assert.equal(captured.length,count);
  }
- await p.getByLabel('Source file').setInputFiles({name:'too-short.txt',mimeType:'text/plain',buffer:Buffer.from('Too short.')});await p.locator('[data-upload-submit]').click();await p.getByText('Not enough readable text. Upload a searchable document, paper, or book.',{exact:true}).waitFor();assert.equal(captured.length,count);
- console.log('PASS real drag/drop, replacement/removal, multiple-file and type rejection, 12 MB PDF extraction, exact 50 MB boundary, empty and insufficient-text rejection.');
- await p.getByLabel('Source file').setInputFiles({name:'scanned.pdf',mimeType:'application/pdf',buffer:pdfFixture(false)});await p.locator('[data-upload-submit]').click();await p.getByText(/This PDF contains pages without readable text/).waitFor({timeout:90000});assert.equal(captured.length,count,'unsearchable PDFs never reach generation');
+ await clear();await p.getByLabel('Source file').setInputFiles({name:'too-short.txt',mimeType:'text/plain',buffer:Buffer.from('Too short.')});await p.locator('[data-upload-submit]').click();await p.getByText('Not enough readable text. Upload a searchable document.',{exact:true}).waitFor();assert.equal(captured.length,count);
+ console.log('PASS real drag/drop, replacement/removal, multiple-file acceptance and type rejection, 12 MB PDF extraction, exact 50 MB boundary, empty and insufficient-text rejection.');
+ await clear();await p.getByLabel('Source file').setInputFiles({name:'scanned.pdf',mimeType:'application/pdf',buffer:pdfFixture(false)});await p.locator('[data-upload-submit]').click();await p.getByText(/This PDF contains pages without readable text/).waitFor({timeout:90000});assert.equal(captured.length,count,'unsearchable PDFs never reach generation');
  assert.deepEqual(provider,[]);console.log('PASS OCR-required message and zero provider calls.');
 }finally{await browser.close();await fs.rm(temporary,{recursive:true,force:true});}

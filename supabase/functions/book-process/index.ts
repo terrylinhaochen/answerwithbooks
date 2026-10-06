@@ -1,3 +1,5 @@
+import {scanSkill} from '../_shared/book-skill-review.mjs';
+import {processingOptions,retryPatch} from '../_shared/book-options.mjs';
 import {distillSection,compileDistillation} from '../_shared/book-distillation.mjs';
 import {repairBook} from '../_shared/book-repair.mjs';
 import {verifyOperator} from '../_shared/operator-auth.mjs';
@@ -21,16 +23,18 @@ async function modelJson(system:string,input:string) {
  return JSON.parse(body.choices[0].message.content);
 }
 async function step(job:any,token:string) {
- const patch:any={error:null,lease_until:null,lease_token:null,updated_at:new Date().toISOString()};
+ const patch:any={error:null,attempts:0,lease_until:null,lease_token:null,updated_at:new Date().toISOString()};
  if(job.status==='uploaded') {
   const source=requireOk(await db.storage.from('private-books').download(`${job.user_id}/${job.id}/source`));
   if(source.size>uploadLimits.maxFileBytes||await hash(await source.arrayBuffer())!==job.source_sha) throw new Error('The source upload is incomplete or changed. Upload the same file again.');
   patch.status='processing';
  } else if(job.cursor<job.chunks.length) {
   const chunk=job.chunks[job.cursor];
-  const {note,title,author}=await distillSection(chunk,job.cursor,modelJson);
+  const {note,title,author}=await distillSection(chunk,job.cursor,modelJson,job.options);
   patch.notes=[...job.notes,note];patch.cursor=job.cursor+1;patch.status='processing';patch.attempts=0;
   if(job.cursor===0) { if(typeof title==='string'&&title.trim()) patch.title=title.slice(0,200);if(typeof author==='string'&&author.trim()) patch.author=author.slice(0,200); }
+ } else if(job.options?.mode==='analysis') {
+  patch.analysis={title:job.title,author:job.author,sections:job.notes,sourceSha256:job.source_sha,createdAt:new Date().toISOString()};patch.status='analyzed';patch.run_state='complete';
  } else if(!job.artifacts) {
   patch.artifacts=await compileDistillation(job,job.notes,modelJson,hash);patch.status='cover';patch.attempts=0;
  } else {
@@ -38,9 +42,21 @@ async function step(job:any,token:string) {
   if(!response.ok) throw new Error('The book and skill are ready, but cover generation failed. Retry to finish the cover.');
   const result=await response.json();const b64=result.data?.[0]?.b64_json;if(!b64)throw new Error('No cover image was returned. Retry the cover.');
   const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const coverPath=`${job.user_id}/${job.id}/cover.png`;
-  requireOk(await db.storage.from('private-books').upload(coverPath,bytes,{contentType:'image/png',upsert:true}));patch.cover_path=coverPath;patch.status='ready';
+  requireOk(await db.storage.from('private-books').upload(coverPath,bytes,{contentType:'image/png',upsert:true}));patch.cover_path=coverPath;patch.status='ready';patch.run_state='complete';
  }
  const saved=requireOk(await db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('lease_token',token).select().single());return publicJob(saved);
+}
+async function wake() { await db.rpc('wake_book_processing',{p_count:1}); }
+async function processClaim(claim:any) {
+ try {return {job:await step(claim,claim.lease_token)};}
+ catch(e) {
+  const message=e instanceof Error?e.message:'Processing failed. Please retry.';
+  const patch=retryPatch(claim.attempts,message);
+  // Preserve a pause requested while a provider call was in flight.
+  requireOk(await db.from('book_processing_jobs').update(patch).eq('id',claim.id).eq('lease_token',claim.lease_token).neq('run_state','paused'));
+  requireOk(await db.from('book_processing_jobs').update({...patch,run_state:'paused'}).eq('id',claim.id).eq('lease_token',claim.lease_token).eq('run_state','paused'));
+  return {error:message};
+ }finally{await wake();}
 }
 Deno.serve(async req=>{
  const origin=req.headers.get('origin')||'';
@@ -52,9 +68,17 @@ Deno.serve(async req=>{
  try {
   if(Number(req.headers.get('content-length')||0)>7000000)return reply({error:'Source too large'},413);
   const raw=await req.text();if(raw.length>2500000)return reply({error:'Source too large'},413);
-  const input=JSON.parse(raw);
-  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:uploadLimits.maxFileBytes,max_text_characters:uploadLimits.maxTextCharacters});
+  const input=JSON.parse(raw);if(!input||typeof input!=='object'||Array.isArray(input))return reply({error:'Send a JSON object.'},400);
+  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:uploadLimits.maxFileBytes,max_text_characters:uploadLimits.maxTextCharacters,max_batch_files:10,daily_source_limit:10,background_processing:true});
   const bearer=req.headers.get('authorization')?.replace(/^Bearer /i,'');if(!bearer)return reply({error:'Sign in to upload a private book.'},401);
+  if(input.action==='drain') {
+   const runner=Deno.env.get('BOOK_QUEUE_RUNNER_SECRET');
+   if(!runner || await hash(new TextEncoder().encode(bearer))!==await hash(new TextEncoder().encode(runner)))return reply({error:'Not authorized'},403);
+   if(!providerKey())return reply({error:'Generation is unavailable.'},503);
+   const claim=requireOk(await db.rpc('claim_book_processing_job'));
+   if(!claim?.id)return reply({idle:true});
+   const result=await processClaim(claim);return reply(result.error?{error:result.error}:{processed:claim.id,status:result.job?.status},result.error?502:200);
+  }
   if(input.action==='repair') {
    if(!await verifyOperator(bearer,{url,serviceKey}))return reply({error:'Repair requires server operator authorization.'},403);
    if(!/^[a-f0-9-]{36}$/i.test(input.id||''))return reply({error:'Invalid book ID'},400);
@@ -70,16 +94,25 @@ Deno.serve(async req=>{
    if(!providerKey())return reply({error:'Book processing is being connected. Please try again later.'},503);
    if(input.size!==undefined&&(!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes))return reply({error:'Choose a non-empty source file up to 50 MB.'},400);
    if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to 1.2 million readable characters.'},400);
+   const options=processingOptions(input.options);
    const source=splitSource(sanitizeSource(input.text), input.extraction?.headings||[]);
    const result=await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:source.text,p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:source.chunks});
    if(result.error)return reply({error:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not create this book. Please retry.'},400);
-   const job=result.data;let upload=null;
+   let job=result.data;let upload=null;
+   if(job.status==='uploaded'&&job.cursor===0&&!job.lease_until) {
+    // Options can change only before processing starts. Enqueue follows completed upload.
+    job=requireOk(await db.from('book_processing_jobs').update({options,run_state:input.options?'staging':'manual'}).eq('id',job.id).eq('updated_at',job.updated_at).is('lease_token',null).select().single());
+   }
    if(job.status==='uploaded')upload=requireOk(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/source`,{upsert:true}));
    return reply({job:publicJob(job),upload});
   }
   if(!/^[a-f0-9-]{36}$/i.test(input.id||''))return reply({error:'Invalid book ID'},400);
   const {data:job}=await db.from('book_processing_jobs').select('*').eq('id',input.id).eq('user_id',user.id).maybeSingle();if(!job)return reply({error:'Book not found'},404);
   if(input.action==='delete') {
+   // Stop claims before touching storage. An active provider call must finish first.
+   const now=new Date().toISOString();
+   const stopped=requireOk(await db.from('book_processing_jobs').update({run_state:'paused',updated_at:now}).eq('id',job.id).eq('user_id',user.id).or(`lease_until.is.null,lease_until.lt.${now}`).select('id').maybeSingle());
+   if(!stopped)return reply({error:'Pause this book and wait for its current section to finish before deleting it.'},409);
    const prefix=`${user.id}/${job.id}`;const files=requireOk(await db.storage.from('private-books').list(prefix,{limit:1000}));
    if(files.length)requireOk(await db.storage.from('private-books').remove(files.map((file:any)=>`${prefix}/${file.name}`)));
    requireOk(await db.from('book_processing_jobs').delete().eq('id',job.id).eq('user_id',user.id));return reply({deleted:true});
@@ -94,21 +127,34 @@ Deno.serve(async req=>{
     const files=exportBookFiles(previous);files['DOWNLOAD.md']='# Previous version\n\nThis saved revision was superseded after a source-fidelity repair. It may contain unsupported claims. Use the current version for new work.\n\n'+files['DOWNLOAD.md'];
     return reply({files});
    }
+   const findings=scanSkill(job.artifacts);if(findings.length&&input.reviewAccepted!==true)return reply({error:'Review the flagged passages before exporting this skill.',findings},409);
    return reply({files:exportBookFiles(job)});
   }
-  if(input.action==='status'||job.status==='ready')return reply({job:publicJob(job)});
-  if(!providerKey())return reply({error:'Book processing is being connected. Please try again later.'},503);
-  if(input.action!=='process')return reply({error:'Unknown action'},400);
-  if(job.attempts>=5)return reply({error:'This section needs review after repeated failures. Your source and completed outputs are saved.'},409);
-  const token=crypto.randomUUID();const now=new Date().toISOString();
-  const {data:claim,error:claimError}=await db.from('book_processing_jobs').update({lease_token:token,lease_until:new Date(Date.now()+140000).toISOString(),attempts:job.attempts+1}).eq('id',job.id).eq('cursor',job.cursor).eq('updated_at',job.updated_at).or(`lease_until.is.null,lease_until.lt.${now}`).select('id');
-  if(claimError)return reply({error:'Could not start processing. Please retry.'},500);
-  if(!claim?.length)return reply({job:publicJob(job),busy:true});
-  try { return reply({job:await step(job,token)}); }
-  catch(e) {
-   const message=e instanceof Error?e.message:'Processing failed. Please retry.';
-   await db.from('book_processing_jobs').update({error:message,lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('lease_token',token);
-   return reply({error:message},502);
+  if(input.action==='analysis-export') {
+   if(!job.analysis)return reply({error:'Analysis is not ready.'},409);
+   return reply({files:{'analysis.json':JSON.stringify(job.analysis,null,2),'source.txt':job.source_text}});
   }
- }catch{return reply({error:'Could not process this request. Please retry.'},400);}
+  if(input.action==='status')return reply({job:publicJob(job)});
+  if(input.action==='pause') {
+   const saved=requireOk(await db.from('book_processing_jobs').update({run_state:'paused',updated_at:new Date().toISOString()}).eq('id',job.id).neq('run_state','complete').select().maybeSingle());
+   return reply({job:publicJob(saved||job)});
+  }
+  if(['enqueue','retry','generate'].includes(input.action)) {
+   if(!providerKey())return reply({error:'Generation is unavailable.'},503);
+   if(job.status==='ready'||job.status==='analyzed'&&input.action!=='generate')return reply({job:publicJob(job)});
+   if(input.action==='generate'&&job.status!=='analyzed')return reply({error:'Finish analysis before generating from it.'},409);
+   const patch:any={run_state:'queued',error:null,next_attempt_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+   if(input.action==='generate'){patch.options={...job.options,mode:'full'};patch.status='processing';}
+   // Do not reset an active claim or overwrite a step that finished concurrently.
+   if(!job.lease_until||Date.parse(job.lease_until)<Date.now())patch.attempts=0;
+   const saved=requireOk(await db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('updated_at',job.updated_at).select().maybeSingle());
+   await wake();return reply({job:publicJob(saved||job)});
+  }
+  if(input.action!=='process')return reply({error:'Unknown action'},400);
+  if(job.status==='ready'||job.status==='analyzed')return reply({job:publicJob(job)});
+  if(!providerKey())return reply({error:'Generation is unavailable.'},503);
+  const claim=requireOk(await db.rpc('claim_book_processing_job',{p_id:job.id,p_user:user.id}));
+  if(!claim?.id)return reply({job:publicJob(job),busy:true});
+  const result=await processClaim(claim);return reply(result,result.error?502:200);
+ }catch(e){return reply({error:e instanceof SyntaxError?'Send valid JSON.':e instanceof Error?e.message:'Could not process this request. Please retry.'},400);}
 });

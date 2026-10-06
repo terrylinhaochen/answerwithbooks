@@ -19,5 +19,11 @@ export function validateSection(data,chunk,index) {
  const refs=items=>Array.isArray(items)&&items.length>0&&items.every(r=>Number.isInteger(r.startLine)&&Number.isInteger(r.endLine)&&r.startLine>=chunk.start&&r.endLine<=chunk.end&&r.endLine>=r.startLine);
  if(!refs(data.sourceRefs)) throw new Error('The section references did not match its source.');
  for(const idea of data.ideas) if(!['name','explanation','whenToUse','limits'].every(k=>nonempty(idea[k]))||!Array.isArray(idea.steps)||!idea.steps.length||!idea.steps.every(nonempty)||!refs(idea.sourceRefs)||(idea.decisionRule!=null&&!nonempty(idea.decisionRule))) throw new Error('The generated idea lacked grounded evidence or application steps.');
- return {id:`ch${String(index+1).padStart(2,'0')}`,title:chunk.title||`Source section ${index+1}`,summary:data.summary,sourceRefs:data.sourceRefs,ideas:data.ideas};
+ const extras={};
+ for(const [key,fields] of [['antiPatterns',['name','why','instead']],['workedExamples',['title','scenario','application']]]){
+  const values=data[key]??[];
+  if(!Array.isArray(values)||values.length>5||values.some(value=>!value||!fields.every(field=>nonempty(value[field]))||!refs(value.sourceRefs)))throw new Error('The generated example or anti-pattern lacked source support.');
+  extras[key]=values;
+ }
+ return {id:`ch${String(index+1).padStart(2,'0')}`,title:chunk.title||`Source section ${index+1}`,summary:data.summary,sourceRefs:data.sourceRefs,ideas:data.ideas,...extras};
 }

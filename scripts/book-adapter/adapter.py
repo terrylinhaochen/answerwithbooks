@@ -17,7 +17,7 @@ VENDOR = ROOT / 'vendor' / 'book-to-skill'
 sys.path.insert(0, str(VENDOR))
 sys.path.insert(0, str(VENDOR / 'tools'))
 from book_to_skill.utils import (detect_structure, estimate_tokens, extract_single_file,
-                                _chapter_number, _closed_fence_line_numbers)
+                                _chapter_number, _closed_fence_line_numbers, _structural_chapter_headings)
 from book_to_skill.sanitize import sanitize_extracted_text
 from book_to_skill.parsers.epub import extract_with_zipfile
 from book_to_skill.parsers.docx import extract_docx_with_zipfile
@@ -70,8 +70,12 @@ def analyze(text, method='provided-text'):
         if _chapter_number(line, previous) is not None:
             headings.append({'line': i+1, 'title': line.strip()})
         previous = line.strip()
+    if detect_structure(text)['chapters_method'] == 'structural':
+        structural = set(_structural_chapter_headings(text))
+        headings = [{'line': i+1, 'title': line.strip()} for i, line in enumerate(lines)
+                    if i not in fenced and line.strip() in structural]
     return {'text': text, 'extractor': 'book-to-skill/' + method,
-            'upstreamCommit': 'c108d25b0cb58e1bdc361f3de02ed9f37075152f',
+            'upstreamCommit': 'e180fc46365e8c1aab0120778cc8a40b9515324b',
             'structure': detect_structure(text), 'headings': headings,
             'estimatedTokens': estimate_tokens(text), 'removedInvisible': removed}
 
@@ -123,11 +127,11 @@ def validate(files):
             target.write_text(content, encoding='utf-8')
         if not (root/'skill/SKILL.md').is_file():
             return {'errors':['Missing skill/SKILL.md.'], 'warnings':[], 'findings':[],
-                    'upstreamCommit':'c108d25b0cb58e1bdc361f3de02ed9f37075152f'}
+                    'upstreamCommit':'e180fc46365e8c1aab0120778cc8a40b9515324b'}
         errors, warnings = audit(root/'skill/SKILL.md', lens='claude')
         findings = [asdict(f) for f in scan_generated_skill(root/'skill')]
         return {'errors':errors, 'warnings':warnings, 'findings':findings,
-                'upstreamCommit':'c108d25b0cb58e1bdc361f3de02ed9f37075152f'}
+                'upstreamCommit':'e180fc46365e8c1aab0120778cc8a40b9515324b'}
 
 
 if __name__ == '__main__':

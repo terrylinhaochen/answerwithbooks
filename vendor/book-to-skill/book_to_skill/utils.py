@@ -217,6 +217,19 @@ _BN_CHAPTER = re.compile(
     rf"^\s*(?:#{{1,6}}\s+)?অধ্যায়\s*([0-9{_BN_DIGITS}]+)\b"
 )
 
+# Odia chapter headings: "ଅଧ୍ୟାୟ 1", "ଅଧ୍ୟାୟ ୧", "## ଅଧ୍ୟାୟ 2".
+# ଅଧ୍ୟାୟ ("chapter") + a number. Grouped next to Bengali because both are
+# Eastern Brahmic and the words look alike, but the scripts occupy separate
+# blocks (Odia U+0B00-U+0B7F, Bengali U+0980-U+09FF), so the two patterns
+# cannot see each other's text. Odia digits (U+0B66-U+0B6F) are positional, so
+# only a digit remap is needed. Requiring a number keeps prose that merely uses
+# an inflected form ("ଅଧ୍ୟାୟରେ", a locative suffix) from matching.
+_OR_DIGITS = "୦-୯"
+_OR_DIGIT_MAP = str.maketrans("୦୧୨୩୪୫୬୭୮୯", "0123456789")
+_OR_CHAPTER = re.compile(
+    rf"^\s*(?:#{{1,6}}\s+)?ଅଧ୍ୟାୟ\s*([0-9{_OR_DIGITS}]+)\b"
+)
+
 # Tamil chapter headings: "அத்தியாயம் 1", "அத்தியாயம் ௧", "## அத்தியாயம் 2".
 # அத்தியாயம் ("chapter") + a number. Tamil digits (U+0BE6-U+0BEF) are positional
 # like the Devanagari/Bengali blocks above, so only a digit remap is needed.
@@ -263,6 +276,21 @@ _ML_DIGITS = "൦-൯"
 _ML_DIGIT_MAP = str.maketrans("൦൧൨൩൪൫൬൭൮൯", "0123456789")
 _ML_CHAPTER = re.compile(
     rf"^\s*(?:#{{1,6}}\s+)?അ(?:ധ്|ദ്ധ്)യായം\s*([0-9{_ML_DIGITS}]+)\b"
+)
+
+# Gujarati chapter headings: "પ્રકરણ 1", "અધ્યાય ૧", "## પ્રકરણ 2".
+# Gujarati uses two distinct words for "chapter" — પ્રકરણ (common in modern
+# books) and અધ્યાય (classical/religious) — so both are matched. અધ્યાય shares
+# its transliteration with Devanagari अध्याय (the Hindi block above) but not its
+# codepoints (U+0A85.. vs U+0905..), so the two scripts cannot collide. Gujarati
+# digits (U+0AE6-U+0AEF) are positional like the other Indic blocks above, so
+# only a digit remap is needed. Unlike Malayalam, an inflected form keeps the
+# whole word ("પ્રકરણમાં" is the word + માં), so requiring a number right after
+# it is what keeps prose from matching.
+_GU_DIGITS = "૦-૯"
+_GU_DIGIT_MAP = str.maketrans("૦૧૨૩૪૫૬૭૮૯", "0123456789")
+_GU_CHAPTER = re.compile(
+    rf"^\s*(?:#{{1,6}}\s+)?(?:પ્રકરણ|અધ્યાય)\s*([0-9{_GU_DIGITS}]+)\b"
 )
 
 # Russian (Cyrillic) chapter headings: "Глава 1", "ГЛАВА 12", "## Глава 2".
@@ -399,6 +427,47 @@ _TOC_PATTERN = re.compile(
     re.IGNORECASE | re.MULTILINE,
 )
 
+# Structural extraction sees every heading at the selected depth, including
+# the book's framing sections. These whole-title guards remove only conventional
+# front/back matter; instructional titles such as "Indexing Strategies" and
+# "Glossary of Terms" must remain chapters.
+_FRONT_MATTER_HEADERS = (
+    "preface",
+    "foreword",
+    "acknowledgements",
+    "acknowledgments",
+    "dedication",
+    "copyright",
+    "epigraph",
+    "prologue",
+)
+_BACK_MATTER_HEADERS = (
+    "bibliography",
+    "references",
+    "works cited",
+    "further reading",
+    "index",
+    "glossary",
+    "notes",
+    "endnotes",
+    "footnotes",
+    "colophon",
+    "about the author",
+    "about the authors",
+)
+_NON_CHAPTER_HEADERS = frozenset((*_FRONT_MATTER_HEADERS, *_BACK_MATTER_HEADERS))
+_NON_CHAPTER_PREFIX = re.compile(r"^(?:appendix|appendices|part)\b", re.IGNORECASE)
+
+
+def _is_non_chapter_section(title: str) -> bool:
+    """Return whether *title* is conventional book framing, not a chapter."""
+    normalized = title.strip()
+    return (
+        normalized.casefold() in _NON_CHAPTER_HEADERS
+        or bool(_TOC_PATTERN.fullmatch(normalized))
+        or bool(_NON_CHAPTER_PREFIX.match(normalized))
+    )
+
 # ATX-style heading: "# Title", "## Section", AsciiDoc "= Title", "== Section".
 # The required space after the marker distinguishes an AsciiDoc "== X" from a
 # reStructuredText underline "=====" (no space) — the latter is intentionally
@@ -456,7 +525,7 @@ _MIN_NUMBERED_BODY_CHARS = 200
 
 
 def _numbered_titles_are_structural(
-    entries: list[tuple[str, int]], heading_lines: list[int], lines: list[str]
+    entries: list[tuple[str, int, str]], heading_lines: list[int], lines: list[str]
 ) -> bool:
     """Decide whether digit-led titles at one depth are chapters or list items.
 
@@ -470,15 +539,15 @@ def _numbered_titles_are_structural(
         return False
     ordered = sorted(heading_lines)
     bodies = []
-    for _, index in entries:
+    for _, index, _ in entries:
         after = [ln for ln in ordered if ln > index]
         end = after[0] if after else len(lines)
         bodies.append(sum(len(ln) for ln in lines[index + 1:end]))
     return statistics.median(bodies) >= _MIN_NUMBERED_BODY_CHARS
 
 
-def _structural_chapter_count(text: str) -> int:
-    """Count chapter-like structural headings in Markdown/AsciiDoc/RST sources.
+def _structural_chapter_headings(text: str) -> list[str]:
+    """Return chapter-like structural headings in Markdown/AsciiDoc/RST sources.
 
     Recognizes ATX headings ("# Title", "== Section") and setext/RST underline
     headings (a title line directly above a row of "=" or "-"). Groups distinct
@@ -494,11 +563,14 @@ def _structural_chapter_count(text: str) -> int:
     not match).
     """
     lines = text.splitlines()
-    levels: dict[int, set[str]] = {}
+    # Map normalized titles to their original representation. Dict insertion
+    # order makes the returned sample match the source order while preserving
+    # the previous case-insensitive de-duplication behavior.
+    levels: dict[int, dict[str, str]] = {}
     # Digit-led titles are held back and judged per depth at the end (see
     # _numbered_titles_are_structural): "## 1. Introduction" and "## 5 Setup"
     # are the same string shape, so the line alone cannot decide.
-    numbered: dict[int, list[tuple[str, int]]] = {}
+    numbered: dict[int, list[tuple[str, int, str]]] = {}
     heading_lines: list[int] = []
     fenced = _closed_fence_line_numbers(lines)
     prev = ""  # previous non-fence line (stripped); a setext title candidate
@@ -523,8 +595,9 @@ def _structural_chapter_count(text: str) -> int:
             and re.search(r"\w", prev)
         ):
             depth = 1 if s[0] == "=" else 2
-            levels.setdefault(depth, set()).add(prev.lower())
             heading_lines.append(index)
+            if not _is_non_chapter_section(prev):
+                levels.setdefault(depth, {}).setdefault(prev.casefold(), prev)
             prev = ""
             continue
         # ATX heading ("# Title", "== Section").
@@ -535,26 +608,38 @@ def _structural_chapter_count(text: str) -> int:
             # Reject empty and all-punctuation ("=====" table-border) titles.
             if title and re.search(r"\w", title):
                 heading_lines.append(index)
-                if title[0].isdigit():
-                    numbered.setdefault(depth, []).append((title, index))
-                else:
-                    levels.setdefault(depth, set()).add(title)
+                if not _is_non_chapter_section(title):
+                    if title[0].isdigit():
+                        numbered.setdefault(depth, []).append((title, index, s))
+                    else:
+                        levels.setdefault(depth, {}).setdefault(title, s)
             # An ATX heading line is not a setext title for the next line.
             prev = ""
             continue
         prev = s
     for depth, entries in numbered.items():
         if _numbered_titles_are_structural(entries, heading_lines, lines):
-            levels.setdefault(depth, set()).update(title for title, _ in entries)
+            level = levels.setdefault(depth, {})
+            for title, _, sample in entries:
+                level.setdefault(title, sample)
     if not levels:
-        return 0
+        return []
     for depth in sorted(levels):
         if len(levels[depth]) >= 2:
-            return len(levels[depth])
+            return list(levels[depth].values())
     # No level has >= 2 distinct headings: a thin doc (e.g. one heading per
     # level). Count them all — this path runs only as a fallback when numeric
     # chapter detection already found zero, so it cannot inflate real books.
-    return sum(len(titles) for titles in levels.values())
+    return [
+        title
+        for depth in sorted(levels)
+        for title in levels[depth].values()
+    ]
+
+
+def _structural_chapter_count(text: str) -> int:
+    """Count chapter-like structural headings in Markdown/AsciiDoc/RST sources."""
+    return len(_structural_chapter_headings(text))
 
 
 def _cn_numeral_to_int(s: str) -> int | None:
@@ -681,6 +766,9 @@ def _match_chapter_number(
     bm = _BN_CHAPTER.match(s)
     if bm:
         return int(bm.group(1).translate(_BN_DIGIT_MAP))
+    orm = _OR_CHAPTER.match(s)
+    if orm:
+        return int(orm.group(1).translate(_OR_DIGIT_MAP))
     tam = _TA_CHAPTER.match(s)
     if tam:
         return int(tam.group(1).translate(_TA_DIGIT_MAP))
@@ -693,6 +781,9 @@ def _match_chapter_number(
     mlm = _ML_CHAPTER.match(s)
     if mlm:
         return int(mlm.group(1).translate(_ML_DIGIT_MAP))
+    gum = _GU_CHAPTER.match(s)
+    if gum:
+        return int(gum.group(1).translate(_GU_DIGIT_MAP))
     rum = _RU_CHAPTER.match(s)
     if rum:
         return int(rum.group(1))
@@ -722,10 +813,12 @@ def _chapter_number(line: str, prev_line: str | None = None) -> int | None:
     Chinese ("第三章 …", "## 一 · …", "## 第一讲"), Thai ("บทที่ 3",
     "## บทที่ ๑"), Hindi ("अध्याय 1", "अध्याय १", "## अध्याय 2"),
     Bengali ("অধ্যায় 1", "অধ্যায় ১", "## অধ্যায় 2"),
+    Odia ("ଅଧ୍ୟାୟ 1", "ଅଧ୍ୟାୟ ୧", "## ଅଧ୍ୟାୟ 2"),
     Tamil ("அத்தியாயம் 1", "அத்தியாயம் ௧", "## அத்தியாயம் 2"),
     Telugu ("అధ్యాయము 1", "అధ్యాయం ౧", "## అధ్యాయం 2"),
     Kannada ("ಅಧ್ಯಾಯ 1", "ಅಧ್ಯಾಯ ೧", "## ಅಧ್ಯಾಯ 2"),
     Malayalam ("അധ്യായം 1", "അധ്യായം ൧", "## അദ്ധ്യായം 2"),
+    Gujarati ("પ્રકરણ 1", "અધ્યાય ૧", "## પ્રકરણ 2"),
     Russian ("Глава 1", "ГЛАВА 12", "## Глава 2"),
     Greek ("Κεφάλαιο 1", "ΚΕΦΑΛΑΙΟ 12", "## Κεφάλαιο 2"),
     Korean ("제1장 총칙", "## 제4장 근로시간과 휴식"), and
@@ -803,17 +896,24 @@ def detect_structure(text: str) -> dict:
     if numeric_count >= 2:
         chapters_detected = numeric_count
         chapters_method = "numeric"
+        chapter_headings_sample = headings[:10]
     else:
         # A single stray number (e.g. a Roman numeral inside an example paper
         # reproduced in the book, or a lone "Part 1") is not enough to suppress
         # the structural (Markdown/AsciiDoc) heading count, so course-style
         # books with "### Unit N" headings still get counted via max().
-        structural_count = _structural_chapter_count(text)
+        structural_headings = _structural_chapter_headings(text)
+        structural_count = len(structural_headings)
         chapters_detected = max(numeric_count, structural_count)
         chapters_method = (
             "structural" if structural_count > numeric_count
             else "numeric" if numeric_count
             else "none"
+        )
+        chapter_headings_sample = (
+            structural_headings[:10]
+            if chapters_method == "structural"
+            else headings[:10]
         )
 
     # Look for ToC indicators in the first ~30k chars (multilingual; see _TOC_PATTERN)
@@ -822,7 +922,7 @@ def detect_structure(text: str) -> dict:
     return {
         "chapters_detected": chapters_detected,
         "chapters_method": chapters_method,
-        "chapter_headings_sample": headings[:10],
+        "chapter_headings_sample": chapter_headings_sample,
         "has_toc": has_toc,
     }
 
@@ -1349,8 +1449,11 @@ def main():
     # Combine texts
     consolidated_text = "".join(combined_texts).strip()
     
-    # Write combined text
-    OUTPUT_TEXT.write_text(consolidated_text, encoding="utf-8")
+    # Preserve existing source line endings. On Windows, the default newline
+    # translation turns an extracted CRLF into CRCRLF and breaks setext headings
+    # when the persisted corpus is read back.
+    with OUTPUT_TEXT.open("w", encoding="utf-8", newline="\n") as output_file:
+        output_file.write(consolidated_text)
     
     # Consolidate metadata
     total_file_size_mb = sum(src["file_size_mb"] for src in extracted_sources)

@@ -44,7 +44,21 @@ jobs:
       - name: Verify upstream book adaptation
         run: |
           python3 scripts/book-adapter/test_adapter.py
-          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs
+          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs
+
+      - name: Set up Deno for the processing handler tests
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Verify processing handler without network or provider access
+        run: |
+          deno cache scripts/test-book-worker-http.ts
+          deno check supabase/functions/book-process/index.ts
+          deno run --allow-env --allow-read scripts/test-book-worker-http.ts
+
+      - name: Verify queue concurrency and account isolation in local Postgres
+        run: PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-queue-db.py
 
       - name: Verify authentication email branding
         run: node scripts/test-auth-email-templates.mjs
