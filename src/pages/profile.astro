@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import BookAdditions from '../components/BookAdditions.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
-import AccountNav from '../components/AccountNav.astro';
 import AddBookDialog from '../components/AddBookDialog.astro';
 
 ---
@@ -14,7 +13,6 @@ import AddBookDialog from '../components/AddBookDialog.astro';
   robots="noindex, follow"
 >
   <section class="awb-section profile-page">
-    <AccountNav active="profile" />
     <div id="library-loading" class="text-soft">Checking your session…</div>
 
     <div id="library-content" class="hidden">

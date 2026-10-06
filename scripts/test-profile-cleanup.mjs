@@ -25,11 +25,8 @@ try {
   await page.locator('#library-content').waitFor();
   assert.equal(await page.getByRole('heading',{name:/Saved books|Saved guides/}).count(),0);
   assert.ok(await page.getByRole('heading',{name:'Your preferences',exact:true}).isVisible());
-  const accountNav=page.getByRole('navigation',{name:'Your account',exact:true});
-  assert.equal(await accountNav.getByRole('link').count(),3);
-  assert.equal(await accountNav.getByRole('link',{name:'Profile',exact:true}).getAttribute('aria-current'),'page');
-  assert.equal(await accountNav.getByRole('link',{name:'Billing',exact:true}).getAttribute('href'),'/billing/');
-  assert.equal(await accountNav.getByRole('link',{name:'API keys',exact:true}).getAttribute('href'),'/api-keys/');
+  assert.equal(await page.getByRole('navigation',{name:'Your account',exact:true}).count(),0);
+  assert.equal(await page.locator('a[href="/billing/"], a[href="/api-keys/"]').count(),0);
   assert.match(await page.locator('#profile-preferences').textContent(),/Learn better/);
   assert.equal(await page.locator('a[href="/upload/"], a[href="/community/"]').count(),0);
   assert.doesNotMatch(await page.locator('#library-content').innerText(),/Your mapped content|Collected maps|Open dashboard|Open questions|Honest misses|Explore books|Explore guides|Install the agent skill/);
