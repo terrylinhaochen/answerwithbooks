@@ -7,6 +7,11 @@ readIf: "Competent people keep making preventable mistakes, but adding more proc
 tags: ["operations", "quality", "systems"]
 featured: false
 order: 18
+amazon:
+  asin: "0312430000"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0312430000"
 ---
 
 Atul Gawande begins with a change in the nature of failure. In many fields, the central problem is no longer that humanity lacks the necessary knowledge. Medicine, aviation, construction, and engineering know how to perform an extraordinary range of difficult tasks. Failure often occurs because the available knowledge is not applied correctly, completely, or at the right moment.

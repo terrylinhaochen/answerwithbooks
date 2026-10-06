@@ -1,0 +1,18 @@
+---
+interface Props {
+ title: string;
+ author: string;
+ slug: string;
+ amazon?: { asin: string; edition: string; verifiedAt: string; source: string };
+}
+const { title, author, slug, amazon } = Astro.props;
+const href = amazon ? `https://www.amazon.com/dp/${amazon.asin}` : undefined;
+---
+{amazon && <section class="book-purchase" id="buy-the-book" aria-labelledby="purchase-title">
+ <div class="purchase-copy"><p class="purchase-eyebrow">KEEP READING</p><h2 id="purchase-title">Read the full book.</h2><p class="purchase-invitation">Go deeper into the ideas in this digest.</p><p class="purchase-book">{title} <span>by {author}</span></p></div>
+ <div class="purchase-action"><a href={href} target="_blank" rel="noopener noreferrer" data-book-purchase data-book-slug={slug} data-amazon-asin={amazon.asin} data-purchase-placement="digest_end" aria-label={`View ${title} on Amazon (opens in a new tab)`}>View on Amazon <span aria-hidden="true">↗</span></a><p>Opens Amazon in a new tab.</p></div>
+</section>}
+<style>
+.book-purchase{margin-top:28px;padding:30px 32px;background:#eae7dd;border-radius:18px;display:flex;align-items:center;justify-content:space-between;gap:30px;scroll-margin-top:220px}.purchase-eyebrow{font-size:9px;letter-spacing:.14em;color:#707765;margin-bottom:10px}.purchase-copy h2{font-family:var(--font-serif);font-size:35px;line-height:1.08;letter-spacing:-.03em;color:#30372f}.purchase-invitation{font-size:13px;color:#656a5f;margin-top:10px;line-height:1.6}.purchase-book{font-size:12px;margin-top:17px;color:#30372f}.purchase-book span{color:#75796e;margin-left:5px}.purchase-action{flex-shrink:0}.purchase-action a{display:flex;align-items:center;gap:30px;cursor:pointer;background:#354734;color:#f7f5ed;padding:14px 20px;border-radius:7px;font-size:12px}.purchase-action a:hover{background:#485b42}.purchase-action a:focus-visible{outline:2px solid #596c46;outline-offset:4px}.purchase-action p{font-size:9px;color:#7b7f72;text-align:center;margin-top:10px}@media(max-width:600px){.book-purchase{padding:25px;display:block;scroll-margin-top:180px}.purchase-action{margin-top:23px;width:fit-content}.purchase-copy h2{font-size:32px}.purchase-book span{display:block;margin:5px 0 0}.purchase-action p{text-align:left}}
+
+</style>

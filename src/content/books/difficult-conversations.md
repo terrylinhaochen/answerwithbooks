@@ -7,6 +7,11 @@ readIf: "Read it when you need to address a coworker who keeps missing weekly sa
 tags: ["relationships","communication","conflict","negotiation"]
 featured: false
 order: 30
+amazon:
+  asin: "0143118447"
+  edition: "Paperback, updated anniversary edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0143118447"
 ---
 
 *Difficult Conversations* argues that hard talks usually go badly because people try to deliver a conclusion when the real problem is a tangled conflict of stories, feelings, and self-image. The topic may be performance, money, family rules, politics, deadlines, or apology, but the difficulty comes from what each person privately believes: what happened, what the other person meant, who is at fault, which feelings count, and what the situation says about them.

@@ -7,6 +7,11 @@ readIf: "You are negotiating salary, scope, price, deadlines, or conflict and te
 tags: ["negotiation", "communication", "career"]
 featured: false
 order: 15
+amazon:
+  asin: "0062407805"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0062407805"
 ---
 
 Chris Voss built his negotiation method in FBI hostage negotiations, where averaging two positions could be absurd and a nominal agreement could conceal danger. *Never Split the Difference* transfers lessons from that environment to business and ordinary life: listen for the world as the other person sees it, surface emotions and constraints before arguing solutions, and treat negotiation as discovery rather than a contest of speeches.

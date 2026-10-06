@@ -7,6 +7,11 @@ readIf: "Your head is full of open loops, reminders, half-decisions, and vague t
 tags: ["productivity", "execution", "systems"]
 featured: false
 order: 11
+amazon:
+  asin: "0143126563"
+  edition: "Paperback, revised edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0143126563"
 ---
 
 David Allen begins from a familiar contradiction: people can have sophisticated plans and still feel preoccupied by small unfinished obligations. The problem is not simply too much work. It is that the work has not been converted into decisions the mind can stop rehearsing.

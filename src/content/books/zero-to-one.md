@@ -7,6 +7,11 @@ readIf: "You are building something that sounds useful but still looks too much 
 tags: ["business", "startups", "strategy", "innovation"]
 featured: true
 order: 2
+amazon:
+  asin: "0804139296"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0804139296"
 ---
 
 *Zero to One* begins with a distinction between two kinds of progress. Horizontal progress takes something that already works and reproduces it: one successful product becomes many similar products, or a proven model spreads into another market. Vertical progress creates a capability that did not exist before. The title names that second leap—from nothing to something genuinely new.

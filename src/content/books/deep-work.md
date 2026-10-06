@@ -7,6 +7,11 @@ readIf: "Your day is full of Slack, email, meetings, and context switching, and 
 tags: ["focus", "productivity", "work"]
 featured: false
 order: 10
+amazon:
+  asin: "1455586692"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1455586692"
 ---
 
 Many jobs reward visible responsiveness while depending on work that responsiveness continually interrupts. Messages are answered, meetings are attended, and small requests are cleared; the difficult analysis, design, writing, or learning is pushed into whatever attention remains. *Deep Work* names that conflict and argues that it should be designed, not endured.

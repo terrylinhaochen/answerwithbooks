@@ -7,6 +7,11 @@ readIf: "You are a mid-career consulting partner testing whether nonprofit-secto
 tags: ["career","work","experiments","life-design"]
 featured: false
 order: 41
+amazon:
+  asin: "1591394139"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1591394139"
 ---
 
 Herminia Ibarra’s central argument in *Working Identity* is that major career change is not a sequence of self-discovery followed by execution. It is an identity-learning process. People become clearer about what they want by trying provisional versions of a future self, spending time with people who make that future legible, and then making sense of what those experiences reveal. In serious transitions, action is not what happens after certainty arrives. Action is often how certainty is produced.

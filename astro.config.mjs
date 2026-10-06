@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 const utilityPaths = [
   '/shelf-preview/',
+  '/shelf-lab/',
   '/login/',
   '/signup/',
   '/my-books/',

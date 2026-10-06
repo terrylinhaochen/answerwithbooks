@@ -137,7 +137,7 @@ const providers = [
       } catch {
         action.dataset.promptCopied = 'false';
         action.textContent = `Copy prompt & open ${providerName(provider)}`;
-        if (status) status.textContent = 'Automatic copy was blocked. The prompt is selected below—press ⌘C on Mac or Ctrl+C on Windows, then open your AI and paste it.';
+        if (status) status.textContent = 'Automatic copy was blocked. The prompt is selected below. Press ⌘C on Mac or Ctrl+C on Windows, then open your AI and paste it.';
         const fallback = prompt.closest<HTMLElement>('[data-personalize-fallback]');
         if (fallback) fallback.hidden = false;
         prompt.focus();

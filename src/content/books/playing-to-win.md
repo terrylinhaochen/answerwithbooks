@@ -7,6 +7,11 @@ readIf: "You are leading an annual strategy offsite where the team keeps produci
 tags: ["business","strategy","management","competitive advantage"]
 featured: false
 order: 24
+amazon:
+  asin: "142218739X"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/142218739X"
 ---
 
 Strategy, in *Playing to Win*, is an integrated set of choices that positions an organization to win in a chosen arena. A.G. Lafley and Roger L. Martin argue that many organizations avoid strategy while believing they are doing it: they write mission statements, set financial targets, build annual plans, and approve long lists of initiatives. Those activities may be useful, but they do not answer the strategic question unless they specify where the organization will compete, how it will create a superior value equation there, and what must be built to sustain that advantage.

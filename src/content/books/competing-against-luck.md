@@ -7,6 +7,11 @@ readIf: "You are redesigning a product that gets interest and trials but weak co
 tags: ["business","product","customer research","innovation"]
 featured: false
 order: 23
+amazon:
+  asin: "0062435612"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0062435612"
 ---
 
 *Competing Against Luck* argues that innovation feels random because companies usually study the wrong unit of demand. They measure customers, markets, product categories, satisfaction scores, and feature preferences, then hope those correlations reveal what to build. Christensen, Hall, Dillon, and Duncan say the more useful question is causal: what progress is a person or organization trying to make in a particular circumstance, and what solution do they hire to make that progress?

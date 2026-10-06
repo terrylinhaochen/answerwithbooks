@@ -1,0 +1,20 @@
+---
+interface Props { books: {slug: string; title: string; author: string}[]; }
+const { books } = Astro.props;
+---
+<dialog id="shelf-personalizer" class="shelf-personalizer" aria-labelledby="shelf-personalizer-title">
+ <header><div><p class="awb-eyebrow">Your collection</p><h2 id="shelf-personalizer-title">Make room for your books.</h2></div><button type="button" data-close-shelf-picker aria-label="Close personalization">×</button></header>
+ <p data-shelf-account-loading role="status">Loading your account…</p>
+ <div data-shelf-signin hidden><p>Sign in to choose five books from the library. Your collection will be saved to your account.</p><a class="awb-pill awb-pill-primary" href="/login/?from=shelf">Sign in to personalize</a><p class="shelf-signup">New here? <a href="/signup/?from=shelf">Create an account</a></p></div>
+ <form data-shelf-preferences hidden>
+  <p class="shelf-picker-intro">Choose five books for your table. Remove a selection to make room for another.</p>
+  <div class="shelf-selected" data-shelf-selected aria-label="Selected books"></div>
+  <label class="shelf-search-label" for="shelf-book-search">Find a book</label><input id="shelf-book-search" type="search" class="awb-input" placeholder="Search title or author" data-shelf-search />
+  <div class="shelf-book-options" aria-label="Library books">
+   {books.slice().sort((a,b)=>a.title.localeCompare(b.title)).map(book => <label class="shelf-book-option" data-shelf-option data-search={`${book.title} ${book.author}`.toLowerCase()}><input type="checkbox" value={book.slug} name="shelf-book" /><span><strong>{book.title}</strong><small>{book.author}</small></span></label>)}
+  </div>
+  <p data-shelf-empty hidden>No books match your search.</p>
+  <p class="shelf-picker-status" role="status" data-shelf-picker-status></p>
+  <footer><span data-shelf-count>5 of 5 selected</span><button type="button" class="shelf-recommended" data-shelf-defaults>Use recommended</button><button type="submit" class="awb-pill awb-pill-primary" data-save-shelf>Save my shelf</button></footer>
+ </form>
+</dialog>

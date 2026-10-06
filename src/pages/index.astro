@@ -1,18 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import ShelfHero from '../components/ShelfHero.astro';
+import TactileShelf from '../components/TactileShelf.astro';
+import BookJacket from '../components/BookJacket.astro';
+import AnswerCover from '../components/AnswerCover.astro';
+import { bookPalettes } from '../lib/book-palettes';
+import '../styles/collector-home.css';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
-import { newsletterSignupUrl } from '../lib/newsletter';
-import BookCover from '../components/BookCover.astro';
-import BookRow from '../components/BookRow.astro';
-import AnswerRow from '../components/AnswerRow.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
-import FaqList from '../components/FaqList.astro';
 import QuestionInvite from '../components/QuestionInvite.astro';
 import { faqJsonLd } from '../lib/seo';
 
-const { preview = false } = Astro.props;
+const { preview = false, shelfLab = false } = Astro.props;
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 const answers = (await getCollection('answers')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -27,7 +26,6 @@ const shelfAnswers = [
   ...featuredAnswers,
   ...answers.filter((answer) => !featuredAnswers.some((featuredAnswer) => featuredAnswer.id === answer.id)),
 ].slice(0, 6);
-const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
 const bookById = new Map(books.map((b) => [b.id, b]));
 const carouselIds = [
   'how-to-fix-user-interviews-that-are-not-teaching-you-anything',
@@ -68,34 +66,13 @@ const carouselItems = carouselIds
       body: answer.data.description,
     },
   }));
-const installCommand = 'npx answer-with-books install --skill --api';
-const siteDescription = 'Hands-on guides and workflows that help non-technical teams put AI to work.';
+const siteDescription = 'Turn books into practical skills for your AI agent. Read a digest, apply its methods to your work, or upload a book to create a reusable skill.';
 const homeFaqs = [
-  {
-    question: 'How does Answer with Books work?',
-    answer:
-      'Read a book digest or a guide for a question on your mind. In Personalize, choose your preferred AI, copy the reading material and instructions, and paste them there. It can connect the ideas to context you have actually shared; no skill installation is required.',
-  },
-  {
-    question: 'What makes this different from normal book summaries?',
-    answer:
-      'The book pages are concise but substantial editorial digests. The final advice is produced in your own agent harness, where memory and current context can change which ideas matter and what you should do next.',
-  },
-  {
-    question: 'What is included in the public shelf?',
-    answer:
-      'The public shelf includes source book pages, book-grounded answers, search, categories, and examples of how books can be applied to work and life decisions.',
-  },
-  {
-    question: 'What would a paid subscription unlock?',
-    answer:
-      'The paid version should unlock a fuller catalog, premium audio overviews, custom books, community demand signals, and agent/API access.',
-  },
-  {
-    question: 'Can I use this with my AI tools?',
-    answer:
-      'Yes. The agent skill is the direction: give your chat AI a book-grounded shelf it can call while you are working through real questions.',
-  },
+  { question: 'What is a skill?', answer: 'A skill gives an agent instructions for applying a book’s methods: useful frameworks, decision rules, checklists, and mistakes to avoid. Supporting reference notes provide context for the task.' },
+  { question: 'How do I use a book with my agent?', answer: 'Open a book and choose Copy to agent. Paste the book material and instructions into your preferred AI, then describe your task. For an uploaded book, the prompt also includes the generated skill and references. No installation is needed for this copy-and-paste flow.' },
+  { question: 'What does uploading a book create?', answer: 'One searchable upload creates a readable book artifact, a reusable skill with supporting references, and a cover. Keep the processing page open while it runs. Your files and results stay private to your account.' },
+  { question: 'How is the public shelf different?', answer: 'Public book pages are editorial digests with agent prompts. The fuller downloadable skill package is generated from your own uploaded source. Public pages do not contain the original book’s full text.' },
+  { question: 'Can I keep and reuse the skill?', answer: 'Yes. An uploaded book has Download book & skill, which exports a ZIP with the book artifact, SKILL.md, reference notes, patterns, a cheatsheet, and a glossary. Add those files to an agent that supports skills, or use Copy to agent for a single task.' },
 ];
 
 const jsonLd = [
@@ -120,7 +97,7 @@ const jsonLd = [
     '@type': 'WebPage',
     '@id': 'https://answerwithbooks.com/#webpage',
     url: 'https://answerwithbooks.com/',
-    name: 'The Best Way to Learn From Books Using AI',
+    name: 'Books into skills for your agent',
     description: siteDescription,
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     mainEntity: {
@@ -151,295 +128,101 @@ const jsonLd = [
 ---
 
 <Base
-  title="Learn what matters to you, right now — Answer with Books"
+  title="Good books. Better work. | Answer with Books"
   description={siteDescription}
-  path={preview ? "/shelf-preview/" : "/"}
-  robots={preview ? "noindex, nofollow" : undefined}
+  path={shelfLab ? "/shelf-lab/" : preview ? "/shelf-preview/" : "/"}
+  robots={preview || shelfLab ? "noindex, nofollow" : undefined}
   jsonLd={jsonLd}
+  theme="collector"
 >
-  <ShelfHero />
+  <TactileShelf showControls={shelfLab} />
 
-  <section id="home-intro" class="awb-section pb-14 pt-12 sm:pt-16 lg:pb-20 lg:pt-20">
-    <div class="grid min-w-0 grid-cols-1 items-stretch gap-10 xl:grid-cols-[0.95fr_1.05fr] xl:gap-16">
-      <div class="flex min-w-0 flex-col justify-center">
-        <p class="max-w-[20rem] font-sans text-xs font-semibold uppercase leading-relaxed tracking-[0.08em] text-faint sm:max-w-none">
-          Practical AI to upskill your team
-        </p>
-        <h1 class="mt-5 max-w-[13ch] break-words font-serif text-[2.85rem] leading-[1.03] sm:max-w-3xl sm:text-6xl xl:text-[4.75rem]">
-          Learn what matters to you, right now.
-        </h1>
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-soft">
-          Hands-on guides and workflows that help non-technical teams put AI to work.
-        </p>
-        <div class="mt-8" data-hide-when-signed-in><NewsletterSignup /></div>
+  <div class="reading-room">
+    <section id="home-intro" class="home-section home-intro">
+      <div class="home-intro-copy">
+        <p class="room-eyebrow">Book knowledge, ready for your agent</p>
+        <h1>Turn what you read<br class="desktop-break" /> into <em>how you work.</em></h1>
+        <p class="room-description">Give your agent the frameworks, questions, and practical rules inside a good book. Turn them into a better interview, a clearer decision, or a plan you can use.</p>
+        <div class="home-signup" data-hide-when-signed-in><NewsletterSignup /></div>
       </div>
-
-      <div id="ideas-for-work" class="awb-panel flex min-w-0 flex-col justify-center p-5">
-        <div class="min-w-0" data-insight-carousel>
-          {carouselItems.map((item, slideIndex) => (
-            <article data-carousel-slide={slideIndex} class={slideIndex === 0 ? '' : 'hidden'}>
-              <div class="flex items-center justify-between gap-3">
-                <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Ideas for your work</p>
-                <p class="font-sans text-xs text-faint">{slideIndex + 1} / {carouselItems.length}</p>
+      <div id="ideas-for-work" class="insight-paper" data-insight-carousel aria-label="Ideas for your work" aria-roledescription="carousel">
+        {carouselItems.map((item, slideIndex) => (
+          <article data-carousel-slide={slideIndex} hidden={slideIndex !== 0} aria-label={`Insight ${slideIndex + 1} of ${carouselItems.length}`}>
+            <div class="paper-heading"><p class="room-eyebrow">Ideas for your work</p><span class="paper-count">0{slideIndex + 1} / 0{carouselItems.length}</span></div>
+            <p class="insight-label">A question worth asking</p>
+            <h2>{item.answer.data.question}</h2>
+            <div class="insight-body">
+              <div class="insight-books" aria-label="Source books">
+                {item.books.map((book, index) => <a class="small-jacket" href={`/books/${book.id}/`} aria-label={`Read ${book.data.title}`} style={`--lean:${index === 0 ? -7 : 5}deg`}><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} loading="lazy" /></a>)}
               </div>
-
-              <div class="mt-5 rounded-2xl border border-line bg-wash p-5">
-                <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">A question worth asking</p>
-                <h2 class="mt-3 font-serif text-2xl leading-tight sm:text-[1.85rem]">
-                  {item.answer.data.question}
-                </h2>
-              </div>
-
-              <div class="mt-5 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
-                <div class="flex min-w-0 flex-col justify-between rounded-2xl border border-line bg-card p-4">
-                  <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Books</p>
-                  <div class="mt-4 flex items-end justify-center gap-2">
-                    {item.books.map((book, index) => (
-                      <BookCover
-                        book={book}
-                        size={index === 1 ? 'md' : 'sm'}
-                        class={index === 1 ? 'relative z-10' : 'relative'}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div class="rounded-2xl border border-line bg-ink p-4 text-white">
-                  <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-white/55">Useful takeaway</p>
-                  <p class="mt-4 font-serif text-2xl leading-tight">
-                    {item.copy.title}
-                  </p>
-                  <p class="mt-3 text-sm leading-relaxed text-white/65">
-                    {item.copy.body}
-                  </p>
-                </div>
-              </div>
-
-              <div class="mt-5 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                  {carouselItems.map((_, dotIndex) => (
-                    <button
-                      type="button"
-                      class={`awb-dot ${dotIndex === slideIndex ? 'awb-dot--active' : ''}`}
-                      aria-label={`Show insight ${dotIndex + 1}`}
-                      data-carousel-dot={dotIndex}
-                    ></button>
-                  ))}
-                </div>
-                <a href={`/answers/${item.answer.id}/`} class="inline-flex min-h-8 items-center font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft">
-                  Open insight
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="question-first-reading" class="awb-section pb-16">
-    <div class="awb-panel overflow-hidden px-5 py-10 sm:px-7 lg:px-10 lg:py-12">
-      <div class="grid gap-7 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-        <div>
-          <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Question-first reading</p>
-          <h2 class="mt-3 max-w-2xl font-serif text-4xl leading-tight lg:text-[2.85rem]">
-            Book ideas, applied to your context.
-          </h2>
-        </div>
-        <div>
-          <p class="max-w-2xl text-lg leading-relaxed text-soft">
-            Books and guides are designed to stand alone. Use the same Personalize flow on either page to connect the ideas to your experience in your preferred AI.
-          </p>
-        </div>
-      </div>
-      <div class="mt-10 grid gap-4 border-t border-line pt-8 lg:grid-cols-3">
-        {[
-          ['Read the digest', 'Understand the book’s argument, mechanisms, applications, and limits without reading a thin list of takeaways.'],
-          ['Open an answer brief', 'Choose a real problem and see the initial decision rule plus the source books behind it.'],
-          ['Personalize in your agent', 'Copy the full reading material and instructions into your preferred AI, then connect it to context you have shared.'],
-        ].map(([title, text], index) => (
-          <article class="rounded-2xl border border-line bg-wash/70 p-5">
-            <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">0{index + 1}</p>
-            <h3 class="mt-3 font-serif text-2xl leading-tight">{title}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-soft">{text}</p>
+              <div class="insight-takeaway"><p class="room-eyebrow">Useful takeaway</p><h3>{item.copy.title}</h3><p>{item.copy.body}</p></div>
+            </div>
+            <div class="insight-bottom">
+              <div class="insight-dots" role="group" aria-label="Choose an insight">{carouselItems.map((_, dotIndex) => <button type="button" class:list={["insight-dot", {"is-current": dotIndex === slideIndex}]} aria-label={`Show insight ${dotIndex + 1}`} aria-pressed={dotIndex === slideIndex} data-carousel-dot={dotIndex}></button>)}</div>
+              <a class="room-link" href={`/answers/${item.answer.id}/`}>Open insight <span aria-hidden="true">↗</span></a>
+            </div>
           </article>
         ))}
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section id="question-first-reading" class="home-section home-method">
+      <div class="section-heading"><div><p class="room-eyebrow">From book to working method</p><h2>Book ideas, applied<br /> to <em>your context.</em></h2></div><p class="section-note">A book gives you the ideas.<br />A skill helps your agent apply them to a task.</p></div>
+      <div class="method-grid">
+        {[
+          ['Choose your source', 'Start with a public digest, or upload a book to create a readable artifact and a complete companion skill.'],
+          ['Give your agent a method', 'Bring the book’s frameworks and decision rules into your task. Uploaded skills include supporting references, patterns, and a cheatsheet.'],
+          ['Put it to work', 'Copy to agent, add your context, and ask for a concrete result: an interview plan, a decision review, or a practical next step.'],
+        ].map(([title, text], index) => <article class="method-card"><span class="method-number" aria-hidden="true">0{index + 1}</span><h3>{title}</h3><p>{text}</p></article>)}
+      </div>
+    </section>
+
+    <section id="source-books" class="home-section home-library">
+      <div class="section-heading"><div><p class="room-eyebrow">Featured books</p><h2>A few good places<br /> to <em>begin.</em></h2></div><a class="room-link" href="/books/">All {books.length} books <span aria-hidden="true">↗</span></a></div>
+      <div class="library-grid">
+        {shelfBooks.map((book, index) => <article class="library-book">
+          <a class="library-cover" href={`/books/${book.id}/`} aria-label={`Read ${book.data.title}`} style={`--book-well:${index % 3 === 0 ? '#e2e3d6' : index % 3 === 1 ? '#e9e0d2' : '#e0e4df'}`}><span class="library-jacket"><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} loading="lazy" /></span><span class="library-open" aria-hidden="true">↗</span></a>
+          <div class="library-copy"><p class="room-eyebrow">{book.data.tags[0]?.replaceAll('-', ' ') ?? 'Source book'}</p><h3><a href={`/books/${book.id}/`}>{book.data.title}</a></h3><p class="library-author">{book.data.author}</p><p class="library-description">{book.data.oneLiner}</p></div>
+        </article>)}
+      </div>
+    </section>
+
+    <section id="install" class="home-section home-install">
+      <div class="agent-room agent-room-simple">
+        <div><h2>Give your agent<br /><em>a useful skill.</em></h2><p>Turn the methods in a book or document into a way to tackle your next task.</p></div>
+        <a href="/tools/" class="room-button room-button-light">Explore skills <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section id="featured-answers" class="home-section home-answers">
+      <div class="section-heading"><div><p class="room-eyebrow">Answers from the shelf</p><h2>For the question<br /> <em>on your mind.</em></h2></div><a href="/answers/" class="room-link">All answers <span aria-hidden="true">↗</span></a></div>
+      <div class="answer-grid">
+        {shelfAnswers.map((answer, index) => <article class="answer-paper"><div class="answer-paper-image"><AnswerCover answer={answer}/></div><div class="answer-paper-copy"><p class="room-eyebrow">Reading note {String(index + 1).padStart(2,'0')} · {answer.data.books.length} {answer.data.books.length === 1 ? 'source book' : 'source books'}</p><h3><a href={`/answers/${answer.id}/`}>{answer.data.question}</a></h3><p>{answer.data.description}</p><a class="room-link" href={`/answers/${answer.id}/`}>Read the answer <span aria-hidden="true">↗</span></a></div></article>)}
+      </div>
+      <QuestionInvite />
+    </section>
+
+    <section id="profile-tracker" class="home-section home-profile">
+      <div class="profile-paper"><div class="profile-intro"><p class="room-eyebrow">Your reading life</p><h2>Track what<br /> keeps <em>showing up.</em></h2><p>See the books, answers, and patterns you return to.</p></div><ActivityPanel eyebrow="Profile tracker" title="A visible trail of useful insights." description="Explore insights and see the books and ideas you return to for the situations that keep coming up." compact showDetails={false} class="home-activity" /></div>
+    </section>
+
+    <section id="home-faq" class="home-section home-faq">
+      <div><p class="room-eyebrow">A little more to know</p><h2>Good questions.<br /><em>Clear answers.</em></h2></div>
+      <div class="faq-pages">{homeFaqs.map(item=><details><summary><h3>{item.question}</h3><span class="faq-plus" aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div>
+    </section>
+  </div>
 
   <script>
     const carousel = document.querySelector<HTMLElement>('[data-insight-carousel]');
     const slides = Array.from(carousel?.querySelectorAll<HTMLElement>('[data-carousel-slide]') ?? []);
-    let activeSlide = 0;
-    let slideTimer: number | undefined;
-
-    const showSlide = (index: number) => {
-      if (slides.length === 0) return;
-      activeSlide = (index + slides.length) % slides.length;
-      slides.forEach((slide, slideIndex) => {
-        slide.hidden = slideIndex !== activeSlide;
-        slide.classList.toggle('hidden', slideIndex !== activeSlide);
-      });
-    };
-
-    const scheduleSlide = () => {
-      window.clearInterval(slideTimer);
-      slideTimer = window.setInterval(() => showSlide(activeSlide + 1), 5200);
-    };
-
     carousel?.addEventListener('click', (event) => {
       const dot = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-carousel-dot]');
       if (!dot) return;
-      showSlide(Number(dot.dataset.carouselDot ?? 0));
-      scheduleSlide();
-    });
-
-    showSlide(0);
-    scheduleSlide();
-  </script>
-
-  <script>
-    const copyInstallButton = document.querySelector<HTMLButtonElement>('[data-copy-install]');
-    const installCommandNode = document.querySelector<HTMLElement>('[data-install-command]');
-    const copyInstallStatus = document.querySelector<HTMLElement>('[data-copy-install-status]');
-
-    const copyText = async (value: string) => {
-      if (navigator.clipboard?.writeText) {
-        try {
-          await navigator.clipboard.writeText(value);
-          return;
-        } catch {
-          // Continue to the textarea fallback for embedded browsers.
-        }
-      }
-      const field = document.createElement('textarea');
-      field.value = value;
-      field.setAttribute('readonly', '');
-      field.style.position = 'fixed';
-      field.style.opacity = '0';
-      document.body.appendChild(field);
-      field.select();
-      const copied = document.execCommand('copy');
-      field.remove();
-      if (!copied) throw new Error('Copy command failed');
-    };
-
-    copyInstallButton?.addEventListener('click', async () => {
-      const command = installCommandNode?.textContent?.trim();
-      if (!command) return;
-      const original = copyInstallButton.textContent;
-      try {
-        await copyText(command);
-        copyInstallButton.textContent = 'Copied';
-        if (copyInstallStatus) copyInstallStatus.textContent = 'Install command copied.';
-      } catch {
-        copyInstallButton.textContent = 'Failed';
-        if (copyInstallStatus) copyInstallStatus.textContent = 'Install command could not be copied.';
-      } finally {
-        window.setTimeout(() => {
-          copyInstallButton.textContent = original ?? 'Copy';
-        }, 1800);
-      }
+      const index = Number(dot.dataset.carouselDot);
+      slides.forEach((slide, i) => { slide.hidden = i !== index; });
+      // Keep keyboard focus on the equivalent control in the newly visible slide.
+      slides[index]?.querySelector<HTMLButtonElement>(`[data-carousel-dot="${index}"]`)?.focus({preventScroll:true});
     });
   </script>
 
-  <section id="source-books" class="awb-section py-16">
-    <div class="mb-7 flex items-end justify-between gap-5">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Featured books</p>
-        <h2 class="mt-3 font-serif text-4xl">Source books</h2>
-      </div>
-      <a href="/books/" class="hidden font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft sm:inline">
-        All books
-      </a>
-    </div>
-    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {shelfBooks.map((book) => <BookRow book={book} compact />)}
-    </div>
-  </section>
-
-  <section id="install" class="awb-section">
-    <div class="awb-panel grid grid-cols-1 overflow-hidden lg:grid-cols-[0.82fr_1.18fr]">
-      <div class="border-b border-line px-5 py-8 sm:px-7 lg:border-b-0 lg:border-r lg:py-9">
-        <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Agent skill</p>
-        <h2 class="mt-3 max-w-md font-serif text-3xl leading-tight sm:text-4xl">
-          Install the shelf as a skill.
-        </h2>
-        <p class="mt-3 max-w-lg leading-relaxed text-soft">
-          Give your chat AI books it can call while you work.
-        </p>
-      </div>
-      <div class="px-5 py-8 sm:px-7 lg:py-9">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p class="font-sans text-xs font-semibold uppercase tracking-[0.08em] text-faint">Install</p>
-            <p class="mt-2 text-sm leading-relaxed text-soft">
-              Add the book layer to your agent setup.
-            </p>
-          </div>
-          <div class="flex flex-wrap gap-3 text-sm">
-            <a href={newsletterSignupUrl} data-open-newsletter aria-haspopup="dialog" class="awb-pill awb-pill-primary min-h-0 px-4 py-2 transition-colors">Subscribe</a>
-            <a href="/tools/#book-skill" class="awb-pill awb-pill-outline min-h-0 px-4 py-2 transition-colors">
-              Explore skill
-            </a>
-          </div>
-        </div>
-        <div class="mt-5 rounded-2xl border border-ink/10 bg-ink p-2 shadow-sm">
-          <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <pre class="min-w-0 flex-1 overflow-x-auto px-3 py-3 font-sans text-[0.88rem] leading-relaxed text-white"><code class="whitespace-nowrap"><span class="select-none text-white/45">$ </span><span data-install-command>{installCommand}</span></code></pre>
-            <button
-              type="button"
-              class="min-h-11 rounded-xl border border-white/15 bg-white/10 px-4 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white hover:text-ink"
-              data-copy-install
-              aria-describedby="install-copy-status"
-            >
-              Copy
-            </button>
-          </div>
-          <p id="install-copy-status" class="sr-only" aria-live="polite" data-copy-install-status></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="featured-answers" class="awb-section py-16">
-    <div class="mb-7 flex items-end justify-between gap-5">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Featured answers</p>
-        <h2 class="mt-3 font-serif text-4xl">Answers from the shelf</h2>
-      </div>
-      <a href="/answers/" class="hidden font-sans text-sm font-medium text-ink underline underline-offset-4 decoration-1 hover:text-soft sm:inline">
-        All answers
-      </a>
-    </div>
-    <div class="grid gap-4 lg:grid-cols-3">
-      {shelfAnswers.map((answer) => <AnswerRow answer={answer} bookTitles={bookTitles} compact />)}
-    </div>
-    <QuestionInvite />
-  </section>
-
-  <section id="profile-tracker" class="awb-section">
-    <div class="awb-panel grid grid-cols-1 gap-10 px-5 py-16 sm:px-6 lg:grid-cols-[0.88fr_1.12fr] lg:px-10">
-      <div class="flex flex-col justify-center">
-        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Profile</p>
-        <h2 class="mt-3 max-w-lg font-serif text-4xl leading-tight">
-          Track what keeps showing up.
-        </h2>
-        <p class="mt-4 max-w-lg leading-relaxed text-soft">
-          See the books, answers, and patterns you return to.
-        </p>
-      </div>
-      <ActivityPanel
-        eyebrow="Profile tracker"
-        title="A visible trail of useful insights."
-        description="Explore insights and see the books and ideas you return to for the situations that keep coming up."
-        compact
-        showDetails={false}
-        class="bg-card text-ink"
-      />
-    </div>
-  </section>
-
-  <FaqList items={homeFaqs} eyebrow="FAQ" title="Got questions? We have answers." width="wide" />
 </Base>

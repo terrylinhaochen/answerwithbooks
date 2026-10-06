@@ -12,6 +12,12 @@ const books = defineCollection({
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     order: z.number().default(99),
+    amazon: z.object({
+      asin: z.string().regex(/^[A-Z0-9]{10}$/),
+      edition: z.string().min(1),
+      verifiedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      source: z.string().url().refine((value) => new URL(value).hostname === 'www.amazon.com'),
+    }).optional(),
   }),
 });
 

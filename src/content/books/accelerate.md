@@ -7,6 +7,11 @@ readIf: "Your leadership team is deciding whether a legacy product can deploy mo
 tags: ["technology","operations","management","quality"]
 featured: false
 order: 37
+amazon:
+  asin: "1942788339"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1942788339"
 ---
 
 *Accelerate* argues that software delivery is a measurable organizational capability, and that this capability predicts broader organizational performance. Its central claim challenges the familiar tradeoff between speed and stability. High-performing technology organizations do not move quickly by accepting more operational fragility. They tend to become better at both tempo and reliability because the same practices that shorten feedback loops also reduce batch size, rework, deployment pain, and recovery time.

@@ -7,6 +7,11 @@ readIf: "Read if your project reviews stay polite until a missed deadline, custo
 tags: ["relationships","leadership","teams","management"]
 featured: false
 order: 29
+amazon:
+  asin: "1119477247"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1119477247"
 ---
 
 Amy C. Edmondson’s central argument in *The Fearless Organization* is that many organizations do not fail because people lack intelligence, effort, or concern; they fail because people who hold important information decide that silence is safer than candor. Psychological safety is the local team climate that changes that calculation. When people believe they can ask questions, admit mistakes, challenge assumptions, and offer incomplete ideas without humiliation or punishment, the organization gets access to weak signals before they become expensive failures.

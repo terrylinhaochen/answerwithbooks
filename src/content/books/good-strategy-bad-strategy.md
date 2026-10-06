@@ -7,6 +7,11 @@ readIf: "Your plan contains goals and initiatives but no shared explanation of w
 tags: ["strategy", "management", "focus"]
 featured: false
 order: 6
+amazon:
+  asin: "0307886239"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0307886239"
 ---
 
 Richard Rumelt’s central argument is that strategy is not a statement of ambition. It is a response to a consequential challenge. A growth target, an inspiring vision, a list of values, and a crowded roadmap may all be useful, but none says what obstacle matters most or how an organization intends to overcome it. Calling them strategy hides the choice that strategy exists to make.

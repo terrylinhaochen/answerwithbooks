@@ -7,6 +7,11 @@ readIf: "Read if you are managing someone whose performance problem is obvious t
 tags: ["relationships","communication","management","feedback"]
 featured: false
 order: 28
+amazon:
+  asin: "1250103509"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1250103509"
 ---
 
 *Radical Candor* argues that good management is not a choice between being kind and being clear. Kim Scott’s central claim is that effective bosses build relationships strong enough to hold the truth: they Care Personally and Challenge Directly. Care without challenge withholds information people need. Challenge without care turns truth into a weapon. The useful path is narrower than either niceness or bluntness: show that you are invested in the person as a human being, then say clearly what is working and what is not.

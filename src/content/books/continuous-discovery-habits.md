@@ -7,6 +7,11 @@ readIf: "Your team keeps shipping stakeholder-requested features but cannot expl
 tags: ["business","product","customer research","experiments"]
 featured: false
 order: 26
+amazon:
+  asin: "1736633309"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1736633309"
 ---
 
 Teresa Torres’s central argument is that product discovery should be a continuous habit inside the team building the product, not a separate phase before delivery or a validation step after a feature has already been chosen. The purpose is not to add research ceremony. It is to make product decisions with recent evidence about customers while keeping those decisions tied to an outcome the business needs.

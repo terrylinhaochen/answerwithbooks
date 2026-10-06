@@ -1,14 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import BookCover from './BookCover.astro';
-import { topicsForTags } from '../lib/topics';
+import CopyBookAction from './CopyBookAction.astro';
 
 interface Props {
   book: CollectionEntry<'books'>;
   compact?: boolean;
 }
 const { book, compact = false } = Astro.props;
-const topics = topicsForTags(book.data.tags);
 ---
 
 <article class={`book-row awb-card-link group h-full ${compact ? 'p-5' : 'p-4'}`}>
@@ -23,16 +22,7 @@ const topics = topicsForTags(book.data.tags);
         {book.data.author} · {book.data.year}
       </p>
       <p class={`book-row__copy mt-3 text-soft leading-relaxed ${compact ? 'text-[0.95rem]' : ''}`}>{book.data.oneLiner}</p>
-      <div class="mt-auto flex flex-wrap gap-2 pt-4">
-        {topics.slice(0, 3).map((topic) => (
-          <a
-            href={`/topics/${topic.slug}/`}
-            class="book-row__topic inline-flex min-h-8 max-w-full items-center rounded-full border border-line px-2.5 py-1 text-xs text-soft font-sans hover:border-ink hover:text-ink"
-          >
-            {topic.label}
-          </a>
-        ))}
-      </div>
+      <div class="mt-auto"><CopyBookAction book={book} readingLink /></div>
     </div>
   </div>
 </article>
@@ -42,7 +32,6 @@ const topics = topicsForTags(book.data.tags);
   .book-row__link::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: 16px; }
   .book-row__link:focus-visible { outline: none; }
   .book-row__link:focus-visible::after { outline: 2px solid var(--color-ink); outline-offset: 3px; }
-  .book-row__topic { position: relative; z-index: 2; }
   .book-row__copy {
     display: -webkit-box;
     overflow: hidden;

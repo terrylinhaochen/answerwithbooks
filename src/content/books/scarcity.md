@@ -7,6 +7,11 @@ readIf: "Read if you are redesigning a benefits application for people already m
 tags: ["health","decisions","psychology","systems"]
 featured: false
 order: 43
+amazon:
+  asin: "125005611X"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/125005611X"
 ---
 
 *Scarcity* argues that having too little does more than create an external constraint; it changes the mind of the person facing the constraint. A shortage of money, time, food, companionship, or other needed resources captures attention. That capture is useful in the narrow domain of the shortage: it makes the urgent problem vivid, concentrates effort, and clarifies trade-offs. But the same capture also imposes a cost. It pulls attention away from what is outside the tunnel, consumes cognitive capacity, weakens executive control, and can make the original shortage harder to escape.

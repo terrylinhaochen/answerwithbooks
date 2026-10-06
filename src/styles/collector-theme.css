@@ -1,0 +1,100 @@
+/* The collector's table continues into a warm, editorial reading room. */
+body[data-theme='collector'] {
+  --color-paper: #f4f1e9;
+  --color-ink: #30382e;
+  --color-soft: #606858;
+  --color-faint: #6c7265;
+  --color-accent: #354734;
+  --color-accent-dark: #243623;
+  --color-line: #dcdccf;
+  --color-wash: #e9e9df;
+  --color-card: #fcfaf5;
+  background: #f4f1e9 url('/textures/book-paper.svg');
+}
+body[data-theme='collector'] > header { border: 0; background: #f4f1e9ed; }
+body[data-theme='collector'] .awb-header { max-width: 1200px; min-height: 78px; padding-inline: 32px; }
+body[data-theme='collector'] .awb-brand { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; font-family: var(--font-serif); font-size: 25px; font-weight: 450; letter-spacing: -.045em; }
+body[data-theme='collector'] .awb-nav { background: transparent; border: 0; box-shadow: none; gap: 12px; }
+body[data-theme='collector'] .awb-nav__link { font-size: 12px; font-weight: 500; }
+body[data-theme='collector'] .awb-nav__cta { background: #354734; box-shadow: none; font-size: 12px; padding-inline: 22px; min-height: 40px; margin-left: 18px; }
+body[data-theme='collector'] .awb-nav__cta:hover { background: #455a40; }
+
+/* Shared materials and rhythm, including account and reading surfaces. */
+body[data-theme='collector'] .awb-section { max-width: 1184px; padding-inline: 32px; }
+body[data-theme='collector'] h1, body[data-theme='collector'] h2, body[data-theme='collector'] h3 { letter-spacing: -.025em; }
+body[data-theme='collector'] .awb-display { font-weight: 400; letter-spacing: -.045em; }
+body[data-theme='collector'] .awb-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: .13em; line-height: 1.65; }
+body[data-theme='collector'] :is(.awb-card, .awb-panel, .awb-card-link) { border-color: #dcdccf80; border-radius: 16px; box-shadow: 0 8px 28px #34452c05; }
+body[data-theme='collector'] .awb-panel { background: #e9e9df99; }
+body[data-theme='collector'] .awb-card-link { background: #fcfaf5; }
+body[data-theme='collector'] .awb-card-link:hover { border-color: #b7c0aa; box-shadow: 0 12px 30px #34452c0c; }
+body[data-theme='collector'] .awb-card-link[data-active=true] { background: #354734; color: #fcfaf5; }
+body[data-theme='collector'] :is(.awb-pill, .awb-page-button) { border-radius: 8px; min-height: 42px; font-size: 12px; line-height: 1.4; }
+body[data-theme='collector'] .awb-pill-primary { background: #354734; color: #fcfaf5; box-shadow: none; }
+body[data-theme='collector'] .awb-pill-primary:hover { background: #455a40; }
+body[data-theme='collector'] :is(.awb-input, .awb-select) { background: #fffdf7; border-color: #dcdccf; border-radius: 9px; font-size: 14px; }
+body[data-theme='collector'] :is(a, button, summary, input, select, textarea):focus-visible { outline: 2px solid #647a4f; outline-offset: 4px; }
+body[data-theme='collector'] dialog { background: #fcfaf5 url('/textures/book-paper.svg'); color: var(--color-ink); box-shadow: 0 30px 100px #18231b40; }
+body[data-theme='collector'] dialog::backdrop { background: #19231dd9; backdrop-filter: blur(7px); }
+body[data-theme='collector'] .prose-awb { --tw-prose-body: #4e574b; --tw-prose-headings: #30382e; --tw-prose-links: #354734; --tw-prose-quotes: #354734; --tw-prose-quote-borders: #bac5ab; }
+body[data-theme='collector'] .prose-awb :is(h2, h3) { font-weight: 400; }
+body[data-theme='collector'] .prose-awb blockquote { background: #e9e9df80; border-radius: 0 12px 12px 0; padding: 12px 24px; }
+body[data-theme='collector'] .book-row { padding: 26px; }
+body[data-theme='collector'] .book-row > div { gap: 26px; }
+body[data-theme='collector'] .book-row__copy { font-size: 14px; line-height: 1.8; }
+body[data-theme='collector'] [data-book-agent] { background: #e3e7d9 url('/textures/book-paper.svg'); border: 0; padding: 32px; }
+body[data-theme='collector'] [data-book-agent] h2 { font-size: 32px; }
+body[data-theme='collector'] [data-book-purchase] { background: #fcfaf5; border-color: #dcdccf; }
+body[data-theme='collector'] .account-nav { gap: 8px; padding: 6px; border: 0; border-radius: 10px; background: #e3e6d9; width: fit-content; }
+body[data-theme='collector'] .awb-section .account-nav a { padding: 11px 18px; border: 0; margin: 0; border-radius: 7px; font-size: 12px; }
+body[data-theme='collector'] .awb-section .account-nav a[aria-current=page] { background: #fcfaf5; box-shadow: 0 2px 8px #34452c0a; }
+body[data-theme='collector'] .profile-header { align-items: flex-start; padding: 40px; border-radius: 20px; background: #2a302a url('/textures/book-paper.svg'); color: #eee9d9; }
+body[data-theme='collector'] .profile-header :is(.awb-eyebrow,.profile-email,.profile-signout,.profile-description) { color: #c2c7b9; }
+body[data-theme='collector'] .profile-title { font-size: clamp(35px,4vw,52px); line-height: 1.05; }
+body[data-theme='collector'] .profile-signout { border-color: #66715d; }
+body[data-theme='collector'] .profile-signout:hover { background: #3c4836; color: #fff; }
+body[data-theme='collector'] .profile-card { background: #fcfaf5; border: 0; border-radius: 16px; padding: 30px; }
+body[data-theme='collector'] .profile-page .profile-card-heading h2 { font-family: var(--font-serif); font-weight: 400; font-size: 29px; }
+body[data-theme='collector'] .profile-activity > section { background: #e7e9de; border: 0; border-radius: 16px; }
+body[data-theme='collector'] [data-book-additions-list] > :is(article,a) { background: #fcfaf5; padding: 25px; border: 0; border-radius: 14px; }
+body[data-theme='collector'] [data-book-additions-list] > a:hover { box-shadow: 0 8px 24px #34452c10; }
+body[data-theme='collector'] [data-surface=auth] { margin-block: 54px; width: calc(100% - 40px); max-width: 440px; background: #fcfaf5; padding: 40px; border-radius: 18px; box-shadow: 0 18px 60px #34452c08; }
+body[data-theme='collector'] > footer { margin-top: 0; background: #2a302a url('/textures/book-paper.svg'); border: 0; color: #e8e6d8; }
+body[data-theme='collector'] > footer > div { padding: 46px 32px; max-width: 1184px; color: #c7cabb; }
+body[data-theme='collector'] > footer > div > div { gap: 18px 25px; }
+body[data-theme='collector'] > footer p { width: 100%; font-family: var(--font-serif); color: #eee9d9; font-size: 27px; margin-bottom: 10px; letter-spacing: -.025em; }
+body[data-theme='collector'] > footer a { font-size: 10px; text-decoration: none; }
+body[data-theme='collector'] > footer a:hover { color: #fffbed; text-decoration: underline; }
+@media (max-width: 700px) {
+ body[data-theme='collector'] .awb-section { padding-inline: 24px; }
+ body[data-theme='collector'] .book-row { padding: 22px; }
+ body[data-theme='collector'] .book-row > div { gap: 21px; }
+ body[data-theme='collector'] .profile-header { padding: 28px 24px; flex-wrap: wrap; }
+ body[data-theme='collector'] .profile-card { padding: 24px; }
+ body[data-theme='collector'] [data-book-agent] { padding: 26px; }
+ body[data-theme='collector'] > footer > div { padding: 36px 24px; }
+ body[data-theme='collector'] [data-surface=auth] { padding: 28px 24px; margin-inline: 20px; }
+}
+@media (max-width: 520px) {
+ body[data-theme='collector'] .awb-header { padding: 12px 20px 8px; gap: 6px; min-height: 105px; }
+ body[data-theme='collector'] .awb-brand { font-size: 23px; }
+ body[data-theme='collector'] .awb-nav { gap: 5px; padding: 0; }
+ body[data-theme='collector'] .awb-nav__link { font-size: 11px; min-height: 32px; }
+ body[data-theme='collector'] .awb-nav__cta { font-size: 10px; padding-inline: 16px; min-height: 34px; margin-left: 0; }
+ body[data-theme='collector'] .account-nav { width: 100%; gap: 3px; }
+ body[data-theme='collector'] .awb-section .account-nav a { padding: 10px; }
+}
+@media (max-width: 360px) {
+ body[data-theme='collector'] .awb-brand { font-size: 21px; }
+ body[data-theme='collector'] .awb-header { padding-inline: 16px; }
+ body[data-theme='collector'] .awb-section { padding-inline: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+ body[data-theme='collector'] :is(.awb-card-link,.book-cover,.awb-pill) { transition: none; }
+}
+
+body[data-theme='collector'] .prose-awb { color: #465140; line-height: 1.85; }
+body[data-theme='collector'] .prose-awb h2 { font-size: 31px; line-height: 1.14; }
+body[data-theme='collector'] .prose-awb h3 { font-size: 24px; line-height: 1.2; border-left-color: #aebc99; }
+body[data-theme='collector'] .newsletter-modal { border: 0; }
+body[data-theme='collector'] .newsletter-email__field { background: #fffdf7; border-color: #dcdccf; }

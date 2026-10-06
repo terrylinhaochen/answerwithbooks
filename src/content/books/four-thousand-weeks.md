@@ -7,6 +7,11 @@ readIf: "You are trying to become efficient enough to fit everything in and susp
 tags: ["time", "priorities", "burnout"]
 featured: false
 order: 13
+amazon:
+  asin: "0374159122"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0374159122"
 ---
 
 An eighty-year life contains about four thousand weeks. Oliver Burkeman uses that number to make the scale of human time emotionally legible. It is large enough to contain a life and small enough to count. The point is not that life is unusually short. It is that time is finite, and no method can remove the need to choose what a finite life will exclude.

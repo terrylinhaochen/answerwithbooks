@@ -7,6 +7,11 @@ readIf: "You are choosing a career and suspect that advice to simply follow your
 tags: ["career", "work", "skill-building"]
 featured: false
 order: 19
+amazon:
+  asin: "1455509124"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1455509124"
 ---
 
 Cal Newport challenges what he calls the **passion hypothesis**: the idea that each person has a pre-existing passion and career satisfaction follows from identifying a job that matches it. The advice sounds liberating, but it offers little guidance to someone with several interests, no obvious calling, or a desirable field in which entry-level work is still frustrating.

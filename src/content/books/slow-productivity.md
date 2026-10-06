@@ -7,6 +7,11 @@ readIf: "Read if your workweek is filled with meetings, fast replies, and half-s
 tags: ["productivity","work","burnout","priorities"]
 featured: false
 order: 39
+amazon:
+  asin: "0593544854"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0593544854"
 ---
 
 Cal Newport’s central argument in *Slow Productivity* is that knowledge workers are not exhausted because productivity itself is bad. They are exhausted because modern offices adopted a broken proxy for productivity: visible activity. When useful output is hard to measure, people infer value from being present, replying quickly, attending meetings, sending updates, and looking constantly engaged. Newport calls this pseudo-productivity. His alternative is to organize knowledge work around fewer simultaneous commitments, a more humane rhythm of effort and recovery, and a serious commitment to quality.

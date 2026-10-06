@@ -7,6 +7,11 @@ readIf: "Read it when your team is deciding whether a failed product launch prov
 tags: ["decisions","uncertainty","judgment","probability"]
 featured: false
 order: 34
+amazon:
+  asin: "0735216355"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0735216355"
 ---
 
 Most consequential decisions are made without all the facts, so Annie Duke’s central argument in *Thinking in Bets* is that judgment improves when you stop asking whether you were simply right or wrong and start asking what odds you believed, what alternatives were live, and how much the outcome reflected decision quality rather than luck or hidden information. The book is not an argument for gambling. It is an argument that you are already staking resources on beliefs about the future, whether the stake is money, time, reputation, attention, or opportunity cost. Calling those commitments “bets” makes the uncertainty visible enough to inspect.

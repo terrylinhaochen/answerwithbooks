@@ -7,6 +7,11 @@ readIf: "Your B2B product has happy customers, but new prospects keep comparing 
 tags: ["business","positioning","marketing","product"]
 featured: false
 order: 21
+amazon:
+  asin: "1999023005"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1999023005"
 ---
 
 Positioning is the market context that lets the right customer understand why a product is valuable. April Dunford’s central argument in *Obviously Awesome* is that many products fail to sell clearly not because they lack differentiation, but because customers are being asked to understand them through the wrong comparison, the wrong category, or a pile of features without a frame. A tagline can express positioning, and messaging can carry it into sales and marketing, but positioning itself is the strategic choice of where the product sits in the customer’s mind.

@@ -7,6 +7,11 @@ readIf: "You have a startup product in development and need to decide where your
 tags: ["business","startups","growth","marketing"]
 featured: false
 order: 22
+amazon:
+  asin: "1591848369"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1591848369"
 ---
 
 Startup growth is not the reward for finishing the product; it is a separate problem that has to be solved while the product is being built. That is the central argument of *Traction*. Gabriel Weinberg and Justin Mares define traction as measurable evidence that real users or customers are adopting what the company has made. A startup can have a product people like, a competent team, and a persuasive story, yet still fail because it never finds a repeatable way to reach enough customers. The book’s practical contribution is a disciplined way to search for that route instead of treating “marketing” as a late-stage scramble or copying whichever growth tactic is currently fashionable.

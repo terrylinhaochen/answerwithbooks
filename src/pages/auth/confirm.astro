@@ -20,6 +20,8 @@ import Base from '../../layouts/Base.astro';
     import { readOAuthConsent, clearOAuthConsent, finishOAuthNewsletter } from '../../lib/tool-oauth.mjs';
     import { registerToolNewsletter } from '../../lib/tool-newsletter';
     const toolsContext = readToolsAuthContext(location.pathname, location.search);
+    const fromShelf = new URLSearchParams(location.search).get('from') === 'shelf';
+    const destination = toolsContext?.returnTo || (fromShelf ? '/?personalize=1' : '/profile/');
     let consent: ReturnType<typeof readOAuthConsent> = null;
     try { consent = readOAuthConsent(sessionStorage, location.search); } catch { /* Email sign-in does not require consent storage. */ }
     const title = document.querySelector<HTMLElement>('[data-confirm-title]')!;
@@ -27,6 +29,7 @@ import Base from '../../layouts/Base.astro';
     const retry = document.querySelector<HTMLElement>('[data-confirm-retry]')!;
     const newsletterRetry = document.querySelector<HTMLButtonElement>('[data-newsletter-retry]')!;
     if (toolsContext) retry.querySelector<HTMLAnchorElement>('a')!.href = toolsContext.returnTo;
+    else if (fromShelf) retry.querySelector<HTMLAnchorElement>('a')!.href = '/login/?from=shelf';
     const finishNewsletter = async () => {
       newsletterRetry.disabled = true;
       try {
@@ -34,7 +37,7 @@ import Base from '../../layouts/Base.astro';
         if (error) throw new Error('invalid-session');
         await finishOAuthNewsletter({ consent, user: data.user, subscribe: registerToolNewsletter });
         clearOAuthConsent(sessionStorage);
-        window.location.replace(toolsContext?.returnTo || '/profile/');
+        window.location.replace(destination);
       } catch {
         title.textContent = 'Your account is ready.';
         status.textContent = 'You’re signed in, but we couldn’t save your newsletter subscription. Retry, or continue to your tools.';
@@ -55,7 +58,7 @@ import Base from '../../layouts/Base.astro';
         if (error || !data.user?.email_confirmed_at) throw new Error('unverified-session');
         writeSignupFlow(null);
         if (consent) { await finishNewsletter(); return; }
-        window.location.replace(toolsContext?.returnTo || '/profile/');
+        window.location.replace(destination);
       } catch {
         if (consent) { try { clearOAuthConsent(sessionStorage); } catch { /* Preserve the auth error. */ } }
         title.textContent = 'Let’s try a fresh link.';

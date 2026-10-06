@@ -7,6 +7,11 @@ readIf: "You are preparing for a certification exam and keep forgetting material
 tags: ["career","learning","skill-building","psychology"]
 featured: false
 order: 40
+amazon:
+  asin: "0674729013"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0674729013"
 ---
 
 *Make It Stick* argues that the study methods that feel most productive in the moment often produce the weakest long-term learning. Rereading, highlighting, cramming, and repeating one kind of problem in a block can create a feeling of mastery because the material becomes easy to process. But fluency is not the same as being able to recall, choose, and apply knowledge later. Brown, Roediger, and McDaniel’s central claim is that learning sticks when practice requires useful mental effort: retrieving from memory, spacing attempts over time, mixing related types, varying conditions, generating answers before seeing them, and connecting new material to what is already known.

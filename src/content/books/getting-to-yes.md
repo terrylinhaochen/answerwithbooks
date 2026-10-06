@@ -7,6 +7,11 @@ readIf: "You are renegotiating compensation with your manager and want to be fir
 tags: ["negotiation","communication","decisions","relationships"]
 featured: false
 order: 31
+amazon:
+  asin: "0143118757"
+  edition: "Paperback, third revised edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0143118757"
 ---
 
 *Getting to Yes* argues that negotiation should not be a choice between hard bargaining and soft concession. Roger Fisher, William Ury, and Bruce Patton propose a third structure: negotiate on the merits. Protect the relationship without confusing it with the substantive dispute; look for the interests underneath stated positions; create possible agreements before deciding among them; use fair standards when interests conflict; and say yes only when the proposed agreement is better than your best no-deal alternative.

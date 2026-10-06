@@ -7,6 +7,11 @@ readIf: "You need to discuss conflict, feedback, performance, money, trust, or e
 tags: ["communication", "conflict", "management"]
 featured: false
 order: 14
+amazon:
+  asin: "0071771328"
+  edition: "Paperback, second edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0071771328"
 ---
 
 A conversation becomes crucial when three conditions meet: stakes are high, opinions differ, and emotions run strong. These are precisely the conversations in which accurate information matters most and becomes hardest to exchange. People who feel threatened stop contributing openly. They withhold, soften, control, label, attack, or retreat.

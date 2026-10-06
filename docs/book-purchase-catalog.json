@@ -1,0 +1,416 @@
+[
+  {
+    "slug": "accelerate",
+    "asin": "1942788339",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1942788339",
+    "matchedTitle": "Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations",
+    "matchedAuthors": "by Nicole Forsgren PhD (Author), Jez Humble (Author), Gene Kim (Author) & 0 more"
+  },
+  {
+    "slug": "atomic-habits",
+    "asin": "0735211299",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0735211299",
+    "matchedTitle": "Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones",
+    "matchedAuthors": "by James Clear (Author)"
+  },
+  {
+    "slug": "competing-against-luck",
+    "asin": "0062435612",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0062435612",
+    "matchedTitle": "Competing Against Luck: The Story of Innovation and Customer Choice ― Clayton Christensen's Groundbreaking Jobs-to-Be-Done Business Guide",
+    "matchedAuthors": "by Clayton M. Christensen (Author), Karen Dillon (Author), Taddy Hall (Author), David S. Duncan (Author) & 1 more"
+  },
+  {
+    "slug": "continuous-discovery-habits",
+    "asin": "1736633309",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1736633309",
+    "matchedTitle": "Continuous Discovery Habits: Discover Products that Create Customer Value and Business Value",
+    "matchedAuthors": "by Teresa Torres (Author)"
+  },
+  {
+    "slug": "crucial-conversations",
+    "asin": "0071771328",
+    "edition": "Paperback, second edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0071771328",
+    "matchedTitle": "Crucial Conversations Tools for Talking When Stakes Are High, Second Edition",
+    "matchedAuthors": "by Kerry Patterson (Author), Joseph Grenny (Author), Ron McMillan (Author), Al Switzler (Author) & 1 more"
+  },
+  {
+    "slug": "deep-work",
+    "asin": "1455586692",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1455586692",
+    "matchedTitle": "Deep Work: Rules for Focused Success in a Distracted World",
+    "matchedAuthors": "by Cal Newport (Author)"
+  },
+  {
+    "slug": "designing-your-life",
+    "asin": "1101875321",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1101875321",
+    "matchedTitle": "Designing Your Life: How to Build a Well-Lived, Joyful Life",
+    "matchedAuthors": "by Bill Burnett (Author), Dave Evans (Author)"
+  },
+  {
+    "slug": "difficult-conversations",
+    "asin": "0143118447",
+    "edition": "Paperback, updated anniversary edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0143118447",
+    "matchedTitle": "Difficult Conversations: How to Discuss What Matters Most",
+    "matchedAuthors": "by Douglas Stone (Author), Bruce Patton (Author), Sheila Heen (Author), Roger Fisher (Foreword) & 1 more"
+  },
+  {
+    "slug": "dont-make-me-think",
+    "asin": "0321965515",
+    "edition": "Paperback, Revisited third edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0321965515",
+    "matchedTitle": "Don't Make Me Think, Revisited: A Common Sense Approach to Web Usability (3rd Edition) (Voices That Matter)",
+    "matchedAuthors": "by Steve Krug (Author)"
+  },
+  {
+    "slug": "four-thousand-weeks",
+    "asin": "0374159122",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0374159122",
+    "matchedTitle": "Four Thousand Weeks: Time Management for Mortals",
+    "matchedAuthors": "by Oliver Burkeman (Author)"
+  },
+  {
+    "slug": "getting-things-done",
+    "asin": "0143126563",
+    "edition": "Paperback, revised edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0143126563",
+    "matchedTitle": "Getting Things Done: The Art of Stress-Free Productivity",
+    "matchedAuthors": "by David Allen (Author), James Fallows (Foreword)"
+  },
+  {
+    "slug": "getting-to-yes",
+    "asin": "0143118757",
+    "edition": "Paperback, third revised edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0143118757",
+    "matchedTitle": "Getting to Yes: Negotiating Agreement Without Giving In",
+    "matchedAuthors": "by Roger Fisher (Author), William L. Ury (Author), Bruce Patton (Author) & 0 more"
+  },
+  {
+    "slug": "good-strategy-bad-strategy",
+    "asin": "0307886239",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0307886239",
+    "matchedTitle": "Good Strategy Bad Strategy: The Difference and Why It Matters",
+    "matchedAuthors": "by Richard Rumelt (Author)"
+  },
+  {
+    "slug": "high-output-management",
+    "asin": "0679762884",
+    "edition": "Paperback, second edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0679762884",
+    "matchedTitle": "High Output Management",
+    "matchedAuthors": "by Andrew S. Grove (Author)"
+  },
+  {
+    "slug": "made-to-stick",
+    "asin": "1400064287",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1400064287",
+    "matchedTitle": "Made to Stick: Why Some Ideas Survive and Others Die",
+    "matchedAuthors": "by Chip Heath (Author), Dan Heath (Author)"
+  },
+  {
+    "slug": "make-it-stick",
+    "asin": "0674729013",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0674729013",
+    "matchedTitle": "Make It Stick: The Science of Successful Learning",
+    "matchedAuthors": "by Peter C. Brown (Author), Henry L. Roediger III (Author), Mark A. McDaniel (Author) & 0 more"
+  },
+  {
+    "slug": "never-split-the-difference",
+    "asin": "0062407805",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0062407805",
+    "matchedTitle": "Never Split the Difference: Negotiating As If Your Life Depended On It―Unlock Your Persuasion Potential in Professional and Personal Life",
+    "matchedAuthors": "by Chris Voss (Author), Tahl Raz (Author)"
+  },
+  {
+    "slug": "noise",
+    "asin": "0316451401",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0316451401",
+    "matchedTitle": "Noise: A Flaw in Human Judgment",
+    "matchedAuthors": "by Daniel Kahneman (Author), Olivier Sibony (Author), Cass R. Sunstein (Author) & 0 more"
+  },
+  {
+    "slug": "obviously-awesome",
+    "asin": "1999023005",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1999023005",
+    "matchedTitle": "Obviously Awesome: How to Nail Product Positioning so Customers Get It, Buy It, Love It",
+    "matchedAuthors": "by April Dunford (Author)"
+  },
+  {
+    "slug": "playing-to-win",
+    "asin": "142218739X",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/142218739X",
+    "matchedTitle": "Playing to Win: How Strategy Really Works",
+    "matchedAuthors": "by A.G. Lafley (Author), Roger L. Martin (Author)"
+  },
+  {
+    "slug": "radical-candor",
+    "asin": "1250103509",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1250103509",
+    "matchedTitle": "Radical Candor: Be a Kick-Ass Boss Without Losing Your Humanity",
+    "matchedAuthors": "by Kim Scott (Author)"
+  },
+  {
+    "slug": "scarcity",
+    "asin": "125005611X",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/125005611X",
+    "matchedTitle": "Scarcity: The New Science of Having Less and How It Defines Our Lives",
+    "matchedAuthors": "by Sendhil Mullainathan (Author), Eldar Shafir (Author)"
+  },
+  {
+    "slug": "seeing-like-a-state",
+    "asin": "0300078153",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0300078153",
+    "matchedTitle": "Seeing like a State: How Certain Schemes to Improve the Human Condition Have Failed",
+    "matchedAuthors": "by James C. Scott (Author)"
+  },
+  {
+    "slug": "slow-productivity",
+    "asin": "0593544854",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0593544854",
+    "matchedTitle": "Slow Productivity: The Lost Art of Accomplishment Without Burnout",
+    "matchedAuthors": "by Cal Newport (Author)"
+  },
+  {
+    "slug": "so-good-they-cant-ignore-you",
+    "asin": "1455509124",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1455509124",
+    "matchedTitle": "So Good They Can't Ignore You: Why Skills Trump Passion in the Quest for Work You Love",
+    "matchedAuthors": "by Cal Newport (Author)"
+  },
+  {
+    "slug": "superforecasting",
+    "asin": "0804136718",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0804136718",
+    "matchedTitle": "Superforecasting: The Art and Science of Prediction",
+    "matchedAuthors": "by Philip E. Tetlock (Author), Dan Gardner (Author)"
+  },
+  {
+    "slug": "team-topologies",
+    "asin": "1942788819",
+    "edition": "Print edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1942788819",
+    "matchedTitle": "Team Topologies: Organizing Business and Technology Teams for Fast Flow",
+    "matchedAuthors": "by Matthew Skelton CEO of Conflux and co-aut (Author), Manuel Pais coauthor of Team Topologi (Author), Ruth Malan Architecture Consultant a (Foreword) & 0 more"
+  },
+  {
+    "slug": "the-checklist-manifesto",
+    "asin": "0312430000",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0312430000",
+    "matchedTitle": "The Checklist Manifesto: How to Get Things Right",
+    "matchedAuthors": "by Atul Gawande (Author)"
+  },
+  {
+    "slug": "the-crowd",
+    "asin": "0486419568",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0486419568",
+    "matchedTitle": "The Crowd: A Study of the Popular Mind",
+    "matchedAuthors": "by Gustave Le Bon (Author)"
+  },
+  {
+    "slug": "the-design-of-everyday-things",
+    "asin": "0465050654",
+    "edition": "Paperback, revised and expanded edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0465050654",
+    "matchedTitle": "The Design of Everyday Things: Revised and Expanded Edition",
+    "matchedAuthors": "by Don Norman (Author)"
+  },
+  {
+    "slug": "the-effective-executive",
+    "asin": "0060833459",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0060833459",
+    "matchedTitle": "The Effective Executive: The Definitive Guide to Getting the Right Things Done (Harperbusiness Essentials)",
+    "matchedAuthors": "by Peter F. Drucker (Author)"
+  },
+  {
+    "slug": "the-fearless-organization",
+    "asin": "1119477247",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1119477247",
+    "matchedTitle": "The Fearless Organization: Creating Psychological Safety in the Workplace for Learning, Innovation, and Growth",
+    "matchedAuthors": "by Amy C. Edmondson (Author)"
+  },
+  {
+    "slug": "the-goal",
+    "asin": "0884271951",
+    "edition": "Paperback, 40th anniversary edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0884271951",
+    "matchedTitle": "The Goal: 40th Anniversary Edition: A Process of Ongoing Improvement",
+    "matchedAuthors": "by Eliyahu M Goldratt (Author), Jeff Cox (Author)"
+  },
+  {
+    "slug": "the-good-life",
+    "asin": "198216669X",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/198216669X",
+    "matchedTitle": "The Good Life: Lessons from the World's Longest Scientific Study of Happiness",
+    "matchedAuthors": "by Robert Waldinger M.D. (Author), Marc Schulz Ph.D (Author)"
+  },
+  {
+    "slug": "the-happiness-trap",
+    "asin": "1590305841",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1590305841",
+    "matchedTitle": "The Happiness Trap: How to Stop Struggling and Start Living: A Guide to ACT",
+    "matchedAuthors": "by Russ Harris (Author), Steven C. Hayes PhD (Foreword)"
+  },
+  {
+    "slug": "the-lean-startup",
+    "asin": "0307887898",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0307887898",
+    "matchedTitle": "The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses",
+    "matchedAuthors": "by Eric Ries (Author)"
+  },
+  {
+    "slug": "the-mom-test",
+    "asin": "1492180742",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1492180742",
+    "matchedTitle": "The Mom Test: How to talk to customers & learn if your business is a good idea when everyone is lying to you",
+    "matchedAuthors": "by Rob Fitzpatrick (Author)"
+  },
+  {
+    "slug": "the-scout-mindset",
+    "asin": "0735217556",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0735217556",
+    "matchedTitle": "The Scout Mindset: Why Some People See Things Clearly and Others Don't",
+    "matchedAuthors": "by Julia Galef (Author)"
+  },
+  {
+    "slug": "the-structure-of-scientific-revolutions",
+    "asin": "0226458121",
+    "edition": "Paperback, 50th anniversary edition",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0226458121",
+    "matchedTitle": "The Structure of Scientific Revolutions: 50th Anniversary Edition",
+    "matchedAuthors": "by Thomas S. Kuhn (Author), Ian Hacking (Introduction)"
+  },
+  {
+    "slug": "the-wisdom-of-crowds",
+    "asin": "0385721706",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0385721706",
+    "matchedTitle": "The Wisdom of Crowds",
+    "matchedAuthors": "by James Surowiecki (Author)"
+  },
+  {
+    "slug": "thinking-fast-and-slow",
+    "asin": "0374533555",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0374533555",
+    "matchedTitle": "Thinking, Fast and Slow",
+    "matchedAuthors": "by Daniel Kahneman (Author)"
+  },
+  {
+    "slug": "thinking-in-bets",
+    "asin": "0735216355",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0735216355",
+    "matchedTitle": "Thinking in Bets: Making Smarter Decisions When You Don't Have All the Facts",
+    "matchedAuthors": "by Annie Duke (Author)"
+  },
+  {
+    "slug": "thinking-in-systems",
+    "asin": "1603580557",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1603580557",
+    "matchedTitle": "Thinking in Systems: International Bestseller",
+    "matchedAuthors": "by Donella H. Meadows (Author), Diana Wright (Editor)"
+  },
+  {
+    "slug": "traction",
+    "asin": "1591848369",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1591848369",
+    "matchedTitle": "Traction: How Any Startup Can Achieve Explosive Customer Growth",
+    "matchedAuthors": "by Gabriel Weinberg (Author), Justin Mares (Author)"
+  },
+  {
+    "slug": "working-identity",
+    "asin": "1591394139",
+    "edition": "Paperback",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/1591394139",
+    "matchedTitle": "Working Identity: Unconventional Strategies for Reinventing Your Career",
+    "matchedAuthors": "by Herminia Ibarra (Author)"
+  },
+  {
+    "slug": "zero-to-one",
+    "asin": "0804139296",
+    "edition": "Hardcover",
+    "verifiedAt": "2026-10-05",
+    "source": "https://www.amazon.com/dp/0804139296",
+    "matchedTitle": "Zero to One: Notes on Startups, or How to Build the Future",
+    "matchedAuthors": "by Peter Thiel (Author), Blake Masters (Author)"
+  }
+]

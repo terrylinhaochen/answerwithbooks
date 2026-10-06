@@ -9,22 +9,7 @@ Already done via the GitHub API: the repo exists at
 `terrylinhaochen/answerwithbooks` with all site files committed, and Pages is enabled
 with the workflow build source.
 
-**One remaining manual step — push the deploy workflow.** The gh token used for the
-initial push lacked the `workflow` OAuth scope, so `.github/workflows/deploy.yml`
-exists locally but is not yet on GitHub. To finish:
-
-```bash
-# grant the workflow scope (opens browser once)
-gh auth refresh -h github.com -s workflow
-
-# from the project root, link the local copy and push the workflow
-# (see "Linking a local checkout" below if .git doesn't exist yet)
-git add .github/workflows/deploy.yml
-git commit -m "Add GitHub Pages deploy workflow"
-git push origin main
-```
-
-The push triggers the first deploy automatically.
+The deploy workflow is installed and active. Push an approved change to `main`, then verify the matching Actions run and live site.
 
 For reference, the original from-scratch setup commands:
 
@@ -96,7 +81,7 @@ Notes:
 The build embeds the Supabase URL and anon key into the client bundle:
 
 - Local: `.env` (gitignored) — see `.env.example`.
-- CI: set inline in `.github/workflows/deploy.yml`. The anon key is public by design;
+- CI: Supabase configuration comes from repository Actions variables in `.github/workflows/deploy.yml`. The anon key is public by design;
   data protection comes from Supabase Row Level Security, not key secrecy.
 
 ## Supabase auth settings

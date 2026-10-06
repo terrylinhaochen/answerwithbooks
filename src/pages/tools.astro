@@ -1,60 +1,114 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import ToolDialogs from '../components/ToolDialogs.astro';
-import SkillTool from '../components/SkillTool.astro';
-import { availableTools, installSkillPath } from '../lib/tool-catalog.mjs';
-import { jobFunctions } from '../lib/skill-discovery.mjs';
+import AddBookDialog from '../components/AddBookDialog.astro';
+import BookJacket from '../components/BookJacket.astro';
+import { bookPalettes } from '../lib/book-palettes';
+import { bookAgentPrompt } from '../../supabase/functions/_shared/book-handoff.mjs';
+import '../styles/book-skills.css';
+const books = await getCollection('books');
+const examples = [
+ { slug: 'the-mom-test', label: 'Customer interviews', title: 'Ask for evidence, not compliments.', task: 'Help me prepare a customer interview. First ask about my product and what I need to learn. Use The Mom Test to draft questions about specific past behavior, flag leading questions, and give me a checklist for reviewing the evidence afterward.', methods: ['Ask about a specific recent experience.', 'Separate observed behavior from opinions.', 'Look for commitments, costs, and workarounds.'], outcome: 'An interview plan and a way to evaluate what you hear.' },
+ { slug: 'thinking-fast-and-slow', label: 'Better decisions', title: 'Give your first instinct a second look.', task: 'Help me review a decision I am about to make. Ask for the options and stakes. Use the supplied Thinking, Fast and Slow digest to examine framing, overconfidence, and missing base rates. Separate what we know from what we are assuming, then suggest a next step.', methods: ['Check the framing of the choice.', 'Seek base rates and outside evidence.', 'Make uncertainty explicit.'], outcome: 'A decision review with assumptions and evidence gaps.' },
+ { slug: 'atomic-habits', label: 'Habits that last', title: 'Design the conditions for follow-through.', task: 'Help me make one work habit easier to maintain. Ask about the behavior, my routine, and where I get stuck. Apply the supplied Atomic Habits digest to propose a small starting action, a clear cue, and an environment change. Give me a simple one-week experiment.', methods: ['Make the first action small.', 'Connect it to a clear cue.', 'Adjust the environment, then review.'], outcome: 'A small experiment designed around your actual routine.' },
+ { slug: 'deep-work', label: 'Focused work', title: 'Make room for the work that matters.', task: 'Help me plan a week of focused work. First ask about my most valuable project, schedule, and unavoidable interruptions. Use the supplied Deep Work digest to choose realistic focus blocks, define an output for each, and batch routine work. Include a restart note and a way to review what worked.', methods: ['Choose a focus schedule that fits your role.', 'Give each block a clear output and boundaries.', 'Batch routine work and leave a restart note.'], outcome: 'A realistic weekly focus plan with clear outputs and room for interruptions.' },
+ { slug: 'designing-your-life', label: 'Career moves', title: 'Try a direction before you commit.', task: 'Help me explore my next career move. First ask about my situation, interests, energy, and constraints. Use the supplied Designing Your Life digest to sketch three different possible directions. Turn the biggest uncertainty in each into a small experience or a conversation, and define what I should learn before making a commitment.', methods: ['Separate fixed constraints from assumptions.', 'Sketch several genuinely different directions.', 'Use small experiences to test a specific question.'], outcome: 'Three possible directions and practical experiments to learn which fits.' },
+ { slug: 'difficult-conversations', label: 'Difficult conversations', title: 'Prepare to be clear and curious.', task: 'Help me prepare for a difficult conversation. First ask what happened, what I want to change, and what constraints matter. Use the supplied Difficult Conversations digest to separate observations from assumptions about intent, consider feelings and identity, and draft an opening that describes the gap between our perspectives. Suggest questions, a clear request, and boundaries without inventing the other person’s motives.', methods: ['Separate impact from assumed intent.', 'Notice what the issue threatens for each person.', 'Open with the difference between perspectives.'], outcome: 'A conversation plan with an opening, useful questions, and a clear request.' },
+].map(example => {
+ const book = books.find(book => book.id === example.slug)!;
+ return { ...example, book, prompt: `${bookAgentPrompt({ title: book.data.title, author: book.data.author, url: `https://answerwithbooks.com/books/${book.id}/`, digest: book.body })}\n\nMY TASK\n${example.task}` };
+});
 ---
+<Base title="Skills" description="Turn books, papers, and documents into reusable instructions for your AI agent. Get a readable book, practical frameworks, checklists, and source references from one upload." path="/tools/">
+ <div class="book-skills awb-section">
+  <section class="skill-intro" id="book-skill" aria-labelledby="skill-title">
+   <div class="skill-intro-copy">
+    <p class="awb-eyebrow">Books, with a job to do</p>
+    <h1 id="skill-title">Give your agent<br />a book’s <em>way of thinking.</em></h1>
+    <p class="skill-lead">Turn the methods you trust into instructions your agent can use: how to ask better questions, weigh a decision, or make a plan.</p>
+    <div class="skill-actions"><button type="button" class="awb-pill awb-pill-primary" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Upload a source <span aria-hidden="true">↗</span></button><a href="#try-a-skill">Try an example <span aria-hidden="true">↓</span></a></div>
+    <p class="skill-caption">Books, papers, and documents. One source becomes a skill you can use.</p>
+   </div>
+   <div class="skill-object" aria-label="A book becomes practical instructions with supporting references">
+    <div class="skill-object-book"><BookJacket title="The Mom Test" author="Rob Fitzpatrick" slug="the-mom-test" color="#077f8e" /></div>
+    <div class="skill-note"><p class="skill-note-label"><span aria-hidden="true">↳</span> The companion skill</p><h2>Better customer<br /><em>interviews.</em></h2><ol><li>Start with past behavior.</li><li>Listen for real workarounds.</li><li>Ask for a concrete commitment.</li></ol><div class="skill-note-footer">Methods · Checklists · References</div></div>
+    <span class="skill-object-caption">From something you know.<br /><em>To something you can do.</em></span>
+   </div>
+  </section>
 
-<Base title="Skills" description="Browse specialized skills for research, audience insights, and book-backed decisions. Connect them to the agent you already use." path="/tools/">
-  <div class="awb-section py-12 sm:py-16">
-    <header class="mb-8">
-      <p class="awb-eyebrow">Skills</p>
-      <h1 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">Browse and hire skills on demand.</h1>
-      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-soft">Find expertise for your next task. Get useful results in the agent you already use.</p>
-    </header>
+  <section class="skill-method" aria-labelledby="method-title">
+   <div class="skill-section-heading"><div><p class="awb-eyebrow">What a skill actually does</p><h2 id="method-title">A method your agent<br /><em>can put into practice.</em></h2></div><p>A summary helps you understand an idea. A skill adds instructions for applying it: when to use a framework, what to check, and which mistakes to avoid.</p></div>
+   <div class="skill-method-grid">
+    <article><span class="skill-step">01</span><h3>Bring the source.</h3><p>Upload a book, paper, or document in PDF, EPUB, DOCX, Markdown, HTML, RTF, or text. The processing flow extracts and works through its sections.</p></article>
+    <article><span class="skill-step">02</span><h3>Keep the book.<br /> Get the skill.</h3><p>Read the generated book artifact. Its companion skill organizes frameworks, decision rules, examples, and supporting references.</p></article>
+    <article><span class="skill-step">03</span><h3>Give it real work.</h3><p>Copy the book and skill into your agent, then describe your task. Or download the package to add it to an agent that supports skill files.</p></article>
+   </div>
+  </section>
 
-    <section id="install" class="awb-panel scroll-mt-28 p-5 sm:p-7" aria-labelledby="install-heading">
-      <div class="flex flex-wrap items-start justify-between gap-3">
-        <div><h2 id="install-heading" class="font-serif text-2xl">Works with your agent</h2><p class="mt-2 text-sm text-soft">Choose your agent and add the skills you need.</p></div>
-        <button type="button" class="awb-pill bg-ink text-white disabled:opacity-50" data-open-setup disabled>Connect your agent →</button>
-      </div>
-      <noscript><p class="mt-4 text-sm text-soft">Enable JavaScript for guided setup, or <a href={installSkillPath}>read the skill instructions</a>.</p></noscript>
-    </section>
+  <section id="try-a-skill" class="skill-examples" aria-labelledby="examples-title">
+   <div class="skill-section-heading"><div><p class="awb-eyebrow">Try it with the public shelf</p><h2 id="examples-title">What are you<br /><em>working on?</em></h2></div><p>These examples copy a public book’s editorial digest and a task into your agent. Your own uploaded books produce the fuller downloadable skill package.</p></div>
+   <div class="skill-tabs" role="tablist" aria-label="Choose a book application">
+    {examples.map((example, index) => <button type="button" role="tab" id={`example-tab-${index}`} aria-controls={`example-panel-${index}`} aria-selected={index === 0} tabindex={index === 0 ? 0 : -1} data-example-tab={index}>{example.label}</button>)}
+   </div>
+   {examples.map((example,index) => <article class="skill-example" role="tabpanel" id={`example-panel-${index}`} aria-labelledby={`example-tab-${index}`} tabindex="0" hidden={index !== 0} data-example-panel={index}>
+    <div class="skill-example-source"><a class="skill-example-jacket" href={`/books/${example.slug}/`} aria-label={`Read ${example.book.data.title}`}><BookJacket title={example.book.data.title} author={example.book.data.author} slug={example.slug} color={bookPalettes[example.slug]?.cover ?? '#304c44'} loading="lazy" /></a><p>{example.book.data.title}</p><span>{example.book.data.author}</span><a class="skill-source-link" href={`/books/${example.slug}/`}>Read the source digest ↗</a></div>
+    <div class="skill-example-body"><p class="awb-eyebrow">A task you can try</p><h3>{example.title}</h3><p class="skill-example-task">{example.task}</p><ul>{example.methods.map(method => <li>{method}</li>)}</ul><p class="skill-example-outcome"><span>Work toward</span>{example.outcome}</p><button type="button" class="awb-pill awb-pill-primary" data-copy-example>Copy to agent <span aria-hidden="true">↗</span></button><p class="skill-copy-status" role="status">Copies the digest, source link, and this task. Paste into your preferred agent.</p><textarea class="awb-input mt-4" readonly hidden aria-label="Book and task prompt" data-example-prompt>{example.prompt}</textarea></div>
+   </article>)}
+  </section>
 
-    <section id="available-tools" class="mt-10 scroll-mt-28" aria-labelledby="available-tools-heading">
-      <div class="mb-5 flex flex-wrap items-end justify-between gap-4"><h2 id="available-tools-heading" class="font-serif text-3xl">Find a skill for your work</h2><label class="skill-search"><span class="sr-only">Search skills</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input type="search" placeholder="Search tasks, outcomes, or tools" data-skill-search /></label></div>
-      <div class="role-filters" role="group" aria-label="Filter skills by job function">{jobFunctions.map(role => <button type="button" data-skill-role={role.id} aria-pressed={role.id === 'all' ? 'true' : 'false'} title={role.description}>{role.label}</button>)}</div>
-      <div class="mb-5 flex flex-wrap items-center justify-between gap-2"><p class="text-sm text-soft">Managed skills are in private preview. Paid hiring is not available yet.</p><p class="text-sm text-faint" data-skill-count role="status">{availableTools.length} skills</p></div>
-      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-tool-capabilities>
-        {availableTools.map(tool => (
-          <article id={tool.id === 'book-answers' ? 'book-skill' : undefined} class="awb-panel min-w-0 scroll-mt-28 overflow-hidden" data-capability={tool.id}>
-            <button type="button" class="tool-card" data-open-tool={tool.id} aria-haspopup="dialog" aria-controls={`tool-${tool.id}`} disabled>
-            <span class="flex items-center justify-between gap-3"><span class="text-sm font-medium">{tool.publisher}</span><span class="rounded-full bg-wash px-2 py-1 text-xs text-faint">{tool.kind === 'API' ? 'Private preview' : 'Your agent'}</span></span>
-            <span class="mt-4 font-serif text-2xl leading-tight" role="heading" aria-level="3">{tool.name}</span>
-            <span class="mt-3 flex-1 text-sm leading-relaxed text-soft">{tool.description}</span>
-            <span class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2" aria-label="Tools used"><span class="text-xs text-faint">Uses</span>{tool.tools.map(id => <SkillTool id={id} />)}</span>
-            <span class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-faint">{tool.roles.map(id => <span>{jobFunctions.find(role => role.id === id)?.label}</span>)}</span>
-            {tool.scope && <span class="mt-2 text-xs leading-relaxed text-faint">{tool.scope}</span>}
-            <span class="mt-5 flex items-center justify-between gap-2 border-t border-line pt-4 text-sm"><span>View skill</span><span aria-hidden="true">→</span></span>
-            </button>
-          </article>
-        ))}
-      </div>
-      <div class="awb-panel p-8 text-center" data-skill-empty hidden><h3 class="font-serif text-2xl">No matching skills yet</h3><p class="mt-2 text-soft">Try another task or browse all job functions.</p><button type="button" class="awb-pill mt-4" data-skill-reset>Show all skills</button></div>
-      <nav class="mt-6 flex items-center justify-center gap-4" aria-label="Skills pagination" data-skill-pagination hidden><button type="button" class="awb-pill" data-skill-prev>Previous</button><span class="text-sm text-soft" data-skill-page></span><button type="button" class="awb-pill" data-skill-next>Next</button></nav>
-    </section>
+  <section class="skill-package" id="install" aria-labelledby="package-title">
+   <div><p class="awb-eyebrow">Your sources. Your working toolkit.</p><h2 id="package-title">Readable for you.<br /><em>Reusable by your agent.</em></h2><p>Each uploaded book gets one place to read, copy, and download. The ZIP keeps the skill and references together, so you can take them into a compatible agent’s workspace.</p><button type="button" class="awb-pill" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Upload a source ↗</button></div>
+   <dl class="skill-files"><div><dt>Book artifact</dt><dd>The ideas, context, applications, and limits in a readable document.</dd></div><div><dt>Skill instructions <code>SKILL.md</code></dt><dd>When and how to apply the book’s methods to a task.</dd></div><div><dt>Reference notes</dt><dd>Source sections, practical patterns, a cheatsheet, and a glossary.</dd></div><div><dt>Book cover</dt><dd>A generated cover for your private library.</dd></div></dl>
+  </section>
 
-    <ToolDialogs />
-  </div>
+  <section class="skill-faq" aria-labelledby="skill-faq-title"><div><p class="awb-eyebrow">Before you begin</p><h2 id="skill-faq-title">A few useful<br /><em>details.</em></h2></div><div>
+   <details><summary>Can I use this with my existing agent?</summary><p>Yes. Copy to agent gives you a single prompt containing the book artifact, skill, and references. Paste it into your preferred agent and add your task. For reusable installation, download the ZIP and follow your agent’s skill-file setup. Installation is not automatic.</p></details>
+   <details><summary>What can I upload?</summary><p>Books, research papers, documentation, and notes in PDF, EPUB, DOCX, Markdown, HTML, RTF, or plain text. Sign in, choose one searchable file up to 10 MB, and keep the processing page open while your book and skill are generated. If processing pauses, return to the book page to continue. Your source text is sent to our generation provider; your file and artifacts stay private to your account. Scanned PDFs need OCR first.</p></details>
+   <details><summary>Is every public book a complete skill package?</summary><p>The public shelf offers editorial digests with a Copy to agent prompt. Your own uploaded book produces the fuller skill package, including source-section notes, patterns, a cheatsheet, and a glossary.</p></details>
+   <details><summary>How much should I trust a generated skill?</summary><p>Use it as a working aid. Review important claims against the source, and check the output before relying on it. The agent prompt asks for source references, clearly marked inferences, and limits; it does not guarantee accuracy or complete coverage.</p></details>
+  </div></section>
+  <p class="skill-credit">Built with adapted parsing and skill-generation tools from the MIT-licensed <a href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener noreferrer">book-to-skill project ↗</a>.</p>
+ </div>
+ <AddBookDialog />
 </Base>
-
 <script>
-  import '../lib/tools-page';
-  import '../lib/skills-page';
+ import { readToolsAuthContext } from '../lib/tools-auth.mjs';
+ // Older research-setup email links still finish at the existing account-access surface.
+ const researchSetup = readToolsAuthContext(location.pathname, location.search);
+ if (researchSetup) location.replace(`/api-keys/?from=tools&agent=${encodeURIComponent(researchSetup.agentId)}`);
+ const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-example-tab]'));
+ const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-example-panel]'));
+ function selectExample(index: number, focus = false) {
+  tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
+  panels.forEach((panel, i) => { panel.hidden = i !== index; });
+  if (focus) tabs[index]?.focus({ preventScroll: true });
+  const selected = tabs[index];
+  if (selected) {
+   const row = selected.parentElement!;
+   const rowBounds = row.getBoundingClientRect();
+   const tabBounds = selected.getBoundingClientRect();
+   if (tabBounds.left < rowBounds.left + 5) row.scrollLeft -= rowBounds.left + 5 - tabBounds.left;
+   else if (tabBounds.right > rowBounds.right - 5) row.scrollLeft += tabBounds.right - rowBounds.right + 5;
+  }
+ }
+ tabs.forEach((tab,index) => {
+  tab.addEventListener('click', () => selectExample(index));
+  tab.addEventListener('keydown', event => {
+   let next = index;
+   if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+   else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+   else if (event.key === 'Home') next = 0;
+   else if (event.key === 'End') next = tabs.length - 1;
+   else return;
+   event.preventDefault(); selectExample(next, true);
+  });
+ });
+ panels.forEach(panel => {
+  panel.querySelector('[data-copy-example]')?.addEventListener('click', async () => {
+   const prompt = panel.querySelector<HTMLTextAreaElement>('[data-example-prompt]')!;
+   const status = panel.querySelector('.skill-copy-status')!;
+   try { await navigator.clipboard.writeText(prompt.value); status.textContent = 'Copied. Paste into your agent to start with the book and your task.'; }
+   catch { prompt.hidden = false; prompt.focus(); prompt.select(); status.textContent = 'Copy was blocked. Select and copy the prompt below.'; }
+  });
+ });
 </script>
-
-<style>
-  .tool-card{display:flex;flex-direction:column;width:100%;height:100%;padding:20px;text-align:left;cursor:pointer;background:transparent;transition:background .15s ease}.tool-card:hover{background:var(--color-wash)}.tool-card:focus-visible{outline:2px solid var(--color-ink);outline-offset:-3px;border-radius:15px}.tool-card:disabled{cursor:default}.tool-card>span:first-child,.tool-card>span:last-child{width:100%}
-  .skill-search{display:flex;align-items:center;gap:10px;border:1px solid var(--color-line);border-radius:12px;padding:10px 14px;min-width:min(100%,320px);background:var(--color-paper)}.skill-search input{min-width:0;width:100%;outline:none;font-size:14px}.skill-search:focus-within{outline:2px solid var(--color-ink)}.role-filters{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0}.role-filters button{border:1px solid var(--color-line);border-radius:999px;padding:9px 14px;font-size:13px;cursor:pointer}.role-filters button[aria-pressed=true]{color:white;background:var(--color-ink);border-color:var(--color-ink)}[data-capability][hidden]{display:none}
-</style>

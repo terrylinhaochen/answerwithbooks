@@ -33,7 +33,7 @@ export async function createToolAccount({ auth, registerNewsletter, fields, redi
       },
     });
     if (error) return { state: 'error', message: error.status === 429
-      ? 'Your newsletter signup is saved. Too many account requests—wait a minute before trying again.'
+      ? 'Your newsletter signup is saved. Too many account requests. Wait a minute before trying again.'
       : 'Your newsletter signup is saved, but we couldn’t finish the account request. Try signing in if you already have an account.' };
     return data?.session ? { state: 'signed-in', message: 'You’re signed in. Your tool setup will continue here.' }
       : { state: 'confirmation', message: 'Check your email to confirm your account and return to tool setup. Already registered? Use Sign in below.' };

@@ -7,6 +7,11 @@ readIf: "You are busy, responsible for outcomes through other people, and unsure
 tags: ["management", "leadership", "priorities"]
 featured: false
 order: 16
+amazon:
+  asin: "0060833459"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0060833459"
 ---
 
 Peter Drucker defines an executive by contribution rather than title. Anyone whose decisions materially affect an organization’s performance is doing executive work, whether they manage people or contribute specialized knowledge. The central question is therefore not how senior a person is, but whether they can convert knowledge, time, and authority into results outside themselves.

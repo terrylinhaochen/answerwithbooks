@@ -2,11 +2,16 @@
 title: "The Mom Test"
 author: "Rob Fitzpatrick"
 year: 2013
-oneLiner: "How to talk to customers and learn the truth when everyone is lying to you — including your mom."
+oneLiner: "How to talk to customers and learn the truth when everyone is lying to you, including your mom."
 readIf: "You are about to build something and want to find out whether anyone actually needs it, before you spend a year finding out the hard way."
 tags: ["startups", "customer research", "product"]
 featured: true
 order: 1
+amazon:
+  asin: "1492180742"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1492180742"
 ---
 
 The central problem in customer research is not that people lie. It is that most questions make honesty almost impossible. Ask someone whether your idea is good and they have to predict a future they cannot see while managing a social interaction they do not want to damage. Their answer may be sincere and still tell you nothing about demand.

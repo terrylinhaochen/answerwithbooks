@@ -12,15 +12,15 @@ page.on('pageerror', error => errors.push(error.message));
 
 try {
   await page.goto('http://127.0.0.1:4321/');
-  const order = await page.locator('main > section[id]').evaluateAll(sections => sections.map(section => section.id));
-  assert.deepEqual(order, ['home-intro', 'question-first-reading', 'source-books', 'install', 'featured-answers', 'profile-tracker']);
+  const order = await page.locator('main .reading-room > section[id]').evaluateAll(sections => sections.map(section => section.id));
+  assert.deepEqual(order, ['home-intro', 'question-first-reading', 'source-books', 'install', 'featured-answers', 'profile-tracker', 'home-faq']);
   const profile = page.locator('#profile-tracker');
   assert.ok(await page.getByRole('heading', { name: 'Have a question of your own?', exact: true }).evaluate((heading) => !!(heading.compareDocumentPosition(document.querySelector('#profile-tracker')) & Node.DOCUMENT_POSITION_FOLLOWING)));
-  assert.ok(await page.getByRole('heading', { name: 'Got questions? We have answers.', exact: true }).evaluate((heading) => !!(document.querySelector('#profile-tracker').compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING)));
+  assert.ok(await page.locator('#home-faq h2').evaluate((heading) => !!(document.querySelector('#profile-tracker').compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING)));
   assert.equal(await profile.getByRole('link', { name: 'Open profile', exact: true }).getAttribute('href'), '/profile/');
   assert.equal(await page.getByRole('link', { name: 'Start personalization', exact: true }).count(), 0);
   for (const id of order) assert.equal(await page.locator(`#${id}`).count(), 1);
-  assert.equal(await page.locator('#home-intro h1').innerText(), 'Learn what matters to you, right now.');
+  assert.match(await page.locator('#home-intro h1').innerText(), /Turn what you read/);
   assert.equal(await page.locator('#home-intro [data-insight-carousel]').count(), 1);
   assert.equal(await page.locator('#source-books a').count() > 0, true);
   assert.equal(await page.locator('#question-first-reading article').count(), 3);
@@ -30,9 +30,9 @@ try {
   assert.equal(await email.inputValue(), 'preview@example.com');
   await email.clear(); // Do not submit a signup during a layout test.
 
-  await page.locator('[data-copy-install]').click();
-  await page.waitForFunction(() => document.querySelector('[data-copy-install-status]').textContent === 'Install command copied.');
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'npx answer-with-books install --skill --api');
+  assert.equal(await page.locator('#install a,#install button').count(),1);
+  assert.equal(await page.locator('.library-book [data-copy-public-book]').count(),0);
+  assert.equal(await page.locator('.library-book .library-cover[href^="/books/"]').count(),8);
 
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 950 });
@@ -53,7 +53,7 @@ try {
     }
   }
   assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ passed: true, order: order, desktop: true, mobile: true, carousel: true, clipboard: true, signup: 'input only; not submitted' }, null, 2));
+  console.log(JSON.stringify({ passed: true, order: order, desktop: true, mobile: true, carousel: true, bookLinks: true, signup: 'input only; not submitted' }, null, 2));
 } finally {
   await browser.close();
 }

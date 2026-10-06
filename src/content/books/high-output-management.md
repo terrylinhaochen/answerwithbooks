@@ -7,6 +7,11 @@ readIf: "You manage people and need a practical model for delegation, one-on-one
 tags: ["management", "operations", "delegation"]
 featured: false
 order: 17
+amazon:
+  asin: "0679762884"
+  edition: "Paperback, second edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0679762884"
 ---
 
 Andrew Grove treats management as production. The language can sound mechanical, but its purpose is clarifying: a manager should be evaluated by the output created through the part of the organization they influence, not by the visible volume of their own activity.

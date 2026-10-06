@@ -19,7 +19,7 @@ The site is maintained by Answer with Books.
 
 - Home: ${site}/
 - Skills and agent connections: ${site}/tools/
-- Book skill: ${site}/tools/#book-skill
+- Skills: ${site}/tools/#book-skill
 - Guides: ${site}/answers/
 - Source books: ${site}/books/
 - Topics: ${site}/topics/

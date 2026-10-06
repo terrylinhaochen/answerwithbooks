@@ -36,7 +36,12 @@
     "engine:compile": "node scripts/compile-book-artifacts.mjs",
     "test:book-processing": "node --test scripts/test-book-processing.mjs",
     "predev": "node scripts/build-book-runtime.mjs",
-    "prebuild": "node scripts/build-book-runtime.mjs"
+    "prebuild": "node scripts/build-book-runtime.mjs",
+    "test:book-purchases": "node scripts/test-book-purchases.mjs",
+    "test:book-skills": "node scripts/test-book-skills.mjs",
+    "test:book-agent-actions": "node scripts/test-book-agent-actions.mjs",
+    "test:source-upload": "node scripts/test-source-upload.mjs",
+    "test:shelf-personalization": "node scripts/test-shelf-personalization.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",

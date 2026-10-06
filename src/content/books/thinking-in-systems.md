@@ -7,6 +7,11 @@ readIf: "You are trying to fix a recurring organizational problem that keeps ret
 tags: ["technology","systems","decisions","planning"]
 featured: false
 order: 36
+amazon:
+  asin: "1603580557"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1603580557"
 ---
 
 *Thinking in Systems* argues that persistent problems usually come from system structure, not from the most visible event or the most blameworthy person. A system produces behavior over time through accumulations, rates of change, feedback loops, delays, information flows, rules, goals, and deeper assumptions about what the system is for. That claim matters because it changes the question from “Who caused this?” or “What just happened?” to “What structure keeps making this happen?” The book’s discipline is not to say that everything is connected. It is to ask which connections matter, how fast they operate, what they amplify or restrain, and what kind of pattern they generate.

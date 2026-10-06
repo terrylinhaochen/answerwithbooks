@@ -7,6 +7,11 @@ readIf: "You are redesigning annual performance reviews after managers give shar
 tags: ["decisions","judgment","management","evidence"]
 featured: false
 order: 32
+amazon:
+  asin: "0316451401"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0316451401"
 ---
 
 Human judgment is damaged not only by bias, which pushes errors in a shared direction, but by noise: unwanted variability among judgments that should be similar. *Noise* argues that many organizations worry about prejudice, incentives, and predictable distortions while missing a quieter defect: two authorized professionals can see the same kind of case and produce different answers for no defensible reason. The bad outcome is not just an occasional mistake. It is a system that behaves like a lottery.

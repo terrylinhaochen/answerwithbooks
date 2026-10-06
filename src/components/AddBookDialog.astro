@@ -3,13 +3,13 @@
 interface Props { catalog?: unknown[]; title?: string; sourcePath?: string; bookBaseUrl?: string; }
 ---
 <dialog id="book-upload-dialog" class="book-upload-dialog">
- <header class="flex items-center justify-between gap-4"><h2 class="font-serif text-3xl">Upload a book</h2><button type="button" data-close-book-upload aria-label="Close upload" class="p-3">×</button></header>
- <p class="mt-3 text-soft">One upload gives you a readable book, a reusable skill, and a cover.</p>
+ <header class="flex items-center justify-between gap-4"><h2 class="font-serif text-3xl">Upload a source</h2><button type="button" data-close-book-upload aria-label="Close upload" class="p-3">×</button></header>
+ <p class="mt-3 text-soft">Turn a book, research paper, or document into a readable artifact and a reusable skill.</p>
  <form class="mt-6">
-  <label class="upload-drop"><span class="font-serif text-2xl">Choose your book</span><span class="mt-2 block text-sm text-soft">PDF, EPUB, DOCX, HTML, RTF, or text · up to 10 MB</span><input class="mt-5 block w-full text-sm" type="file" accept=".pdf,.epub,.docx,.html,.htm,.xhtml,.rtf,.txt,.text,.md,.markdown,.rst,.adoc,.asciidoc" required aria-label="Book file" /></label>
-  <p class="mt-3 text-sm text-soft">Upload a full, searchable source. Your original file and generated artifacts stay private to your account. Scanned PDFs need OCR first.</p>
-  <p class="mt-2 text-sm text-soft">The source text is sent to our generation provider to create your book and skill.</p>
-  <button type="submit" class="awb-pill awb-pill-primary mt-5" data-upload-submit>Create book &amp; skill</button>
+  <label class="upload-drop"><span class="font-serif text-2xl">Choose a file</span><span class="mt-2 block text-sm text-soft">PDF · EPUB · DOCX · Markdown · HTML · RTF · Text</span><input class="mt-5 block w-full text-sm" type="file" accept=".pdf,.epub,.docx,.html,.htm,.xhtml,.rtf,.txt,.text,.md,.markdown,.rst,.adoc,.asciidoc" required aria-label="Source file" /></label>
+  <p class="mt-3 text-sm text-soft">One file, up to 10 MB. PDFs need selectable text; scanned pages need OCR first.</p>
+  <p class="mt-2 text-xs leading-relaxed text-soft">Private to your account. Source text is sent to our AI provider for processing.</p>
+  <button type="submit" class="awb-pill awb-pill-primary mt-5" data-upload-submit>Create skill &amp; book</button>
   <p class="mt-4 text-sm text-soft" role="status" data-upload-status>Sign in to save your book. Three new books per day.</p>
   <a href="/login/" class="mt-3 inline-block underline" data-upload-login hidden>Sign in to Answer with Books</a>
  </form>

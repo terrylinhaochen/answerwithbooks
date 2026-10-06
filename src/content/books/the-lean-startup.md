@@ -7,6 +7,11 @@ readIf: "You are building a complete product before knowing whether the underlyi
 tags: ["startups", "experiments", "product"]
 featured: false
 order: 7
+amazon:
+  asin: "0307887898"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0307887898"
 ---
 
 Eric Ries defines a startup as an institution creating a new product or service under conditions of extreme uncertainty. The uncertainty is the important part. In an established operation, better execution against a known model can create progress. In a startup, flawless execution of the wrong model only consumes resources faster.

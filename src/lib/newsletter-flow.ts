@@ -35,12 +35,12 @@ function render() {
     root.querySelector<HTMLElement>('[data-account-login]')!.hidden = !!state;
     if (!state) continue;
     input.value = state.email;
-    message.textContent = 'Thanks—your email has been saved for the Answer with Books newsletter.';
+    message.textContent = 'Thanks, your email has been saved for the Answer with Books newsletter.';
     message.dataset.error = 'false';
     const sent = state.stage === 'sent';
     root.querySelector<HTMLElement>('[data-account-title]')!.textContent = activating ? 'Finishing your signup…' : sent ? 'Check your email.' : 'Finish your signup.';
     root.querySelector<HTMLElement>('[data-account-copy]')!.textContent = sent
-      ? `We sent a verification link to ${state.email}. Confirm your email to ${readToolsAuthContext(location.pathname, location.search) ? 'return to your tool setup' : 'go straight to your Answer with Books profile'}—no password needed.`
+      ? `We sent a verification link to ${state.email}. Confirm your email to ${readToolsAuthContext(location.pathname, location.search) ? 'return to your tool setup' : 'go straight to your Answer with Books profile'}. No password needed.`
       : `Your newsletter signup is saved. ${activating ? 'Sending' : 'Retry sending'} the verification link to ${state.email} to finish your Answer with Books signup.`;
     const activate = root.querySelector<HTMLButtonElement>('[data-resend-verification]')!;
     const remaining = Math.max(0, Math.ceil((state.resendAt - Date.now()) / 1000));

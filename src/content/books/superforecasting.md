@@ -7,6 +7,11 @@ readIf: "Read if your leadership team must decide whether to launch a product in
 tags: ["decisions","forecasting","judgment","uncertainty"]
 featured: false
 order: 33
+amazon:
+  asin: "0804136718"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0804136718"
 ---
 
 *Superforecasting* argues that better prediction is possible when uncertain judgments are stated as specific probabilities, tested against outcomes, and revised through disciplined feedback. Philip E. Tetlock and Dan Gardner do not claim that the future is generally knowable, or that a special class of people can see around corners. Their narrower and more practical claim is that some bounded questions can be forecast better than others when the question is clear, the time horizon is defined, the answer can be scored, and forecasters learn from the record of their own errors.

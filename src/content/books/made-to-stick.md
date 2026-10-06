@@ -7,6 +7,11 @@ readIf: "You understand an idea but cannot make other people remember, repeat, o
 tags: ["communication", "marketing", "ideas"]
 featured: false
 order: 9
+amazon:
+  asin: "1400064287"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1400064287"
 ---
 
 Some ideas are accurate and important yet disappear as soon as a meeting ends. Others—rumors, proverbs, vivid anecdotes—travel intact through years of retelling. Chip and Dan Heath ask what gives an idea that durability and whether useful ideas can be designed to share the same properties.

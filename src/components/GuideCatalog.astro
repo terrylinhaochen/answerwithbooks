@@ -21,7 +21,7 @@ const practicalGuides = capabilityGuides.map(guide => ({
   categories: ['ai', ...topicsForTags(guide.audience.toLowerCase().split(' · ')).map(topic => topic.slug)],
 }));
 const guideCount = practicalGuides.length + answers.length;
-const featuredGuides = practicalGuides.slice(0, 3);
+const featuredGuides = answers.filter(answer => answer.data.featured).slice(0, 3);
 const categories = [{ slug: 'ai', label: 'AI', description: 'Practical workflows for using AI at work.', count: practicalGuides.length }, ...CANONICAL_TOPICS.map((topic) => ({
   slug: topic.slug,
   label: topic.label,
@@ -91,9 +91,9 @@ const jsonLd = [
 >
   <section class="awb-section pt-16 pb-8">
     <p class="awb-eyebrow">Guides</p>
-    <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">Curated guides to help you get started.</h1>
+    <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">Good ideas, in practice.</h1>
     <p class="awb-copy mt-4 max-w-2xl">
-      Practical AI workflows and book-backed guidance for your career, learning, and everyday decisions.
+      See how book ideas become better questions, clearer decisions, and useful next steps. Take a guide into your agent to apply it to your own situation.
     </p>
   </section>
 
@@ -101,12 +101,12 @@ const jsonLd = [
     <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
         <h2 id="featured-guides-title" class="font-serif text-3xl">Featured guides</h2>
-        <p class="mt-2 text-soft">Three practical ways to put AI to work.</p>
+        <p class="mt-2 text-soft">Three ways to put book ideas to work.</p>
       </div>
       <a href="#all-guides" class="text-sm font-semibold hover:text-soft">Browse all guides ↓</a>
     </div>
     <div class="grid gap-4 md:grid-cols-3">
-      {featuredGuides.map(guide => <PracticalGuideCard guide={guide} featured />)}
+      {featuredGuides.map(answer => <AnswerRow answer={answer} bookTitles={bookTitles} />)}
     </div>
   </section>
 

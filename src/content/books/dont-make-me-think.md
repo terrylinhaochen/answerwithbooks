@@ -7,6 +7,11 @@ readIf: "Your page looks polished but users still hesitate, bounce, or ask what 
 tags: ["design", "usability", "web"]
 featured: false
 order: 8
+amazon:
+  asin: "0321965515"
+  edition: "Paperback, Revisited third edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0321965515"
 ---
 
 Steve Krug’s first law of usability is the title: **don’t make me think**. He does not mean that a website should contain no ideas or that every task must be effortless. He means an interface should not spend a user’s attention on questions the design could have answered: Is this clickable? Which label contains what I need? Am I still in the same site? What happens if I continue?

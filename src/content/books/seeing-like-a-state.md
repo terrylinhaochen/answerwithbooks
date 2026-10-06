@@ -3,10 +3,15 @@ title: "Seeing Like a State"
 author: "James C. Scott"
 year: 1998
 oneLiner: "Why grand schemes to improve the human condition fail: they replace messy local knowledge with tidy maps, then mistake the map for the territory."
-readIf: "You design systems for other people — software, processes, org charts, cities — and want to understand why clean top-down plans keep being defeated by messy reality."
+readIf: "You design software, processes, organizations, or cities for other people and want to understand why clean plans keep being defeated by messy reality."
 tags: ["systems", "planning", "institutions"]
 featured: true
 order: 4
+amazon:
+  asin: "0300078153"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0300078153"
 ---
 
 ## What the book is about

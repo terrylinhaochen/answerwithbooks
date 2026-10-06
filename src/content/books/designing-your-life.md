@@ -7,6 +7,11 @@ readIf: "You feel stuck between possible lives and need evidence about a directi
 tags: ["career", "life-design", "experiments"]
 featured: false
 order: 20
+amazon:
+  asin: "1101875321"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1101875321"
 ---
 
 Bill Burnett and Dave Evans argue that many career and life decisions are approached as if a correct answer already exists and careful introspection should reveal it. The person waits for a single passion, calling, or optimal path, then interprets uncertainty as personal failure.

@@ -2,11 +2,16 @@
 title: "The Structure of Scientific Revolutions"
 author: "Thomas S. Kuhn"
 year: 1962
-oneLiner: "Science doesn't progress by smooth accumulation — it alternates between puzzle-solving within a paradigm and rare, wrenching revolutions that replace it."
-readIf: "You're deciding whether to keep refining the current approach or throw it out — in research, strategy, or engineering — and want a vocabulary for telling incremental progress from a dying framework."
+oneLiner: "Science doesn't progress by smooth accumulation. It alternates between puzzle-solving within a paradigm and rare, wrenching revolutions that replace it."
+readIf: "You're deciding whether to keep refining the current approach or throw it out in research, strategy, or engineering, and want a vocabulary for telling incremental progress from a dying framework."
 tags: ["science", "paradigms", "epistemology"]
 featured: true
 order: 5
+amazon:
+  asin: "0226458121"
+  edition: "Paperback, 50th anniversary edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0226458121"
 ---
 
 ## What the book is about

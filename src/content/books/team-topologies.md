@@ -7,6 +7,11 @@ readIf: "You are reorganizing a software group whose releases are slowed by week
 tags: ["technology","teams","management","systems"]
 featured: false
 order: 38
+amazon:
+  asin: "1942788819"
+  edition: "Print edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1942788819"
 ---
 
 The central argument of *Team Topologies* is that software organizations should design around teams, not individuals, projects, functions, or static departments. Matthew Skelton and Manuel Pais make that claim because team communication structures shape software architecture, and because every team has a finite capacity for understanding its domain, technology, operations, and dependencies. Fast flow of change is therefore not only a tooling problem or a talent problem. It is an organizational design problem: give stable teams clear ownership of value streams, keep their cognitive load sustainable, and make their interactions with other teams explicit enough that coordination happens for a reason rather than by default.

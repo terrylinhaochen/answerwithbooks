@@ -7,6 +7,11 @@ readIf: "Read this if users keep choosing the wrong control on a stove, applianc
 tags: ["technology","design","usability","psychology"]
 featured: false
 order: 27
+amazon:
+  asin: "0465050654"
+  edition: "Paperback, revised and expanded edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0465050654"
 ---
 
 Don Norman’s central argument is that much everyday “user error” is evidence of bad design: the object, interface, procedure, or organization has failed to show people what actions are possible, which action will produce which result, or whether the intended result happened. The point matters because it changes where diagnosis begins. A person who hesitates at a door, tries every stove knob, misreads a thermostat, or struggles with a hotel shower is not necessarily careless or unintelligent. The design may have hidden its logic and then blamed the user for not guessing it.

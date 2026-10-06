@@ -7,6 +7,11 @@ readIf: "You are considering taking a promotion that would further crowd out the
 tags: ["health","relationships","wellbeing","life-design"]
 featured: false
 order: 44
+amazon:
+  asin: "198216669X"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/198216669X"
 ---
 
 *The Good Life* argues that durable wellbeing is built less by achievement, wealth, status, or constant pleasure than by repeatedly cultivating warm, reliable relationships. Its central claim is not the generic instruction to “be social.” The stronger mechanism is that dependable connection gives people a place to be known, supported, and steadied, which helps them meet stress, illness, loss, work, aging, and ordinary disappointment without facing them alone.

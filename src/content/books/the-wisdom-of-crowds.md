@@ -2,11 +2,16 @@
 title: "The Wisdom of Crowds"
 author: "James Surowiecki"
 year: 2004
-oneLiner: "Why large groups of ordinary people outguess experts — and the exact conditions under which they stop."
-readIf: "You aggregate opinions for a living — running teams, markets, forecasts, or feedback systems — and want to know when the average answer is smart and when it is a stampede."
+oneLiner: "Why large groups of ordinary people outguess experts and the exact conditions under which they stop."
+readIf: "You combine opinions from teams, markets, forecasts, or feedback systems and want to know when the average answer is smart and when it is a stampede."
 tags: ["collective intelligence", "decision-making", "markets"]
 featured: true
 order: 3
+amazon:
+  asin: "0385721706"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0385721706"
 ---
 
 ## What the book is about

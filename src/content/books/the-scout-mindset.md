@@ -7,6 +7,11 @@ readIf: "You are about to decide whether to keep funding a team project after ea
 tags: ["decisions","judgment","psychology","learning"]
 featured: false
 order: 35
+amazon:
+  asin: "0735217556"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0735217556"
 ---
 
 Julia Galef’s central argument in *The Scout Mindset* is that clear thinking depends less on intelligence than on what you are trying to accomplish while you think. If your hidden goal is to defend a belief, protect a plan, or stay loyal to a side, your reasoning will bend toward that goal while still feeling objective from the inside. If your goal is to build the most accurate map you can, including uncertainty and inconvenient evidence, you become more likely to notice mistakes early enough to use them.

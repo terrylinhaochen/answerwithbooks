@@ -7,6 +7,11 @@ readIf: "You want to examine how repetition, prestige, and group influence shape
 tags: ["collective behavior", "decision-making"]
 featured: false
 order: 99
+amazon:
+  asin: "0486419568"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0486419568"
 ---
 
 This is a short editorial reading guide, not a complete book summary. Source: [the original public-domain text at Project Gutenberg](https://www.gutenberg.org/ebooks/445).

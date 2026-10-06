@@ -7,6 +7,11 @@ readIf: "You keep postponing a difficult conversation until you feel calm and ce
 tags: ["health","psychology","behavior-change","relationships"]
 featured: false
 order: 42
+amazon:
+  asin: "1590305841"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/1590305841"
 ---
 
 Russ Harris’s central argument in *The Happiness Trap* is that people often make suffering worse by treating happiness as a constant pleasant state and treating painful thoughts or feelings as problems that must be solved before life can be lived. The trap is not pleasure, optimism, love, or ease. The trap is the rule that fear, doubt, sadness, shame, anger, or painful memories must disappear before you can act well.

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/collector-theme.css';
 import NewsletterModal from '../components/NewsletterModal.astro';
 import Analytics from '../components/Analytics.astro';
 import { newsletterSignupUrl } from '../lib/newsletter';
@@ -15,6 +16,7 @@ export interface Props {
   robots?: string;
   jsonLd?: object | object[];
   readingMode?: boolean;
+  theme?: 'collector';
 }
 
 const {
@@ -27,10 +29,11 @@ const {
   robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
   jsonLd,
   readingMode = false,
+  theme = 'collector',
 } = Astro.props;
 const site = 'https://answerwithbooks.com';
 const canonical = new URL(path, site).href;
-const fullTitle = path === '/' ? title : `${title} — Answer with Books`;
+const fullTitle = path === '/' ? title : `${title} | Answer with Books`;
 const imageUrl = new URL(image, site).href;
 const structuredData = Array.isArray(jsonLd)
   ? { '@context': 'https://schema.org', '@graph': jsonLd }
@@ -66,7 +69,7 @@ const current = Astro.url.pathname;
     <meta name="robots" content={robots} />
     <meta name="googlebot" content={robots} />
     {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
-    <meta name="theme-color" content="#f5f5f5" />
+    <meta name="theme-color" content="#f4f1e9" />
     <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -99,7 +102,7 @@ const current = Astro.url.pathname;
     {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
     <Analytics ids={gaMeasurementIds} />
   </head>
-  <body class="min-h-screen flex flex-col bg-paper text-ink">
+  <body class="min-h-screen flex flex-col bg-paper text-ink" data-theme={theme}>
     {!readingMode && <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
       <div class="awb-header mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
         <a href="/" class="awb-brand" aria-label="Answer with Books home">Answer with Books</a>
@@ -140,7 +143,7 @@ const current = Astro.url.pathname;
     {!readingMode && <footer class="border-t border-line mt-20 bg-paper">
       <div class="mx-auto max-w-6xl px-5 py-10 text-sm text-soft">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <p>Answer with Books — practical AI for non-technical teams.</p>
+          <p>Good books. Useful skills. Better work.</p>
           <a href="/newsletter/" class="underline underline-offset-4 hover:text-ink">Newsletter</a>
           <a href="/terms/" class="underline underline-offset-4 hover:text-ink">Terms</a>
           <a href="/privacy/" class="underline underline-offset-4 hover:text-ink">Privacy Policy</a>

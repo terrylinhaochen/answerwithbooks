@@ -7,6 +7,11 @@ readIf: "You keep trying to change by motivation alone and then blaming yourself
 tags: ["habits", "behavior-change", "productivity"]
 featured: false
 order: 12
+amazon:
+  asin: "0735211299"
+  edition: "Hardcover"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0735211299"
 ---
 
 Lasting behavior change is rarely won in the moment when a person decides to be different. It is won earlier, when the environment makes one action obvious and another inconvenient, and later, when repeating the action changes what the person believes about themselves. *Atomic Habits* is a book about designing that system.

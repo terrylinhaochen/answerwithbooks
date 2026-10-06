@@ -1,6 +1,6 @@
 ---
 question: "How to negotiate salary without guessing your worth"
-description: "Negotiate compensation from a relevant market range, role scope, alternatives, and package constraints—not from current salary, anxiety, or a claim about personal worth."
+description: "Negotiate compensation from a relevant market range, role scope, alternatives, and package constraints rather than from current salary, anxiety, or a claim about personal worth."
 books: ["never-split-the-difference", "thinking-fast-and-slow"]
 date: 2026-06-22
 featured: false

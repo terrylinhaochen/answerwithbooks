@@ -2,11 +2,16 @@
 title: "Thinking, Fast and Slow"
 author: "Daniel Kahneman"
 year: 2011
-oneLiner: "A map of the two systems that run your mind — and the predictable ways the fast one fools you."
-readIf: "You make judgments under uncertainty for a living — hiring, investing, forecasting, designing — and want to know where your intuition is trustworthy and where it is confidently wrong."
+oneLiner: "A map of the two systems that run your mind and the predictable ways the fast one fools you."
+readIf: "You make hiring, investing, forecasting, or design decisions under uncertainty and want to know where intuition is trustworthy and where it is confidently wrong."
 tags: ["decision-making", "psychology", "judgment"]
 featured: true
 order: 2
+amazon:
+  asin: "0374533555"
+  edition: "Paperback"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0374533555"
 ---
 
 ## What the book is about

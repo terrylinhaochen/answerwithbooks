@@ -103,7 +103,7 @@ const { contentType, contentSlug, contentTitle } = Astro.props;
         submit.disabled = !error;
       }
       if (status) {
-        status.textContent = error ? 'We couldn’t send that. Please try again.' : 'Thank you — this helps improve the shelf.';
+        status.textContent = error ? 'We couldn’t send that. Please try again.' : 'Thank you. This helps improve the shelf.';
         status.classList.remove('hidden');
       }
     });

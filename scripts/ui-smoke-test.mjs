@@ -80,7 +80,7 @@ try {
   );
 
   await context.close();
-  console.log('UI smoke test passed: additive workplace guides, original Skills page, speed-reader matching, skills install, book personalization handoff, legacy redirect, mobile nav, carousel, filters, upload sign-in guard, content feedback, bookmark removal, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
+  console.log('UI smoke test passed: additive workplace guides, book-focused Skills page, speed-reader matching, book skill handoff, book personalization handoff, legacy redirect, mobile nav, carousel, filters, upload sign-in guard, content feedback, bookmark removal, onboarding, signup, profile sync, login, email-link callback, signout, content mapping, and community collection verified.');
 } finally {
   if (browser) await browser.close();
   server.closeAllConnections();
@@ -94,11 +94,15 @@ async function testHomeInteractions(page) {
   await page.locator('[data-carousel-slide]:visible [data-carousel-dot="1"]').click();
   await assertVisibleText(page, '[data-carousel-slide]:visible', 'How to tell whether to pivot or keep going');
 
-  await page.locator('[data-copy-install]').scrollIntoViewIfNeeded();
-  await page.locator('[data-copy-install]').click();
-  await expectText(page.locator('[data-copy-install]'), /Copied/);
-  const copied = await page.evaluate(() => navigator.clipboard.readText());
-  assert.equal(copied, 'npx answer-with-books install --skill --api');
+  assert.equal(await page.locator('#install a, #install button').count(),1);
+  assert.equal((await page.locator('#install a').innerText()).replace(/\s+/g,' '),'Explore skills ↗');
+  await page.locator('[data-pick-book="0"]').focus();await page.keyboard.press('Enter');
+  await page.locator('[data-detail-copy]').click();
+  await expectText(page.locator('[data-detail-copy-status]'),/Copied/);
+  const copied=await page.evaluate(()=>navigator.clipboard.readText());
+  assert.match(copied,/BEGIN BOOK ARTIFACT/);assert.match(copied,/MY TASK/);assert.match(copied,/customer interview/);
+  await page.keyboard.press('Escape');
+
 }
 
 async function testFilters(page) {
@@ -140,8 +144,8 @@ async function testBookRequest(page) {
   await page.goto('/books/',{waitUntil:'domcontentloaded'});
   await page.locator('[data-open-book-request]').click();
   assert.equal(await page.getByText('Is this the right book?',{exact:true}).count(),0);
-  await page.getByLabel('Book file').setInputFiles({name:'example.txt',mimeType:'text/plain',buffer:Buffer.from('A full source file. '.repeat(20))});
-  await page.getByRole('button',{name:'Create book & skill'}).click();
+  await page.getByLabel('Source file').setInputFiles({name:'example.txt',mimeType:'text/plain',buffer:Buffer.from('A full source file. '.repeat(20))});
+  await page.getByRole('button',{name:'Create skill & book'}).click();
   await assertVisibleText(page,'[data-upload-status]','Sign in first');
   await page.locator('[data-close-book-upload]').click();
 }
@@ -177,15 +181,12 @@ async function testWorkplaceGuides(page) {
   await page.goto('/tools/');
   await page.waitForURL('**/tools/');
   assert.equal((await page.locator('nav [aria-current="page"]').textContent()).trim(), 'Skills');
-  assert.equal(await page.locator('h1').textContent(), 'Browse and hire skills on demand.');
+  assert.match(await page.locator('h1').textContent(), /Give your agent/);
   assert.equal(await page.locator('[data-prompt-builder]').count(), 0);
-  await page.locator('#install [data-open-setup]').click();
-  await page.locator('#tools-setup input[value="codex"]').check();
-  await page.locator('#tools-setup [data-setup-next]').click();
-  await page.locator('[data-copy-install]').click();
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), `Set up ${new URL(page.url()).origin}/tools/awb-tools/SKILL.md`);
+  await page.locator('[data-example-panel="0"] [data-copy-example]').click();
+  assert.match(await page.evaluate(() => navigator.clipboard.readText()), /BEGIN BOOK ARTIFACT/);
   await page.goto('/guides/');
-  assert.equal(await page.locator('h1').textContent(), 'Curated guides to help you get started.');
+  assert.equal(await page.locator('h1').textContent(), 'Good ideas, in practice.');
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
   assert.equal(await page.locator('[data-capability-guide]').count(), 3);
   assert.equal(await page.locator('[data-filter-item]:visible').count(), 6);
@@ -203,48 +204,22 @@ async function testWorkplaceGuides(page) {
 }
 
 async function testSkills(page) {
-  await page.goto('/ask/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/skills/', {waitUntil:'domcontentloaded'});
   await page.waitForURL('**/tools/');
-  await assertVisibleText(page, 'h1', 'Browse and hire skills on demand.');
-  assert.equal(await page.locator('[data-tool-capabilities] article').count(), 5);
-  assert.equal(await page.locator('[data-agent-task-form]').count(), 0);
-  await page.locator('#install [data-open-setup]').click();
-  const setup = page.locator('#tools-setup');
-  assert.equal(await setup.isVisible(), true);
-  assert.equal(await setup.locator('[data-setup-next]').isDisabled(), true);
-  await setup.locator('input[value="codex"]').check();
-  await setup.locator('[data-setup-next]').click();
-  await expectText(setup.locator('[data-selected-agent]'), /Codex/);
-  await setup.locator('[data-copy-install]').click();
-  await expectText(setup.locator('[data-install-status]'), /Copied/);
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), `Set up ${new URL(page.url()).origin}/tools/awb-tools/SKILL.md`);
-  await setup.locator('[data-setup-next]').click();
-  assert.equal(await setup.locator('[data-setup-next]').isDisabled(), true);
-  await expectText(setup.locator('[data-setup-title]'), /Create your account/);
-  assert.equal(await setup.locator('[data-connection-ack]').count(), 0);
-  assert.equal(await setup.locator('[data-tools-signup-form]').isVisible(), true);
-  await setup.locator('[data-tools-auth-mode="login"]').click();
-  assert.equal(await setup.locator('[data-tools-signup-form]').isVisible(), false);
-  assert.equal(await setup.locator('[data-tools-login-form]').isVisible(), true);
-  await setup.locator('[data-tools-auth-mode="signup"]').click();
-  assert.equal(await setup.locator('[data-tools-signup-form]').isVisible(), true);
-  assert.equal(await setup.locator('[data-tools-login-form]').isVisible(), false);
-  assert.equal(await setup.locator('[data-try-tool]').count(), 5);
-  await page.keyboard.press('Escape');
-  assert.equal(await setup.isVisible(), false);
-
-  for (const id of ['github-leads', 'x-discourse', 'tinker-audience', 'book-answers', 'product-feedback-analysis']) {
-    await page.locator(`[data-open-tool="${id}"]`).click();
-    const detail = page.locator(`[data-tool-detail="${id}"]`);
-    assert.equal(await detail.isVisible(), true);
-    assert.equal(await detail.getByRole('tab').count(), 0);
-    assert.equal(await detail.getByText('What you get', { exact: true }).isVisible(), true);
-    assert.equal(await detail.getByRole('button', { name: 'Connect your agent' }).count(), 1);
-    assert.doesNotMatch(await detail.innerText(), /POST \/v1|curl |npm run|Endpoint Detail/);
-    await page.keyboard.press('Escape');
-    assert.equal(await detail.isVisible(), false);
-    assert.equal(await page.locator(`[data-open-tool="${id}"]`).evaluate(el => el === document.activeElement), true);
+  await assertVisibleText(page, 'h1', 'Give your agent');
+  assert.equal(await page.locator('[data-capability]').count(),0);
+  for (let index=0;index<6;index++) {
+    await page.locator(`[data-example-tab="${index}"]`).click();
+    const panel=page.locator(`[data-example-panel="${index}"]`);
+    assert.equal(await panel.isVisible(),true);
+    await panel.locator('[data-copy-example]').click();
+    const prompt=await page.evaluate(()=>navigator.clipboard.readText());
+    assert.match(prompt,/BEGIN BOOK ARTIFACT/);assert.match(prompt,/MY TASK/);
+    assert.ok(prompt.length>1000);
   }
+  await page.locator('[data-open-book-request]').first().click();
+  assert.equal(await page.locator('#book-upload-dialog').isVisible(),true);
+  await page.keyboard.press('Escape');
 }
 
 async function testBookPersonalization(page) {

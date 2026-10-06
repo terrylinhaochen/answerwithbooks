@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { publicBookPrompt } from '../lib/public-book-agent';
+interface Props { book: CollectionEntry<'books'>; readingLink?: boolean; }
+const { book, readingLink = false } = Astro.props;
+---
+<div class="copy-book-action" data-public-book-action>
+ <div class="copy-book-actions"><button type="button" class="awb-pill awb-pill-primary" data-copy-public-book aria-label={`Copy ${book.data.title} to agent`}>Copy to agent <span aria-hidden="true">↗</span></button>{readingLink && <a href={`/books/${book.id}/`}>Open the book</a>}</div>
+ <p class="copy-book-status" role="status" data-public-book-status></p>
+ <textarea hidden readonly class="awb-input" rows="7" aria-label={`${book.data.title} agent prompt`} data-public-book-prompt>{publicBookPrompt(book)}</textarea>
+</div>
+<style>
+ .copy-book-action { position: relative; z-index: 2; margin-top: 20px; }
+ .copy-book-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 13px 18px; }
+ .copy-book-actions button { gap: 12px; cursor: pointer; white-space: nowrap; }
+ .copy-book-actions a { font-size: 11px; text-underline-offset: 4px; }
+ .copy-book-actions a:hover { text-decoration: underline; }
+ .copy-book-status { font-size: 11px; line-height: 1.65; color: var(--color-soft); }
+ .copy-book-status:not(:empty) { margin-top: 10px; }
+ textarea:not([hidden]) { margin-top: 12px; }
+</style>
+<script>
+ for (const root of document.querySelectorAll('[data-public-book-action]')) {
+  const button=root.querySelector<HTMLButtonElement>('[data-copy-public-book]')!;
+  const prompt=root.querySelector<HTMLTextAreaElement>('[data-public-book-prompt]')!;
+  const status=root.querySelector('[data-public-book-status]')!;
+  button.addEventListener('click',async () => {
+   try { await navigator.clipboard.writeText(prompt.value); status.textContent='Copied. Paste into your agent to start the task.'; }
+   catch { prompt.hidden=false;prompt.focus();prompt.select();status.textContent='Select and copy the prompt below, then paste it into your agent.'; }
+  });
+ }
+</script>

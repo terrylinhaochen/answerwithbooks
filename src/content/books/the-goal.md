@@ -7,6 +7,11 @@ readIf: "You manage a plant or operations team where departments look busy but c
 tags: ["business","operations","systems","management"]
 featured: false
 order: 25
+amazon:
+  asin: "0884271951"
+  edition: "Paperback, 40th anniversary edition"
+  verifiedAt: "2026-10-05"
+  source: "https://www.amazon.com/dp/0884271951"
 ---
 
 *The Goal* argues that an organization should be managed as a system, not as a collection of locally efficient departments. In the book’s manufacturing setting, the goal of the company is to make money now and in the future, so a plant is successful only when its decisions help the company generate sales, avoid excess money tied up in inventory, and control the expense of turning materials into sold output. A machine can be busy, a worker can hit an efficiency target, and a department can look productive while the plant still ships late, accumulates work-in-process, consumes cash, and faces closure.

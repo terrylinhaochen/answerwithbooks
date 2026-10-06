@@ -1,0 +1,176 @@
+{
+  "origin": "https://github.com/terrylinhaochen/answerwithbooks",
+  "baseCommit": "c6235735da5a36eb22c78bb0b4d1e556253af3b4",
+  "snapshotDate": "2026-10-05",
+  "note": "Working-tree snapshot before replacing the AWB skills directory. Shared layout includes uncommitted design changes. No environment files or credentials included.",
+  "files": [
+    {
+      "path": "source/docs/SKILLS_IMPLEMENTATION.md",
+      "sha256": "cf6e90b6646b052a4e39b5de5ec63dd46650a3e9996c9eb1c1d2ef7051858535"
+    },
+    {
+      "path": "source/docs/SKILLS_PRODUCT_DESIGN.md",
+      "sha256": "f080344431e4ff5a556aa9417413dfeaa7ab4e5ec032569851bdf20d1d4d0ca1"
+    },
+    {
+      "path": "source/package.json",
+      "sha256": "e50f9b53e41c1ac6873fd3be8810fdbb6aafc1a20b59353751a84accd220d5ab"
+    },
+    {
+      "path": "source/public/tools/awb-tools/SKILL.md",
+      "sha256": "3d567034bcfa7712dc93cff3484126884b523a3d73b57f826cbd1c786694f1bc"
+    },
+    {
+      "path": "source/scripts/test-skills-surface.mjs",
+      "sha256": "0ecb0f4aaf5f06ee367ded69eca850def74a0a248edcc233003b06a559adcd51"
+    },
+    {
+      "path": "source/scripts/test-tool-access-client.mjs",
+      "sha256": "cfe51956ce0f96b6dd96dcaf7c267033e6b40a315d85572aac23fa3873e7253e"
+    },
+    {
+      "path": "source/scripts/test-tool-auth.mjs",
+      "sha256": "4abc8997372baacd002bbe893de0253042ca52be31b4762ff9a53bfe7e22317c"
+    },
+    {
+      "path": "source/scripts/test-tool-catalog.mjs",
+      "sha256": "cadf49eb49ec92aead48b0c0eec6ec9f47f3169ce8fa8e8994152952fed5a790"
+    },
+    {
+      "path": "source/scripts/test-tool-oauth.mjs",
+      "sha256": "bfd3251890c4f0493d5280e16cfdf2e8385ff0bd2dcf8173ebcc5119f4d0cfa8"
+    },
+    {
+      "path": "source/src/components/AgentIcon.astro",
+      "sha256": "51299fc958d5198ed679b32007d0393fe96f14059c4574deb4bcd918706c3daf"
+    },
+    {
+      "path": "source/src/components/Analytics.astro",
+      "sha256": "65a073a63f254a837a72dd39bcdada9e873b136a172a2e77a0534300435692d4"
+    },
+    {
+      "path": "source/src/components/NewsletterEmailForm.astro",
+      "sha256": "f60e8510a7854daea772dbfde5b6e8bf4542d65872c022e19e8c056ea8993e83"
+    },
+    {
+      "path": "source/src/components/NewsletterModal.astro",
+      "sha256": "63e686ad53e3b02d58a4f38db2398f21c273bbb234066ea117e702febac0ffa2"
+    },
+    {
+      "path": "source/src/components/SkillTool.astro",
+      "sha256": "4977c2404a373319ffc95580b6cca093374ffd97285ff5685cffe5722ca75314"
+    },
+    {
+      "path": "source/src/components/ToolAccountAccess.astro",
+      "sha256": "eaed0f04a9acd0147863b3b64c26367a1e2596ac3fbc1935edd08e0714477f28"
+    },
+    {
+      "path": "source/src/components/ToolAuthForm.astro",
+      "sha256": "685aac5f8c82a0448582f68c82aa35289e790433f82e25a439a8858b674c4427"
+    },
+    {
+      "path": "source/src/components/ToolCommand.astro",
+      "sha256": "f8105487e7bba0ed7e0cb68ab027ae1d655b2dac3626973a1ca9b15f76dae24d"
+    },
+    {
+      "path": "source/src/components/ToolDialogs.astro",
+      "sha256": "c4167b7744bd90629bc3c64684f8bb09735cfc92562b7c2eb842106d7d40c0f2"
+    },
+    {
+      "path": "source/src/data/skills.json",
+      "sha256": "07f5d9e8192419226aa09a38616ad539d8638cedf8a2776745434f28231e16ad"
+    },
+    {
+      "path": "source/src/layouts/Base.astro",
+      "sha256": "72b6678dc5e742916468a7512adeac7e2a54b910a5a81e8e9ba1a6c7b2196c57"
+    },
+    {
+      "path": "source/src/lib/account-connection.mjs",
+      "sha256": "f6e3c07bbb0380d10c2ae57c9997557e6e83fd945e63fd126d0c1770b82bab15"
+    },
+    {
+      "path": "source/src/lib/auth-callback.ts",
+      "sha256": "b3ff581e324ddc77402496ed096640a124e86b6d1a1bd6141f7baae0501d3872"
+    },
+    {
+      "path": "source/src/lib/copy-text.mjs",
+      "sha256": "4ece1e163d56111b6d2ec4d31dfe8525d905040d005802f5e5454621cd27b3d7"
+    },
+    {
+      "path": "source/src/lib/newsletter-flow.ts",
+      "sha256": "5f7423feb1ad1c989130dc7919d213b921feefe84e68c2bb52cb3a818dfdd211"
+    },
+    {
+      "path": "source/src/lib/newsletter.ts",
+      "sha256": "01793ff157fe6f6aaff6ce991aeecf5d6a39ec4a07345010ec1b6666e673177f"
+    },
+    {
+      "path": "source/src/lib/signup-session.ts",
+      "sha256": "e8229a50f3ab93e420e6db82e2b3e8d1c381fc206c12813ce675d89fe5eeea0e"
+    },
+    {
+      "path": "source/src/lib/skill-discovery.mjs",
+      "sha256": "3e9ce211c162d30f0a7801ed5adf0335c52887c840c3cda9d63746b1cf180ce8"
+    },
+    {
+      "path": "source/src/lib/skills-page.ts",
+      "sha256": "099562a1596010483497de59185892a66b2fbce8bb552497aa1023f8066331a6"
+    },
+    {
+      "path": "source/src/lib/supabase.ts",
+      "sha256": "f0e243f789ca7b4d7127499c0243dd11391b1839b039af36b7360aaa232688b7"
+    },
+    {
+      "path": "source/src/lib/tool-access-client.mjs",
+      "sha256": "81e4c30e8b9aafa3fb59ba3ceea7c02ba5f496e5c2f73b06ea9e20fb99b95e79"
+    },
+    {
+      "path": "source/src/lib/tool-account-access.ts",
+      "sha256": "51398a8916fed41bcb270b7c0e1e998b3ee189fa9390abcd60fcacf79301a187"
+    },
+    {
+      "path": "source/src/lib/tool-auth-client.mjs",
+      "sha256": "2c18690576968b365b6f37e1b59ea5aaee4de5a763e8920e913e2671ec7bf09c"
+    },
+    {
+      "path": "source/src/lib/tool-auth-form.ts",
+      "sha256": "8fb289b31887c5466e3e42806b24f3390db1bc4e3c2da6c737f86789f55e7783"
+    },
+    {
+      "path": "source/src/lib/tool-catalog.mjs",
+      "sha256": "85a10cfb02897866365ec3fa475212d774d1e4db1b1e4ac2155711f79b8f523f"
+    },
+    {
+      "path": "source/src/lib/tool-newsletter.ts",
+      "sha256": "9bf6bc0778c91a292a79c576673ad69159c9fa6178fd187c88e9880eb3fdeb04"
+    },
+    {
+      "path": "source/src/lib/tool-oauth.mjs",
+      "sha256": "545f4831ae412956623713224f811e5fe26d36e0cb6b9b3278c25dfee1369bfc"
+    },
+    {
+      "path": "source/src/lib/tool-skill-package.mjs",
+      "sha256": "4d4f9d0e70bc94f70c6b0dcc3f7e0a42a401c49fafc2ecdfec6ae7c1f8fc3444"
+    },
+    {
+      "path": "source/src/lib/tools-auth.mjs",
+      "sha256": "18492a98f5cad098c6ff7feecf504e533357b06cee09d9e548e26496d191e383"
+    },
+    {
+      "path": "source/src/lib/tools-page.ts",
+      "sha256": "a70cab0b8087c260db78e7cfc9bd855f67d8628b000fbc0c13a80f9a64fd914b"
+    },
+    {
+      "path": "source/src/pages/tools/awb-tools.zip.ts",
+      "sha256": "7da2595fa8afabf70a778c1c055ed11ed7eb847a6c320f4773473a0248065794"
+    },
+    {
+      "path": "source/src/pages/tools.astro",
+      "sha256": "670292248a72b2e13f1d21ccc5d01ee5c70cb75d18ba443a7053018e4e4cc6ca"
+    },
+    {
+      "path": "source/src/styles/global.css",
+      "sha256": "40f1947bb40b02cafd91b62ac5c4dd97acc7b56f97baabaadbf0aebb13c64c42"
+    }
+  ]
+}

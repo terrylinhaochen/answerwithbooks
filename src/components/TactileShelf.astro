@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import BookJacket from './BookJacket.astro';
+import ShelfPersonalizer from './ShelfPersonalizer.astro';
+import { bookPalettes } from '../lib/book-palettes';
+import { publicBookPrompt, publicBookTask } from '../lib/public-book-agent';
+import '../styles/tactile-shelf.css';
+interface Props { showControls?: boolean; }
+const { showControls = false } = Astro.props;
+const books = await getCollection('books');
+const picks = [
+ {slug:'the-mom-test',color:'#077f8e',label:'Better questions',angle:-7,lift:10,question:'What do people actually need?'},
+ {slug:'thinking-fast-and-slow',color:'#8b1745',label:'Clearer thinking',angle:4,lift:-8,question:'Can I trust my first instinct?'},
+ {slug:'designing-your-life',color:'#224eb8',label:'New possibilities',angle:-3,lift:-20,question:'What could my next chapter look like?'},
+ {slug:'atomic-habits',color:'#16805c',label:'Small beginnings',angle:5,lift:-5,question:'How do I make a change that lasts?'},
+ {slug:'deep-work',color:'#132e79',label:'Room to focus',angle:-5,lift:10,question:'What deserves my undivided attention?'},
+].map((pick,index)=>{ const book=books.find(book=>book.id===pick.slug)!; return {...pick,index,...book.data,task:publicBookTask(book),prompt:publicBookPrompt(book)}; });
+const catalog = books.map(book => ({ slug: book.id, title: book.data.title, author: book.data.author, year: book.data.year, oneLiner: book.data.oneLiner, label: picks.find(pick => pick.slug === book.id)?.label ?? book.data.tags[0]?.replaceAll('-', ' ') ?? 'Your choice', color: picks.find(pick => pick.slug === book.id)?.color ?? bookPalettes[book.id]?.cover ?? '#304c44', task: publicBookTask(book) }));
+---
+<div class="shelf-lab" data-shelf-lab data-direction={showControls ? "room" : "table"} data-shelf-production={!showControls || undefined}>
+ {showControls && <script is:inline>
+  // Set the requested layout before its books paint, even on a slow connection.
+  document.currentScript.parentElement.dataset.direction =
+   new URLSearchParams(location.search).get('direction') === 'table' ? 'table' : 'room';
+ </script>}
+ {showControls && <nav class="lab-controls" aria-label="Choose a shelf prototype"><span class="lab-label">A new perspective <span> / shelf studies</span></span><div class="lab-switch"><button type="button" data-direction-button="room" aria-pressed="true"><span>01</span> The reading room</button><button type="button" data-direction-button="table" aria-pressed="false"><span>02</span> The collector’s table</button></div></nav>}
+ <section class="tactile-hero" aria-label="Interactive book library">
+  <div class="tactile-inner">
+   <div class="collection-line"><span><i></i> <span data-shelf-eyebrow>THE BOOK &amp; SKILL LIBRARY</span></span><button type="button" class="shelf-personalize" data-personalize-shelf aria-haspopup="dialog" aria-controls="shelf-personalizer"><span data-personalize-label>Personalize</span> <span aria-hidden="true">＋</span></button></div>
+   <div class="tactile-heading"><div class="shelf-title"><h2><span data-public-shelf-heading><span data-room-copy>Good books.<br /><em>Fresh perspective.</em></span><span data-table-copy>Put good books<br /><em>to work.</em></span></span><span data-personal-shelf-heading hidden><span data-shelf-owner>Your</span> <em>shelf</em></span></h2><time data-shelf-date hidden></time></div><div class="heading-aside"><p data-shelf-description>Read the ideas.<br />Give your agent a method to work with.</p><span class="handwritten" data-room-copy>Take one off the shelf</span><span class="handwritten" data-table-copy>A little room to play.</span></div></div>
+   <div class="book-stage" data-book-stage>
+    <div class="room-light" aria-hidden="true"></div>
+    <div class="book-arrangement">
+     {picks.map((book,index)=><div class="book-place" data-book-place style={`--i:${index};--rest-angle:${book.angle}deg;--rest-lift:${book.lift}px;--cloth:${book.color}`}>
+      <button class="pick-book" type="button" data-pick-book={index} aria-label={`Pick up ${book.title}`} aria-haspopup="dialog" aria-controls="shelf-book-detail">
+       <BookJacket {...book} />
+      </button>
+      <span class="book-caption"><span>{String(index+1).padStart(2,'0')}</span>{book.label}</span>
+     </div>)}
+    </div>
+    <div class="shelf-ledge" aria-hidden="true"></div>
+    <span class="table-stamp" aria-hidden="true">A collection of<br /><em>possible beginnings.</em></span>
+   </div>
+   <div class="tactile-bottom"><p><span class="interaction-mark" aria-hidden="true">✳</span><span data-room-copy>Follow your curiosity. Click a cover to take a closer look.</span><span data-table-copy>Drag to rearrange. Click to pick one up.</span></p><button class="reset-books" data-reset-books type="button">Reset the table <span aria-hidden="true">↺</span></button><a class="shelf-browse" href="/books/">Explore the library <span aria-hidden="true">↗</span></a></div>
+  </div>
+ </section>
+ <dialog id="shelf-book-detail" class="book-detail" aria-labelledby="shelf-detail-title">
+  <div class="detail-shell">
+   <button type="button" class="detail-close" data-close-book aria-label="Put book back on shelf"><span aria-hidden="true">←</span> Back to the shelf <span class="escape-key">Esc</span></button>
+   <div class="detail-grid">
+    <div class="detail-object" data-detail-object>
+     {picks.map(book=><div class="detail-jacket" data-detail-jacket={book.index} hidden><BookJacket {...book}/></div>)}
+     <span class="detail-shadow" aria-hidden="true"></span><p>One book. A method for your next task.</p>
+    </div>
+    <div class="detail-copy"><p class="detail-eyebrow" data-detail-category></p><h2 id="shelf-detail-title"></h2><p class="detail-author" data-detail-author></p><div class="detail-rule"></div><p class="detail-task-label">PUT IT TO WORK</p><p class="detail-question" data-detail-question></p><p class="detail-description" data-detail-description></p><div class="detail-actions"><button type="button" data-detail-copy class="detail-link">Copy to agent <span aria-hidden="true">↗</span></button><a data-detail-link class="detail-reading-link" href="/books/">Open the book</a></div><p class="detail-footnote" role="status" data-detail-copy-status>Copies the book’s digest and this task. Paste into your agent.</p><textarea hidden readonly class="awb-input mt-4" rows="7" aria-label="Book and task prompt" data-detail-prompt></textarea></div>
+   </div>
+   <div class="detail-navigation"><button type="button" data-previous-book aria-label="Previous book">←</button><span data-detail-position></span><button type="button" data-next-book aria-label="Next book">→</button></div>
+  </div>
+ </dialog>
+ <ShelfPersonalizer books={catalog} />
+ {catalog.map(book => <template data-shelf-cover={book.slug}><BookJacket {...book} loading="eager" /></template>)}
+ <script type="application/json" data-shelf-catalog set:html={JSON.stringify(catalog).replace(/</g,'\\u003c')} />
+ <script type="application/json" data-shelf-data set:html={JSON.stringify(picks).replace(/</g,'\\u003c')} />
+</div>
+<script>
+ import '../lib/tactile-shelf';
+</script>
