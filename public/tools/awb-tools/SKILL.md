@@ -1,5 +1,5 @@
 ---
-name: awb-tools
+name: answer-with-books-tools
 description: Use Answer with Books managed skills for evidence-backed GitHub leads, recent X discourse, Tinker/Cookbook audiences, or authorized product feedback analysis. Route book-backed advice to the Answer with Books book skill. Select capabilities in the customer's agent; this is not a general-purpose web-search or outreach tool.
 ---
 
@@ -11,13 +11,13 @@ Answer with Books is a Crowdlisten product. Customers authorize their own accoun
 
 ## Set up
 
-When the user asks to set up this skill, use the current harness's supported skill-installation mechanism. If it supports local skills, save this document as `awb-tools/SKILL.md` in its approved skills location. Do not assume a particular harness path, replace another skill, or claim installation in a hosted chat that cannot install skills.
+When the user asks to set up this skill, use the current harness's supported skill-installation mechanism. If it supports local skills, save this document as `answer-with-books-tools/SKILL.md` in its approved skills location. Do not assume a particular harness path, replace another skill, or claim installation in a hosted chat that cannot install skills.
 
 Configure `CAPABILITY_BASE_URL` and `CAPABILITY_API_KEY` through the harness's secure environment or connection settings. Do not request credentials in chat or embed them in prompts. The platform key authorizes Capability Lab, not a model provider. Provider credentials remain server-side.
 
 The hosted API is `https://crowdlisten-skills-api.vercel.app`. Use this as `CAPABILITY_BASE_URL` unless the user's connection file specifies another authorized deployment. The optional development API is `http://127.0.0.1:4318`, reachable only on the machine running it. The customer's agent needs an HTTP tool. If a connection or key is missing, explain the missing setup; do not simulate a successful connection.
 
-Sign in at the Answer with Books website and open [API keys](https://answerwithbooks.com/api-keys/) or the Tools setup. Approved accounts can create, list, and revoke personal API keys; account signup alone does not grant research access. Copy the full key when it is created: the server retains only its hash and display prefix, so an existing full key cannot be recovered. The user can download `awb-tools.env` and provide its private local path for configuration instead of pasting the key into chat. Read only the two connection values, never execute the file as a script or print the secret, and keep it out of version control. If the bridge is disabled or access is pending, ask the operator to enable or approve access. Do not grant access or create keys merely to install the skill.
+Sign in at the Answer with Books website and open [API keys](https://answerwithbooks.com/api-keys/) or the Tools setup. Approved accounts can create, list, and revoke personal API keys; account signup alone does not grant research access. Copy the full key when it is created: the server retains only its hash and display prefix, so an existing full key cannot be recovered. The user can download `answer-with-books-tools.env` and provide its private local path for configuration instead of pasting the key into chat. Read only the two connection values, never execute the file as a script or print the secret, and keep it out of version control. If the bridge is disabled or access is pending, ask the operator to enable or approve access. Do not grant access or create keys merely to install the skill.
 
 Verify setup using authenticated `GET /v1/capabilities`. Report the capabilities actually returned. A configured provider means credentials are present, not proof that live execution succeeds. Do not run paid research merely to test installation.
 

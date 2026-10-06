@@ -53,7 +53,7 @@ try {
   for(const width of [600,390]) {
    await page.setViewportSize({width,height:950});
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
-   const box=await page.getByRole('link',{name:name==='confirmation'?'Verify my email':'Verify and sign in to AWB',exact:true}).boundingBox();
+   const box=await page.getByRole('link',{name:name==='confirmation'?'Verify my email':'Sign in',exact:true}).boundingBox();
    assert.ok(Math.abs(box.x+box.width/2-width/2)<3,'Email button centered');
    await page.screenshot({path:`/tmp/awb-email-${name}-${width}.png`});
   }

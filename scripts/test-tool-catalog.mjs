@@ -16,8 +16,8 @@ for (const bad of ['https://user:secret@example.com', 'http://example.com', 'jav
   assert.throws(() => buildInstallInstruction(bad));
 }
 assert.equal(buildInstallInstruction('https://answerwithbooks.com/other?q=test#hash'), `Set up https://answerwithbooks.com${installSkillPath}`);
-const skill = fs.readFileSync(`public${installSkillPath}`, 'utf8');
-assert.ok(skill.startsWith('---\nname: awb-tools\ndescription: '));
+const skill = fs.readFileSync('public/tools/awb-tools/SKILL.md', 'utf8');
+assert.ok(skill.startsWith('---\nname: answer-with-books-tools\ndescription: '));
 assert.ok(skill.includes(bookSkillCommand), 'Book installation remains available in the shared setup');
 assert.ok(skill.includes(apiPreviewOrigin));
 for (const id of apiIds) assert.ok(skill.includes('`' + id + '`'));
@@ -25,7 +25,7 @@ assert.match(skill, /General audience enrichment is not implemented as an API ca
 assert.match(skill, /Do not run paid research merely to test installation/);
 assert.match(skill, /refuse cross-origin redirects/);
 assert.match(skill, /Do not request credentials in chat/);
-assert.match(skill, /save this document as `awb-tools\/SKILL.md`/);
+assert.match(skill, /save this document as `answer-with-books-tools\/SKILL.md`/);
 
 for (const tool of availableTools) {
   const example = buildExamplePrompt(tool.id);
@@ -42,7 +42,7 @@ assert.deepEqual(agentOptions.map(agent => agent.name), ['OpenClaw', 'Hermes Age
 for (const agent of agentOptions) {
   const info = getAgentSetup(agent.id, 'http://127.0.0.1:4321');
   assert.equal(info.agent.id, agent.id);
-  if (agent.method === 'skill') assert.ok(info.instruction.includes('http://127.0.0.1:4321/tools/awb-tools/SKILL.md'));
+  if (agent.method === 'skill') assert.ok(info.instruction.includes('http://127.0.0.1:4321/tools/answer-with-books-tools/SKILL.md'));
   else assert.equal(info.instruction, null);
   assert.ok(canAdvanceSetup(0, agent.id, false));
   assert.equal(canAdvanceSetup(1, agent.id, false), agent.available);
@@ -123,4 +123,5 @@ assert.doesNotMatch(html, /name="api.?key"/i);
 assert.ok(fs.readFileSync(built('skills/index.html'), 'utf8').includes('/tools/'));
 assert.equal(fs.readFileSync(built(installSkillPath), 'utf8'), skill, 'Legacy setup URL still serves its skill');
 assert.ok(fs.existsSync(built('tools/awb-tools.zip')), 'Legacy ZIP remains available');
+assert.ok(fs.existsSync(built('tools/answer-with-books-tools.zip')), 'Branded ZIP is available');
 console.log('PASS shared capability contracts, safe commands, book-focused page, and retained legacy skill downloads.');

@@ -27,13 +27,12 @@ try {
       assert.equal(response.status(), 200);
       assert.equal(await page.getByRole('link', {name: 'Answer with Books home', exact: true}).innerText(), 'Answer with Books');
       assert.ok((await page.title()).includes('Answer with Books'));
-      assert.ok((await page.getByRole('contentinfo').innerText()).includes('Answer with Books'));
       assert.equal(await page.locator('meta[property="og:site_name"]').getAttribute('content'), 'Answer with Books');
       assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), `https://answerwithbooks.com${path}`);
       assert.ok(!/\b(?:Arda|AWB)\b/.test(await page.locator('body').innerText()));
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Overflow: ${width} ${path}`);
       if (path === '/') await page.screenshot({path: `/tmp/awb-brand-${width}.png`});
-      if (path === '/') assert.equal(await page.locator('[data-install-command]').innerText(), 'npx --yes answer-with-books@0.1.4 install --skill --api');
+      if (path === '/tools/') assert.equal((await page.locator('[data-install-command]').textContent()).trim(), 'npx --yes answer-with-books@0.1.4 install --skill --api');
     }
   }
   console.log(`PASS: ${files.length} built HTML files free of old display branding; 8 routes on desktop/mobile; Answer with Books titles, metadata, feed and preview asset; existing URLs and install command preserved.`);

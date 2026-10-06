@@ -1,6 +1,6 @@
 import skills from '../data/skills.json' with { type: 'json' };
 export const bookSkillCommand = 'npx --yes answer-with-books@0.1.4 install --skill --api';
-export const installSkillPath = '/tools/awb-tools/SKILL.md';
+export const installSkillPath = '/tools/answer-with-books-tools/SKILL.md';
 export const apiPreviewOrigin = 'http://127.0.0.1:4318';
 
 export const availableTools = skills;

@@ -1,6 +1,6 @@
 // A single stored ZIP entry, without another runtime/build dependency.
 export function packageToolSkill(content) {
-  const name = Buffer.from('awb-tools/SKILL.md');
+  const name = Buffer.from('answer-with-books-tools/SKILL.md');
   const data = Buffer.from(content, 'utf8');
   let crc = 0xffffffff;
   for (const byte of data) {

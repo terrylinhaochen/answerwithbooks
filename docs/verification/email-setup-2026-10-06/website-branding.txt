@@ -1,0 +1,1 @@
+PASS: 122 built HTML files free of old display branding; 8 routes on desktop/mobile; Answer with Books titles, metadata, feed and preview asset; existing URLs and install command preserved.

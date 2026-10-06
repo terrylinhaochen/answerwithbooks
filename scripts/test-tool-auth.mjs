@@ -33,10 +33,10 @@ for (const auth of [{ signUp: async () => ({ error: { status: 429 } }) }, { sign
 const skill = readFileSync('public/tools/awb-tools/SKILL.md', 'utf8');
 const zip = packageToolSkill(skill);
 // Validate with an independent ZIP reader in memory: no cache or artifact writes.
-const checked = spawnSync('/usr/bin/python3', ['-c', 'import io,sys,zipfile,json; z=zipfile.ZipFile(io.BytesIO(sys.stdin.buffer.read())); print(json.dumps({"names":z.namelist(),"content":z.read("awb-tools/SKILL.md").decode(),"bad":z.testzip()}))'], { input: zip, encoding: 'utf8' });
+const checked = spawnSync('/usr/bin/python3', ['-c', 'import io,sys,zipfile,json; z=zipfile.ZipFile(io.BytesIO(sys.stdin.buffer.read())); print(json.dumps({"names":z.namelist(),"content":z.read("answer-with-books-tools/SKILL.md").decode(),"bad":z.testzip()}))'], { input: zip, encoding: 'utf8' });
 assert.equal(checked.status, 0, checked.stderr);
 const archive = JSON.parse(checked.stdout);
-assert.deepEqual(archive.names, ['awb-tools/SKILL.md']); assert.equal(archive.content, skill); assert.equal(archive.bad, null);
+assert.deepEqual(archive.names, ['answer-with-books-tools/SKILL.md']); assert.equal(archive.content, skill); assert.equal(archive.bad, null);
 assert.match(grokSkillSetup(skill), /Do not run a paid research task/);
 assert.ok(grokSkillSetup(skill).endsWith(skill));
 console.log(JSON.stringify({ passed: true, signupValidation: true, authRequestAndMetadata: true, partialFailure: true, zipIndependentlyValidated: true, liveAccountsCreated: 0 }));

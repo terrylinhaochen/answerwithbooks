@@ -187,7 +187,7 @@ export function setupToolAccountAccess(root: HTMLElement) {
   find('[data-key-download]').addEventListener('click', () => {
     if (!secret || !origin) return;
     const url = URL.createObjectURL(new Blob([`# Keep private. Do not commit or paste into chat.\nCAPABILITY_BASE_URL=${origin}\nCAPABILITY_API_KEY=${secret}\n`], { type: 'text/plain' }));
-    const link = document.createElement('a'); link.href = url; link.download = 'awb-tools.env'; root.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const link = document.createElement('a'); link.href = url; link.download = 'answer-with-books-tools.env'; root.append(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     keyStatus.textContent = 'Connection file downloaded. Keep it private and load it into your agent’s secure environment.';
   });
   find('[data-key-check]').addEventListener('click', async () => {
