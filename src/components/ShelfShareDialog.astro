@@ -1,0 +1,19 @@
+---
+import '../styles/shelf-sharing.css';
+---
+<dialog class="shelf-share-dialog" data-shelf-share-dialog aria-labelledby="shelf-share-title">
+ <header><h2 id="shelf-share-title">Good books travel.</h2><button type="button" data-close-shelf-share aria-label="Close sharing">×</button></header>
+ <p class="shelf-share-intro">Share these books and their agent tasks.</p>
+ <div class="shelf-share-covers" data-shelf-share-covers role="group" aria-label="Books in this shared shelf"></div>
+ <img class="shelf-share-image-preview" data-shelf-image-preview hidden alt="Share card with your selected books" width="2400" height="1500" />
+ <label for="shelf-share-url">Your shelf link</label>
+ <div class="shelf-share-link-row"><input id="shelf-share-url" data-shelf-share-url type="url" readonly spellcheck="false" /><button type="button" class="shelf-copy-link" data-copy-shelf-link>Copy link</button></div>
+ <p class="shelf-share-status" data-shelf-share-status role="status"></p>
+ <div class="shelf-image-actions">
+  <button type="button" class="shelf-image-primary" data-create-shelf-image>Create share image <span aria-hidden="true">↗</span></button>
+  <button type="button" class="shelf-image-primary" data-share-shelf-image hidden>Share image <span aria-hidden="true">↗</span></button>
+  <a class="shelf-image-primary" data-download-shelf-image download="answer-with-books-shelf.png" hidden>Download image <span aria-hidden="true">↓</span></a>
+ </div>
+ <p class="shelf-share-status" data-shelf-image-status role="status"></p>
+ <a class="shelf-share-preview" data-shelf-share-preview href="/shelf/" target="_blank" rel="noopener">Open shared shelf <span aria-hidden="true">↗</span></a>
+</dialog>

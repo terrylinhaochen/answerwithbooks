@@ -1,0 +1,16 @@
+.shelf-export-host { position:fixed; left:-20000px; top:0; width:1200px; pointer-events:none; }
+.shelf-export-card { position:relative; left:0; top:0; width:1200px; height:750px; box-sizing:border-box; padding:76px 76px 48px; margin:0; overflow:hidden; isolation:isolate; pointer-events:none; background:#282b29; color:#e8e1ce; font-family:var(--font-sans); }
+.shelf-export-card::before { content:''; position:absolute; inset:0; background:url('/textures/book-paper.svg'); opacity:.22; z-index:-1; }
+.shelf-export-heading { display:flex; align-items:center; justify-content:space-between; gap:40px; }
+.shelf-export-title-group { width:660px; min-width:0; }
+.shelf-export-title { width:100%; margin:0; padding:0; font-family:var(--font-serif); font-size:80px; font-weight:350; line-height:1.05; letter-spacing:-.045em; white-space:nowrap; }
+.shelf-export-title em { font-weight:350; }
+.shelf-export-date { margin:20px 0 0; font-size:17px; line-height:1.5; color:#b0b8a6; }
+.shelf-export-description { flex:none; width:285px; margin:0; font-size:21px; line-height:1.7; color:#c4c9b7; }
+.shelf-export-books { display:flex; justify-content:center; align-items:center; gap:38px; height:390px; padding-top:30px; }
+.shelf-export-book { width:174px; flex:none; perspective:950px; }
+.shelf-export-book .jacket { --book-depth:42px; transform:translateY(var(--lift)) rotateZ(var(--angle)) rotateY(-27deg); }
+.shelf-export-card[data-export-book-count='1'] .shelf-export-book,.shelf-export-card[data-export-book-count='2'] .shelf-export-book { width:210px; }
+.shelf-export-card[data-export-book-count='3'] .shelf-export-book { width:195px; }
+.shelf-export-footer { position:absolute; left:76px; right:76px; bottom:48px; display:flex; justify-content:space-between; align-items:center; gap:24px; font-size:20px; letter-spacing:.01em; color:#d7dcc6; }
+.shelf-export-footer span:last-child { font-size:17px; color:#aeb7a3; }

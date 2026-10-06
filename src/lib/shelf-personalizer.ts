@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { mountShelfSharing } from './shelf-sharing';
 import type { User } from '@supabase/supabase-js';
 
 type CatalogBook = { slug: string; title: string; author: string };
@@ -17,6 +18,11 @@ export function mountShelfPersonalizer({lab, defaults, catalog, applySelection}:
  const status=dialog.querySelector<HTMLElement>('[data-shelf-picker-status]')!;
  const save=dialog.querySelector<HTMLButtonElement>('[data-save-shelf]')!;
  const reset=dialog.querySelector<HTMLButtonElement>('[data-shelf-defaults]')!;
+ const clear=dialog.querySelector<HTMLButtonElement>('[data-clear-shelf]')!;
+ const clearSearch=dialog.querySelector<HTMLButtonElement>('[data-clear-shelf-search]')!;
+ const share=lab.querySelector<HTMLButtonElement>('[data-share-shelf]')!;
+ const shareDraft=dialog.querySelector<HTMLButtonElement>('[data-share-shelf-selection]')!;
+ const sharing=mountShelfSharing(lab,catalog,slug=>lab.querySelector<HTMLTemplateElement>(`[data-shelf-cover="${slug}"]`)?.content.cloneNode(true));
  const options=Array.from(dialog.querySelectorAll<HTMLElement>('[data-shelf-option]'));
  const bySlug=new Map(catalog.map(book=>[book.slug,book]));
  const publicHeading=lab.querySelector<HTMLElement>('[data-public-shelf-heading]')!;
@@ -57,12 +63,14 @@ export function mountShelfPersonalizer({lab, defaults, catalog, applySelection}:
  const validIds=(value: unknown): value is string[]=>Array.isArray(value)&&value.length===5&&new Set(value).size===5&&value.every(id=>typeof id==='string'&&bySlug.has(id));
  function filter(){
   let visible=0;const query=search.value.trim().toLocaleLowerCase();
+  clearSearch.hidden=!search.value;
   options.forEach(option=>{option.hidden=!option.dataset.search!.includes(query);if(!option.hidden)visible++;});
   dialog.querySelector<HTMLElement>('[data-shelf-empty]')!.hidden=visible>0;
  }
  function render(){
   loading.hidden=ready;signin.hidden=!ready||!!userId;form.hidden=!ready||!userId;
   save.disabled=busy||draft.length!==5;save.textContent=busy?'Saving…':'Save my shelf';close.disabled=busy;reset.disabled=busy;search.disabled=busy;
+  clear.disabled=busy||draft.length===0;clearSearch.disabled=busy;share.disabled=!ready||busy;shareDraft.disabled=busy||draft.length===0;
   dialog.querySelector('[data-shelf-count]')!.textContent=`${draft.length} of 5 selected`;
   options.forEach(option=>{const input=option.querySelector<HTMLInputElement>('input')!;input.checked=draft.includes(input.value);input.disabled=busy||(!input.checked&&draft.length>=5);});
   selected.replaceChildren(...draft.map(id=>{
@@ -74,7 +82,7 @@ export function mountShelfPersonalizer({lab, defaults, catalog, applySelection}:
  function show(){draft=[...saved];search.value='';status.textContent='';render();if(!dialog.open){previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();}if(userId)search.focus();}
  function syncUser(user: User|null){
   const wasReady=ready;const changed=userId!==(user?.id||null);userId=user?.id||null;ready=true;
-  if(changed){busy=false;if(dialog.open&&wasReady)dialog.close();search.value='';status.textContent='';}
+  if(changed){sharing.close();busy=false;if(dialog.open&&wasReady)dialog.close();search.value='';status.textContent='';}
   const value=user?.user_metadata?.[preferenceKey];
   const hasSelection=value?.version===1&&validIds(value.books);
   const ids=hasSelection?value.books:defaults;
@@ -89,6 +97,11 @@ export function mountShelfPersonalizer({lab, defaults, catalog, applySelection}:
  dialog.addEventListener('cancel',event=>{if(busy)event.preventDefault();});
  dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;open.focus({preventScroll:true});});
  search.addEventListener('input',filter);
+ clearSearch.addEventListener('click',()=>{search.value='';filter();search.focus();});
+ clear.addEventListener('click',()=>{draft=[];search.value='';status.textContent='';render();search.focus();});
+ const shareContext=()=>({title:personalHeading.hidden?'Your shelf':personalHeading.textContent!.trim().replace(/\s+/g,' '),date:shelfDate.textContent||undefined});
+ share.addEventListener('click',()=>sharing.open(saved,share,shareContext()));
+ shareDraft.addEventListener('click',()=>sharing.open(draft,shareDraft,shareContext()));
  reset.addEventListener('click',()=>{draft=[...defaults];status.textContent='';render();});
  options.forEach(option=>option.querySelector<HTMLInputElement>('input')!.addEventListener('change',event=>{
   const input=event.target as HTMLInputElement;

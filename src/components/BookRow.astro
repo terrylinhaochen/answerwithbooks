@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import BookCover from './BookCover.astro';
-import CopyBookAction from './CopyBookAction.astro';
 
 interface Props {
   book: CollectionEntry<'books'>;
@@ -22,7 +21,6 @@ const { book, compact = false } = Astro.props;
         {book.data.author} · {book.data.year}
       </p>
       <p class={`book-row__copy mt-3 text-soft leading-relaxed ${compact ? 'text-[0.95rem]' : ''}`}>{book.data.oneLiner}</p>
-      <div class="mt-auto"><CopyBookAction book={book} readingLink /></div>
     </div>
   </div>
 </article>

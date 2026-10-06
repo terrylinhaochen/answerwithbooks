@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BookJacket from './BookJacket.astro';
 import ShelfPersonalizer from './ShelfPersonalizer.astro';
+import ShelfShareDialog from './ShelfShareDialog.astro';
 import { bookPalettes } from '../lib/book-palettes';
 import { publicBookPrompt, publicBookTask } from '../lib/public-book-agent';
 import '../styles/tactile-shelf.css';
@@ -26,7 +27,7 @@ const catalog = books.map(book => ({ slug: book.id, title: book.data.title, auth
  {showControls && <nav class="lab-controls" aria-label="Choose a shelf prototype"><span class="lab-label">A new perspective <span> / shelf studies</span></span><div class="lab-switch"><button type="button" data-direction-button="room" aria-pressed="true"><span>01</span> The reading room</button><button type="button" data-direction-button="table" aria-pressed="false"><span>02</span> The collector’s table</button></div></nav>}
  <section class="tactile-hero" aria-label="Interactive book library">
   <div class="tactile-inner">
-   <div class="collection-line"><span><i></i> <span data-shelf-eyebrow>THE BOOK &amp; SKILL LIBRARY</span></span><button type="button" class="shelf-personalize" data-personalize-shelf aria-haspopup="dialog" aria-controls="shelf-personalizer"><span data-personalize-label>Personalize</span> <span aria-hidden="true">＋</span></button></div>
+   <div class="collection-line"><span><i></i> <span data-shelf-eyebrow>THE BOOK &amp; SKILL LIBRARY</span></span><div class="shelf-collection-actions"><button type="button" class="shelf-personalize" data-share-shelf aria-haspopup="dialog" disabled>Share <span aria-hidden="true">↗</span></button><button type="button" class="shelf-personalize" data-personalize-shelf aria-haspopup="dialog" aria-controls="shelf-personalizer"><span data-personalize-label>Personalize</span> <span aria-hidden="true">＋</span></button></div></div>
    <div class="tactile-heading"><div class="shelf-title"><h2><span data-public-shelf-heading><span data-room-copy>Good books.<br /><em>Fresh perspective.</em></span><span data-table-copy>Put good books<br /><em>to work.</em></span></span><span data-personal-shelf-heading hidden><span data-shelf-owner>Your</span> <em>shelf</em></span></h2><time data-shelf-date hidden></time></div><div class="heading-aside"><p data-shelf-description>Read the ideas.<br />Give your agent a method to work with.</p><span class="handwritten" data-room-copy>Take one off the shelf</span><span class="handwritten" data-table-copy>A little room to play.</span></div></div>
    <div class="book-stage" data-book-stage>
     <div class="room-light" aria-hidden="true"></div>
@@ -58,6 +59,7 @@ const catalog = books.map(book => ({ slug: book.id, title: book.data.title, auth
   </div>
  </dialog>
  <ShelfPersonalizer books={catalog} />
+ <ShelfShareDialog />
  {catalog.map(book => <template data-shelf-cover={book.slug}><BookJacket {...book} loading="eager" /></template>)}
  <script type="application/json" data-shelf-catalog set:html={JSON.stringify(catalog).replace(/</g,'\\u003c')} />
  <script type="application/json" data-shelf-data set:html={JSON.stringify(picks).replace(/</g,'\\u003c')} />

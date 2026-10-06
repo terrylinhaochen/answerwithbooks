@@ -41,7 +41,9 @@
     "test:book-skills": "node scripts/test-book-skills.mjs",
     "test:book-agent-actions": "node scripts/test-book-agent-actions.mjs",
     "test:source-upload": "node scripts/test-source-upload.mjs",
-    "test:shelf-personalization": "node scripts/test-shelf-personalization.mjs"
+    "test:shelf-personalization": "node scripts/test-shelf-personalization.mjs",
+    "test:shelf-sharing": "node scripts/test-shelf-sharing.mjs",
+    "test:shelf-share-image": "node scripts/test-shelf-share-image.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",
@@ -51,6 +53,7 @@
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^5.12.0",
     "fflate": "0.8.2",
+    "html-to-image": "1.11.13",
     "pdfjs-dist": "5.4.624",
     "pyodide": "314.0.7",
     "tailwindcss": "^4.1.0",

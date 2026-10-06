@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import BookJacket from '../components/BookJacket.astro';
+import ShelfShareDialog from '../components/ShelfShareDialog.astro';
+import { bookPalettes } from '../lib/book-palettes';
+import { publicBookTask } from '../lib/public-book-agent';
+import '../styles/shared-shelf.css';
+const books = (await getCollection('books')).map(book => ({ ...book, task: publicBookTask(book) }));
+const catalog = books.map(book => ({ slug: book.id, title: book.data.title }));
+---
+<Base title="A shared shelf" description="A collection of good books and practical tasks to put their methods to work with your agent." path="/shelf/" robots="noindex, follow">
+ <div class="shared-shelf" data-shared-shelf>
+  <p class="shared-shelf-loading" role="status" data-shared-loading>Opening this shelf…</p>
+  <noscript><p>Enable JavaScript to open this shared collection, or <a href="/books/">explore the book library</a>.</p></noscript>
+  <section class="shared-shelf-error" data-shared-error hidden>
+   <p class="shared-eyebrow">A missing piece</p>
+   <h1>This shelf link<br /><em>is incomplete.</em></h1>
+   <p>Ask for the full link, or find a few good books of your own.</p>
+   <a class="shared-primary" href="/books/">Explore the library <span aria-hidden="true">↗</span></a>
+  </section>
+  <div data-shared-content hidden>
+   <header class="shared-shelf-heading">
+    <div class="shared-heading-line"><p class="shared-eyebrow"><span data-shared-count></span> · A shared collection</p><button type="button" data-reshare-shelf aria-haspopup="dialog">Share shelf <span aria-hidden="true">↗</span></button></div>
+    <h1>A shelf worth<br /><em>passing on.</em></h1>
+    <p>Books to read. Methods to use.<br />Copy a book’s digest and task into your agent, then make it your own.</p>
+   </header>
+   <section class="shared-book-list" data-shared-books aria-label="Shared books and agent tasks"></section>
+   <footer class="shared-shelf-footer"><p>What belongs on your shelf?</p><a href="/?personalize=1">Make it yours <span aria-hidden="true">↗</span></a></footer>
+  </div>
+  {books.map(book => <template data-shared-book-template={book.id}>
+    <article class="shared-book" data-shared-book={book.id} aria-label={book.data.title}>
+     <div class="shared-book-source">
+      <a class="shared-book-cover" href={`/books/${book.id}/`} aria-label={`Read ${book.data.title}`}><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} loading="lazy" /></a>
+      <div><span class="shared-book-number" data-shared-book-number></span><h2><a href={`/books/${book.id}/`}>{book.data.title}</a></h2><p class="shared-book-author">{book.data.author}</p></div>
+     </div>
+     <div class="shared-book-skill">
+      <p class="shared-eyebrow">Try it with your agent</p>
+      <h3>{book.task.label}</h3><p class="shared-book-task">{book.task.prompt}</p>
+      <button type="button" class="shared-primary" data-copy-shared-book aria-label={`Copy ${book.data.title} to agent`}>Copy to agent <span aria-hidden="true">↗</span></button>
+      <p class="shared-copy-status" data-shared-copy-status role="status"></p>
+      <textarea hidden readonly class="shared-manual-prompt" data-shared-prompt aria-label={`${book.data.title} agent prompt`} rows="6"></textarea>
+     </div>
+    </article>
+  </template>)}
+  <ShelfShareDialog />
+  <script type="application/json" data-shared-catalog set:html={JSON.stringify(catalog).replace(/</g,'\\u003c')} />
+ </div>
+</Base>
+<script>
+ import '../lib/shared-shelf';
+</script>

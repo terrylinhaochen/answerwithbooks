@@ -1,0 +1,37 @@
+.shelf-share-dialog { width:min(560px,calc(100vw - 24px)); max-height:calc(100dvh - 24px); overflow:auto; margin:auto; padding:32px; border:1px solid #c7cbbb; border-radius:24px; background:#f5f2e9 url('/textures/book-paper.svg'); color:#303a30; }
+.shelf-share-dialog::backdrop { background:#132017b8; backdrop-filter:blur(7px); }
+.shelf-share-dialog header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.shelf-share-dialog>header h2 { font-family:var(--font-serif); font-size:42px; line-height:1.08; letter-spacing:-.035em; }
+.shelf-share-dialog [data-close-shelf-share] { font-size:26px; line-height:1; min-width:36px; min-height:36px; cursor:pointer; }
+.shelf-share-intro { font-size:16px; line-height:1.65; margin-top:14px; color:#606b5c; }
+.shelf-share-covers { display:flex; justify-content:center; gap:12px; padding:34px 12px 38px; margin:24px 0; border-radius:14px; background:#282b29; min-height:170px; }
+.shelf-share-cover { width:68px; max-width:19%; align-self:center; flex-shrink:1; perspective:600px; }
+.shelf-share-cover .jacket { --book-depth:16px; --board:2px; transform:rotateY(-16deg) rotateZ(-3deg); }
+.shelf-share-cover:nth-child(even) .jacket { transform:rotateY(-16deg) rotateZ(3deg); }
+.shelf-share-dialog label { display:block; font-size:15px; font-weight:500; margin-bottom:10px; }
+.shelf-share-dialog input { width:100%; min-width:0; border:1px solid #bfc6b8; background:#fffdf78a; padding:15px; border-radius:10px; font-size:16px; color:#4c5947; text-overflow:ellipsis; }
+.shelf-share-link-row { display:flex; align-items:stretch; gap:8px; }
+.shelf-share-link-row input { flex:1; width:0; padding:12px; }
+.shelf-copy-link { flex:none; padding:10px 14px; border:1px solid #bfc6b8; border-radius:10px; background:#e7ebdf; color:#344b36; font-size:14px; font-weight:500; cursor:pointer; white-space:nowrap; }
+.shelf-copy-link:hover { background:#dbe2cf; }
+.shelf-copy-link:disabled { opacity:.65; cursor:wait; }
+.shelf-share-status { font-size:15px; line-height:1.6; margin-top:12px; text-align:center; }
+.shelf-share-status:empty { display:none; }
+.shelf-share-preview { display:block; text-align:center; font-size:15px; margin-top:22px; text-underline-offset:4px; }
+.shelf-share-preview:hover { text-decoration:underline; }
+.shelf-share-dialog :focus-visible { outline:2px solid #879956; outline-offset:4px; }
+@media(max-width:600px) {
+ .shelf-share-dialog { padding:24px 20px; }
+ .shelf-share-dialog>header h2 { font-size:35px; }
+ .shelf-share-covers { gap:9px; padding:28px 14px 30px; min-height:130px; }
+ .shelf-share-cover .jacket { --book-depth:12px; }
+}
+.shelf-share-dialog [hidden] { display:none; }
+.shelf-image-actions { display:flex; flex-direction:column; align-items:stretch; gap:12px; margin-top:20px; }
+.shelf-image-primary { display:flex; align-items:center; justify-content:center; gap:18px; width:100%; padding:15px 20px; border-radius:28px; background:#344b36; color:#fffaf0; font-size:16px; font-weight:500; cursor:pointer; }
+.shelf-image-primary:hover { background:#253b28; }
+.shelf-image-primary:disabled { opacity:.65; cursor:wait; }
+.shelf-image-secondary { padding:6px; background:transparent; color:#344b36; font-size:15px; font-weight:400; text-decoration:underline; text-underline-offset:4px; }
+.shelf-image-secondary:hover { background:transparent; }
+.shelf-share-image-preview { display:block; width:100%; height:auto; border-radius:14px; margin:24px 0; }
+@media(max-width:400px) { .shelf-share-link-row { gap:6px; } .shelf-copy-link { padding:10px; font-size:13px; } }
