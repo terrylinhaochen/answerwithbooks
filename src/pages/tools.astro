@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import ToolCommand from '../components/ToolCommand.astro';
+import {bookSkillCommand} from '../lib/tool-catalog.mjs';
 import AddBookDialog from '../components/AddBookDialog.astro';
 import BookJacket from '../components/BookJacket.astro';
 import { bookPalettes } from '../lib/book-palettes';
@@ -63,6 +65,7 @@ const examples = [
 
   <section class="skill-faq" aria-labelledby="skill-faq-title"><div><p class="awb-eyebrow">Before you begin</p><h2 id="skill-faq-title">A few useful<br /><em>details.</em></h2></div><div>
    <details><summary>Can I use this with my existing agent?</summary><p>Yes. Copy to agent gives you a single prompt containing the book artifact, skill, and references. Paste it into your preferred agent and add your task. For reusable installation, download the ZIP and follow your agent’s skill-file setup. Installation is not automatic.</p></details>
+   <details><summary>Can my agent search the public shelf?</summary><p>Install the bundled CLI and Codex skill with Node 20 or later and Git. This pinned release includes its own public book corpus and runtime. No account, API key, or running server is required.</p><ToolCommand value={bookSkillCommand} install label="Copy install command" /><p>The installer prints a working ask command. Other agents can use the installed CLI or load its SKILL.md and runtime together.</p></details>
    <details><summary>What can I upload?</summary><p>Books, research papers, documentation, and notes in PDF, EPUB, DOCX, Markdown, HTML, RTF, or plain text. Sign in, choose one searchable file up to 10 MB, and keep the processing page open while your book and skill are generated. If processing pauses, return to the book page to continue. Your source text is sent to our generation provider; your file and artifacts stay private to your account. Scanned PDFs need OCR first.</p></details>
    <details><summary>Is every public book a complete skill package?</summary><p>The public shelf offers editorial digests with a Copy to agent prompt. Your own uploaded book produces the fuller skill package, including source-section notes, patterns, a cheatsheet, and a glossary.</p></details>
    <details><summary>How much should I trust a generated skill?</summary><p>Use it as a working aid. Review important claims against the source, and check the output before relying on it. The agent prompt asks for source references, clearly marked inferences, and limits; it does not guarantee accuracy or complete coverage.</p></details>

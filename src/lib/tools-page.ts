@@ -155,6 +155,7 @@ document.querySelectorAll<HTMLElement>('[data-dynamic-command="install"]').forEa
   try { code.textContent = buildInstallInstruction(location.origin); } catch { /* Keep the trusted canonical setup URL. */ }
 });
 document.querySelectorAll<HTMLButtonElement>('[data-copy-command]').forEach(button => {
+  if(button.dataset.copyReady)return;button.dataset.copyReady='true';
   button.disabled = false;
   button.addEventListener('click', async () => {
     const block = button.closest<HTMLElement>('[data-tool-command]')!;

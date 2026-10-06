@@ -20,3 +20,14 @@ const { value, label = 'Copy', install = false, dynamic, compact = false, task =
   pre{flex:1;min-width:0;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.75}button{flex:none;min-height:32px;padding:4px 10px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer}button:hover{background:var(--color-paper)}button:disabled{opacity:.4;cursor:default}button:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px}
   .tool-command__status{font-size:13px;color:var(--color-soft);margin-top:6px}.tool-command__status:empty{display:none}.tool-command__fallback{display:block;margin-top:12px;font-size:14px}.tool-command__fallback[hidden]{display:none}textarea{display:block;width:100%;margin-top:8px;border:1px solid var(--color-line);border-radius:8px;background:var(--color-paper);padding:10px;font:13px/1.6 monospace}
 </style>
+
+<script>
+ document.querySelectorAll<HTMLButtonElement>('[data-copy-command]').forEach(button=>{
+  if(button.dataset.copyReady)return;button.dataset.copyReady='true';button.disabled=false;
+  button.addEventListener('click',async()=>{
+   const root=button.closest<HTMLElement>('[data-tool-command]')!, value=root.querySelector<HTMLElement>('[data-command-text]')!.textContent||'', status=root.querySelector<HTMLElement>('[data-copy-status]')!, fallback=root.querySelector<HTMLElement>('[data-copy-fallback]')!;
+   try {await navigator.clipboard.writeText(value);fallback.hidden=true;status.textContent=button.hasAttribute('data-copy-install')?'Copied. Paste into your terminal to install.':'Copied.';}
+   catch {const input=fallback.querySelector<HTMLTextAreaElement>('textarea')!;input.value=value;fallback.hidden=false;input.focus();input.select();status.textContent='Select and copy the command below.';}
+  });
+ });
+</script>
