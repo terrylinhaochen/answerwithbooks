@@ -18,11 +18,13 @@ The topic audit passed for all nine library categories, complete pagination with
 
 Package 0.1.4 is published with one pinned npm command across CLI help, README, SKILL.md, and the website. Nine package tests and GitHub CI pass. The exact documented npm command passed from an empty directory with an empty npm cache, and the installed skill successfully retrieved a relevant public answer. The published tarball SHA-1 is `36234591b16de1868f6853f9051b670e2922c2d2`.
 
-## Email delivery: provider connection required
+## Email delivery: closed
 
-A read-only production configuration check found no custom SMTP host, no Send Email hook, and a two-email-per-hour limit. AWB has no email-provider secret configured. Supabase documents that its default sender only delivers to project-team addresses; public signup requires a production sender. This is a configuration blocker, not merely an unobserved inbox result. See [Supabase SMTP documentation](https://supabase.com/docs/guides/auth/auth-smtp).
+Production authentication now uses the existing CrowdListen Resend workspace with a dedicated verified `auth.answerwithbooks.com` domain and a sending-only key restricted to that domain. All four DNS records match on both GoDaddy nameservers and a public resolver. SMTP authentication and an independent Supabase configuration readback passed. The project email limit is now 30 per hour, and email confirmation remains enabled.
 
-Connect an existing sending account and verified sender domain in the project Auth SMTP settings, keeping email confirmation enabled. Then authorize one verification email and confirm arrival from the receiving inbox. No email was sent during this check. The repaired signup flow preserves plus aliases and does not create newsletter consent. Provider acceptance alone does not prove delivery.
+All 13 authentication and security templates use **Answer with Books**, as does the live sender `no-reply@auth.answerwithbooks.com`. One explicitly authorized test through the production login page returned HTTP 200 and was reported delivered to Gmail by Resend. The request kept account creation disabled. The recipient then confirmed receipt and successful sign-in through the emailed link. This verifies one live Gmail sign-in; deliverability across other mailbox providers and long-term reliability are not established by this test. No newsletter subscription or additional test email was created.
+
+See [email setup](email-setup-2026-10-06.md) and `verification/email-setup-2026-10-06/email-connection.json` for the configuration and nonsecret acceptance evidence.
 
 Independent, blind agent-quality benchmarking and multilingual semantic retrieval are broader product capabilities, not established by this regression pass. Current public retrieval explicitly supports English; an agent can translate a query and disclose that translation.
 

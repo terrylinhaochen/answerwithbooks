@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-06T19:12:48.912818+00:00",
+  "provider": "Resend",
+  "domain": "auth.answerwithbooks.com",
+  "domainStatus": "verified",
+  "dnsRecordsVerified": 4,
+  "dnsMatchesOnBothAuthoritativeServersAndPublicResolver": true,
+  "sender": "no-reply@auth.answerwithbooks.com",
+  "senderName": "Answer with Books",
+  "smtpHost": "smtp.resend.com",
+  "smtpPort": 465,
+  "smtpSettingsVerified": true,
+  "sendingKeyRestrictedToDomain": true,
+  "smtpAuthenticationTested": true,
+  "emailLimitPerHour": 30,
+  "confirmationRequired": true,
+  "hostedEmailTemplatesVerified": 13,
+  "liveSignInTest": {
+    "url": "https://answerwithbooks.com/login/",
+    "requestsSent": 1,
+    "httpStatus": 200,
+    "accountCreationDisabled": true,
+    "redirectTo": "https://answerwithbooks.com/auth/confirm/",
+    "subject": "Your Answer with Books sign-in link",
+    "recipientProvider": "Gmail",
+    "providerEvent": "delivered",
+    "inboxPlacementConfirmed": true,
+    "signInLinkConfirmed": true,
+    "confirmationSource": "recipient confirmation in chat",
+    "confirmedAt": "2026-10-06T19:13:16.251957+00:00"
+  }
+}
