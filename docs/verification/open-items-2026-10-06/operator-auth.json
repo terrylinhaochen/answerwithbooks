@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "label": "Valid project operator",
+      "status": 200,
+      "accepted": true
+    },
+    {
+      "label": "Anonymous credential",
+      "status": 403,
+      "accepted": false
+    },
+    {
+      "label": "Invalid bearer with real service apikey",
+      "status": 403,
+      "accepted": false
+    },
+    {
+      "label": "Empty bearer with real service apikey",
+      "status": 401,
+      "accepted": false
+    },
+    {
+      "label": "Authenticated ordinary user",
+      "status": 403,
+      "accepted": false
+    },
+    {
+      "label": "Forged service role claim",
+      "status": 403,
+      "accepted": false
+    }
+  ]
+}

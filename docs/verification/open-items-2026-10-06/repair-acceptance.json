@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "checks": [
+    "Ordinary account cannot invoke operator repair.",
+    "Repair replaces the unsupported rule, preserves source, and keeps the complete previous revision.",
+    "Previous revision is private to the owning account.",
+    "Signed-in mobile browser downloads current and previous ZIP revisions.",
+    "Re-running repair skips already checked artifacts.",
+    "Deleting the book also deletes private revision files."
+  ],
+  "emailsSent": 0,
+  "checkedAt": "2026-10-06T17:15:19.226Z"
+}

@@ -1,5 +1,5 @@
 import skills from '../data/skills.json' with { type: 'json' };
-export const bookSkillCommand = 'npx --yes --package=github:Crowdlisten/Crowdlisten_books#v0.1.3 answer-with-books install --skill --api';
+export const bookSkillCommand = 'npx --yes answer-with-books@0.1.4 install --skill --api';
 export const installSkillPath = '/tools/awb-tools/SKILL.md';
 export const apiPreviewOrigin = 'http://127.0.0.1:4318';
 

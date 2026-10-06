@@ -33,7 +33,7 @@ try {
       assert.ok(!/\b(?:Arda|AWB)\b/.test(await page.locator('body').innerText()));
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Overflow: ${width} ${path}`);
       if (path === '/') await page.screenshot({path: `/tmp/awb-brand-${width}.png`});
-      if (path === '/') assert.equal(await page.locator('[data-install-command]').innerText(), 'npx --yes --package=github:Crowdlisten/Crowdlisten_books#v0.1.3 answer-with-books install --skill --api');
+      if (path === '/') assert.equal(await page.locator('[data-install-command]').innerText(), 'npx --yes answer-with-books@0.1.4 install --skill --api');
     }
   }
   console.log(`PASS: ${files.length} built HTML files free of old display branding; 8 routes on desktop/mobile; Answer with Books titles, metadata, feed and preview asset; existing URLs and install command preserved.`);

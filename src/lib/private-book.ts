@@ -42,7 +42,16 @@ async function paint(job:any) {
  find('status').textContent=job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':`Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
  if(job.status==='ready')find('resume').hidden=true;
  if(job.artifacts&&!rendered) {
-  rendered=true;find('content').hidden=false;renderMarkdown(job.artifacts['book.md']);void checkSkill(job.artifacts);
+  rendered=true;find('content').hidden=false;
+  try {
+   const review=JSON.parse(job.artifacts['quality-review.json']||'{}');
+   if(review.version===2) {
+    find('quality').hidden=false;
+    find('quality').textContent='This version passed automated source-support checks. Review important claims against the bundled source.';
+    find('previous').hidden=!review.previousRevisionPath;
+   }
+  }catch{}
+  renderMarkdown(job.artifacts['book.md']);void checkSkill(job.artifacts);
   const skill=Object.entries(job.artifacts).filter(([name])=>name.startsWith('skill/')).map(([name,value])=>`## ${name}\n${value}`).join('\n\n');
   find<HTMLTextAreaElement>('prompt').value=bookAgentPrompt({title:job.title,author:job.author,url:location.href,digest:job.artifacts['book.md'],skill});
   const {data}=await supabase.storage.from('private-books').createSignedUrl(`${job.user_id}/${job.id}/source`,3600);
@@ -73,15 +82,18 @@ find('copy').addEventListener('click',async()=>{
  try {await navigator.clipboard.writeText(prompt.value);find('copy-status').textContent='Copied. Paste into your agent and add your question or task.';}
  catch {prompt.hidden=false;prompt.focus();prompt.select();find('copy-status').textContent='Copy was blocked. Select and copy the prompt below.';}
 });
-find('download').addEventListener('click',async()=>{
- const button=find<HTMLButtonElement>('download');button.disabled=true;
+async function downloadRevision(previous=false) {
+ const button=find<HTMLButtonElement>(previous?'previous':'download');button.disabled=true;
  try {
-  const result=await bookWorker({action:'export',id});
+  const result=await bookWorker({action:'export',id,...(previous?{revision:'previous'}:{})});
   const files=Object.fromEntries(Object.entries(result.files).map(([path,text])=>[path,strToU8(String(text))]));
   const blob=new Blob([zipSync(files) as Uint8Array<ArrayBuffer>],{type:'application/zip'});
-  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='book-and-skill.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-  find('copy-status').textContent='Downloaded with your private source text. Keep the bundle private and check the cited lines before use.';
+  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=previous?'book-and-skill-previous.zip':'book-and-skill.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  find('copy-status').textContent=previous?'Previous version downloaded. It may contain claims corrected in the current version.':'Downloaded with your private source text. Keep the bundle private and check the cited lines before use.';
  } catch(e) {find('copy-status').textContent=e instanceof Error?e.message:'Download failed. Please retry.';}
  finally {button.disabled=false;}
-});
+}
+find('download').addEventListener('click',()=>void downloadRevision());
+find('previous').addEventListener('click',()=>void downloadRevision(true));
+
 void run();

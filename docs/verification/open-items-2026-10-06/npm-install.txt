@@ -1,0 +1,1 @@
+PASS exact documented npm 0.1.4 command from empty directory and empty npm cache, followed by installed skill retrieval.

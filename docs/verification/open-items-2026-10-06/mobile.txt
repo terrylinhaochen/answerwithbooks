@@ -1,0 +1,3 @@
+PASS 1440px: 23 routes, consistent theme, shelf viewport, task copy, tab keyboard controls, clipboard fallback, upload dialog, library filter, public handoff, mocked profile and auth guard.
+PASS 390px: 23 routes, consistent theme, shelf viewport, task copy, tab keyboard controls, clipboard fallback, upload dialog, library filter, public handoff, mocked profile and auth guard.
+PASS 320px: 23 routes, consistent theme, shelf viewport, task copy, tab keyboard controls, clipboard fallback, upload dialog, library filter, public handoff, mocked profile and auth guard.

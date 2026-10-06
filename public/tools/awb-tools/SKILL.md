@@ -80,7 +80,7 @@ Runs are available through `GET /v1/runs` and `GET /v1/runs/:id`, and in the acc
 Book-backed answers use the separate Answer with Books book skill, not Capability Lab's `/v1/run`. If the user wants this capability and it is absent, offer the existing install command in a Node-enabled environment:
 
 ```sh
-npx --yes --package=github:Crowdlisten/Crowdlisten_books#v0.1.3 answer-with-books install --skill --api
+npx --yes answer-with-books@0.1.4 install --skill --api
 ```
 
 This installs the book integration, not the research API. Use its published answers and editorial book digests to return a diagnosis, decision rule, next move, and boundary. Do not claim to have read inaccessible material. The Books and Guides pages also provide self-contained reading prompts for agents without source-link access.

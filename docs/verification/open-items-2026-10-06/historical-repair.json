@@ -1,0 +1,16 @@
+{
+  "mode": "apply",
+  "candidates": 1,
+  "repaired": 1,
+  "checks": [
+    {
+      "book": 1,
+      "sourcePreserved": true,
+      "coverPreserved": true,
+      "originalSnapshotVerified": true,
+      "checkedSections": 4,
+      "currentSkillReadable": true
+    }
+  ],
+  "checkedAt": "2026-10-06T17:17:24.472Z"
+}

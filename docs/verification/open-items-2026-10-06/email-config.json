@@ -1,0 +1,12 @@
+{
+  "customSmtpConfigured": false,
+  "smtpHost": null,
+  "senderDomain": "",
+  "emailProviderEnabled": true,
+  "signupsDisabled": false,
+  "autoconfirm": false,
+  "emailSendRate": 2,
+  "sendEmailHookEnabled": false,
+  "siteUrl": "https://answerwithbooks.com",
+  "emailsSentByThisCheck": 0
+}
