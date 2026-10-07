@@ -21,7 +21,7 @@ try{
   assert.ok(await demo.locator('[data-demo-tool="ask"]').evaluate(el=>el.inert),'ask is not presented before the catalog');
   await page.waitForFunction(()=>document.querySelector('.demo-catalog').dataset.visible==='true');
   assert.equal(await demo.locator('.demo-catalog li').count(),3);
-  assert.ok(await demo.locator('.demo-catalog').getByText('Designing Your Life',{exact:true}).isVisible());
+  assert.ok(await demo.locator('.demo-catalog-title').filter({hasText:/^Designing Your Life$/}).isVisible());
   assert.ok(await demo.getByText('GET /v1/books',{exact:true}).isVisible());
   await demo.locator('[data-demo-tool="catalog"] summary').click();
   await demo.getByRole('button',{name:'Play demo',exact:true}).waitFor();
@@ -36,7 +36,7 @@ try{
   assert.ok(await demo.locator('.demo-catalog').isVisible(),'the book list remains visible during ask');
   assert.equal(await demo.locator('[data-demo-tool="catalog"]').evaluate(el=>el.open),false);
   await page.waitForFunction(()=>document.querySelector('[data-agent-demo]').dataset.demoMatched==='true');
-  assert.equal(await demo.locator('[data-demo-choice=true]').innerText(),'Designing Your Life');
+  assert.equal(await demo.locator('[data-demo-choice=true] > .demo-catalog-title').innerText(),'Designing Your Life');
   await phase(page,'apply');
   await page.waitForFunction(()=>document.querySelector('[data-demo-run-state]').textContent==='Ready to use');
   assert.equal(await demo.locator('[data-demo-reveal][data-visible=true]').count(),11);
