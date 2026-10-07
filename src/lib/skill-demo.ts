@@ -21,11 +21,12 @@ export function mountSkillDemo(){
   controlLabel.textContent=reduced.matches?'Next':userPaused?'Play':'Pause';control.setAttribute('aria-label',label);
   controlPath.setAttribute('d',reduced.matches?'M5 12h14m-6-6 6 6-6 6':userPaused?'m8 5 11 7-11 7z':'M8 5v14M16 5v14');
   root!.dataset.demoPaused=String(!canPlay());
-  runState.textContent=userPaused?'Paused':finished?'Example complete':elapsed<1150?'Your task':elapsed<2450?'Reading the skill':'Applying the methods';
+  runState.textContent=userPaused?'Paused':finished?'Example complete':elapsed<1150?'Your task':elapsed<2450?'Retrieving sources':'Agent response';
  }
  function paint(instant=false){
   const phase=elapsed<1150?'task':elapsed<2450?'reading':'answer';root!.dataset.demoPhase=phase;
-  current().querySelector<HTMLElement>('[data-demo-call-label]')!.textContent=phase==='reading'?'Reading skill':'Read skill';
+  const callLabel=current().querySelector<HTMLElement>('[data-demo-call-label]')!;
+  callLabel.textContent=(phase==='reading'?callLabel.dataset.pending:callLabel.dataset.returned)||'';
   current().querySelectorAll<HTMLElement>('[data-demo-reveal]').forEach(el=>{
    if(el.dataset.visible==='true'||elapsed<starts[Number(el.dataset.demoReveal)])return;
    el.dataset.visible='true';el.removeAttribute('aria-hidden');el.inert=false;
