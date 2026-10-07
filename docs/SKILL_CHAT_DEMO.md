@@ -12,7 +12,7 @@ Both tool calls have native command disclosures. Catalog details show the requir
 
 This is an authored illustration labeled “Illustrated demo · skill + local API.” It does not connect an agent, install a skill, submit a task, upload a source, or call a model or localhost API. The CLI retrieves sources; the displayed final response is an authored application. Public book pages continue to offer editorial digests and copyable prompts; full source-derived skill packages come from private uploads.
 
-The dark frame uses warm charcoal with restrained brass and sage accents. The main source cover and all catalog thumbnails use the shared `BookJacket` component, including its cream title-and-author panel, artwork, paper texture, and solid book edges. Depth is scaled for the smaller demo covers. On phones the book becomes a compact strip above the conversation. No editable composer is shown.
+The dark frame uses warm charcoal with restrained brass and sage accents. The main source cover and all catalog thumbnails use the shared `BookJacket` component, including its cream title-and-author panel, artwork, paper texture, and solid book edges. The covers use the collector’s table tilt (20 degrees on X, -27 on Y) so the solid page block is visible. Depth and the recessed paper edges scale down for the smaller demo covers; hovering keeps the pages in view. On phones the book becomes a compact strip above the conversation. No editable composer is shown.
 
 ## Open-source research and implementation
 
