@@ -1,3 +1,7 @@
+# Agent command update
+
+The 0.2.0 demo uses `books --public --json` followed by `ask`, then the illustrated agent application. The catalog step runs without a server. The CLI also includes authenticated upload/status/download and browser login. Earlier 0.1.4 verification below is retained as historical evidence.
+
 # Skills in action: agent conversation demo
 
 ## Design

@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "commands": [
+    "books",
+    "ask",
+    "upload",
+    "status"
+  ],
+  "entrypoints": {
+    "codex": "$answer-with-books",
+    "claude-code": "/answer-with-books"
+  }
+}

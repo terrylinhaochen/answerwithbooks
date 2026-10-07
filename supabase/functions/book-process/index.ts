@@ -1,3 +1,4 @@
+import {bookUser} from '../_shared/book-cli-auth.mjs';
 import {reusableBook,cachedBookSummary} from '../_shared/book-cache.mjs';
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
 import {scanSkill} from '../_shared/book-skill-review.mjs';
@@ -93,8 +94,13 @@ Deno.serve(async req=>{
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
    try {return reply(await repairBook({db,job:target,modelJson,hash}));}catch(e){return reply({error:e instanceof Error?e.message:'Repair failed; original preserved.'},502);}
   }
-  const {data:auth,error}=await db.auth.getUser(bearer);if(error||!auth.user)return reply({error:'Sign in to upload a private book.'},401);
-  const user=auth.user;
+  if(bearer.startsWith('awb_cli_')&&!['list','lookup','prepare','create','finalize','enqueue','status','export','analysis-export'].includes(input.action))return reply({error:'This action is not available to agent sessions.'},403);
+  const user=await bookUser(db,bearer);if(!user)return reply({error:'Sign in to access your private books.'},401);
+  if(input.action==='list') {
+   const offset=Number(input.offset||0);if(!Number.isSafeInteger(offset)||offset<0)return reply({error:'Invalid offset'},400);
+   const jobs=requireOk(await db.from('book_processing_jobs').select('id,title,author,source_name,status,run_state,cursor,created_at,error').eq('user_id',user.id).order('created_at',{ascending:false}).order('id').range(offset,offset+99));
+   return reply({books:jobs,next_offset:jobs.length===100?offset+100:null});
+  }
   if(['lookup','prepare','create'].includes(input.action)) {
    if(typeof input.sha!=='string'||! /^[a-f0-9]{64}$/.test(input.sha))return reply({error:'Invalid source fingerprint.'},400);
    // Read before provider availability, extraction, quotas, or signed uploads.

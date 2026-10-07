@@ -21,7 +21,7 @@ import Base from '../../layouts/Base.astro';
     import { registerToolNewsletter } from '../../lib/tool-newsletter';
     const toolsContext = readToolsAuthContext(location.pathname, location.search);
     const fromShelf = new URLSearchParams(location.search).get('from') === 'shelf';
-    const destination = toolsContext?.returnTo || (fromShelf ? '/?personalize=1' : '/profile/');
+    const destination = new URLSearchParams(location.search).get('from') === 'agent' ? '/connect-agent/' : toolsContext?.returnTo || (fromShelf ? '/?personalize=1' : '/profile/');
     let consent: ReturnType<typeof readOAuthConsent> = null;
     try { consent = readOAuthConsent(sessionStorage, location.search); } catch { /* Email sign-in does not require consent storage. */ }
     const title = document.querySelector<HTMLElement>('[data-confirm-title]')!;

@@ -22,15 +22,15 @@ try{
   await page.waitForFunction(()=>document.querySelector('.demo-catalog').dataset.visible==='true');
   assert.equal(await demo.locator('.demo-catalog li').count(),3);
   assert.ok(await demo.locator('.demo-catalog-title').filter({hasText:/^Designing Your Life$/}).isVisible());
-  assert.ok(await demo.getByText('GET /v1/books',{exact:true}).isVisible());
+  assert.ok(await demo.getByText('books',{exact:true}).isVisible());
   await demo.locator('[data-demo-tool="catalog"] summary').click();
   await demo.getByRole('button',{name:'Play demo',exact:true}).waitFor();
   const before=await demo.locator('[data-demo-reveal][data-visible=true]').count();
   await page.waitForTimeout(700);
   assert.equal(await demo.getAttribute('data-demo-phase'),'catalog','inspecting a command must not skip ahead');
   assert.equal(await demo.locator('[data-demo-reveal][data-visible=true]').count(),before);
-  assert.ok(await demo.getByText('npx --yes answer-with-books@0.1.4 serve',{exact:true}).isVisible());
-  assert.ok(await demo.getByText('curl http://127.0.0.1:8787/v1/books',{exact:true}).isVisible());
+  assert.ok(await demo.getByText('npx --yes answer-with-books@0.2.0 books --public --json',{exact:true}).isVisible());
+  assert.equal(await demo.getByText('curl http://127.0.0.1:8787/v1/books',{exact:true}).count(),0);
   await demo.getByRole('button',{name:'Play demo',exact:true}).click();
   await phase(page,'ask');
   assert.ok(await demo.locator('.demo-catalog').isVisible(),'the book list remains visible during ask');
@@ -76,7 +76,7 @@ try{
  assert.ok(await demo.getByText(result,{exact:true}).isVisible());
  assert.equal(await demo.evaluate(el=>el.getAnimations({subtree:true}).filter(a=>a.playState==='running').length),0);
  await demo.locator('[data-demo-tool="catalog"] summary').focus();await reduced.keyboard.press('Enter');
- assert.ok(await demo.getByText('curl http://127.0.0.1:8787/v1/books',{exact:true}).isVisible());
+ assert.ok(await demo.getByText('npx --yes answer-with-books@0.2.0 books --public --json',{exact:true}).isVisible());
  await demo.locator('[data-demo-tool="ask"] summary').focus();await reduced.keyboard.press('Enter');
  assert.ok(await demo.getByText('Answer: How to decide what to do with your career next',{exact:true}).isVisible());
  assert.equal(await reduced.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
@@ -84,7 +84,7 @@ try{
  const staticPage=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:1100}});await staticPage.goto(origin+'/#question-first-reading');
  assert.ok(await staticPage.getByText(result,{exact:true}).isVisible());
  assert.equal(await staticPage.locator('.demo-catalog li').count(),3);
- await staticPage.locator('[data-demo-tool="catalog"] summary').click();assert.ok(await staticPage.getByText('curl http://127.0.0.1:8787/v1/books',{exact:true}).isVisible());
+ await staticPage.locator('[data-demo-tool="catalog"] summary').click();assert.ok(await staticPage.getByText('npx --yes answer-with-books@0.2.0 books --public --json',{exact:true}).isVisible());
  await staticPage.locator('[data-demo-tool="ask"] summary').click();assert.ok(await staticPage.getByText('Answer: How to decide what to do with your career next',{exact:true}).isVisible());await staticPage.close();
  assert.deepEqual(providerCalls,[]);assert.deepEqual(errors,[]);
  console.log('PASS list books -> ask -> apply; returned catalog precedes ask; matched book highlighted; one continuous looping task; reading hold; inspection pauses without skipping; stable layout; offscreen pause; keyboard; reduced motion; no JS; no live calls.');

@@ -54,6 +54,11 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
   }
   throw Error('Unexpected RPC '+fn);
  }
+ if(url.pathname==='/rest/v1/book_cli_sessions') {
+  const ownerHash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('awb_cli_'+'a'.repeat(64)));
+  const expected=Array.from(new Uint8Array(ownerHash)).map(n=>n.toString(16).padStart(2,'0')).join('');
+  return url.searchParams.get('token_hash')==='eq.'+expected?json({user_id:owner}):json({code:'PGRST116',details:'The result contains 0 rows'},406);
+ }
  if(url.pathname==='/rest/v1/book_processing_jobs'){
   const selected=jobs.filter(job=>match(job,url.searchParams));
   if(method==='PATCH')for(const job of selected)Object.assign(job,body);
@@ -82,6 +87,14 @@ const created=await call({action:'create',name:'manual.md',size:bytes.length,tex
 const id=created.body.job.id;originals.set(id,bytes);
 assert.equal(created.body.job.run_state,'staging');assert.equal(created.body.job.source_text,undefined);
 assert.equal((await call({action:'status',id},'stranger-token')).status,404);
+const cliToken='awb_cli_'+'a'.repeat(64);
+assert.equal((await call({action:'status',id},cliToken)).status,200);
+assert.equal((await call({action:'status',id},'awb_cli_'+'b'.repeat(64))).status,401);
+assert.equal((await call({action:'delete',id},cliToken)).status,403);
+assert.equal((await call({action:'repair',id},cliToken)).status,403);
+const cliList=await call({action:'list'},cliToken);assert.equal(cliList.status,200);assert.ok(cliList.body.books.every((book:any)=>book.user_id===owner));
+console.log('PASS CLI credentials resolve only their owner; invalid/revoked credentials, delete and operator repair are denied');
+
 assert.equal((await call({action:'process',id})).body.busy,true,'staging jobs cannot process before upload/enqueue');
 assert.equal((await call({action:'enqueue',id})).body.job.run_state,'queued');
 const drain=()=>call({action:'drain'},'synthetic-queue-secret');

@@ -54,11 +54,16 @@ jobs:
       - name: Verify processing handler without network or provider access
         run: |
           deno cache --node-modules-dir=none scripts/test-book-worker-http.ts
-          deno check --node-modules-dir=none supabase/functions/book-process/index.ts
+          deno check --node-modules-dir=none supabase/functions/book-process/index.ts supabase/functions/book-cli-auth/index.ts
           deno run --node-modules-dir=none --allow-env --allow-read scripts/test-book-worker-http.ts
 
       - name: Verify queue concurrency and account isolation in local Postgres
         run: PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-queue-db.py
+
+      - name: Verify agent connection and session isolation
+        run: |
+          node scripts/test-book-cli-auth.mjs
+          PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-cli-db.py
 
       - name: Verify authentication email branding
         run: node scripts/test-auth-email-templates.mjs

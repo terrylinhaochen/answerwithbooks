@@ -73,10 +73,13 @@ import Base from '../layouts/Base.astro';
     const fromOnboarding = from === 'onboarding';
     const fromUpload = from === 'upload';
     const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
-    const redirectAfterAuth = from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
-    const authReturnPath = from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/';
+    const redirectAfterAuth = from === 'agent' ? '/connect-agent/' : from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
+    const authReturnPath = from === 'agent' ? '/auth/confirm/?from=agent' : from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/';
 
-    if (from === 'shelf') {
+    if (from === 'agent') {
+      if (signupCopy) signupCopy.textContent = 'Create an account to connect your agent to your private books.';
+      if (loginLink) loginLink.href = '/login/?from=agent';
+    } else if (from === 'shelf') {
       if (signupCopy) signupCopy.textContent = 'Create an account to choose and save your own book collection.';
       if (loginLink) loginLink.href = '/login/?from=shelf';
     } else if (pendingOnboarding) {

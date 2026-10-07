@@ -15,14 +15,17 @@ const loginCopy = document.querySelector<HTMLElement>('[data-login-copy]');
 const signupLink = document.querySelector<HTMLAnchorElement>('[data-signup-link]');
 const from = new URLSearchParams(location.search).get('from');
 const pendingOnboarding = from === 'onboarding' || hasPendingOnboarding();
-const destination = from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : from === 'upload' ? '/upload/' : '/my-books/';
+const destination = from === 'agent' ? '/connect-agent/' : from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : from === 'upload' ? '/upload/' : '/my-books/';
 let passwordMode = false;
 let busy = false;
 let resendAt = 0;
 // Preserve text entered while the sign-in module was loading.
 if (!email.value) email.value = readSignupFlow()?.email || '';
 
-if (from === 'shelf') {
+if (from === 'agent') {
+  if (loginCopy) loginCopy.textContent = 'Sign in to connect your agent to your private books.';
+  if (signupLink) signupLink.href = '/signup/?from=agent';
+} else if (from === 'shelf') {
   if (loginCopy) loginCopy.textContent = 'Sign in to choose the books on your draggable shelf.';
   if (signupLink) signupLink.href = '/signup/?from=shelf';
 } else if (pendingOnboarding) {
@@ -94,7 +97,7 @@ form.addEventListener('submit', async event => {
     } else {
       const { error } = await supabase.auth.signInWithOtp({
         email: address,
-        options: { shouldCreateUser: false, emailRedirectTo: emailRedirectTo(from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/') },
+        options: { shouldCreateUser: false, emailRedirectTo: emailRedirectTo(from === 'agent' ? '/auth/confirm/?from=agent' : from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/') },
       });
       resendAt = Date.now() + 60000;
       // Do not reveal whether an address has an account.
