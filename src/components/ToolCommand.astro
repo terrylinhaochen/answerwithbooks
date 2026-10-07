@@ -26,8 +26,8 @@ const { value, label = 'Copy', install = false, dynamic, compact = false, task =
   if(button.dataset.copyReady)return;button.dataset.copyReady='true';button.disabled=false;
   button.addEventListener('click',async()=>{
    const root=button.closest<HTMLElement>('[data-tool-command]')!, value=root.querySelector<HTMLElement>('[data-command-text]')!.textContent||'', status=root.querySelector<HTMLElement>('[data-copy-status]')!, fallback=root.querySelector<HTMLElement>('[data-copy-fallback]')!;
-   try {await navigator.clipboard.writeText(value);fallback.hidden=true;status.textContent=button.hasAttribute('data-copy-install')?'Copied. Paste into your terminal to install.':'Copied.';}
-   catch {const input=fallback.querySelector<HTMLTextAreaElement>('textarea')!;input.value=value;fallback.hidden=false;input.focus();input.select();status.textContent='Select and copy the command below.';}
+   try {await navigator.clipboard.writeText(value);if(root.querySelector('[data-command-text]')?.textContent!==value)return;fallback.hidden=true;status.textContent=button.hasAttribute('data-copy-install')?'Copied. Paste into your terminal to install.':'Copied.';}
+   catch {if(root.querySelector('[data-command-text]')?.textContent!==value)return;const input=fallback.querySelector<HTMLTextAreaElement>('textarea')!;input.value=value;fallback.hidden=false;input.focus();input.select();status.textContent='Select and copy the command below.';}
   });
  });
 </script>
