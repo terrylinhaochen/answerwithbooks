@@ -1,3 +1,4 @@
+import {reusableBook,cachedBookSummary} from '../_shared/book-cache.mjs';
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
 import {scanSkill} from '../_shared/book-skill-review.mjs';
 import {processingOptions,retryPatch} from '../_shared/book-options.mjs';
@@ -94,6 +95,13 @@ Deno.serve(async req=>{
   }
   const {data:auth,error}=await db.auth.getUser(bearer);if(error||!auth.user)return reply({error:'Sign in to upload a private book.'},401);
   const user=auth.user;
+  if(['lookup','prepare','create'].includes(input.action)) {
+   if(typeof input.sha!=='string'||! /^[a-f0-9]{64}$/.test(input.sha))return reply({error:'Invalid source fingerprint.'},400);
+   // Read before provider availability, extraction, quotas, or signed uploads.
+   const existing=requireOk(await db.from('book_processing_jobs').select('id,title,status,run_state').eq('user_id',user.id).eq('source_sha',input.sha).maybeSingle());
+   if(reusableBook(existing))return reply({job:cachedBookSummary(existing),reused:true});
+   if(input.action==='lookup')return reply({job:null,reused:false});
+  }
   if(input.action==='prepare') {
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
    if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes||!Number.isSafeInteger(input.textBytes)||input.textBytes<100||input.textBytes>uploadLimits.maxTextBytes||! /^[a-f0-9]{64}$/.test(input.sha||'')||! /^[a-f0-9]{64}$/.test(input.textSha||''))return reply({error:'Choose a supported source within the upload limits.'},400);
@@ -102,7 +110,8 @@ Deno.serve(async req=>{
    const result=await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:'Source upload pending. '.repeat(6),p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:[]});
    if(result.error)return reply({error:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not save this source. Please retry.'},400);
    let job=result.data;
-   if(job.status!=='uploaded'||job.cursor>0)return reply({job:publicJob(job)});
+   if(reusableBook(job))return reply({job:cachedBookSummary(job),reused:true});
+   if(job.cursor>0)return reply({job:publicJob(job)});
    if(job.lease_until&&Date.parse(job.lease_until)>Date.now())return reply({error:'This source is already being saved. Please retry shortly.'},409);
    job=requireOk(await db.from('book_processing_jobs').update({options,run_state:'staging',source_import:{textSha:input.textSha,textBytes:input.textBytes,headings},lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('updated_at',job.updated_at).select().single());
    const upload=requireOk(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/source`,{upsert:true}));
@@ -118,6 +127,7 @@ Deno.serve(async req=>{
    const result=await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:source.text,p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:source.chunks});
    if(result.error)return reply({error:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not create this book. Please retry.'},400);
    let job=result.data;let upload=null;
+   if(reusableBook(job))return reply({job:cachedBookSummary(job),reused:true});
    if(job.source_import&&job.status==='uploaded')return reply({error:'This book has an unfinished large-source upload. Choose the same file again in the current upload dialog.'},409);
    if(job.status==='uploaded'&&job.cursor===0&&!job.lease_until) {
     // Options can change only before processing starts. Enqueue follows completed upload.

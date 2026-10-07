@@ -1,11 +1,15 @@
 ---
+import {getCollection} from 'astro:content';
 import uploadLimits from '../../supabase/functions/_shared/book-upload-limits.json';
 // Retain the shared entry-point contract used by the shelf and embedded upload.
 interface Props { catalog?: unknown[]; title?: string; sourcePath?: string; bookBaseUrl?: string; }
+const library=(await getCollection('books')).map(book=>({slug:book.id,title:book.data.title,author:book.data.author}));
 ---
 <dialog id="book-upload-dialog" class="book-upload-dialog">
  <header class="flex items-center justify-between gap-4"><h2 class="font-serif text-3xl">Upload sources</h2><button type="button" data-close-book-upload aria-label="Close upload" class="p-3">×</button></header>
  <p class="mt-3 text-soft">Turn a book, research paper, or document into a readable artifact and a reusable skill.</p>
+ <p class="mt-2 text-sm text-soft">Already in the library? Use the saved book and AI prompt. Your previous uploads are reused automatically.</p>
+ <script type="application/json" data-upload-library set:html={JSON.stringify(library).replace(/</g,'\\u003c')} />
  <form class="mt-6" novalidate>
   <label class="upload-drop" data-upload-drop>
    <svg class="upload-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>
@@ -45,6 +49,7 @@ interface Props { catalog?: unknown[]; title?: string; sourcePath?: string; book
  .upload-files :global(li){display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--color-line);border-radius:12px;font-size:14px}
  .upload-files :global(li>div){min-width:0;overflow-wrap:anywhere}.upload-files :global(small){display:block;margin-top:4px;color:var(--color-soft);font-size:12px}
  .upload-files :global(button),[data-upload-clear]{flex-shrink:0;min-height:44px;text-decoration:underline;text-underline-offset:4px;font-size:13px;cursor:pointer}
+ .upload-files :global(.upload-reuse){display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px}.upload-files :global(.upload-reuse a){font-size:13px}.upload-files :global(.upload-reuse button){text-align:left}
  .upload-files :global(a){text-decoration:underline;text-underline-offset:3px}
  [data-upload-submit]:disabled{opacity:.5;cursor:not-allowed}
 </style>

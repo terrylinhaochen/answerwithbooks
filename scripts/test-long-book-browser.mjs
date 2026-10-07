@@ -19,7 +19,8 @@ try{
   const request=route.request(),url=new URL(request.url());let result=[];
   if(url.pathname.endsWith('/book-process')){
    const body=request.postDataJSON();
-   if(body.action==='health')result={available:true,staged_uploads:true};
+   if(body.action==='lookup')result={job:null,reused:false};
+   else if(body.action==='health')result={available:true,staged_uploads:true};
    else if(body.action==='prepare'){
     preparation=body;assert.equal(body.text,undefined);assert.ok(request.postData().length<300000);assert.equal(body.sha,sourceHash);
     result={job,upload:{path:`${user.id}/${job.id}/source`,token:'mock'},textUpload:{path:`${user.id}/${job.id}/extracted-source.txt`,token:'mock'}};

@@ -1,3 +1,4 @@
+import {matchLibraryFile} from './library-match.mjs';
 import {extractUpstream,analyzeUpstream} from './upstream-book';
 import { supabase } from './supabase';
 import uploadLimits from '../../supabase/functions/_shared/book-upload-limits.json';
@@ -42,10 +43,12 @@ export async function extractFullBook(file:File,progress:(s:string)=>void) {
   progress('Identifying the source structure…');return analyzeUpstream(text);
  }finally{await task.destroy();}
 }
-type UploadItem = {file:File;report?:SourceReport;error?:string;message:string;jobId?:string};
+type LibraryBook={slug:string;title:string;author:string};
+type UploadItem = {file:File;report?:SourceReport;error?:string;message:string;jobId?:string;sha?:string;libraryMatch?:LibraryBook;libraryBook?:LibraryBook};
 export function mountBookUpload() {
  const dialog=document.querySelector<HTMLDialogElement>('#book-upload-dialog');if(!dialog)return;
  const form=dialog.querySelector<HTMLFormElement>('form')!;
+ const library:LibraryBook[]=JSON.parse(dialog.querySelector('[data-upload-library]')?.textContent||'[]');
  const input=dialog.querySelector<HTMLInputElement>('input[type=file]')!;
  const submit=dialog.querySelector<HTMLButtonElement>('[data-upload-submit]')!;
  const status=dialog.querySelector<HTMLElement>('[data-upload-status]')!;
@@ -57,16 +60,29 @@ export function mountBookUpload() {
  const close=dialog.querySelector<HTMLButtonElement>('[data-close-book-upload]')!;
  let busy=false,dragDepth=0,reviewed=false;
  let items:UploadItem[]=[];
- const pending=()=>items.filter(item=>!item.jobId&&!item.error);
+ const resolved=(item:UploadItem)=>!!(item.jobId||item.libraryBook);
+ const href=(item:UploadItem)=>item.libraryBook?`/books/${item.libraryBook.slug}/`:`/your-book/?id=${item.jobId}`;
+ const pending=()=>items.filter(item=>!resolved(item)&&!item.libraryMatch&&!item.error);
+ function openIfComplete(){if(items.length&&items.every(resolved))location.assign(items.length===1?href(items[0]):'/processing/');}
+ function reuse(item:UploadItem,job:{id:string;status:string}){item.jobId=job.id;item.message=job.status==='ready'?'Using your saved book, skill and cover. No upload or processing.':'Already in your books. Open it to view its saved progress.';}
  function draw() {
   list.replaceChildren();
   for(const item of items) {
    const row=document.createElement('li'),info=document.createElement('div');
-   const name=document.createElement(item.jobId?'a':'span');name.textContent=item.file.name;
-   if(name instanceof HTMLAnchorElement)name.href=`/your-book/?id=${item.jobId}`;
+   const name=document.createElement(resolved(item)?'a':'span');name.textContent=item.libraryBook?.title||item.file.name;
+   if(name instanceof HTMLAnchorElement)name.href=href(item);
    const detail=document.createElement('small');detail.textContent=item.error||item.message;
    info.append(name,detail);row.append(info);
-   if(!item.jobId){const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label',`Remove ${item.file.name}`);remove.disabled=busy;remove.addEventListener('click',()=>{items=items.filter(other=>other!==item);draw();});row.append(remove);}
+   if(item.libraryMatch){
+    const book=item.libraryMatch,choices=document.createElement('div');choices.className='upload-reuse';
+    detail.textContent=`Library match: ${book.title} by ${book.author}. Saved digest and AI prompt available.`;
+    const use=document.createElement('button');use.type='button';use.textContent='Use library book';use.disabled=busy;
+    use.addEventListener('click',()=>{item.libraryBook=book;item.libraryMatch=undefined;item.error=undefined;item.message='Using the saved library digest and AI prompt. No upload or processing.';draw();if(items.length===1)location.assign(href(item));});
+    const own=document.createElement('button');own.type='button';own.textContent='Process this file instead';own.disabled=busy;
+    own.addEventListener('click',()=>{item.libraryMatch=undefined;reviewed=false;try{validateFile(item.file);}catch(error){item.error=error instanceof Error?error.message:'Choose a readable source.';}draw();});
+    choices.append(use,own);info.append(choices);
+   }
+   if(!resolved(item)){const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label',`Remove ${item.file.name}`);remove.disabled=busy;remove.addEventListener('click',()=>{items=items.filter(other=>other!==item);draw();});row.append(remove);}
    list.append(row);
   }
   clear.hidden=!items.length;clear.disabled=busy;
@@ -84,10 +100,11 @@ export function mountBookUpload() {
    if(items.some(item=>item.file.name===file.name&&item.file.size===file.size&&item.file.lastModified===file.lastModified))continue;
    if(items.length>=maxBatchFiles){status.textContent='Choose up to ten files per batch. Remove a file to add another.';draw();return;}
    const item:UploadItem={file,message:`${(file.size/1024/1024).toFixed(1)} MB`};
-   try{validateFile(file);}catch(error){item.error=error instanceof Error?error.message:'Choose a readable source.';}
+   item.libraryMatch=matchLibraryFile(file.name,library)||undefined;
+   if(!item.libraryMatch)try{validateFile(file);}catch(error){item.error=error instanceof Error?error.message:'Choose a readable source.';}
    items.push(item);
   }
-  status.textContent='Review the sources before processing. Each file gets its own book and skill.';draw();
+  status.textContent=items.some(item=>item.libraryMatch)?'Use the saved library book, or choose to process your specific file.':'We’ll check your saved books before reading or uploading new sources.';draw();
  }
  const resetDrag=()=>{dragDepth=0;drop.classList.remove('is-dragging');};
  input.addEventListener('change',()=>{selectFiles(Array.from(input.files||[]));input.value='';});
@@ -112,6 +129,10 @@ export function mountBookUpload() {
    if(!reviewed){
     for(const item of pending()){
      try{
+      item.message='Checking your saved books…';draw();
+      item.sha??=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await item.file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
+      const cached=await bookWorker({action:'lookup',sha:item.sha});
+      if(cached.reused&&cached.job){reuse(item,cached.job);draw();continue;}
       item.report=await extractFullBook(item.file,message=>{item.message=message;draw();});
       if(item.report.text.trim().length<100)throw new Error('Not enough readable text. Upload a searchable document.');
       const sections=splitSource(item.report.text,item.report.headings).chunks.length;
@@ -119,9 +140,17 @@ export function mountBookUpload() {
      }catch(error){item.error=error instanceof Error?error.message:'Could not read this source.';}
      draw();
     }
-    reviewed=true;status.textContent=pending().length?'Sources reviewed. Processing sends their text to our AI provider. The estimates above describe the source, not a price or a guarantee of complete extraction.':'No readable sources remain. Remove these files and choose others.';
+    reviewed=true;status.textContent=pending().length?'Sources reviewed. Only new sources are sent to our AI provider. The estimates above describe the source, not a price or a guarantee of complete extraction.':items.some(resolved)?'Using your saved books. Open them above; no new upload or processing.':'No readable sources remain. Remove these files and choose others.';
+    if(items.every(item=>!!item.jobId))openIfComplete();
     return;
    }
+   // Another tab or a concurrent upload may have saved a reviewed source.
+   for(const item of pending()){
+    const cached=await bookWorker({action:'lookup',sha:item.sha});
+    if(cached.reused&&cached.job)reuse(item,cached.job);
+   }
+   draw();
+   if(!pending().length){status.textContent='Using your saved books. No new upload or processing.';if(!items.some(item=>item.libraryBook))openIfComplete();return;}
    const health=await bookWorker({action:'health'});if(!health.available)throw new Error('Book processing is unavailable. Please try again later.');
    const options=Object.fromEntries(['mode','depth','purpose'].map(name=>[name,(form.elements.namedItem(name) as HTMLSelectElement).value]));
    status.textContent='Keep this dialog open until the files finish uploading. Processing then continues in the background.';
@@ -129,21 +158,22 @@ export function mountBookUpload() {
     try {
      item.message='Uploading…';draw();
      const extraction=item.report!;
-     const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await item.file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
+     const sha=item.sha!;
      const large=extraction.text.length>1000000;
      if(large&&!health.staged_uploads)throw new Error('Your book is readable. Long-book processing is not enabled on this server yet. Your file has not been uploaded.');
      const sourceText=new TextEncoder().encode(extraction.text);
      const textSha=large?Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',sourceText))).map(x=>x.toString(16).padStart(2,'0')).join(''):undefined;
      const result=await bookWorker({action:large?'prepare':'create',name:item.file.name,size:item.file.size,...(large?{textSha,textBytes:sourceText.byteLength}:{text:extraction.text}),sha,extraction:{...extraction,text:undefined},options});
+     if(result.reused){reuse(item,result.job);draw();continue;}
      if(result.upload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([item.file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});if(error)throw new Error('Upload failed. Remove this file and choose it again to retry.');}
      if(result.textUpload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.textUpload.path,result.textUpload.token,new Blob([sourceText],{type:'text/plain'}),{contentType:'text/plain'});if(error)throw new Error('Could not save the extracted text. Choose the same book again to resume.');}
      await bookWorker({action:result.textUpload?'finalize':'enqueue',id:result.job.id});item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':'Saved · processing in the background';
     }catch(error){item.error=error instanceof Error?error.message:'Upload failed. Remove this file and choose it again to retry.';}
     draw();
    }
-   const saved=items.filter(item=>item.jobId);status.textContent=`${saved.length} source${saved.length===1?'':'s'} saved. You can leave this page. ${items.some(item=>item.error)?'Some files need attention; your other sources will continue.':''}`;
+   const saved=items.filter(resolved);status.textContent=`${saved.length} source${saved.length===1?'':'s'} saved. You can leave this page. ${items.some(item=>item.error)?'Some files need attention; your other sources will continue.':''}${items.some(item=>item.libraryMatch)?' Choose a library match above to finish.':''}`;
    window.dispatchEvent(new Event('awb:book-added'));
-   if(saved.length&&saved.length===items.length)location.assign(saved.length===1?`/your-book/?id=${saved[0].jobId}`:'/processing/');
+   if(!items.some(item=>item.libraryBook))openIfComplete();
   }catch(error){status.textContent=error instanceof Error?error.message:'Upload failed. Please try again.';}
   finally{busy=false;draw();}
  });

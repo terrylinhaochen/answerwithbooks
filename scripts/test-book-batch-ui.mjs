@@ -15,7 +15,8 @@ try{
   const url=new URL(route.request().url());let result=[];let status=200;
   if(url.pathname.endsWith('/book-process')){
    const body=route.request().postDataJSON();calls.push(body);
-   if(body.action==='health')result={available:true};
+   if(body.action==='lookup')result={job:null,reused:false};
+   else if(body.action==='health')result={available:true};
    else if(body.action==='create'){
     if(body.name==='failed.md'){result={error:'Synthetic per-file failure'};status=400;}
     else {const job={id:`00000000-0000-4000-8000-${String(jobs.length+10).padStart(12,'0')}`,user_id:user.id,title:body.name,author:'Editor',source_name:body.name,status:'uploaded',run_state:'staging',cursor:0,total_sections:2,options:body.options};jobs.push(job);result={job,upload:{path:`${user.id}/${job.id}/source`,token:'synthetic-token'}};}
