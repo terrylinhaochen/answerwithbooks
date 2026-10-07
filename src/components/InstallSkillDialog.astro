@@ -20,17 +20,20 @@ import SkillInstallOptions from './SkillInstallOptions.astro';
  :is(button,a):focus-visible{outline:2px solid #62734e;outline-offset:4px}
  @media(max-width:600px){.skill-install-dialog{padding:32px 25px}h2{font-size:40px}}
 </style>
-<script>
- const dialog=document.querySelector<HTMLDialogElement>('#skill-install-dialog');
- if(dialog){
-  let opener:HTMLElement|null=null,previousOverflow='';
-  document.querySelectorAll<HTMLAnchorElement>('[data-open-skill-install]').forEach(link=>link.addEventListener('click',event=>{
-   if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-   event.preventDefault();opener=link;previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();
-   dialog.querySelector<HTMLSelectElement>('[data-book-install-agent]')?.focus();
+<!-- Keep opening independent of deferred assets: a slow/stale bundle must never navigate away. -->
+<script is:inline>
+ (() => {
+  const dialog=document.getElementById('skill-install-dialog');
+  if(!dialog || dialog.dataset.modalReady)return;
+  dialog.dataset.modalReady='true';
+  let opener=null,previousOverflow='';
+  document.querySelectorAll('button[data-open-skill-install]').forEach(button=>button.addEventListener('click',()=>{
+   if(dialog.open)return;
+   opener=button;previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();
+   dialog.querySelector('[data-book-install-agent]:not(:disabled)')?.focus();
   }));
   dialog.querySelector('[data-close-skill-install]')?.addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;opener?.focus({preventScroll:true});});
   dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
- }
+ })();
 </script>

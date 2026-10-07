@@ -123,7 +123,7 @@ const current = Astro.url.pathname;
             }
           </nav>
           <div class="awb-account-links">
-          <>{installCta ? <a class="awb-nav__cta" href="/tools/#public-shelf-install" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill</a> : <a class="awb-nav__cta" href={newsletterSignupUrl} data-open-newsletter aria-haspopup="dialog">Subscribe</a>}</>
+          <>{installCta ? <button type="button" class="awb-nav__cta" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill</button> : <a class="awb-nav__cta" href={newsletterSignupUrl} data-open-newsletter aria-haspopup="dialog">Subscribe</a>}</>
           <a
             href="/profile/"
             data-auth-link

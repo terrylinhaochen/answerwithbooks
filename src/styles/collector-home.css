@@ -203,8 +203,8 @@ body[data-theme='collector'] .home-activity .activity-weekdays, body[data-theme=
 .agent-room-simple { grid-template-columns: minmax(0,1fr) auto; gap: 40px; }
 .agent-room-simple h2 { margin-top: 0; }
 .agent-room-simple > div > p:not(.room-eyebrow) { max-width: 46ch; }
-.agent-room-simple > a { gap: 28px; white-space: nowrap; }
-@media(max-width:700px) { .agent-room-simple { grid-template-columns: 1fr; gap: 27px; } .agent-room-simple > a { justify-self: start; } }
+.agent-room-simple > :is(a,button) { gap: 28px; white-space: nowrap; }
+@media(max-width:700px) { .agent-room-simple { grid-template-columns: 1fr; gap: 27px; } .agent-room-simple > :is(a,button) { justify-self: start; } }
 
 @media(max-width:360px){.home-start-actions{gap:20px}.home-start-actions :is(a,button){gap:13px}}
 
@@ -214,3 +214,5 @@ body[data-theme='collector'] .home-activity .activity-weekdays, body[data-theme=
  .awb-header:has([data-open-skill-install]):has([data-auth-link]:not(.hidden)) .awb-nav{grid-column:1}
  .awb-header:has([data-open-skill-install]) [data-auth-link]{grid-column:2;grid-row:2}
 }
+
+button[data-open-skill-install]{cursor:pointer}

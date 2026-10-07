@@ -1,6 +1,6 @@
 # Public skill installation
 
-The homepage install dialog and the public-shelf FAQ share `SkillInstallOptions.astro` and `book-skill-install.mjs`. The selector changes the command, installation note, and first-task instructions together. Changing platforms clears copied/fallback state; a pending clipboard response cannot show confirmation for a different command.
+The homepage install dialog and the public-shelf FAQ share `SkillInstallOptions.astro` and `book-skill-install.mjs`. The selector changes the command, installation note, and first-task instructions together. Homepage setup controls are buttons with no navigation URL. A small inline controller opens the modal even if deferred modules are unavailable. Changing platforms clears copied/fallback state; a pending clipboard response cannot show confirmation for a different command.
 
 ## Available choices
 

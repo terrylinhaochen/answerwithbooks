@@ -41,6 +41,21 @@ try {
    }
   }
  }
+ // Opening must not depend on deferred modules loading successfully.
+ const unbundled=await context.newPage();
+ await unbundled.route('http://127.0.0.1:4321/',async route=>{
+  const response=await route.fetch();
+  const html=(await response.text()).replace(/<script\b(?=[^>]*type=["']module["'])[^>]*>[\s\S]*?<\/script>/gi,'');
+  await route.fulfill({response,body:html});
+ });
+ await unbundled.goto('http://127.0.0.1:4321/');
+ for(const trigger of await unbundled.locator('[data-open-skill-install]').all()){
+  await trigger.click();
+  assert.equal(unbundled.url(),'http://127.0.0.1:4321/');
+  assert.equal(await unbundled.locator('#skill-install-dialog').isVisible(),true);
+  await unbundled.keyboard.press('Escape');
+ }
+ await unbundled.close();
  assert.deepEqual(errors,[]);
  console.log(JSON.stringify({passed:true,platforms:bookSkillPlatforms.map(p=>p.name),surfaces:['homepage dialog','Skills FAQ'],clipboard:true,fallback:true,mobile:true}));
 } finally {await browser.close();}

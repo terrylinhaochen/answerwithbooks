@@ -32,7 +32,10 @@ try {
   const installTriggers = page.locator('[data-open-skill-install]');
   assert.equal(await installTriggers.count(), 3);
   for (const trigger of await installTriggers.all()) {
+    assert.equal(await trigger.evaluate(el => el.tagName), 'BUTTON');
+    const before = page.url();
     await trigger.click();
+    assert.equal(page.url(), before, 'Skill setup stays on the current page');
     assert.equal(await install.isVisible(), true);
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => document.body.style.overflow !== 'hidden');
