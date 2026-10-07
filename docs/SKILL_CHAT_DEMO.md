@@ -2,13 +2,17 @@
 
 ## Design
 
-The headline is “Your agent, well read.” One concrete customer interview question progresses through **Ask → Find books → Apply**. The question, retrieval call, and final reply accumulate in the same conversation. The three progress labels are passive status indicators, not tabs. There is no catalog-browsing scene or switch to a different task. The Mom Test remains beside the conversation as its source book. “Explore skills” is the sole primary destination.
+The headline is “Your agent, well read.” One concrete customer interview question progresses through **List books → Ask → Apply**. The question, both tool calls, catalog results, and final reply accumulate in the same conversation. The labels are passive progress indicators with an active underline, not tabs. The same complete flow loops; it never switches to a different user task. “Explore skills” is the sole primary destination.
 
-The user asks “How should I interview customers to validate my meal-planning app?” and provides context about five interviews before building. The agent's `ask` call finds The Mom Test, then the illustration applies its methods to three interview questions about actual behavior. Expanding the tool call exposes the complete runnable command and verified retrieval result, including the lack of a matching published answer.
+1. The user's meal-planning interview question appears. A visible `GET /v1/books` tool call lists the public catalog, followed by three compact book entries from its 46 results: The Mom Test, Deep Work, and Atomic Habits.
+2. A separate `ask` call submits that question with the five-interview context. When retrieval completes, The Mom Test is highlighted in the earlier list and appears as the matched source.
+3. The agent applies the matched book to three interview questions about past behavior. The complete result holds before the same conversation replays.
 
-This is an authored illustration labeled “Illustrated demo · public book skill.” It does not connect an agent, install a skill, submit a task, upload a source, or call a model. The CLI retrieves sources; the displayed final response is an authored example of how the agent can apply them. Public book pages continue to offer the saved editorial digest and copyable prompt; full source-derived skill packages come from private uploads.
+Both tool calls have native command disclosures. Catalog details show the required optional local API startup command and exact curl request. Ask details show the executable command and verified result, including the lack of a published answer. Opening a disclosure pauses at the current step instead of skipping to the final reply; Play closes disclosures and continues.
 
-The dark frame uses warm charcoal with restrained brass and sage accents. The existing book cover retains visible thickness. On phones the book becomes a compact strip above the conversation. No editable composer is shown, so the display does not invite an unsupported live chat.
+This is an authored illustration labeled “Illustrated demo · skill + local API.” It does not connect an agent, install a skill, submit a task, upload a source, or call a model or localhost API. The CLI retrieves sources; the displayed final response is an authored application. Public book pages continue to offer editorial digests and copyable prompts; full source-derived skill packages come from private uploads.
+
+The dark frame uses warm charcoal with restrained brass and sage accents. The source cover retains visible thickness. On phones the book becomes a compact strip above the conversation. No editable composer is shown.
 
 ## Open-source research and implementation
 
@@ -20,13 +24,15 @@ The dark frame uses warm charcoal with restrained brass and sage accents. The ex
 
 ## Interaction and accessibility
 
-The flow starts only when in view, unfolds over about seven seconds, then stays complete until the user chooses Replay. Each step highlights automatically as its content appears. The original question and earlier stages remain visible as the response develops. The panel height stays stable during reveals. Playback pauses outside the viewport or when the tab is hidden. Pause, Play, and Replay share one control with keyboard support and an accessible label. Opening tool details completes the flow so the command can be read without motion. Keyboard focus inside the conversation pauses playback. Browser back/forward restoration resumes an unfinished flow.
+Playback begins when at least a quarter of the panel is visible. Listing occupies the first 4.5 seconds, the separate ask call the next 3.4 seconds, then the applied answer unfolds. The full answer is visible by about 11 seconds and remains until a short fade at 18.5 seconds. At 19 seconds the same task starts again. Earlier stages remain visible as later stages appear; the panel height remains stable.
 
-Reduced-motion users receive the completed static conversation without playback controls. Without JavaScript the complete conversation and native command disclosure remain readable. Screen readers receive no unsolicited announcements during playback. The current progression step has `aria-current="step"`; unrevealed content is hidden from accessibility navigation and made inert.
+Pause/Play shares one keyboard-accessible control. Playback pauses offscreen, in a hidden tab, on focus inside the conversation, or when either command disclosure opens. Inspection holds the current time rather than forcing completion. Play closes the disclosures and resumes. Browser back/forward restoration resumes playback.
+
+Reduced-motion users get the completed static flow with both calls and catalog results, without playback controls. Without JavaScript the same complete transcript and native disclosures remain readable. Screen readers receive no unsolicited announcements during the loop. The active progress step has `aria-current="step"`; unrevealed content is hidden from accessibility navigation and made inert.
 
 ## Local validation
 
-`npm run build` and `node scripts/test-agent-demo.mjs` cover ordered three-step progression in one conversation, pause/resume, replay, retention of the completed answer, offscreen suspension, stable panel height, actual command disclosure, preserved surrounding homepage sections, phone/desktop layouts, keyboard operation, reduced motion, and the no-JavaScript transcript. The test rejects provider, processing-worker, and local API calls from the illustration. Screenshots are reviewed at 320, 390, and 1280 px.
+`npm run build` and `node scripts/test-agent-demo.mjs` cover the actual listing step preceding ask, visible catalog results, matched-book highlighting, ordered progression, a repeating single task, reading hold, pause/continue without skipping, stable layout, actual command disclosures, preserved surrounding homepage sections, phone/desktop layouts, keyboard operation, reduced motion, and the no-JavaScript transcript. The test rejects provider, processing-worker, and local API calls from the illustration. Screenshots are reviewed at 320, 390, and 1280 px.
 
 No production release is included in this change.
 
@@ -37,17 +43,17 @@ Inspected and executed the **published** `answer-with-books@0.1.4` tarball from 
 - `install --skill --api`: installs the skill and bundled runtime. Node 20+ required.
 - `ask "QUESTION" --json`: retrieves relevant public books and published editorial answers locally. No account, API key, running HTTP server, or model call is needed by default.
 - `ask ... --top-of-mind "CONTEXT"`: accepts request-only context. In 0.1.4 the retrieval query still comes from the question; this flag does not change ranking or generate a personalized answer. The agent retains the user's chat context and applies the retrieved sources itself.
-- `serve`: runs the optional localhost HTTP API. `GET /v1/books` lists its catalog. Catalog listing requires this local API; it is documented on the Skills page.
+- `serve`: runs the optional localhost HTTP API. `GET /v1/books` lists its catalog. The catalog disclosure shows this prerequisite; the Skills page also documents it.
 - `--help`: prints the available commands and flags. Both `list` and `answer` exit with “Unknown command” in 0.1.4. No unsupported commands are advertised.
 
 Current illustrated command, executed against the published package:
 
 ```sh
-npx --yes answer-with-books@0.1.4 ask "How should I interview customers to validate my meal-planning app?" --top-of-mind "I want five customer interviews before building the app." --json
+npx --yes answer-with-books@0.1.4 ask "How should I interview customers to validate my meal-planning app?" --top-of-mind "Five interviews before I build." --json
 ```
 
 It returns `status: new_question`, The Mom Test as the only book, no published answers, and `new_question.saved: false`. The disclosure preserves those distinctions. The short source-method note and final questions are editorial applications of the matched book, not claimed verbatim CLI output.
 
-The earlier command audit also confirmed 46 books in the optional local API catalog. Catalog listing remains documented in the Skills page FAQ; it is not a separate scene in this single-task demo.
+The catalog response was rechecked in the published package: 46 books, including all three displayed entries. Catalog listing is now the first visible tool call in the same conversation, not a separate example.
 
 Individual uploaded book packages are a different artifact: their instructions and reference files are loaded by a compatible agent, rather than exposing their own `list` or `ask` executables.
