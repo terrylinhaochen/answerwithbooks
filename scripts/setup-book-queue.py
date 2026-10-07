@@ -37,7 +37,9 @@ def main():
             sql=(ROOT/f'supabase/migrations/{version}_{name}.sql').read_text()
             query('begin;\n'+sql+'\ninsert into supabase_migrations.schema_migrations(version,name,statements) values('+quote(version)+','+quote(name)+',array['+quote(sql)+']);\ncommit;')
             print(name+' migration applied and recorded.')
-    rows=query("select decrypted_secret from vault.decrypted_secrets where name='book_queue_runner'",True)
+    # Supabase's read-only database role cannot call Vault's decrypt function.
+    # Use the operator role for this SELECT; the credential remains in memory.
+    rows=query("select decrypted_secret from vault.decrypted_secrets where name='book_queue_runner'")
     runner=rows[0]['decrypted_secret'] if rows else secrets.token_urlsafe(48)
     api('/secrets',[{'name':'BOOK_QUEUE_RUNNER_SECRET','value':runner}])
     if not rows:query('select vault.create_secret('+quote(runner)+",'book_queue_runner')")
