@@ -4,15 +4,9 @@
 
 ## Customer experience
 
-The homepage section immediately after “Turn what you read into how you work” now demonstrates the action with The Mom Test:
+The initial three-step copy-prompt form has been replaced by the compact animated agent conversation documented in [SKILL_CHAT_DEMO.md](SKILL_CHAT_DEMO.md). It illustrates an installed skill being read and applied to a task, with three examples and an expandable method trace. The animation is labeled as illustrative and makes no provider calls.
 
-1. Edit a concrete task, such as planning customer-interview questions.
-2. Inspect the complete prompt: the public editorial digest, instructions, and the task.
-3. Copy it, open an AI chat, paste, and send. The response shown in the demo is explicitly illustrative, not a live or simulated provider run.
-
-“Copy prompt for your AI” replaces “Copy to agent” on the main book, shelf, and skills surfaces. Helper text explains what is copied and the next action. Copy uses the clipboard; it does not connect an account, send a request to an AI provider, or install anything.
-
-A short expandable explanation distinguishes the reusable download. Uploaded sources produce a `skill/` directory, with `SKILL.md`, on-demand references and `INSTALL.md`. Installing that package in a compatible agent makes it available for later tasks. Copying is the immediate chat workflow; installation is a separate, explicit action. Public editorial digests are not presented as complete source-derived skill packages.
+“Copy prompt for your AI” remains the action on the actual book, shelf, and skills surfaces. It copies saved book context and instructions for a chat; it does not connect an account or install a skill. Uploaded sources produce a downloadable `skill/` directory with `SKILL.md`, supporting references and `INSTALL.md`. Public editorial digests are not presented as complete source-derived skill packages.
 
 ## What upstream supports
 

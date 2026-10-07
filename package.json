@@ -54,6 +54,7 @@
     "astro": "^5.12.0",
     "fflate": "0.8.2",
     "html-to-image": "1.11.13",
+    "motion": "12.40.0",
     "pdfjs-dist": "5.4.624",
     "pyodide": "314.0.7",
     "tailwindcss": "^4.1.0",
