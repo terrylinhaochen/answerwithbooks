@@ -72,7 +72,9 @@ try {
   assert.equal(await upload.locator('[data-upload-files] > li').count(), 0);
   await upload.getByRole('button', { name: 'Close upload' }).click();
 
-  assert.equal(await page.locator('#install a,#install button').count(),1);
+  assert.equal(await page.locator('#install a,#install button').count(),2);
+  assert.equal(await page.locator('.shelf-lab [data-open-skill-install],.shelf-lab [data-open-book-request],.demo-footer').count(),0);
+  assert.equal(await page.locator('#home-intro [data-open-skill-install],#home-intro [data-open-book-request]').count(),2);
   assert.equal(await page.locator('.library-book [data-copy-public-book]').count(),0);
   assert.equal(await page.locator('.library-book .library-cover[href^="/books/"]').count(),8);
 
@@ -89,7 +91,7 @@ try {
       assert.ok(await page.locator('[data-carousel-slide]:visible').getByRole('link', { name: 'Open insight', exact: true }).getAttribute('href'));
     }
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `No horizontal overflow at ${width}px`);
-    for (const id of ['install', 'profile-tracker']) {
+    for (const id of ['home-intro', 'install', 'profile-tracker']) {
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
       await page.screenshot({ path: `/tmp/awb-home-${id}-${width}.jpg`, type: 'jpeg', quality: 70 });
     }
