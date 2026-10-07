@@ -1,0 +1,47 @@
+---
+import ToolCommand from './ToolCommand.astro';
+import { bookSkillCommand } from '../lib/tool-catalog.mjs';
+---
+<dialog id="skill-install-dialog" class="skill-install-dialog" aria-labelledby="skill-install-title" aria-describedby="skill-install-description">
+ <button class="install-close" type="button" data-close-skill-install aria-label="Close installation">×</button>
+ <p class="install-eyebrow">A library for your agent</p>
+ <h2 id="skill-install-title">Install Answer<br /><em>with Books.</em></h2>
+ <p id="skill-install-description">Find the right books for your question. Give your agent their ideas and methods to work with.</p>
+ <div class="install-terminal">
+  <p><span aria-hidden="true">&gt;_</span> Run in your terminal <span>Node 20+</span></p>
+  <ToolCommand value={bookSkillCommand} install label="Copy install command" />
+ </div>
+ <p class="install-caption">Installs the Codex skill and public library. No account or API key needed.</p>
+ <div class="install-first-task"><p>Then, in a new Codex chat</p><blockquote>“Use Answer with Books to help me choose work I can become great at.”</blockquote></div>
+ <a class="install-details" href="/tools/#public-shelf-install">More setup details <span aria-hidden="true">↗</span></a>
+</dialog>
+<style>
+ .skill-install-dialog{position:fixed;inset:0;margin:auto;width:min(560px,calc(100vw - 28px));max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;border:1px solid #c9c5b7;border-radius:20px;padding:40px;background:#f5f1e7 url('/textures/book-paper.svg');color:#30372f;box-shadow:0 30px 100px #1118}
+ .skill-install-dialog::backdrop{background:#171d17a3;backdrop-filter:blur(7px)}
+ .install-close{position:absolute;right:15px;top:12px;width:44px;height:44px;font-size:27px;color:#707566;cursor:pointer;border-radius:8px}.install-close:hover{background:#343a2910}
+ .install-eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#717868;padding-right:30px}
+ h2{font-family:var(--font-serif);font-size:46px;line-height:1.02;letter-spacing:-.04em;font-weight:400;margin-top:20px}h2 em{font-weight:350}
+ #skill-install-description{font-size:14px;line-height:1.75;max-width:40ch;color:#636c5b;margin-top:18px}
+ .install-terminal{margin-top:28px;border:1px solid #d8d5c9;border-radius:10px;background:#eeede3;padding:15px}
+ .install-terminal>p{display:flex;align-items:center;gap:9px;font-size:11px;color:#626a59}.install-terminal>p>span:last-child{margin-left:auto;color:#7a806f;font-size:10px}
+ .install-terminal :global(.tool-command__row){display:block;border:0;background:transparent;padding:4px 0 0}.install-terminal :global(pre){font-size:13px;color:#35432e;line-height:1.85}.install-terminal :global([data-copy-command]){display:block;width:100%;margin-top:16px;background:#354734;color:#f9f5e9;font-size:12px;font-weight:500;min-height:44px;border-radius:6px}.install-terminal :global([data-copy-command]:hover){background:#455a40}
+ .install-caption{font-size:12px;line-height:1.7;margin-top:13px;color:#6b7263}
+ .install-first-task{margin-top:28px;padding-top:22px;border-top:1px solid #d8d5c9}.install-first-task>p{font-size:11px;color:#747a6b}.install-first-task blockquote{font-family:var(--font-serif);font-size:23px;line-height:1.25;letter-spacing:-.015em;margin-top:12px}
+ .install-details{display:inline-flex;align-items:center;gap:16px;margin-top:24px;font-size:12px;text-decoration:underline;text-underline-offset:4px;min-height:32px}
+ :is(button,a):focus-visible{outline:2px solid #62734e;outline-offset:4px}
+ @media(max-width:600px){.skill-install-dialog{padding:32px 25px}h2{font-size:40px}.install-terminal{padding:13px}.install-terminal :global(pre){font-size:12px}}
+</style>
+<script>
+ const dialog=document.querySelector<HTMLDialogElement>('#skill-install-dialog');
+ if(dialog){
+  let opener:HTMLElement|null=null,previousOverflow='';
+  document.querySelectorAll<HTMLAnchorElement>('[data-open-skill-install]').forEach(link=>link.addEventListener('click',event=>{
+   if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+   event.preventDefault();opener=link;previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();
+   dialog.querySelector<HTMLButtonElement>('[data-copy-command]')?.focus();
+  }));
+  dialog.querySelector('[data-close-skill-install]')?.addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;opener?.focus({preventScroll:true});});
+  dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+ }
+</script>

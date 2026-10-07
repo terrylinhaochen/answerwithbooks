@@ -2,7 +2,7 @@
 
 ## Design
 
-The headline is “Your agent, well read.” One question about finding a direction for great work progresses through **List books → Ask → Apply**. The question, both tool calls, catalog results, and final reply accumulate in the same conversation. The conversation shows the progression directly, without a step-label row or tabs. The same complete flow loops; it never switches to a different user task. “Explore skills” is the sole primary destination.
+The headline is “Your agent, well read.” One question about finding a direction for great work progresses through **List books → Ask → Apply**. The question, both tool calls, catalog results, and final reply accumulate in the same conversation. The conversation shows the progression directly, without a step-label row or tabs. The same complete flow loops; it never switches to a different user task. “Install skill” opens the shared installation panel at the end of the demo. The same entry point appears in the homepage header and on the shelf. A quieter “Add a book” action opens the existing batch uploader from the shelf and the lower upload banner; newsletter signup remains available through the footer. The installation panel copies the verified command, explains its Codex target, and offers a first task plus a link to setup details.
 
 1. The user asks ‘How do I choose a career where I can do great work?’ with interests in writing, software, and teaching. A visible `GET /v1/books` tool call lists the public catalog, followed by three compact book entries from its 46 results: Designing Your Life, Deep Work, and Zero to One.
 2. A separate `ask` call submits that question and context. It retrieves three books and one published answer. Designing Your Life is highlighted as the lead source in the sample catalog; the disclosure lists all matches.
@@ -34,7 +34,9 @@ Reduced-motion users get the completed static flow with both calls and catalog r
 
 `npm run build` and `node scripts/test-agent-demo.mjs` cover the actual listing step preceding ask, visible catalog results, matched-book highlighting, ordered progression, a repeating single task, reading hold, pause/continue without skipping, stable layout, actual command disclosures, preserved surrounding homepage sections, phone/desktop layouts, keyboard operation, reduced motion, and the no-JavaScript transcript. The test rejects provider, processing-worker, and local API calls from the illustration. Screenshots are reviewed at 320, 390, and 1280 px.
 
-Included in the [2026-10-06 production release](releases/2026-10-06-book-processing.md).
+The core conversation demo was included in the [2026-10-06 production release](releases/2026-10-06-book-processing.md). The newer homepage CTA revision requires a subsequent deployment.
+
+`node scripts/test-home-section-order.mjs` checks the homepage installation entry points, exact clipboard contents, manual-copy fallback, closing and focus restoration, batch drag-and-drop, cached-library suggestions, setup-details link, preserved section order and carousel, and desktop/mobile layouts including signed-in navigation at 320 px. It never submits an upload or signup.
 
 ## Verified command contract (2026-10-06)
 

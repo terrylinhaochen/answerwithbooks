@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
+import { bookSkillCommand } from '../src/lib/tool-catalog.mjs';
 
 const browser = await chromium.launch({
   headless: true,
@@ -23,18 +24,59 @@ try {
   assert.match(await page.locator('#home-intro h1').innerText(), /Turn what you read/);
   assert.equal(await page.locator('#home-intro [data-insight-carousel]').count(), 1);
   assert.equal(await page.locator('#source-books a').count() > 0, true);
-  assert.equal(await page.locator('#question-first-reading article').count(), 3);
+  assert.equal(await page.locator('#question-first-reading .demo-catalog-title').count(), 3);
 
-  const email = page.locator('#home-intro input[type=email]');
-  await email.fill('preview@example.com');
-  assert.equal(await email.inputValue(), 'preview@example.com');
-  await email.clear(); // Do not submit a signup during a layout test.
+  assert.equal(await page.locator('#home-intro form').count(), 0);
+  assert.equal(await page.locator('footer').getByRole('link', { name: 'Newsletter', exact: true }).getAttribute('href'), '/newsletter/');
+  const install = page.locator('#skill-install-dialog');
+  const installTriggers = page.locator('[data-open-skill-install]');
+  assert.equal(await installTriggers.count(), 3);
+  for (const trigger of await installTriggers.all()) {
+    await trigger.click();
+    assert.equal(await install.isVisible(), true);
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.body.style.overflow !== 'hidden');
+    assert.equal(await install.isVisible(), false);
+    assert.equal(await trigger.evaluate(el => el === document.activeElement), true);
+  }
+  await installTriggers.first().click();
+  await install.getByRole('button', { name: 'Copy install command' }).click();
+  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), bookSkillCommand);
+  await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new Error('Denied for fallback test'); }; });
+  await install.getByRole('button', { name: 'Copy install command' }).click();
+  assert.equal(await install.getByRole('textbox', { name: 'Text to copy manually' }).inputValue(), bookSkillCommand);
+  await install.getByRole('button', { name: 'Close installation' }).click();
+  await installTriggers.first().click();
+  await page.mouse.click(1, 1);
+  assert.equal(await install.isVisible(), false);
+
+  const upload = page.locator('#book-upload-dialog');
+  const uploadTriggers = page.locator('[data-open-book-request]');
+  assert.equal(await uploadTriggers.count(), 2);
+  for (const trigger of await uploadTriggers.all()) {
+    await trigger.click();
+    assert.equal(await upload.isVisible(), true);
+    assert.equal(await upload.locator('input[type=file]').getAttribute('multiple'), '');
+    await upload.getByRole('button', { name: 'Close upload' }).click();
+  }
+  await uploadTriggers.first().click();
+  await upload.locator('[data-upload-drop]').evaluate(drop => {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(new File(['Preview only'], 'The Mom Test.pdf', { type: 'application/pdf' }));
+    dataTransfer.items.add(new File(['Preview only'], 'Original notes.md', { type: 'text/markdown' }));
+    drop.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer }));
+  });
+  assert.equal(await upload.locator('[data-upload-files] > li').count(), 2);
+  assert.equal(await upload.getByRole('button', { name: 'Use library book', exact: true }).count(), 1);
+  await upload.getByRole('button', { name: 'Clear files', exact: true }).click();
+  assert.equal(await upload.locator('[data-upload-files] > li').count(), 0);
+  await upload.getByRole('button', { name: 'Close upload' }).click();
 
   assert.equal(await page.locator('#install a,#install button').count(),1);
   assert.equal(await page.locator('.library-book [data-copy-public-book]').count(),0);
   assert.equal(await page.locator('.library-book .library-cover[href^="/books/"]').count(),8);
 
-  for (const width of [1440, 390]) {
+  for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 950 });
     const intro = await page.locator('#home-intro h1').boundingBox();
     const ideas = await page.locator('#ideas-for-work').boundingBox();
@@ -52,8 +94,13 @@ try {
       await page.screenshot({ path: `/tmp/awb-home-${id}-${width}.jpg`, type: 'jpeg', quality: 70 });
     }
   }
+  await page.locator('[data-auth-link]').evaluate(el => el.classList.remove('hidden'));
+  assert.ok(await page.locator('.awb-brand').evaluate(el => el.scrollWidth <= el.clientWidth + 1), 'Signed-in mobile brand stays readable');
+  await page.screenshot({ path: '/tmp/awb-home-cta-signed-in-320.png' });
+  await page.goto('http://127.0.0.1:4321/tools/#public-shelf-install');
+  await page.waitForFunction(() => document.querySelector('#public-shelf-install').open);
   assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ passed: true, order: order, desktop: true, mobile: true, carousel: true, bookLinks: true, signup: 'input only; not submitted' }, null, 2));
+  console.log(JSON.stringify({ passed: true, order: order, desktop: true, mobile: true, carousel: true, bookLinks: true, install: 'copy, fallback, close, focus return, setup anchor', upload: 'batch drop and cached-library suggestion; not submitted' }, null, 2));
 } finally {
   await browser.close();
 }

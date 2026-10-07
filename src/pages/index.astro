@@ -7,7 +7,8 @@ import BookJacket from '../components/BookJacket.astro';
 import AnswerCover from '../components/AnswerCover.astro';
 import { bookPalettes } from '../lib/book-palettes';
 import '../styles/collector-home.css';
-import NewsletterSignup from '../components/NewsletterSignup.astro';
+import InstallSkillDialog from '../components/InstallSkillDialog.astro';
+import AddBookDialog from '../components/AddBookDialog.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
 import QuestionInvite from '../components/QuestionInvite.astro';
 import { faqJsonLd } from '../lib/seo';
@@ -114,12 +115,12 @@ const jsonLd = [
   },
   {
     '@type': 'SiteNavigationElement',
-    name: ['Books', 'Guides', 'Skills', 'Subscribe'],
+    name: ['Books', 'Guides', 'Skills', 'Install skill'],
     url: [
       'https://answerwithbooks.com/books/',
       'https://answerwithbooks.com/guides/',
       'https://answerwithbooks.com/tools/',
-      'https://answerwithbooks.com/newsletter/',
+      'https://answerwithbooks.com/tools/#public-shelf-install',
     ],
   },
   {
@@ -135,8 +136,9 @@ const jsonLd = [
   robots={preview || shelfLab ? "noindex, nofollow" : undefined}
   jsonLd={jsonLd}
   theme="collector"
+  installCta
 >
-  <TactileShelf showControls={shelfLab} />
+  <TactileShelf showControls={shelfLab} showGettingStarted />
 
   <div class="reading-room">
     <section id="home-intro" class="home-section home-intro">
@@ -144,7 +146,7 @@ const jsonLd = [
         <p class="room-eyebrow">Book knowledge, ready for your agent</p>
         <h1><span>Turn what you read into</span> <em>how you work.</em></h1>
         <p class="room-description">Give your agent the frameworks, questions, and practical rules inside a good book. Turn them into a better interview, a clearer decision, or a plan you can use.</p>
-        <div class="home-signup" data-hide-when-signed-in><NewsletterSignup /></div>
+        <a href="#question-first-reading" class="room-link home-demo-link">See it in action <span aria-hidden="true">↓</span></a>
       </div>
       <div id="ideas-for-work" class="insight-paper" data-insight-carousel aria-label="Ideas for your work" aria-roledescription="carousel">
         {carouselItems.map((item, slideIndex) => (
@@ -181,8 +183,8 @@ const jsonLd = [
 
     <section id="install" class="home-section home-install">
       <div class="agent-room agent-room-simple">
-        <div><h2>Give your agent<br /><em>a useful skill.</em></h2><p>Turn the methods in a book or document into a way to tackle your next task.</p></div>
-        <a href="/tools/" class="room-button room-button-light">Explore skills <span aria-hidden="true">↗</span></a>
+        <div><h2>Your book.<br /><em>Your next skill.</em></h2><p>Upload a book, paper, or document. Keep a readable digest, a reusable skill, and a cover, all in your private library.</p></div>
+        <button type="button" class="room-button room-button-light" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Add a book <span aria-hidden="true">＋</span></button>
       </div>
     </section>
 
@@ -217,4 +219,6 @@ const jsonLd = [
     });
   </script>
 
+  <InstallSkillDialog />
+  <AddBookDialog />
 </Base>

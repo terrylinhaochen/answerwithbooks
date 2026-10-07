@@ -6,8 +6,8 @@ import ShelfShareDialog from './ShelfShareDialog.astro';
 import { bookPalettes } from '../lib/book-palettes';
 import { publicBookPrompt, publicBookTask } from '../lib/public-book-agent';
 import '../styles/tactile-shelf.css';
-interface Props { showControls?: boolean; }
-const { showControls = false } = Astro.props;
+interface Props { showControls?: boolean; showGettingStarted?: boolean; }
+const { showControls = false, showGettingStarted = false } = Astro.props;
 const books = await getCollection('books');
 const picks = [
  {slug:'the-mom-test',color:'#077f8e',label:'Better questions',angle:-7,lift:10,question:'What do people actually need?'},
@@ -18,7 +18,7 @@ const picks = [
 ].map((pick,index)=>{ const book=books.find(book=>book.id===pick.slug)!; return {...pick,index,...book.data,task:publicBookTask(book),prompt:publicBookPrompt(book)}; });
 const catalog = books.map(book => ({ slug: book.id, title: book.data.title, author: book.data.author, year: book.data.year, oneLiner: book.data.oneLiner, label: picks.find(pick => pick.slug === book.id)?.label ?? book.data.tags[0]?.replaceAll('-', ' ') ?? 'Your choice', color: picks.find(pick => pick.slug === book.id)?.color ?? bookPalettes[book.id]?.cover ?? '#304c44', task: publicBookTask(book) }));
 ---
-<div class="shelf-lab" data-shelf-lab data-direction={showControls ? "room" : "table"} data-shelf-production={!showControls || undefined}>
+<div class="shelf-lab" data-shelf-lab data-direction={showControls ? "room" : "table"} data-shelf-production={!showControls || undefined} data-shelf-getting-started={showGettingStarted || undefined}>
  {showControls && <script is:inline>
   // Set the requested layout before its books paint, even on a slow connection.
   document.currentScript.parentElement.dataset.direction =
@@ -28,7 +28,7 @@ const catalog = books.map(book => ({ slug: book.id, title: book.data.title, auth
  <section class="tactile-hero" aria-label="Interactive book library">
   <div class="tactile-inner">
    <div class="collection-line"><span><i></i> <span data-shelf-eyebrow>THE BOOK &amp; SKILL LIBRARY</span></span><div class="shelf-collection-actions"><button type="button" class="shelf-personalize" data-share-shelf aria-haspopup="dialog" disabled>Share <span aria-hidden="true">↗</span></button><button type="button" class="shelf-personalize" data-personalize-shelf aria-haspopup="dialog" aria-controls="shelf-personalizer"><span data-personalize-label>Personalize</span> <span aria-hidden="true">＋</span></button></div></div>
-   <div class="tactile-heading"><div class="shelf-title"><h2><span data-public-shelf-heading><span data-room-copy>Good books.<br /><em>Fresh perspective.</em></span><span data-table-copy>Put good books<br /><em>to work.</em></span></span><span data-personal-shelf-heading hidden><span data-shelf-owner>Your</span> <em>shelf</em></span></h2><time data-shelf-date hidden></time></div><div class="heading-aside"><p data-shelf-description>Read the ideas.<br />Give your agent a method to work with.</p><span class="handwritten" data-room-copy>Take one off the shelf</span><span class="handwritten" data-table-copy>A little room to play.</span></div></div>
+   <div class="tactile-heading"><div class="shelf-title"><h2><span data-public-shelf-heading><span data-room-copy>Good books.<br /><em>Fresh perspective.</em></span><span data-table-copy>Put good books<br /><em>to work.</em></span></span><span data-personal-shelf-heading hidden><span data-shelf-owner>Your</span> <em>shelf</em></span></h2><time data-shelf-date hidden></time></div><div class="heading-aside"><p data-shelf-description>Read the ideas.<br />Give your agent a method to work with.</p>{showGettingStarted ? <div class="shelf-start-actions"><a class="shelf-install" href="/tools/#public-shelf-install" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill <span aria-hidden="true">↗</span></a><button type="button" class="shelf-add" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Add a book <span aria-hidden="true">＋</span></button></div> : <><span class="handwritten" data-room-copy>Take one off the shelf</span><span class="handwritten" data-table-copy>A little room to play.</span></>}</div></div>
    <div class="book-stage" data-book-stage>
     <div class="room-light" aria-hidden="true"></div>
     <div class="book-arrangement">
