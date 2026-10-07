@@ -1,6 +1,6 @@
 # Public skill installation
 
-The homepage install dialog and the public-shelf FAQ share `SkillInstallOptions.astro` and `book-skill-install.mjs`. The selector changes the command, installation note, and first-task instructions together. Homepage setup controls are buttons with no navigation URL. A small inline controller opens the modal even if deferred modules are unavailable. Changing platforms clears copied/fallback state; a pending clipboard response cannot show confirmation for a different command.
+The homepage install dialog and the public-shelf FAQ share `SkillInstallOptions.astro` and `book-skill-install.mjs`. The two-step card picker reuses the earlier Answer with Books `ToolDialogs.astro` pattern: choose an agent from the icon grid, click Next, then copy its command. Back returns to the selected card; reopening the dialog starts on the picker. The sample chat prompt and setup-details link are removed. Homepage setup controls are buttons with no navigation URL. A small inline controller opens the modal even if deferred modules are unavailable. Going back or changing platforms clears copied/fallback state; a pending clipboard response cannot show confirmation for a different command.
 
 ## Available choices
 
@@ -17,12 +17,12 @@ The shared installer downloads the `skill/answer-with-books` directory from the 
 - [Upstream book-to-skill installation](https://github.com/virgiliojr94/book-to-skill/blob/master/docs/install.md): recommends `npx skills add`, with manual host-specific locations as alternatives.
 - [Shared skills installer](https://github.com/vercel-labs/skills): agent selection, global scope, install paths, and supported agent IDs. Actual v1.5.0 package code and npm engine metadata were checked, rather than assuming current main describes the pinned release.
 - [Public Answer with Books skill](https://github.com/Crowdlisten/Crowdlisten_books/blob/main/skill/answer-with-books/SKILL.md): bundled-runtime and published-CLI fallback paths.
-- CrowdListen's existing `frontend/src/components/collection/AgentClientPicker.jsx`: native agent dropdown, selected-agent setup, and cleared copy state. Reused the interaction pattern; its MCP login/configuration commands do not apply to this skill.
+- CrowdListen's existing `frontend/src/components/collection/AgentClientPicker.jsx`: selected-agent setup and cleared copy state. The subsequent card-picker revision reuses the older Answer with Books dialog markup and existing `AgentIcon` assets; its MCP login/configuration commands do not apply to this skill.
 
 ## Validation
 
 - The real pinned shared installer discovers exactly one `answer-with-books` skill in the public repository.
 - A temporary project installation for all seven named agents succeeded. Shared skill files plus Claude Code/OpenClaw links were read back. These tests used project scope to avoid replacing the user's installed skills; the advertised global destinations were checked in the pinned installer's source.
 - Executed the fallback retrieval command from that installation against the published `answer-with-books@0.1.4`: `status: hit`, three books and one published answer for the great-work career question. No API server or model invocation.
-- `node scripts/test-skill-install-ui.mjs`: every selector option copies the appropriate command on both surfaces, manual clipboard fallback follows the new selection, copied status resets, no browser errors or horizontal overflow at 320, 390, and 1280 px.
+- `node scripts/test-skill-install-ui.mjs`: every agent card leads to the appropriate copy command on both surfaces, keyboard selection and Back/reopen work, manual clipboard fallback follows the new selection, copied status resets, no browser errors or horizontal overflow at 320, 390, and 1280 px.
 - Browser installation/discovery inside each native agent application is not certified by these filesystem/CLI checks.

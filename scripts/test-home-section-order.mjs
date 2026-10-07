@@ -43,10 +43,11 @@ try {
     assert.equal(await trigger.evaluate(el => el === document.activeElement), true);
   }
   await installTriggers.first().click();
-  await install.getByRole('button', { name: 'Copy install command' }).click();
+  await install.getByRole('button', { name: 'Next', exact: true }).click();
+  await install.getByRole('button', { name: 'Copy command', exact: true }).click();
   assert.equal(await page.evaluate(() => navigator.clipboard.readText()), bookSkillCommand);
   await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new Error('Denied for fallback test'); }; });
-  await install.getByRole('button', { name: 'Copy install command' }).click();
+  await install.getByRole('button', { name: 'Copy command', exact: true }).click();
   assert.equal(await install.getByRole('textbox', { name: 'Text to copy manually' }).inputValue(), bookSkillCommand);
   await install.getByRole('button', { name: 'Close installation' }).click();
   await installTriggers.first().click();

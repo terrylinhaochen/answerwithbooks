@@ -9,36 +9,56 @@ try {
  for(const surface of ['dialog','page']) {
   await page.goto(surface==='dialog'?'http://127.0.0.1:4321/':'http://127.0.0.1:4321/tools/#public-shelf-install');
   if(surface==='dialog')await page.locator('[data-open-skill-install]').first().click();
-  const root=page.locator('[data-book-install-options]'),select=root.getByRole('combobox',{name:'Choose your agent'});
+  const root=page.locator('[data-book-install-options]');
+  const pick=async id=>root.locator(`[data-book-install-agent][value="${id}"]`).check();
+  const next=async()=>root.getByRole('button',{name:'Next',exact:true}).click();
+  const back=async()=>root.locator('[data-book-install-back]').click();
+  assert.equal(await root.locator('select').count(),0);
+  assert.equal(await root.locator('[data-book-install-agent]').count(),bookSkillPlatforms.length);
+  assert.equal(await root.locator('blockquote,[data-book-install-next]').count(),0);
+  assert.equal(await page.getByRole('link',{name:'More setup details'}).count(),0);
+  await root.locator('[data-book-install-agent]:checked').focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await root.locator('[data-book-install-agent]:checked').inputValue(),'claude-code');
   for(const platform of bookSkillPlatforms){
-   await select.selectOption(platform.id);
-   await root.getByRole('button',{name:'Copy install command'}).click();
+   await pick(platform.id);await next();
+   await root.getByRole('button',{name:'Copy command',exact:true}).click();
    const copied=await page.evaluate(()=>navigator.clipboard.readText());
    assert.equal(copied,platform.command);
    if(!['codex','choose'].includes(platform.id))assert.ok(copied.endsWith(`--agent ${platform.id}`));
    if(platform.id==='choose')assert.ok(!copied.includes('--agent'),'Let the user select agents; do not install to every agent automatically');
-   assert.equal(await root.locator('[data-book-install-next]').innerText(),platform.next);
-   await select.selectOption(platform.id==='codex'?'cursor':'codex');
-   assert.equal(await root.locator('[data-copy-status]').innerText(),'','Switching agents clears stale copied confirmation');
+   await back();
+   assert.equal(await root.locator('[data-copy-status]').innerText(),'','Back clears stale copied confirmation');
   }
   await page.evaluate(()=>{navigator.clipboard.writeText=async()=>{throw new Error('Clipboard denied for test');};});
-  await select.selectOption('claude-code');
-  await root.getByRole('button',{name:'Copy install command'}).click();
+  await pick('claude-code');await next();
+  await root.getByRole('button',{name:'Copy command',exact:true}).click();
   assert.ok((await root.getByRole('textbox',{name:'Text to copy manually'}).inputValue()).endsWith('--agent claude-code'));
-  await select.selectOption('cursor');
+  await back();await pick('cursor');await next();
   assert.equal(await root.locator('[data-copy-fallback]').isVisible(),false);
-  await root.getByRole('button',{name:'Copy install command'}).click();
+  await root.getByRole('button',{name:'Copy command',exact:true}).click();
   assert.ok((await root.getByRole('textbox',{name:'Text to copy manually'}).inputValue()).endsWith('--agent cursor'));
-  await select.selectOption('claude-code');
+  await back();await pick('codex');
   for(const width of [1280,390,320]){
-   await page.setViewportSize({width,height:1000});
+   await page.setViewportSize({width,height:900});
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
    assert.ok(await root.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
-   if(surface==='dialog'){
-    const dialog=page.locator('#skill-install-dialog');
-    assert.ok(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
-    await dialog.screenshot({path:`/private/tmp/awb-platform-install-${width}.png`});
+   for(const step of ['choose','copy']){
+    if(step==='copy')await next();
+    assert.ok(await root.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+    if(surface==='dialog'){
+     const dialog=page.locator('#skill-install-dialog');
+     assert.ok(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+     await dialog.screenshot({path:`/private/tmp/awb-agent-cards-${step}-${width}.png`});
+    }
    }
+   await back();
+  }
+  if(surface==='dialog'){
+   await next();await page.keyboard.press('Escape');
+   await page.locator('[data-open-skill-install]').first().click();
+   assert.equal(await root.locator('[data-book-install-step="choose"]').isVisible(),true);
+   assert.equal(await root.locator('[data-book-install-step="copy"]').isVisible(),false);
   }
  }
  // Opening must not depend on deferred modules loading successfully.

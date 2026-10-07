@@ -1,24 +1,15 @@
 ---
 import SkillInstallOptions from './SkillInstallOptions.astro';
 ---
-<dialog id="skill-install-dialog" class="skill-install-dialog" aria-labelledby="skill-install-title" aria-describedby="skill-install-description">
+<dialog id="skill-install-dialog" class="skill-install-dialog" aria-labelledby="dialog-install-agent-title">
  <button class="install-close" type="button" data-close-skill-install aria-label="Close installation">×</button>
- <p class="install-eyebrow">A library for your agent</p>
- <h2 id="skill-install-title">Install Answer<br /><em>with Books.</em></h2>
- <p id="skill-install-description">Find the right books for your question. Give your agent their ideas and methods to work with.</p>
  <SkillInstallOptions id="dialog-install-agent" />
- <a class="install-details" href="/tools/#public-shelf-install">More setup details <span aria-hidden="true">↗</span></a>
 </dialog>
 <style>
- .skill-install-dialog{position:fixed;inset:0;margin:auto;width:min(560px,calc(100vw - 28px));max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;border:1px solid #c9c5b7;border-radius:20px;padding:40px;background:#f5f1e7 url('/textures/book-paper.svg');color:#30372f;box-shadow:0 30px 100px #1118}
- .skill-install-dialog::backdrop{background:#171d17a3;backdrop-filter:blur(7px)}
- .install-close{position:absolute;right:15px;top:12px;width:44px;height:44px;font-size:27px;color:#707566;cursor:pointer;border-radius:8px}.install-close:hover{background:#343a2910}
- .install-eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#717868;padding-right:30px}
- h2{font-family:var(--font-serif);font-size:46px;line-height:1.02;letter-spacing:-.04em;font-weight:400;margin-top:20px}h2 em{font-weight:350}
- #skill-install-description{font-size:14px;line-height:1.75;max-width:40ch;color:#636c5b;margin-top:18px}
- .install-details{display:inline-flex;align-items:center;gap:16px;margin-top:24px;font-size:12px;text-decoration:underline;text-underline-offset:4px;min-height:32px}
- :is(button,a):focus-visible{outline:2px solid #62734e;outline-offset:4px}
- @media(max-width:600px){.skill-install-dialog{padding:32px 25px}h2{font-size:40px}}
+ .skill-install-dialog{position:fixed;inset:0;margin:auto;width:min(720px,calc(100vw - 28px));max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;border:1px solid #d8d7d0;border-radius:16px;padding:0;background:#fffefa;color:#35372f;box-shadow:0 25px 90px #1115}
+ .skill-install-dialog::backdrop{background:#171d1785;backdrop-filter:blur(5px)}
+ .skill-install-dialog :global(.skill-install-options){margin:0;border:0;border-radius:0}
+ .install-close{position:absolute;right:12px;top:15px;width:44px;height:44px;font-size:25px;color:#73776b;cursor:pointer;border-radius:7px;z-index:1}.install-close:hover{background:#343a2910}.install-close:focus-visible{outline:2px solid #40523a;outline-offset:2px}
 </style>
 <!-- Keep opening independent of deferred assets: a slow/stale bundle must never navigate away. -->
 <script is:inline>
@@ -30,7 +21,8 @@ import SkillInstallOptions from './SkillInstallOptions.astro';
   document.querySelectorAll('button[data-open-skill-install]').forEach(button=>button.addEventListener('click',()=>{
    if(dialog.open)return;
    opener=button;previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();
-   dialog.querySelector('[data-book-install-agent]:not(:disabled)')?.focus();
+   dialog.querySelector('[data-book-install-options]')?.dispatchEvent(new Event('book-install-reset'));
+   dialog.querySelector('[data-book-install-agent]:checked')?.focus();
   }));
   dialog.querySelector('[data-close-skill-install]')?.addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;opener?.focus({preventScroll:true});});

@@ -2,11 +2,14 @@
 import openclaw from '@lobehub/icons-static-svg/icons/openclaw.svg?url';
 import hermes from '@lobehub/icons-static-svg/icons/hermesagent.svg?url';
 import claude from '@lobehub/icons-static-svg/icons/claude.svg?url';
+import claudeCode from '@lobehub/icons-static-svg/icons/claudecode.svg?url';
+import githubCopilot from '@lobehub/icons-static-svg/icons/githubcopilot.svg?url';
+import geminiCli from '@lobehub/icons-static-svg/icons/geminicli.svg?url';
 import codex from '@lobehub/icons-static-svg/icons/codex.svg?url';
 import grok from '@lobehub/icons-static-svg/icons/grok.svg?url';
 import opencode from '@lobehub/icons-static-svg/icons/opencode.svg?url';
 import cursor from '@lobehub/icons-static-svg/icons/cursor.svg?url';
-const icons: Record<string, string> = { openclaw, hermes, 'claude-ai': claude, 'claude-code': claude, codex, 'grok-bot': grok, opencode, cursor };
+const icons: Record<string, string> = { openclaw, hermes, 'claude-ai': claude, 'claude-code': claudeCode, 'github-copilot': githubCopilot, 'gemini-cli': geminiCli, codex, 'grok-bot': grok, opencode, cursor };
 const { id } = Astro.props;
 ---
 <span class="agent-icon" data-agent-icon={id} aria-hidden="true">
