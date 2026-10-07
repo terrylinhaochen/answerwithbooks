@@ -13,7 +13,6 @@ export function mountSkillDemo(){
  const catalogCount=catalogLabel.textContent!;
  const catalogTool=root.querySelector<HTMLElement>('[data-demo-tool="catalog"]')!;
  const askTool=root.querySelector<HTMLElement>('[data-demo-tool="ask"]')!;
- const progress=[...root.querySelectorAll<HTMLElement>('[data-demo-step]')];
  const reveals=[...root.querySelectorAll<HTMLElement>('[data-demo-reveal]')];
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  const starts=[0,750,2100,4500,6600,7900,8350,8950,9550,10200],duration=10800,fadeAt=18500,cycle=19000;
@@ -35,10 +34,6 @@ export function mountSkillDemo(){
   root!.dataset.demoMatched=String(elapsed>=6600);
   catalogTool.dataset.loading=String(elapsed>=750&&elapsed<2100);
   askTool.dataset.loading=String(elapsed>=4500&&elapsed<6600);
-  progress.forEach((item,index)=>{
-   item.dataset.state=finished||index<step?'complete':index===step?'current':'upcoming';
-   if(index===step&&!finished)item.setAttribute('aria-current','step');else item.removeAttribute('aria-current');
-  });
   catalogLabel.textContent=elapsed<2100?'Listing…':catalogCount;
   callLabel.textContent=elapsed<6600?'Finding a match…':'The Mom Test';
   reveals.forEach(el=>{

@@ -2,7 +2,7 @@
 
 ## Design
 
-The headline is “Your agent, well read.” One concrete customer interview question progresses through **List books → Ask → Apply**. The question, both tool calls, catalog results, and final reply accumulate in the same conversation. The labels are passive progress indicators with an active underline, not tabs. The same complete flow loops; it never switches to a different user task. “Explore skills” is the sole primary destination.
+The headline is “Your agent, well read.” One concrete customer interview question progresses through **List books → Ask → Apply**. The question, both tool calls, catalog results, and final reply accumulate in the same conversation. The conversation shows the progression directly, without a step-label row or tabs. The same complete flow loops; it never switches to a different user task. “Explore skills” is the sole primary destination.
 
 1. The user's meal-planning interview question appears. A visible `GET /v1/books` tool call lists the public catalog, followed by three compact book entries from its 46 results: The Mom Test, Deep Work, and Atomic Habits.
 2. A separate `ask` call submits that question with the five-interview context. When retrieval completes, The Mom Test is highlighted in the earlier list and appears as the matched source.
@@ -28,7 +28,7 @@ Playback begins when at least a quarter of the panel is visible. Listing occupie
 
 Pause/Play shares one keyboard-accessible control. Playback pauses offscreen, in a hidden tab, on focus inside the conversation, or when either command disclosure opens. Inspection holds the current time rather than forcing completion. Play closes the disclosures and resumes. Browser back/forward restoration resumes playback.
 
-Reduced-motion users get the completed static flow with both calls and catalog results, without playback controls. Without JavaScript the same complete transcript and native disclosures remain readable. Screen readers receive no unsolicited announcements during the loop. The active progress step has `aria-current="step"`; unrevealed content is hidden from accessibility navigation and made inert.
+Reduced-motion users get the completed static flow with both calls and catalog results, without playback controls. Without JavaScript the same complete transcript and native disclosures remain readable. Screen readers receive no unsolicited announcements during the loop. Unrevealed content is hidden from accessibility navigation and made inert.
 
 ## Local validation
 
