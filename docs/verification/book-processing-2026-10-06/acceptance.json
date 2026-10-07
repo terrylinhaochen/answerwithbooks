@@ -1,0 +1,15 @@
+{
+  "emailsSent": 0,
+  "source": "Two short original acceptance fixtures",
+  "productionWorker": true,
+  "origin": "http://127.0.0.1:4321",
+  "batchUploads": 2,
+  "crossAccountIsolation": true,
+  "backgroundCompletion": true,
+  "generatedBooksSkillsCovers": 2,
+  "citationSourcesBundled": true,
+  "freshBrowserCopyAndZip": true,
+  "privateCacheNoUploadOrGeneration": true,
+  "temporaryAccountsAndFilesRemoved": true,
+  "checkedAt": "2026-10-07T04:04:57.276Z"
+}

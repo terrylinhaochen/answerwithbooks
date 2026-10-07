@@ -34,7 +34,7 @@ Reduced-motion users get the completed static flow with both calls and catalog r
 
 `npm run build` and `node scripts/test-agent-demo.mjs` cover the actual listing step preceding ask, visible catalog results, matched-book highlighting, ordered progression, a repeating single task, reading hold, pause/continue without skipping, stable layout, actual command disclosures, preserved surrounding homepage sections, phone/desktop layouts, keyboard operation, reduced motion, and the no-JavaScript transcript. The test rejects provider, processing-worker, and local API calls from the illustration. Screenshots are reviewed at 320, 390, and 1280 px.
 
-No production release is included in this change.
+Included in the [2026-10-06 production release](releases/2026-10-06-book-processing.md).
 
 ## Verified command contract (2026-10-06)
 

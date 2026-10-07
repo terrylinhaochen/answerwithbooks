@@ -2,7 +2,7 @@
 
 Reviewed 2026-10-06 against upstream `e180fc46365e8c1aab0120778cc8a40b9515324b` (v1.4.0), https://github.com/virgiliojr94/book-to-skill. This is a code comparison, not a claim of equal output quality.
 
-**Release status: implemented and tested locally; not deployed.** Production remains at the previous release. Activating the queue requires approval for the production migration, Vault/function runner credential, and scheduler. The scheduler allows provider charges to continue after a browser closes. No real provider calls or emails were made during this change's tests.
+**Release status:** the 2026-10-06 production release includes the implemented queue, batch upload, cache and long-source changes below. [Release evidence and limits](releases/2026-10-06-book-processing.md) distinguish local fixtures from real hosted acceptance. The scheduler continues processing uploaded sources after the browser closes.
 
 The next local commit also adds [the copy-prompt demo and long-book processing](AGENT_DEMO_AND_LONG_BOOKS.md). The tested 476-page PDF exceeds the old character ceiling and now uses the staged private-text path.
 
@@ -18,7 +18,7 @@ The next local commit also adds [the copy-prompt demo and long-book processing](
 
 ## Capability matrix
 
-“Local” below means implemented here but awaiting deployment. “Existing” describes the preceding implementation, not a new live verification.
+“Local” below describes the implementation at the time of this comparison; these implemented changes are included in the linked release. “Existing” describes the preceding implementation, not a new live verification.
 
 | Capability | Upstream behavior / evidence | Answer with Books status |
 | --- | --- | --- |
