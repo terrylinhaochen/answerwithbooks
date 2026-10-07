@@ -1,0 +1,27 @@
+{
+  "emailsSent": 0,
+  "cliVersion": "0.2.0",
+  "origin": "http://127.0.0.1:4321",
+  "productionBackend": true,
+  "browserPairing": true,
+  "separateBatch": 2,
+  "accountIsolation": true,
+  "cacheReuse": true,
+  "backgroundCompletion": true,
+  "privateBookEvidence": true,
+  "citationBundle": true,
+  "revocation": true,
+  "passed": true,
+  "backend": {
+    "book-process": {
+      "version": 12,
+      "status": "ACTIVE"
+    },
+    "book-cli-auth": {
+      "version": 1,
+      "status": "ACTIVE"
+    }
+  },
+  "migration": "20261008001000",
+  "packageCi": "https://github.com/Crowdlisten/Crowdlisten_books/actions/runs/37577973901"
+}
