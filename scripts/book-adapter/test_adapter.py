@@ -61,7 +61,7 @@ class AdapterTests(unittest.TestCase):
         path=self.root/'too-large.epub'
         with path.open('wb') as file: file.truncate(MAX_BYTES+1)
         with self.assertRaisesRegex(ValueError,'50 MB'): extract(path,browser=True)
-        with self.assertRaisesRegex(ValueError,'text limit'): analyze('A'*(MAX_TEXT+1))
+        with self.assertRaisesRegex(ValueError,'processing capacity'): analyze('A'*(MAX_TEXT+1))
     def test_cleanup_structure_and_native_adapter(self):
         data=extract(self.root/'manual.md',browser=True)
         self.assertEqual(data['removedInvisible'],1); self.assertEqual(data['headings'][1]['line'],4)

@@ -7,11 +7,11 @@ try {
  for(const width of [320,390,1280]) {
   const context=await browser.newContext({viewport:{width,height:900}});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   await page.goto(origin+'/books/zero-to-one/');
-  assert.equal(await page.getByRole('button',{name:'Copy to agent',exact:true}).count(),1);
+  assert.equal(await page.getByRole('button',{name:'Copy prompt for your AI',exact:true}).count(),1);
   const prompt=await page.getByLabel('Book agent prompt').inputValue();assert.ok(prompt.length>2000);assert.match(prompt,/question or complete a task/);
-  await page.evaluate(()=>{navigator.clipboard.writeText=async text=>{window.copied=text;};});await page.getByRole('button',{name:'Copy to agent',exact:true}).click();
+  await page.evaluate(()=>{navigator.clipboard.writeText=async text=>{window.copied=text;};});await page.getByRole('button',{name:'Copy prompt for your AI',exact:true}).click();
   assert.equal(await page.evaluate(()=>window.copied),prompt);
-  await page.evaluate(()=>{navigator.clipboard.writeText=async()=>{throw new Error('denied');};});await page.getByRole('button',{name:'Copy to agent',exact:true}).click();assert.ok(await page.getByLabel('Book agent prompt').isVisible());
+  await page.evaluate(()=>{navigator.clipboard.writeText=async()=>{throw new Error('denied');};});await page.getByRole('button',{name:'Copy prompt for your AI',exact:true}).click();assert.ok(await page.getByLabel('Book agent prompt').isVisible());
   await page.goto(origin+'/books/');await page.locator('[data-open-book-request]').click();
   assert.equal(await page.getByText('Is this the right book?',{exact:true}).count(),0);assert.equal(await page.getByText('Find a book',{exact:true}).count(),0);
   assert.match(await page.getByLabel('Source file').getAttribute('accept'),/\.epub,\.docx/);

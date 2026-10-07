@@ -1,6 +1,7 @@
 import {extractUpstream,analyzeUpstream} from './upstream-book';
 import { supabase } from './supabase';
 import uploadLimits from '../../supabase/functions/_shared/book-upload-limits.json';
+import {splitSource} from '../../supabase/functions/_shared/book-sections.mjs';
 import {maxBatchFiles} from '../../supabase/functions/_shared/book-options.mjs';
 import type {SourceReport} from './upstream-book';
 const maxFileMB=uploadLimits.maxFileBytes/1024/1024;
@@ -35,7 +36,7 @@ export async function extractFullBook(file:File,progress:(s:string)=>void) {
    readableCharacters+=value.trim().length;
    if(value.trim().length<20 && n>2 && n<pdf.numPages-1) throw new Error('This PDF contains pages without readable text. Run OCR first, then upload the searchable PDF.');
    text+=`\n[Page ${n}]\n${value}\n`;page.cleanup();
-   if(text.length>uploadLimits.maxTextCharacters)throw new Error('This source exceeds the 1.2 million character text limit. Split it into smaller documents.');
+   if(text.length>uploadLimits.maxTextCharacters)throw new Error('This source exceeds the current six-million-character processing capacity. Your original file has not been changed.');
   }
   if(readableCharacters===0)throw new Error('This PDF contains pages without readable text. Run OCR first, then upload the searchable PDF.');
   progress('Identifying the source structure…');return analyzeUpstream(text);
@@ -113,7 +114,8 @@ export function mountBookUpload() {
      try{
       item.report=await extractFullBook(item.file,message=>{item.message=message;draw();});
       if(item.report.text.trim().length<100)throw new Error('Not enough readable text. Upload a searchable document.');
-      item.message=`${item.report.text.trim().split(/\s+/).length.toLocaleString()} words · about ${item.report.estimatedTokens.toLocaleString()} source tokens · ${item.report.headings.length} detected headings`;
+      const sections=splitSource(item.report.text,item.report.headings).chunks.length;
+      item.message=`${item.report.text.trim().split(/\s+/).length.toLocaleString()} words · about ${item.report.estimatedTokens.toLocaleString()} source tokens · ${sections} reading sections${item.report.text.length>1000000?'. Long book: we’ll process it in sections and keep one book and skill.':''}`;
      }catch(error){item.error=error instanceof Error?error.message:'Could not read this source.';}
      draw();
     }
@@ -128,9 +130,14 @@ export function mountBookUpload() {
      item.message='Uploading…';draw();
      const extraction=item.report!;
      const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await item.file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
-     const result=await bookWorker({action:'create',name:item.file.name,size:item.file.size,text:extraction.text,sha,extraction:{...extraction,text:undefined},options});
+     const large=extraction.text.length>1000000;
+     if(large&&!health.staged_uploads)throw new Error('Your book is readable. Long-book processing is not enabled on this server yet. Your file has not been uploaded.');
+     const sourceText=new TextEncoder().encode(extraction.text);
+     const textSha=large?Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',sourceText))).map(x=>x.toString(16).padStart(2,'0')).join(''):undefined;
+     const result=await bookWorker({action:large?'prepare':'create',name:item.file.name,size:item.file.size,...(large?{textSha,textBytes:sourceText.byteLength}:{text:extraction.text}),sha,extraction:{...extraction,text:undefined},options});
      if(result.upload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([item.file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});if(error)throw new Error('Upload failed. Remove this file and choose it again to retry.');}
-     await bookWorker({action:'enqueue',id:result.job.id});item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':'Saved · processing in the background';
+     if(result.textUpload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.textUpload.path,result.textUpload.token,new Blob([sourceText],{type:'text/plain'}),{contentType:'text/plain'});if(error)throw new Error('Could not save the extracted text. Choose the same book again to resume.');}
+     await bookWorker({action:result.textUpload?'finalize':'enqueue',id:result.job.id});item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':'Saved · processing in the background';
     }catch(error){item.error=error instanceof Error?error.message:'Upload failed. Remove this file and choose it again to retry.';}
     draw();
    }

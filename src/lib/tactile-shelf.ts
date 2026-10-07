@@ -42,12 +42,12 @@ if (lab) {
   text('#shelf-detail-title',book.title);text('[data-detail-category]',book.label);text('[data-detail-author]',`${book.author} · ${book.year}`);text('[data-detail-question]',book.task.label);text('[data-detail-description]',book.oneLiner);text('[data-detail-position]',`${String(selected+1).padStart(2,'0')} / ${String(books.length).padStart(2,'0')}`);
   const prompt=lab.querySelector<HTMLTextAreaElement>('[data-detail-prompt]')!;prompt.value=prompts.get(book.slug) || '';prompt.hidden=true;
   const copy=lab.querySelector<HTMLButtonElement>('[data-detail-copy]')!;copy.disabled=!prompt.value;
-  text('[data-detail-copy-status]', prompt.value ? 'Copies the book’s digest and this task. Paste into your agent.' : 'Loading this book’s task…');
+  text('[data-detail-copy-status]', prompt.value ? 'Copies the book’s digest and this task. Paste into your AI chat and send.' : 'Loading this book’s task…');
   if (!prompt.value) void fetch(`/book-prompts/${encodeURIComponent(book.slug)}.json`).then(async response => {
    if (!response.ok) throw new Error('Unavailable');
    const result=await response.json();if(result.slug!==book.slug || typeof result.prompt!=='string' || !result.prompt) throw new Error('Invalid prompt');
    prompts.set(book.slug,result.prompt);
-   if(books[selected]?.slug===book.slug){prompt.value=result.prompt;copy.disabled=false;text('[data-detail-copy-status]','Copies the book’s digest and this task. Paste into your agent.');}
+   if(books[selected]?.slug===book.slug){prompt.value=result.prompt;copy.disabled=false;text('[data-detail-copy-status]','Copies the book’s digest and this task. Paste into your AI chat and send.');}
   }).catch(()=>{if(books[selected]?.slug===book.slug)text('[data-detail-copy-status]','Couldn’t load the task. Open the book, or close and try again.');});
   lab.querySelector<HTMLAnchorElement>('[data-detail-link]')!.href=`/books/${book.slug}/`;
   lab.querySelectorAll<HTMLElement>('[data-detail-jacket]').forEach((item,i)=>{item.hidden=i!==selected;});
@@ -83,7 +83,7 @@ if (lab) {
  dialog.addEventListener('keydown',event=>{if((event.target as HTMLElement).matches('textarea,input'))return;if(event.key==='ArrowLeft'){event.preventDefault();populate(selected-1);}if(event.key==='ArrowRight'){event.preventDefault();populate(selected+1);}});
  lab.querySelector('[data-detail-copy]')?.addEventListener('click',async()=>{
   const index=selected;const prompt=lab.querySelector<HTMLTextAreaElement>('[data-detail-prompt]')!;
-  try {await navigator.clipboard.writeText(prompt.value);if(selected===index)text('[data-detail-copy-status]','Copied. Paste into your agent to start the task.');}
+  try {await navigator.clipboard.writeText(prompt.value);if(selected===index)text('[data-detail-copy-status]','Copied. Open your AI chat, paste the prompt, and send it.');}
   catch {if(selected===index){prompt.hidden=false;prompt.focus();prompt.select();text('[data-detail-copy-status]','Select and copy the prompt below, then paste it into your agent.');}}
  });
  buttons.forEach((button,index)=>{

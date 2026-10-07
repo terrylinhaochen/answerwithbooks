@@ -4,11 +4,13 @@ Reviewed 2026-10-06 against upstream `e180fc46365e8c1aab0120778cc8a40b9515324b` 
 
 **Release status: implemented and tested locally; not deployed.** Production remains at the previous release. Activating the queue requires approval for the production migration, Vault/function runner credential, and scheduler. The scheduler allows provider charges to continue after a browser closes. No real provider calls or emails were made during this change's tests.
 
+The next local commit also adds [the copy-prompt demo and long-book processing](AGENT_DEMO_AND_LONG_BOOKS.md). The tested 476-page PDF exceeds the old character ceiling and now uses the staged private-text path.
+
 ## What changed
 
 - Select or drop up to ten files, each up to 50 MB. Each file produces a separate book and skill, per the user's decision. Review word/token estimates before generation. Invalid files and per-file failures do not discard valid uploads.
 - After upload, jobs persist in an owner-scoped queue. A queue page and the private reader expose progress, pause, and resume. Closing the browser after upload does not need to stop generation once the scheduler is deployed.
-- Bounded claims: four workers globally, two per owner, a 140-second lease, delayed retries, and a stop after five unsuccessful attempts. Ten new sources per rolling 24 hours; duplicate originals reuse their existing job. One source remains limited to 1.2 million extracted characters and 60 processing sections.
+- Bounded claims: four workers globally, two per owner, a 140-second lease, delayed retries, and a stop after five unsuccessful attempts. Ten new sources per rolling 24 hours; duplicate originals reuse their existing job. One source remains limited to six million extracted characters and 512 processing sections.
 - Choose full generation or analysis first, study or reference depth, and a purpose. Analysis is downloadable with its cited source. Generating from saved analysis reuses section notes instead of extracting and analyzing again.
 - Added an alphabetical topic index, source-supported anti-patterns and worked examples, and installation instructions. Large supporting files are divided into on-demand reference files without deleting entries. Copy-to-agent remains a portable context prompt; installed skills use on-demand files.
 - Original upstream validation still runs in Python in the browser. Flagged passages now require explicit review before copying/downloading. A tested JavaScript port of the upstream advisory content rules also gates the server export route. Factual fidelity remains a separate, fallible model-assisted check.

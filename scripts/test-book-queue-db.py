@@ -40,6 +40,7 @@ create function cron.schedule(name text,schedule text,command text) returns bigi
     sql(original[:start]+original[end:])
     migration=(ROOT/'supabase/migrations/20261007003000_book_processing_queue.sql').read_text()
     sql('\n'.join(line for line in migration.splitlines() if not line.startswith('create extension')))
+    sql((ROOT/'supabase/migrations/20261007013000_long_book_processing.sql').read_text())
     users=[f'00000000-0000-4000-8000-{n:012d}' for n in range(1,4)]
     for user in users:
         sql(f"insert into auth.users values('{user}');")
@@ -84,6 +85,10 @@ create function cron.schedule(name text,schedule text,command text) returns bigi
     assert sql("select bool_and(body='{"+'"action":"drain"'+"}'::jsonb) from net.requests;")=='t'
     assert sql("select count(*) from cron.job where jobname='answerwithbooks-processing' and schedule='* * * * *';")=='1'
     print('PASS duplicate reuse, 10-source quota, bounded wake-ups and scheduled recovery command')
+    large=scalar(f"select (public.create_book_processing_job('{users[2]}','long.md','{'d'*64}',repeat('Bounded source ',100000),'Long source','[]')).id")['id']
+    assert int(sql(f"select length(source_text) from book_processing_jobs where id='{large}';"))==1500000
+    assert sql(f"select overview_notes::text from book_processing_jobs where id='{large}';")=='[]'
+    print('PASS large sources persist beyond the previous character limit')
 finally:
     if started:subprocess.run([str(BIN/'pg_ctl'),'-D',str(area/'data'),'-m','immediate','-w','stop'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     shutil.rmtree(area)

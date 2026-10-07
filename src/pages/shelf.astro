@@ -37,7 +37,7 @@ const catalog = books.map(book => ({ slug: book.id, title: book.data.title }));
      <div class="shared-book-skill">
       <p class="shared-eyebrow">Try it with your agent</p>
       <h3>{book.task.label}</h3><p class="shared-book-task">{book.task.prompt}</p>
-      <button type="button" class="shared-primary" data-copy-shared-book aria-label={`Copy ${book.data.title} to agent`}>Copy to agent</button>
+      <button type="button" class="shared-primary" data-copy-shared-book aria-label={`Copy ${book.data.title} prompt for your AI`}>Copy prompt for your AI</button>
       <p class="shared-copy-status" data-shared-copy-status role="status"></p>
       <textarea hidden readonly class="shared-manual-prompt" data-shared-prompt aria-label={`${book.data.title} agent prompt`} rows="6"></textarea>
      </div>

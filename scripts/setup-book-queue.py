@@ -18,7 +18,7 @@ def main():
     parser.add_argument('--apply', action='store_true', help='Apply the reviewed migration and provision production queue infrastructure.')
     args=parser.parse_args()
     if not args.apply:
-        print('Plan: add queue/options/analysis columns; server-only claims; max 4 concurrent jobs, max 2 per user; 10 new sources per day; private Vault runner credential; one-minute cron recovery. No changes applied.')
+        print('Plan: add queue/options/analysis columns and six-million-character source capacity; server-only claims; max 4 concurrent jobs, max 2 per user; 10 new sources per day; private Vault runner credential; one-minute cron recovery. No changes applied.')
         return
     spec=importlib.util.spec_from_file_location('auth_setup', ROOT/'scripts/sync-auth-email-templates.py')
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
@@ -32,10 +32,11 @@ def main():
         return api('/database/query',{'query':sql,'read_only':read_only})
     def quote(value):
         return "'"+value.replace("'","''")+"'"
-    if not query("select version from supabase_migrations.schema_migrations where version="+quote(VERSION),True):
-        sql=(ROOT/'supabase/migrations/20261007003000_book_processing_queue.sql').read_text()
-        query('begin;\n'+sql+'\ninsert into supabase_migrations.schema_migrations(version,name,statements) values('+quote(VERSION)+",'book_processing_queue',array["+quote(sql)+']);\ncommit;')
-        print('Queue migration applied and recorded.')
+    for version,name in [('20261007003000','book_processing_queue'),('20261007013000','long_book_processing')]:
+        if not query("select version from supabase_migrations.schema_migrations where version="+quote(version),True):
+            sql=(ROOT/f'supabase/migrations/{version}_{name}.sql').read_text()
+            query('begin;\n'+sql+'\ninsert into supabase_migrations.schema_migrations(version,name,statements) values('+quote(version)+','+quote(name)+',array['+quote(sql)+']);\ncommit;')
+            print(name+' migration applied and recorded.')
     rows=query("select decrypted_secret from vault.decrypted_secrets where name='book_queue_runner'",True)
     runner=rows[0]['decrypted_secret'] if rows else secrets.token_urlsafe(48)
     api('/secrets',[{'name':'BOOK_QUEUE_RUNNER_SECRET','value':runner}])

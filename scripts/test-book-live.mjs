@@ -39,7 +39,7 @@ try {
  assert.ok((await page.locator('[data-job-reading]').textContent()).includes('Central argument'));
  await page.locator('[data-job-cover]').waitFor({state:'visible'});await page.waitForFunction(()=>{const img=document.querySelector('[data-job-cover]');return img.complete&&img.naturalWidth>0;},{},{timeout:20000});
  await page.waitForFunction(()=>!document.querySelector('[data-job-copy]').disabled,{},{timeout:90000});assert.match(await page.locator('[data-job-audit]').textContent(),/Skill structure/);
- await page.getByRole('button',{name:'Copy to agent',exact:true}).click();const clipboard=await page.evaluate(()=>navigator.clipboard.readText());assert.match(clipboard,/BEGIN BOOK ARTIFACT/);assert.match(clipboard,/skill\/SKILL.md/);assert.match(clipboard,/patterns.md/);
+ await page.getByRole('button',{name:'Copy prompt for your AI',exact:true}).click();const clipboard=await page.evaluate(()=>navigator.clipboard.readText());assert.match(clipboard,/BEGIN BOOK ARTIFACT/);assert.match(clipboard,/skill\/SKILL.md/);assert.match(clipboard,/patterns.md/);
  const download=page.waitForEvent('download');await page.getByRole('button',{name:'Download book & skill'}).click();await (await download).saveAs('/private/tmp/awb-live-test-bundle.zip');
  await page.screenshot({path:'/private/tmp/awb-live-private-book-390.png',fullPage:true});
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.deepEqual(errors,[]);

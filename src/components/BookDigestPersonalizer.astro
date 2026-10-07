@@ -8,8 +8,8 @@ const prompt = publicBookPrompt({id:slug,data:{title,author},body:digest});
 <section id="use-in-agent" class="mt-8 rounded-2xl border border-line bg-card p-6" data-book-agent>
  <h2 class="font-serif text-2xl">Put this book to work.</h2>
  <p class="mt-2 text-soft">Give your agent a way to approach your task: the book’s frameworks, practical rules, and limits. Ask it to draft a plan, review a decision, or improve your next interview.</p>
- <button type="button" class="awb-pill awb-pill-primary mt-5" data-copy-book-agent>Copy to agent</button>
- <p class="mt-3 text-sm text-soft" role="status" data-book-agent-status>Includes the book’s digest and instructions. Paste into your preferred agent.</p>
+ <button type="button" class="awb-pill awb-pill-primary mt-5" data-copy-book-agent>Copy prompt for your AI</button>
+ <p class="mt-3 text-sm text-soft" role="status" data-book-agent-status>Includes the book’s digest and instructions. Paste into your AI chat and send.</p>
  <textarea hidden readonly rows="10" class="awb-input mt-3 w-full" aria-label="Book agent prompt" data-book-agent-prompt>{prompt}</textarea>
 </section>
 <script>
@@ -18,7 +18,7 @@ const prompt = publicBookPrompt({id:slug,data:{title,author},body:digest});
   const prompt = root.querySelector<HTMLTextAreaElement>('[data-book-agent-prompt]')!;
   const status = root.querySelector('[data-book-agent-status]')!;
   button.addEventListener('click', async () => {
-   try { await navigator.clipboard.writeText(prompt.value); status.textContent = 'Copied. Paste into your agent and add your question or task.'; }
+   try { await navigator.clipboard.writeText(prompt.value); status.textContent = 'Copied. Open your AI chat, paste the prompt, add your task, and send.'; }
    catch { prompt.hidden=false; prompt.focus(); prompt.select(); status.textContent='Copy was blocked. Select and copy the prompt below.'; }
   });
  }

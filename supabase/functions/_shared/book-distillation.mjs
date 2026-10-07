@@ -1,3 +1,4 @@
+import {synthesisEvidence} from './book-overview.mjs';
 import {depthGuidance} from './book-options.mjs';
 import {fidelityInstructions,requireFaithfulSection} from './book-fidelity.mjs';
 import {upstreamGuidance} from './upstream-guidance.mjs';
@@ -15,8 +16,9 @@ ${upstreamGuidance}`,chunk.text);
 }
 
 export async function compileDistillation(job,notes,modelJson,hash) {
-  const generated=await modelJson(`Synthesize the supplied book notes, not outside knowledge. Return JSON {oneLiner,readIf,thesis,tags:[lowercase-hyphenated-topic-slug],year:null,glossary:[{term,definition,chapterIds:[chNN]}]}. Preserve uncertainty. Explain the central argument and when it applies. Original prose only. Detected source headings are provisional, not verified original chapter boundaries.`,JSON.stringify(notes));
-  const review=await modelJson(fidelityInstructions,JSON.stringify({source:notes,notes:generated}));
+  const evidence=synthesisEvidence(notes,job.overview_notes);
+  const generated=await modelJson(`Synthesize the supplied book notes, not outside knowledge. Return JSON {oneLiner,readIf,thesis,tags:[lowercase-hyphenated-topic-slug],year:null,glossary:[{term,definition,chapterIds:[chNN]}]}. Preserve uncertainty. Explain the central argument and when it applies. Original prose only. Detected source headings are provisional, not verified original chapter boundaries.`,JSON.stringify(evidence));
+  const review=await modelJson(fidelityInstructions,JSON.stringify({source:evidence,notes:generated}));
   requireFaithfulSection(review);
   const textSha=await hash(new TextEncoder().encode(job.source_text));
   const meta={id:job.id,options:job.options,book:{id:`book-${job.id}`,title:job.title,author:job.author},source:{sha256:job.source_sha,textSha256:textSha,lineCount:job.source_text.split('\n').length}};

@@ -1,0 +1,66 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { bookAgentPrompt } from '../../supabase/functions/_shared/book-handoff.mjs';
+interface Props { book: CollectionEntry<'books'>; }
+const {book}=Astro.props;
+const basePrompt=bookAgentPrompt({title:book.data.title,author:book.data.author,url:`https://answerwithbooks.com/books/${book.id}/`,digest:book.body||''});
+const task='I’m interviewing people about a meal-planning app. Help me learn how they planned dinner last week. Draft five questions about what they actually did, and flag questions that would lead them toward my idea.';
+---
+<section id="question-first-reading" class="home-section agent-demo" data-agent-demo>
+ <div class="section-heading"><div><p class="room-eyebrow">See how it works</p><h2>Give your AI a book.<br />Get help with <em>a real task.</em></h2></div><p class="section-note">Copy the book’s notes and your task as one prompt. Paste it into the AI chat you already use.</p></div>
+ <div class="demo-workbench">
+  <nav class="demo-steps" aria-label="Try the book-to-task demo">
+   <button type="button" data-demo-step="0" aria-current="step"><span>01</span>Your task</button>
+   <button type="button" data-demo-step="1"><span>02</span>What you copy</button>
+   <button type="button" data-demo-step="2"><span>03</span>In your AI chat</button>
+  </nav>
+  <div class="demo-panel" data-demo-panel="0">
+   <div class="demo-source"><img src={`/covers/${book.id}.jpg`} alt={`${book.data.title} cover`} width="86" height="129" loading="lazy" /><div><p class="room-eyebrow">Try a public book</p><h3>{book.data.title}</h3><p>{book.data.author}</p><p class="demo-source-note">Ask about real behavior.<br />Learn from specifics, not compliments.</p></div></div>
+   <div class="demo-task"><label for="book-demo-task">What would you like help with?</label><textarea id="book-demo-task" rows="5" maxlength="3000" data-demo-task>{task}</textarea><p>Edit this task to make it yours.</p></div>
+  </div>
+  <div class="demo-panel" data-demo-panel="1" hidden>
+   <div class="demo-explainer"><p class="room-eyebrow">One ready-to-send prompt</p><h3>The context<br />comes with it.</h3><p>You copy the book’s editorial digest, instructions for applying its methods, and the task you wrote.</p><p>You can inspect the complete prompt here before sending it.</p></div>
+   <textarea readonly rows="10" class="demo-prompt" aria-label="Demo prompt to paste into your AI" data-demo-prompt></textarea>
+  </div>
+  <div class="demo-panel" data-demo-panel="2" hidden>
+   <div class="demo-explainer"><p class="room-eyebrow">Over to your AI</p><h3>Paste. Send.<br />Keep working.</h3><p>Open a new chat in ChatGPT, Claude, or your preferred AI. Paste the prompt and send it.</p><p>It now has the supplied book notes and a concrete task to work on. Continue the conversation with your context.</p></div>
+   <div class="demo-response"><p class="room-eyebrow">Illustrative response</p><h4>Start with last week’s dinner.</h4><ol><li>Walk me through how you decided what to eat last Tuesday.</li><li>When did you last change your dinner plans? What happened?</li><li>What have you already tried to make planning easier?</li></ol><p><strong>Question to avoid:</strong> “Would you use a meal-planning app?” It invites a prediction, rather than evidence of what someone does.</p><p class="demo-example-note">This is an example for the meal-planning task, not a live AI response. Your AI will respond to the task you send.</p></div>
+  </div>
+  <div class="demo-bottom"><div><p data-demo-status role="status">Nothing is sent automatically. You choose where to paste it.</p><p class="demo-detail">Public books use an editorial digest. Uploaded books also include the generated skill notes.</p></div><button type="button" class="awb-pill awb-pill-primary" data-demo-copy>Copy prompt for my AI <span aria-hidden="true">↗</span></button></div>
+ </div>
+ <details class="demo-install"><summary>Want your agent to reuse the skill on future tasks?</summary><p>Upload your own source, then choose <strong>Download book &amp; skill</strong>. The package includes a <strong>SKILL.md</strong> file, supporting notes, and installation instructions. Add the skill folder to an agent that supports skills. It can then load the relevant notes when you ask it to use that skill.</p><p>Copying a prompt gives one chat the context. Installing the downloaded skill makes it available for future tasks in that agent.</p></details>
+ <textarea hidden readonly data-demo-base aria-label="Demo book context">{basePrompt}</textarea>
+</section>
+<style>
+ .demo-workbench{border:1px solid #d4d3c6;border-radius:20px;background:#faf8f0 url('/textures/book-paper.svg');overflow:hidden;box-shadow:0 18px 40px #272c2408}
+ .demo-steps{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #d4d3c6;background:#eeede3}
+ .demo-steps button{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;padding:12px;font-size:13px;cursor:pointer;color:#666d60}
+ .demo-steps span{font-size:11px;font-variant-numeric:tabular-nums;opacity:.7}
+ .demo-steps button[aria-current=step]{background:#334331;color:#fcf9ed}.demo-steps button:hover:not([aria-current]){background:#e3e4d7}
+ .demo-panel{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:center;padding:40px;min-height:330px}.demo-panel[hidden]{display:none}
+ .demo-source{display:flex;gap:24px;align-items:center}.demo-source img{width:86px;height:auto;border-radius:3px;box-shadow:5px 7px 12px #1b231b26;transform:rotate(-4deg);flex-shrink:0}
+ .demo-source h3{font-size:29px;line-height:1.15;margin:8px 0}.demo-source p{font-size:13px;color:#656e5f;line-height:1.6}.demo-source .room-eyebrow{font-size:10px}.demo-source .demo-source-note{margin-top:14px}
+ .demo-task label{display:block;margin-bottom:12px;font-size:15px;font-weight:500}.demo-task textarea,.demo-prompt{width:100%;border:1px solid #cbcfc0;border-radius:12px;background:#fffdf7;padding:18px;color:#303a2c;font-size:14px;line-height:1.8;resize:vertical;min-height:180px}.demo-task>p{margin-top:10px;font-size:12px;color:#717865}.demo-prompt{font-family:var(--font-sans);min-height:270px}
+ .demo-explainer h3{font-size:34px;line-height:1.1;margin:12px 0 18px}.demo-explainer>p:not(.room-eyebrow){font-size:14px;line-height:1.8;color:#616c58;margin-top:12px}
+ .demo-response{padding:26px;border-radius:12px;background:#e7e9dd}.demo-response h4{font-family:var(--font-serif);font-size:24px;margin:12px 0}.demo-response ol{list-style:decimal;padding-left:20px;font-size:14px;line-height:1.65}.demo-response li+li{margin-top:10px}.demo-response>p:not(.room-eyebrow){font-size:13px;line-height:1.7;margin-top:16px}.demo-response .demo-example-note{color:#68705f;font-size:12px}
+ .demo-bottom{padding:24px 40px;border-top:1px solid #dddecf;display:flex;align-items:center;justify-content:space-between;gap:24px}.demo-bottom p{font-size:13px;line-height:1.7;max-width:62ch}.demo-bottom .demo-detail{font-size:12px;color:#727966;margin-top:4px}.demo-bottom button{flex-shrink:0;gap:16px;cursor:pointer}
+ .demo-install{margin-top:24px;max-width:78ch;font-size:14px;line-height:1.8;color:#616c58}.demo-install summary{cursor:pointer;color:var(--color-ink);min-height:44px;padding-block:10px}.demo-install p{margin-top:10px}
+ @media(max-width:760px){.demo-panel{grid-template-columns:1fr;gap:28px;padding:26px;min-height:0}.demo-bottom{padding:24px 26px;flex-direction:column;align-items:stretch}.demo-steps button{font-size:11px;gap:6px;padding:10px 5px}.demo-source h3{font-size:28px}.demo-response{padding:20px}.demo-source{gap:20px}}
+</style>
+<script>
+ const root=document.querySelector<HTMLElement>('[data-agent-demo]');
+ if(root){
+  const task=root.querySelector<HTMLTextAreaElement>('[data-demo-task]')!;
+  const base=root.querySelector<HTMLTextAreaElement>('[data-demo-base]')!;
+  const prompt=root.querySelector<HTMLTextAreaElement>('[data-demo-prompt]')!;
+  const status=root.querySelector<HTMLElement>('[data-demo-status]')!;
+  const tabs=[...root.querySelectorAll<HTMLButtonElement>('[data-demo-step]')];
+  function show(step:number){tabs.forEach((button,i)=>i===step?button.setAttribute('aria-current','step'):button.removeAttribute('aria-current'));root!.querySelectorAll<HTMLElement>('[data-demo-panel]').forEach((panel,i)=>panel.hidden=i!==step);}
+  function update(){prompt.value=base.value+'\n\nMY TASK\n'+(task.value.trim()||'Ask what I am working on, then help me apply the supplied book notes.');status.textContent='Nothing is sent automatically. You choose where to paste it.';}
+  task.addEventListener('input',update);tabs.forEach((button,i)=>button.addEventListener('click',()=>show(i)));
+  root.querySelector('[data-demo-copy]')!.addEventListener('click',async()=>{
+   try{await navigator.clipboard.writeText(prompt.value);show(2);status.textContent='Copied. Open your AI chat, paste the prompt, and send it.';}
+   catch{show(1);prompt.focus();prompt.select();status.textContent='Select and copy the prompt above, then paste it into your AI chat.';}
+  });update();
+ }
+</script>

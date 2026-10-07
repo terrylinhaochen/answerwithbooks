@@ -44,7 +44,7 @@ jobs:
       - name: Verify upstream book adaptation
         run: |
           python3 scripts/book-adapter/test_adapter.py
-          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs
+          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs scripts/test-long-book.mjs
 
       - name: Set up Deno for the processing handler tests
         uses: denoland/setup-deno@v2

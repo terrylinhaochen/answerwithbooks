@@ -1,3 +1,4 @@
+import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from './book-overview.mjs';
 import {distillSection,compileDistillation} from './book-distillation.mjs';
 const check=result=>{if(result.error)throw new Error('Could not save repair progress. Original book preserved.');return result.data;};
 export function isReviewed(job){try{return JSON.parse(job.artifacts?.['quality-review.json']||'{}').version===2;}catch{return false;}}
@@ -9,9 +10,14 @@ export async function advanceRepair({job,state,modelJson,hash,previousRevisionPa
   const {note}=await distillSection(job.chunks[next.cursor],next.cursor,modelJson);next.notes.push(note);next.cursor++;
   return {state:next,patch:null};
  }
- const artifacts=await compileDistillation(job,next.notes,modelJson,hash);
+ next.overviews??=[];
+ if(next.overviews.length<overviewGroupCount(next.notes)){
+  const start=next.overviews.length*overviewGroupSize;next.overviews.push(await summarizeBookGroup(next.notes.slice(start,start+overviewGroupSize),modelJson));
+  return {state:next,patch:null};
+ }
+ const artifacts=await compileDistillation({...job,overview_notes:next.overviews},next.notes,modelJson,hash);
  const quality=JSON.parse(artifacts['quality-review.json']);quality.previousRevisionPath=previousRevisionPath;artifacts['quality-review.json']=JSON.stringify(quality,null,2);
- return {state:next,patch:{notes:next.notes,artifacts,cursor:job.chunks.length,updated_at:new Date().toISOString()}};
+ return {state:next,patch:{notes:next.notes,overview_notes:next.overviews,artifacts,cursor:job.chunks.length,updated_at:new Date().toISOString()}};
 }
 export async function repairBook({db,job,modelJson,hash}) {
  if(isReviewed(job))return {repaired:true,alreadyReviewed:true};

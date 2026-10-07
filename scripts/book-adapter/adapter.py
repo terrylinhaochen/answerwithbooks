@@ -52,7 +52,7 @@ def check_archive(path):
 def analyze(text, method='provided-text'):
     text, removed = sanitize_extracted_text(text)
     if len(text) > MAX_TEXT:
-        raise ValueError('This source exceeds the 1.2 million character text limit. Split it into smaller documents.')
+        raise ValueError('This source exceeds the current six-million-character processing capacity. Your original file has not been changed.')
     if not text.strip() or '\x00' in text:
         raise ValueError('No usable text was found in this document.')
     # Match the server line normalization so citations and heading positions agree.

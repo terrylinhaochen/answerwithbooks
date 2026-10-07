@@ -10,7 +10,7 @@ Deno.env.set('BOOK_QUEUE_RUNNER_SECRET','synthetic-queue-secret');
 let handler:(req:Request)=>Promise<Response>;
 // Deno.serve normally opens a listener. Capture the actual handler instead.
 Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
-const jobs:any[]=[];const originals=new Map<string,Uint8Array>();
+const jobs:any[]=[];const originals=new Map<string,Uint8Array>();const extractedFiles=new Map<string,Uint8Array>();
 let modelCalls=0,wakes=0,failProvider=false,holdProvider:(()=>Promise<void>)|null=null;
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
 function match(job:any,params:URLSearchParams){
@@ -31,7 +31,9 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
   if(failProvider)return json({error:'Synthetic busy response'},429);
   if(url.pathname.includes('/images/'))return json({data:[{b64_json:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZQmcAAAAASUVORK5CYII='}]});
   const prompt=body.messages[0].content;
-  const refs=[{startLine:1,endLine:2}];
+  const numbered=[...body.messages[1].content.matchAll(/^(\d+):/gm)].map(m=>Number(m[1]));
+  const refs=[{startLine:numbered[0]||1,endLine:numbered.at(-1)||2}];
+  if(prompt.startsWith('Summarize this group'))return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({summary:'The sections describe bounded trials, comparing predictions and observations, and retaining uncertainty.',terms:[]})}}]});
   const content=prompt.startsWith('Check generated')?{supported:true,issues:[]}:prompt.startsWith('Synthesize')?{oneLiner:'Bounded trials with evidence.',readIf:'You are planning a reversible trial.',thesis:'Record expectations and compare observations.',tags:['evidence'],year:null,glossary:[]}:{title:'Evidence Manual',author:'Test Editor',summary:'Run a bounded trial and compare observations.',sourceRefs:refs,ideas:[{name:'Bounded trial',explanation:'Compare the result to the expectation.',whenToUse:'When a change is reversible.',steps:['Record the expectation.','Compare the observations.'],limits:'One trial is not proof.',sourceRefs:refs}],antiPatterns:[],workedExamples:[]};
   return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify(content)}}]});
  }
@@ -44,7 +46,7 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
   if(fn==='wake_book_processing'){wakes++;return json(null);}
   if(fn==='create_book_processing_job'){
    let job=jobs.find(job=>job.user_id===body.p_user&&job.source_sha===body.p_sha);
-   if(!job){job={id:crypto.randomUUID(),user_id:body.p_user,source_name:body.p_name,source_sha:body.p_sha,source_text:body.p_text,title:body.p_title,author:'Unknown author',chunks:body.p_chunks,notes:[],cursor:0,status:'uploaded',run_state:'manual',options:{mode:'full',depth:'study',purpose:'apply'},attempts:0,lease_token:null,lease_until:null,updated_at:new Date().toISOString()};jobs.push(job);}return json(job);
+   if(!job){job={id:crypto.randomUUID(),user_id:body.p_user,source_name:body.p_name,source_sha:body.p_sha,source_text:body.p_text,title:body.p_title,author:'Unknown author',chunks:body.p_chunks,notes:[],cursor:0,overview_notes:[],status:'uploaded',run_state:'manual',options:{mode:'full',depth:'study',purpose:'apply'},attempts:0,lease_token:null,lease_until:null,updated_at:new Date().toISOString()};jobs.push(job);}return json(job);
   }
   if(fn==='claim_book_processing_job'){
    const job=jobs.find(job=>(body?.p_id?job.id===body.p_id&&job.user_id===body.p_user&&['queued','manual'].includes(job.run_state):job.run_state==='queued')&&!['ready','analyzed'].includes(job.status)&&!job.lease_token&&job.attempts<5&&(!job.next_attempt_at||Date.parse(job.next_attempt_at)<=Date.now()));
@@ -61,7 +63,7 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
  if(url.pathname.startsWith('/storage/v1/object/upload/sign/'))return json({url:'/object/upload/sign/private-books/synthetic?token=synthetic-token',token:'synthetic-token'});
  if(url.pathname.includes('/storage/v1/object/')){
   if(method==='GET'){
-   const job=jobs.find(job=>url.pathname.includes(job.id));const bytes=originals.get(job?.id);return bytes?new Response(bytes):json({message:'Missing source'},404);
+   const job=jobs.find(job=>url.pathname.includes(job.id));const bytes=url.pathname.endsWith('/extracted-source.txt')?extractedFiles.get(job?.id):originals.get(job?.id);return bytes?new Response(bytes):json({message:'Missing source'},404);
   }
   return json({Key:'synthetic-cover'});
  }
@@ -101,3 +103,25 @@ const legacy=await call({action:'create',name:'legacy.md',text,sha:'f'.repeat(64
 jobs[0].lease_token=crypto.randomUUID();jobs[0].lease_until=new Date(Date.now()+60000).toISOString();assert.equal((await call({action:'delete',id})).status,409,'cannot delete storage during an active provider call');
 assert.ok(wakes>5);
 console.log('PASS pause during provider failure, lease release, retry/backoff, no busy loop, wake-up calls and legacy client compatibility');
+
+// A source larger than the old cap travels through staged Storage and all queue
+// stages. The fake provider returns deterministic notes; this tests orchestration.
+failProvider=false;
+const largeText=('Use a bounded, reversible trial. Record the prediction and compare observations.\n').repeat(20000)+'The final source line remains available for citations.';
+const largeBytes=new TextEncoder().encode(largeText);
+const largeSha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',largeBytes))).map(n=>n.toString(16).padStart(2,'0')).join('');
+const staged=await call({action:'prepare',name:'large.md',size:largeBytes.length,sha:largeSha,textSha:largeSha,textBytes:largeBytes.length,options:{mode:'full',depth:'reference',purpose:'apply'},extraction:{headings:[]}});
+assert.equal(staged.status,200,JSON.stringify(staged.body));const largeId=staged.body.job.id;
+assert.equal((await call({action:'enqueue',id:largeId})).status,409,'a staged placeholder cannot be sent to the model');
+originals.set(largeId,largeBytes);extractedFiles.set(largeId,new TextEncoder().encode('damaged'));
+assert.equal((await call({action:'finalize',id:largeId})).status,400,'corrupted extracted text fails hash verification');
+extractedFiles.set(largeId,largeBytes);
+assert.equal((await call({action:'finalize',id:largeId},'stranger-token')).status,404);
+const finalized=await call({action:'finalize',id:largeId});assert.equal(finalized.status,200,JSON.stringify(finalized.body));assert.ok(finalized.body.job.total_sections>60);
+const largeJob=jobs.find(job=>job.id===largeId);let rounds=0;
+while(largeJob.status!=='ready'&&rounds++<160){const result=await drain();assert.equal(result.status,200,JSON.stringify(result.body));}
+assert.equal(largeJob.status,'ready');assert.equal(largeJob.notes.length,largeJob.chunks.length);assert.equal(largeJob.overview_notes.length,Math.ceil(largeJob.notes.length/12));
+const longExport=(await call({action:'export',id:largeId})).body.files;assert.equal(longExport['skill/source.txt'],largeText);
+assert.equal(Object.keys(longExport).filter(name=>/skill\/chapters\/ch\d+\.md$/.test(name)).length,largeJob.chunks.length);
+assert.equal(largeJob.chunks.at(-1).end,largeText.split('\n').length);
+console.log('PASS staged long-source transport, corruption/ownership checks, all '+largeJob.chunks.length+' sections, '+largeJob.overview_notes.length+' saved overview groups, final assembly, cover and complete source/citation export');

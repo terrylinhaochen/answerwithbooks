@@ -23,7 +23,7 @@ interface Props { catalog?: unknown[]; title?: string; sourcePath?: string; book
     <label class="text-sm sm:col-span-2">Purpose<select name="purpose" class="awb-input mt-1 w-full"><option value="apply">Apply the methods</option><option value="mental-models">Learn mental models</option><option value="reference">Look up concepts</option><option value="all">All of the above</option></select></label>
    </div><p class="mt-2 text-xs text-soft">Analysis saves source-grounded notes. You can create the book and skill from those notes later.</p>
   </details>
-  <p id="upload-limits" class="mt-3 text-sm text-soft">Up to ten files, each up to {uploadLimits.maxFileBytes / 1024 / 1024} MB. PDFs need selectable text; scanned pages need OCR first.</p>
+  <p id="upload-limits" class="mt-3 text-sm text-soft">Up to ten files, each up to {uploadLimits.maxFileBytes / 1024 / 1024} MB. Long books are read in sections automatically. PDFs need selectable text; scanned pages need OCR first.</p>
   <p class="mt-2 text-xs leading-relaxed text-soft">Private to your account. Source text is sent to our AI provider for processing.</p>
   <button type="submit" class="awb-pill awb-pill-primary mt-5" data-upload-submit disabled>Review sources</button>
   <p class="mt-4 text-sm text-soft" role="status" data-upload-status>Each file becomes a separate book and skill. Ten new sources per day.</p>

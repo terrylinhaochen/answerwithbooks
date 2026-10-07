@@ -55,7 +55,7 @@ const examples = [
    </div>
    {examples.map((example,index) => <article class="skill-example" role="tabpanel" id={`example-panel-${index}`} aria-labelledby={`example-tab-${index}`} tabindex="0" hidden={index !== 0} data-example-panel={index}>
     <div class="skill-example-source"><a class="skill-example-jacket" href={`/books/${example.slug}/`} aria-label={`Read ${example.book.data.title}`}><BookJacket title={example.book.data.title} author={example.book.data.author} slug={example.slug} color={bookPalettes[example.slug]?.cover ?? '#304c44'} loading="lazy" /></a><p>{example.book.data.title}</p><span>{example.book.data.author}</span><a class="skill-source-link" href={`/books/${example.slug}/`}>Read the source digest ↗</a></div>
-    <div class="skill-example-body"><p class="awb-eyebrow">A task you can try</p><h3>{example.title}</h3><p class="skill-example-task">{example.task}</p><ul>{example.methods.map(method => <li>{method}</li>)}</ul><p class="skill-example-outcome"><span>Work toward</span>{example.outcome}</p><button type="button" class="awb-pill awb-pill-primary" data-copy-example>Copy to agent</button><p class="skill-copy-status" role="status">Copies the digest, source link, and this task. Paste into your preferred agent.</p><textarea class="awb-input mt-4" readonly hidden aria-label="Book and task prompt" data-example-prompt>{example.prompt}</textarea></div>
+    <div class="skill-example-body"><p class="awb-eyebrow">A task you can try</p><h3>{example.title}</h3><p class="skill-example-task">{example.task}</p><ul>{example.methods.map(method => <li>{method}</li>)}</ul><p class="skill-example-outcome"><span>Work toward</span>{example.outcome}</p><button type="button" class="awb-pill awb-pill-primary" data-copy-example>Copy prompt for your AI</button><p class="skill-copy-status" role="status">Copies the digest, source link, and this task. Paste into your AI chat and send.</p><textarea class="awb-input mt-4" readonly hidden aria-label="Book and task prompt" data-example-prompt>{example.prompt}</textarea></div>
    </article>)}
   </section>
 
@@ -65,10 +65,10 @@ const examples = [
   </section>
 
   <section class="skill-faq" aria-labelledby="skill-faq-title"><div><p class="awb-eyebrow">Before you begin</p><h2 id="skill-faq-title">A few useful<br /><em>details.</em></h2></div><div>
-   <details><summary>Can I use this with my existing agent?</summary><p>Yes. Copy to agent gives you a single prompt containing the book artifact, skill, and references. Paste it into your preferred agent and add your task. For reusable installation, download the ZIP and follow your agent’s skill-file setup. Installation is not automatic.</p></details>
+   <details><summary>Can I use this with my existing agent?</summary><p>Yes. Copy prompt for your AI gives you a single prompt containing the book artifact, skill, and references. Paste it into your preferred agent and add your task. For reusable installation, download the ZIP and follow your agent’s skill-file setup. Installation is not automatic.</p></details>
    <details><summary>Can my agent search the public shelf?</summary><p>Install the bundled CLI and Codex skill with Node 20 or later. This pinned release includes its own public book corpus and runtime. No account, API key, or running server is required.</p><ToolCommand value={bookSkillCommand} install label="Copy install command" /><p>The installer prints a working ask command. Other agents can use the installed CLI or load its SKILL.md and runtime together.</p></details>
    <details><summary>What can I upload?</summary><p>Books, research papers, documentation, and notes in PDF, EPUB, DOCX, Markdown, HTML, RTF, or plain text. Sign in, drop or choose one searchable file up to {uploadLimits.maxFileBytes / 1024 / 1024} MB, and keep the processing page open while your book and skill are generated. Extracted text can contain up to 1.2 million characters; split longer sources into smaller documents. If processing pauses, return to the book page to continue. Your source text is sent to our generation provider; your file and artifacts stay private to your account. Scanned PDFs need OCR first.</p></details>
-   <details><summary>Is every public book a complete skill package?</summary><p>The public shelf offers editorial digests with a Copy to agent prompt. Your own uploaded book produces the fuller skill package, including source-section notes, patterns, a cheatsheet, and a glossary.</p></details>
+   <details><summary>Is every public book a complete skill package?</summary><p>The public shelf offers editorial digests with a Copy prompt for your AI prompt. Your own uploaded book produces the fuller skill package, including source-section notes, patterns, a cheatsheet, and a glossary.</p></details>
    <details><summary>How much should I trust a generated skill?</summary><p>Use it as a working aid. Review important claims against the source, and check the output before relying on it. The agent prompt asks for source references, clearly marked inferences, and limits; it does not guarantee accuracy or complete coverage.</p></details>
   </div></section>
   <p class="skill-credit">Built with adapted parsing and skill-generation tools from the MIT-licensed <a href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener noreferrer">book-to-skill project ↗</a>.</p>
@@ -111,7 +111,7 @@ const examples = [
   panel.querySelector('[data-copy-example]')?.addEventListener('click', async () => {
    const prompt = panel.querySelector<HTMLTextAreaElement>('[data-example-prompt]')!;
    const status = panel.querySelector('.skill-copy-status')!;
-   try { await navigator.clipboard.writeText(prompt.value); status.textContent = 'Copied. Paste into your agent to start with the book and your task.'; }
+   try { await navigator.clipboard.writeText(prompt.value); status.textContent = 'Copied. Paste into your AI chat to start with the book and your task.'; }
    catch { prompt.hidden = false; prompt.focus(); prompt.select(); status.textContent = 'Copy was blocked. Select and copy the prompt below.'; }
   });
  });

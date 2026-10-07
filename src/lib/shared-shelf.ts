@@ -46,7 +46,7 @@ if (root) {
      field.value = prompt;
      try {
       await navigator.clipboard.writeText(prompt);
-      status.textContent = 'Copied. Paste into your agent to begin.';
+      status.textContent = 'Copied. Open your AI chat, paste the prompt, and send it.';
      } catch {
       field.hidden = false; field.focus(); field.select();
       status.textContent = 'Select and copy the prompt below.';

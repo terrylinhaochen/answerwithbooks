@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import TactileShelf from '../components/TactileShelf.astro';
+import BookAgentDemo from '../components/BookAgentDemo.astro';
 import BookJacket from '../components/BookJacket.astro';
 import AnswerCover from '../components/AnswerCover.astro';
 import { bookPalettes } from '../lib/book-palettes';
@@ -69,10 +70,10 @@ const carouselItems = carouselIds
 const siteDescription = 'Turn books into practical skills for your AI agent. Read a digest, apply its methods to your work, or upload a book to create a reusable skill.';
 const homeFaqs = [
   { question: 'What is a skill?', answer: 'A skill gives an agent instructions for applying a book’s methods: useful frameworks, decision rules, checklists, and mistakes to avoid. Supporting reference notes provide context for the task.' },
-  { question: 'How do I use a book with my agent?', answer: 'Open a book and choose Copy to agent. Paste the book material and instructions into your preferred AI, then describe your task. For an uploaded book, the prompt also includes the generated skill and references. No installation is needed for this copy-and-paste flow.' },
-  { question: 'What does uploading a book create?', answer: 'One searchable upload creates a readable book artifact, a reusable skill with supporting references, and a cover. Keep the processing page open while it runs. Your files and results stay private to your account.' },
+  { question: 'How do I use a book with my agent?', answer: 'Open a book and choose Copy prompt for your AI. This copies the book notes and instructions to your clipboard. Paste them into your AI chat and describe your task. For an uploaded book, the prompt also includes the generated skill and references. No installation is needed for this copy-and-paste flow.' },
+  { question: 'What does uploading a book create?', answer: 'One searchable upload creates a readable book artifact, a reusable skill with supporting references, and a cover. Keep the upload dialog open until saving finishes; processing then continues in the background. Your files and results stay private to your account.' },
   { question: 'How is the public shelf different?', answer: 'Public book pages are editorial digests with agent prompts. The fuller downloadable skill package is generated from your own uploaded source. Public pages do not contain the original book’s full text.' },
-  { question: 'Can I keep and reuse the skill?', answer: 'Yes. An uploaded book has Download book & skill, which exports a ZIP with the book artifact, SKILL.md, reference notes, patterns, a cheatsheet, and a glossary. Add those files to an agent that supports skills, or use Copy to agent for a single task.' },
+  { question: 'Can I keep and reuse the skill?', answer: 'Yes. An uploaded book has Download book & skill, which exports a ZIP with the book artifact, SKILL.md, reference notes, patterns, a cheatsheet, and a glossary. Add those files to an agent that supports skills, or use Copy prompt for your AI for a single task.' },
 ];
 
 const jsonLd = [
@@ -166,16 +167,7 @@ const jsonLd = [
       </div>
     </section>
 
-    <section id="question-first-reading" class="home-section home-method">
-      <div class="section-heading"><div><p class="room-eyebrow">From book to working method</p><h2>Book ideas, applied<br /> to <em>your context.</em></h2></div><p class="section-note">A book gives you the ideas.<br />A skill helps your agent apply them to a task.</p></div>
-      <div class="method-grid">
-        {[
-          ['Choose your source', 'Start with a public digest, or upload a book to create a readable artifact and a complete companion skill.'],
-          ['Give your agent a method', 'Bring the book’s frameworks and decision rules into your task. Uploaded skills include supporting references, patterns, and a cheatsheet.'],
-          ['Put it to work', 'Copy to agent, add your context, and ask for a concrete result: an interview plan, a decision review, or a practical next step.'],
-        ].map(([title, text], index) => <article class="method-card"><span class="method-number" aria-hidden="true">0{index + 1}</span><h3>{title}</h3><p>{text}</p></article>)}
-      </div>
-    </section>
+    <BookAgentDemo book={bookById.get('the-mom-test')!} />
 
     <section id="source-books" class="home-section home-library">
       <div class="section-heading"><div><p class="room-eyebrow">Featured books</p><h2>A few good places<br /> to <em>begin.</em></h2></div><a class="room-link" href="/books/">All {books.length} books <span aria-hidden="true">↗</span></a></div>

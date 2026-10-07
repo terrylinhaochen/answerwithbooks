@@ -1,6 +1,9 @@
 {
   "maxFileBytes": 52428800,
-  "maxTextCharacters": 1200000,
+  "maxTextCharacters": 6000000,
   "maxPdfPages": 1500,
-  "maxArchiveExpandedBytes": 104857600
+  "maxArchiveExpandedBytes": 104857600,
+  "maxTextBytes": 24000000,
+  "maxProcessingSections": 512,
+  "maxSourceHeadings": 2000
 }

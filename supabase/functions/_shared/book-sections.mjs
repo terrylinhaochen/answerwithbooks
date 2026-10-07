@@ -1,16 +1,21 @@
+import limits from './book-upload-limits.json' with {type:'json'};
 export function splitSource(text, headings = []) {
+ if(typeof text!=='string'||text.length>limits.maxTextCharacters)throw new Error('This source exceeds the current processing capacity.');
  const lines = text.replace(/\r\n?/g,'\n').split('\n').flatMap(line => line.match(/.{1,1000}/gu) || ['']);
  const boundaries=new Map();
- if(!Array.isArray(headings)||headings.length>500)throw new Error('Invalid source structure.');
+ if(!Array.isArray(headings)||headings.length>limits.maxSourceHeadings)throw new Error('Invalid source structure.');
  for(const heading of headings)if(Number.isInteger(heading.line)&&heading.line>=1&&heading.line<=lines.length&&typeof heading.title==='string'&&heading.title===lines[heading.line-1].trim()&&heading.title.length<=200)boundaries.set(heading.line,heading.title);
+ const minHeadingSection=text.length>300000?Math.max(12000,Math.ceil(text.length/(limits.maxProcessingSections*.8))):0;
  const chunks = []; let start=1, part=[] , size=0, title='';
  for(let i=0;i<lines.length;i++) {
-  if((size+lines[i].length>24000 || boundaries.has(i+1)) && part.length) { chunks.push({start,end:i,text:part.join('\n'),title});start=i+1;part=[];size=0; }
-  if(boundaries.has(i+1))title=boundaries.get(i+1);
+  if((size+lines[i].length>24000 || (boundaries.has(i+1)&&size>=minHeadingSection)) && part.length) { chunks.push({start,end:i,text:part.join('\n'),title});start=i+1;part=[];size=0; }
+  if(boundaries.has(i+1)&&!part.length)title=boundaries.get(i+1);
   part.push(`${i+1}: ${lines[i]}`);size+=lines[i].length+12;
  }
  if(part.length) chunks.push({start,end:lines.length,text:part.join('\n'),title});
- if(chunks.length>60) throw new Error('This book exceeds the current processing limit.');
+ // Dense headings must not turn a readable book into thousands of tiny jobs.
+ // Fall back to size-bounded sections, retaining every line and its citation position.
+ if(chunks.length>limits.maxProcessingSections){if(headings.length)return splitSource(text,[]);throw new Error('This source exceeds the current processing capacity.');}
  return {text:lines.join('\n'),chunks,lineCount:lines.length};
 }
 export function validateSection(data,chunk,index) {

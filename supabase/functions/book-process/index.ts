@@ -1,3 +1,4 @@
+import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
 import {scanSkill} from '../_shared/book-skill-review.mjs';
 import {processingOptions,retryPatch} from '../_shared/book-options.mjs';
 import {distillSection,compileDistillation} from '../_shared/book-distillation.mjs';
@@ -14,7 +15,7 @@ const db=createClient(url,serviceKey,{auth:{persistSession:false}});
 const providerKey=()=>Deno.env.get('OPENAI_API_KEY');
 const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','https://chenterry.com','http://localhost:4321','http://127.0.0.1:4321']);
 const hash=async(bytes:BufferSource)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
-function publicJob(job:any) { const {source_text,chunks,notes,lease_token,...rest}=job;return {...rest,total_sections:chunks.length}; }
+function publicJob(job:any) { const {source_text,chunks,notes,overview_notes=[],lease_token,...rest}=job;return {...rest,total_sections:chunks.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
 function requireOk(result:any) { if(result.error) throw new Error('Could not save processing progress. Please retry.');return result.data; }
 async function modelJson(system:string,input:string) {
  const response=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{Authorization:`Bearer ${providerKey()}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_PROCESSING_MODEL')||'gpt-4.1-mini',messages:[{role:'system',content:system},{role:'user',content:input}],response_format:{type:'json_object'},max_tokens:6000}),signal:AbortSignal.timeout(60000)});
@@ -35,6 +36,9 @@ async function step(job:any,token:string) {
   if(job.cursor===0) { if(typeof title==='string'&&title.trim()) patch.title=title.slice(0,200);if(typeof author==='string'&&author.trim()) patch.author=author.slice(0,200); }
  } else if(job.options?.mode==='analysis') {
   patch.analysis={title:job.title,author:job.author,sections:job.notes,sourceSha256:job.source_sha,createdAt:new Date().toISOString()};patch.status='analyzed';patch.run_state='complete';
+ } else if((job.overview_notes||[]).length<overviewGroupCount(job.notes)) {
+  const start=(job.overview_notes||[]).length*overviewGroupSize;
+  patch.overview_notes=[...(job.overview_notes||[]),await summarizeBookGroup(job.notes.slice(start,start+overviewGroupSize),modelJson)];
  } else if(!job.artifacts) {
   patch.artifacts=await compileDistillation(job,job.notes,modelJson,hash);patch.status='cover';patch.attempts=0;
  } else {
@@ -69,7 +73,7 @@ Deno.serve(async req=>{
   if(Number(req.headers.get('content-length')||0)>7000000)return reply({error:'Source too large'},413);
   const raw=await req.text();if(raw.length>2500000)return reply({error:'Source too large'},413);
   const input=JSON.parse(raw);if(!input||typeof input!=='object'||Array.isArray(input))return reply({error:'Send a JSON object.'},400);
-  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:uploadLimits.maxFileBytes,max_text_characters:uploadLimits.maxTextCharacters,max_batch_files:10,daily_source_limit:10,background_processing:true});
+  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:uploadLimits.maxFileBytes,max_text_characters:uploadLimits.maxTextCharacters,max_batch_files:10,daily_source_limit:10,background_processing:true,staged_uploads:true});
   const bearer=req.headers.get('authorization')?.replace(/^Bearer /i,'');if(!bearer)return reply({error:'Sign in to upload a private book.'},401);
   if(input.action==='drain') {
    const runner=Deno.env.get('BOOK_QUEUE_RUNNER_SECRET');
@@ -90,15 +94,31 @@ Deno.serve(async req=>{
   }
   const {data:auth,error}=await db.auth.getUser(bearer);if(error||!auth.user)return reply({error:'Sign in to upload a private book.'},401);
   const user=auth.user;
+  if(input.action==='prepare') {
+   if(!providerKey())return reply({error:'Generation is unavailable.'},503);
+   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes||!Number.isSafeInteger(input.textBytes)||input.textBytes<100||input.textBytes>uploadLimits.maxTextBytes||! /^[a-f0-9]{64}$/.test(input.sha||'')||! /^[a-f0-9]{64}$/.test(input.textSha||''))return reply({error:'Choose a supported source within the upload limits.'},400);
+   const options=processingOptions(input.options),headings=input.extraction?.headings||[];
+   if(!Array.isArray(headings)||headings.length>uploadLimits.maxSourceHeadings||headings.some((h:any)=>!h||!Number.isSafeInteger(h.line)||h.line<1||typeof h.title!=='string'||h.title.length>1000))return reply({error:'Invalid extracted source structure.'},400);
+   const result=await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:'Source upload pending. '.repeat(6),p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:[]});
+   if(result.error)return reply({error:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not save this source. Please retry.'},400);
+   let job=result.data;
+   if(job.status!=='uploaded'||job.cursor>0)return reply({job:publicJob(job)});
+   if(job.lease_until&&Date.parse(job.lease_until)>Date.now())return reply({error:'This source is already being saved. Please retry shortly.'},409);
+   job=requireOk(await db.from('book_processing_jobs').update({options,run_state:'staging',source_import:{textSha:input.textSha,textBytes:input.textBytes,headings},lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('updated_at',job.updated_at).select().single());
+   const upload=requireOk(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/source`,{upsert:true}));
+   const textUpload=requireOk(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/extracted-source.txt`,{upsert:true}));
+   return reply({job:publicJob(job),upload,textUpload});
+  }
   if(input.action==='create') {
    if(!providerKey())return reply({error:'Book processing is being connected. Please try again later.'},503);
    if(input.size!==undefined&&(!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes))return reply({error:'Choose a non-empty source file up to 50 MB.'},400);
-   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to 1.2 million readable characters.'},400);
+   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to six million readable characters.'},400);
    const options=processingOptions(input.options);
    const source=splitSource(sanitizeSource(input.text), input.extraction?.headings||[]);
    const result=await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:source.text,p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:source.chunks});
    if(result.error)return reply({error:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not create this book. Please retry.'},400);
    let job=result.data;let upload=null;
+   if(job.source_import&&job.status==='uploaded')return reply({error:'This book has an unfinished large-source upload. Choose the same file again in the current upload dialog.'},409);
    if(job.status==='uploaded'&&job.cursor===0&&!job.lease_until) {
     // Options can change only before processing starts. Enqueue follows completed upload.
     job=requireOk(await db.from('book_processing_jobs').update({options,run_state:input.options?'staging':'manual'}).eq('id',job.id).eq('updated_at',job.updated_at).is('lease_token',null).select().single());
@@ -108,6 +128,23 @@ Deno.serve(async req=>{
   }
   if(!/^[a-f0-9-]{36}$/i.test(input.id||''))return reply({error:'Invalid book ID'},400);
   const {data:job}=await db.from('book_processing_jobs').select('*').eq('id',input.id).eq('user_id',user.id).maybeSingle();if(!job)return reply({error:'Book not found'},404);
+  if(input.action==='finalize') {
+   if(job.status!=='uploaded')return reply({job:publicJob(job)});
+   if(!job.source_import)return reply({error:'This source does not have a staged extraction.'},409);
+   const token=crypto.randomUUID(),now=new Date().toISOString();
+   const claim=requireOk(await db.from('book_processing_jobs').update({lease_token:token,lease_until:new Date(Date.now()+140000).toISOString()}).eq('id',job.id).eq('updated_at',job.updated_at).or(`lease_until.is.null,lease_until.lt.${now}`).select('id'));
+   if(!claim?.length)return reply({error:'This source is already being saved. Please retry shortly.'},409);
+   try{
+    const original=requireOk(await db.storage.from('private-books').download(`${user.id}/${job.id}/source`));
+    if(original.size>uploadLimits.maxFileBytes||await hash(await original.arrayBuffer())!==job.source_sha)throw new Error('The original upload is incomplete. Choose the same file to retry.');
+    const extracted=requireOk(await db.storage.from('private-books').download(`${user.id}/${job.id}/extracted-source.txt`));
+    if(extracted.size!==job.source_import.textBytes||extracted.size>uploadLimits.maxTextBytes||await hash(await extracted.arrayBuffer())!==job.source_import.textSha)throw new Error('The extracted text upload is incomplete. Choose the same file to retry.');
+    const text=sanitizeSource(await extracted.text());if(text.length<100||text.length>uploadLimits.maxTextCharacters)throw new Error('The extracted text exceeds the current processing capacity.');
+    const source=splitSource(text,job.source_import.headings);
+    const saved=requireOk(await db.from('book_processing_jobs').update({source_text:source.text,chunks:source.chunks,status:'processing',run_state:'queued',error:null,attempts:0,next_attempt_at:now,lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('lease_token',token).select().single());
+    await wake();return reply({job:publicJob(saved)});
+   }finally{await db.from('book_processing_jobs').update({lease_token:null,lease_until:null}).eq('id',job.id).eq('lease_token',token);}
+  }
   if(input.action==='delete') {
    // Stop claims before touching storage. An active provider call must finish first.
    const now=new Date().toISOString();
@@ -140,6 +177,7 @@ Deno.serve(async req=>{
    return reply({job:publicJob(saved||job)});
   }
   if(['enqueue','retry','generate'].includes(input.action)) {
+   if(job.source_import&&job.status==='uploaded')return reply({error:'Finish saving the original and extracted text before processing.'},409);
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
    if(job.status==='ready'||job.status==='analyzed'&&input.action!=='generate')return reply({job:publicJob(job)});
    if(input.action==='generate'&&job.status!=='analyzed')return reply({error:'Finish analysis before generating from it.'},409);

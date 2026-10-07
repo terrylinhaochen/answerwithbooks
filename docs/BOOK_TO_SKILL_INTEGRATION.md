@@ -28,7 +28,7 @@ The integration now executes upstream code. Unmodified Python sources and tools 
 | SKILL.md + chapters + patterns/glossary/cheatsheet | AWB's shared compiler creates these alongside the reader artifact, from one distillation. Source-supported decision rules appear in the cheatsheet. |
 | Calibre / Kindle, folder/glob input, multi-book synthesis, agent installation | Not added to the website. Optional native single-file Calibre support is inherited when installed; no browser parity is claimed. |
 
-Supported web inputs: PDF, EPUB, DOCX, RTF, HTML/HTM/XHTML, TXT/TEXT, MD/MARKDOWN, RST, ADOC/ASCIIDOC. Limits: 50 MB raw file, 1.2 million extracted characters, 60 processing sections. Archives are bounded before parsing (2,000 members, 100 MB expanded total, 12 MB per member, and compression-ratio checks). Scanned PDFs need OCR before upload. The original DOCX DTD/entity rejection remains active. These checks do not guarantee extraction completeness or semantic accuracy.
+Supported web inputs: PDF, EPUB, DOCX, RTF, HTML/HTM/XHTML, TXT/TEXT, MD/MARKDOWN, RST, ADOC/ASCIIDOC. Limits: 50 MB raw file, six million extracted characters, 512 processing sections. Archives are bounded before parsing (2,000 members, 100 MB expanded total, 12 MB per member, and compression-ratio checks). Scanned PDFs need OCR before upload. The original DOCX DTD/entity rejection remains active. These checks do not guarantee extraction completeness or semantic accuracy.
 
 The Python runtime adds an initial download of roughly 14 MB and is loaded only for extraction or export validation. A fresh worker isolates each operation and terminates after 90 seconds. Book contents are never evaluated as code. The native adapter disables automatic dependency installation.
 

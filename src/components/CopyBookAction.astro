@@ -5,8 +5,8 @@ interface Props { book: CollectionEntry<'books'>; readingLink?: boolean; }
 const { book, readingLink = false } = Astro.props;
 ---
 <div class="copy-book-action" data-public-book-action>
- <div class="copy-book-actions"><button type="button" class="awb-pill awb-pill-primary" data-copy-public-book aria-label={`Copy ${book.data.title} to agent`}>Copy to agent</button>{readingLink && <a href={`/books/${book.id}/`}>Open the book</a>}</div>
- <p class="copy-book-status" role="status" data-public-book-status></p>
+ <div class="copy-book-actions"><button type="button" class="awb-pill awb-pill-primary" data-copy-public-book aria-label={`Copy ${book.data.title} prompt for your AI`}>Copy prompt for your AI</button>{readingLink && <a href={`/books/${book.id}/`}>Open the book</a>}</div>
+ <p class="copy-book-status" role="status" data-public-book-status>Copies book notes and a task prompt. Paste into your AI chat and send.</p>
  <textarea hidden readonly class="awb-input" rows="7" aria-label={`${book.data.title} agent prompt`} data-public-book-prompt>{publicBookPrompt(book)}</textarea>
 </div>
 <style>
@@ -25,8 +25,8 @@ const { book, readingLink = false } = Astro.props;
   const prompt=root.querySelector<HTMLTextAreaElement>('[data-public-book-prompt]')!;
   const status=root.querySelector('[data-public-book-status]')!;
   button.addEventListener('click',async () => {
-   try { await navigator.clipboard.writeText(prompt.value); status.textContent='Copied. Paste into your agent to start the task.'; }
-   catch { prompt.hidden=false;prompt.focus();prompt.select();status.textContent='Select and copy the prompt below, then paste it into your agent.'; }
+   try { await navigator.clipboard.writeText(prompt.value); status.textContent='Copied. Open your AI chat, paste the prompt, and send it.'; }
+   catch { prompt.hidden=false;prompt.focus();prompt.select();status.textContent='Select and copy the prompt below, then paste it into your AI chat and send.'; }
   });
  }
 </script>

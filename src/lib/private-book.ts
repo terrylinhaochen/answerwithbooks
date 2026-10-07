@@ -45,7 +45,7 @@ async function paint(job:any) {
  current=job;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
  find<HTMLProgressElement>('progress').value=job.status==='ready'?100:job.artifacts?90:Math.round(job.cursor/(job.total_sections+2)*85);
  find('pause').hidden=job.run_state!=='queued';find('retry').hidden=!['failed','paused','manual'].includes(job.run_state);
- find('status').textContent=job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':`Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
+ find('status').textContent=job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':job.overview_total&&job.cursor===job.total_sections?`All source sections read. Assembling your book · ${job.overview_completed} of ${job.overview_total} overview groups`: `Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
  if(job.status==='ready'||job.status==='analyzed')find('resume').hidden=true;
  if(job.analysis&&!analysisRendered){
   analysisRendered=true;find('analysis').hidden=false;
@@ -97,7 +97,7 @@ find('audit-retry').addEventListener('click',()=>void checkSkill(current.artifac
 find('retry').addEventListener('click',()=>void run('retry'));
 find('copy').addEventListener('click',async()=>{
  const prompt=find<HTMLTextAreaElement>('prompt');
- try {await navigator.clipboard.writeText(prompt.value);find('copy-status').textContent='Copied. Paste into your agent and add your question or task.';}
+ try {await navigator.clipboard.writeText(prompt.value);find('copy-status').textContent='Copied. Open your AI chat, paste the prompt, add your task, and send.';}
  catch {prompt.hidden=false;prompt.focus();prompt.select();find('copy-status').textContent='Copy was blocked. Select and copy the prompt below.';}
 });
 async function downloadRevision(previous=false,analysis=false) {
