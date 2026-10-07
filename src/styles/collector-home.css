@@ -199,22 +199,14 @@ body[data-theme='collector'] .home-activity .activity-weekdays, body[data-theme=
 }
 
 
-/* Two paths, kept together where visitors decide how to begin. */
-.agent-room-paths{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:0;padding:48px 0}
-.agent-room-paths .agent-path{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:0 48px}
-.agent-path + .agent-path{border-left:1px solid #eee9d925}
-.agent-room-paths h2{margin-top:0;font-size:clamp(36px,3.8vw,48px)}
-.agent-room-paths .agent-path > p{max-width:36ch;margin:21px 0 27px}
-.agent-path .room-button{margin-top:auto;gap:24px;cursor:pointer}
-.room-button-outline{border:1px solid #eee9d955;color:#eee9d9;background:transparent}
-.room-button-outline:hover{background:#eee9d912;border-color:#eee9d980}
-@media(max-width:900px){.agent-room-paths .agent-path{padding-inline:30px}}
-@media(max-width:700px){
- .agent-room-paths{grid-template-columns:1fr;padding:34px 28px;gap:32px}
- .agent-room-paths .agent-path{padding:0}
- .agent-path + .agent-path{border-left:0;border-top:1px solid #eee9d925;padding-top:32px}
-}
-@media(max-width:360px){.agent-room-paths{padding-inline:23px}.home-start-actions{gap:20px}.home-start-actions :is(a,button){gap:13px}}
+/* A single next step; book-specific tasks live with their covers. */
+.agent-room-simple { grid-template-columns: minmax(0,1fr) auto; gap: 40px; }
+.agent-room-simple h2 { margin-top: 0; }
+.agent-room-simple > div > p:not(.room-eyebrow) { max-width: 46ch; }
+.agent-room-simple > a { gap: 28px; white-space: nowrap; }
+@media(max-width:700px) { .agent-room-simple { grid-template-columns: 1fr; gap: 27px; } .agent-room-simple > a { justify-self: start; } }
+
+@media(max-width:360px){.home-start-actions{gap:20px}.home-start-actions :is(a,button){gap:13px}}
 
 /* Keep the complete brand and install action visible beside signed-in navigation. */
 @media(max-width:520px){

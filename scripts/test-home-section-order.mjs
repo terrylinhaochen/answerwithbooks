@@ -52,7 +52,7 @@ try {
 
   const upload = page.locator('#book-upload-dialog');
   const uploadTriggers = page.locator('[data-open-book-request]');
-  assert.equal(await uploadTriggers.count(), 2);
+  assert.equal(await uploadTriggers.count(), 1);
   for (const trigger of await uploadTriggers.all()) {
     await trigger.click();
     assert.equal(await upload.isVisible(), true);
@@ -72,7 +72,7 @@ try {
   assert.equal(await upload.locator('[data-upload-files] > li').count(), 0);
   await upload.getByRole('button', { name: 'Close upload' }).click();
 
-  assert.equal(await page.locator('#install a,#install button').count(),2);
+  assert.equal(await page.locator('#install a,#install button').count(),1);
   assert.equal(await page.locator('.shelf-lab [data-open-skill-install],.shelf-lab [data-open-book-request],.demo-footer').count(),0);
   assert.equal(await page.locator('#home-intro [data-open-skill-install],#home-intro [data-open-book-request]').count(),2);
   assert.equal(await page.locator('.library-book [data-copy-public-book]').count(),0);
