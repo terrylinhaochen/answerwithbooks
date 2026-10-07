@@ -1,6 +1,6 @@
 {
   "emailsSent": 0,
-  "cliVersion": "0.2.0",
+  "cliVersion": "0.3.0",
   "origin": "http://127.0.0.1:4321",
   "productionBackend": true,
   "browserPairing": true,
@@ -8,20 +8,19 @@
   "accountIsolation": true,
   "cacheReuse": true,
   "backgroundCompletion": true,
+  "privateDiscovery": {
+    "method": "multilingual_embeddings_then_agent_reasoning",
+    "fallbackReason": null,
+    "methodMetadata": true,
+    "twoDistinctTopics": true
+  },
   "privateBookEvidence": true,
   "citationBundle": true,
+  "individualBookInstall": true,
+  "accountLibrarySync": true,
+  "oldRevisionRemainsUsable": true,
+  "revisionAccountIsolation": true,
+  "appendRevisionActivationAndSync": true,
   "revocation": true,
-  "passed": true,
-  "backend": {
-    "book-process": {
-      "version": 12,
-      "status": "ACTIVE"
-    },
-    "book-cli-auth": {
-      "version": 1,
-      "status": "ACTIVE"
-    }
-  },
-  "migration": "20261008001000",
-  "packageCi": "https://github.com/Crowdlisten/Crowdlisten_books/actions/runs/37577973901"
+  "passed": true
 }

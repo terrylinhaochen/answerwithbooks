@@ -1,6 +1,6 @@
 import skills from '../data/skills.json' with { type: 'json' };
 import bookCliRelease from './book-cli-release.json' with {type:'json'};
-export const bookSkillCommand = `npx --yes answer-with-books@${bookCliRelease.version} install --skill --api`;
+export const bookSkillCommand = `npx --yes ${bookCliRelease.package || `answer-with-books@${bookCliRelease.version}`} install --skill --api`;
 export const installSkillPath = '/tools/answer-with-books-tools/SKILL.md';
 export const apiPreviewOrigin = 'http://127.0.0.1:4318';
 

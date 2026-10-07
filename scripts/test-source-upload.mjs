@@ -31,13 +31,14 @@ try {
   if(url.pathname.endsWith('/book-process')) {
    const body=route.request().postDataJSON();
    if(body.action==='health') result={available:true};
+   else if(body.action==='lookup')result={reused:false};
    else if(body.action==='create'){captured.push(body);result={error:'QA extraction complete; generation intentionally not started.'};status=400;}
    else throw Error(`Unexpected action ${body.action}`);
   } else if(url.pathname==='/auth/v1/user')result=user;
   await route.fulfill({status,contentType:'application/json',body:JSON.stringify(result)});
  });
  await p.route('https://api.openai.com/**',route=>{provider.push(route.request().url());return route.abort();});
- await p.goto(origin+'/tools/');await p.locator('[data-open-book-request]').first().click();
+ await p.goto(origin+'/tools/',{waitUntil:'domcontentloaded',timeout:120000});await p.locator('[data-open-book-request]').first().click();
  const source='Chapter 1: Evidence\nUse a bounded trial and keep the observations. Review the prediction before changing the plan.\n\nChapter 2: Review\nCompare the result with the expected signal. Keep uncertainty visible, check the original source, and identify the next reversible action.';
  const clear=async()=>{if(await p.locator('[data-upload-clear]').isVisible())await p.locator('[data-upload-clear]').click();};
  const start=async()=>{await p.locator('[data-upload-submit]').click();await p.getByText(/Sources reviewed\./).waitFor({timeout:90000});await p.locator('[data-upload-submit]').click();};

@@ -24,10 +24,11 @@
   async function refresh() {
     const { data } = await supabase.auth.getSession(); activeUserId = data.session?.user.id; render();
     if (!activeUserId) return;
-    const {data: jobs} = await supabase.from('book_processing_jobs').select('id,title,author,status,run_state,cursor,created_at').order('created_at',{ascending:false}).limit(100);
+    const {data: jobs} = await supabase.from('book_processing_jobs').select('id,title,author,status,run_state,cursor,created_at,source_import').eq('is_current',true).order('created_at',{ascending:false}).limit(100);
     for(const job of jobs||[]) {
       root.hidden=false;const card=document.createElement('a');card.href=`/your-book/?id=${encodeURIComponent(job.id)}`;card.className='rounded-2xl border border-line bg-card p-4';
-      const title=document.createElement('h3');title.className='font-serif text-xl';title.textContent=job.title;const info=document.createElement('p');info.className='mt-2 text-sm text-soft';info.textContent=job.status==='ready'?'Book, skill, and cover ready':job.status==='analyzed'?'Analysis ready':job.run_state==='queued'?`Processing in the background · ${job.cursor} sections read`:job.run_state==='failed'?'Needs a retry':job.run_state==='staging'?'Source upload incomplete':'Open to resume processing';card.append(title,info);list.prepend(card);
+      const native=job.source_import?.kind==='native'&&['queued','processing'].includes(job.source_import.state);
+      const title=document.createElement('h3');title.className='font-serif text-xl';title.textContent=job.title;const info=document.createElement('p');info.className='mt-2 text-sm text-soft';info.textContent=native?'Reading your original file in the background':job.status==='ready'?'Book, skill, and cover ready':job.status==='analyzed'?'Analysis ready':job.run_state==='queued'?`Processing in the background · ${job.cursor} sections read`:job.run_state==='failed'?'Needs a retry':job.run_state==='staging'?'Source upload incomplete':'Open to resume processing';card.append(title,info);list.prepend(card);
     }
     const { data: rows, error } = await supabase.from('book_requests').select('id,title,author,status,created_at,external_id,matched_book_slug').eq('user_id', activeUserId).order('created_at', { ascending: false }).limit(100);
     if (!error && rows) {

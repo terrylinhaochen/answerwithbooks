@@ -1,13 +1,17 @@
 import {auditUpstream} from './upstream-book';
 import {zipSync,strToU8} from 'fflate';
 import {supabase} from './supabase';
-import {bookWorker} from './book-upload';
+import {bookWorker,nativeBookWorker,openBookUpload} from './book-upload';
 import {bookAgentPrompt} from '../../supabase/functions/_shared/book-handoff.mjs';
+import bookCliRelease from './book-cli-release.json';
 const root=document.querySelector<HTMLElement>('[data-private-book]')!;
 const find=<T extends HTMLElement>(name:string)=>root.querySelector<T>(`[data-job-${name}]`)!;
 const id=new URL(location.href).searchParams.get('id');
-let current:any, running=false, rendered=false, analysisRendered=false, auditPassed=false, hasFindings=false;
-function updateReviewGate(){const blocked=!auditPassed||(hasFindings&&!find<HTMLInputElement>('review-accept').checked);find<HTMLButtonElement>('copy').disabled=blocked;find<HTMLButtonElement>('download').disabled=blocked;}
+let current:any, running=false, rendered=false, analysisRendered=false, auditPassed=false, hasFindings=false, activating=false;
+let revisionsKey='',revisionCanActivate=false;
+const nativePending=(job:any)=>job?.source_import?.kind==='native'&&['queued','processing'].includes(job.source_import.state);
+function updateActivationGate(){find<HTMLButtonElement>('activate').disabled=activating||current?.status!=='ready'||!revisionCanActivate||!find<HTMLInputElement>('activate-review').checked||!auditPassed||(hasFindings&&!find<HTMLInputElement>('review-accept').checked);}
+function updateReviewGate(){const blocked=!auditPassed||(hasFindings&&!find<HTMLInputElement>('review-accept').checked);find<HTMLButtonElement>('copy').disabled=blocked;find<HTMLButtonElement>('download').disabled=blocked;updateActivationGate();}
 async function checkSkill(files:Record<string,string>) {
  find<HTMLButtonElement>('copy').disabled=true;find<HTMLButtonElement>('download').disabled=true;find('audit-retry').hidden=true;
  find('audit').textContent='Checking skill format and content…';
@@ -41,11 +45,58 @@ const renderMarkdown=(text:string)=>{
  }
 
 };
+async function showVersions(job:any) {
+ find('versions').hidden=false;
+ const pending=job.is_current===false;
+ if(!pending)revisionCanActivate=false;
+ find('version-status').textContent=`Version ${job.revision||1} · ${pending?'Checking version history…':'Current book and skill'}`;
+ find('revision-actions').hidden=job.status!=='ready'||pending;
+ find('activation').hidden=!revisionCanActivate||job.status!=='ready';
+ find('discard').hidden=!revisionCanActivate||!['complete','failed','paused'].includes(job.run_state);
+ find<HTMLButtonElement>('discard').disabled=!!job.lease_until&&Date.parse(job.lease_until)>Date.now();
+ find('version-message').textContent=pending?'Your current version stays available until you make this version current.':'Add or replace one source at a time. Each change stays in this book and skill.';
+ updateActivationGate();
+ const installId=job.book_id||job.id;
+ const canInstall=job.status==='ready'&&!pending&&/^[a-zA-Z0-9-]+$/.test(installId);
+ find('install').hidden=!canInstall;
+ if(canInstall)find('install-command').textContent=`npx --yes ${bookCliRelease.package || `answer-with-books@${bookCliRelease.version}`} library install-book ${installId}`;
+ const key=`${job.id}:${job.status}:${job.is_current}:${job.revision}`;
+ if(key===revisionsKey){if(pending)find('version-status').textContent=`Version ${job.revision||1} · ${revisionCanActivate?job.status==='ready'?'Review before making current':'New version in progress':'Previous version'}`;return;}
+ revisionsKey=key;
+ find('sources').replaceChildren();
+ for(const source of job.source_manifest||[]) {
+  const li=document.createElement('li');
+  li.textContent=`${source.name}${source.startLine?` · source lines ${source.startLine}–${source.endLine}`:''}`;
+  find('sources').append(li);
+ }
+ try {
+  const result=await bookWorker({action:'revisions',id:job.id});
+  const active=result.revisions?.find((revision:any)=>revision.is_current);
+  revisionCanActivate=job.is_current===false&&!!job.parent_job_id&&job.parent_job_id===active?.id;
+  find('discard').hidden=!revisionCanActivate||!['complete','failed','paused'].includes(job.run_state);
+  if(pending){
+   find('version-status').textContent=`Version ${job.revision||1} · ${revisionCanActivate?job.status==='ready'?'Review before making current':'New version in progress':'Previous version'}`;
+   find('version-message').textContent=revisionCanActivate?'Your current version stays available until you make this version current.':'This saved version remains available. Open the current version to add or replace sources.';
+  }
+  find('activation').hidden=!revisionCanActivate||job.status!=='ready';updateActivationGate();
+  find('revisions').replaceChildren();
+  for(const revision of result.revisions||[]) {
+   const li=document.createElement('li'),link=document.createElement('a');
+   link.href=`/your-book/?id=${encodeURIComponent(revision.id)}`;link.className='underline underline-offset-4';
+   const state=revision.is_current?'current':revision.status==='ready'?revision.revision>(active?.revision||0)?'ready to review':'previous version':revision.status;
+   link.textContent=`Version ${revision.revision||1} · ${state}${revision.revision_kind==='append'?' · source added':revision.revision_kind==='replace'?' · source replaced':''}`;
+   if(revision.id===job.id)link.setAttribute('aria-current','page');
+   li.append(link);find('revisions').append(li);
+  }
+ }catch {revisionsKey='';revisionCanActivate=false;find('activation').hidden=true;find('discard').hidden=true;updateActivationGate();find('version-message').textContent='Version history is unavailable right now. Your saved book remains available.';}
+}
 async function paint(job:any) {
  current=job;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
- find<HTMLProgressElement>('progress').value=job.status==='ready'?100:job.artifacts?90:Math.round(job.cursor/(job.total_sections+2)*85);
- find('pause').hidden=job.run_state!=='queued';find('retry').hidden=!['failed','paused','manual'].includes(job.run_state);
- find('status').textContent=job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':job.overview_total&&job.cursor===job.total_sections?`All source sections read. Assembling your book · ${job.overview_completed} of ${job.overview_total} overview groups`: `Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
+ void showVersions(job);
+ if(nativePending(job))find('progress').removeAttribute('value');
+ else find<HTMLProgressElement>('progress').value=job.status==='ready'?100:job.artifacts?90:Math.round((job.cursor||0)/((job.total_sections||0)+2)*85);
+ find('pause').hidden=job.run_state!=='queued'||nativePending(job);find('retry').hidden=nativePending(job)||(!['failed','paused','manual'].includes(job.run_state)&&job.source_import?.state!=='failed');
+ find('status').textContent=nativePending(job)?job.source_import.state==='processing'?'Reading your original file in the background…':'Your original file is saved. Waiting for background extraction…':job.source_import?.state==='failed'?job.error||'Could not read this source. Retry background extraction.':job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':job.overview_total&&job.cursor===job.total_sections?`All source sections read. Assembling your book · ${job.overview_completed} of ${job.overview_total} overview groups`: `Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
  if(job.status==='ready'||job.status==='analyzed')find('resume').hidden=true;
  if(job.analysis&&!analysisRendered){
   analysisRendered=true;find('analysis').hidden=false;
@@ -83,13 +134,38 @@ async function run(action?:string) {
  try {
   if(!id)throw new Error('Choose a book from your shelf first.');
   const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to Answer with Books, then return to this private book link.');
+  if(action==='retry'&&current?.source_import?.kind==='native'&&current.source_import.state==='failed'){await nativeBookWorker({action:'retry',id});action='status';}
   await paint((await bookWorker({action:action||'status',id})).job);
-  if(current.run_state==='manual'&&!['ready','analyzed'].includes(current.status))await paint((await bookWorker({action:'enqueue',id})).job);
+  if(current.run_state==='manual'&&!nativePending(current)&&!['ready','analyzed'].includes(current.status))await paint((await bookWorker({action:'enqueue',id})).job);
  }catch(e){find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
  finally{running=false;}
 }
-setInterval(()=>{if(!document.hidden&&current?.run_state==='queued')void run();},5000);
+setInterval(()=>{if(!document.hidden&&(current?.run_state==='queued'||nativePending(current)))void run();},5000);
 find('review-accept').addEventListener('change',updateReviewGate);
+find('activate-review').addEventListener('change',updateActivationGate);
+find('add-source').addEventListener('click',()=>openBookUpload({parentId:current.id,revisionKind:'append'}));
+find('replace-source').addEventListener('click',()=>openBookUpload({parentId:current.id,revisionKind:'replace'}));
+find('discard').addEventListener('click',async()=>{
+ if(!revisionCanActivate||!current?.parent_job_id||!confirm('Discard this unactivated revision and its added source? Your current book and skill will stay available.'))return;
+ const button=find<HTMLButtonElement>('discard');button.disabled=true;
+ try {await bookWorker({action:'delete',id:current.id});location.assign(`/your-book/?id=${encodeURIComponent(current.parent_job_id)}`);}
+ catch(error){button.disabled=false;find('version-message').textContent=error instanceof Error?error.message:'Could not discard this revision. Please retry.';}
+});
+find('activate').addEventListener('click',async()=>{
+ if(find<HTMLButtonElement>('activate').disabled)return;
+ activating=true;updateActivationGate();
+ try {
+  await bookWorker({action:'activate',id:current.id,reviewAccepted:true});
+  revisionsKey='';await run();
+  find('version-message').textContent='This is now your current book and skill. Previous versions remain in the history.';
+  window.dispatchEvent(new Event('awb:book-added'));
+ }catch(error){find('version-message').textContent=error instanceof Error?error.message:'Could not make this version current. Please retry.';}
+ finally{activating=false;updateActivationGate();}
+});
+find('install-copy').addEventListener('click',async()=>{
+ try {await navigator.clipboard.writeText(find('install-command').textContent||'');find('copy-status').textContent='Install command copied. Run it in your terminal after signing in to the updated CLI.';}
+ catch {find('copy-status').textContent='Copy was blocked. Select the install command above and copy it.';}
+});
 find('pause').addEventListener('click',()=>void run('pause'));
 find('generate').addEventListener('click',()=>void run('generate'));
 find('analysis-download').addEventListener('click',()=>void downloadRevision(false,true));

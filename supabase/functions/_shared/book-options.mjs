@@ -1,8 +1,8 @@
 export const maxBatchFiles = 10;
 export function processingOptions(value = {}) {
  if(!value || typeof value !== 'object' || Array.isArray(value))throw new Error('Invalid processing options.');
- const options={mode:value.mode??'full',depth:value.depth??'study',purpose:value.purpose??'apply'};
- if(!['full','analysis'].includes(options.mode)||!['reference','study'].includes(options.depth)||!['apply','mental-models','reference','all'].includes(options.purpose))throw new Error('Invalid processing options.');
+ const options={mode:value.mode??'full',depth:value.depth??'study',purpose:value.purpose??'apply',extractionMode:value.extractionMode??'text'};
+ if(!['full','analysis'].includes(options.mode)||!['reference','study'].includes(options.depth)||!['apply','mental-models','reference','all'].includes(options.purpose)||!['text','technical'].includes(options.extractionMode))throw new Error('Invalid processing options.');
  return options;
 }
 export function depthGuidance(value) {

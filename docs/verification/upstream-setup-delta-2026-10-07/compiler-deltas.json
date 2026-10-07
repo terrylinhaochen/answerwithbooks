@@ -1,0 +1,7 @@
+{
+  "bennett_processing_sections": 5,
+  "expected_original_chapters": 12,
+  "source_lines_retained": true,
+  "description_before": "Apply past-behavior interview questions and avoid asking for compliments.",
+  "description_after": "\"Use the methods in A Book when the user's task matches the source's stated scope. Check the chapter references and limits.\""
+}

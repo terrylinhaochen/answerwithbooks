@@ -4,8 +4,8 @@ import {chromium} from 'playwright';
 import {unzipSync,strFromU8} from 'fflate';
 import {execFileSync,execFile,spawn} from 'node:child_process';
 import {promisify} from 'node:util';
-import {randomUUID} from 'node:crypto';
-import {mkdtemp,writeFile,readFile,rm,mkdir} from 'node:fs/promises';
+import {randomUUID,createHash} from 'node:crypto';
+import {mkdtemp,writeFile,readFile,rm,mkdir,readlink,lstat} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 if(process.env.AWB_LIVE_CLI_TEST!=='1')throw new Error('Set AWB_LIVE_CLI_TEST=1 for temporary-account production acceptance. No emails are sent.');
@@ -22,10 +22,29 @@ r=urllib.request.Request('https://api.supabase.com/v1/projects/'+m.PROJECT+'/api
 with urllib.request.urlopen(r,timeout=30) as f:keys=json.load(f)
 print(next(k['api_key'] for k in keys if k['name']=='service_role'))`],{encoding:'utf8'}).trim();
 const opts={auth:{persistSession:false,autoRefreshToken:false}},admin=createClient(url,service,opts),owner=createClient(url,anon,opts),outsider=createClient(url,anon,opts);
-const area=await mkdtemp(join(tmpdir(),'book-cli-live-')),env={...process.env,ANSWER_WITH_BOOKS_CONFIG_DIR:join(area,'session'),ANSWER_WITH_BOOKS_API_URL:''};
-const users=[],jobs=[],receipt={emailsSent:0,cliVersion:'0.2.0',origin,productionBackend:true};let browser,loginProcess;
+const area=await mkdtemp(join(tmpdir(),'book-cli-live-')),env={...process.env,ANSWER_WITH_BOOKS_CONFIG_DIR:join(area,'session'),ANSWER_WITH_BOOKS_CACHE_DIR:join(area,'cache'),CODEX_HOME:join(area,'codex'),ANSWER_WITH_BOOKS_API_URL:''};
+const users=[],jobs=[],receipt={emailsSent:0,cliVersion:'0.3.0',origin,productionBackend:true};let browser,loginProcess;
 const run=async args=>{try{return await promisify(execFile)(process.execPath,[cli,...args],{env,cwd:area,timeout:240000,maxBuffer:4000000});}catch(e){throw new Error(`CLI ${args[0]} failed: ${e.stderr||e.message}`);}};
 const jsonRun=async args=>JSON.parse((await run([...args,'--json'])).stdout);
+const sha=text=>createHash('sha256').update(text).digest('hex');
+async function verifyInstallation(installed,bookId,revisionId){
+ assert.equal((await lstat(installed.path)).isSymbolicLink(),true);
+ const pointer=await readlink(installed.path),manifest=JSON.parse(await readFile(join(installed.path,'.awb-install.json'),'utf8'));
+ assert.equal(manifest.bookId,bookId);assert.equal(manifest.revisionId,revisionId);assert.equal(manifest.sourceKind,'full-source');
+ assert.ok(manifest.files['SKILL.md']);assert.ok(manifest.files['source.txt']);assert.ok(Object.keys(manifest.files).some(name=>name.startsWith('chapters/')));
+ for(const [name,digest] of Object.entries(manifest.files))assert.equal(sha(await readFile(join(installed.path,name))),digest);
+ const source=(await readFile(join(installed.path,'source.txt'),'utf8')).split('\n');let citations=0;
+ for(const name of Object.keys(manifest.files).filter(name=>name==='SKILL.md'||/^chapters\/.*\.md$/.test(name))){
+  const content=await readFile(join(installed.path,name),'utf8');
+  for(const match of content.matchAll(/S1:L(\d+)(?:[-–]L?(\d+))?/g)){const start=Number(match[1]),end=Number(match[2]||match[1]);assert.ok(start>=1&&end>=start&&end<=source.length,'Citation must resolve to the installed source');citations++;}
+ }
+ assert.ok(citations>0,'Installed methods require source citations');return {pointer,manifest};
+}
+async function waitForRevision(id){
+ const deadline=Date.now()+600000;let previous='';
+ while(Date.now()<deadline){const result=await jsonRun(['status',id]),job=result.job;assert.ok(job);const progress=job.status+'/'+job.run_state;if(progress!==previous){console.log('revision '+progress);previous=progress;}assert.notEqual(job.run_state,'failed',job.error||'Revision processing failed');if(job.status==='ready')return job;await new Promise(r=>setTimeout(r,5000));}
+ throw new Error('Timed out waiting for revision generation');
+}
 const originalA='# Small Reversible Decisions\nBy Release Verification\n\n'+`Classify decisions by how easily you can reverse them. For a reversible decision, try a small bounded experiment. Write down your prediction and the signal you will observe before starting. At the end, compare the result to the prediction and decide whether to continue. A single result is evidence, not proof of causation. Keep uncertainty visible.\n\nRecord the reason for your choice in a decision log. Review it weekly to identify patterns, without confusing good luck with a sound process. For a costly irreversible choice, seek stronger evidence and appropriate expert advice.\n\nFor example, a team could try a shorter planning meeting for one week, track whether important decisions were captured, then restore the longer meeting if issues were missed. Use the test to learn rather than to defend the original plan.\n\nThis is an original release-test source, not medical, financial, or legal advice. Its framework applies to bounded reversible work decisions.\n`;
 const originalB='# Specific Feedback Conversations\nBy Release Verification\n\n'+`Ask people to describe a recent example of the activity you want to understand. Find out what happened first, what happened next, and what they tried when something went wrong. Questions about specific past behavior are more informative than praise for an imagined product.\n\nKeep the person's words separate from your interpretation. When a statement is unclear, ask for a concrete example. A few conversations suggest hypotheses; they do not establish how common a problem is across a population. Keep contradictions in your notes.\n\nFor example, ask someone to describe the last time they planned dinner. Ask what they did when the plan changed, which workaround they chose, and what it cost them. Avoid steering them toward your meal-planning idea.\n\nChoose a small follow-up that tests the most uncertain assumption. Explain participation clearly and respect requests not to record a conversation. This original release-test source is a limited learning framework, not a substitute for rigorous research.\n`;
 try{
@@ -43,7 +62,7 @@ try{
  browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
  const context=await browser.newContext({viewport:{width:390,height:900}});await context.addInitScript(({session,project})=>localStorage.setItem('sb-'+project+'-auth-token',JSON.stringify(session)),{session,project});
  const page=await context.newPage();await page.goto(origin+'/connect-agent/?code='+code);
- await page.getByRole('button',{name:'Connect agent',exact:true}).click();await page.getByText('Connected. Return to your agent to use your books.').waitFor({timeout:30000});await loginDone;loginProcess=null;receipt.browserPairing=true;
+ await page.getByRole('button',{name:'Connect agent',exact:true}).click();await page.getByText('Connected. Return to your agent to use your books.').waitFor({timeout:30000});await loginDone;loginProcess=null;receipt.browserPairing=true;console.log('PASS temporary-account browser pairing; preparing account-library acceptance.');
  const stored=JSON.parse(await readFile(join(area,'session/session.json'),'utf8'));
  assert.equal((await jsonRun(['books','--private'])).count,0);
  if(!connectOnly){
@@ -64,13 +83,44 @@ try{
   if(states.length===2&&states.every(book=>book.status==='ready'))break;
   await new Promise(r=>setTimeout(r,5000));
  }
- assert.ok(states.every(book=>book.status==='ready'),'Timed out waiting for generation');receipt.backgroundCompletion=true;
+ assert.equal(states.length,2);assert.ok(states.every(book=>book.status==='ready'),'Timed out waiting for generation');receipt.backgroundCompletion=true;
+ const library=await jsonRun(['books','--private']);assert.equal(library.count,2);
+ for(const book of library.books){assert.equal(book.is_current,true);assert.equal(book.source_kind,'full-source');assert.equal(book.revision,1);assert.ok(book.book_id);assert.ok(book.one_liner);assert.ok(book.read_if);assert.ok(Array.isArray(book.tags));assert.ok(Array.isArray(book.methods));}
+ const firstBook=library.books.find(book=>book.id===jobs[0]);assert.ok(firstBook);
+ const matched=await jsonRun(['match','How should I test a reversible decision?','--private']);
+ assert.equal(matched.method,'multilingual_embeddings_then_agent_reasoning',matched.fallback_reason||'Private discovery must exercise the real local model');assert.equal(matched.candidates[0]?.id,jobs[0]);assert.ok(matched.candidates.every(book=>book.visibility==='private'));
+ receipt.privateDiscovery={method:matched.method,fallbackReason:matched.fallback_reason||null,methodMetadata:matched.candidates.some(book=>book.methods?.length)};
+ const feedbackMatch=await jsonRun(['match','What should I ask in a customer interview about recent behavior?','--private']);assert.equal(feedbackMatch.candidates[0]?.id,jobs[1]);receipt.privateDiscovery.twoDistinctTopics=true;console.log('PASS rich private method metadata and real semantic discovery for both source topics.');
  const asked=await jsonRun(['ask','How should I test a reversible decision?','--book',jobs[0]]);assert.equal(asked.status,'book_selected');assert.ok(asked.objects.books[0].files['skill/SKILL.md']);assert.ok(asked.objects.books[0].citations.length);receipt.privateBookEvidence=true;
  const archive=join(area,'book.zip');await run(['download',jobs[0],'--output',archive]);const files=unzipSync(new Uint8Array(await readFile(archive)));assert.ok(files['skill/SKILL.md']);assert.match(strFromU8(files['skill/source.txt']),/Small Reversible Decisions/);receipt.citationBundle=true;
+ const packageMeta=JSON.parse(strFromU8(files['skill/package.json']));assert.equal(packageMeta.bookId,firstBook.book_id);assert.equal(packageMeta.revisionId,jobs[0]);
+ const installed=await jsonRun(['library','install-book',firstBook.book_id]);assert.equal(installed.status,'installed');const old=await verifyInstallation(installed,firstBook.book_id,jobs[0]);receipt.individualBookInstall=true;
+ const synced=await jsonRun(['library','sync']);assert.equal(synced.results.length,2);assert.ok(synced.results.every(item=>['installed','unchanged'].includes(item.status)));receipt.accountLibrarySync=true;
+ const appendix='# Decision Review Appendix\n\n'+('After a reversible experiment, compare the observed signal with the written prediction. Record what changed your judgment, preserve contrary evidence, and choose whether to stop, continue, or revise the experiment. Do not generalize beyond the tested setting.\n\n').repeat(2);
+ const revisionFile=join(area,'Decision Review Appendix.md');await writeFile(revisionFile,appendix);
+ const revisionUpload=await jsonRun(['upload',revisionFile,'--book',firstBook.book_id,'--revision','append','--mode','full']);
+ assert.equal(revisionUpload.results[0].status,'queued');const revision=revisionUpload.results[0].id;jobs.push(revision);assert.notEqual(revision,jobs[0]);
+ let current=await jsonRun(['books','--private']);assert.equal(current.count,2);assert.equal(current.books.find(book=>book.book_id===firstBook.book_id).id,jobs[0]);
+ assert.equal((await jsonRun(['status',jobs[0]])).job.status,'ready');assert.equal(await readlink(installed.path),old.pointer);receipt.oldRevisionRemainsUsable=true;
+ for(const action of ['status','revisions','export','activate','retry']){const denied=await outsider.functions.invoke('book-process',{body:{action,id:revision,...(action==='activate'?{reviewAccepted:true}:{})}});assert.ok(denied.error,'Cross-account '+action+' unexpectedly succeeded');assert.equal(denied.error.context.status,404);}
+ const deniedPrepare=await outsider.functions.invoke('book-process',{body:{action:'prepare',parentId:jobs[0],revisionKind:'append',name:'Denied appendix.md',size:Buffer.byteLength(appendix),sha:sha(appendix),textSha:sha(appendix),textBytes:Buffer.byteLength(appendix),extraction:{},options:{mode:'full',depth:'study',purpose:'apply'}}});assert.ok(deniedPrepare.error);assert.ok([400,404].includes(deniedPrepare.error.context.status));const deniedBody=await deniedPrepare.error.context.clone().json();assert.match(deniedBody.error,/not found|current, ready revision of your own book/i);const outsiderLibrary=await outsider.functions.invoke('book-process',{body:{action:'list'}});assert.ifError(outsiderLibrary.error);assert.equal(outsiderLibrary.data.books.length,0);receipt.revisionAccountIsolation=true;
+ const ready=await waitForRevision(revision);assert.equal(ready.book_id,firstBook.book_id);assert.equal(ready.revision,2);assert.equal(ready.is_current,false);
+ const history=await jsonRun(['revisions',firstBook.book_id]);assert.equal(history.book_id,firstBook.book_id);assert.ok(history.revisions.some(book=>book.id===jobs[0]&&book.is_current));assert.ok(history.revisions.some(book=>book.id===revision&&!book.is_current));
+ const revisionArchive=join(area,'revision.zip');await run(['download',revision,'--output',revisionArchive]);const revisedFiles=unzipSync(new Uint8Array(await readFile(revisionArchive)));const revisedSource=strFromU8(revisedFiles['skill/source.txt']);assert.match(revisedSource,/Small Reversible Decisions/);assert.match(revisedSource,/Decision Review Appendix/);
+ current=await jsonRun(['books','--private']);assert.equal(current.books.find(book=>book.book_id===firstBook.book_id).id,jobs[0]);
+ // These are our original synthetic fixtures. The export review gate has passed,
+ // the complete source was read above, and explicit activation is exercised here.
+ await jsonRun(['activate',revision,'--accept-review']);
+ current=await jsonRun(['books','--private']);assert.equal(current.count,2);assert.equal(current.books.find(book=>book.book_id===firstBook.book_id).id,revision);
+ const updated=await jsonRun(['library','sync']),changed=updated.results.find(book=>book.book_id===firstBook.book_id);assert.equal(changed.status,'updated');assert.equal(changed.path,installed.path);
+ const latest=await verifyInstallation(changed,firstBook.book_id,revision);assert.notEqual(latest.pointer,old.pointer);assert.equal(await readFile(join(old.pointer,'source.txt'),'utf8'),strFromU8(files['skill/source.txt']));receipt.appendRevisionActivationAndSync=true;
+ console.log('PASS full-source install/sync, append revision, explicit activation, old revision preservation, account isolation, and installed citation/hash checks.');
  }
  await run(['logout']);const revoked=await fetch(url+'/functions/v1/book-process',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+stored.token},body:JSON.stringify({action:'list'})});assert.equal(revoked.status,401);receipt.revocation=true;
  await mkdir('docs/verification/agent-commands-2026-10-07',{recursive:true});await writeFile(connectOnly?join(tmpdir(),'answerwithbooks-production-connection.json'):'docs/verification/agent-commands-2026-10-07/acceptance.json',JSON.stringify({...receipt,passed:true},null,2)+'\n');
  console.log(connectOnly?'PASS published CLI and production website pairing, private catalog, and revocation.':'PASS live CLI books/upload/status/ask/download/logout, real generated artifacts, cache and account isolation.');
+}catch(error){
+ await writeFile(join(tmpdir(),'answerwithbooks-cli-live-failure.json'),JSON.stringify({...receipt,passed:false,error:error.message},null,2)+'\n');throw error;
 }finally{
  loginProcess?.kill();await browser?.close();
  // Only temporary test users and their objects are removed.

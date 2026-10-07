@@ -1,0 +1,229 @@
+{
+  "instanceId": "i-019e8912ea055c71b",
+  "artifactSha256": "8b6e3bbb567ecf6f31579d4812e3a9ec46a1870d55fd3e24953657613ebf22f9",
+  "artifact": "s3://answerwithbooks-native-worker-194722444705-us-east-2/releases/8b6e3bbb567ecf6f31579d4812e3a9ec46a1870d55fd3e24953657613ebf22f9.tar.gz",
+  "securityGroupId": "sg-03b9f1e8ceb1bb904",
+  "profile": "answerwithbooks-native-worker",
+  "region": "us-east-2",
+  "configured": true,
+  "bootstrapCommandId": "6a575d3c-ef5d-4409-bad3-ba2c675c05d1",
+  "verifiedAt": "2026-10-07T10:01:04.303843+00:00",
+  "hostSmoke": {
+    "artifactSha256": "8b6e3bbb567ecf6f31579d4812e3a9ec46a1870d55fd3e24953657613ebf22f9",
+    "calibreRequired": true,
+    "passed": true
+  },
+  "converterSmoke": [
+    {
+      "code_preserved": true,
+      "formula_preserved": true,
+      "docling": "passed",
+      "table_preserved": true,
+      "headings": 1,
+      "characters": 869
+    },
+    {
+      "calibre": "mobi",
+      "result": "passed",
+      "characters": 637
+    },
+    {
+      "calibre": "azw3",
+      "result": "passed",
+      "characters": 595
+    }
+  ],
+  "serviceActive": true,
+  "health": {
+    "available": true,
+    "worker_configured": true,
+    "worker_online": true,
+    "formats": [
+      "pdf",
+      "mobi",
+      "azw",
+      "azw3"
+    ],
+    "technical_pdf": true,
+    "max_file_bytes": 52428800,
+    "max_text_characters": 6000000
+  },
+  "instanceType": "m7i.large",
+  "volumeIds": [
+    "vol-02b50f21711f6896f"
+  ],
+  "smokeCommandId": "7cac6bfe-e592-434c-bc3a-a88b5a003871",
+  "fixtures": [
+    {
+      "name": "fixture.pdf",
+      "size": 2452,
+      "sha256": "31b9f0f4f5680fd6ee9ef9cff36128c0bed1027903e9f55417bdf0ae12d6aeae"
+    },
+    {
+      "name": "fixture.mobi",
+      "size": 9860,
+      "sha256": "9b1d9771b1b65b0c44cc0c7898af4bee33d36d52755c36468a2c54ffd11d4d38"
+    },
+    {
+      "name": "fixture.azw3",
+      "size": 11206,
+      "sha256": "7af608fc2414474a1d8042a574b62379737ae3d9ab67d3f402f4889dcea352ae"
+    }
+  ],
+  "knownLimit": "Tiny code and formula layouts can be misclassified; code indentation may differ. Compare technical details against original.",
+  "initialCloudInitFailure": "Ubuntu 24.04 awscli apt candidate absent; recovered by corrected immutable artifact and successful SSM bootstrap.",
+  "configuration": {
+    "persisted": true,
+    "type": "SecureString",
+    "parameterName": "/answerwithbooks/native-worker/config",
+    "version": 5,
+    "lastModifiedDate": "2026-10-07 02:41:38.452000-07:00",
+    "localTemporaryFileDeleted": true
+  },
+  "security": {
+    "ingressRules": 0,
+    "imdsTokens": "required",
+    "imdsHopLimit": 1,
+    "encryptedVolume": true,
+    "volumeSizeGiB": 30,
+    "volumeType": "gp3",
+    "dedicatedRolePolicy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Resource": "arn:aws:s3:::answerwithbooks-native-worker-194722444705-us-east-2/releases/*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "ssm:GetParameter"
+          ],
+          "Resource": "arn:aws:ssm:us-east-2:194722444705:parameter/answerwithbooks/native-worker/config"
+        },
+        {
+          "Effect": "Deny",
+          "Action": [
+            "ssm:GetParameter",
+            "ssm:GetParameters",
+            "ssm:GetParametersByPath"
+          ],
+          "NotResource": "arn:aws:ssm:us-east-2:194722444705:parameter/answerwithbooks/native-worker/config"
+        }
+      ]
+    }
+  },
+  "runtimeReceiptCommandId": "50f83b6d-055c-4bf0-953e-5bf91b6090f3",
+  "runtimeAndModels": {
+    "runtime": {
+      "python": "Python 3.12.3",
+      "calibre": "ebook-convert (calibre 7.6.0)\nCreated by: Kovid Goyal <kovid@kovidgoyal.net>",
+      "pins": {
+        "docling": "2.134.0",
+        "docling-core": "2.100.0",
+        "docling-ibm-models": "4.0.3",
+        "pypdf": "6.19.0",
+        "torch": "2.14.1+cpu",
+        "torchvision": "0.29.1+cpu",
+        "transformers": "5.19.0"
+      },
+      "packageCount": 104,
+      "freezeSha256": "bf617706c972c58eab56c2e4bfbc075099b738a274552da480cab2b83d81d115",
+      "freezePath": "/opt/awb-native/runtime-freeze.txt"
+    },
+    "models": {
+      "manifestSha256": "7738da8c0269a82b7ba3b59bbad4a5ccce9aab88a6c2377e72b9eb70f16c67a3",
+      "fileCount": 132,
+      "manifestPath": "/opt/awb-native/model-sha256.txt",
+      "directories": [
+        "docling-project--CodeFormulaV2",
+        "docling-project--TableFormerV2",
+        "docling-project--docling-layout-heron",
+        "docling-project--docling-layout-heron-onnx",
+        "docling-project--docling-models"
+      ]
+    },
+    "service": {
+      "active": "active",
+      "enabled": "enabled"
+    },
+    "marker": {
+      "artifactSha256": "8b6e3bbb567ecf6f31579d4812e3a9ec46a1870d55fd3e24953657613ebf22f9",
+      "calibreRequired": true,
+      "passed": true
+    }
+  },
+  "productionUploadEndToEnd": {
+    "passed": true,
+    "receipt": "acceptance.json",
+    "performedBeforeTypeChange": true,
+    "formats": [
+      "pdf",
+      "mobi"
+    ],
+    "checks": [
+      "native original upload and extraction",
+      "generated book, skill, cover and source package",
+      "cross-account denial",
+      "test record cleanup"
+    ]
+  },
+  "fixedCpuMigration": {
+    "offerings": [
+      {
+        "InstanceType": "m7i.large",
+        "LocationType": "availability-zone",
+        "Location": "us-east-2a"
+      }
+    ],
+    "instanceType": "m7i.large",
+    "vcpus": 2,
+    "memoryMiB": 8192,
+    "architecture": [
+      "x86_64"
+    ],
+    "currentInstanceId": "i-019e8912ea055c71b",
+    "temporaryCpuCredits": "unlimited",
+    "capacityNote": "Offering is supported in us-east-2a; actual available capacity is only confirmed when starting the instance.",
+    "quiesceCommandId": "b8cd7183-2b84-4692-85c2-ba817de29013",
+    "migrationStartedAt": "2026-10-07T09:58:39.275335+00:00",
+    "completedAt": "2026-10-07T10:01:04.303843+00:00",
+    "previousInstanceType": "t3.large",
+    "actualCapacityConfirmedBySuccessfulStart": true,
+    "activeConverterChildrenBeforeStop": 0,
+    "sameInstanceAndEncryptedVolume": true,
+    "runtimeArtifactUnchanged": true,
+    "priorStrictSmokeMarkerRetained": true,
+    "serviceStartedAt": "2026-10-07T09:59:20Z",
+    "postRestartRestarts": 0,
+    "serviceCommandId": "337eb9a8-39af-46ab-801d-87e1ca188d86",
+    "healthCommandId": "fa63f244-f7ab-4729-b0c1-cae3dd926fcb",
+    "postRestartHealth": {
+      "checkedAt": "2026-10-07T10:00:17.786802+00:00",
+      "health": {
+        "available": true,
+        "worker_configured": true,
+        "worker_online": true,
+        "formats": [
+          "pdf",
+          "mobi",
+          "azw",
+          "azw3"
+        ],
+        "technical_pdf": true,
+        "max_file_bytes": 52428800,
+        "max_text_characters": 6000000
+      },
+      "configurationRetrievedFromEncryptedSsm": true
+    },
+    "exactDatabaseHeartbeat": {
+      "id": "native",
+      "last_seen_at": "2026-10-07 10:00:12.964+00",
+      "checked_at": "2026-10-07 10:00:27.005259+00"
+    }
+  },
+  "hostSmokeInstanceType": "t3.large"
+}

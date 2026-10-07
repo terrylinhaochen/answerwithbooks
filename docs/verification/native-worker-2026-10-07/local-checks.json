@@ -1,0 +1,24 @@
+{
+  "build": {
+    "passed": true,
+    "pages": 115
+  },
+  "productSurface": {
+    "passed": true,
+    "publicBooks": 46
+  },
+  "browser": {
+    "origin": "http://127.0.0.1:4322",
+    "builtStaticFiles": true,
+    "nativeUploadRouting": true,
+    "appendReplace": true,
+    "discardConfirmation": true,
+    "reviewBeforeActivation": true,
+    "stableBookInstallCommand": true,
+    "mobile": true,
+    "agentSelectorAndClipboard": true
+  },
+  "pythonAdapterTests": 12,
+  "revisionNodeTests": 6,
+  "dedicatedLiveNativeAcceptance": "Passed; see acceptance.json for real PDF and MOBI upload/generation/export/isolation."
+}

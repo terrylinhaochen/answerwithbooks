@@ -7,7 +7,7 @@ const context='I love writing, software, and teaching. Where should I focus?';
 export const skillDemoFlow = {
  slug:'designing-your-life',question,context,
  catalog:{
-  command:`npx --yes answer-with-books@${release.version} books --public --json`,
+  command:`npx --yes ${release.package || `answer-with-books@${release.version}`} books --public --json`,
   count:46,
   books:[
    {slug:'designing-your-life',title:'Designing Your Life'},
@@ -15,7 +15,7 @@ export const skillDemoFlow = {
    {slug:'zero-to-one',title:'Zero to One'},
   ],
  },
- command:`npx --yes answer-with-books@${release.version} ask "${question}" --top-of-mind "${context}" --json`,
+ command:`npx --yes ${release.package || `answer-with-books@${release.version}`} ask "${question}" --top-of-mind "${context}" --json`,
  matchedLabel:'3 books · 1 answer',
  output:[
   'Books: Working Identity; So Good They Can\'t Ignore You; Designing Your Life',

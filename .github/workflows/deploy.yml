@@ -44,7 +44,8 @@ jobs:
       - name: Verify upstream book adaptation
         run: |
           python3 scripts/book-adapter/test_adapter.py
-          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs scripts/test-long-book.mjs scripts/test-book-cache.mjs
+          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs scripts/test-book-revisions.mjs scripts/test-long-book.mjs scripts/test-book-cache.mjs
+          python3 -m unittest discover -s scripts/native-book-worker -p test_worker.py
 
       - name: Set up Deno for the processing handler tests
         uses: denoland/setup-deno@v2
@@ -53,12 +54,15 @@ jobs:
 
       - name: Verify processing handler without network or provider access
         run: |
-          deno cache --node-modules-dir=none scripts/test-book-worker-http.ts
-          deno check --node-modules-dir=none supabase/functions/book-process/index.ts supabase/functions/book-cli-auth/index.ts
+          deno cache --node-modules-dir=none scripts/test-book-worker-http.ts scripts/native-book-worker/test_http.ts
+          deno check --node-modules-dir=none supabase/functions/book-process/index.ts supabase/functions/book-cli-auth/index.ts supabase/functions/book-native/index.ts
           deno run --node-modules-dir=none --allow-env --allow-read scripts/test-book-worker-http.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/native-book-worker/test_http.ts
 
       - name: Verify queue concurrency and account isolation in local Postgres
-        run: PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-queue-db.py
+        run: |
+          PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-queue-db.py
+          PG_BIN="$(pg_config --bindir)" python3 scripts/native-book-worker/test_queue_db.py
 
       - name: Verify agent connection and session isolation
         run: |

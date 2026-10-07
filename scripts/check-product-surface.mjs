@@ -13,7 +13,7 @@ assert.equal((skills.match(/data-example-panel="\d+"/g) || []).length, 6);
 for (const label of ['Customer interviews', 'Better decisions', 'Habits that last', 'Focused work', 'Career moves', 'Difficult conversations']) assert.ok(skills.includes(label));
 assert.doesNotMatch(skills, /data-open-tool=|data-tool-detail=|name="tools-agent"/);
 assert.match(skills, /Upload a source/);
-assert.match(skills, /PDF · EPUB · DOCX · Markdown · HTML · RTF · Text/);
+assert.match(skills, /PDF · EPUB · DOCX · MOBI · AZW · AZW3 · Markdown · HTML · RTF · Text/);
 assert.match(skills, /fuller downloadable skill package/);
 const homepage = read('');
 assert.match(homepage, /data-direction="table"/);

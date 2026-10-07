@@ -1,0 +1,65 @@
+{
+  "version": "0.3.0",
+  "commit": "8aea0f4d4258836174300ed8962502e04c2b273a",
+  "releaseUrl": "https://github.com/Crowdlisten/Crowdlisten_books/releases/tag/v0.3.0",
+  "releaseId": 405605475,
+  "sha256": "253bcf2c3da0a4e7a90390496232acfb2f9b4ec04b8e2396c37dff518a180e9a",
+  "size": 1065364,
+  "assets": [
+    {
+      "name": "answer-with-books-0.3.0.tgz",
+      "url": "https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.3.0/answer-with-books-0.3.0.tgz",
+      "digest": "sha256:253bcf2c3da0a4e7a90390496232acfb2f9b4ec04b8e2396c37dff518a180e9a"
+    },
+    {
+      "name": "SHA256SUMS",
+      "url": "https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.3.0/SHA256SUMS",
+      "digest": "sha256:ad588c5c7da556f6d219e9f8b498c1e721a859c5028d718a5e8eaf7961fc8868"
+    }
+  ],
+  "npmPublished": false,
+  "publicDownloadVerified": true,
+  "ci": {
+    "passed": true,
+    "url": "https://github.com/Crowdlisten/Crowdlisten_books/actions/runs/37602070304",
+    "commit": "8aea0f4d4258836174300ed8962502e04c2b273a"
+  },
+  "productionBackendAcceptance": {
+    "emailsSent": 0,
+    "cliVersion": "0.3.0",
+    "origin": "http://127.0.0.1:4321",
+    "productionBackend": true,
+    "browserPairing": true,
+    "separateBatch": 2,
+    "accountIsolation": true,
+    "cacheReuse": true,
+    "backgroundCompletion": true,
+    "privateDiscovery": {
+      "method": "multilingual_embeddings_then_agent_reasoning",
+      "fallbackReason": null,
+      "methodMetadata": true,
+      "twoDistinctTopics": true
+    },
+    "privateBookEvidence": true,
+    "citationBundle": true,
+    "individualBookInstall": true,
+    "accountLibrarySync": true,
+    "oldRevisionRemainsUsable": true,
+    "revisionAccountIsolation": true,
+    "appendRevisionActivationAndSync": true,
+    "revocation": true,
+    "passed": true
+  },
+  "extractorSha256": "959c693195b3338c3135df76feb0205e9d5031b919807b0f246f1786ea4d76f2",
+  "freshUrlInstall": {
+    "passed": true,
+    "isolatedCache": true,
+    "installedVersion": "0.3.0",
+    "publicCatalog": true,
+    "copiedRuntimeAsk": true,
+    "copiedRuntimeMatch": true,
+    "libraryCommands": true,
+    "releaseUrlGuidance": true,
+    "extractorHashMatched": true
+  }
+}

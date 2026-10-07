@@ -1,0 +1,45 @@
+{
+  "emailsSent": 0,
+  "productionBackend": true,
+  "fixtures": [
+    {
+      "name": "fixture.pdf",
+      "id": "970c0d6f-7330-47ab-bf9c-0491ed46deaa",
+      "technical": true,
+      "originalBytes": 2452,
+      "extraction": "book-to-skill/docling",
+      "sourceCharacters": 869,
+      "bookSkillCover": true,
+      "sourceBundle": true,
+      "accountIsolation": true
+    },
+    {
+      "name": "fixture.mobi",
+      "id": "57ac390e-bf47-4e11-899c-d0de215513e4",
+      "technical": false,
+      "originalBytes": 9860,
+      "extraction": "book-to-skill/ebook-convert",
+      "sourceCharacters": 637,
+      "bookSkillCover": true,
+      "sourceBundle": true,
+      "accountIsolation": true
+    }
+  ],
+  "startedAt": "2026-10-07T09:48:19.696Z",
+  "health": {
+    "available": true,
+    "worker_configured": true,
+    "worker_online": true,
+    "formats": [
+      "pdf",
+      "mobi",
+      "azw",
+      "azw3"
+    ],
+    "technical_pdf": true,
+    "max_file_bytes": 52428800,
+    "max_text_characters": 6000000
+  },
+  "passed": true,
+  "completedAt": "2026-10-07T09:58:12.011Z"
+}

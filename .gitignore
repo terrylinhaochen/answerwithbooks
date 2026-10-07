@@ -19,6 +19,7 @@ supabase/.temp/
 
 # Private uploaded books and generated drafts
 .book-processing/
+.answer-with-books/
 
 # Built from pinned dependencies and vendored upstream source
 public/book-runtime/

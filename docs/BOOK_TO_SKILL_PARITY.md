@@ -1,5 +1,7 @@
 # Book-to-skill parity review and separate batch uploads
 
+**October 7 update:** [Source-based skills and revisions](BOOK_SOURCE_SKILLS.md) supersedes the native-conversion and fold-in gaps in this historical October 6 comparison. It documents the current implementation, remaining deliberate differences, and links to live acceptance evidence.
+
 Reviewed 2026-10-06 against upstream `e180fc46365e8c1aab0120778cc8a40b9515324b` (v1.4.0), https://github.com/virgiliojr94/book-to-skill. This is a code comparison, not a claim of equal output quality.
 
 **Release status:** the 2026-10-06 production release includes the implemented queue, batch upload, cache and long-source changes below. [Release evidence and limits](releases/2026-10-06-book-processing.md) distinguish local fixtures from real hosted acceptance. The scheduler continues processing uploaded sources after the browser closes.

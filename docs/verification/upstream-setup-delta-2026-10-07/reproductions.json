@@ -1,0 +1,33 @@
+[
+  {
+    "case": "small-control",
+    "total_files": 2,
+    "awb_adapter_accepted": true,
+    "errors": [],
+    "upstream_scanner_exit": 0,
+    "upstream_scanner_output": "Generated-skill scan passed: no known injection or authority patterns found."
+  },
+  {
+    "case": "source-500001",
+    "total_files": 2,
+    "awb_adapter_accepted": false,
+    "error": "Invalid skill reference.",
+    "upstream_scanner_exit": 0,
+    "upstream_scanner_output": "Generated-skill scan passed: no known injection or authority patterns found."
+  },
+  {
+    "case": "files-101",
+    "total_files": 101,
+    "awb_adapter_accepted": false,
+    "error": "Invalid skill bundle.",
+    "upstream_scanner_exit": 0,
+    "upstream_scanner_output": "Generated-skill scan passed: no known injection or authority patterns found."
+  },
+  {
+    "case": "awb-bennet-chapters",
+    "chars": 91068,
+    "detected_chapters": 0,
+    "heading_positions": 0,
+    "expected_original_chapters": 12
+  }
+]

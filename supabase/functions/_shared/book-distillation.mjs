@@ -10,7 +10,8 @@ export async function distillSection(chunk,index,modelJson,options) {
 ${depthGuidance(options)}
 ${upstreamGuidance}`,chunk.text);
   const note=validateSection(generated,chunk,index);
-  const review=await modelJson(fidelityInstructions,JSON.stringify({source:chunk.text,notes:note}));
+  const {technicalReferences,sourceChapters,...generatedNotes}=note;
+  const review=await modelJson(fidelityInstructions,JSON.stringify({source:chunk.text,notes:generatedNotes}));
   requireFaithfulSection(review);
   return {note,title:generated.title,author:generated.author};
 }
@@ -21,7 +22,7 @@ export async function compileDistillation(job,notes,modelJson,hash) {
   const review=await modelJson(fidelityInstructions,JSON.stringify({source:evidence,notes:generated}));
   requireFaithfulSection(review);
   const textSha=await hash(new TextEncoder().encode(job.source_text));
-  const meta={id:job.id,options:job.options,book:{id:`book-${job.id}`,title:job.title,author:job.author},source:{sha256:job.source_sha,textSha256:textSha,lineCount:job.source_text.split('\n').length}};
+  const meta={id:job.id,sourceText:job.source_text,options:job.options,book:{id:job.book_id||job.id,title:job.title,author:job.author},source:{sha256:job.source_sha,textSha256:textSha,lineCount:job.source_text.split('\n').length}};
   const data={schemaVersion:1,jobId:job.id,sourceSha256:job.source_sha,textSha256:textSha,book:generated,coverage:{scope:'partial',gaps:['All extracted source sections were processed; extraction completeness and original chapter boundaries have not been independently verified.']},chapters:notes,glossary:generated.glossary||[]};
   const artifacts=renderBookArtifacts(meta,data);
   artifacts['quality-review.json']=JSON.stringify({version:2,method:'model-assisted source support checks for sections and synthesis',reviewedAt:new Date().toISOString(),textSha256:textSha,limitations:'Model checks are fallible; verify important claims against the bundled source.'},null,2);

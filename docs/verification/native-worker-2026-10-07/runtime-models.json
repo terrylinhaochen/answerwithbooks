@@ -1,0 +1,39 @@
+{
+  "runtime": {
+    "python": "Python 3.12.3",
+    "calibre": "ebook-convert (calibre 7.6.0)\nCreated by: Kovid Goyal <kovid@kovidgoyal.net>",
+    "pins": {
+      "docling": "2.134.0",
+      "docling-core": "2.100.0",
+      "docling-ibm-models": "4.0.3",
+      "pypdf": "6.19.0",
+      "torch": "2.14.1+cpu",
+      "torchvision": "0.29.1+cpu",
+      "transformers": "5.19.0"
+    },
+    "packageCount": 104,
+    "freezeSha256": "bf617706c972c58eab56c2e4bfbc075099b738a274552da480cab2b83d81d115",
+    "freezePath": "/opt/awb-native/runtime-freeze.txt"
+  },
+  "models": {
+    "manifestSha256": "7738da8c0269a82b7ba3b59bbad4a5ccce9aab88a6c2377e72b9eb70f16c67a3",
+    "fileCount": 132,
+    "manifestPath": "/opt/awb-native/model-sha256.txt",
+    "directories": [
+      "docling-project--CodeFormulaV2",
+      "docling-project--TableFormerV2",
+      "docling-project--docling-layout-heron",
+      "docling-project--docling-layout-heron-onnx",
+      "docling-project--docling-models"
+    ]
+  },
+  "service": {
+    "active": "active",
+    "enabled": "enabled"
+  },
+  "marker": {
+    "artifactSha256": "8b6e3bbb567ecf6f31579d4812e3a9ec46a1870d55fd3e24953657613ebf22f9",
+    "calibreRequired": true,
+    "passed": true
+  }
+}

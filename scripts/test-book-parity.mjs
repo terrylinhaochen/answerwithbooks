@@ -7,7 +7,7 @@ import {distillSection} from '../supabase/functions/_shared/book-distillation.mj
 import {renderBookArtifacts} from '../supabase/functions/_shared/book-artifacts.mjs';
 import {validateSection} from '../supabase/functions/_shared/book-sections.mjs';
 test('options reject unsupported values and give different study/reference instructions',()=>{
- assert.deepEqual(processingOptions(),{mode:'full',depth:'study',purpose:'apply'});
+ assert.deepEqual(processingOptions(),{mode:'full',depth:'study',purpose:'apply',extractionMode:'text'});
  for(const value of [null,[],{mode:'shell'},{depth:'unknown'},{purpose:'unknown'}])assert.throws(()=>processingOptions(value));
  assert.match(depthGuidance({depth:'reference'}),/compact/);assert.match(depthGuidance({depth:'study'}),/learn and apply/);
 });

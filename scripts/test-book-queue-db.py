@@ -89,6 +89,50 @@ create function cron.schedule(name text,schedule text,command text) returns bigi
     assert int(sql(f"select length(source_text) from book_processing_jobs where id='{large}';"))==1500000
     assert sql(f"select overview_notes::text from book_processing_jobs where id='{large}';")=='[]'
     print('PASS large sources persist beyond the previous character limit')
+    sql((ROOT/'supabase/migrations/20261007023000_book_library_revisions.sql').read_text())
+    sql((ROOT/'supabase/migrations/20261007031000_book_revision_delete_guards.sql').read_text())
+    assert sql('select bool_and(book_id=id and revision=1 and is_current) from book_processing_jobs;')=='t'
+    # Use a fresh account to test revision quota, ownership and atomic activation.
+    revision_owner='00000000-0000-4000-8000-000000000099'
+    sql(f"insert into auth.users values('{revision_owner}');")
+    root=scalar(f"select (public.create_book_processing_job('{revision_owner}','base.md','{'e'*64}',repeat('source ',30),'Evidence','[]')).id")['id']
+    sql(f"update book_processing_jobs set status='ready',run_state='complete',artifacts='{{\"skill/SKILL.md\":\"Evidence\"}}' where id='{root}';")
+    options='{"mode":"full","depth":"study","purpose":"apply","extractionMode":"text"}'
+    create_revision=lambda user,parent,sha,kind:scalar(f"select (public.create_book_revision('{user}','{parent}','extra.md','{sha}','{kind}','{options}')).id")['id']
+    try:create_revision(users[1],root,'f'*64,'append')
+    except RuntimeError as e:assert 'own book' in str(e)
+    else:raise AssertionError('Cross-account revision allowed')
+    try:create_revision(revision_owner,root,'e'*64,'append')
+    except RuntimeError as e:assert 'already part' in str(e)
+    else:raise AssertionError('Duplicate append allowed')
+    revision=create_revision(revision_owner,root,'f'*64,'append')
+    assert create_revision(revision_owner,root,'f'*64,'append')==revision
+    assert sql(f"select is_current from book_processing_jobs where id='{root}';")=='t'
+    assert sql(f"select revision||':'||is_current::text from book_processing_jobs where id='{revision}';")=='2:false'
+    try:sql(f"select public.activate_book_revision('{revision_owner}','{revision}');")
+    except RuntimeError as e:assert 'Finish processing' in str(e)
+    else:raise AssertionError('Unready revision activated')
+    sql(f"update book_processing_jobs set status='ready',run_state='complete',artifacts='{{\"skill/SKILL.md\":\"Revised\"}}' where id='{revision}';")
+    sql(f"select public.activate_book_revision('{revision_owner}','{revision}');")
+    assert sql(f"select id from book_processing_jobs where user_id='{revision_owner}' and is_current;")==revision
+    assert sql(f"select count(*) from book_processing_jobs where book_id='{root}';")=='2'
+    sql(f"update book_processing_jobs set run_state='paused' where id='{revision}';")
+    try:create_revision(revision_owner,revision,'b'*64,'append')
+    except RuntimeError as e:assert 'current' in str(e)
+    else:raise AssertionError('Revision raced a pending delete')
+    try:sql(f"select public.activate_book_revision('{revision_owner}','{revision}');")
+    except RuntimeError as e:assert 'Finish processing' in str(e)
+    else:raise AssertionError('Activation raced a pending delete')
+    sql(f"update book_processing_jobs set run_state='complete' where id='{revision}';")
+    try:create_revision(revision_owner,root,'c'*64,'replace')
+    except RuntimeError as e:assert 'current' in str(e)
+    else:raise AssertionError('Stale-parent revision allowed')
+    sql(f"set role authenticated;set request.jwt.claim.sub='{revision_owner}';")
+    try:sql(f"set role authenticated;select public.activate_book_revision('{revision_owner}','{revision}');")
+    except RuntimeError as e:assert 'permission denied' in str(e)
+    else:raise AssertionError('Direct user activation allowed')
+    assert int(sql(f"set role authenticated;set request.jwt.claim.sub='{revision_owner}';select count(*) from book_processing_jobs;reset role;").splitlines()[-2])==2
+    print('PASS stable book identity, independent revisions, duplicate reuse, stale-parent guard, explicit activation and account isolation')
 finally:
     if started:subprocess.run([str(BIN/'pg_ctl'),'-D',str(area/'data'),'-m','immediate','-w','stop'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     shutil.rmtree(area)

@@ -9,16 +9,22 @@ const maxFileMB=uploadLimits.maxFileBytes/1024/1024;
 function validateFile(file:File) {
  if(file.size===0)throw new Error('Choose a non-empty source file.');
  if(file.size>uploadLimits.maxFileBytes)throw new Error(`Choose a source file up to ${maxFileMB} MB.`);
- if(!/\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(file.name))throw new Error('Choose a PDF, EPUB, DOCX, Markdown, HTML, RTF, or text file. Convert MOBI/AZW to EPUB first; images need OCR.');
+ if(!/\.(pdf|epub|mobi|azw|azw3|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(file.name))throw new Error('Choose a PDF, EPUB, DOCX, MOBI, AZW, AZW3, Markdown, HTML, RTF, or text file.');
 }
-export async function bookWorker(body: Record<string,unknown>) {
- const { data, error } = await supabase.functions.invoke('book-process',{body});
+async function invokeBookWorker(endpoint:string,body:Record<string,unknown>) {
+ const { data, error } = await supabase.functions.invoke(endpoint,{body});
  if(error) {
   let message='Book processing is unavailable. Please try again.';
   try { message=(await error.context.json()).error||message; } catch { /* Network errors have no response. */ }
   throw new Error(message);
  }
- if(data.error) throw new Error(data.error);return data;
+ if(data?.error) throw new Error(data.error);return data;
+}
+export const bookWorker=(body:Record<string,unknown>)=>invokeBookWorker('book-process',body);
+export const nativeBookWorker=(body:Record<string,unknown>)=>invokeBookWorker('book-native',body);
+export type BookUploadContext={parentId?:string;revisionKind?:'append'|'replace'};
+export function openBookUpload(context:BookUploadContext={}) {
+ document.dispatchEvent(new CustomEvent('awb:open-book-upload',{detail:context}));
 }
 export async function extractFullBook(file:File,progress:(s:string)=>void) {
  validateFile(file);
@@ -60,6 +66,11 @@ export function mountBookUpload() {
  const close=dialog.querySelector<HTMLButtonElement>('[data-close-book-upload]')!;
  let busy=false,dragDepth=0,reviewed=false;
  let items:UploadItem[]=[];
+ let context:BookUploadContext={};
+ const extractionMode=()=> (form.elements.namedItem('extractionMode') as HTMLSelectElement).value;
+ const usesNative=(item:UploadItem)=>/\.(mobi|azw|azw3)$/i.test(item.file.name)||(/\.pdf$/i.test(item.file.name)&&extractionMode()==='technical');
+ const revisionFields=()=>context.parentId?{parentId:context.parentId,revisionKind:context.revisionKind}:{};
+ const checkNative=async()=>{const health=await nativeBookWorker({action:'health'});if(!health.available)throw new Error('Background extraction is unavailable. Try again later, or choose Text for a searchable PDF.');};
  const resolved=(item:UploadItem)=>!!(item.jobId||item.libraryBook);
  const href=(item:UploadItem)=>item.libraryBook?`/books/${item.libraryBook.slug}/`:`/your-book/?id=${item.jobId}`;
  const pending=()=>items.filter(item=>!resolved(item)&&!item.libraryMatch&&!item.error);
@@ -98,18 +109,21 @@ export function mountBookUpload() {
   reviewed=false;login.hidden=true;
   for(const file of files){
    if(items.some(item=>item.file.name===file.name&&item.file.size===file.size&&item.file.lastModified===file.lastModified))continue;
-   if(items.length>=maxBatchFiles){status.textContent='Choose up to ten files per batch. Remove a file to add another.';draw();return;}
+   if(items.length>=(context.parentId?1:maxBatchFiles)){status.textContent=context.parentId?'Choose one source for this version. Review and make it current before adding another.':'Choose up to ten files per batch. Remove a file to add another.';draw();return;}
    const item:UploadItem={file,message:`${(file.size/1024/1024).toFixed(1)} MB`};
-   item.libraryMatch=matchLibraryFile(file.name,library)||undefined;
+   item.libraryMatch=context.parentId?undefined:matchLibraryFile(file.name,library)||undefined;
    if(!item.libraryMatch)try{validateFile(file);}catch(error){item.error=error instanceof Error?error.message:'Choose a readable source.';}
    items.push(item);
   }
-  status.textContent=items.some(item=>item.libraryMatch)?'Use the saved library book, or choose to process your specific file.':'We’ll check your saved books before reading or uploading new sources.';draw();
+  status.textContent=context.parentId?'This creates a new version for review. Your current book stays available.':items.some(item=>item.libraryMatch)?'Use the saved library book, or choose to process your specific file.':'We’ll check your saved books before reading or uploading new sources.';draw();
  }
  const resetDrag=()=>{dragDepth=0;drop.classList.remove('is-dragging');};
  input.addEventListener('change',()=>{selectFiles(Array.from(input.files||[]));input.value='';});
  clear.addEventListener('click',()=>{items=[];reviewed=false;input.value='';draw();status.textContent='Choose your sources.';input.focus();});
- form.querySelectorAll('select').forEach(select=>select.addEventListener('change',draw));
+ form.querySelectorAll('select').forEach(select=>select.addEventListener('change',()=>{
+  if(select.name==='extractionMode'){reviewed=false;for(const item of items.filter(item=>!resolved(item))){item.report=undefined;item.error=undefined;item.message='Ready to review';try{validateFile(item.file);}catch(error){item.error=error instanceof Error?error.message:'Choose a readable source.';}}}
+  draw();
+ }));
  drop.addEventListener('dragenter',event=>{event.preventDefault();if(!busy&&event.dataTransfer?.types.includes('Files')){dragDepth++;drop.classList.add('is-dragging');}});
  drop.addEventListener('dragover',event=>{event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect=busy?'none':'copy';});
  drop.addEventListener('dragleave',()=>{if(--dragDepth<=0)resetDrag();});
@@ -120,7 +134,19 @@ export function mountBookUpload() {
   selectFiles(Array.from(event.dataTransfer.files||[]));
  });
  for(const eventName of ['dragover','drop'])document.addEventListener(eventName,event=>{if(dialog.open&&(event as DragEvent).dataTransfer?.types.includes('Files'))event.preventDefault();});
- document.querySelectorAll('[data-open-book-request]').forEach(button=>button.addEventListener('click',()=>{dialog.showModal();input.focus();}));
+ document.addEventListener('awb:open-book-upload',event=>{
+  if(busy)return;
+  const next=(event as CustomEvent<BookUploadContext>).detail||{};
+  if(next.parentId!==context.parentId||next.revisionKind!==context.revisionKind){items=[];reviewed=false;input.value='';}
+  context=next;input.multiple=!context.parentId;
+  dialog.querySelector('[data-upload-title]')!.textContent=context.parentId?context.revisionKind==='append'?'Add a source':'Replace the source':'Upload sources';
+  dialog.querySelector('[data-upload-intro]')!.textContent=context.parentId?'Create a new version of this book and skill. Review it before making it current.':'Turn a book, research paper, or document into a readable artifact and a reusable skill.';
+  dialog.querySelector<HTMLElement>('[data-upload-reuse-note]')!.hidden=!!context.parentId;
+  dialog.querySelector('[data-upload-limits]')!.textContent=context.parentId?`Choose one source up to ${maxFileMB} MB. Additions stay together in one book and skill.`:`Up to ten files, each up to ${maxFileMB} MB. Long books are read in sections automatically. PDFs need selectable text; scanned pages need OCR first.`;
+  status.textContent=context.parentId?'Your current book stays available until you approve the new version.':'Each file becomes a separate book and skill. Ten new sources per day.';
+  draw();dialog.showModal();input.focus();
+ });
+ document.querySelectorAll('[data-open-book-request]').forEach(button=>button.addEventListener('click',()=>openBookUpload()));
  close.addEventListener('click',()=>{if(!busy)dialog.close();});dialog.addEventListener('close',resetDrag);dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});
  form.addEventListener('submit',async event=>{
   event.preventDefault();if(busy||!pending().length)return;busy=true;draw();login.hidden=true;
@@ -131,8 +157,10 @@ export function mountBookUpload() {
      try{
       item.message='Checking your saved books…';draw();
       item.sha??=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await item.file.arrayBuffer()))).map(x=>x.toString(16).padStart(2,'0')).join('');
-      const cached=await bookWorker({action:'lookup',sha:item.sha});
-      if(cached.reused&&cached.job){reuse(item,cached.job);draw();continue;}
+      if(!context.parentId&&!usesNative(item)){const cached=await bookWorker({action:'lookup',sha:item.sha});
+       if(cached.reused&&cached.job){reuse(item,cached.job);draw();continue;}
+      }
+      if(usesNative(item)){await checkNative();item.message='Ready for background extraction. The original file uploads first; your book and skill stay together.';draw();continue;}
       item.report=await extractFullBook(item.file,message=>{item.message=message;draw();});
       if(item.report.text.trim().length<100)throw new Error('Not enough readable text. Upload a searchable document.');
       const sections=splitSource(item.report.text,item.report.headings).chunks.length;
@@ -145,25 +173,35 @@ export function mountBookUpload() {
     return;
    }
    // Another tab or a concurrent upload may have saved a reviewed source.
-   for(const item of pending()){
+   for(const item of pending().filter(item=>!context.parentId&&!usesNative(item))){
     const cached=await bookWorker({action:'lookup',sha:item.sha});
     if(cached.reused&&cached.job)reuse(item,cached.job);
    }
    draw();
    if(!pending().length){status.textContent='Using your saved books. No new upload or processing.';if(!items.some(item=>item.libraryBook))openIfComplete();return;}
-   const health=await bookWorker({action:'health'});if(!health.available)throw new Error('Book processing is unavailable. Please try again later.');
+   const health=pending().some(item=>!usesNative(item))?await bookWorker({action:'health'}):null;
+   if(health&&!health.available)throw new Error('Book processing is unavailable. Please try again later.');
+   if(pending().some(usesNative))await checkNative();
    const options=Object.fromEntries(['mode','depth','purpose'].map(name=>[name,(form.elements.namedItem(name) as HTMLSelectElement).value]));
    status.textContent='Keep this dialog open until the files finish uploading. Processing then continues in the background.';
    for(const item of pending()){
     try {
      item.message='Uploading…';draw();
+     if(usesNative(item)){
+      const result=await nativeBookWorker({action:'prepare',name:item.file.name,size:item.file.size,sha:item.sha,extractionMode:extractionMode(),options,...revisionFields()});
+      if(result.reused){reuse(item,result.job);draw();continue;}
+      if(!result.upload){if(!result.job?.id)throw new Error('Could not prepare your original file upload. Please retry.');reuse(item,result.job);draw();continue;}
+      const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([item.file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});
+      if(error)throw new Error('Upload failed. Remove this file and choose it again to retry.');
+      await nativeBookWorker({action:'finalize',id:result.job.id});item.jobId=result.job.id;item.message='Saved · extracting in the background';draw();continue;
+     }
      const extraction=item.report!;
      const sha=item.sha!;
      const large=extraction.text.length>1000000;
      if(large&&!health.staged_uploads)throw new Error('Your book is readable. Long-book processing is not enabled on this server yet. Your file has not been uploaded.');
      const sourceText=new TextEncoder().encode(extraction.text);
      const textSha=large?Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',sourceText))).map(x=>x.toString(16).padStart(2,'0')).join(''):undefined;
-     const result=await bookWorker({action:large?'prepare':'create',name:item.file.name,size:item.file.size,...(large?{textSha,textBytes:sourceText.byteLength}:{text:extraction.text}),sha,extraction:{...extraction,text:undefined},options});
+     const result=await bookWorker({action:large?'prepare':'create',name:item.file.name,size:item.file.size,...(large?{textSha,textBytes:sourceText.byteLength}:{text:extraction.text}),sha,extraction:{...extraction,text:undefined},options,...revisionFields()});
      if(result.reused){reuse(item,result.job);draw();continue;}
      if(result.upload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([item.file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});if(error)throw new Error('Upload failed. Remove this file and choose it again to retry.');}
      if(result.textUpload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.textUpload.path,result.textUpload.token,new Blob([sourceText],{type:'text/plain'}),{contentType:'text/plain'});if(error)throw new Error('Could not save the extracted text. Choose the same book again to resume.');}

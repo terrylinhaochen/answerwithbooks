@@ -1,5 +1,7 @@
 # Book uploads and companion skills
 
+**Current architecture (October 7):** see [Source-based skills and revisions](BOOK_SOURCE_SKILLS.md) for the dedicated Docling/Calibre worker, account-scoped skill installation, and append/replace revisions. The dated architecture and acceptance below are historical and do not describe the new native path.
+
 ## Architecture
 
 **2026-10-06 update:** the separate batch queue and expanded skill workflow are implemented locally, pending infrastructure deployment approval. See [the parity review](BOOK_TO_SKILL_PARITY.md) for the exact matrix, limitations, tests, and rollout order. The historical release evidence below describes the preceding live version.

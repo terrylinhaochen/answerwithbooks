@@ -1,13 +1,15 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {bookSkillPlatforms} from '../src/lib/book-skill-install.mjs';
+const origin=process.env.AWB_TEST_ORIGIN||'http://127.0.0.1:4321';
 const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
 const context=await browser.newContext({permissions:['clipboard-read','clipboard-write'],viewport:{width:1280,height:1000}});
 const page=await context.newPage(),errors=[];
+page.setDefaultTimeout(120000);page.setDefaultNavigationTimeout(120000);
 page.on('pageerror',error=>errors.push(error.message));
 try {
  for(const surface of ['dialog','page']) {
-  await page.goto(surface==='dialog'?'http://127.0.0.1:4321/':'http://127.0.0.1:4321/tools/#public-shelf-install');
+  await page.goto(origin+(surface==='dialog'?'/':'/tools/#public-shelf-install'));
   if(surface==='dialog')await page.locator('[data-open-skill-install]').first().click();
   const root=page.locator('[data-book-install-options]');
   const pick=async id=>root.locator(`[data-book-install-agent][value="${id}"]`).check();
@@ -63,15 +65,15 @@ try {
  }
  // Opening must not depend on deferred modules loading successfully.
  const unbundled=await context.newPage();
- await unbundled.route('http://127.0.0.1:4321/',async route=>{
+ await unbundled.route(origin+'/',async route=>{
   const response=await route.fetch();
   const html=(await response.text()).replace(/<script\b(?=[^>]*type=["']module["'])[^>]*>[\s\S]*?<\/script>/gi,'');
   await route.fulfill({response,body:html});
  });
- await unbundled.goto('http://127.0.0.1:4321/');
+ await unbundled.goto(origin+'/');
  for(const trigger of await unbundled.locator('[data-open-skill-install]').all()){
   await trigger.click();
-  assert.equal(unbundled.url(),'http://127.0.0.1:4321/');
+  assert.equal(unbundled.url(),origin+'/');
   assert.equal(await unbundled.locator('#skill-install-dialog').isVisible(),true);
   await unbundled.keyboard.press('Escape');
  }

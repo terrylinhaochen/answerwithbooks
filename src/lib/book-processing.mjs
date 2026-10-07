@@ -57,7 +57,7 @@ export async function compileBookProcessing({ directory, distillation }) {
   const job = JSON.parse(await readFile(path.join(directory, 'job.json'), 'utf8'));
   const text = await readFile(path.join(directory, 'source.txt'), 'utf8');
   if (hash(text) !== job.source.textSha256 || lines(text).length !== job.source.lineCount) throw new Error('Extracted source changed after intake. Re-ingest the source.');
-  const files = {...renderBookArtifacts(job, distillation), 'skill/source.txt': text};
+  const files = {...renderBookArtifacts({...job,sourceText:text}, distillation), 'skill/source.txt': text};
   const upstreamValidation=runBookAdapter({operation:'validate',files});
   if(upstreamValidation.errors.length)throw new Error('Upstream skill validation failed: '+upstreamValidation.errors.join('; '));
   const distillationHash = hash(json(distillation));

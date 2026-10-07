@@ -1,0 +1,18 @@
+{
+  "checked_on": "2026-10-07 America/Los_Angeles",
+  "upstream_commit": "e180fc46365e8c1aab0120778cc8a40b9515324b",
+  "upstream_version": "1.4.0",
+  "vendored_files": 22,
+  "all_vendored_hashes_verified": true,
+  "all_vendored_files_equal_installed_upstream": true,
+  "live_extractor_commit": "e180fc46365e8c1aab0120778cc8a40b9515324b",
+  "live_bundle_equals_local": true,
+  "live_bundle_sha256": "93a49c4c701ad2248dea7299104b21b444c623dbf3b92d8c07fa25491f7e9ef8",
+  "website_sha": "87459c0b67fd434e996ffa5e122e85b14f728248",
+  "website_deployment_workflow": "https://github.com/terrylinhaochen/answerwithbooks/actions/runs/37578558621",
+  "website_deployment_conclusion": "success",
+  "npm_version": "0.2.0",
+  "npm_git_head": "6b4df3a296e0938c3c704dc3a96faea500e939f7",
+  "local_semantic_changes_published": false,
+  "scope": "Read-only code audit and local synthetic reproductions. No authenticated production book was processed, modified, or downloaded. No runtime fixes or deployment performed."
+}

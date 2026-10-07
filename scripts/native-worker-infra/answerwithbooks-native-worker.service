@@ -1,0 +1,37 @@
+[Unit]
+Description=Answer with Books native extraction worker
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/opt/awb-native/smoke-passed.json
+
+[Service]
+Type=simple
+User=awb
+Group=awb
+WorkingDirectory=/opt/awb-native/app
+ExecStart=/opt/awb-native/venv/bin/python /opt/awb-native/app/scripts/native-worker-infra/launch.py
+Restart=on-failure
+RestartSec=15
+TimeoutStopSec=60
+KillMode=control-group
+UMask=0077
+Environment=PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+Environment=DOCLING_ARTIFACTS_PATH=/opt/docling-models HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+Environment=QT_QPA_PLATFORM=offscreen OMP_NUM_THREADS=2 MKL_NUM_THREADS=2
+Environment=HF_HOME=/tmp/huggingface CALIBRE_CONFIG_DIRECTORY=/tmp/calibre-config XDG_CACHE_HOME=/tmp/cache XDG_CONFIG_HOME=/tmp/config
+Environment=AWS_DEFAULT_REGION=us-east-2 AWS_PAGER=
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryMax=7G
+TasksMax=256
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
