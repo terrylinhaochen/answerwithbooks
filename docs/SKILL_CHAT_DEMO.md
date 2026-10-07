@@ -2,13 +2,13 @@
 
 ## Design
 
-The headline is “Your agent, well read.” One concrete customer interview question progresses through **List books → Ask → Apply**. The question, both tool calls, catalog results, and final reply accumulate in the same conversation. The conversation shows the progression directly, without a step-label row or tabs. The same complete flow loops; it never switches to a different user task. “Explore skills” is the sole primary destination.
+The headline is “Your agent, well read.” One question about finding a direction for great work progresses through **List books → Ask → Apply**. The question, both tool calls, catalog results, and final reply accumulate in the same conversation. The conversation shows the progression directly, without a step-label row or tabs. The same complete flow loops; it never switches to a different user task. “Explore skills” is the sole primary destination.
 
-1. The user's meal-planning interview question appears. A visible `GET /v1/books` tool call lists the public catalog, followed by three compact book entries from its 46 results: The Mom Test, Deep Work, and Atomic Habits.
-2. A separate `ask` call submits that question with the five-interview context. When retrieval completes, The Mom Test is highlighted in the earlier list and appears as the matched source.
-3. The agent applies the matched book to three interview questions about past behavior. The complete result holds before the same conversation replays.
+1. The user asks ‘How do I choose a career where I can do great work?’ with interests in writing, software, and teaching. A visible `GET /v1/books` tool call lists the public catalog, followed by three compact book entries from its 46 results: Designing Your Life, Deep Work, and Zero to One.
+2. A separate `ask` call submits that question and context. It retrieves three books and one published answer. Designing Your Life is highlighted as the lead source in the sample catalog; the disclosure lists all matches.
+3. The agent applies the sources to a concrete experiment: build a small teaching tool, try it with five people, and seek feedback on a skill worth developing. The complete result holds before the same conversation replays.
 
-Both tool calls have native command disclosures. Catalog details show the required optional local API startup command and exact curl request. Ask details show the executable command and verified result, including the lack of a published answer. Opening a disclosure pauses at the current step instead of skipping to the final reply; Play closes disclosures and continues.
+Both tool calls have native command disclosures. Catalog details show the required optional local API startup command and exact curl request. Ask details show the executable command and verified result, including the matched published career brief. Opening a disclosure pauses at the current step instead of skipping to the final reply; Play closes disclosures and continues.
 
 This is an authored illustration labeled “Illustrated demo · skill + local API.” It does not connect an agent, install a skill, submit a task, upload a source, or call a model or localhost API. The CLI retrieves sources; the displayed final response is an authored application. Public book pages continue to offer editorial digests and copyable prompts; full source-derived skill packages come from private uploads.
 
@@ -49,10 +49,12 @@ Inspected and executed the **published** `answer-with-books@0.1.4` tarball from 
 Current illustrated command, executed against the published package:
 
 ```sh
-npx --yes answer-with-books@0.1.4 ask "How should I interview customers to validate my meal-planning app?" --top-of-mind "Five interviews before I build." --json
+npx --yes answer-with-books@0.1.4 ask "How do I choose a career where I can do great work?" --top-of-mind "I love writing, software, and teaching. Where should I focus?" --json
 ```
 
-It returns `status: new_question`, The Mom Test as the only book, no published answers, and `new_question.saved: false`. The disclosure preserves those distinctions. The short source-method note and final questions are editorial applications of the matched book, not claimed verbatim CLI output.
+It returns `status: hit`; Working Identity, So Good They Can't Ignore You, and Designing Your Life; the published answer ‘How to decide what to do with your career next’; and `new_question: null`. The disclosure preserves those actual results. The small teaching-tool project is an editorial application of the sources, not claimed verbatim CLI output.
+
+The question takes inspiration from Paul Graham's *How to Do Great Work* (https://paulgraham.com/greatwork.html), checked on 2026-10-06. His essay informed the choice of ambition, curiosity, and work selection as the example's theme. It is not installed in this package or represented as a retrieved book. The final reply draws on our existing digests' career experiments, prototyping, and deliberate skill-building.
 
 The catalog response was rechecked in the published package: 46 books, including all three displayed entries. Catalog listing is now the first visible tool call in the same conversation, not a separate example.
 

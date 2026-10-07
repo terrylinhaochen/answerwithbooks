@@ -1,11 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import {skillDemoFlow as flow} from '../lib/skill-demo-flow';
 interface Props { books: CollectionEntry<'books'>[]; }
 const {books}=Astro.props;
 const book=books.find(book=>book.id===flow.slug);
 if(!book)throw new Error(`Missing skill demo book: ${flow.slug}`);
 const {title,author}=book.data;
+// Match BookJacket's asset formats; several library covers are PNGs.
+function coverFor(slug: string){
+ const ext=['jpg','jpeg','png','svg'].find(ext=>existsSync(fileURLToPath(new URL(`../../public/covers/${slug}.${ext}`,import.meta.url))));
+ if(!ext)throw new Error(`Missing skill demo cover: ${slug}`);
+ return `/covers/${slug}.${ext}`;
+}
 ---
 <section id="question-first-reading" class="home-section agent-demo" data-agent-demo aria-labelledby="agent-demo-heading">
  <header class="demo-heading"><div><p class="room-eyebrow">Skills in action</p><h2 id="agent-demo-heading">Your agent, <em>well read.</em></h2></div><p>A book’s methods.<br />At work in your next task.</p></header>
@@ -14,11 +22,11 @@ const {title,author}=book.data;
   <div class="demo-scene">
    <aside class="demo-book" aria-label={`Source book: ${title}`}>
     <span class="demo-small-label">From the public shelf</span>
-    <a href={`/books/${flow.slug}/`} class="demo-book-object" aria-label={`Read ${title}`}><img src={`/covers/${flow.slug}.jpg`} alt={`${title} cover`} width="180" height="270" loading="lazy" /></a>
+    <a href={`/books/${flow.slug}/`} class="demo-book-object" aria-label={`Read ${title}`}><img src={coverFor(flow.slug)} alt={`${title} cover`} width="180" height="270" loading="lazy" /></a>
     <div class="demo-book-caption"><h3>{title}</h3><p>{author}</p></div>
     <div class="demo-skill-file"><svg width="14" height="16" viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M11 1H3a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6zM11 1v5h5M6 10h6M6 14h4" /></svg><span>SKILL.md</span><span class="demo-file-indicator" aria-hidden="true"></span></div>
    </aside>
-   <div class="demo-conversation" data-demo-conversation aria-label="One illustrated customer interview task">
+   <div class="demo-conversation" data-demo-conversation aria-label="One illustrated great-work question">
     <div class="demo-user-message" data-demo-reveal="0"><span class="demo-speaker">You</span><p data-demo-words>{flow.question}<span class="demo-user-context">{flow.context}</span></p></div>
     <div class="demo-agent-message">
      <span class="demo-speaker" data-demo-reveal="1"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 5 5 5-5 5m8 0h5" /></svg>Your agent</span>
@@ -26,12 +34,12 @@ const {title,author}=book.data;
       <summary><span class="demo-call-state" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m4 10 4 4 8-8" /></svg></span><code class="demo-call-action">GET /v1/books</code><span class="demo-call-book" data-demo-catalog-label>{flow.catalog.count} books</span><svg class="demo-call-chevron" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 4 6 6-6 6" /></svg></summary>
       <div class="demo-methods"><p>Start the optional local API in another terminal</p><pre><code>{flow.catalog.setup}</code></pre><p>List its public books</p><pre><code>{flow.catalog.command}</code></pre><span>The catalog returns {flow.catalog.count} books. Three are shown below.</span></div>
      </details>
-     <ul class="demo-catalog" data-demo-reveal="2" aria-label="Three books from the returned catalog">{flow.catalog.books.map(item=><li data-demo-choice={item.slug===flow.slug}><img src={`/covers/${item.slug}.jpg`} alt="" width="22" height="33" loading="lazy" /><span>{item.title}</span></li>)}</ul>
+     <ul class="demo-catalog" data-demo-reveal="2" aria-label="Three books from the returned catalog">{flow.catalog.books.map(item=><li data-demo-choice={item.slug===flow.slug}><img src={coverFor(item.slug)} alt="" width="22" height="33" loading="lazy" /><span>{item.title}</span></li>)}</ul>
      <details class="demo-skill-call" data-demo-reveal="3" data-demo-tool="ask">
-      <summary><span class="demo-call-state" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m4 10 4 4 8-8" /></svg></span><code class="demo-call-action">ask</code><span class="demo-call-book" data-demo-call-label>The Mom Test</span><svg class="demo-call-chevron" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 4 6 6-6 6" /></svg></summary>
+      <summary><span class="demo-call-state" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m4 10 4 4 8-8" /></svg></span><code class="demo-call-action">ask</code><span class="demo-call-book" data-demo-call-label>{flow.matchedLabel}</span><svg class="demo-call-chevron" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 4 6 6-6 6" /></svg></summary>
       <div class="demo-methods"><p>Ask with the task and context above</p><pre><code>{flow.command}</code></pre><p>Retrieved sources</p><ul>{flow.output.map(item=><li>{item}</li>)}</ul><span>The command retrieves sources. Your agent applies them to your task.</span></div>
      </details>
-     <p class="demo-source-note" data-demo-reveal="4"><span aria-hidden="true">↳</span> Matched The Mom Test: ask about past behavior.</p>
+     <p class="demo-source-note" data-demo-reveal="4"><span aria-hidden="true">↳</span> {flow.sourceNote}</p>
      <div class="demo-answer">
       <p class="demo-answer-title" data-demo-reveal="5">{flow.result}</p>
       <ol>{flow.steps.map((step,index)=><li data-demo-reveal={index+6}><span aria-hidden="true">0{index+1}</span><p>{step}</p></li>)}</ol>

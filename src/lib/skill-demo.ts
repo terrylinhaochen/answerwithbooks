@@ -9,6 +9,7 @@ export function mountSkillDemo(){
  const controlPath=root.querySelector<SVGPathElement>('[data-demo-playback-icon] path')!;
  const runState=root.querySelector<HTMLElement>('[data-demo-run-state]')!;
  const callLabel=root.querySelector<HTMLElement>('[data-demo-call-label]')!;
+ const matchedLabel=callLabel.textContent!;
  const catalogLabel=root.querySelector<HTMLElement>('[data-demo-catalog-label]')!;
  const catalogCount=catalogLabel.textContent!;
  const catalogTool=root.querySelector<HTMLElement>('[data-demo-tool="catalog"]')!;
@@ -35,7 +36,7 @@ export function mountSkillDemo(){
   catalogTool.dataset.loading=String(elapsed>=750&&elapsed<2100);
   askTool.dataset.loading=String(elapsed>=4500&&elapsed<6600);
   catalogLabel.textContent=elapsed<2100?'Listing…':catalogCount;
-  callLabel.textContent=elapsed<6600?'Finding a match…':'The Mom Test';
+  callLabel.textContent=elapsed<6600?'Finding a match…':matchedLabel;
   reveals.forEach(el=>{
    if(el.dataset.visible==='true'||elapsed<starts[Number(el.dataset.demoReveal)])return;
    el.dataset.visible='true';el.removeAttribute('aria-hidden');el.inert=false;

@@ -3,8 +3,8 @@ import {chromium} from 'playwright';
 const origin=process.env.AWB_TEST_ORIGIN||'http://127.0.0.1:4321';
 const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
 const errors=[],providerCalls=[];
-const question='How should I interview customers to validate my meal-planning app?';
-const result='Ask about their last dinner. Start here:';
+const question='How do I choose a career where I can do great work?';
+const result='Build a small piece of the future you want.';
 const height=demo=>demo.locator('.demo-window').evaluate(el=>el.getBoundingClientRect().height);
 const phase=(page,value)=>page.waitForFunction(value=>document.querySelector('[data-agent-demo]').dataset.demoPhase===value,value);
 try{
@@ -21,7 +21,7 @@ try{
   assert.ok(await demo.locator('[data-demo-tool="ask"]').evaluate(el=>el.inert),'ask is not presented before the catalog');
   await page.waitForFunction(()=>document.querySelector('.demo-catalog').dataset.visible==='true');
   assert.equal(await demo.locator('.demo-catalog li').count(),3);
-  assert.ok(await demo.locator('.demo-catalog').getByText('The Mom Test',{exact:true}).isVisible());
+  assert.ok(await demo.locator('.demo-catalog').getByText('Designing Your Life',{exact:true}).isVisible());
   assert.ok(await demo.getByText('GET /v1/books',{exact:true}).isVisible());
   await demo.locator('[data-demo-tool="catalog"] summary').click();
   await demo.getByRole('button',{name:'Play demo',exact:true}).waitFor();
@@ -36,7 +36,7 @@ try{
   assert.ok(await demo.locator('.demo-catalog').isVisible(),'the book list remains visible during ask');
   assert.equal(await demo.locator('[data-demo-tool="catalog"]').evaluate(el=>el.open),false);
   await page.waitForFunction(()=>document.querySelector('[data-agent-demo]').dataset.demoMatched==='true');
-  assert.equal(await demo.locator('[data-demo-choice=true]').innerText(),'The Mom Test');
+  assert.equal(await demo.locator('[data-demo-choice=true]').innerText(),'Designing Your Life');
   await phase(page,'apply');
   await page.waitForFunction(()=>document.querySelector('[data-demo-run-state]').textContent==='Ready to use');
   assert.equal(await demo.locator('[data-demo-reveal][data-visible=true]').count(),11);
@@ -44,6 +44,7 @@ try{
   assert.equal(await demo.locator('.demo-user-message').count(),1);
   assert.ok((await demo.locator('.demo-user-message').innerText()).includes(question));
   assert.ok(Math.abs(await height(demo)-initialHeight)<1,'reveals preserve layout');
+  await page.waitForFunction(()=>[...document.querySelectorAll('[data-agent-demo] img')].every(img=>img.complete&&img.naturalWidth>0));
   await demo.screenshot({path:`/private/tmp/awb-catalog-flow-${width}.png`});
   await page.waitForTimeout(1500);assert.equal(await demo.getAttribute('data-demo-phase'),'apply','hold the finished result for reading');
   if(width===1280){
@@ -54,8 +55,8 @@ try{
   }
   await demo.locator('[data-demo-tool="ask"] summary').click();
   await demo.getByRole('button',{name:'Play demo',exact:true}).waitFor();
-  assert.ok(await demo.getByText('Book: The Mom Test',{exact:true}).isVisible());
-  assert.ok(await demo.getByText('No matching published answer. The question is not saved.',{exact:true}).isVisible());
+  assert.ok(await demo.getByText('Answer: How to decide what to do with your career next',{exact:true}).isVisible());
+  assert.ok(await demo.getByText("Books: Working Identity; So Good They Can't Ignore You; Designing Your Life",{exact:true}).isVisible());
   const command=await demo.locator('[data-demo-tool="ask"] pre code').innerText();
   assert.ok(command.includes(`ask "${question}"`));assert.ok(command.includes('--top-of-mind'));
   if(width===1280){
@@ -77,14 +78,14 @@ try{
  await demo.locator('[data-demo-tool="catalog"] summary').focus();await reduced.keyboard.press('Enter');
  assert.ok(await demo.getByText('curl http://127.0.0.1:8787/v1/books',{exact:true}).isVisible());
  await demo.locator('[data-demo-tool="ask"] summary').focus();await reduced.keyboard.press('Enter');
- assert.ok(await demo.getByText('Book: The Mom Test',{exact:true}).isVisible());
+ assert.ok(await demo.getByText('Answer: How to decide what to do with your career next',{exact:true}).isVisible());
  assert.equal(await reduced.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  await demo.screenshot({path:'/private/tmp/awb-catalog-flow-expanded-320.png'});await reduced.close();
  const staticPage=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:1100}});await staticPage.goto(origin+'/#question-first-reading');
  assert.ok(await staticPage.getByText(result,{exact:true}).isVisible());
  assert.equal(await staticPage.locator('.demo-catalog li').count(),3);
  await staticPage.locator('[data-demo-tool="catalog"] summary').click();assert.ok(await staticPage.getByText('curl http://127.0.0.1:8787/v1/books',{exact:true}).isVisible());
- await staticPage.locator('[data-demo-tool="ask"] summary').click();assert.ok(await staticPage.getByText('Book: The Mom Test',{exact:true}).isVisible());await staticPage.close();
+ await staticPage.locator('[data-demo-tool="ask"] summary').click();assert.ok(await staticPage.getByText('Answer: How to decide what to do with your career next',{exact:true}).isVisible());await staticPage.close();
  assert.deepEqual(providerCalls,[]);assert.deepEqual(errors,[]);
  console.log('PASS list books -> ask -> apply; returned catalog precedes ask; matched book highlighted; one continuous looping task; reading hold; inspection pauses without skipping; stable layout; offscreen pause; keyboard; reduced motion; no JS; no live calls.');
 }finally{await browser.close();}
