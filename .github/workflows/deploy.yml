@@ -49,13 +49,13 @@ jobs:
       - name: Set up Deno for the processing handler tests
         uses: denoland/setup-deno@v2
         with:
-          deno-version: v2.x
+          deno-version: v2.8.3
 
       - name: Verify processing handler without network or provider access
         run: |
-          deno cache scripts/test-book-worker-http.ts
-          deno check supabase/functions/book-process/index.ts
-          deno run --allow-env --allow-read scripts/test-book-worker-http.ts
+          deno cache --node-modules-dir=none scripts/test-book-worker-http.ts
+          deno check --node-modules-dir=none supabase/functions/book-process/index.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-book-worker-http.ts
 
       - name: Verify queue concurrency and account isolation in local Postgres
         run: PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-queue-db.py

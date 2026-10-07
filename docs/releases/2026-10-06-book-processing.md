@@ -23,6 +23,8 @@ The real acceptance test used the built local release frontend connected to the 
 
 The first test attempt expected a transient upload-dialog success message, but a fully successful batch redirects to `/processing/`. The test was corrected to inspect that queue; it did not require a product-code change.
 
+The first Pages build stopped before publishing because Deno tried to resolve the worker’s exact Supabase SDK version from Astro’s npm installation. CI now uses Deno’s separate dependency cache (`--node-modules-dir=none`), the verified Deno 2.8.3 runtime, and a committed dependency lock. The handler checks passed with a fresh cache before rerunning CI.
+
 Local release checks also passed:
 
 - 27 Node processing, fidelity, cache, option, and long-book tests; 8 original Python adapter tests.
