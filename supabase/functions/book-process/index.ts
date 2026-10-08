@@ -46,7 +46,7 @@ async function step(job:any,token:string) {
    // A useful review is completed work, not a provider outage. Repair promptly
    // and fill spare slots with later, unprocessed sections. Never accept a failed draft.
    const exhausted=Object.values(patch.section_feedback).some((feedback:any)=>feedback.attempts>=5);
-   patch.error=exhausted?'A section still fails its source check after five targeted repairs. Accepted sections are saved.':'Repairing source-review findings; accepted sections are saved.';
+   patch.error=exhausted?'A section still fails its source check after five failed review attempts. Accepted sections are saved.':'Repairing source-review findings; accepted sections are saved.';
    if(exhausted)patch.run_state='failed';
    patch.next_attempt_at=new Date().toISOString();
   }

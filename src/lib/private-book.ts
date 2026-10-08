@@ -162,7 +162,7 @@ find('activate').addEventListener('click',async()=>{
 find('remote-copy').addEventListener('click',async()=>{
  const prompt=`$answer-with-books Use “${current.title}” from my private library to help with [describe my task]. Focus on book ${current.book_id||current.id}; retrieve relevant chapter methods, check their citations, and apply them to my situation.`;
  try{await navigator.clipboard.writeText(prompt);find('copy-status').textContent='Question copied. Paste it into your connected agent and replace the task placeholder.';}
- catch{find<HTMLTextAreaElement>('prompt').value=prompt;find('prompt').hidden=false;find('copy-status').textContent='Copy was blocked. Select and copy the question below.';}
+ catch{find('remote-example').textContent=prompt;find('copy-status').textContent='Copy was blocked. Select and copy the question above.';}
 });
 find('install-copy').addEventListener('click',async()=>{
  try {await navigator.clipboard.writeText(find('install-command').textContent||'');find('copy-status').textContent='Install command copied. Run it in your terminal after signing in to the updated CLI.';}
