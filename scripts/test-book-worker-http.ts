@@ -11,6 +11,7 @@ let handler:(req:Request)=>Promise<Response>;
 // Deno.serve normally opens a listener. Capture the actual handler instead.
 Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
 const usage:any[]=[];const jobs:any[]=[];const originals=new Map<string,Uint8Array>();const extractedFiles=new Map<string,Uint8Array>();
+let rejectNextReview=false,sawTargetedRepair=false;
 let modelCalls=0,wakes=0,failProvider=false,holdProvider:(()=>Promise<void>)|null=null;
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
 function match(job:any,params:URLSearchParams){
@@ -31,6 +32,9 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
   if(failProvider)return json({error:'Synthetic busy response'},429);
   if(url.pathname.includes('/images/'))return json({data:[{b64_json:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZQmcAAAAASUVORK5CYII='}]});
   const prompt=body.messages[0].content;
+  if(prompt.startsWith('You distill')&&body.messages[1].content.includes('previousDraft'))sawTargetedRepair=true;
+  if(prompt.startsWith('Check generated')&&rejectNextReview){rejectNextReview=false;return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({supported:false,issues:['Keep the original condition.'],checks:[]})}}]});}
+
   const numbered=[...body.messages[1].content.matchAll(/^(\d+):/gm)].map(m=>Number(m[1]));
   const refs=[{startLine:numbered[0]||1,endLine:numbered.at(-1)||2}];
   if(prompt.startsWith('Summarize this group'))return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({summary:'The sections describe bounded trials, comparing predictions and observations, and retaining uncertainty.',terms:[]})}}]});
@@ -164,3 +168,17 @@ const longExport=(await call({action:'export',id:largeId})).body.files;assert.eq
 assert.equal(Object.keys(longExport).filter(name=>/skill\/chapters\/ch\d+\.md$/.test(name)).length,largeJob.chunks.length);
 assert.equal(largeJob.chunks.at(-1).end,largeText.split('\n').length);
 console.log('PASS staged long-source transport, corruption/ownership checks, all '+largeJob.chunks.length+' sections, '+largeJob.overview_notes.length+' saved overview groups, final assembly, cover and complete source/citation export');
+
+// Real source-review failures are durable corrections, with no outage backoff.
+for(const saved of jobs)saved.run_state='complete';
+const correctionText=text+'\nCorrection fixture.',correctionBytes=new TextEncoder().encode(correctionText),correctionSha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',correctionBytes))).map(n=>n.toString(16).padStart(2,'0')).join('');
+const correction=await call({action:'create',name:'correction.md',text:correctionText,sha:correctionSha,options:{mode:'full'}});
+const correctionId=correction.body.job.id;originals.set(correctionId,correctionBytes);await call({action:'enqueue',id:correctionId});await drain();
+rejectNextReview=true;assert.equal((await drain()).status,200);
+const correctionJob=jobs.find(job=>job.id===correctionId);
+assert.equal(correctionJob.cursor,0);assert.equal(correctionJob.section_feedback[0].attempts,1);assert.equal(correctionJob.run_state,'queued');assert.ok(Date.parse(correctionJob.next_attempt_at)<=Date.now());
+assert.equal((await call({action:'status',id:correctionId})).body.job.section_feedback,undefined);
+await drain();assert.equal(correctionJob.cursor,1);assert.equal(sawTargetedRepair,true);assert.deepEqual(correctionJob.section_feedback,{});
+correctionJob.cursor=0;correctionJob.notes=[];correctionJob.section_feedback={0:{attempts:4,draft:{},review:{issues:['Unresolved condition.']}}};rejectNextReview=true;
+await drain();assert.equal(correctionJob.run_state,'failed');assert.equal(correctionJob.cursor,0);
+console.log('PASS saved targeted repairs, immediate review retry, private feedback, cleared successful repair and five-attempt quality stop');
