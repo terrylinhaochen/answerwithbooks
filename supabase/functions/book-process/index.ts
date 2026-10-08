@@ -22,7 +22,7 @@ const db=createClient(url,serviceKey,{auth:{persistSession:false}});
 const providerKey=()=>Deno.env.get('OPENAI_API_KEY');
 const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','https://chenterry.com','http://localhost:4321','http://127.0.0.1:4321']);
 const hash=async(bytes:BufferSource)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
-function publicJob(job:any) { const {source_text,chunks,notes,section_feedback,generation_feedback,overview_notes=[],lease_token,cover_lease_token,...rest}=job;return {...rest,total_sections:chunks.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
+function publicJob(job:any) { const {source_text,chunks,notes,section_feedback,generation_feedback,overview_notes=[],lease_token,cover_lease_token,...rest}=job;return {...rest,total_sections:chunks.length,completed_sections:notes.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
 function requireOk(result:any) { if(result.error) throw new Error('Could not save processing progress. Please retry.');return result.data; }
 const modelFor=(job:any)=>createBookModelClient({getEnv:(name:string)=>Deno.env.get(name),onUsage:async(metric:unknown)=>{const result=await db.from('book_model_usage').insert({job_id:job.id,user_id:job.user_id,section:job.cursor,phase:job.status,usage:metric});if(result.error)console.error('book_usage_receipt_failed',job.id);}});
 async function step(job:any,token:string) {
@@ -39,13 +39,22 @@ async function step(job:any,token:string) {
   patch.notes=batch.notes;patch.cursor=batch.cursor;patch.status='processing';patch.attempts=0;
   patch.section_feedback={...job.section_feedback};
   for(const note of batch.notes)delete patch.section_feedback[Number(note.id.slice(2))-1];
-  for(const error of batch.errors)if(error.feedback)patch.section_feedback[error.sectionIndex]=error.feedback;
+  for(const error of batch.errors)if(error.feedback)patch.section_feedback[error.sectionIndex]={...error.feedback,attempts:(job.section_feedback?.[error.sectionIndex]?.attempts||0)+1};
   if(job.revision_kind!=='append'&&!job.source_name.endsWith('.collection.zip')) { if(typeof batch.title==='string'&&batch.title.trim()) patch.title=batch.title.slice(0,200);if(typeof batch.author==='string'&&batch.author.trim()) patch.author=batch.author.slice(0,200); }
-  if(batch.errors.length) {
+  const transportErrors=batch.errors.filter(error=>!error.feedback);
+  if(batch.errors.length&&!transportErrors.length){
+   // A useful review is completed work, not a provider outage. Repair promptly
+   // and fill spare slots with later, unprocessed sections. Never accept a failed draft.
+   const exhausted=Object.values(patch.section_feedback).some((feedback:any)=>feedback.attempts>=5);
+   patch.error=exhausted?'A section still fails its source check after five targeted repairs. Accepted sections are saved.':'Repairing source-review findings; accepted sections are saved.';
+   if(exhausted)patch.run_state='failed';
+   patch.next_attempt_at=new Date().toISOString();
+  }
+  if(transportErrors.length) {
    // Save paid, reviewed successes without releasing this lease or resetting retries.
    const {lease_until,lease_token,attempts,error,...progress}=patch;
    requireOk(await db.from('book_processing_jobs').update(progress).eq('id',job.id).eq('lease_token',token).select('id').single());
-   throw batch.errors[0];
+   throw transportErrors[0];
   }
  } else if(job.options?.mode==='analysis') {
   patch.analysis={title:job.title,author:job.author,sections:job.notes,sourceSha256:job.source_sha,createdAt:new Date().toISOString()};patch.status='analyzed';patch.run_state='complete';
@@ -57,7 +66,12 @@ async function step(job:any,token:string) {
  } else {
   patch.status='ready';patch.run_state='complete';patch.cover_status=job.cover_path?'ready':'pending';
  }
- const saved=requireOk(await db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('lease_token',token).select().single());return publicJob(saved);
+ let save=db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('lease_token',token);
+ if(patch.run_state==='failed')save=save.neq('run_state','paused');
+ let saved=requireOk(await save.select().maybeSingle());
+ if(!saved&&patch.run_state==='failed')saved=requireOk(await db.from('book_processing_jobs').update({...patch,run_state:'paused'}).eq('id',job.id).eq('lease_token',token).eq('run_state','paused').select().single());
+ if(!saved)throw new Error('Processing lease changed; saved progress was preserved.');
+ return publicJob(saved);
 }
 async function processCover(job:any) {
  const started=Date.now();let metric:any={kind:'image',provider:'openai',requestedModel:Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5',outcome:'error'};
@@ -87,7 +101,11 @@ async function processClaim(claim:any) {
  catch(e) {
   const message=e instanceof Error?e.message:'Processing failed. Please retry.';
   const patch:any=retryPatch(claim.attempts,message);
-  if((e as any)?.generationFeedback)patch.generation_feedback=(e as any).generationFeedback;
+  if((e as any)?.generationFeedback){
+   const attempts=(claim.generation_feedback?.attempts||0)+1;
+   patch.generation_feedback={...(e as any).generationFeedback,attempts};
+   patch.attempts=0;patch.run_state=attempts>=5?'failed':'queued';patch.next_attempt_at=new Date().toISOString();
+  }
   // Preserve a pause requested while a provider call was in flight.
   requireOk(await db.from('book_processing_jobs').update(patch).eq('id',claim.id).eq('lease_token',claim.lease_token).neq('run_state','paused'));
   requireOk(await db.from('book_processing_jobs').update({...patch,run_state:'paused'}).eq('id',claim.id).eq('lease_token',claim.lease_token).eq('run_state','paused'));

@@ -12,3 +12,8 @@ test('invalid concurrency and mismatched identities cannot advance the cursor',a
  for(const value of [0,4,'x',1.5])assert.throws(()=>sectionConcurrency(value));
  const result=await distillSectionBatch({chunks:[1],distill:async()=>({note:{id:'ch02'}})});assert.equal(result.cursor,0);assert.equal(result.notes.length,0);assert.equal(result.errors.length,1);
 });
+
+test('a failed early section does not leave spare parallel slots idle behind accepted siblings',async()=>{
+ const calls=[];const result=await distillSectionBatch({chunks:[1,2,3,4,5,6],notes:[{id:'ch02'},{id:'ch03'}],cursor:0,concurrency:3,distill:async(_,index)=>{calls.push(index);return {note:{id:`ch${String(index+1).padStart(2,'0')}`}};}});
+ assert.deepEqual(calls,[0,3,4]);assert.equal(result.cursor,5);
+});

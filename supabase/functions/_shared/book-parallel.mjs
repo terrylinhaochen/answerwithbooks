@@ -9,7 +9,7 @@ export async function distillSectionBatch({chunks, notes = [], cursor = 0, concu
   const idFor = index => `ch${String(index + 1).padStart(2, '0')}`;
   const accepted = new Map(notes.map(note => [note.id, note]));
   const indices = [];
-  for (let index = cursor; index < Math.min(chunks.length, cursor + count); index++) {
+  for (let index = cursor; index < chunks.length && indices.length < count; index++) {
     if (!accepted.has(idFor(index))) indices.push(index);
   }
   const results = await Promise.allSettled(indices.map(async index => ({index, ...await distill(chunks[index], index)})));
