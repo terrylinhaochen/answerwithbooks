@@ -182,3 +182,5 @@ await drain();assert.equal(correctionJob.cursor,1);assert.equal(sawTargetedRepai
 correctionJob.cursor=0;correctionJob.notes=[];correctionJob.section_feedback={0:{attempts:4,draft:{},review:{issues:['Unresolved condition.']}}};rejectNextReview=true;
 await drain();assert.equal(correctionJob.run_state,'failed');assert.equal(correctionJob.cursor,0);
 console.log('PASS saved targeted repairs, immediate review retry, private feedback, cleared successful repair and five-attempt quality stop');
+
+await call({action:'retry',id:correctionId});assert.equal(correctionJob.section_feedback[0].attempts,0);assert.ok(correctionJob.section_feedback[0].review);await drain();assert.equal(correctionJob.cursor,1);console.log('PASS explicit retry resets the review-attempt budget while retaining repair feedback');

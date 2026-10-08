@@ -79,7 +79,12 @@ async function processCover(job:any) {
  try {
   const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${providerKey()}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5',prompt:`Create an original editorial book cover illustration for ${job.title} by ${job.author}. Warm ivory background, quiet ink linework and one muted color, symbolic visual metaphor, generous negative space. No text, letters, logos, or imitation of the publisher cover. Subject context: ${job.notes[0]?.summary?.slice(0,1000)||job.title}`,size:'1024x1536',quality:'low',n:1}),signal:AbortSignal.timeout(110000)});
   if(!response.ok) throw new Error('The book and skill are ready, but cover generation failed. Retry to finish the cover.');
-  const result=await response.json();const b64=result.data?.[0]?.b64_json;if(!b64)throw new Error('No cover image was returned. Retry the cover.');
+  const result=await response.json();
+  const count=(value:unknown)=>Number.isSafeInteger(value)&&Number(value)>=0?Number(value):null;
+  metric.inputTokens=count(result.usage?.input_tokens);metric.outputTokens=count(result.usage?.output_tokens);
+  metric.inputTextTokens=count(result.usage?.input_tokens_details?.text_tokens)??metric.inputTokens;
+  metric.inputImageTokens=count(result.usage?.input_tokens_details?.image_tokens)??0;
+  const b64=result.data?.[0]?.b64_json;if(!b64)throw new Error('No cover image was returned. Retry the cover.');
   const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const coverPath=`${job.user_id}/${job.id}/cover.png`;
   requireOk(await db.storage.from('private-books').upload(coverPath,bytes,{contentType:'image/png',upsert:true}));patch.cover_path=coverPath;patch.status='ready';patch.run_state='complete';
   delete patch.status;delete patch.run_state;patch.cover_status='ready';patch.cover_error=null;metric.outcome='complete';
@@ -285,7 +290,13 @@ Deno.serve(async req=>{
    const patch:any={run_state:'queued',error:null,next_attempt_at:new Date().toISOString(),updated_at:new Date().toISOString()};
    if(input.action==='generate'){patch.options={...job.options,mode:'full'};patch.status='processing';}
    // Do not reset an active claim or overwrite a step that finished concurrently.
-   if(!job.lease_until||Date.parse(job.lease_until)<Date.now())patch.attempts=0;
+   if(!job.lease_until||Date.parse(job.lease_until)<Date.now()){
+    patch.attempts=0;
+    if(input.action==='retry'&&job.run_state==='failed'){
+     patch.section_feedback=Object.fromEntries(Object.entries(job.section_feedback||{}).map(([key,value]:[string,any])=>[key,{...value,attempts:0}]));
+     if(job.generation_feedback)patch.generation_feedback={...job.generation_feedback,attempts:0};
+    }
+   }
    const saved=requireOk(await db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('updated_at',job.updated_at).select().maybeSingle());
    await wake();return reply({job:publicJob(saved||job)});
   }

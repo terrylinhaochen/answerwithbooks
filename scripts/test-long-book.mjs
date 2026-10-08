@@ -28,3 +28,16 @@ test('overview groups have bounded size, validate chapter membership, and requir
  await assert.rejects(summarizeBookGroup(notes.slice(0,12),async prompt=>prompt.startsWith('Check generated')?{supported:false,issues:['Meaning changed']}:{summary:'Discard all uncertain actions.',terms:[]}),/source check/);
  await assert.rejects(summarizeBookGroup(notes.slice(0,12),async()=>({summary:'A'.repeat(1801),terms:[]})),error=>error.generationFeedback?.review.issues[0].includes('bounds'));
 });
+
+test('long-book schemas constrain references to processing section IDs, excluding detected chapter IDs',async()=>{
+ const {overviewSchemaFor,synthesisSchemaFor}=await import('../supabase/functions/_shared/book-schemas.mjs');
+ const notes=[{id:'ch01',sourceChapters:[{id:'chapter-33'}]},{id:'ch02'}];
+ assert.deepEqual(overviewSchemaFor(notes).properties.terms.items.properties.chapterIds.items.enum,['ch01','ch02']);
+ assert.deepEqual(synthesisSchemaFor(notes).properties.glossary.items.properties.chapterIds.items.enum,['ch01','ch02']);
+ assert.equal(overviewSchemaFor(notes).properties.summary.maxLength,1800);
+ let saw=false;
+ await summarizeBookGroup(notes,async(prompt,input,options)=>{
+  if(options.kind==='review')return {supported:true,issues:[]};
+  assert.doesNotMatch(input,/chapter-33/);saw=true;return {summary:'A bounded overview.',terms:[{term:'Trial',definition:'A bounded test.',chapterIds:['ch01']}]};
+ });assert.equal(saw,true);
+});
