@@ -1,11 +1,11 @@
 // Provider boundary shared by the worker and the bounded model evaluation CLI.
 // No prompts, source text, response contents, keys or provider error bodies enter metrics.
 export function bookModelConfig(getEnv, kind = 'generation') {
-  const model = (kind === 'review' && getEnv('BOOK_REVIEW_MODEL')) || getEnv('BOOK_PROCESSING_MODEL') || 'gpt-4.1-mini';
+  const model = (kind === 'review' && getEnv('BOOK_REVIEW_MODEL')) || getEnv('BOOK_PROCESSING_MODEL') || 'gpt-5.4-mini';
   if (!/^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,95}$/.test(model)) throw new Error('Invalid book processing model configuration.');
   const provider = model.startsWith('gemini-') ? 'google' : 'openai';
   const reasoningModel = /^gpt-[5-9](?:[.-]|$)/.test(model) || /^o[1-9](?:[.-]|$)/.test(model);
-  const effort = (kind === 'review' ? getEnv('BOOK_REVIEW_REASONING_EFFORT') : getEnv('BOOK_REASONING_EFFORT')) || (provider === 'google' ? (/^gemini-2\.5/.test(model) ? 'none' : 'minimal') : 'low');
+  const effort = (kind === 'review' ? getEnv('BOOK_REVIEW_REASONING_EFFORT') : getEnv('BOOK_REASONING_EFFORT')) || (provider === 'google' ? (/^gemini-2\.5/.test(model) ? 'none' : 'minimal') : kind === 'generation' && /^gpt-5\.4-mini(?:-|$)/.test(model) ? 'none' : 'low');
   if (provider === 'google' && (!['none','minimal','low','medium','high'].includes(effort) || (!/^gemini-2\.5/.test(model) && effort === 'none'))) throw new Error('Invalid Gemini reasoning effort configuration.');
   if (reasoningModel && !['none', 'low', 'medium', 'high', 'xhigh', 'max'].includes(effort)) throw new Error('Invalid book reasoning effort configuration.');
   if (/^gpt-6(?:\.1-sol|-astra)(?:-|$)/.test(model) && effort === 'none') throw new Error('This book model requires reasoning effort low or higher.');

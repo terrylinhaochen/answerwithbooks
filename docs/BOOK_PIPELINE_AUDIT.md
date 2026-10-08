@@ -70,7 +70,7 @@ For the full Smith source, 117 sequential sections imply at least 234 section ge
 - Give the reviewer each summary, idea, example and anti-pattern with only its cited excerpts. A citation elsewhere in the section is insufficient for that note.
 - Require an application basis. Render inferred applications distinctly from procedures the source actually prescribes. Earlier packages with no basis say it was not recorded.
 - Preserve conditional language, numerical qualifications, excerpt scope and historical attribution in generation guidance.
-- Support separate generation/review models and reasoning settings. Modern reasoning models use compatible completion-token parameters. Defaults remain unchanged pending model selection and release acceptance.
+- Support separate generation/review models and reasoning settings. Modern reasoning models use compatible completion-token parameters. The follow-up model selection now sets GPT-5.4 mini as the source default; deployment and release acceptance remain pending (see HOSTED_BOOK_LIBRARY.md).
 - Record sanitized provider model IDs, token counts, cached/reasoning tokens, outcomes and timings. No source, prompts, keys or provider error bodies enter these metrics. Worker logs are not yet a persistent per-book billing receipt.
 - Version the review report and distinguish old, partial and complete checks in downloads and the private reader. Preserve access to both v2 and v3 repair snapshots within the owning book's storage prefix. Do not relabel old notes as freshly reviewed.
 - Add a bounded provider comparison using the same distillation and compilation code as production. Dry-run is the default; live execution is explicit, writes to a new directory, and never retries silently.
@@ -79,7 +79,7 @@ Strict schemas enforce shape, not truth. The live trials found false acceptances
 
 ## Models and bounded evaluation
 
-The deployed source defaults are `gpt-4.1-mini` for text and `gpt-image-1.5` for private covers; environment overrides can differ. Public editorial scripts have separate model settings. Changing a local CLI setting does not change the server's model.
+At the original audit, deployed source defaults were `gpt-4.1-mini` for text and `gpt-image-1.5` for private covers; environment overrides can differ. Public editorial scripts have separate model settings. Changing a local CLI setting does not change the server's model.
 
 Current standard short-context text rates, checked October 7, 2026:
 

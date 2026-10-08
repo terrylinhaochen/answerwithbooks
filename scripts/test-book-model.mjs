@@ -20,13 +20,26 @@ test('modern models use compatible reasoning parameters and strict schema; metri
  assert.doesNotMatch(JSON.stringify(metrics),/PRIVATE|synthetic-secret/);
 });
 
-test('legacy default remains available and review has an independent model and reasoning setting',async()=>{
+test('explicit legacy models remain available and review has independent model and reasoning settings',async()=>{
  const sent=[];const client=createBookModelClient({getEnv:env({BOOK_PROCESSING_MODEL:'gpt-6-luna',BOOK_REASONING_EFFORT:'none',BOOK_REVIEW_MODEL:'gpt-6.1-sol'}),fetchImpl:async(_,init)=>{sent.push(JSON.parse(init.body));return Response.json(result());}});
  await client('review','evidence',{kind:'review'});assert.equal(sent[0].model,'gpt-6.1-sol');assert.equal(sent[0].reasoning_effort,'low');
- const legacy=createBookModelClient({getEnv:env(),fetchImpl:async(_,init)=>{sent.push(JSON.parse(init.body));return Response.json(result({model:'gpt-4.1-mini'}));}});
+ const legacy=createBookModelClient({getEnv:env({BOOK_PROCESSING_MODEL:'gpt-4.1-mini'}),fetchImpl:async(_,init)=>{sent.push(JSON.parse(init.body));return Response.json(result({model:'gpt-4.1-mini'}));}});
  await legacy('system','input');assert.equal(sent[1].model,'gpt-4.1-mini');assert.equal(sent[1].max_tokens,6000);assert.equal(sent[1].reasoning_effort,undefined);
  assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-6.1-sol',BOOK_REASONING_EFFORT:'none'})),/requires reasoning/);
  assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-6-astra',BOOK_REASONING_EFFORT:'none'})),/requires reasoning/);
+});
+
+test('default Mini matches the benchmark: generation none, review low, with explicit overrides preserved',async()=>{
+ const sent=[];
+ const client=createBookModelClient({getEnv:env(),fetchImpl:async(_,init)=>{sent.push(JSON.parse(init.body));return Response.json(result({model:'gpt-5.4-mini-2026-03-17'}));}});
+ await client('write','source',{schema:sectionSchema,name:'book_section'});
+ await client('review','claims',{kind:'review'});
+ for(const body of sent){assert.equal(body.model,'gpt-5.4-mini');assert.equal(body.max_completion_tokens,6000);assert.equal(body.max_tokens,undefined);}
+ assert.equal(sent[0].reasoning_effort,'none');assert.equal(sent[1].reasoning_effort,'low');assert.equal(sent[0].response_format.type,'json_schema');
+ assert.equal(bookModelConfig(env({BOOK_REASONING_EFFORT:'medium'})).effort,'medium');
+ assert.equal(bookModelConfig(env({BOOK_REVIEW_REASONING_EFFORT:'high'}),'review').effort,'high');
+ assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-5.4-mini-2026-03-17'})).effort,'none');
+ assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-6.1-sol'})).effort,'low');
 });
 
 test('provider errors, refusal and truncation cannot become accepted notes or expose provider text',async()=>{
