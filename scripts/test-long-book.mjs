@@ -20,12 +20,12 @@ test('dense headings do not create hundreds of tiny jobs or lose source text',()
 test('overview groups have bounded size, validate chapter membership, and require a fidelity pass',async()=>{
  const notes=Array.from({length:13},(_,i)=>({id:`ch${String(i+1).padStart(2,'0')}`,summary:'Compare observations with predictions.'}));
  assert.equal(overviewGroupCount(notes),2);assert.throws(()=>synthesisEvidence(notes,[]),/Finish/);
- const model=async prompt=>prompt.startsWith('Check generated')?{supported:true,issues:[]}:{summary:'Compare observations with predictions.',terms:[]};
+ const model=async prompt=>prompt.startsWith('Verify only')?{supported:true,issues:[]}:{summary:'Compare observations with predictions.',terms:[]};
  const groups=[await summarizeBookGroup(notes.slice(0,12),model),await summarizeBookGroup(notes.slice(12),model)];assert.deepEqual(synthesisEvidence(notes,groups),groups);
  assert.throws(()=>synthesisEvidence([...notes].reverse(),groups),/another source revision/);
  await assert.rejects(summarizeBookGroup(notes,model),/Invalid/);
  await assert.rejects(summarizeBookGroup(notes.slice(0,12),async()=>({summary:'Unsupported',terms:[{term:'Trial',definition:'Test',chapterIds:['ch99']}]})),error=>error.generationFeedback?.review.issues[0].includes('chapter IDs'));
- await assert.rejects(summarizeBookGroup(notes.slice(0,12),async prompt=>prompt.startsWith('Check generated')?{supported:false,issues:['Meaning changed']}:{summary:'Discard all uncertain actions.',terms:[]}),/source check/);
+ await assert.rejects(summarizeBookGroup(notes.slice(0,12),async prompt=>prompt.startsWith('Verify only')?{supported:false,issues:['Meaning changed']}:{summary:'Discard all uncertain actions.',terms:[]}),/source check/);
  await assert.rejects(summarizeBookGroup(notes.slice(0,12),async()=>({summary:'A'.repeat(1801),terms:[]})),error=>error.generationFeedback?.review.issues[0].includes('bounds'));
 });
 
@@ -40,4 +40,18 @@ test('long-book schemas constrain references to processing section IDs, excludin
   if(options.kind==='review')return {supported:true,issues:[]};
   assert.doesNotMatch(input,/chapter-33/);saw=true;return {summary:'A bounded overview.',terms:[{term:'Trial',definition:'A bounded test.',chapterIds:['ch01']}]};
  });assert.equal(saw,true);
+});
+
+
+test('aggregate review distinguishes richer evidence from the shorter candidate it checks',async()=>{
+ const notes=[{id:'ch01',summary:'Division of labour can increase dexterity. Water carriage historically enlarged markets.'}];
+ await summarizeBookGroup(notes,async(prompt,input,options)=>{
+  if(options.kind!=='review')return {summary:'Division of labour can increase dexterity.',terms:[]};
+  const data=JSON.parse(input);
+  assert.match(data.evidence[0].summary,/Water carriage/);
+  assert.doesNotMatch(data.candidate.summary,/Water carriage/);
+  assert.match(prompt,/Do not reverse the comparison/);
+  assert.match(prompt,/candidate field/);
+  return {supported:true,issues:[]};
+ });
 });

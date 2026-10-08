@@ -1,0 +1,77 @@
+{
+  "model": "gpt-5.4-mini",
+  "reviewEffort": "low",
+  "results": [
+    {
+      "id": "shorter-candidate",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "report": {
+        "supported": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "source-detail-in-candidate",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "report": {
+        "supported": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "invented-obligation",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "report": {
+        "supported": false,
+        "issues": [
+          "thesis: \"Smith requires every company to give each worker a lifetime assignment and always use water transport.\" is not supported by the evidence. The evidence says Smith argues that division of labour increases productivity and that its extent is limited by the market, which historical water carriage could enlarge; it does not state any requirement for lifetime assignments or that water transport must always be used."
+        ]
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 1524,
+      "outcome": "complete",
+      "inputTokens": 386,
+      "outputTokens": 43,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 20
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2310,
+      "outcome": "complete",
+      "inputTokens": 367,
+      "outputTokens": 56,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 33
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2472,
+      "outcome": "complete",
+      "inputTokens": 374,
+      "outputTokens": 106,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 8
+    }
+  ],
+  "limitations": "Three targeted aggregate-review regressions, not a general accuracy estimate."
+}
