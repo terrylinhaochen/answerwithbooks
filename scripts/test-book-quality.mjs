@@ -80,3 +80,14 @@ test('review notices distinguish legacy and partially checked notes; previous ve
  for(const version of [2,3])assert.equal(previousReviewPath({id:'book',artifacts:artifacts({previousRevisionPath:`owner/book/before-fidelity-v${version}.json`})},'owner'),`owner/book/before-fidelity-v${version}.json`);
  for(const path of ['stranger/book/before-fidelity-v3.json','owner/other/before-fidelity-v3.json','owner/book/../../secret','owner/book/before-fidelity-v4.json'])assert.equal(previousReviewPath({id:'book',artifacts:artifacts({previousRevisionPath:path})},'owner'),null);
 });
+
+test('failed claims survive as targeted repair feedback without accepting the draft',async()=>{
+ let failure;
+ try{await distillSection(chunk,0,async(_,input,options)=>options.kind==='review'?{supported:false,issues:['Do not prescribe lifetime roles.'],checks:[]}:draft);}catch(error){failure=error;}
+ assert.equal(failure.sectionIndex,0);assert.deepEqual(failure.feedback.draft,draft);
+ const repaired=await distillSection(chunk,0,async(_,input,options)=>{
+  if(options.kind==='review')return supported(input);
+  const data=JSON.parse(input);assert.deepEqual(data.previousDraft,draft);assert.match(data.reviewFindings.issues[0],/lifetime/);assert.equal(data.source,chunk.text);return draft;
+ },undefined,failure.feedback);
+ assert.equal(repaired.note.sourceReview.claimCount,2);
+});

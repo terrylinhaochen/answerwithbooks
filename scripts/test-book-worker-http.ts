@@ -10,12 +10,12 @@ Deno.env.set('BOOK_QUEUE_RUNNER_SECRET','synthetic-queue-secret');
 let handler:(req:Request)=>Promise<Response>;
 // Deno.serve normally opens a listener. Capture the actual handler instead.
 Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
-const jobs:any[]=[];const originals=new Map<string,Uint8Array>();const extractedFiles=new Map<string,Uint8Array>();
+const usage:any[]=[];const jobs:any[]=[];const originals=new Map<string,Uint8Array>();const extractedFiles=new Map<string,Uint8Array>();
 let modelCalls=0,wakes=0,failProvider=false,holdProvider:(()=>Promise<void>)|null=null;
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
 function match(job:any,params:URLSearchParams){
  const lease=params.get('or');if(lease?.includes('lease_until.lt.')&&job.lease_until&&Date.parse(job.lease_until)>=Date.parse(lease.split('lease_until.lt.')[1].replace(/\)$/,'')))return false;
- for(const key of ['id','user_id','source_sha','updated_at','lease_token','run_state']){
+ for(const key of ['id','user_id','source_sha','updated_at','lease_token','cover_lease_token','run_state']){
   const value=params.get(key);if(!value)continue;
   if(value.startsWith('eq.')&&String(job[key])!==value.slice(3))return false;
   if(value.startsWith('neq.')&&String(job[key])===value.slice(4))return false;
@@ -44,6 +44,10 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
  if(url.pathname.includes('/rpc/')){
   const fn=url.pathname.split('/').at(-1);
   if(fn==='wake_book_processing'){wakes++;return json(null);}
+  if(fn==='claim_book_cover'){
+   const job=jobs.find(job=>job.status==='ready'&&job.cover_status==='pending'&&!job.cover_lease_token&&(!job.cover_next_attempt_at||Date.parse(job.cover_next_attempt_at)<=Date.now()));
+   if(!job)return json(null);job.cover_lease_token=crypto.randomUUID();job.cover_attempts=(job.cover_attempts||0)+1;return json(job);
+  }
   if(fn==='create_book_processing_job'){
    let job=jobs.find(job=>job.user_id===body.p_user&&job.source_sha===body.p_sha);
    if(!job){job={id:crypto.randomUUID(),user_id:body.p_user,source_name:body.p_name,source_sha:body.p_sha,source_text:body.p_text,title:body.p_title,author:'Unknown author',chunks:body.p_chunks,notes:[],cursor:0,overview_notes:[],status:'uploaded',run_state:'manual',options:{mode:'full',depth:'study',purpose:'apply'},attempts:0,lease_token:null,lease_until:null,updated_at:new Date().toISOString()};jobs.push(job);}return json(job);
@@ -59,6 +63,7 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
   const expected=Array.from(new Uint8Array(ownerHash)).map(n=>n.toString(16).padStart(2,'0')).join('');
   return url.searchParams.get('token_hash')==='eq.'+expected?json({user_id:owner}):json({code:'PGRST116',details:'The result contains 0 rows'},406);
  }
+ if(url.pathname==='/rest/v1/book_model_usage'){if(method==='POST'){usage.push(body);return json(null,201);}return json(usage.filter(row=>url.searchParams.get('job_id')==='eq.'+row.job_id&&url.searchParams.get('user_id')==='eq.'+row.user_id));}
  if(url.pathname==='/rest/v1/book_processing_jobs'){
   const selected=jobs.filter(job=>match(job,url.searchParams));
   if(method==='PATCH')for(const job of selected)Object.assign(job,body);
@@ -101,7 +106,11 @@ const drain=()=>call({action:'drain'},'synthetic-queue-secret');
 for(let i=0;i<3;i++){const result=await drain();assert.equal(result.status,200,JSON.stringify(result.body));assert.equal(result.body.job,undefined,'runner response must not expose book contents');}
 const analyzed=(await call({action:'status',id})).body.job;assert.equal(analyzed.status,'analyzed');assert.equal(analyzed.artifacts,undefined);assert.equal(analyzed.analysis.sections.length,1);assert.equal(modelCalls,2);
 const analysis=(await call({action:'analysis-export',id})).body;assert.equal(analysis.files['source.txt'],text);
-await call({action:'generate',id});await drain();assert.equal(jobs[0].status,'cover');assert.equal(modelCalls,4,'generate reuses saved section notes');await drain();assert.equal(jobs[0].status,'ready');assert.equal(jobs[0].run_state,'complete');assert.equal(modelCalls,5);
+await call({action:'generate',id});await drain();assert.equal(jobs[0].status,'ready');assert.equal(jobs[0].cover_status,'pending');assert.equal(modelCalls,4,'generate reuses saved section notes');failProvider=true;await drain();assert.equal(jobs[0].status,'ready');assert.equal(jobs[0].run_state,'complete');assert.equal(jobs[0].cover_status,'pending');
+assert.equal((await call({action:'export',id})).status,200,'cover failure does not block exports');
+assert.equal((await call({action:'usage',id},'stranger-token')).status,404);
+assert.equal((await call({action:'usage',id})).body.receipt.calls,5);
+failProvider=false;await call({action:'retry-cover',id});await drain();assert.equal(jobs[0].cover_status,'ready');assert.equal(modelCalls,6);
 // Cached books are usable even during a provider outage. Cache lookup returns
 // metadata only, requires the owner, and must not mutate state or start work.
 const beforeReuse=JSON.stringify(jobs),reuseModels=modelCalls,reuseWakes=wakes;

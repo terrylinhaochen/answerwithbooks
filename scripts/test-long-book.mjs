@@ -24,7 +24,7 @@ test('overview groups have bounded size, validate chapter membership, and requir
  const groups=[await summarizeBookGroup(notes.slice(0,12),model),await summarizeBookGroup(notes.slice(12),model)];assert.deepEqual(synthesisEvidence(notes,groups),groups);
  assert.throws(()=>synthesisEvidence([...notes].reverse(),groups),/another source revision/);
  await assert.rejects(summarizeBookGroup(notes,model),/Invalid/);
- await assert.rejects(summarizeBookGroup(notes.slice(0,12),async()=>({summary:'Unsupported',terms:[{term:'Trial',definition:'Test',chapterIds:['ch99']}]})),/unsupported references/);
+ await assert.rejects(summarizeBookGroup(notes.slice(0,12),async()=>({summary:'Unsupported',terms:[{term:'Trial',definition:'Test',chapterIds:['ch99']}]})),error=>error.generationFeedback?.review.issues[0].includes('chapter IDs'));
  await assert.rejects(summarizeBookGroup(notes.slice(0,12),async prompt=>prompt.startsWith('Check generated')?{supported:false,issues:['Meaning changed']}:{summary:'Discard all uncertain actions.',terms:[]}),/source check/);
- await assert.rejects(summarizeBookGroup(notes.slice(0,12),async()=>({summary:'A'.repeat(1801),terms:[]})),/bounds/);
+ await assert.rejects(summarizeBookGroup(notes.slice(0,12),async()=>({summary:'A'.repeat(1801),terms:[]})),error=>error.generationFeedback?.review.issues[0].includes('bounds'));
 });

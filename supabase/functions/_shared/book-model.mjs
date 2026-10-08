@@ -49,7 +49,7 @@ export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_me
     } finally {
       metric.elapsedMs = Math.max(0, now() - started);
       // Telemetry failure must not consume another paid generation by failing the job.
-      try {onUsage(metric);} catch { /* The worker owns telemetry delivery. */ }
+      try {await onUsage(metric);} catch { /* The worker owns telemetry delivery. */ }
     }
   };
 }
