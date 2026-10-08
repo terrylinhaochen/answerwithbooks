@@ -20,8 +20,8 @@ test('handoff contains usable context and both task modes with no installation p
 test('detected headings preserve source coverage and cannot invent titles',()=>{
  const source='Front matter\nChapter 1: Trial\nChoose a safe test.\nChapter 2: Review\nInspect results.';
  const result=splitSource(source,[{line:2,title:'Chapter 1: Trial'},{line:4,title:'Chapter 2: Review'},{line:5,title:'Fabricated'}]);
- assert.deepEqual(result.chunks.map(c=>[c.start,c.end,c.title]),[[1,1,''],[2,3,'Chapter 1: Trial'],[4,5,'Chapter 2: Review']]);
- assert.equal(result.text,source);assert.equal(validateSection({summary:'Review',sourceRefs:[{startLine:4,endLine:5}],ideas:[]},result.chunks[2],2).title,'Chapter 2: Review');
+ assert.deepEqual(result.chunks.map(c=>[c.start,c.end,c.title]),[[1,3,'Chapter 1: Trial'],[4,5,'Chapter 2: Review']]);
+ assert.equal(result.text,source);assert.equal(validateSection({summary:'Review',sourceRefs:[{startLine:4,endLine:5}],ideas:[]},result.chunks[1],1).title,'Chapter 2: Review');
 });
 test('server sanitizer agrees with original Python for hidden characters and preserves ordinary Unicode',async()=>{
  const {sanitizeSource}=await import('../supabase/functions/_shared/upstream-sanitize.mjs');
@@ -52,7 +52,7 @@ test('repair advances separately and replaces artifacts only after checked synth
  const original=structuredClone(job);
  const section={summary:'Record accountable actions.',sourceRefs:refs,ideas:[{name:'Action record',explanation:'Record owner and date.',whenToUse:'After agreeing an action.',steps:['Assign an owner.','Agree a deadline.'],limits:'This is a record, not a performance measure.',sourceRefs:refs}]};
  const book={oneLiner:'Actions with owners and dates.',readIf:'You record meeting actions.',thesis:'Commitments require ownership and dates.',tags:['meetings'],year:null,glossary:[]};
- let calls=0;const modelJson=async prompt=>{calls++;return prompt.startsWith('Check generated')?{supported:true,issues:[]}:prompt.startsWith('Synthesize')?book:section;};
+ let calls=0;const modelJson=async (prompt,input)=>{calls++;return prompt.startsWith('Check generated')?{supported:true,issues:[],checks:(JSON.parse(input).claims||[]).map(claim=>({id:claim.id,supported:true,reason:'Supported by the cited text.'}))}:prompt.startsWith('Synthesize')?book:section;};
  const first=await advanceRepair({job,state:null,modelJson,hash,previousRevisionPath:'owner/job/original.json'});assert.equal(first.patch,null);assert.equal(first.state.cursor,1);assert.deepEqual(job,original);
  const final=await advanceRepair({job,state:first.state,modelJson,hash,previousRevisionPath:'owner/job/original.json'});assert.match(final.patch.artifacts['skill/SKILL.md'],/name: meeting-manual/);assert.equal(isReviewed({artifacts:final.patch.artifacts}),true);assert.equal(JSON.parse(final.patch.artifacts['quality-review.json']).previousRevisionPath,'owner/job/original.json');assert.equal(calls,4);assert.deepEqual(job,original);
  const deniedModel=async prompt=>prompt.startsWith('Check generated')?{supported:false,issues:['Unsupported action']}:section;

@@ -1,7 +1,8 @@
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from './book-overview.mjs';
 import {distillSection,compileDistillation} from './book-distillation.mjs';
+import {hasCurrentSourceReview} from './book-review-status.mjs';
 const check=result=>{if(result.error)throw new Error('Could not save repair progress. Original book preserved.');return result.data;};
-export function isReviewed(job){try{return JSON.parse(job.artifacts?.['quality-review.json']||'{}').version===2;}catch{return false;}}
+export function isReviewed(job){return hasCurrentSourceReview(job.artifacts);}
 export async function advanceRepair({job,state,modelJson,hash,previousRevisionPath}) {
  const originalHash=await hash(new TextEncoder().encode(JSON.stringify(job.artifacts)));
  if(state&&(state.originalHash!==originalHash||state.sourceSha!==job.source_sha))throw new Error('The source revision changed; original book preserved.');
@@ -24,7 +25,7 @@ export async function repairBook({db,job,modelJson,hash}) {
  const token=crypto.randomUUID(),now=new Date().toISOString();
  const claim=check(await db.from('book_processing_jobs').update({lease_token:token,lease_until:new Date(Date.now()+140000).toISOString()}).eq('id',job.id).eq('updated_at',job.updated_at).or(`lease_until.is.null,lease_until.lt.${now}`).select('id'));
  if(!claim?.length)return {repaired:false,busy:true};
- const storage=db.storage.from('private-books'),prefix=`${job.user_id}/${job.id}`,snapshotPath=`${prefix}/before-fidelity-v2.json`,progressPath=`${prefix}/fidelity-v2-progress.json`;
+ const storage=db.storage.from('private-books'),prefix=`${job.user_id}/${job.id}`,snapshotPath=`${prefix}/before-fidelity-v3.json`,progressPath=`${prefix}/fidelity-v3-progress.json`;
  const read=async path=>{const name=path.slice(prefix.length+1);const files=check(await storage.list(prefix,{search:name,limit:1000}));if(!files.some(file=>file.name===name))return null;const file=check(await storage.download(path));return JSON.parse(await file.text());};
  const save=async(path,value,upsert)=>check(await storage.upload(path,new TextEncoder().encode(JSON.stringify(value)),{contentType:'application/octet-stream',upsert}));
  try {

@@ -14,6 +14,11 @@ export function splitSource(text, headings = []) {
   part.push(`${i+1}: ${lines[i]}`);size+=lines[i].length+12;
  }
  if(part.length) chunks.push({start,end:lines.length,text:part.join('\n'),title});
+ // A short title/provenance preface must not become an isolated AI chapter.
+ // Keep every citation line and attach it to the first substantive section.
+ if(chunks.length>1 && !chunks[0].title && chunks[0].text.length<2000 && chunks[0].text.length+chunks[1].text.length+1<=24000){
+  const prefix=chunks.shift();chunks[0]={...chunks[0],start:prefix.start,text:prefix.text+'\n'+chunks[0].text};
+ }
  // Dense headings must not turn a readable book into thousands of tiny jobs.
  // Fall back to size-bounded sections, retaining every line and its citation position.
  if(chunks.length>limits.maxProcessingSections){if(headings.length)chunks=splitSource(text,[]).chunks;else throw new Error('This source exceeds the current processing capacity.');}
@@ -30,6 +35,7 @@ export function validateSection(data,chunk,index) {
  const refs=items=>Array.isArray(items)&&items.length>0&&items.every(r=>Number.isInteger(r.startLine)&&Number.isInteger(r.endLine)&&r.startLine>=chunk.start&&r.endLine<=chunk.end&&r.endLine>=r.startLine);
  if(!refs(data.sourceRefs)) throw new Error('The section references did not match its source.');
  for(const idea of data.ideas) if(!['name','explanation','whenToUse','limits'].every(k=>nonempty(idea[k]))||!Array.isArray(idea.steps)||!idea.steps.length||!idea.steps.every(nonempty)||!refs(idea.sourceRefs)||(idea.decisionRule!=null&&!nonempty(idea.decisionRule))) throw new Error('The generated idea lacked grounded evidence or application steps.');
+ for(const idea of data.ideas) if(idea.applicationBasis!=null&&!['source-instruction','derived-application'].includes(idea.applicationBasis))throw new Error('The generated application basis was invalid.');
  const extras={};
  for(const [key,fields] of [['antiPatterns',['name','why','instead']],['workedExamples',['title','scenario','application']]]){
   const values=data[key]??[];

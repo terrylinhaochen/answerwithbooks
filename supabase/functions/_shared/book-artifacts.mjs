@@ -37,6 +37,7 @@ export function validateDistillation(job, data) {
     for (const idea of chapter.ideas) {
       for (const field of ['name', 'explanation', 'whenToUse', 'limits']) nonempty(idea[field], `idea.${field}`);
       if (idea.decisionRule != null) nonempty(idea.decisionRule, 'idea.decisionRule');
+      if (idea.applicationBasis != null && !['source-instruction','derived-application'].includes(idea.applicationBasis)) throw new Error('Invalid application basis.');
       if (!Array.isArray(idea.steps) || !idea.steps.length) throw new Error('An idea needs actionable steps.');
       idea.steps.forEach(step => nonempty(step, 'Idea step')); validateRefs(idea.sourceRefs); ideas++;
     }
@@ -56,7 +57,8 @@ const heading = cleanHeading;
 export function skillName(title, fallback='source') { return title.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,63).replace(/-$/,'') || `source-${fallback.slice(0,12)}`; }
 const safeLinkText = value => heading(value).replace(/[\[\]\\]/g, '');
 const sourceNote = (job, data) => `Source: ${heading(job.book.title)} — ${heading(job.book.author)}. Source SHA-256: \`${job.source.sha256}\`. Extraction SHA-256: \`${job.source.textSha256}\`.\n\nCoverage: ${data.coverage.scope}${data.coverage.gaps.length ? `; gaps: ${data.coverage.gaps.map(heading).join('; ')}` : ''}. S1 references use 1-based line numbers in the bundled skill/source.txt. Section IDs are extraction units, not original chapter numbers. Content fidelity and behavioral quality still require review.\n`;
-const ideaText = idea => `### ${heading(idea.name)}\n\n${paragraph(idea.explanation)}\n\n**Use when:** ${paragraph(idea.whenToUse)}\n\n${idea.steps.map((step, i) => `${i + 1}. ${paragraph(step)}`).join('\n')}\n\n**Limits:** ${paragraph(idea.limits)}\n\nSource: ${refs(idea.sourceRefs)}.\n`;
+const applicationLabel = idea => idea.applicationBasis === 'source-instruction' ? 'Source-described method' : idea.applicationBasis === 'derived-application' ? 'Suggested application (inference)' : 'Application guidance (basis not recorded)';
+const ideaText = idea => `### ${heading(idea.name)}\n\n${paragraph(idea.explanation)}\n\n**Use when:** ${paragraph(idea.whenToUse)}\n\n**${applicationLabel(idea)}**\n\n${idea.steps.map((step, i) => `${i + 1}. ${paragraph(step)}`).join('\n')}\n\n**Limits:** ${paragraph(idea.limits)}\n\nSource: ${refs(idea.sourceRefs)}.\n`;
 
 export function renderBookArtifacts(job, data) {
   validateDistillation(job, data);
@@ -81,7 +83,7 @@ export function renderBookArtifacts(job, data) {
   files['skill/chapters/source-map.md']='# Source chapter map\n\nDetected chapter labels are provisional. Processing sections may split one chapter or span multiple headings; they are not original chapter numbers.\n\n'+(chapters.size?[...chapters.values()].map(ch=>`- **${safeLinkText(ch.title)}** (S1:L${ch.startLine}–L${ch.endLine}, ${ch.method}): ${ch.sections.map(id=>`[${id}](${id}.md)`).join(', ')}`).join('\n'):'No reliable original chapter headings were detected. Use the processing section index and cited source lines.')+'\n';
   files['skill/SKILL.md']+='\n[Map original chapter labels to processing sections](chapters/source-map.md).\n';
   files['skill/patterns.md'] = `# Patterns\n\n${ideas.map(({ chapter, idea }) => `${ideaText(idea)}\n[Chapter context](chapters/${chapter.id}.md)\n`).join('\n')}`;
-  files['skill/cheatsheet.md'] = `# Decision cheatsheet\n\n${ideas.map(({ chapter, idea }) => `## ${heading(idea.name)}\n\n${idea.decisionRule ? 'Decision rule: '+paragraph(idea.decisionRule)+'\n\n' : ''}When: ${paragraph(idea.whenToUse)}\n\nNext move: ${paragraph(idea.steps[0])}\n\nBoundary: ${paragraph(idea.limits)}\n\n[Chapter context](chapters/${chapter.id}.md) · ${refs(idea.sourceRefs)}\n`).join('\n')}`;
+  files['skill/cheatsheet.md'] = `# Decision cheatsheet\n\n${ideas.map(({ chapter, idea }) => `## ${heading(idea.name)}\n\n${idea.decisionRule ? 'Decision rule: '+paragraph(idea.decisionRule)+'\n\n' : ''}When: ${paragraph(idea.whenToUse)}\n\nApplication basis: ${applicationLabel(idea)}\n\nNext move: ${paragraph(idea.steps[0])}\n\nBoundary: ${paragraph(idea.limits)}\n\n[Chapter context](chapters/${chapter.id}.md) · ${refs(idea.sourceRefs)}\n`).join('\n')}`;
   files['skill/glossary.md'] = `# Glossary\n\n${data.glossary.length ? [...data.glossary].sort((a,b) => a.term.localeCompare(b.term)).map(term => `- **${heading(term.term)}** — ${paragraph(term.definition)} (${term.chapterIds.map(id => `[${id}](chapters/${id}.md)`).join(', ')})`).join('\n') : 'No specialist terms were identified in this distillation.'}\n`;
   const topics=new Map();
   for(const {chapter,idea} of ideas){const name=heading(idea.name);if(!topics.has(name))topics.set(name,new Set());topics.get(name).add(chapter.id);}

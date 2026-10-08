@@ -1,3 +1,6 @@
+import {usageReceipt} from '../_shared/book-usage.mjs';
+import {distillSectionBatch,sectionConcurrency} from '../_shared/book-parallel.mjs';
+import {createBookModelClient} from '../_shared/book-model.mjs';
 import {bookUser} from '../_shared/book-cli-auth.mjs';
 import {reusableBook,cachedBookSummary} from '../_shared/book-cache.mjs';
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
@@ -5,6 +8,7 @@ import {scanSkill} from '../_shared/book-skill-review.mjs';
 import {processingOptions,retryPatch} from '../_shared/book-options.mjs';
 import {distillSection,compileDistillation} from '../_shared/book-distillation.mjs';
 import {repairBook} from '../_shared/book-repair.mjs';
+import {previousReviewPath} from '../_shared/book-review-status.mjs';
 import {verifyOperator} from '../_shared/operator-auth.mjs';
 import {exportBookFiles} from '../_shared/book-export.mjs';
 import {sanitizeSource} from '../_shared/upstream-sanitize.mjs';
@@ -18,47 +22,72 @@ const db=createClient(url,serviceKey,{auth:{persistSession:false}});
 const providerKey=()=>Deno.env.get('OPENAI_API_KEY');
 const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','https://chenterry.com','http://localhost:4321','http://127.0.0.1:4321']);
 const hash=async(bytes:BufferSource)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
-function publicJob(job:any) { const {source_text,chunks,notes,overview_notes=[],lease_token,...rest}=job;return {...rest,total_sections:chunks.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
+function publicJob(job:any) { const {source_text,chunks,notes,section_feedback,generation_feedback,overview_notes=[],lease_token,cover_lease_token,...rest}=job;return {...rest,total_sections:chunks.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
 function requireOk(result:any) { if(result.error) throw new Error('Could not save processing progress. Please retry.');return result.data; }
-async function modelJson(system:string,input:string) {
- const response=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{Authorization:`Bearer ${providerKey()}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_PROCESSING_MODEL')||'gpt-4.1-mini',messages:[{role:'system',content:system},{role:'user',content:input}],response_format:{type:'json_object'},max_tokens:6000}),signal:AbortSignal.timeout(60000)});
- if(!response.ok) throw new Error(response.status===429?'The generation provider is busy or out of quota. Please retry later.':'The generation provider could not complete this section. Please retry.');
- const body=await response.json();if(body.choices?.[0]?.finish_reason!=='stop') throw new Error('The generated section was incomplete. Please retry.');
- return JSON.parse(body.choices[0].message.content);
-}
+const modelFor=(job:any)=>createBookModelClient({getEnv:(name:string)=>Deno.env.get(name),onUsage:async(metric:unknown)=>{const result=await db.from('book_model_usage').insert({job_id:job.id,user_id:job.user_id,section:job.cursor,phase:job.status,usage:metric});if(result.error)console.error('book_usage_receipt_failed',job.id);}});
 async function step(job:any,token:string) {
- const patch:any={error:null,attempts:0,lease_until:null,lease_token:null,updated_at:new Date().toISOString()};
+ const modelJson=modelFor(job);
+ const patch:any={error:null,attempts:0,lease_until:null,lease_token:null,updated_at:new Date().toISOString(),generation_feedback:null};
  if(job.status==='uploaded') {
   const source=requireOk(await db.storage.from('private-books').download(`${job.user_id}/${job.id}/source`));
   if(source.size>uploadLimits.maxFileBytes||await hash(await source.arrayBuffer())!==job.source_sha) throw new Error('The source upload is incomplete or changed. Upload the same file again.');
   patch.status='processing';
  } else if(job.cursor<job.chunks.length) {
-  const chunk=job.chunks[job.cursor];
-  const {note,title,author}=await distillSection(chunk,job.cursor,modelJson,job.options);
-  patch.notes=[...job.notes,note];patch.cursor=job.cursor+1;patch.status='processing';patch.attempts=0;
-  if(job.cursor===0&&job.revision_kind!=='append') { if(typeof title==='string'&&title.trim()) patch.title=title.slice(0,200);if(typeof author==='string'&&author.trim()) patch.author=author.slice(0,200); }
+  const batch=await distillSectionBatch({chunks:job.chunks,notes:job.notes,cursor:job.cursor,
+   concurrency:sectionConcurrency(Deno.env.get('BOOK_SECTION_CONCURRENCY')||'1'),
+   distill:(chunk:any,index:number)=>distillSection(chunk,index,modelFor({...job,cursor:index}),job.options,job.section_feedback?.[index])});
+  patch.notes=batch.notes;patch.cursor=batch.cursor;patch.status='processing';patch.attempts=0;
+  patch.section_feedback={...job.section_feedback};
+  for(const note of batch.notes)delete patch.section_feedback[Number(note.id.slice(2))-1];
+  for(const error of batch.errors)if(error.feedback)patch.section_feedback[error.sectionIndex]=error.feedback;
+  if(job.revision_kind!=='append'&&!job.source_name.endsWith('.collection.zip')) { if(typeof batch.title==='string'&&batch.title.trim()) patch.title=batch.title.slice(0,200);if(typeof batch.author==='string'&&batch.author.trim()) patch.author=batch.author.slice(0,200); }
+  if(batch.errors.length) {
+   // Save paid, reviewed successes without releasing this lease or resetting retries.
+   const {lease_until,lease_token,attempts,error,...progress}=patch;
+   requireOk(await db.from('book_processing_jobs').update(progress).eq('id',job.id).eq('lease_token',token).select('id').single());
+   throw batch.errors[0];
+  }
  } else if(job.options?.mode==='analysis') {
   patch.analysis={title:job.title,author:job.author,sections:job.notes,sourceSha256:job.source_sha,createdAt:new Date().toISOString()};patch.status='analyzed';patch.run_state='complete';
  } else if((job.overview_notes||[]).length<overviewGroupCount(job.notes)) {
   const start=(job.overview_notes||[]).length*overviewGroupSize;
-  patch.overview_notes=[...(job.overview_notes||[]),await summarizeBookGroup(job.notes.slice(start,start+overviewGroupSize),modelJson)];
+  patch.overview_notes=[...(job.overview_notes||[]),await summarizeBookGroup(job.notes.slice(start,start+overviewGroupSize),modelJson,job.generation_feedback?.phase==='overview'?job.generation_feedback:null)];
  } else if(!job.artifacts) {
-  patch.artifacts=await compileDistillation(job,job.notes,modelJson,hash);patch.skill_summary=skillSummary(patch.artifacts);patch.status='cover';patch.attempts=0;
+  patch.artifacts=await compileDistillation(job,job.notes,modelJson,hash);patch.skill_summary=skillSummary(patch.artifacts);patch.status='ready';patch.run_state='complete';patch.cover_status='pending';patch.attempts=0;
  } else {
+  patch.status='ready';patch.run_state='complete';patch.cover_status=job.cover_path?'ready':'pending';
+ }
+ const saved=requireOk(await db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('lease_token',token).select().single());return publicJob(saved);
+}
+async function processCover(job:any) {
+ const started=Date.now();let metric:any={kind:'image',provider:'openai',requestedModel:Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5',outcome:'error'};
+ const patch:any={cover_lease_until:null,cover_lease_token:null};
+ try {
   const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${providerKey()}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5',prompt:`Create an original editorial book cover illustration for ${job.title} by ${job.author}. Warm ivory background, quiet ink linework and one muted color, symbolic visual metaphor, generous negative space. No text, letters, logos, or imitation of the publisher cover. Subject context: ${job.notes[0]?.summary?.slice(0,1000)||job.title}`,size:'1024x1536',quality:'low',n:1}),signal:AbortSignal.timeout(110000)});
   if(!response.ok) throw new Error('The book and skill are ready, but cover generation failed. Retry to finish the cover.');
   const result=await response.json();const b64=result.data?.[0]?.b64_json;if(!b64)throw new Error('No cover image was returned. Retry the cover.');
   const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const coverPath=`${job.user_id}/${job.id}/cover.png`;
   requireOk(await db.storage.from('private-books').upload(coverPath,bytes,{contentType:'image/png',upsert:true}));patch.cover_path=coverPath;patch.status='ready';patch.run_state='complete';
+  delete patch.status;delete patch.run_state;patch.cover_status='ready';patch.cover_error=null;metric.outcome='complete';
+ }catch(error){
+  patch.cover_status=job.cover_attempts>=5?'failed':'pending';
+  patch.cover_error=error instanceof Error?error.message:'Cover generation failed. Your book and skill are ready.';
+  patch.cover_next_attempt_at=new Date(Date.now()+Math.min(300,30*2**Math.max(0,job.cover_attempts-1))*1000).toISOString();
+ }finally{
+  metric.elapsedMs=Date.now()-started;
+  await db.from('book_model_usage').insert({job_id:job.id,user_id:job.user_id,phase:'cover',usage:metric});
  }
- const saved=requireOk(await db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('lease_token',token).select().single());return publicJob(saved);
+ requireOk(await db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('cover_lease_token',job.cover_lease_token));
+ await wake();return {processed:job.id,status:'ready',cover_status:patch.cover_status};
 }
+
 async function wake() { await db.rpc('wake_book_processing',{p_count:1}); }
 async function processClaim(claim:any) {
  try {return {job:await step(claim,claim.lease_token)};}
  catch(e) {
   const message=e instanceof Error?e.message:'Processing failed. Please retry.';
-  const patch=retryPatch(claim.attempts,message);
+  const patch:any=retryPatch(claim.attempts,message);
+  if((e as any)?.generationFeedback)patch.generation_feedback=(e as any).generationFeedback;
   // Preserve a pause requested while a provider call was in flight.
   requireOk(await db.from('book_processing_jobs').update(patch).eq('id',claim.id).eq('lease_token',claim.lease_token).neq('run_state','paused'));
   requireOk(await db.from('book_processing_jobs').update({...patch,run_state:'paused'}).eq('id',claim.id).eq('lease_token',claim.lease_token).eq('run_state','paused'));
@@ -83,7 +112,7 @@ Deno.serve(async req=>{
    if(!runner || await hash(new TextEncoder().encode(bearer))!==await hash(new TextEncoder().encode(runner)))return reply({error:'Not authorized'},403);
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
    const claim=requireOk(await db.rpc('claim_book_processing_job'));
-   if(!claim?.id)return reply({idle:true});
+   if(!claim?.id){const cover=requireOk(await db.rpc('claim_book_cover'));return reply(cover?.id?await processCover(cover):{idle:true});}
    const result=await processClaim(claim);return reply(result.error?{error:result.error}:{processed:claim.id,status:result.job?.status},result.error?502:200);
   }
   if(input.action==='repair') {
@@ -93,9 +122,9 @@ Deno.serve(async req=>{
    if(lookupError)throw new Error('Could not load this book.');if(!target)return reply({error:'Book not found'},404);
    if(target.status!=='ready')return reply({error:'Finish processing before repairing this book.'},409);
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
-   try {return reply(await repairBook({db,job:target,modelJson,hash}));}catch(e){return reply({error:e instanceof Error?e.message:'Repair failed; original preserved.'},502);}
+   try {return reply(await repairBook({db,job:target,modelJson:modelFor(target),hash}));}catch(e){return reply({error:e instanceof Error?e.message:'Repair failed; original preserved.'},502);}
   }
-  if(bearer.startsWith('awb_cli_')&&!['list','lookup','prepare','create','finalize','enqueue','status','export','analysis-export','pause','retry','generate','revisions','activate'].includes(input.action))return reply({error:'This action is not available to agent sessions.'},403);
+  if(bearer.startsWith('awb_cli_')&&!['list','lookup','prepare','create','finalize','enqueue','status','export','analysis-export','pause','retry','generate','revisions','activate','usage','retry-cover'].includes(input.action))return reply({error:'This action is not available to agent sessions.'},403);
   const user=await bookUser(db,bearer);if(!user)return reply({error:'Sign in to access your private books.'},401);
   if(input.action==='list') {
    const offset=Number(input.offset||0);if(!Number.isSafeInteger(offset)||offset<0)return reply({error:'Invalid offset'},400);
@@ -116,10 +145,10 @@ Deno.serve(async req=>{
   }
   if(input.action==='prepare') {
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
-   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes||!Number.isSafeInteger(input.textBytes)||input.textBytes<100||input.textBytes>uploadLimits.maxTextBytes||! /^[a-f0-9]{64}$/.test(input.sha||'')||! /^[a-f0-9]{64}$/.test(input.textSha||''))return reply({error:'Choose a supported source within the upload limits.'},400);
+   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc|collection\.zip)$/i.test(input.name)||!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes||!Number.isSafeInteger(input.textBytes)||input.textBytes<100||input.textBytes>uploadLimits.maxTextBytes||! /^[a-f0-9]{64}$/.test(input.sha||'')||! /^[a-f0-9]{64}$/.test(input.textSha||''))return reply({error:'Choose a supported source within the upload limits.'},400);
    const options=processingOptions(input.options),headings=input.extraction?.headings||[];
    if(!Array.isArray(headings)||headings.length>uploadLimits.maxSourceHeadings||headings.some((h:any)=>!h||!Number.isSafeInteger(h.line)||h.line<1||typeof h.title!=='string'||h.title.length>1000))return reply({error:'Invalid extracted source structure.'},400);
-   const result=input.parentId?await db.rpc('create_book_revision',{p_user:user.id,p_parent:input.parentId,p_name:input.name,p_sha:input.sha,p_kind:input.revisionKind,p_options:options}):await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:'Source upload pending. '.repeat(6),p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:[]});
+   const result=input.parentId?await db.rpc('create_book_revision',{p_user:user.id,p_parent:input.parentId,p_name:input.name,p_sha:input.sha,p_kind:input.revisionKind,p_options:options}):await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:'Source upload pending. '.repeat(6),p_title:input.name.replace(/(?:\.collection)?\.[^.]+$/,''),p_chunks:[]});
    if(result.error)return reply({error:input.parentId?result.error.message:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not save this source. Please retry.'},400);
    let job=result.data;
    if(reusableBook(job))return reply({job:cachedBookSummary(job),reused:true});
@@ -133,10 +162,10 @@ Deno.serve(async req=>{
   if(input.action==='create') {
    if(!providerKey())return reply({error:'Book processing is being connected. Please try again later.'},503);
    if(input.size!==undefined&&(!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes))return reply({error:'Choose a non-empty source file up to 50 MB.'},400);
-   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to six million readable characters.'},400);
+   if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc|collection\.zip)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to six million readable characters.'},400);
    const options=processingOptions(input.options);
    const source=splitSource(sanitizeSource(input.text), input.extraction?.headings||[]);
-   const result=input.parentId?await db.rpc('create_book_revision',{p_user:user.id,p_parent:input.parentId,p_name:input.name,p_sha:input.sha,p_kind:input.revisionKind,p_options:options}):await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:source.text,p_title:input.name.replace(/\.[^.]+$/,''),p_chunks:source.chunks});
+   const result=input.parentId?await db.rpc('create_book_revision',{p_user:user.id,p_parent:input.parentId,p_name:input.name,p_sha:input.sha,p_kind:input.revisionKind,p_options:options}):await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:source.text,p_title:input.name.replace(/(?:\.collection)?\.[^.]+$/,''),p_chunks:source.chunks});
    if(result.error)return reply({error:input.parentId?result.error.message:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not create this book. Please retry.'},400);
    let job=result.data;let upload=null;
    if(reusableBook(job))return reply({job:cachedBookSummary(job),reused:true});
@@ -171,6 +200,7 @@ Deno.serve(async req=>{
    }finally{await db.from('book_processing_jobs').update({lease_token:null,lease_until:null}).eq('id',job.id).eq('lease_token',token);}
   }
   if(input.action==='delete') {
+   if(job.cover_lease_until&&Date.parse(job.cover_lease_until)>Date.now())return reply({error:'Wait for the cover attempt to finish before deleting this book.'},409);
    const children=requireOk(await db.from('book_processing_jobs').select('id').eq('parent_job_id',job.id).eq('user_id',user.id).limit(1));
    if(children.length||job.parent_job_id&&job.is_current)return reply({error:'This book is part of a saved revision history. Only an unactivated revision can be removed individually.'},409);
    // Stop claims before touching storage. An active provider call must finish first.
@@ -188,9 +218,8 @@ Deno.serve(async req=>{
   }
   if(input.action==='export') {
    if(input.revision==='previous') {
-    let review;try{review=JSON.parse(job.artifacts?.['quality-review.json']||'{}');}catch{}
-    const path=`${user.id}/${job.id}/before-fidelity-v2.json`;
-    if(review?.previousRevisionPath!==path)return reply({error:'No previous revision is available.'},404);
+    const path=previousReviewPath(job,user.id);
+    if(!path)return reply({error:'No previous revision is available.'},404);
     const snapshot=requireOk(await db.storage.from('private-books').download(path));const previous=JSON.parse(await snapshot.text());
     if(previous.id!==job.id||previous.user_id!==user.id)return reply({error:'Revision does not belong to this book.'},404);
     const files=exportBookFiles(previous);files['DOWNLOAD.md']='# Previous version\n\nThis saved revision was superseded after a source-fidelity repair. It may contain unsupported claims. Use the current version for new work.\n\n'+files['DOWNLOAD.md'];
@@ -204,6 +233,16 @@ Deno.serve(async req=>{
    return reply({files:{'analysis.json':JSON.stringify(job.analysis,null,2),'source.txt':job.source_text}});
   }
   if(input.action==='status')return reply({job:publicJob(job)});
+  if(input.action==='usage') {
+   const rows:any[]=[];for(let offset=0;offset<10000;offset+=500){const page=requireOk(await db.from('book_model_usage').select('usage,created_at').eq('job_id',job.id).eq('user_id',user.id).order('created_at').order('id').range(offset,offset+499));rows.push(...page);if(page.length<500)break;}
+   return reply({job_id:job.id,receipt:usageReceipt(rows)});
+  }
+  if(input.action==='retry-cover') {
+   if(job.status!=='ready')return reply({error:'Finish the book before requesting a cover.'},409);
+   if(job.cover_path||job.cover_lease_until&&Date.parse(job.cover_lease_until)>Date.now())return reply({job:publicJob(job)});
+   const saved=requireOk(await db.from('book_processing_jobs').update({cover_status:'pending',cover_attempts:0,cover_error:null,cover_next_attempt_at:new Date().toISOString()}).eq('id',job.id).eq('updated_at',job.updated_at).select().maybeSingle());
+   await wake();return reply({job:publicJob(saved||job)});
+  }
   if(input.action==='revisions') {
    const revisions=requireOk(await db.from('book_processing_jobs').select('id,book_id,revision,parent_job_id,revision_kind,is_current,title,author,source_name,status,run_state,created_at,error').eq('user_id',user.id).eq('book_id',job.book_id||job.id).order('revision',{ascending:false}));
    return reply({book_id:job.book_id||job.id,revisions});

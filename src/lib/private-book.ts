@@ -3,6 +3,7 @@ import {zipSync,strToU8} from 'fflate';
 import {supabase} from './supabase';
 import {bookWorker,nativeBookWorker,openBookUpload} from './book-upload';
 import {bookAgentPrompt} from '../../supabase/functions/_shared/book-handoff.mjs';
+import {sourceReviewNotice,previousReviewPath} from '../../supabase/functions/_shared/book-review-status.mjs';
 import bookCliRelease from './book-cli-release.json';
 const root=document.querySelector<HTMLElement>('[data-private-book]')!;
 const find=<T extends HTMLElement>(name:string)=>root.querySelector<T>(`[data-job-${name}]`)!;
@@ -91,12 +92,12 @@ async function showVersions(job:any) {
  }catch {revisionsKey='';revisionCanActivate=false;find('activation').hidden=true;find('discard').hidden=true;updateActivationGate();find('version-message').textContent='Version history is unavailable right now. Your saved book remains available.';}
 }
 async function paint(job:any) {
- current=job;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
+ current=job;find('cover-retry').hidden=job.cover_status!=='failed';find('usage-show').hidden=!job.cursor&&!job.artifacts;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
  void showVersions(job);
  if(nativePending(job))find('progress').removeAttribute('value');
  else find<HTMLProgressElement>('progress').value=job.status==='ready'?100:job.artifacts?90:Math.round((job.cursor||0)/((job.total_sections||0)+2)*85);
  find('pause').hidden=job.run_state!=='queued'||nativePending(job);find('retry').hidden=nativePending(job)||(!['failed','paused','manual'].includes(job.run_state)&&job.source_import?.state!=='failed');
- find('status').textContent=nativePending(job)?job.source_import.state==='processing'?'Reading your original file in the background…':'Your original file is saved. Waiting for background extraction…':job.source_import?.state==='failed'?job.error||'Could not read this source. Retry background extraction.':job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?'Book, skill, and cover ready.':job.artifacts?'Book and skill ready. Creating your cover…':job.overview_total&&job.cursor===job.total_sections?`All source sections read. Assembling your book · ${job.overview_completed} of ${job.overview_total} overview groups`: `Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
+ find('status').textContent=nativePending(job)?job.source_import.state==='processing'?'Reading your original file in the background…':'Your original file is saved. Waiting for background extraction…':job.source_import?.state==='failed'?job.error||'Could not read this source. Retry background extraction.':job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?job.cover_path?'Book, skill, and cover ready.':job.cover_status==='failed'?'Book and skill ready. Cover failed; you can retry it below.':'Book and skill ready. Cover is being created separately.':job.artifacts?'Book and skill ready. Creating your cover…':job.overview_total&&job.cursor===job.total_sections?`All source sections read. Assembling your book · ${job.overview_completed} of ${job.overview_total} overview groups`: `Creating your book and skill · ${job.cursor} of ${job.total_sections} source sections read`;
  if(job.status==='ready'||job.status==='analyzed')find('resume').hidden=true;
  if(job.analysis&&!analysisRendered){
   analysisRendered=true;find('analysis').hidden=false;
@@ -110,14 +111,9 @@ async function paint(job:any) {
  find('generate').hidden=job.status!=='analyzed';
  if(job.artifacts&&!rendered) {
   rendered=true;find('content').hidden=false;
-  try {
-   const review=JSON.parse(job.artifacts['quality-review.json']||'{}');
-   if(review.version===2) {
-    find('quality').hidden=false;
-    find('quality').textContent='This version passed automated source-support checks. Review important claims against the bundled source.';
-    find('previous').hidden=!review.previousRevisionPath;
-   }
-  }catch{}
+  find('quality').hidden=false;
+  find('quality').textContent=sourceReviewNotice(job.artifacts);
+  find('previous').hidden=!previousReviewPath(job,job.user_id);
   renderMarkdown(job.artifacts['book.md']);void checkSkill(job.artifacts);
   const skill=Object.entries(job.artifacts).filter(([name])=>name.startsWith('skill/')).map(([name,value])=>`## ${name}\n${value}`).join('\n\n');
   find<HTMLTextAreaElement>('prompt').value=bookAgentPrompt({title:job.title,author:job.author,url:location.href,digest:job.artifacts['book.md'],skill});
@@ -140,7 +136,7 @@ async function run(action?:string) {
  }catch(e){find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
  finally{running=false;}
 }
-setInterval(()=>{if(!document.hidden&&(current?.run_state==='queued'||nativePending(current)))void run();},5000);
+setInterval(()=>{if(!document.hidden&&(current?.run_state==='queued'||current?.cover_status==='pending'||nativePending(current)))void run();},5000);
 find('review-accept').addEventListener('change',updateReviewGate);
 find('activate-review').addEventListener('change',updateActivationGate);
 find('add-source').addEventListener('click',()=>openBookUpload({parentId:current.id,revisionKind:'append'}));
@@ -165,6 +161,12 @@ find('activate').addEventListener('click',async()=>{
 find('install-copy').addEventListener('click',async()=>{
  try {await navigator.clipboard.writeText(find('install-command').textContent||'');find('copy-status').textContent='Install command copied. Run it in your terminal after signing in to the updated CLI.';}
  catch {find('copy-status').textContent='Copy was blocked. Select the install command above and copy it.';}
+});
+find('cover-retry').addEventListener('click',()=>void run('retry-cover'));
+find('usage-show').addEventListener('click',async()=>{
+ const box=find('usage');box.hidden=false;box.textContent='Loading saved usage…';
+ try{const {receipt}=await bookWorker({action:'usage',id});box.textContent=`Recorded generation: ${receipt.calls} calls · ${receipt.inputTokens.toLocaleString()} input tokens · ${receipt.outputTokens.toLocaleString()} output tokens · $${receipt.knownProviderEstimateUsd.toFixed(4)} known provider estimate${receipt.unpricedCalls?` · ${receipt.unpricedCalls} calls not priced`:''}. ${receipt.notice}`;}
+ catch{box.textContent='Usage is unavailable. Please retry.';}
 });
 find('pause').addEventListener('click',()=>void run('pause'));
 find('generate').addEventListener('click',()=>void run('generate'));

@@ -133,6 +133,11 @@ create function cron.schedule(name text,schedule text,command text) returns bigi
     else:raise AssertionError('Direct user activation allowed')
     assert int(sql(f"set role authenticated;set request.jwt.claim.sub='{revision_owner}';select count(*) from book_processing_jobs;reset role;").splitlines()[-2])==2
     print('PASS stable book identity, independent revisions, duplicate reuse, stale-parent guard, explicit activation and account isolation')
+    import runpy
+    runpy.run_path(str(ROOT/'scripts/test-book-completion-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})
+    if os.environ.get('BOOK_LIBRARY_DB_TEST') == '1':
+        import runpy
+        runpy.run_path(str(ROOT/'scripts/test-book-library-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})
 finally:
     if started:subprocess.run([str(BIN/'pg_ctl'),'-D',str(area/'data'),'-m','immediate','-w','stop'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     shutil.rmtree(area)

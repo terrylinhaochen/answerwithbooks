@@ -1,0 +1,750 @@
+{
+  "date": "2026-10-08",
+  "scope": "Public-domain Wealth of Nations Book I chapters 1-3, generation and source checks only; excludes extraction, upload, queue, covers, installation, and human review.",
+  "ratesUSDPerMillionTokens": {
+    "5.4-nano": {
+      "input": 0.2,
+      "cachedInput": 0.02,
+      "output": 1.25
+    },
+    "5.4-mini": {
+      "input": 0.75,
+      "cachedInput": 0.075,
+      "output": 4.5
+    },
+    "5.5": {
+      "input": 5,
+      "cachedInput": 0.5,
+      "output": 30
+    }
+  },
+  "ratesSource": "https://developers.openai.com/api/docs/pricing",
+  "costNote": "Estimates from returned usage; output includes reasoning tokens; reported cache hits discounted. Not invoices, customer charges, or full-book costs. Unknown usage remains unknown.",
+  "results": [
+    {
+      "run": "model-comparison-v4",
+      "concurrency": 3,
+      "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sections": 3,
+      "pipelineHashes": {
+        "book-model": "56e2d041dbeefcd7d005d4ab0b8813b643a2208e4983e84f943eabf83067da8d",
+        "book-parallel": "1afee4cfb9cb71d315f90453c893a637080616018ff580eec11c3f977febacd6",
+        "book-schemas": "2bbe398ff4ef42acb4fd3849d9bb9dfc7bf302f08045b9ad7a6ae89332c574b8",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "eaa615d056ce4844b294f6599ed7d663fbe60e04e7c701a30c0cccee0477e09e",
+        "book-distillation": "ed1f1ac822bc989cff914f1eeb507aca45b8f3f5ed2633caf8cecb275586fad8",
+        "book-overview": "827772daf90a33c373e74f7464173c28c6d79c530ac0812b3f463b170cf0a17c",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "profile": "5.4-nano",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-5.4-nano",
+        "BOOK_REVIEW_MODEL": "gpt-5.4-nano",
+        "BOOK_REASONING_EFFORT": "none",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-nano",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "elapsedMs": 11577,
+          "outcome": "complete",
+          "inputTokens": 3823,
+          "outputTokens": 1820,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-nano",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "elapsedMs": 14501,
+          "outcome": "complete",
+          "inputTokens": 6611,
+          "outputTokens": 2200,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-nano",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "elapsedMs": 17685,
+          "outcome": "complete",
+          "inputTokens": 4237,
+          "outputTokens": 2704,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-nano",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "elapsedMs": 6249,
+          "outcome": "complete",
+          "inputTokens": 7723,
+          "outputTokens": 997,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 235
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-nano",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "elapsedMs": 11061,
+          "outcome": "complete",
+          "inputTokens": 12787,
+          "outputTokens": 1448,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 491
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-nano",
+          "model": "gpt-5.4-nano-2026-03-17",
+          "elapsedMs": 13025,
+          "outcome": "complete",
+          "inputTokens": 8990,
+          "outputTokens": 1760,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 401
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check found unsupported or changed meaning. Retry this section; it has not been accepted.",
+      "elapsedMs": 30750.117,
+      "completedSections": 1,
+      "estimatedProviderUSD": 0.02249545
+    },
+    {
+      "run": "model-comparison-v4",
+      "concurrency": 3,
+      "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sections": 3,
+      "pipelineHashes": {
+        "book-model": "56e2d041dbeefcd7d005d4ab0b8813b643a2208e4983e84f943eabf83067da8d",
+        "book-parallel": "1afee4cfb9cb71d315f90453c893a637080616018ff580eec11c3f977febacd6",
+        "book-schemas": "2bbe398ff4ef42acb4fd3849d9bb9dfc7bf302f08045b9ad7a6ae89332c574b8",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "eaa615d056ce4844b294f6599ed7d663fbe60e04e7c701a30c0cccee0477e09e",
+        "book-distillation": "ed1f1ac822bc989cff914f1eeb507aca45b8f3f5ed2633caf8cecb275586fad8",
+        "book-overview": "827772daf90a33c373e74f7464173c28c6d79c530ac0812b3f463b170cf0a17c",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "profile": "5.4-mini",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-5.4-mini",
+        "BOOK_REVIEW_MODEL": "gpt-5.4-mini",
+        "BOOK_REASONING_EFFORT": "none",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "complete",
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 7987,
+          "outcome": "complete",
+          "inputTokens": 3823,
+          "outputTokens": 1522,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 9438,
+          "outcome": "complete",
+          "inputTokens": 4237,
+          "outputTokens": 1748,
+          "cachedInputTokens": 1280,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 9564,
+          "outcome": "complete",
+          "inputTokens": 6611,
+          "outputTokens": 1730,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4095,
+          "outcome": "complete",
+          "inputTokens": 7857,
+          "outputTokens": 805,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 170
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 3920,
+          "outcome": "complete",
+          "inputTokens": 13732,
+          "outputTokens": 782,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 149
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4382,
+          "outcome": "complete",
+          "inputTokens": 9152,
+          "outputTokens": 829,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 156
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4040,
+          "outcome": "complete",
+          "inputTokens": 5366,
+          "outputTokens": 630,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 2975,
+          "outcome": "complete",
+          "inputTokens": 5977,
+          "outputTokens": 535,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 512
+        }
+      ],
+      "sourceCheck": "model_passed_not_human_verified",
+      "humanQualityReview": "not_performed",
+      "artifactCount": 17,
+      "elapsedMs": 20869.054833,
+      "completedSections": 3,
+      "estimatedProviderUSD": 0.08031675
+    },
+    {
+      "run": "model-comparison-v4",
+      "concurrency": 3,
+      "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sections": 3,
+      "pipelineHashes": {
+        "book-model": "56e2d041dbeefcd7d005d4ab0b8813b643a2208e4983e84f943eabf83067da8d",
+        "book-parallel": "1afee4cfb9cb71d315f90453c893a637080616018ff580eec11c3f977febacd6",
+        "book-schemas": "2bbe398ff4ef42acb4fd3849d9bb9dfc7bf302f08045b9ad7a6ae89332c574b8",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "eaa615d056ce4844b294f6599ed7d663fbe60e04e7c701a30c0cccee0477e09e",
+        "book-distillation": "ed1f1ac822bc989cff914f1eeb507aca45b8f3f5ed2633caf8cecb275586fad8",
+        "book-overview": "827772daf90a33c373e74f7464173c28c6d79c530ac0812b3f463b170cf0a17c",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "profile": "5.5",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-5.5",
+        "BOOK_REVIEW_MODEL": "gpt-5.5",
+        "BOOK_REASONING_EFFORT": "none",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.5",
+          "model": "gpt-5.5-2026-04-23",
+          "elapsedMs": 27562,
+          "outcome": "complete",
+          "inputTokens": 3823,
+          "outputTokens": 1913,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.5",
+          "model": "gpt-5.5-2026-04-23",
+          "elapsedMs": 33188,
+          "outcome": "complete",
+          "inputTokens": 6611,
+          "outputTokens": 2426,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.5",
+          "model": "gpt-5.5-2026-04-23",
+          "elapsedMs": 36423,
+          "outcome": "complete",
+          "inputTokens": 4237,
+          "outputTokens": 2107,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.5",
+          "model": "gpt-5.5-2026-04-23",
+          "elapsedMs": 11196,
+          "outcome": "complete",
+          "inputTokens": 7681,
+          "outputTokens": 969,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.5",
+          "model": "gpt-5.5-2026-04-23",
+          "elapsedMs": 13696,
+          "outcome": "complete",
+          "inputTokens": 10125,
+          "outputTokens": 1092,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.5",
+          "model": "gpt-5.5-2026-04-23",
+          "elapsedMs": 18025,
+          "outcome": "complete",
+          "inputTokens": 16252,
+          "outputTokens": 1309,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 327
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check found unsupported or changed meaning. Retry this section; it has not been accepted.",
+      "elapsedMs": 51219.344084000004,
+      "completedSections": 1,
+      "estimatedProviderUSD": 0.538125
+    },
+    {
+      "run": "model-comparison-v4",
+      "concurrency": 3,
+      "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sections": 3,
+      "pipelineHashes": {
+        "book-model": "56e2d041dbeefcd7d005d4ab0b8813b643a2208e4983e84f943eabf83067da8d",
+        "book-parallel": "1afee4cfb9cb71d315f90453c893a637080616018ff580eec11c3f977febacd6",
+        "book-schemas": "2bbe398ff4ef42acb4fd3849d9bb9dfc7bf302f08045b9ad7a6ae89332c574b8",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "eaa615d056ce4844b294f6599ed7d663fbe60e04e7c701a30c0cccee0477e09e",
+        "book-distillation": "ed1f1ac822bc989cff914f1eeb507aca45b8f3f5ed2633caf8cecb275586fad8",
+        "book-overview": "827772daf90a33c373e74f7464173c28c6d79c530ac0812b3f463b170cf0a17c",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "profile": "flash-lite-2.5",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gemini-2.5-flash-lite",
+        "BOOK_REVIEW_MODEL": "gemini-2.5-flash-lite"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "google",
+          "requestedModel": "gemini-2.5-flash-lite",
+          "model": null,
+          "elapsedMs": 108,
+          "outcome": "error",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "google",
+          "requestedModel": "gemini-2.5-flash-lite",
+          "model": null,
+          "elapsedMs": 134,
+          "outcome": "error",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "google",
+          "requestedModel": "gemini-2.5-flash-lite",
+          "model": null,
+          "elapsedMs": 157,
+          "outcome": "error",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "reasoningTokens": null
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The generation provider could not complete this section (HTTP 400). Check the model configuration or retry later.",
+      "elapsedMs": 159.00170799999614,
+      "completedSections": 0,
+      "estimatedProviderUSD": null
+    },
+    {
+      "run": "model-comparison-v4",
+      "concurrency": 3,
+      "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sections": 3,
+      "pipelineHashes": {
+        "book-model": "56e2d041dbeefcd7d005d4ab0b8813b643a2208e4983e84f943eabf83067da8d",
+        "book-parallel": "1afee4cfb9cb71d315f90453c893a637080616018ff580eec11c3f977febacd6",
+        "book-schemas": "2bbe398ff4ef42acb4fd3849d9bb9dfc7bf302f08045b9ad7a6ae89332c574b8",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "eaa615d056ce4844b294f6599ed7d663fbe60e04e7c701a30c0cccee0477e09e",
+        "book-distillation": "ed1f1ac822bc989cff914f1eeb507aca45b8f3f5ed2633caf8cecb275586fad8",
+        "book-overview": "827772daf90a33c373e74f7464173c28c6d79c530ac0812b3f463b170cf0a17c",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "profile": "flash-lite",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gemini-3.5-flash-lite",
+        "BOOK_REVIEW_MODEL": "gemini-3.5-flash-lite"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "google",
+          "requestedModel": "gemini-3.5-flash-lite",
+          "model": null,
+          "elapsedMs": 158,
+          "outcome": "error",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "google",
+          "requestedModel": "gemini-3.5-flash-lite",
+          "model": null,
+          "elapsedMs": 163,
+          "outcome": "error",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "google",
+          "requestedModel": "gemini-3.5-flash-lite",
+          "model": null,
+          "elapsedMs": 212,
+          "outcome": "error",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "reasoningTokens": null
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The generation provider could not complete this section (HTTP 400). Check the model configuration or retry later.",
+      "elapsedMs": 216.2000829999888,
+      "completedSections": 0,
+      "estimatedProviderUSD": null
+    },
+    {
+      "run": "mini-repeat-c1",
+      "concurrency": 1,
+      "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sections": 3,
+      "pipelineHashes": {
+        "book-model": "56e2d041dbeefcd7d005d4ab0b8813b643a2208e4983e84f943eabf83067da8d",
+        "book-parallel": "1afee4cfb9cb71d315f90453c893a637080616018ff580eec11c3f977febacd6",
+        "book-schemas": "2bbe398ff4ef42acb4fd3849d9bb9dfc7bf302f08045b9ad7a6ae89332c574b8",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "eaa615d056ce4844b294f6599ed7d663fbe60e04e7c701a30c0cccee0477e09e",
+        "book-distillation": "ed1f1ac822bc989cff914f1eeb507aca45b8f3f5ed2633caf8cecb275586fad8",
+        "book-overview": "827772daf90a33c373e74f7464173c28c6d79c530ac0812b3f463b170cf0a17c",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "profile": "5.4-mini",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-5.4-mini",
+        "BOOK_REVIEW_MODEL": "gpt-5.4-mini",
+        "BOOK_REASONING_EFFORT": "none",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 9316,
+          "outcome": "complete",
+          "inputTokens": 6611,
+          "outputTokens": 1753,
+          "cachedInputTokens": 6400,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 5481,
+          "outcome": "complete",
+          "inputTokens": 10762,
+          "outputTokens": 923,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 283
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 9034,
+          "outcome": "complete",
+          "inputTokens": 3823,
+          "outputTokens": 1796,
+          "cachedInputTokens": 3328,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4377,
+          "outcome": "complete",
+          "inputTokens": 8873,
+          "outputTokens": 806,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 138
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 8406,
+          "outcome": "complete",
+          "inputTokens": 4237,
+          "outputTokens": 1547,
+          "cachedInputTokens": 3840,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 5145,
+          "outcome": "complete",
+          "inputTokens": 9205,
+          "outputTokens": 873,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 120
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check found unsupported or changed meaning. Retry this section; it has not been accepted.",
+      "elapsedMs": 41769.271166,
+      "completedSections": 2,
+      "estimatedProviderUSD": 0.05811585
+    },
+    {
+      "run": "mini-repeat-c3",
+      "concurrency": 3,
+      "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sections": 3,
+      "pipelineHashes": {
+        "book-model": "56e2d041dbeefcd7d005d4ab0b8813b643a2208e4983e84f943eabf83067da8d",
+        "book-parallel": "1afee4cfb9cb71d315f90453c893a637080616018ff580eec11c3f977febacd6",
+        "book-schemas": "2bbe398ff4ef42acb4fd3849d9bb9dfc7bf302f08045b9ad7a6ae89332c574b8",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "eaa615d056ce4844b294f6599ed7d663fbe60e04e7c701a30c0cccee0477e09e",
+        "book-distillation": "ed1f1ac822bc989cff914f1eeb507aca45b8f3f5ed2633caf8cecb275586fad8",
+        "book-overview": "827772daf90a33c373e74f7464173c28c6d79c530ac0812b3f463b170cf0a17c",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "profile": "5.4-mini",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-5.4-mini",
+        "BOOK_REVIEW_MODEL": "gpt-5.4-mini",
+        "BOOK_REASONING_EFFORT": "none",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "complete",
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 8375,
+          "outcome": "complete",
+          "inputTokens": 3823,
+          "outputTokens": 1566,
+          "cachedInputTokens": 3328,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 8808,
+          "outcome": "complete",
+          "inputTokens": 4237,
+          "outputTokens": 1525,
+          "cachedInputTokens": 3840,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 9876,
+          "outcome": "complete",
+          "inputTokens": 6611,
+          "outputTokens": 1570,
+          "cachedInputTokens": 6400,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4101,
+          "outcome": "complete",
+          "inputTokens": 8425,
+          "outputTokens": 664,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 127
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4230,
+          "outcome": "complete",
+          "inputTokens": 7765,
+          "outputTokens": 789,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 210
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4752,
+          "outcome": "complete",
+          "inputTokens": 12486,
+          "outputTokens": 834,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 290
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4156,
+          "outcome": "complete",
+          "inputTokens": 5018,
+          "outputTokens": 681,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 4311,
+          "outcome": "complete",
+          "inputTokens": 5680,
+          "outputTokens": 845,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 816
+        }
+      ],
+      "sourceCheck": "model_passed_not_human_verified",
+      "humanQualityReview": "not_performed",
+      "artifactCount": 17,
+      "elapsedMs": 23115.387125,
+      "completedSections": 3,
+      "estimatedProviderUSD": 0.06950835000000001
+    }
+  ],
+  "retrievalEmbeddingFixture": {
+    "model": "text-embedding-3-small",
+    "dimensions": 512,
+    "texts": 15,
+    "elapsedMs": 763.532083,
+    "usage": {
+      "prompt_tokens": 3472,
+      "total_tokens": 3472
+    },
+    "estimatedUSD": 6.944e-05
+  }
+}

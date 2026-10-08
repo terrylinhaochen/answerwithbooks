@@ -1,0 +1,16 @@
+PASS atomic concurrent claims: 4 globally, at most 2 per owner, no double claims
+PASS expired leases recover and stale workers cannot overwrite progress
+PASS pause, backoff and five-attempt stop
+PASS account isolation and server-only queue mutations
+PASS duplicate reuse, 10-source quota, bounded wake-ups and scheduled recovery command
+PASS large sources persist beyond the previous character limit
+PASS stable book identity, independent revisions, duplicate reuse, stale-parent guard, explicit activation and account isolation
+PASS lexical retrieval, unrelated empty result, verified owner scope and service-only index/RPC
+PASS exact bounded SQL citation excerpts, invalid range exclusion and truthful truncation
+PASS current revision, paused/delete-in-progress exclusion and cross-owner hydration isolation
+PASS atomic per-account query limit without storing questions
+LIVE EMBEDDING FIXTURE [{"question": "When is there enough demand to justify dedicated specialist roles?", "expected": "ch03", "top": "ch03", "top1": true, "top3": ["ch03", "ch01", "ch02"], "recallAt3": true}, {"question": "Why does repeating one stage of production raise throughput?", "expected": "ch01", "top": "ch01", "top1": true, "top3": ["ch01", "habits", "ch03"], "recallAt3": true}, {"question": "Are occupational differences in ability mostly inborn or learned?", "expected": "ch02", "top": "ch02", "top1": true, "top3": ["ch02", "ch01", "ch03"], "recallAt3": true}, {"question": "市场规模如何限制专业化分工？", "expected": "ch03", "top": "ch01", "top1": false, "top3": ["ch01", "ch02", "ch03"], "recallAt3": true}, {"question": "How do I choose a telescope for Jupiter?", "expected": "astronomy", "top": "astronomy", "top1": true, "top3": ["astronomy", "gardening", "music"], "recallAt3": true}, {"question": "What made the difference between a philosopher and a porter?", "expected": "ch02", "top": "ch02", "top1": true, "top3": ["ch02", "ch03", "ch01"], "recallAt3": true}]
+PASS real model candidate recall at 3; top-1 accuracy reported separately, no perfect ranking claim
+PASS actual pgvector + FTS search over 10,001 owner entries; 24 candidates; milliseconds including psql startup: [184.0, 182.3, 184.6]
+PASS bounded parallel embedding claims, one owner per batch and stale embedding rejection
+PASS deletion cascades, scheduled recovery and separately configured indexing endpoint

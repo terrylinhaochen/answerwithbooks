@@ -1,6 +1,6 @@
 {
-  "version": "0.3.0",
-  "package": "https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.3.0/answer-with-books-0.3.0.tgz",
+  "version": "0.4.0",
+  "package": "https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.4.0/answer-with-books-0.4.0.tgz",
   "commands": [
     "books",
     "ask",
