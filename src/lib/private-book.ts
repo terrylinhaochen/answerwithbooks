@@ -3,6 +3,7 @@ import {zipSync,strToU8} from 'fflate';
 import {supabase} from './supabase';
 import {bookWorker,nativeBookWorker,openBookUpload} from './book-upload';
 import {bookAgentPrompt} from '../../supabase/functions/_shared/book-handoff.mjs';
+import {sourceReviewNotice,previousReviewPath} from '../../supabase/functions/_shared/book-review-status.mjs';
 import bookCliRelease from './book-cli-release.json';
 const root=document.querySelector<HTMLElement>('[data-private-book]')!;
 const find=<T extends HTMLElement>(name:string)=>root.querySelector<T>(`[data-job-${name}]`)!;
@@ -110,14 +111,9 @@ async function paint(job:any) {
  find('generate').hidden=job.status!=='analyzed';
  if(job.artifacts&&!rendered) {
   rendered=true;find('content').hidden=false;
-  try {
-   const review=JSON.parse(job.artifacts['quality-review.json']||'{}');
-   if(review.version===2) {
-    find('quality').hidden=false;
-    find('quality').textContent='This version passed automated source-support checks. Review important claims against the bundled source.';
-    find('previous').hidden=!review.previousRevisionPath;
-   }
-  }catch{}
+  find('quality').hidden=false;
+  find('quality').textContent=sourceReviewNotice(job.artifacts);
+  find('previous').hidden=!previousReviewPath(job,job.user_id);
   renderMarkdown(job.artifacts['book.md']);void checkSkill(job.artifacts);
   const skill=Object.entries(job.artifacts).filter(([name])=>name.startsWith('skill/')).map(([name,value])=>`## ${name}\n${value}`).join('\n\n');
   find<HTMLTextAreaElement>('prompt').value=bookAgentPrompt({title:job.title,author:job.author,url:location.href,digest:job.artifacts['book.md'],skill});

@@ -1,0 +1,477 @@
+{
+  "dateUtc": "2026-10-08",
+  "source": "Project Gutenberg 3300, Book I chapters I-III",
+  "sourceTextSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+  "sourceCharacters": 39877,
+  "sourceWords": 6931,
+  "originalWebMain": "a68ba957e9bd18d82601946fef6156d0987bdaee",
+  "productionChanged": false,
+  "coverIncluded": false,
+  "independentQualityJudge": false,
+  "costBasis": "Observed provider input/output tokens multiplied by standard uncached input/output rates checked 2026-10-07. Before cache adjustments, possible cache-write premiums, covers and service fees; not an invoice or customer tariff. Failed requests with missing usage would remain unknown.",
+  "trialDifferences": {
+    "v1": "Initial strict schema, unconstrained review array count; Luna low reasoning. All rejected.",
+    "v2": "Exact claim count/IDs and stronger application/citation instructions; Luna none for generation, low for review. Mini completed but failed manual review.",
+    "v3": "Added excerpt-scope, conditional-number and historical-attribution instructions. Sol low for generation and review. Section coordinate bounds were added after this live run; the recorded output already satisfies those bounds."
+  },
+  "results": [
+    {
+      "trial": "v1",
+      "profile": "baseline",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-4.1-mini",
+        "BOOK_REVIEW_MODEL": "gpt-4.1-mini"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 9812,
+          "outcome": "complete",
+          "inputTokens": 6479,
+          "outputTokens": 1036,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 3589,
+          "outcome": "complete",
+          "inputTokens": 13143,
+          "outputTokens": 386,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 6635,
+          "outcome": "complete",
+          "inputTokens": 3691,
+          "outputTokens": 852,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 2320,
+          "outcome": "complete",
+          "inputTokens": 5826,
+          "outputTokens": 167,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check did not verify every cited claim. Retry this section; it has not been accepted.",
+      "elapsedMs": 22363.330042,
+      "completedSections": 1,
+      "inputTokens": 29139,
+      "outputTokens": 2441,
+      "estimatedStandardTextCostUsd": 0.015561200000000002,
+      "manualAudit": "not accepted; automated gate rejected draft"
+    },
+    {
+      "trial": "v1",
+      "profile": "fast",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-6-luna",
+        "BOOK_REVIEW_MODEL": "gpt-6-luna",
+        "BOOK_REASONING_EFFORT": "low",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6-luna",
+          "model": "gpt-6-luna",
+          "elapsedMs": 17774,
+          "outcome": "complete",
+          "inputTokens": 6477,
+          "outputTokens": 1966,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 98
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6-luna",
+          "model": "gpt-6-luna",
+          "elapsedMs": 11202,
+          "outcome": "complete",
+          "inputTokens": 13982,
+          "outputTokens": 987,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 447
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check found unsupported or changed meaning. Retry this section; it has not been accepted.",
+      "elapsedMs": 28981.08425,
+      "completedSections": 0,
+      "inputTokens": 20459,
+      "outputTokens": 2953,
+      "estimatedStandardTextCostUsd": 0.0035224,
+      "manualAudit": "not accepted; automated gate rejected draft"
+    },
+    {
+      "trial": "v1",
+      "profile": "strong-review",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-6-luna",
+        "BOOK_REVIEW_MODEL": "gpt-6.1-sol",
+        "BOOK_REASONING_EFFORT": "low",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6-luna",
+          "model": "gpt-6-luna",
+          "elapsedMs": 16928,
+          "outcome": "complete",
+          "inputTokens": 6477,
+          "outputTokens": 1901,
+          "cachedInputTokens": 6474,
+          "reasoningTokens": 80
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 15037,
+          "outcome": "complete",
+          "inputTokens": 13617,
+          "outputTokens": 746,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 50
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check found unsupported or changed meaning. Retry this section; it has not been accepted.",
+      "elapsedMs": 31968.952749999997,
+      "completedSections": 0,
+      "inputTokens": 20094,
+      "outputTokens": 2647,
+      "estimatedStandardTextCostUsd": 0.036292200000000004,
+      "manualAudit": "not accepted; automated gate rejected draft"
+    },
+    {
+      "trial": "v2",
+      "profile": "baseline",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-4.1-mini",
+        "BOOK_REVIEW_MODEL": "gpt-4.1-mini"
+      },
+      "status": "complete",
+      "metrics": [
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 10568,
+          "outcome": "complete",
+          "inputTokens": 6547,
+          "outputTokens": 1217,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 3190,
+          "outcome": "complete",
+          "inputTokens": 12861,
+          "outputTokens": 381,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 8982,
+          "outcome": "complete",
+          "inputTokens": 3759,
+          "outputTokens": 1113,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 4980,
+          "outcome": "complete",
+          "inputTokens": 6560,
+          "outputTokens": 458,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 7927,
+          "outcome": "complete",
+          "inputTokens": 4173,
+          "outputTokens": 1140,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 2798,
+          "outcome": "complete",
+          "inputTokens": 7023,
+          "outputTokens": 379,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 7368,
+          "outcome": "complete",
+          "inputTokens": 3867,
+          "outputTokens": 761,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "elapsedMs": 526,
+          "outcome": "complete",
+          "inputTokens": 4618,
+          "outputTokens": 8,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        }
+      ],
+      "sourceCheck": "model_passed_not_human_verified",
+      "humanQualityReview": "not_performed",
+      "artifactCount": 17,
+      "elapsedMs": 46380.155584,
+      "completedSections": 3,
+      "inputTokens": 49408,
+      "outputTokens": 5457,
+      "estimatedStandardTextCostUsd": 0.028494400000000003,
+      "manualAudit": "failed: source-instruction labels, attribution and scope"
+    },
+    {
+      "trial": "v2",
+      "profile": "fast",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-6-luna",
+        "BOOK_REVIEW_MODEL": "gpt-6-luna",
+        "BOOK_REASONING_EFFORT": "none",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6-luna",
+          "model": "gpt-6-luna",
+          "elapsedMs": 18904,
+          "outcome": "complete",
+          "inputTokens": 6545,
+          "outputTokens": 2186,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6-luna",
+          "model": "gpt-6-luna",
+          "elapsedMs": 11230,
+          "outcome": "complete",
+          "inputTokens": 14575,
+          "outputTokens": 913,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 310
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check found unsupported or changed meaning. Retry this section; it has not been accepted.",
+      "elapsedMs": 30136.437042000005,
+      "completedSections": 0,
+      "inputTokens": 21120,
+      "outputTokens": 3099,
+      "estimatedStandardTextCostUsd": 0.0036615,
+      "manualAudit": "not accepted; automated gate rejected draft"
+    },
+    {
+      "trial": "v2",
+      "profile": "strong-review",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-6-luna",
+        "BOOK_REVIEW_MODEL": "gpt-6.1-sol",
+        "BOOK_REASONING_EFFORT": "none",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "failed",
+      "metrics": [
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6-luna",
+          "model": "gpt-6-luna",
+          "elapsedMs": 18479,
+          "outcome": "complete",
+          "inputTokens": 6545,
+          "outputTokens": 2158,
+          "cachedInputTokens": 6542,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 17297,
+          "outcome": "complete",
+          "inputTokens": 14592,
+          "outputTokens": 721,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 82
+        }
+      ],
+      "sourceCheck": "not_complete",
+      "humanQualityReview": "not_performed",
+      "error": "The source check found unsupported or changed meaning. Retry this section; it has not been accepted.",
+      "elapsedMs": 35780.08320800001,
+      "completedSections": 0,
+      "inputTokens": 21137,
+      "outputTokens": 2879,
+      "estimatedStandardTextCostUsd": 0.0381275,
+      "manualAudit": "not accepted; automated gate rejected draft"
+    },
+    {
+      "trial": "v3",
+      "profile": "quality",
+      "config": {
+        "BOOK_PROCESSING_MODEL": "gpt-6.1-sol",
+        "BOOK_REVIEW_MODEL": "gpt-6.1-sol",
+        "BOOK_REASONING_EFFORT": "low",
+        "BOOK_REVIEW_REASONING_EFFORT": "low"
+      },
+      "status": "complete",
+      "metrics": [
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 36143,
+          "outcome": "complete",
+          "inputTokens": 6611,
+          "outputTokens": 1307,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 11755,
+          "outcome": "complete",
+          "inputTokens": 11461,
+          "outputTokens": 588,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 24
+        },
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 38685,
+          "outcome": "complete",
+          "inputTokens": 3823,
+          "outputTokens": 1426,
+          "cachedInputTokens": 1562,
+          "reasoningTokens": 39
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 15723,
+          "outcome": "complete",
+          "inputTokens": 6243,
+          "outputTokens": 510,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 31
+        },
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 35668,
+          "outcome": "complete",
+          "inputTokens": 4237,
+          "outputTokens": 1344,
+          "cachedInputTokens": 1562,
+          "reasoningTokens": 21
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 12448,
+          "outcome": "complete",
+          "inputTokens": 7577,
+          "outputTokens": 527,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 25
+        },
+        {
+          "kind": "generation",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 20637,
+          "outcome": "complete",
+          "inputTokens": 3650,
+          "outputTokens": 872,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "requestedModel": "gpt-6.1-sol",
+          "model": "gpt-6.1-sol",
+          "elapsedMs": 4173,
+          "outcome": "complete",
+          "inputTokens": 4346,
+          "outputTokens": 81,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 58
+        }
+      ],
+      "sourceCheck": "model_passed_not_human_verified",
+      "humanQualityReview": "not_performed",
+      "artifactCount": 16,
+      "elapsedMs": 175270.97058300002,
+      "completedSections": 3,
+      "inputTokens": 47948,
+      "outputTokens": 6655,
+      "estimatedStandardTextCostUsd": 0.162446,
+      "manualAudit": "major-claim spot check passed; not blind or exhaustive"
+    }
+  ]
+}

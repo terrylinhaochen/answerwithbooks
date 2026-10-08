@@ -1,3 +1,4 @@
+import {createBookModelClient} from '../_shared/book-model.mjs';
 import {bookUser} from '../_shared/book-cli-auth.mjs';
 import {reusableBook,cachedBookSummary} from '../_shared/book-cache.mjs';
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
@@ -5,6 +6,7 @@ import {scanSkill} from '../_shared/book-skill-review.mjs';
 import {processingOptions,retryPatch} from '../_shared/book-options.mjs';
 import {distillSection,compileDistillation} from '../_shared/book-distillation.mjs';
 import {repairBook} from '../_shared/book-repair.mjs';
+import {previousReviewPath} from '../_shared/book-review-status.mjs';
 import {verifyOperator} from '../_shared/operator-auth.mjs';
 import {exportBookFiles} from '../_shared/book-export.mjs';
 import {sanitizeSource} from '../_shared/upstream-sanitize.mjs';
@@ -20,13 +22,9 @@ const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbook
 const hash=async(bytes:BufferSource)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
 function publicJob(job:any) { const {source_text,chunks,notes,overview_notes=[],lease_token,...rest}=job;return {...rest,total_sections:chunks.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
 function requireOk(result:any) { if(result.error) throw new Error('Could not save processing progress. Please retry.');return result.data; }
-async function modelJson(system:string,input:string) {
- const response=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{Authorization:`Bearer ${providerKey()}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_PROCESSING_MODEL')||'gpt-4.1-mini',messages:[{role:'system',content:system},{role:'user',content:input}],response_format:{type:'json_object'},max_tokens:6000}),signal:AbortSignal.timeout(60000)});
- if(!response.ok) throw new Error(response.status===429?'The generation provider is busy or out of quota. Please retry later.':'The generation provider could not complete this section. Please retry.');
- const body=await response.json();if(body.choices?.[0]?.finish_reason!=='stop') throw new Error('The generated section was incomplete. Please retry.');
- return JSON.parse(body.choices[0].message.content);
-}
+const modelFor=(job:any)=>createBookModelClient({getEnv:(name:string)=>Deno.env.get(name),onUsage:(metric:unknown)=>console.info('book_model_usage',JSON.stringify({jobId:job.id,section:job.cursor,phase:job.status,usage:metric}))});
 async function step(job:any,token:string) {
+ const modelJson=modelFor(job);
  const patch:any={error:null,attempts:0,lease_until:null,lease_token:null,updated_at:new Date().toISOString()};
  if(job.status==='uploaded') {
   const source=requireOk(await db.storage.from('private-books').download(`${job.user_id}/${job.id}/source`));
@@ -93,7 +91,7 @@ Deno.serve(async req=>{
    if(lookupError)throw new Error('Could not load this book.');if(!target)return reply({error:'Book not found'},404);
    if(target.status!=='ready')return reply({error:'Finish processing before repairing this book.'},409);
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
-   try {return reply(await repairBook({db,job:target,modelJson,hash}));}catch(e){return reply({error:e instanceof Error?e.message:'Repair failed; original preserved.'},502);}
+   try {return reply(await repairBook({db,job:target,modelJson:modelFor(target),hash}));}catch(e){return reply({error:e instanceof Error?e.message:'Repair failed; original preserved.'},502);}
   }
   if(bearer.startsWith('awb_cli_')&&!['list','lookup','prepare','create','finalize','enqueue','status','export','analysis-export','pause','retry','generate','revisions','activate'].includes(input.action))return reply({error:'This action is not available to agent sessions.'},403);
   const user=await bookUser(db,bearer);if(!user)return reply({error:'Sign in to access your private books.'},401);
@@ -188,9 +186,8 @@ Deno.serve(async req=>{
   }
   if(input.action==='export') {
    if(input.revision==='previous') {
-    let review;try{review=JSON.parse(job.artifacts?.['quality-review.json']||'{}');}catch{}
-    const path=`${user.id}/${job.id}/before-fidelity-v2.json`;
-    if(review?.previousRevisionPath!==path)return reply({error:'No previous revision is available.'},404);
+    const path=previousReviewPath(job,user.id);
+    if(!path)return reply({error:'No previous revision is available.'},404);
     const snapshot=requireOk(await db.storage.from('private-books').download(path));const previous=JSON.parse(await snapshot.text());
     if(previous.id!==job.id||previous.user_id!==user.id)return reply({error:'Revision does not belong to this book.'},404);
     const files=exportBookFiles(previous);files['DOWNLOAD.md']='# Previous version\n\nThis saved revision was superseded after a source-fidelity repair. It may contain unsupported claims. Use the current version for new work.\n\n'+files['DOWNLOAD.md'];
