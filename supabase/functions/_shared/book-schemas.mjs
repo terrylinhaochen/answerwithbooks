@@ -25,3 +25,20 @@ export function citedReviewSchema(ids) {
 const term = object({term: string, definition: string, chapterIds: array(string)});
 export const overviewSchema = object({summary: string, terms: array(term, {maxItems: 8})});
 export const synthesisSchema = object({oneLiner: string, readIf: string, thesis: string, tags: array(string), year: {type: ['integer', 'null']}, glossary: array(term)});
+
+export function overviewSchemaFor(notes) {
+ const schema=structuredClone(overviewSchema),term=schema.properties.terms.items.properties;
+ schema.properties.summary={...schema.properties.summary,maxLength:1800};
+ term.term={...term.term,maxLength:80};term.definition={...term.definition,maxLength:240};
+ term.chapterIds.items={type:'string',enum:notes.map(note=>note.id)};
+ term.chapterIds.minItems=1;term.chapterIds.maxItems=notes.length;
+ return schema;
+}
+export function synthesisSchemaFor(notes) {
+ const schema=structuredClone(synthesisSchema),term=schema.properties.glossary.items.properties;
+ schema.properties.glossary.maxItems=40;
+ term.term={...term.term,maxLength:80};term.definition={...term.definition,maxLength:600};
+ term.chapterIds.items={type:'string',enum:notes.map(note=>note.id)};
+ term.chapterIds.minItems=1;term.chapterIds.maxItems=Math.min(24,notes.length);
+ return schema;
+}

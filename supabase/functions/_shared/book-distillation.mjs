@@ -1,7 +1,7 @@
 import {synthesisEvidence} from './book-overview.mjs';
 import {depthGuidance} from './book-options.mjs';
-import {GenerationReviewError,repairInput,fidelityInstructions,citedFidelityInstructions,sectionClaims,requireFaithfulSection} from './book-fidelity.mjs';
-import {sectionSchemaFor,citedReviewSchema,fidelitySchema,synthesisSchema} from './book-schemas.mjs';
+import {GenerationReviewError,repairInput,summaryFidelityInstructions,citedFidelityInstructions,sectionClaims,requireFaithfulSection} from './book-fidelity.mjs';
+import {sectionSchemaFor,citedReviewSchema,fidelitySchema,synthesisSchemaFor} from './book-schemas.mjs';
 import {upstreamGuidance} from './upstream-guidance.mjs';
 import {validateSection} from './book-sections.mjs';
 import {renderBookArtifacts} from './book-artifacts.mjs';
@@ -33,8 +33,8 @@ For every idea return applicationBasis: default to derived-application. Use sour
 
 export async function compileDistillation(job,notes,modelJson,hash) {
   const evidence=synthesisEvidence(notes,job.overview_notes);
-  const generated=await modelJson(`Synthesize the supplied book notes, not outside knowledge. Return JSON {oneLiner,readIf,thesis,tags:[lowercase-hyphenated-topic-slug],year:null,glossary:[{term,definition,chapterIds:[chNN]}]}. Preserve uncertainty. Explain the central argument and when it applies. Original prose only. Detected source headings are provisional, not verified original chapter boundaries.`,JSON.stringify(repairInput(evidence,job.generation_feedback?.phase==='synthesis'?job.generation_feedback:null)),{name:'book_synthesis',schema:synthesisSchema});
-  const review=await modelJson(fidelityInstructions,JSON.stringify({source:evidence,notes:generated}),{kind:'review',name:'book_synthesis_review',schema:fidelitySchema});
+  const generated=await modelJson(`Synthesize the supplied book notes, not outside knowledge. Return JSON {oneLiner,readIf,thesis,tags:[lowercase-hyphenated-topic-slug],year:null,glossary:[{term,definition,chapterIds:[chNN]}]}. Preserve uncertainty. Explain the central argument and when it applies. Original prose only. Detected source headings are provisional, not verified original chapter boundaries.`,JSON.stringify(repairInput(evidence,job.generation_feedback?.phase==='synthesis'?job.generation_feedback:null)),{name:'book_synthesis',schema:synthesisSchemaFor(notes)});
+  const review=await modelJson(summaryFidelityInstructions,JSON.stringify({evidence,candidate:generated}),{kind:'review',name:'book_synthesis_review',schema:fidelitySchema});
   try{requireFaithfulSection(review);}catch{throw new GenerationReviewError('synthesis',generated,review);}
   const textSha=await hash(new TextEncoder().encode(job.source_text));
   const meta={id:job.id,sourceText:job.source_text,options:job.options,book:{id:job.book_id||job.id,title:job.title,author:job.author},source:{sha256:job.source_sha,textSha256:textSha,lineCount:job.source_text.split('\n').length}};

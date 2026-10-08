@@ -1,0 +1,256 @@
+{
+  "model": "gpt-5.4-mini",
+  "reviewEffort": "low",
+  "results": [
+    {
+      "id": "conditional-output",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "report": {
+        "supported": false,
+        "issues": [
+          "The claim changes a conditional capability into a routine fact. The source says they \"could, when they exerted themselves,\" make \"about twelve pounds of pins in a day,\" which does not support that they routinely produced twelve pounds every day."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported: the source states a conditional and approximate capability (“could, when they exerted themselves, make about twelve pounds of pins in a day”), not that the workshop routinely produced twelve pounds every day."
+          }
+        ]
+      }
+    },
+    {
+      "id": "qualified-output",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": true,
+            "reason": "The evidence states that, when they exerted themselves, they could make about twelve pounds of pins in a day, which matches the claim."
+          }
+        ]
+      }
+    },
+    {
+      "id": "metadata-only",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "report": {
+        "supported": false,
+        "issues": [
+          "The evidence cites only the title/author line ('The Wealth of Nations, by Adam Smith') and does not support the substantive claim that labour determines the exchange value of commodities."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "The cited source excerpt is only a provenance/title line, which does not establish the claim about labour and exchange value."
+          }
+        ]
+      }
+    },
+    {
+      "id": "missing-deadline",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "report": {
+        "supported": false,
+        "issues": [
+          "The claim says to discard any action that lacks a deadline, but the cited source only says an action without a date is incomplete and should have its timing clarified before committing. It does not authorize discarding or deleting the action, and it preserves the item as incomplete rather than invalid."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported and overstated: the source recommends clarifying timing before committing to an undated action; it does not instruct to discard such actions."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lifetime-roles",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "report": {
+        "supported": false,
+        "issues": [
+          "The source is descriptive, not prescriptive: it says some historical workers spent their whole lives at one operation and that repetition developed dexterity, but it does not instruct assigning workers to permanent lifetime roles.",
+          "The proposed step strengthens and reverses the source by turning an observation about repetition into a required policy, and it adds a necessity claim (“to obtain the productivity benefit”) that the source does not state."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Not supported. The cited line reports a historical description that some workers spent their whole lives at one operation and that repetition developed dexterity. It does not prescribe assigning workers to lifetime roles, nor does it say that such assignment is required to obtain the benefit."
+          }
+        ]
+      }
+    },
+    {
+      "id": "cautious-application",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": true,
+            "reason": "The evidence states that repetition can develop dexterity and that switching operations consumes time. Trying to group similar tasks temporarily to see whether switching time falls is a cautious, optional application of that principle, and the note correctly limits it as a test rather than an author-prescribed policy."
+          }
+        ]
+      }
+    },
+    {
+      "id": "invented-source-instruction",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "report": {
+        "supported": false,
+        "issues": [
+          "The source says repetition can develop dexterity and that switching operations consumes time, but it does not prescribe fixed quarterly rotations.",
+          "The note adds unsupported specifics and a stronger conclusion: quarterly timing, fixed rotations, and optimizing productivity are not stated in the source."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "The cited sentence supports only the general idea that repetition can develop dexterity and that switching operations takes time. It does not actually instruct the reader to use fixed quarterly rotations, nor does it state that such rotations will optimize productivity."
+          }
+        ]
+      }
+    },
+    {
+      "id": "transport-overgeneralization",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "report": {
+        "supported": false,
+        "issues": [
+          "The application overgeneralizes a historical comparison into a universal rule. The source says water carriage was cheaper than carts on the routes described, not that it is always cheaper for every route.",
+          "The source supports a conditional/relative principle, not an absolute instruction to always ship by water."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported because the evidence only states that water carriage historically allowed larger loads over longer distances at lower expense than carts on the routes described. It does not support the universal claim that water shipping is cheaper for every route or the absolute directive to always ship by water."
+          }
+        ]
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2147,
+      "outcome": "complete",
+      "inputTokens": 518,
+      "outputTokens": 89,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 23
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2445,
+      "outcome": "complete",
+      "inputTokens": 501,
+      "outputTokens": 121,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 25
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2643,
+      "outcome": "complete",
+      "inputTokens": 513,
+      "outputTokens": 180,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 54
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2161,
+      "outcome": "complete",
+      "inputTokens": 507,
+      "outputTokens": 173,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 51
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2454,
+      "outcome": "complete",
+      "inputTokens": 524,
+      "outputTokens": 277,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 108
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2523,
+      "outcome": "complete",
+      "inputTokens": 535,
+      "outputTokens": 179,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 86
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2401,
+      "outcome": "complete",
+      "inputTokens": 514,
+      "outputTokens": 226,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 93
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2455,
+      "outcome": "complete",
+      "inputTokens": 530,
+      "outputTokens": 231,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 86
+    }
+  ],
+  "limitations": "Eight known regression cases; not an estimate of general factual accuracy or an independent human evaluation."
+}
