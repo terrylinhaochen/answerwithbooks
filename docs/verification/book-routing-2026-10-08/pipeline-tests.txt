@@ -1,0 +1,276 @@
+
+> answerwithbooks@1.0.0 test:book-pipeline
+> node --test scripts/test-book-model.mjs scripts/test-book-quality.mjs scripts/test-book-worker.mjs scripts/test-book-processing.mjs scripts/test-book-parity.mjs scripts/test-long-book.mjs scripts/test-book-revisions.mjs scripts/test-book-parallel.mjs scripts/test-book-library.mjs
+
+TAP version 13
+# Subtest: embedding provider preserves ordering and rejects malformed, duplicate and truncated vectors
+ok 1 - embedding provider preserves ordering and rejects malformed, duplicate and truncated vectors
+  ---
+  duration_ms: 37.38525
+  ...
+# Subtest: search inputs are bounded and candidates are diverse, not treated as a relevance verdict
+ok 2 - search inputs are bounded and candidates are diverse, not treated as a relevance verdict
+  ---
+  duration_ms: 0.913667
+  ...
+# Subtest: evidence returns exact numbered source excerpts with visible truncation, never the source bundle
+ok 3 - evidence returns exact numbered source excerpts with visible truncation, never the source bundle
+  ---
+  duration_ms: 0.366292
+  ...
+# Subtest: search sends verified owner scope and falls back honestly on embedding failure; race-deleted hits are omitted
+ok 4 - search sends verified owner scope and falls back honestly on embedding failure; race-deleted hits are omitted
+  ---
+  duration_ms: 0.917458
+  ...
+# Subtest: index failures release leased entries with backoff and stale results are lease/hash guarded
+ok 5 - index failures release leased entries with backoff and stale results are lease/hash guarded
+  ---
+  duration_ms: 1.938542
+  ...
+# (node:12056) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: modern models use compatible reasoning parameters and strict schema; metrics omit content
+ok 6 - modern models use compatible reasoning parameters and strict schema; metrics omit content
+  ---
+  duration_ms: 22.871
+  ...
+# Subtest: legacy default remains available and review has an independent model and reasoning setting
+ok 7 - legacy default remains available and review has an independent model and reasoning setting
+  ---
+  duration_ms: 2.752333
+  ...
+# Subtest: provider errors, refusal and truncation cannot become accepted notes or expose provider text
+ok 8 - provider errors, refusal and truncation cannot become accepted notes or expose provider text
+  ---
+  duration_ms: 3.4045
+  ...
+# Subtest: missing usage stays unknown and telemetry errors do not retry successful paid output
+ok 9 - missing usage stays unknown and telemetry errors do not retry successful paid output
+  ---
+  duration_ms: 0.844625
+  ...
+# Subtest: bounded evaluation uses the real pipeline, saves usage, and never overwrites a previous run
+ok 10 - bounded evaluation uses the real pipeline, saves usage, and never overwrites a previous run
+  ---
+  duration_ms: 20.064834
+  ...
+# Subtest: Gemini uses its fixed endpoint and credential, preserving schema and bounded output
+ok 11 - Gemini uses its fixed endpoint and credential, preserving schema and bounded output
+  ---
+  duration_ms: 0.759458
+  ...
+# Subtest: bounded parallel sections retain successes around a gap and skip paid work on retry
+ok 12 - bounded parallel sections retain successes around a gap and skip paid work on retry
+  ---
+  duration_ms: 7.329
+  ...
+# Subtest: invalid concurrency and mismatched identities cannot advance the cursor
+ok 13 - invalid concurrency and mismatched identities cannot advance the cursor
+  ---
+  duration_ms: 0.753792
+  ...
+# (node:12058) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: options reject unsupported values and give different study/reference instructions
+ok 14 - options reject unsupported values and give different study/reference instructions
+  ---
+  duration_ms: 2.207834
+  ...
+# Subtest: advisory port matches original scanner rule ids and line numbers
+ok 15 - advisory port matches original scanner rule ids and line numbers
+  ---
+  duration_ms: 223.863208
+  ...
+# Subtest: unsupported examples cannot bypass citation bounds or the fidelity gate
+ok 16 - unsupported examples cannot bypass citation bounds or the fidelity gate
+  ---
+  duration_ms: 1.638625
+  ...
+# Subtest: large skills retain every reference entry while keeping the main references compact
+ok 17 - large skills retain every reference entry while keeping the main references compact
+  ---
+  duration_ms: 317.1275
+  ...
+# Subtest: transient failures back off and terminal attempts stop automatically
+ok 18 - transient failures back off and terminal attempts stop automatically
+  ---
+  duration_ms: 1.205959
+  ...
+# Subtest: one extraction produces linked book and skill artifacts with matching source references
+ok 19 - one extraction produces linked book and skill artifacts with matching source references
+  ---
+  duration_ms: 253.176709
+  ...
+# Subtest: rejects source revision mismatch before producing either output
+ok 20 - rejects source revision mismatch before producing either output
+  ---
+  duration_ms: 6.160209
+  ...
+# Subtest: rejects changed extracted text and out-of-range citations
+ok 21 - rejects changed extracted text and out-of-range citations
+  ---
+  duration_ms: 8.304584
+  ...
+# Subtest: chapter paths and glossary references cannot escape the generated package
+ok 22 - chapter paths and glossary references cannot escape the generated package
+  ---
+  duration_ms: 6.482792
+  ...
+# Subtest: retry reuses the same job and preserves reviewed or edited outputs
+ok 23 - retry reuses the same job and preserves reviewed or edited outputs
+  ---
+  duration_ms: 534.8505
+  ...
+# Subtest: missing boundaries and undeclared coverage gaps cannot produce a ready package
+ok 24 - missing boundaries and undeclared coverage gaps cannot produce a ready package
+  ---
+  duration_ms: 151.504292
+  ...
+# Subtest: rejects empty sources and unsafe book ids
+ok 25 - rejects empty sources and unsafe book ids
+  ---
+  duration_ms: 3.164208
+  ...
+# Subtest: CLI intake and compilation handle paths with spaces without a provider
+ok 26 - CLI intake and compilation handle paths with spaces without a provider
+  ---
+  duration_ms: 428.859042
+  ...
+# (node:12060) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a short title and provenance prefix shares the first real chapter, retaining all citation lines
+ok 27 - a short title and provenance prefix shares the first real chapter, retaining all citation lines
+  ---
+  duration_ms: 1.339459
+  ...
+# Subtest: review sees each item with only its cited evidence, preserving non-one section offsets
+ok 28 - review sees each item with only its cited evidence, preserving non-one section offsets
+  ---
+  duration_ms: 0.405333
+  ...
+# Subtest: one unchecked, failed, duplicated or invented claim prevents section acceptance
+ok 29 - one unchecked, failed, duplicated or invented claim prevents section acceptance
+  ---
+  duration_ms: 0.494125
+  ...
+# Subtest: a rejected metadata-grounded hallucination never returns accepted notes
+ok 30 - a rejected metadata-grounded hallucination never returns accepted notes
+  ---
+  duration_ms: 0.840083
+  ...
+# Subtest: successful notes preserve application basis in all outputs and record actual review coverage
+ok 31 - successful notes preserve application basis in all outputs and record actual review coverage
+  ---
+  duration_ms: 6.832667
+  ...
+# Subtest: review notices distinguish legacy and partially checked notes; previous versions stay owner scoped
+ok 32 - review notices distinguish legacy and partially checked notes; previous versions stay owner scoped
+  ---
+  duration_ms: 0.54025
+  ...
+# (node:12061) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: append preserves original citations and notes, and maps new source coordinates
+ok 33 - append preserves original citations and notes, and maps new source coordinates
+  ---
+  duration_ms: 1.818833
+  ...
+# Subtest: replacement is independent; mismatched ownership and duplicate append fail before mutation
+ok 34 - replacement is independent; mismatched ownership and duplicate append fail before mutation
+  ---
+  duration_ms: 0.795625
+  ...
+# Subtest: large chapter splits retain original labels across all processing sections
+ok 35 - large chapter splits retain original labels across all processing sections
+  ---
+  duration_ms: 3.726875
+  ...
+# Subtest: technical source blocks remain byte-identical and are never model reconstructions
+ok 36 - technical source blocks remain byte-identical and are never model reconstructions
+  ---
+  duration_ms: 0.708042
+  ...
+# Subtest: download keeps discovery text and exports stable package identity with source map
+ok 37 - download keeps discovery text and exports stable package identity with source map
+  ---
+  duration_ms: 1.42375
+  ...
+# Subtest: export preserves exact technical blocks after source verification
+ok 38 - export preserves exact technical blocks after source verification
+  ---
+  duration_ms: 0.631125
+  ...
+# (node:12069) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: source chunks cover every line once, including long paragraphs and non-Latin text
+ok 39 - source chunks cover every line once, including long paragraphs and non-Latin text
+  ---
+  duration_ms: 3.787292
+  ...
+# Subtest: model citations cannot point to another section
+ok 40 - model citations cannot point to another section
+  ---
+  duration_ms: 1.058417
+  ...
+# Subtest: handoff contains usable context and both task modes with no installation prerequisite
+ok 41 - handoff contains usable context and both task modes with no installation prerequisite
+  ---
+  duration_ms: 0.337917
+  ...
+# Subtest: detected headings preserve source coverage and cannot invent titles
+ok 42 - detected headings preserve source coverage and cannot invent titles
+  ---
+  duration_ms: 1.126125
+  ...
+# Subtest: server sanitizer agrees with original Python for hidden characters and preserves ordinary Unicode
+ok 43 - server sanitizer agrees with original Python for hidden characters and preserves ordinary Unicode
+  ---
+  duration_ms: 205.661792
+  ...
+# Subtest: fidelity gate rejects semantic drift even with valid line citations
+ok 44 - fidelity gate rejects semantic drift even with valid line citations
+  ---
+  duration_ms: 2.92225
+  ...
+# Subtest: legacy private downloads gain readable metadata and resolvable source lines
+ok 45 - legacy private downloads gain readable metadata and resolvable source lines
+  ---
+  duration_ms: 6.734042
+  ...
+# Subtest: repair advances separately and replaces artifacts only after checked synthesis
+ok 46 - repair advances separately and replaces artifacts only after checked synthesis
+  ---
+  duration_ms: 14.788458
+  ...
+# Subtest: operator validation fails closed without trusting role claims or the API key alone
+ok 47 - operator validation fails closed without trusting role claims or the API key alone
+  ---
+  duration_ms: 21.037291
+  ...
+# (node:12077) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: large sources pass upstream adapter, retain tail text and every line, and have bounded work units
+ok 48 - large sources pass upstream adapter, retain tail text and every line, and have bounded work units
+  ---
+  duration_ms: 1311.277916
+  ...
+# Subtest: dense headings do not create hundreds of tiny jobs or lose source text
+ok 49 - dense headings do not create hundreds of tiny jobs or lose source text
+  ---
+  duration_ms: 1142.435667
+  ...
+# Subtest: overview groups have bounded size, validate chapter membership, and require a fidelity pass
+ok 50 - overview groups have bounded size, validate chapter membership, and require a fidelity pass
+  ---
+  duration_ms: 1.473167
+  ...
+1..50
+# tests 50
+# suites 0
+# pass 50
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2678.32675

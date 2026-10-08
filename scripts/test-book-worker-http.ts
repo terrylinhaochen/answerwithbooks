@@ -146,8 +146,10 @@ assert.equal((await call({action:'finalize',id:largeId})).status,400,'corrupted 
 extractedFiles.set(largeId,largeBytes);
 assert.equal((await call({action:'finalize',id:largeId},'stranger-token')).status,404);
 const finalized=await call({action:'finalize',id:largeId});assert.equal(finalized.status,200,JSON.stringify(finalized.body));assert.ok(finalized.body.job.total_sections>60);
+Deno.env.set('BOOK_SECTION_CONCURRENCY','3');
 const largeJob=jobs.find(job=>job.id===largeId);let rounds=0;
 while(largeJob.status!=='ready'&&rounds++<160){const result=await drain();assert.equal(result.status,200,JSON.stringify(result.body));}
+assert.ok(rounds<45,'three sections per step reduce long-book queue round trips');
 assert.equal(largeJob.status,'ready');assert.equal(largeJob.notes.length,largeJob.chunks.length);assert.equal(largeJob.overview_notes.length,Math.ceil(largeJob.notes.length/12));
 const longExport=(await call({action:'export',id:largeId})).body.files;assert.equal(longExport['skill/source.txt'],largeText);
 assert.equal(Object.keys(longExport).filter(name=>/skill\/chapters\/ch\d+\.md$/.test(name)).length,largeJob.chunks.length);

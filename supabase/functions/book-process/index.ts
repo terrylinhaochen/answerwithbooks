@@ -1,3 +1,4 @@
+import {distillSectionBatch,sectionConcurrency} from '../_shared/book-parallel.mjs';
 import {createBookModelClient} from '../_shared/book-model.mjs';
 import {bookUser} from '../_shared/book-cli-auth.mjs';
 import {reusableBook,cachedBookSummary} from '../_shared/book-cache.mjs';
@@ -31,10 +32,17 @@ async function step(job:any,token:string) {
   if(source.size>uploadLimits.maxFileBytes||await hash(await source.arrayBuffer())!==job.source_sha) throw new Error('The source upload is incomplete or changed. Upload the same file again.');
   patch.status='processing';
  } else if(job.cursor<job.chunks.length) {
-  const chunk=job.chunks[job.cursor];
-  const {note,title,author}=await distillSection(chunk,job.cursor,modelJson,job.options);
-  patch.notes=[...job.notes,note];patch.cursor=job.cursor+1;patch.status='processing';patch.attempts=0;
-  if(job.cursor===0&&job.revision_kind!=='append') { if(typeof title==='string'&&title.trim()) patch.title=title.slice(0,200);if(typeof author==='string'&&author.trim()) patch.author=author.slice(0,200); }
+  const batch=await distillSectionBatch({chunks:job.chunks,notes:job.notes,cursor:job.cursor,
+   concurrency:sectionConcurrency(Deno.env.get('BOOK_SECTION_CONCURRENCY')||'1'),
+   distill:(chunk:any,index:number)=>distillSection(chunk,index,modelFor({...job,cursor:index}),job.options)});
+  patch.notes=batch.notes;patch.cursor=batch.cursor;patch.status='processing';patch.attempts=0;
+  if(job.revision_kind!=='append') { if(typeof batch.title==='string'&&batch.title.trim()) patch.title=batch.title.slice(0,200);if(typeof batch.author==='string'&&batch.author.trim()) patch.author=batch.author.slice(0,200); }
+  if(batch.errors.length) {
+   // Save paid, reviewed successes without releasing this lease or resetting retries.
+   const {lease_until,lease_token,attempts,error,...progress}=patch;
+   requireOk(await db.from('book_processing_jobs').update(progress).eq('id',job.id).eq('lease_token',token).select('id').single());
+   throw batch.errors[0];
+  }
  } else if(job.options?.mode==='analysis') {
   patch.analysis={title:job.title,author:job.author,sections:job.notes,sourceSha256:job.source_sha,createdAt:new Date().toISOString()};patch.status='analyzed';patch.run_state='complete';
  } else if((job.overview_notes||[]).length<overviewGroupCount(job.notes)) {

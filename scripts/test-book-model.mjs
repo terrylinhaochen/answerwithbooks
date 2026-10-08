@@ -69,3 +69,13 @@ test('bounded evaluation uses the real pipeline, saves usage, and never overwrit
   await assert.rejects(runModelBenchmark(args),/EEXIST/);assert.equal(calls,4);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
+
+test('Gemini uses its fixed endpoint and credential, preserving schema and bounded output',async()=>{
+ let request;
+ const client=createBookModelClient({getEnv:name=>({BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite',GEMINI_API_KEY:'google-test',OPENAI_API_KEY:'must-not-send'}[name]),fetchImpl:async(url,options)=>{request={url,...options};return Response.json({choices:[{finish_reason:'stop',message:{content:'{"ok":true}'}}]});}});
+ await client('system','public domain input',{schema:{type:'object'},name:'test'});
+ assert.match(request.url,/^https:\/\/generativelanguage.googleapis.com\//);assert.equal(request.headers.Authorization,'Bearer google-test');
+ const body=JSON.parse(request.body);assert.equal(body.reasoning_effort,'minimal');assert.equal(body.max_tokens,6000);assert.equal(body.response_format.type,'json_schema');
+ const cfg=bookModelConfig(env({BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite',BOOK_REVIEW_REASONING_EFFORT:'low'}),'review');assert.equal(cfg.effort,'low');
+ assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite',BOOK_REASONING_EFFORT:'none'})),/Invalid Gemini/);
+});

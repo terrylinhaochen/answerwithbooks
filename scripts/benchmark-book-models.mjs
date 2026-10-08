@@ -1,4 +1,4 @@
-// Small, serial provider comparison. Dry-run unless --run is supplied.
+// Small, bounded provider comparison. Dry-run unless --run is supplied.
 // Uses the production distillation/compiler, with no queue, cover or retries.
 import {readFileSync, mkdirSync, writeFileSync} from 'node:fs';
 import {resolve, join} from 'node:path';
@@ -9,14 +9,21 @@ import {createBookModelClient, bookModelConfig} from '../supabase/functions/_sha
 import {splitSource} from '../supabase/functions/_shared/book-sections.mjs';
 import {distillSection, compileDistillation} from '../supabase/functions/_shared/book-distillation.mjs';
 
+import {distillSectionBatch,sectionConcurrency} from '../supabase/functions/_shared/book-parallel.mjs';
+
 export const profiles = {
+  '5.5': {BOOK_PROCESSING_MODEL:'gpt-5.5', BOOK_REVIEW_MODEL:'gpt-5.5', BOOK_REASONING_EFFORT:'none', BOOK_REVIEW_REASONING_EFFORT:'low'},
+  '5.4-mini': {BOOK_PROCESSING_MODEL:'gpt-5.4-mini', BOOK_REVIEW_MODEL:'gpt-5.4-mini', BOOK_REASONING_EFFORT:'none', BOOK_REVIEW_REASONING_EFFORT:'low'},
+  '5.4-nano': {BOOK_PROCESSING_MODEL:'gpt-5.4-nano', BOOK_REVIEW_MODEL:'gpt-5.4-nano', BOOK_REASONING_EFFORT:'none', BOOK_REVIEW_REASONING_EFFORT:'low'},
+  'flash-lite': {BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite', BOOK_REVIEW_MODEL:'gemini-3.5-flash-lite'},
+  'flash-lite-2.5': {BOOK_PROCESSING_MODEL:'gemini-2.5-flash-lite', BOOK_REVIEW_MODEL:'gemini-2.5-flash-lite'},
   baseline: {BOOK_PROCESSING_MODEL:'gpt-4.1-mini', BOOK_REVIEW_MODEL:'gpt-4.1-mini'},
   fast: {BOOK_PROCESSING_MODEL:'gpt-6-luna', BOOK_REVIEW_MODEL:'gpt-6-luna', BOOK_REASONING_EFFORT:'none', BOOK_REVIEW_REASONING_EFFORT:'low'},
   'strong-review': {BOOK_PROCESSING_MODEL:'gpt-6-luna', BOOK_REVIEW_MODEL:'gpt-6.1-sol', BOOK_REASONING_EFFORT:'none', BOOK_REVIEW_REASONING_EFFORT:'low'},
   quality: {BOOK_PROCESSING_MODEL:'gpt-6.1-sol', BOOK_REVIEW_MODEL:'gpt-6.1-sol', BOOK_REASONING_EFFORT:'low', BOOK_REVIEW_REASONING_EFFORT:'low'},
 };
 const hash = value => createHash('sha256').update(value).digest('hex');
-const pipelineFiles=['book-model','book-schemas','book-sections','book-fidelity','book-distillation','book-overview','book-options','book-artifacts','upstream-guidance'];
+const pipelineFiles=['book-model','book-parallel','book-schemas','book-sections','book-fidelity','book-distillation','book-overview','book-options','book-artifacts','upstream-guidance'];
 const pipelineHashes=()=>Object.fromEntries(pipelineFiles.map(name=>[name,hash(readFileSync(new URL(`../supabase/functions/_shared/${name}.mjs`,import.meta.url)))]));
 
 export function benchmarkSource(text) {
@@ -28,13 +35,14 @@ export function benchmarkSource(text) {
   return source;
 }
 
-export async function runModelBenchmark({source, selected, output, key, fetchImpl=fetch}) {
-  if(!key)throw new Error('Set OPENAI_API_KEY in the process environment; do not put it in arguments or output files.');
-  if(!selected.length || new Set(selected).size!==selected.length || selected.some(name=>!Object.hasOwn(profiles,name)))throw new Error('Select unique profiles: baseline, fast, strong-review, quality.');
+export async function runModelBenchmark({source, selected, output, key, geminiKey, concurrency=1, fetchImpl=fetch}) {
+  sectionConcurrency(concurrency);
+  if(selected.some(name=>!name.startsWith('flash-')) && !key)throw new Error('Set OPENAI_API_KEY in the process environment; do not put it in arguments or output files.');
+  if(!selected.length || new Set(selected).size!==selected.length || selected.some(name=>!Object.hasOwn(profiles,name)))throw new Error(`Select unique profiles: ${Object.keys(profiles).join(', ')}.`);
   if(!source.chunks.length || source.chunks.length>6)throw new Error('Invalid benchmark source.');
   // An existing output directory is never overwritten, even after an interrupted run.
   mkdirSync(output,{mode:0o700});
-  const report={version:1,startedAt:new Date().toISOString(),pipelineHashes:pipelineHashes(),sourceTextSha256:hash(source.text),characters:source.text.length,sections:source.chunks.length,
+  const report={version:2,concurrency,startedAt:new Date().toISOString(),pipelineHashes:pipelineHashes(),sourceTextSha256:hash(source.text),characters:source.text.length,sections:source.chunks.length,
     includes:['section generation','cited-claim review','synthesis','synthesis review','artifact compilation'],
     excludes:['extraction','upload','queue','cover','installation','human quality review'],maxProviderRequests:selected.length*(2*source.chunks.length+2),results:[]};
   const save=()=>writeFileSync(join(output,'report.json'),JSON.stringify(report,null,2)+'\n',{mode:0o600});
@@ -43,7 +51,7 @@ export async function runModelBenchmark({source, selected, output, key, fetchImp
     const directory=join(output,name);mkdirSync(directory,{mode:0o700});
     const metrics=[],outputs=[],result={profile:name,config:profiles[name],status:'running',metrics,sourceCheck:'not_complete',humanQualityReview:'not_performed'};
     report.results.push(result);save();
-    const getEnv=variable=>variable==='OPENAI_API_KEY'?key:profiles[name][variable];
+    const getEnv=variable=>variable==='OPENAI_API_KEY'?key:variable==='GEMINI_API_KEY'?geminiKey:profiles[name][variable];
     bookModelConfig(getEnv);bookModelConfig(getEnv,'review');
     const client=createBookModelClient({getEnv,fetchImpl,onUsage:metric=>{metrics.push(metric);save();}});
     let calls=0;
@@ -53,9 +61,15 @@ export async function runModelBenchmark({source, selected, output, key, fetchImp
       outputs.push({stage:options.name,value});writeFileSync(join(directory,'model-outputs.json'),JSON.stringify(outputs,null,2)+'\n',{mode:0o600});
       return value;
     };
-    const started=performance.now(),notes=[];
+    const started=performance.now();let notes=[];
     try{
-      for(const [index,chunk] of source.chunks.entries())notes.push((await distillSection(chunk,index,modelJson,{mode:'full',depth:'study',purpose:'apply'})).note);
+      let cursor=0;
+      while(cursor<source.chunks.length){
+        const batch=await distillSectionBatch({chunks:source.chunks,notes,cursor,concurrency,distill:(chunk,index)=>distillSection(chunk,index,modelJson,{mode:'full',depth:'study',purpose:'apply'})});
+        notes=batch.notes;cursor=batch.cursor;
+        writeFileSync(join(directory,'accepted-notes.json'),JSON.stringify(notes,null,2)+'\n',{mode:0o600});
+        if(batch.errors.length)throw batch.errors[0];
+      }
       const job={id:'00000000-0000-4000-8000-000000000001',title:'Bounded source sample',author:'Source author',source_text:source.text,source_sha:hash(source.text),options:{mode:'full',depth:'study',purpose:'apply'}};
       const artifacts=await compileDistillation(job,notes,modelJson,async bytes=>hash(bytes));
       writeFileSync(join(directory,'artifacts.json'),JSON.stringify(artifacts,null,2)+'\n',{mode:0o600});
@@ -68,15 +82,16 @@ export async function runModelBenchmark({source, selected, output, key, fetchImp
 }
 
 async function main(){
-  const {values}=parseArgs({options:{source:{type:'string'},output:{type:'string'},profiles:{type:'string',default:'baseline,fast,strong-review'},run:{type:'boolean',default:false}}});
+  const {values}=parseArgs({options:{source:{type:'string'},output:{type:'string'},profiles:{type:'string',default:'baseline,fast,strong-review'},concurrency:{type:'string',default:'1'},run:{type:'boolean',default:false}}});
   if(!values.source)throw new Error('Use --source EXTRACTED_TEXT [--output NEW_DIRECTORY] [--profiles baseline,fast,strong-review,quality] [--run]. Without --run this only prints the plan.');
+  const concurrency=sectionConcurrency(values.concurrency);
   const selected=values.profiles.split(',');
-  if(!selected.length || new Set(selected).size!==selected.length || selected.some(name=>!Object.hasOwn(profiles,name)))throw new Error('Select unique profiles: baseline, fast, strong-review, quality.');
+  if(!selected.length || new Set(selected).size!==selected.length || selected.some(name=>!Object.hasOwn(profiles,name)))throw new Error(`Select unique profiles: ${Object.keys(profiles).join(', ')}.`);
   const source=benchmarkSource(readFileSync(values.source,'utf8'));
-  console.log(JSON.stringify({mode:values.run?'live':'dry-run',sourceTextSha256:hash(source.text),characters:source.text.length,sections:source.chunks.length,profiles:selected.map(name=>({name,...profiles[name]})),maxProviderRequests:selected.length*(source.chunks.length*2+2),maxOutputTokensPerRequest:6000,automaticRetries:0},null,2));
+  console.log(JSON.stringify({mode:values.run?'live':'dry-run',concurrency,sourceTextSha256:hash(source.text),characters:source.text.length,sections:source.chunks.length,profiles:selected.map(name=>({name,...profiles[name]})),maxProviderRequests:selected.length*(source.chunks.length*2+2),maxOutputTokensPerRequest:6000,automaticRetries:0},null,2));
   if(!values.run)return;
   if(!values.output)throw new Error('--run requires --output NEW_DIRECTORY.');
-  const report=await runModelBenchmark({source,selected,output:resolve(values.output),key:process.env.OPENAI_API_KEY});
+  const report=await runModelBenchmark({source,selected,output:resolve(values.output),key:process.env.OPENAI_API_KEY,geminiKey:process.env.GEMINI_API_KEY,concurrency});
   console.log(JSON.stringify(report.results.map(({profile,status,elapsedMs,completedSections,error})=>({profile,status,elapsedMs,completedSections,error})),null,2));
   if(report.results.some(result=>result.status!=='complete'))process.exitCode=1;
 }

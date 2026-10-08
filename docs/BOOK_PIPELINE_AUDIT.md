@@ -183,3 +183,7 @@ The executable prefix is `npx --yes https://github.com/Crowdlisten/Crowdlisten_b
 | 7 | Upstream has folder/glob intake, combined collections, free-form fold-in and host-specific flexibility | Add only the needed workflows and test their semantics; current separate-file batches are deliberate |
 
 Upstream's local execution and freely chosen host model remain useful advantages. A hosted product cannot claim to beat every privacy, offline, cost and customization preference merely by adding features. The target is a reliably better default for turning an authorized source into an accurate, readable, reusable book package.
+
+## Follow-up: inexpensive models, parallel sections, and hosted routing
+
+See [Hosted book library](HOSTED_BOOK_LIBRARY.md) for the October 8 follow-up implementation and measured outcomes. It adds bounded section concurrency, preserves accepted work around failures, evaluates GPT-5.4 nano/mini and exact GPT-5.5, and implements account-scoped hybrid chapter retrieval plus a separate embedding queue. The matching CLI adds one-guide hosted routing. The new work is locally tested and remains undeployed; the report distinguishes pipeline completion from source quality and provider cost from customer charges.
