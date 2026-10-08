@@ -25,9 +25,10 @@ try{
     if(body.action==='enqueue'||body.action==='retry')job.run_state='queued';
     else if(body.action==='pause')job.run_state='paused';
     else if(body.action==='generate'){job.run_state='queued';job.status='processing';job.options.mode='full';}
+    else if(body.action==='revisions')result={book_id:body.id,revisions:[job]};
     else if(body.action==='export'){assert.equal(body.reviewAccepted,true);result={files:job.artifacts};}
     else assert.equal(body.action,'status');
-    if(body.action!=='export')result={job};
+    if(!['export','revisions'].includes(body.action))result={job};
    }
   }else if(url.pathname==='/auth/v1/user')result=user;
   else if(url.pathname.includes('/storage/v1/object/upload/sign/'))result={Key:'source'};
@@ -38,10 +39,8 @@ try{
  const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
  await page.goto(origin+'/tools/');await page.locator('[data-open-book-request]').first().click();
  await page.getByLabel('Source file').setInputFiles([fixture('first.md'),fixture('failed.md'),fixture('last.md'),{name:'bad.exe',mimeType:'application/octet-stream',buffer:Buffer.from('bad')}]);
- await page.locator('details.upload-options').evaluate(el=>el.open=true);
+ await page.locator('details.upload-options').first().evaluate(el=>el.open=true);
  await page.locator('select[name=mode]').selectOption('analysis');await page.locator('select[name=depth]').selectOption('reference');
- await page.locator('[data-upload-submit]').click();await page.getByText(/Sources reviewed\./).waitFor({timeout:90000});
- assert.equal(calls.filter(c=>c.action==='create').length,0,'preflight never starts generation');
  await page.locator('[data-upload-submit]').click();await page.getByText(/2 sources saved/).waitFor({timeout:30000});
  assert.deepEqual(calls.filter(c=>c.action==='create').map(c=>c.name),['first.md','failed.md','last.md']);
  assert.equal(calls.filter(c=>c.action==='enqueue').length,2);
@@ -55,7 +54,7 @@ try{
  await page.getByRole('button',{name:'Pause',exact:true}).first().click();await page.getByRole('button',{name:'Resume',exact:true}).waitFor();
  await page.getByRole('button',{name:'Resume',exact:true}).click();await page.getByRole('button',{name:'Pause',exact:true}).first().waitFor();
  assert.equal(calls.filter(c=>c.action==='process').length,0,'browser does not drive model calls');
- console.log('PASS multiple files, preflight, per-file failure isolation, separate IDs/options, queue persistence, pause/resume and mobile layout');
+ console.log('PASS multiple files, single-action submission, per-file failure isolation, separate IDs/options, queue persistence, pause/resume and mobile layout');
  const job=jobs[0];job.status='analyzed';job.run_state='complete';job.analysis={sections:[{title:'Evidence',summary:'Compare predictions and observations.',ideas:[],sourceRefs:[{startLine:1,endLine:3}]}]};
  await page.goto(origin+'/your-book/?id='+job.id);await page.getByText('Your source analysis',{exact:true}).waitFor();
  await page.getByRole('button',{name:'Create book & skill',exact:true}).click();await page.waitForFunction(()=>document.querySelector('[data-job-generate]').hidden);

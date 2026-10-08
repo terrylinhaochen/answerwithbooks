@@ -32,8 +32,7 @@ try{
  await setup(ctx);let page=await ctx.newPage();page.on('pageerror',e=>errors.push(e.message));
  await page.goto(receipt.origin+'/tools/');await page.locator('[data-open-book-request]').first().click();
  await page.getByLabel('Source file').setInputFiles(sources.map(s=>({name:s.name,mimeType:'text/markdown',buffer:Buffer.from(s.text)})));
- await page.getByRole('button',{name:'Review sources',exact:true}).click();await page.getByText(/Sources reviewed\./).waitFor({timeout:90000});
- await page.getByRole('button',{name:'Create books & skills',exact:true}).click();
+ await page.locator('[data-upload-submit]').click();
  await page.waitForURL('**/processing/',{timeout:90000});
  await page.locator('[data-queue-list] article').nth(1).waitFor();
  const saved=await owner.from('book_processing_jobs').select('id,source_name');assert.ifError(saved.error);
@@ -75,8 +74,8 @@ try{
  const cached=await call(owner,{action:'lookup',sha});assert.equal(cached.reused,true);assert.equal(cached.job.id,jobs[0]);
  const requests=[];page.on('request',r=>{if(r.url().endsWith('/book-process'))requests.push(r.postDataJSON()?.action);if(r.url().includes('/storage/v1/object/upload/'))requests.push('upload');});
  await page.goto(receipt.origin+'/tools/');await page.locator('[data-open-book-request]').first().click();await page.getByLabel('Source file').setInputFiles({name:'Renamed Decision Manual.md',mimeType:'text/markdown',buffer:Buffer.from(sources[0].text)});
- await page.getByRole('button',{name:'Review sources',exact:true}).click();await page.waitForURL('**/your-book/?id='+jobs[0],{timeout:30000});
- assert.deepEqual(requests.filter(a=>!['lookup','status'].includes(a)),[]);receipt.privateCacheNoUploadOrGeneration=true;
+ await page.locator('[data-upload-submit]').click();await page.waitForURL('**/your-book/?id='+jobs[0],{timeout:30000});
+ assert.deepEqual(requests.filter(a=>!['lookup','status','revisions'].includes(a)),[]);receipt.privateCacheNoUploadOrGeneration=true;
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.deepEqual(errors,[]);
  await ctx.close();
  console.log('PASS live batch after browser closed, two covers and skill packages, isolation, fresh browser copy/ZIP, cache reuse.');

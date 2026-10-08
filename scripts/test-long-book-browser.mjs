@@ -45,9 +45,6 @@ try{
  await page.route('https://api.openai.com/**',()=>{throw Error('No provider requests permitted');});
  await page.goto(origin+'/tools/');await page.locator('[data-open-book-request]').first().click();await page.getByLabel('Source file').setInputFiles(filename);
  await page.locator('[data-upload-submit]').click();
- await page.waitForFunction(()=>document.querySelector('[data-upload-status]').textContent.startsWith('Sources reviewed.')||document.querySelector('[data-upload-status]').textContent.startsWith('No readable'),{},{timeout:240000});
- assert.match(await page.locator('[data-upload-status]').textContent(),/^Sources reviewed\./,await page.locator('[data-upload-files]').textContent());
- await page.getByText(/Long book: we’ll process it in sections/).waitFor();
- await page.locator('[data-upload-submit]').click();await page.waitForURL(/\/your-book\/\?id=/,{timeout:90000});assert.ok(finalized);
+ await page.waitForURL(/\/your-book\/\?id=/,{timeout:240000});assert.ok(finalized);
  console.log(JSON.stringify({passed:true,originalBytes:sourceFile.size,extractedCharacters:sections.text.length,sourceLines:sections.lineCount,processingSections:sections.chunks.length,allLinesRetained:true,originalAndTextHashesVerified:true,realGeneration:false,realStorageUpload:false}));
 }finally{await browser.close();}

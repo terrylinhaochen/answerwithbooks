@@ -41,7 +41,7 @@ try {
  await p.goto(origin+'/tools/',{waitUntil:'domcontentloaded',timeout:120000});await p.locator('[data-open-book-request]').first().click();
  const source='Chapter 1: Evidence\nUse a bounded trial and keep the observations. Review the prediction before changing the plan.\n\nChapter 2: Review\nCompare the result with the expected signal. Keep uncertainty visible, check the original source, and identify the next reversible action.';
  const clear=async()=>{if(await p.locator('[data-upload-clear]').isVisible())await p.locator('[data-upload-clear]').click();};
- const start=async()=>{await p.locator('[data-upload-submit]').click();await p.getByText(/Sources reviewed\./).waitFor({timeout:90000});await p.locator('[data-upload-submit]').click();};
+ const start=async()=>{await p.locator('[data-upload-submit]').click();};
  for(const file of [{name:'original-paper.pdf',mimeType:'application/pdf',buffer:pdfFixture()},{name:'research-notes.md',mimeType:'text/markdown',buffer:Buffer.from(source)},{name:'team-runbook.txt',mimeType:'text/plain',buffer:Buffer.from(source)}]) {
   const before=captured.length;await clear();await p.getByLabel('Source file').setInputFiles(file);await start();
   await p.getByText('QA extraction complete; generation intentionally not started.',{exact:true}).waitFor({timeout:90000});

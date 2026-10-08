@@ -37,6 +37,7 @@ try {
   if(url.pathname.endsWith('/book-process')){
    const body=route.request().postDataJSON();calls.push(body);
    if(body.action==='lookup')result=body.sha===cachedSha?{job:oldJob,reused:true}:{job:null,reused:false};
+   else if(body.action==='revisions')result={book_id:body.id,revisions:jobs.filter(j=>j.id===body.id)};
    else if(body.action==='health')result={available:true};
    else if(body.action==='create'){
     assert.notEqual(body.sha,cachedSha,'cached source must not be submitted again');
@@ -55,13 +56,12 @@ try {
  await page.goto(origin+'/tools/');await page.locator('[data-open-book-request]').first().click();await page.getByLabel('Source file').setInputFiles(fixture('Renamed private original.pdf'));
  await page.locator('[data-upload-submit]').click();await page.waitForURL('**/your-book/?id='+oldJob.id);
  await page.getByRole('button',{name:'Copy prompt for your AI',exact:true}).waitFor();
- assert.deepEqual(calls.filter(c=>c.action!=='status'),[{action:'lookup',sha:cachedSha}]);assert.deepEqual(uploads,[]);
+ assert.deepEqual(calls.filter(c=>!['status','revisions'].includes(c.action)),[{action:'lookup',sha:cachedSha}]);assert.deepEqual(uploads,[]);
  // Mixed public reuse, private reuse, new sources and a same-batch duplicate.
  calls.length=0;await page.goto(origin+'/tools/');await page.locator('[data-open-book-request]').first().click();
  const source=Buffer.from('Record a prediction before a bounded trial. Compare observed outcomes and retain uncertainty.\n'.repeat(8));
  await page.getByLabel('Source file').setInputFiles([fixture('The Mom Test.pdf'),fixture('Renamed private original.pdf'),{name:'new-source.md',mimeType:'text/markdown',buffer:source},{name:'same-new-source.md',mimeType:'text/markdown',buffer:source}]);
- await page.getByRole('button',{name:'Use library book',exact:true}).click();await page.locator('[data-upload-submit]').click();await page.getByText(/Sources reviewed\./).waitFor({timeout:90000});
- await page.locator('[data-upload-submit]').click();await page.getByText(/4 sources saved/).waitFor({timeout:30000});
+ await page.getByRole('button',{name:'Use library book',exact:true}).click();await page.locator('[data-upload-submit]').click();await page.getByText(/4 sources saved/).waitFor({timeout:30000});
  assert.equal(uploads.length,1);assert.equal(calls.filter(c=>c.action==='enqueue').length,1);
  assert.deepEqual(calls.filter(c=>c.action==='create').map(c=>c.sha),[newSha,newSha]);
  assert.equal(await page.locator('[data-upload-files] a').count(),4);

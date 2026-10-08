@@ -14,9 +14,11 @@ try {
   await page.evaluate(()=>{navigator.clipboard.writeText=async()=>{throw new Error('denied');};});await page.getByRole('button',{name:'Copy prompt for your AI',exact:true}).click();assert.ok(await page.getByLabel('Book agent prompt').isVisible());
   await page.goto(origin+'/books/');await page.locator('[data-open-book-request]').click();
   assert.equal(await page.getByText('Is this the right book?',{exact:true}).count(),0);assert.equal(await page.getByText('Find a book',{exact:true}).count(),0);
-  assert.match(await page.getByLabel('Source file').getAttribute('accept'),/\.epub,\.docx/);
+  const accepted=await page.getByLabel('Source file').getAttribute('accept');for(const type of ['.epub','.docx','.mobi','.pdf'])assert.ok(accepted.split(',').includes(type));
+  assert.equal(await page.locator('select[name=extractionMode]').count(),0);
+  assert.equal(await page.locator('details.upload-options[open]').count(),0);
   await page.getByLabel('Source file').setInputFiles({name:'example.txt',mimeType:'text/plain',buffer:Buffer.from('Example original source. '.repeat(40))});
-  await page.getByRole('button',{name:'Review sources'}).click();await page.getByText('Sign in first to keep your books private.',{exact:true}).waitFor();
+  await page.locator('[data-upload-submit]').click();await page.getByText('Sign in first to keep your books private.',{exact:true}).waitFor();
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.screenshot({path:`/private/tmp/awb-upload-release-${width}.png`});await context.close();
  }

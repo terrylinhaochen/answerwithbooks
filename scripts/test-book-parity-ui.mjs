@@ -1,5 +1,11 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {execFileSync} from 'node:child_process';
+import {readFileSync,mkdtempSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+const fixtures=mkdtempSync(tmpdir()+'/awb-auto-pdf-');
+execFileSync('python3',['-c',"import importlib.util,sys;from pathlib import Path;s=importlib.util.spec_from_file_location('fixture','scripts/native-book-worker/smoke_native.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);m.pdf_fixture(Path(sys.argv[1]))",fixtures+'/technical.pdf']);
+const pdf=readFileSync(fixtures+'/technical.pdf');
 const origin=process.env.AWB_TEST_ORIGIN||'http://127.0.0.1:4321';
 const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
 const user={id:'00000000-0000-4000-8000-000000000001',email:'reader@example.test',aud:'authenticated',role:'authenticated',user_metadata:{}};
@@ -7,7 +13,7 @@ const encode=x=>Buffer.from(JSON.stringify(x)).toString('base64url');
 const token=`${encode({alg:'none',typ:'JWT'})}.${encode({sub:user.id,aud:'authenticated',exp:Math.floor(Date.now()/1000)+3600})}.mock`;
 const source='Chapter 1: Evidence\nA useful source records the prediction, checks observations, and preserves the uncertainty.\n\nChapter 2: Review\nCompare the result with the expected signal and identify the next reversible action.';
 const mainId='11111111-1111-4111-8111-111111111111',nextId='22222222-2222-4222-8222-222222222222';
-let nativeAvailable=true,activated=false;
+let nativeAvailable=true,activated=false,cacheHit=false,createPlain=false;
 const calls=[],uploads=[];
 const job=id=>({id,user_id:user.id,book_id:mainId,title:'Evidence Book',author:'Test Author',status:id==='native-job'?'pending':'ready',run_state:id==='native-job'?'manual':'complete',cursor:0,total_sections:1,revision:id===nextId?2:1,is_current:id===nextId?activated:!activated,parent_job_id:id===nextId?mainId:null,source_manifest:[{name:'source.md',sha:'0'.repeat(64),jobId:mainId,startLine:1,endLine:4}],...(id==='native-job'?{source_import:{kind:'native',state:'queued'}}:{artifacts:{'book.md':'# Evidence Book\n\nRead the source before making a decision.','skill/SKILL.md':'# Evidence skill'}})});
 try {
@@ -26,10 +32,12 @@ try {
     else if(body.action==='finalize')result={job:job('native-job')};
     else throw Error(`Unexpected native action ${body.action}`);
    }else {
-    if(body.action==='lookup')result={reused:false};
+    if(body.action==='lookup')result=cacheHit?{reused:true,job:job(mainId)}:{reused:false};
     else if(body.action==='health')result={available:true,staged_uploads:true};
     else if(body.action==='status')result={job:job(body.id)};
     else if(body.action==='revisions')result={book_id:mainId,revisions:[job(mainId),job(nextId)]};
+    else if(body.action==='create'&&createPlain)result={job:job('plain-job')};
+    else if(body.action==='enqueue'&&createPlain)result={job:job('plain-job')};
     else if(body.action==='create'){result={error:'UI test stopped before generation.'};status=400;}
     else if(body.action==='activate'){assert.equal(body.reviewAccepted,true);activated=true;result={job:job(nextId)};}
     else if(body.action==='delete'){assert.equal(body.id,nextId);result={deleted:true};}
@@ -42,27 +50,48 @@ try {
   await route.fulfill({status,contentType:'application/json',body:JSON.stringify(result)});
  });
  const open=async()=>{await page.goto(origin+'/tools/',{waitUntil:'domcontentloaded'});await page.locator('[data-open-book-request]').first().click();};
- const select=async(name,mode='text')=>{await page.locator('select[name=extractionMode]').selectOption(mode);await page.getByLabel('Source file',{exact:true}).setInputFiles({name,mimeType:'application/octet-stream',buffer:Buffer.from(`ORIGINAL ${name}`)});};
- const review=async()=>{await page.locator('[data-upload-submit]').click();await page.getByText(/Sources reviewed\./).waitFor();};
+ const select=async name=>{assert.equal(await page.locator('select[name=extractionMode]').count(),0);await page.getByLabel('Source file',{exact:true}).setInputFiles({name,mimeType:'application/octet-stream',buffer:name.endsWith('.pdf')?pdf:Buffer.from(`ORIGINAL ${name}`)});};
  if(!process.env.AWB_TEST_REVISION_ONLY){
  for(const [name,mode] of [['kindle.mobi','text'],['kindle.azw','text'],['kindle.azw3','text'],['technical.pdf','technical']]) {
-  await open();await select(name,mode);const start=calls.length,uploaded=uploads.length;await review();await page.locator('[data-upload-submit]').click();await page.waitForURL('**/your-book/?id=native-job',{waitUntil:'domcontentloaded'});
+  await open();await select(name);const start=calls.length,uploaded=uploads.length;await page.locator('[data-upload-submit]').click();await page.waitForURL('**/your-book/?id=native-job',{waitUntil:'domcontentloaded'});
   await page.getByText('Your original file is saved. Waiting for background extraction…',{exact:true}).waitFor();
   const sent=calls.slice(start),prepared=sent.find(c=>c.endpoint==='book-native'&&c.action==='prepare');
   assert.equal(prepared.name,name);assert.equal(prepared.extractionMode,mode);assert.match(prepared.sha,/^[a-f0-9]{64}$/);assert.equal(prepared.text,undefined);
-  assert.equal(uploads.length,uploaded+1);assert.equal(uploads.at(-1).toString(),`ORIGINAL ${name}`);
-  assert.ok(sent.some(c=>c.endpoint==='book-native'&&c.action==='finalize'));assert.ok(!sent.some(c=>['lookup','create','enqueue'].includes(c.action)));
+  assert.equal(uploads.length,uploaded+1);assert.deepEqual(uploads.at(-1),name.endsWith('.pdf')?pdf:Buffer.from(`ORIGINAL ${name}`));
+  assert.ok(sent.some(c=>c.endpoint==='book-native'&&c.action==='finalize'));assert.ok(!sent.some(c=>['create','enqueue'].includes(c.action)));
   console.log(`PASS ${name}: original-only native upload and background status`);
  }
- nativeAvailable=false;await open();await select('unavailable.pdf','technical');const uploadCount=uploads.length;await page.locator('[data-upload-submit]').click();await page.getByText(/Background extraction is unavailable/).waitFor();assert.equal(uploads.length,uploadCount);nativeAvailable=true;
- await page.locator('select[name=extractionMode]').selectOption('text');assert.equal(await page.locator('[data-upload-submit]').isDisabled(),false);
- console.log('PASS native unavailability blocks upload; switching extraction clears stale error');
+ nativeAvailable=false;await open();await select('unavailable.pdf');const uploadCount=uploads.length;await page.locator('[data-upload-submit]').click();await page.getByText(/background reader is temporarily unavailable/).waitFor();assert.equal(uploads.length,uploadCount);nativeAvailable=true;
+ assert.equal(await page.getByRole('button',{name:'Try again',exact:true}).isEnabled(),true);
+ await page.getByRole('button',{name:'Try again',exact:true}).click();await page.waitForURL('**/your-book/?id=native-job');
+ console.log('PASS native unavailability preserves source and retries without an extraction selector');
+ cacheHit=true;nativeAvailable=false;await open();await select('saved.pdf');const beforeCache=calls.length,uploadsBeforeCache=uploads.length;
+ await page.locator('[data-upload-submit]').click();await page.waitForURL('**/your-book/?id='+mainId);
+ assert.equal(uploads.length,uploadsBeforeCache);assert.ok(!calls.slice(beforeCache).some(c=>c.endpoint==='book-native'));
+ cacheHit=false;nativeAvailable=true;console.log('PASS cached PDF bypasses parsing, upload and native availability');
+ nativeAvailable=false;createPlain=true;await open();
+ await page.getByLabel('Source file',{exact:true}).setInputFiles([
+  {name:'mixed-technical.pdf',mimeType:'application/pdf',buffer:pdf},
+  {name:'mixed-kindle.mobi',mimeType:'application/octet-stream',buffer:Buffer.from('ORIGINAL mixed-kindle.mobi')},
+  {name:'mixed-notes.md',mimeType:'text/markdown',buffer:Buffer.from(source)}
+ ]);
+ const mixedStart=calls.length;
+ await page.locator('[data-upload-submit]').click();await page.getByText(/1 source saved/).waitFor();
+ assert.equal(calls.slice(mixedStart).filter(c=>c.action==='create').length,1);
+ assert.equal(calls.slice(mixedStart).filter(c=>c.action==='enqueue').length,1);
+ assert.equal(calls.slice(mixedStart).filter(c=>c.action==='prepare').length,0);
+ assert.equal(await page.locator('[data-upload-files] a').count(),1);
+ nativeAvailable=true;await page.getByRole('button',{name:'Try again',exact:true}).click();await page.waitForURL('**/processing/');
+ const mixed=calls.slice(mixedStart);
+ assert.deepEqual(mixed.filter(c=>c.action==='prepare').map(c=>[c.name,c.extractionMode]),[['mixed-technical.pdf','technical'],['mixed-kindle.mobi','text']]);
+ assert.equal(mixed.filter(c=>c.action==='create').length,1,'retry must not resubmit the successful ordinary source');
+ createPlain=false;console.log('PASS mixed PDF/Kindle/text batch: native outage isolates failures; retry uses per-file routes and keeps saved sources');
  for(const kind of ['append','replace']) {
   await page.goto(`${origin}/your-book/?id=${mainId}`,{waitUntil:'domcontentloaded'});await page.locator(`[data-job-${kind==='append'?'add':'replace'}-source]`).click();
   assert.equal(await page.getByLabel('Source file',{exact:true}).getAttribute('multiple'),null);
   const transfer=await page.evaluateHandle(()=>{const data=new DataTransfer();data.items.add(new File(['one'],'extra.md'));data.items.add(new File(['two'],'second.md'));return data;});
   await page.locator('[data-upload-drop]').dispatchEvent('drop',{dataTransfer:transfer});await transfer.dispose();assert.equal(await page.locator('[data-upload-files] li').count(),1);
-  const start=calls.length;await review();await page.locator('[data-upload-submit]').click();await page.getByText('UI test stopped before generation.',{exact:true}).waitFor();
+  const start=calls.length;await page.locator('[data-upload-submit]').click();await page.getByText('UI test stopped before generation.',{exact:true}).waitFor();
   const sent=calls.slice(start),prepared=sent.find(c=>c.action==='create');assert.equal(prepared.parentId,mainId);assert.equal(prepared.revisionKind,kind);assert.ok(prepared.text.length>100);assert.ok(!sent.some(c=>c.action==='lookup'));
  }
  console.log('PASS append/replace one-file revisions bypass raw-SHA reuse and retain parent metadata');
@@ -86,4 +115,4 @@ try {
  assert.equal(await page.locator('[data-job-discard]').isVisible(),false);
  await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  console.log('PASS explicit reviewed activation, previous-version link, stable install command, and mobile layout');
-}finally{await browser.close();}
+}finally{await browser.close();rmSync(fixtures,{recursive:true,force:true});}
