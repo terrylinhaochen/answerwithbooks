@@ -1,0 +1,67 @@
+{
+  "files": 315,
+  "sourceLines": 35100,
+  "sourceCharacters": 2245854,
+  "sourceHash": "7e4feb57694c123215687cc4468a9a14671b0cf72b4d062737662dcec90b542f",
+  "chapters": 117,
+  "citationRangesChecked": 4989,
+  "qualityReview": {
+    "version": 3,
+    "method": "model-assisted checks against each claim\u2019s cited excerpts, plus synthesis review",
+    "sectionsReviewed": 117,
+    "totalSections": 117,
+    "reviewedAt": "2026-10-08T09:09:23.633Z",
+    "textSha256": "7e4feb57694c123215687cc4468a9a14671b0cf72b4d062737662dcec90b542f",
+    "limitations": "Model checks are fallible; verify important claims against the bundled source."
+  },
+  "skillBytes": 3854,
+  "title": "An Inquiry into the Nature and Causes of the Wealth of Nations",
+  "author": "Adam Smith",
+  "status": "ready",
+  "coverStatus": "ready",
+  "overviewGroups": 10,
+  "startedAt": "2026-10-08T08:10:28.016892Z",
+  "textReadyAt": "2026-10-08T09:09:25.633698Z",
+  "wallSecondsIncludingFixes": 3537.616806,
+  "timingLimitation": "Includes diagnosis, deployments and stopped time; not a steady-state performance benchmark.",
+  "receipt": {
+    "calls": 331,
+    "models": [
+      "gpt-5.4-mini-2026-03-17",
+      "gpt-image-1.5"
+    ],
+    "inputTokens": 3902044,
+    "outputTokens": 459290,
+    "cachedInputTokens": 268032,
+    "elapsedProviderMs": 3355758,
+    "knownProviderEstimateUsd": 4.83156765,
+    "textProviderEstimateUsd": 4.80926865,
+    "imageProviderEstimateUsd": 0.022299,
+    "unpricedCalls": 0,
+    "completeEstimate": true,
+    "recordingCoverage": "recorded-calls-only",
+    "customerCharge": null,
+    "currency": "USD",
+    "rateDate": "2026-10-08",
+    "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. Customer pricing has not been configured."
+  },
+  "retrieval": {
+    "method": "hybrid",
+    "index": {
+      "failed": 0,
+      "embedded": 117,
+      "sections": 117
+    },
+    "sectionIds": [
+      "ch03",
+      "ch02",
+      "ch77",
+      "ch83",
+      "ch33",
+      "ch17"
+    ]
+  },
+  "publishedCliDownload": true,
+  "localSkillInstalledAndRead": true,
+  "sourceCaveat": "All extracted source sections, including edition front and end matter. Processing sections are not original chapter counts; extraction equality is not an independent completeness audit."
+}
