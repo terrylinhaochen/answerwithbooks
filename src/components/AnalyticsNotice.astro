@@ -1,0 +1,22 @@
+<aside class="analytics-notice" data-analytics-notice aria-labelledby="analytics-notice-title" hidden>
+  <div>
+    <h2 id="analytics-notice-title">Optional analytics</h2>
+    <p>Allow Google Analytics to measure visits and clicks? You can use the site either way. <a href="/privacy/#privacy-choices">Privacy choices</a></p>
+  </div>
+  <div class="analytics-notice__actions">
+    <button type="button" data-analytics-choice="on" aria-pressed="false">Allow analytics</button>
+    <button type="button" data-analytics-choice="off" aria-pressed="false">No thanks</button>
+  </div>
+</aside>
+<style>
+  .analytics-notice{position:fixed;left:20px;bottom:20px;z-index:45;width:min(430px,calc(100vw - 40px));padding:20px;border:1px solid var(--color-line);border-radius:16px;background:var(--color-paper,#f4f1e9);color:var(--color-ink);box-shadow:0 8px 32px #00000018;font:14px/1.55 var(--font-sans)}
+  .analytics-notice[hidden]{display:none!important}
+  h2{font-weight:600;font-size:14px;margin:0 0 5px}
+  p{margin:0;color:var(--color-soft)}
+  a{text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+  .analytics-notice__actions{display:flex;gap:10px;margin-top:15px}
+  button{flex:1;min-height:42px;padding:9px 12px;border:1px solid var(--color-line);border-radius:7px;background:transparent;color:var(--color-ink);font:500 13px/1.4 var(--font-sans);cursor:pointer}
+  button:hover{background:var(--color-wash)}
+  button:focus-visible,a:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}
+  @media(max-width:480px){.analytics-notice{left:12px;bottom:12px;width:calc(100vw - 24px);padding:16px}}
+</style>

@@ -71,7 +71,7 @@ try {
    await page.evaluate(()=>{window.gtag=()=>{throw new Error('simulated unavailable analytics');};});
    await outbound(); // Analytics failure cannot block the native link.
    await page.goto(`${base}/privacy/`);
-   await page.locator('[data-analytics-choice="off"]').click();await page.waitForTimeout(300);
+   await page.getByRole('button',{name:'Keep analytics off',exact:true}).click();await page.waitForTimeout(300);
    await page.goto(bookUrl);await outbound();assert.equal((await getEvents()).length,0,'withdrawal persists');
   }
   console.log(`PASS ${test.name}: outbound link works; ${test.events?'consented event and withdrawal verified':'no purchase event'}.`);

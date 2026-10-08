@@ -7,11 +7,12 @@ const { ids } = Astro.props;
     const key = 'awb:analytics-consent:v1';
     const maxAge = 180 * 24 * 60 * 60 * 1000;
     const blocked = navigator.globalPrivacyControl === true || navigator.doNotTrack === '1';
-    let choice = 'off';
+    const privateRoute = /^\/(login|signup|auth|reset-password|profile|my-books|your-book|processing|connect-agent|billing|api-keys|onboarding|upload|ask|embed|acquired-intelligence|community)(\/|$)/.test(location.pathname);
+    let choice = null;
     let loaded = false;
     try {
       const stored = JSON.parse(localStorage.getItem(key) || 'null');
-      if (stored?.value === 'on' && Number.isFinite(stored.at) && stored.at <= Date.now() && Date.now() - stored.at < maxAge) choice = 'on';
+      if (['on', 'off'].includes(stored?.value) && Number.isFinite(stored.at) && stored.at <= Date.now() && Date.now() - stored.at < maxAge) choice = stored.value;
     } catch { /* No storage or invalid preference: analytics stays off. */ }
     if (blocked) choice = 'off';
     const disable = () => ids.forEach(id => { window[`ga-disable-${id}`] = true; });
@@ -24,21 +25,23 @@ const { ids } = Astro.props;
         domains.forEach(domain => { document.cookie = `${name}=; Max-Age=0; path=/${domain}; SameSite=Lax`; });
       }
     };
+    // Google's basic consent mode: no Google Analytics requests until a visitor opts in.
+    window.dataLayer = window.dataLayer || [];
+    const gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag = gtag;
+    const denied = { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' };
+    gtag('consent', 'default', denied);
     const load = () => {
       // Account, submitted-content, and auth routes never initialize analytics.
-      const privateRoute = /^\/(login|signup|auth|reset-password|profile|my-books|your-book|billing|api-keys|onboarding|upload|ask|embed)(\/|$)/.test(location.pathname);
       if (loaded || blocked || choice !== 'on' || !ids.length || privateRoute) return;
       loaded = true;
-      window.dataLayer = window.dataLayer || [];
-      const gtag = function () { window.dataLayer.push(arguments); };
-      window.gtag = gtag;
       ids.forEach(id => { window[`ga-disable-${id}`] = false; });
-      gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+      gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
       gtag('js', new Date());
       ids.forEach(id => gtag('config', id, {
         allow_google_signals: false, allow_ad_personalization_signals: false,
         page_location: location.origin + location.pathname, page_referrer: '',
-        cookie_expires: 15552000,
+        cookie_expires: 15552000, send_page_view: true,
       }));
       const script = document.createElement('script');
       script.async = true;
@@ -47,8 +50,11 @@ const { ids } = Astro.props;
       document.head.appendChild(script);
     };
     const render = () => {
+      document.querySelectorAll('[data-analytics-notice]').forEach(node => {
+        node.hidden = choice !== null || blocked || privateRoute || !ids.length || /^\/privacy(\/|$)/.test(location.pathname);
+      });
       document.querySelectorAll('[data-analytics-status]').forEach(node => {
-        node.textContent = blocked ? 'Analytics is off because your browser requests no tracking.' : `Optional analytics is ${choice}. This choice applies to this browser.`;
+        node.textContent = blocked ? 'Analytics is off because your browser requests no tracking.' : `Optional analytics is ${choice === 'on' ? 'on' : 'off'}. This choice applies to this browser.`;
       });
       document.querySelectorAll('[data-analytics-choice]').forEach(button => {
         button.disabled = blocked && button.dataset.analyticsChoice === 'on';
@@ -56,9 +62,10 @@ const { ids } = Astro.props;
       });
     };
     disable();
-    if (choice === 'off') clearAnalyticsCookies();
+    if (choice !== 'on') clearAnalyticsCookies();
     load();
-    document.addEventListener('DOMContentLoaded', render);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
+    else render();
     const trackBookPurchaseClick = (event) => {
       if (event.type === 'auxclick' && event.button !== 1) return;
       if (event.type === 'click' && event.button !== 0) return;
@@ -91,7 +98,7 @@ const { ids } = Astro.props;
       choice = button.dataset.analyticsChoice === 'on' ? 'on' : 'off';
       try { localStorage.setItem(key, JSON.stringify({ value: choice, at: Date.now() })); } catch { /* Applies to this page only. */ }
       if (choice === 'off') {
-        disable(); clearAnalyticsCookies(); render();
+        disable(); gtag('consent', 'update', denied); clearAnalyticsCookies(); render();
         // Unload listeners installed by the third-party library after withdrawal.
         if (loaded) location.reload();
       } else { load(); render(); }

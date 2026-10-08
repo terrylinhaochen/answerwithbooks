@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/collector-theme.css';
 import NewsletterModal from '../components/NewsletterModal.astro';
 import Analytics from '../components/Analytics.astro';
+import AnalyticsNotice from '../components/AnalyticsNotice.astro';
 import { newsletterSignupUrl } from '../lib/newsletter';
 
 export interface Props {
@@ -40,14 +41,12 @@ const imageUrl = new URL(image, site).href;
 const structuredData = Array.isArray(jsonLd)
   ? { '@context': 'https://schema.org', '@graph': jsonLd }
   : jsonLd;
-const gaMeasurementIds = (
-  import.meta.env.PUBLIC_GA_MEASUREMENT_IDS ||
-  import.meta.env.PUBLIC_GA_MEASUREMENT_ID ||
-  'G-FNWRC3EMV4'
-)
-  .split(',')
-  .map((id) => id.trim())
-  .filter(Boolean);
+// Keep the site's primary property even when additional destinations are configured.
+const gaMeasurementIds = [...new Set([
+  'G-FNWRC3EMV4',
+  import.meta.env.PUBLIC_GA_MEASUREMENT_ID || '',
+  import.meta.env.PUBLIC_GA_MEASUREMENT_IDS || '',
+].flatMap(value => value.split(',').map(id => id.trim())).filter(id => /^G-[A-Z0-9]+$/.test(id)))];
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const nav = [
@@ -137,6 +136,7 @@ const current = Astro.url.pathname;
     </header>}
 
     {!readingMode && <NewsletterModal />}
+    <AnalyticsNotice />
 
     <main class="flex-1 w-full">
       <slot />

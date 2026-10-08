@@ -18,6 +18,13 @@ assert.match(skills, /fuller downloadable skill package/);
 const homepage = read('');
 assert.match(homepage, /data-direction="table"/);
 for (const marker of ['data-personalize-shelf', 'data-personal-shelf-heading', 'data-shelf-date', 'data-shelf-preferences', 'data-clear-shelf', 'data-share-shelf', 'data-copy-shelf-link', 'data-create-shelf-image']) assert.ok(homepage.includes(marker));
+for (const route of ['', 'books', 'tools', 'guides', 'privacy']) {
+ const html = read(route);
+ const ids = JSON.parse(html.match(/const ids = (\[[^;]*\]);/)?.[1] || '[]');
+ assert.equal(ids.filter(id => id === 'G-FNWRC3EMV4').length, 1, `${route}: primary Google Analytics destination appears exactly once`);
+ assert.equal(ids.length, new Set(ids).size, 'Analytics destinations must not duplicate pageviews');
+ assert.match(html, /data-analytics-notice/, `${route}: discoverable analytics choice`);
+}
 const sharedShelf = read('shelf');
 assert.match(sharedShelf, /name="robots" content="noindex, follow"/);
 assert.equal((sharedShelf.match(/data-shared-book-template=/g) || []).length, 46);
