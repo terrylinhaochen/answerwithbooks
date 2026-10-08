@@ -59,7 +59,8 @@ async function showVersions(job:any) {
  updateActivationGate();
  const installId=job.book_id||job.id;
  const canInstall=job.status==='ready'&&!pending&&/^[a-zA-Z0-9-]+$/.test(installId);
- find('install').hidden=!canInstall;
+ find('install').hidden=!canInstall;find('remote').hidden=!canInstall;
+ if(canInstall)find('remote-example').textContent=`Ask: “Use ${job.title} to help me with…”`;
  if(canInstall)find('install-command').textContent=`npx --yes ${bookCliRelease.package || `answer-with-books@${bookCliRelease.version}`} library install-book ${installId}`;
  const key=`${job.id}:${job.status}:${job.is_current}:${job.revision}`;
  if(key===revisionsKey){if(pending)find('version-status').textContent=`Version ${job.revision||1} · ${revisionCanActivate?job.status==='ready'?'Review before making current':'New version in progress':'Previous version'}`;return;}
@@ -157,6 +158,11 @@ find('activate').addEventListener('click',async()=>{
   window.dispatchEvent(new Event('awb:book-added'));
  }catch(error){find('version-message').textContent=error instanceof Error?error.message:'Could not make this version current. Please retry.';}
  finally{activating=false;updateActivationGate();}
+});
+find('remote-copy').addEventListener('click',async()=>{
+ const prompt=`$answer-with-books Use “${current.title}” from my private library to help with [describe my task]. Focus on book ${current.book_id||current.id}; retrieve relevant chapter methods, check their citations, and apply them to my situation.`;
+ try{await navigator.clipboard.writeText(prompt);find('copy-status').textContent='Question copied. Paste it into your connected agent and replace the task placeholder.';}
+ catch{find<HTMLTextAreaElement>('prompt').value=prompt;find('prompt').hidden=false;find('copy-status').textContent='Copy was blocked. Select and copy the question below.';}
 });
 find('install-copy').addEventListener('click',async()=>{
  try {await navigator.clipboard.writeText(find('install-command').textContent||'');find('copy-status').textContent='Install command copied. Run it in your terminal after signing in to the updated CLI.';}

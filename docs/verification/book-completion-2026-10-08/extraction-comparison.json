@@ -1,0 +1,14 @@
+[
+  {
+    "runtime": "python3",
+    "elapsedMs": 2035.487291,
+    "characters": 2245854,
+    "sha256": "7e4feb57694c123215687cc4468a9a14671b0cf72b4d062737662dcec90b542f"
+  },
+  {
+    "runtime": "pyodide",
+    "elapsedMs": 6314.365416999999,
+    "characters": 2245854,
+    "sha256": "7e4feb57694c123215687cc4468a9a14671b0cf72b4d062737662dcec90b542f"
+  }
+]
