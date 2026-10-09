@@ -1,0 +1,21 @@
+{
+  "scope": "18 approved evaluation requests only; not generation cost or customer charge",
+  "calls": 18,
+  "models": [
+    "gpt-5.4-mini-2026-03-17"
+  ],
+  "inputTokens": 38690,
+  "outputTokens": 6030,
+  "cachedInputTokens": 0,
+  "elapsedProviderMs": 57824,
+  "knownProviderEstimateUsd": 0.0561525,
+  "textProviderEstimateUsd": 0.0561525,
+  "imageProviderEstimateUsd": 0,
+  "unpricedCalls": 0,
+  "completeEstimate": true,
+  "recordingCoverage": "recorded-calls-only",
+  "customerCharge": null,
+  "currency": "USD",
+  "rateDate": "2026-10-08",
+  "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+}

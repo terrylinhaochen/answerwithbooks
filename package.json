@@ -35,7 +35,7 @@
     "astro": "astro",
     "engine:compile": "node scripts/compile-book-artifacts.mjs",
     "test:book-processing": "node --test scripts/test-book-processing.mjs",
-    "test:book-pipeline": "node --test scripts/test-book-model.mjs scripts/test-book-quality.mjs scripts/test-book-worker.mjs scripts/test-book-processing.mjs scripts/test-book-parity.mjs scripts/test-long-book.mjs scripts/test-book-revisions.mjs scripts/test-book-parallel.mjs scripts/test-book-library.mjs scripts/test-book-usage.mjs",
+    "test:book-pipeline": "node --test scripts/test-book-evals.mjs scripts/test-book-model.mjs scripts/test-book-quality.mjs scripts/test-book-worker.mjs scripts/test-book-processing.mjs scripts/test-book-parity.mjs scripts/test-long-book.mjs scripts/test-book-revisions.mjs scripts/test-book-parallel.mjs scripts/test-book-library.mjs scripts/test-book-usage.mjs",
     "predev": "node scripts/build-book-runtime.mjs",
     "prebuild": "node scripts/build-book-runtime.mjs",
     "test:book-purchases": "node scripts/test-book-purchases.mjs",
@@ -44,7 +44,8 @@
     "test:source-upload": "node scripts/test-source-upload.mjs",
     "test:shelf-personalization": "node scripts/test-shelf-personalization.mjs",
     "test:shelf-sharing": "node scripts/test-shelf-sharing.mjs",
-    "test:shelf-share-image": "node scripts/test-shelf-share-image.mjs"
+    "test:shelf-share-image": "node scripts/test-shelf-share-image.mjs",
+    "test:book-billing": "node --test scripts/test-book-billing.mjs scripts/test-book-metered-billing.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",
@@ -62,6 +63,7 @@
     "tesseract.js": "7.0.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
     "playwright": "^1.61.1"
   }
 }

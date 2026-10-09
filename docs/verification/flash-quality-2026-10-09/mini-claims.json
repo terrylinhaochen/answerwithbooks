@@ -1,0 +1,426 @@
+{
+  "version": 1,
+  "suite": "claims",
+  "config": {
+    "model": "gpt-5.4-mini",
+    "provider": "openai",
+    "reasoningModel": true,
+    "effort": "low"
+  },
+  "startedAt": "2026-10-09T07:55:17.693Z",
+  "fixturesSha256": "59ee74ef334d170a8825a4c41264a9b8c2a987e421c1471c8c6dd4e91149bd7e",
+  "status": "passed",
+  "results": [
+    {
+      "id": "conditional-output",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The claim strengthens a conditional possibility (“could, when they exerted themselves, make about twelve pounds of pins in a day”) into a routine, unconditional fact that they “routinely produced twelve pounds of pins every day.” The source supports ability under effort, not a regular daily outcome."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported: the source only says they could make about twelve pounds in a day when they exerted themselves; it does not support that this was routine or that it happened every day."
+          }
+        ]
+      }
+    },
+    {
+      "id": "qualified-output",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": true,
+            "reason": "The note matches the cited source: it states that when they exerted themselves, they could make about twelve pounds of pins in a day. The wording is slightly paraphrased but preserves the same meaning and conditions."
+          }
+        ]
+      }
+    },
+    {
+      "id": "metadata-only",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The cited evidence only identifies the work ('The Wealth of Nations, by Adam Smith') and does not support the substantive claim that labour determines the exchange value of commodities."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported. The provided evidence is only a title/author citation and contains no passage stating that labour determines the exchange value of commodities."
+          }
+        ]
+      }
+    },
+    {
+      "id": "missing-deadline",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The source says an action without a date is incomplete and should have its timing clarified before committing; it does not say to discard it, and the claim strengthens/reverses the instruction."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported. The cited line calls an action without a date incomplete and recommends clarifying its timing before committing to it. It does not authorize discarding such actions, so the claim reverses the source's guidance."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lifetime-roles",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The evidence only describes that some historical workers spent their whole lives at one operation and that repetition developed their dexterity. It does not prescribe assigning workers to permanent lifetime roles, and it does not state that doing so will obtain a productivity benefit. This turns a descriptive observation into a stronger recommendation and outcome claim."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "The cited sentence is descriptive, not prescriptive: it says some historical workers spent their whole lives at one operation and that repetition developed their dexterity. It does not authorize the directive to assign workers to permanent lifetime roles, nor does it guarantee a productivity benefit."
+          }
+        ]
+      }
+    },
+    {
+      "id": "cautious-application",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": true,
+            "reason": "The source states that repetition can develop dexterity and that switching operations consumes time. The proposed step is a cautious, temporary test of grouping similar tasks to see whether switching time falls, which is a plausible derived application and does not overstate the source."
+          }
+        ]
+      }
+    },
+    {
+      "id": "invented-source-instruction",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The proposed step adds a new prescription not stated in the source: it specifies fixed quarterly rotations and an optimization goal. The source only says repetition can develop dexterity and that switching operations consumes time; it does not prescribe quarterly rotations, fixed scheduling, or guaranteed productivity improvement."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported as a source-instruction application. The cited passage states only that repetition can develop dexterity and switching operations consumes time. It does not instruct fixed quarterly rotations, nor does it prescribe optimizing productivity as an obligation or guaranteed outcome."
+          }
+        ]
+      }
+    },
+    {
+      "id": "transport-overgeneralization",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The step overstates the source by turning a limited historical comparison (“on the routes described”) into a universal rule (“Always ship by water” and “for every route”). The source says water carriage could be cheaper than carts on those routes; it does not support an across-the-board obligation or guarantee.",
+          "The source states a possibility and comparative advantage, not an absolute claim that water transport is cheaper in every case."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "The cited line supports only a historical comparison on the routes described: water carriage could carry larger loads over longer distances at lower expense than carts. It does not support the stronger application that one should always ship by water or that this is cheaper for every route."
+          }
+        ]
+      }
+    },
+    {
+      "id": "wagon-group-mismatch",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The note reverses the quantities in the source: the source says one wagon carries four tons in six weeks, and a ship carries 200 tons in that same time, which is the same quantity as fifty wagons. It does not say fifty wagons carry four tons."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "Unsupported. The source states that one wagon carries four tons in six weeks, and that a ship carries 200 tons in that same time—the same quantity as fifty wagons. The claim incorrectly swaps this to say fifty wagons carry four tons."
+          }
+        ]
+      }
+    },
+    {
+      "id": "wagon-group-correct",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": true,
+            "reason": "The evidence states that one wagon carries four tons in six weeks and that a ship carries 200 tons in that same time, equal to fifty wagons. The note accurately restates these quantities."
+          }
+        ]
+      }
+    },
+    {
+      "id": "description-is-not-instruction",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "The cited line is descriptive, not an instruction. It says output increases through dexterity, saved switching time, and machines, but it does not prescribe checking roles or making machinery-improvement decisions.",
+          "\"Repetition\" is not stated in the evidence; it is an added inference beyond dexterity and saved switching time.",
+          "\"Potential machinery improvements\" goes beyond the source’s description of machines and turns a descriptive factor into a proposed action without an explicit basis."
+        ],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": false,
+            "reason": "The evidence only describes factors that increase output; it does not instruct the reader to check each role for repetition, switching time, or machinery improvements."
+          }
+        ]
+      }
+    },
+    {
+      "id": "description-derived-checklist",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "claim",
+            "supported": true,
+            "reason": "The source states that output increases through dexterity, saved switching time, and machines. The notes present these as a cautious, illustrative diagnostic application rather than as a prescribed checklist, which is consistent with a derived application of the principle."
+          }
+        ]
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2509,
+      "outcome": "complete",
+      "inputTokens": 517,
+      "outputTokens": 93,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 13
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2626,
+      "outcome": "complete",
+      "inputTokens": 500,
+      "outputTokens": 130,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 34
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 3213,
+      "outcome": "complete",
+      "inputTokens": 512,
+      "outputTokens": 194,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 63
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 1871,
+      "outcome": "complete",
+      "inputTokens": 506,
+      "outputTokens": 169,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 53
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2039,
+      "outcome": "complete",
+      "inputTokens": 523,
+      "outputTokens": 243,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 93
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2305,
+      "outcome": "complete",
+      "inputTokens": 534,
+      "outputTokens": 186,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 99
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2014,
+      "outcome": "complete",
+      "inputTokens": 527,
+      "outputTokens": 246,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 105
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2532,
+      "outcome": "complete",
+      "inputTokens": 529,
+      "outputTokens": 263,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 93
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 2919,
+      "outcome": "complete",
+      "inputTokens": 513,
+      "outputTokens": 232,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 95
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 1796,
+      "outcome": "complete",
+      "inputTokens": 529,
+      "outputTokens": 200,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 124
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 3043,
+      "outcome": "complete",
+      "inputTokens": 519,
+      "outputTokens": 393,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 237
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 4083,
+      "outcome": "complete",
+      "inputTokens": 534,
+      "outputTokens": 156,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 73
+    }
+  ],
+  "limitations": "Targeted agent-labeled regressions. Not a general accuracy estimate, generation quality score, or human evaluation.",
+  "cases": 12,
+  "graded": 12,
+  "unavailable": 0,
+  "passed": 12,
+  "accepted": 4,
+  "rejected": 8,
+  "completedAt": "2026-10-09T07:55:30.263Z",
+  "rubricSha256": "d1bf0186769c9307a719c9b7e0148beb091d382544202de6966f88da03aa5f03",
+  "rubricHashRecordedAfterRun": true,
+  "usage": {
+    "calls": 12,
+    "models": [
+      "gpt-5.4-mini-2026-03-17"
+    ],
+    "inputTokens": 6243,
+    "outputTokens": 2505,
+    "cachedInputTokens": 0,
+    "elapsedProviderMs": 30950,
+    "knownProviderEstimateUsd": 0.01595475,
+    "textProviderEstimateUsd": 0.01595475,
+    "imageProviderEstimateUsd": 0,
+    "unpricedCalls": 0,
+    "completeEstimate": true,
+    "recordingCoverage": "recorded-calls-only",
+    "customerCharge": null,
+    "currency": "USD",
+    "rateDate": "2026-10-08",
+    "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+  }
+}

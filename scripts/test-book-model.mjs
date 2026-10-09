@@ -8,7 +8,7 @@ import {join} from 'node:path';
 import {benchmarkSource, runModelBenchmark} from './benchmark-book-models.mjs';
 
 const result = overrides => ({model:'gpt-6-luna',usage:{prompt_tokens:100,completion_tokens:20,prompt_tokens_details:{cached_tokens:40},completion_tokens_details:{reasoning_tokens:5}},choices:[{finish_reason:'stop',message:{content:'{"ok":true}'}}],...overrides});
-const env = (values = {}) => name => ({OPENAI_API_KEY:'synthetic-secret',...values})[name];
+const env = (values = {}) => name => ({OPENAI_API_KEY:'synthetic-secret',FIREWORKS_API_KEY:'synthetic-fireworks-secret',...values})[name];
 
 test('modern models use compatible reasoning parameters and strict schema; metrics omit content',async()=>{
  const requests=[],metrics=[];let time=0;
@@ -29,17 +29,26 @@ test('explicit legacy models remain available and review has independent model a
  assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-6-astra',BOOK_REASONING_EFFORT:'none'})),/requires reasoning/);
 });
 
-test('default Mini matches the benchmark: generation none, review low, with explicit overrides preserved',async()=>{
+test('default Flash uses low reasoning for generation and review; explicit Mini overrides remain compatible',async()=>{
  const sent=[];
- const client=createBookModelClient({getEnv:env(),fetchImpl:async(_,init)=>{sent.push(JSON.parse(init.body));return Response.json(result({model:'gpt-5.4-mini-2026-03-17'}));}});
+ const client=createBookModelClient({getEnv:env(),fetchImpl:async(url,init)=>{sent.push({url,body:JSON.parse(init.body),headers:init.headers});return Response.json(result({model:'accounts/fireworks/models/glm-5p3-flash'}));}});
  await client('write','source',{schema:sectionSchema,name:'book_section'});
  await client('review','claims',{kind:'review'});
- for(const body of sent){assert.equal(body.model,'gpt-5.4-mini');assert.equal(body.max_completion_tokens,6000);assert.equal(body.max_tokens,undefined);}
- assert.equal(sent[0].reasoning_effort,'none');assert.equal(sent[1].reasoning_effort,'low');assert.equal(sent[0].response_format.type,'json_schema');
- assert.equal(bookModelConfig(env({BOOK_REASONING_EFFORT:'medium'})).effort,'medium');
+ for(const {url,body,headers} of sent){
+  assert.equal(url,'https://api.fireworks.ai/inference/v1/chat/completions');
+  assert.equal(headers.Authorization,'Bearer synthetic-fireworks-secret');
+  assert.equal(body.model,'accounts/fireworks/models/glm-5p3-flash');
+  assert.equal(body.reasoning_effort,'low');assert.equal(body.max_tokens,6000);assert.equal(body.max_completion_tokens,undefined);
+ }
+ assert.equal(sent[0].body.response_format.type,'json_schema');
+ assert.equal(bookModelConfig(env({BOOK_REASONING_EFFORT:'high'})).effort,'high');
  assert.equal(bookModelConfig(env({BOOK_REVIEW_REASONING_EFFORT:'high'}),'review').effort,'high');
- assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-5.4-mini-2026-03-17'})).effort,'none');
+ assert.throws(()=>bookModelConfig(env({BOOK_REASONING_EFFORT:'none'})),/Fireworks/);
+ assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-5.4-mini'})).effort,'none');
+ assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-5.4-mini'}),'review').effort,'low');
  assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-6.1-sol'})).effort,'low');
+ const missingKey=createBookModelClient({getEnv:env({FIREWORKS_API_KEY:undefined}),fetchImpl:async()=>{throw Error('Must not fall back to OpenAI');}});
+ await assert.rejects(missingKey('system','source'),/not configured/);
 });
 
 test('provider errors, refusal and truncation cannot become accepted notes or expose provider text',async()=>{
@@ -91,4 +100,27 @@ test('Gemini uses its fixed endpoint and credential, preserving schema and bound
  const body=JSON.parse(request.body);assert.equal(body.reasoning_effort,'minimal');assert.equal(body.max_tokens,6000);assert.equal(body.response_format.type,'json_schema');
  const cfg=bookModelConfig(env({BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite',BOOK_REVIEW_REASONING_EFFORT:'low'}),'review');assert.equal(cfg.effort,'low');
  assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite',BOOK_REASONING_EFFORT:'none'})),/Invalid Gemini/);
+});
+
+test('Fireworks uses its own key and pinned endpoint with schema visible and cache usage preserved',async()=>{
+ let request;const metrics=[];
+ const client=createBookModelClient({getEnv:env({BOOK_PROCESSING_MODEL:'accounts/fireworks/models/glm-5p3-flash',FIREWORKS_API_KEY:'fireworks-test'}),onUsage:m=>metrics.push(m),fetchImpl:async(url,options)=>{request={url,...options};return Response.json(result({model:'accounts/fireworks/models/glm-5p3-flash',usage:{prompt_tokens:100,completion_tokens:10},perf_metrics:{'cached-prompt-tokens':25}}));}});
+ await client('Write original JSON notes.','source',{schema:sectionSchema,name:'book_section'});
+ assert.equal(request.url,'https://api.fireworks.ai/inference/v1/chat/completions');assert.equal(request.headers.Authorization,'Bearer fireworks-test');
+ const body=JSON.parse(request.body);assert.equal(body.service_tier,'default');assert.equal(body.max_tokens,6000);assert.equal(body.reasoning_effort,'low');assert.equal(body.context_length_exceeded_behavior,'error');assert.ok(body.messages[0].content.includes(JSON.stringify(sectionSchema)));assert.equal(body.response_format.type,'json_schema');
+ assert.equal(metrics[0].model,'accounts/fireworks/models/glm-5p3-flash');assert.equal(metrics[0].cachedInputTokens,25);assert.doesNotMatch(JSON.stringify(metrics),/fireworks-test/);
+ for(const model of ['accounts/evil/models/glm-5p3','https://example.com/model','accounts/fireworks/models/../private'])assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:model})),/Invalid/);
+});
+
+
+test('financial admission precedes network; durable receipt failures propagate and never trigger a second call',async()=>{
+ let calls=0;const order=[];
+ const denied=createBookModelClient({getEnv:env(),beforeCall:async()=>{throw Error('BOOK_BUDGET_EXHAUSTED');},fetchImpl:async()=>{calls++;return Response.json(result());}});
+ await assert.rejects(denied('system','source'),/BUDGET_EXHAUSTED/);assert.equal(calls,0);
+ const client=createBookModelClient({getEnv:env(),beforeCall:async r=>{assert.equal(r.outputBound,6000);assert.ok(r.inputBound>1024);order.push('reserve');return 'operation';},fetchImpl:async()=>{calls++;order.push('provider');return Response.json(result());},afterCall:async(id,metric)=>{assert.equal(id,'operation');assert.equal(metric.inputTokens,100);order.push('receipt');throw Error('Receipt unavailable');}});
+ await assert.rejects(client('system','source'),/Receipt unavailable/);assert.equal(calls,1);assert.deepEqual(order,['reserve','provider','receipt']);
+});
+test('transport errors retain a durable unknown operation instead of zero-cost completion',async()=>{
+ const metrics=[];const client=createBookModelClient({getEnv:env(),beforeCall:async()=> 'op',afterCall:async(_,m)=>{metrics.push(m);},fetchImpl:async()=>{throw Error('offline');}});
+ await assert.rejects(client('system','source'),/could not be reached/);assert.equal(metrics.length,1);assert.equal(metrics[0].inputTokens,null);assert.equal(metrics[0].outputTokens,null);
 });

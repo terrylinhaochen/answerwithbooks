@@ -7,9 +7,11 @@ const library=(await getCollection('books')).map(book=>({slug:book.id,title:book
 ---
 <dialog id="book-upload-dialog" class="book-upload-dialog">
  <header class="flex items-center justify-between gap-4"><h2 class="font-serif text-3xl" data-upload-title>Upload sources</h2><button type="button" data-close-book-upload aria-label="Close upload" class="p-3">×</button></header>
- <p class="mt-3 text-soft" data-upload-intro>Get a readable book, a reusable skill, and a cover from each file.</p>
- <p class="mt-2 text-sm text-soft" data-upload-reuse-note>Already in your library? We’ll reuse it.</p>
+ <p class="mt-3 text-soft" data-upload-intro>Create a readable book and a reusable skill from your source.</p>
+ <p class="mt-2 text-sm text-soft" data-upload-reuse-note>Existing library books are free to read, search, download, and reuse. Private books stay private.</p>
  <script type="application/json" data-upload-library set:html={JSON.stringify(library).replace(/</g,'\\u003c')} />
+ <fieldset class="mt-5 grid gap-3" data-processing-route><legend class="text-sm font-semibold">How would you like to create it?</legend><label class="text-sm"><input type="radio" name="processing-route" value="hosted" checked /> Let Answer with Books process it — review token rates and a spending limit first</label><label class="text-sm"><input type="radio" name="processing-route" value="agent" /> Use my own agent — uses my agent plan, no Answer with Books generation charge</label></fieldset>
+ <div hidden class="mt-5 rounded-xl border border-line p-4" data-local-processing><p class="text-sm">Ask your agent: “Use Answer with Books to turn my local file into a book summary and reusable skill. Use the customer-agent route.”</p><p class="mt-3 text-sm text-soft">Your agent reads the source, generates notes, checks citations, and saves the skill locally. Your file is not uploaded to Answer with Books. <a class="underline" href="/tools/local-book-processing/">Commands and setup</a></p></div>
  <form class="mt-6" novalidate>
   <label class="upload-drop" data-upload-drop>
    <svg class="upload-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>
@@ -33,8 +35,8 @@ const library=(await getCollection('books')).map(book=>({slug:book.id,title:book
    <p class="mt-2 text-sm text-soft">PDFs need selectable text; scanned pages need OCR first. Kindle files must be DRM-free. Long books are read in sections automatically.</p>
    <p class="mt-2 text-sm text-soft">Each file becomes a separate book and skill. Ten new sources per day.</p>
   </details>
-  <p class="mt-5 text-xs leading-relaxed text-soft">Private to your account. Source text is sent to our AI provider for processing.</p>
-  <button type="submit" class="awb-pill awb-pill-primary mt-5" data-upload-submit disabled>Create book &amp; skill</button>
+  <p class="mt-5 text-xs leading-relaxed text-soft">Private to your account. Uploading saves your source; accept the displayed price to send its text for hosted AI generation.</p>
+  <button type="submit" class="awb-pill awb-pill-primary mt-5" data-upload-submit disabled>Upload &amp; review price</button>
   <p class="mt-4 text-sm text-soft" role="status" data-upload-status>We’ll choose how to read each file automatically.</p>
   <a href="/processing/" class="mt-3 inline-block underline" data-upload-queue hidden>View processing queue</a>
   <a href="/login/" class="mt-3 inline-block underline" data-upload-login hidden>Sign in to Answer with Books</a>

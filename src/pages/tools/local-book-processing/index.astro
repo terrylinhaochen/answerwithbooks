@@ -1,0 +1,15 @@
+---
+import Base from '../../../layouts/Base.astro';
+---
+<Base title="Create a book skill with your own agent" description="Turn a local source into a book summary and reusable skill using your existing agent plan." path="/tools/local-book-processing/">
+ <article class="awb-section max-w-3xl py-12"><a href="/tools/" class="text-sm underline">← Tools</a><h1 class="mt-6 font-serif text-4xl">Create it with your own agent</h1><p class="mt-5 text-soft">Use a local PDF, EPUB, DOCX, Markdown, HTML, RTF, or text file. Your agent generates and checks the content using its own model access. Answer with Books makes no hosted generation calls and does not upload your file.</p>
+ <h2 class="mt-8 font-serif text-2xl">Ask your agent</h2><p class="mt-4 rounded-xl border border-line p-5">Use Answer with Books to create a summary and reusable skill from my local file. Use the customer-agent route, then install the finished skill.</p>
+ <p class="mt-4 text-sm text-soft">Your agent needs the Answer with Books CLI with the <code>local</code> command. It prepares the source, answers each generation and source-review request, and saves progress between steps. No repository clone or Answer with Books login is needed.</p>
+ <h2 class="mt-8 font-serif text-2xl">The commands</h2><pre class="mt-4 overflow-x-auto rounded-xl border border-line p-5 text-sm">answer-with-books local prepare ./book.pdf --output ./my-book
+answer-with-books local next ./my-book
+answer-with-books local respond ./my-book --input ./response.json --request REQUEST_ID
+answer-with-books local install ./my-book</pre>
+ <p class="mt-4 text-sm text-soft">The agent repeats next/respond until ready, addressing source-check findings as needed. The package includes a readable summary, SKILL.md, chapter notes, glossary, patterns, cheatsheet, and source references. Image generation and hosted library search are separate; the local package remains on your machine.</p>
+ <p class="mt-4 text-sm text-soft">Your agent provider may charge under your existing plan. Model checks are fallible: verify important claims against the included source. First use may download a local extraction runtime; scanned pages need OCR first.</p>
+ <a href="/profile/" class="awb-pill mt-8">Choose hosted processing instead</a></article>
+</Base>

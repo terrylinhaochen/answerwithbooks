@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-10-09T07:54:47.859250+00:00",
+  "reviewer": "Current Codex agent; separate from Flash generation and self-review. Not human review.",
+  "method": "Targeted comparison of saved claims against original source lines. No accuracy percentage inferred.",
+  "sourceSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+  "benchmarkSha256": "e42c3845aaf9b7c6f04f645e43af6730c5cf5c0e4b118e0ab1ec52be9889479d",
+  "disposition": "not_ready_for_production",
+  "findings": [
+    {
+      "id": "wagon-group-mismatch",
+      "severity": "material_factual_error",
+      "location": "ch03 summary and idea-2 explanation",
+      "claim": "Water-carriage opens a more extensive market than land-carriage alone. Smith's comparison: six or eight men in a ship can move two hundred tons London\u2013Leith in the same six weeks it takes fifty broad-wheeled waggons, a hundred men, and four hundred horses to move four tons London\u2013Edinburgh; land transport is only viable for goods whose value is great relative to their weight.",
+      "sourceEvidence": "482: of the country. A broad-wheeled waggon, attended by two men, and drawn by eight\n483: horses, in about six weeks time, carries and brings back between London and\n484: Edinburgh near four ton weight of goods. In about the same time a ship\n485: navigated by six or eight men, and sailing between the ports of London and\n486: Leith, frequently carries and brings back two hundred ton weight of goods. Six\n487: or eight men, therefore, by the help of water-carriage, can carry and bring\n488: back, in the same time, the same quantity of goods between London and Edinburgh\n489: as fifty broad-wheeled waggons, attended by a hundred men, and drawn by four\n490: hundred horses. Upon two hundred tons of goods, therefore, carried by the\n491: cheapest land-carriage from London to Edinburgh, there must be charged the\n492: maintenance of a hundred men for three weeks, and both the maintenance and what\n493: is nearly equal to maintenance the wear and tear of four hundred horses, as\n494: well as of fifty great waggons. Whereas, upon the same quantity of goods\n495: carried by water, there is to be charged only the maintenance of six or eight\n496: men, and the wear and tear of a ship of two hundred tons burthen, together with",
+      "finding": "The four-ton figure belongs to one wagon. Fifty wagons and one ship each carry 200 tons over the same time. The generated summary and explanation incorrectly attach four tons to fifty wagons. Flash accepted both claims."
+    },
+    {
+      "id": "description-is-not-instruction",
+      "severity": "misattributed_application",
+      "location": "ch01 idea-1",
+      "claim": {
+        "name": "Three causes of the productivity gain: dexterity, time-saving, machinery",
+        "steps": [
+          "Check dexterity: will the role involve one simple operation performed repeatedly as a sole employment?",
+          "Check switch-time: how much time is currently lost moving between different places, tools, and kinds of work, including slow mental re-engagement?",
+          "Check invention potential: will concentrating attention on one simple object make easier methods likely to be found?"
+        ],
+        "applicationBasis": "source-instruction",
+        "sourceRefs": [
+          {
+            "startLine": 128,
+            "endLine": 181
+          }
+        ]
+      },
+      "sourceEvidence": "128: This great increase in the quantity of work, which, in consequence of the\n129: division of labour, the same number of people are capable of performing, is\n130: owing to three different circumstances; first, to the increase of dexterity in\n131: every particular workman; secondly, to the saving of the time which is commonly\n132: lost in passing from one species of work to another; and, lastly, to the\n133: invention of a great number of machines which facilitate and abridge labour,\n134: and enable one man to do the work of many.\n135: \n136: \n137: First, the improvement of the dexterity of the workmen, necessarily increases\n138: the quantity of the work he can perform; and the division of labour, by\n139: reducing every man\u2019s business to some one simple operation, and by making\n140: this operation the sole employment of his life, necessarily increases very much",
+      "finding": "The source explains three causes of productivity. It does not prescribe the generated three-part diagnostic checklist. The checklist must be labeled a derived application; the schema and prompt already require that distinction."
+    },
+    {
+      "id": "lost-production-qualification",
+      "severity": "lost_qualification",
+      "location": "ch01 summary and idea-0 explanation",
+      "claim": "Smith holds that the greatest improvements in productive power come from dividing work into distinct trades and simple operations. The pin manufactory example shows an untrained workman might barely make one pin a day alone, while ten specialized workers making ~4,800 pins each per day achieve roughly a 240-fold (or up to 4,800-fold) multiplication of output. Division of labour is carried furthest in the most improved societies, and trades separate from one another because of this advantage.",
+      "sourceEvidence": "49: same man will sometimes perform two or three of them. I have seen a small\n50: manufactory of this kind, where ten men only were employed, and where some of\n51: them consequently performed two or three distinct operations. But though they\n52: were very poor, and therefore but indifferently accommodated with the necessary\n53: machinery, they could, when they exerted themselves, make among them about\n54: twelve pounds of pins in a day. There are in a pound upwards of four thousand\n55: pins of a middling size. Those ten persons, therefore, could make among them\n56: upwards of forty-eight thousand pins in a day. Each person, therefore, making a\n57: tenth part of forty-eight thousand pins, might be considered as making four\n58: thousand eight hundred pins in a day. But if they had all wrought separately\n59: and independently, and without any of them having been educated to this\n60: peculiar business, they certainly could not each of them have made twenty,\n61: perhaps not one pin in a day; that is, certainly, not the two hundred and\n62: fortieth, perhaps not the four thousand eight hundredth, part of what they are\n63: at present capable of performing, in consequence of a proper division and\n64: combination of their different operations.",
+      "finding": "The source qualifies the reported production capacity with exertion. The saved summary and explanation omit that condition while describing daily output. This is a targeted fidelity concern, not a new measurement of the workshop."
+    }
+  ],
+  "limitations": [
+    "Targeted audit of three public-domain chapters, not an exhaustive independent score for every claim.",
+    "No full-book Flash run, no cross-book generalization measurement, and no end-user skill usefulness evaluation.",
+    "The cost/speed receipt remains valid; its model_passed_not_human_verified flag is not a semantic quality acceptance."
+  ]
+}
