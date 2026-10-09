@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "suite": "summary",
+  "config": {
+    "model": "gpt-5.4-mini",
+    "provider": "openai",
+    "reasoningModel": true,
+    "effort": "low"
+  },
+  "startedAt": "2026-10-09T07:55:30.575Z",
+  "fixturesSha256": "2149a8864b40acb6c1c8bbd95e77294f7878bff761b48a3765cb843732580381",
+  "status": "passed",
+  "results": [
+    {
+      "id": "shorter-candidate",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "source-detail-in-candidate",
+      "expected": true,
+      "accepted": true,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "invented-obligation",
+      "expected": false,
+      "accepted": false,
+      "pass": true,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "candidate.thesis: unsupported claim — \"Smith requires every company to give each worker a lifetime assignment and always use water transport.\" The evidence only says Smith argues that division of labour increases productivity and that market size can be enlarged by water carriage; it does not support any requirement, lifetime assignment, or universal transport prescription."
+        ]
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 1291,
+      "outcome": "complete",
+      "inputTokens": 385,
+      "outputTokens": 40,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 18
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 1503,
+      "outcome": "complete",
+      "inputTokens": 366,
+      "outputTokens": 65,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 43
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 1564,
+      "outcome": "complete",
+      "inputTokens": 373,
+      "outputTokens": 150,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 64
+    }
+  ],
+  "limitations": "Targeted agent-labeled regressions. Not a general accuracy estimate, generation quality score, or human evaluation.",
+  "cases": 3,
+  "graded": 3,
+  "unavailable": 0,
+  "passed": 3,
+  "accepted": 2,
+  "rejected": 1,
+  "completedAt": "2026-10-09T07:55:32.210Z",
+  "rubricSha256": "2515f61526e9dbd7308a3e635494a593f617bf1be841b3ccf50b7dc14f1e3c35",
+  "rubricHashRecordedAfterRun": true,
+  "usage": {
+    "calls": 3,
+    "models": [
+      "gpt-5.4-mini-2026-03-17"
+    ],
+    "inputTokens": 1124,
+    "outputTokens": 255,
+    "cachedInputTokens": 0,
+    "elapsedProviderMs": 4358,
+    "knownProviderEstimateUsd": 0.0019905,
+    "textProviderEstimateUsd": 0.0019905,
+    "imageProviderEstimateUsd": 0,
+    "unpricedCalls": 0,
+    "completeEstimate": true,
+    "recordingCoverage": "recorded-calls-only",
+    "customerCharge": null,
+    "currency": "USD",
+    "rateDate": "2026-10-08",
+    "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+  }
+}

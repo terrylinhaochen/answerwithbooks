@@ -18,7 +18,7 @@ Account navigation exposes Billing and API keys again. The same personal API key
 
 Implementation and local verification do not activate payments. Before release, select and approve retail rates, verify that the personal AWB Stripe top-up/account access policy is available to the intended customers, apply the migration, deploy `book-process`, `book-native`, and `book-library`, then ship the matched CLI and web release. Test against an isolated test wallet before any live customer acceptance. The migration contains NO enabled rates and performs NO customer charges.
 
-A possible tariff for review with the current mini default is a $1 minimum and $0.50 per 100,000 extracted characters, rounded up to the cent, with a $30 maximum quote. That would quote $2.50 for 500,000 characters and $11.23 for the measured 2,245,854-character Smith source. This is a proposal, not an enabled price. A Flash-based tariff should follow a full-book quality/reliability check; the small sample below is insufficient for automatic default replacement.
+An earlier unapproved tariff proposal for Mini is a $1 minimum and $0.50 per 100,000 extracted characters, rounded up to the cent, with a $30 maximum quote. That would quote $2.50 for 500,000 characters and $11.23 for the measured 2,245,854-character Smith source. This is not an enabled price or user approval. The user selected GLM-5.3 Flash for the candidate on October 9; neither a Flash retail tariff nor payment activation has been approved. Flash rollout remains gated by the quality audit and a full-book reliability check.
 
 ## Verification and limits
 
@@ -28,3 +28,9 @@ A possible tariff for review with the current mini default is a $1 minimum and $
 - Hosted pipeline and CLI regression suites pass. The new commercial migration, tariffs and payment flow are not yet live.
 
 See `verification/processing-routes-2026-10-08/model-comparison.json` for live bounded model receipts. Latency includes generation, cited-claim review, synthesis and synthesis review, with concurrency three and up to two repairs per stage. It excludes extraction, upload, queues, covers, indexing, human evaluation, and installation. Rates are provider estimates, not customer bills or reconciled invoices. One successful sample does not establish general factual accuracy or full-book performance.
+
+## October 9 model and billing verification
+
+The candidate default is now GLM-5.3 Flash with low reasoning for generation and review. Explicit environment overrides still take precedence. See [quality findings and reproducible evaluations](verification/flash-quality-2026-10-09/README.md). A completed pipeline run is not a quality pass: a source comparison found a wagon-tonnage error and misattributed procedural steps in the saved Flash output. Do not deploy this candidate as quality-approved.
+
+A fresh read-only production query found no `book_processing_prices` table, no `book_payment_reservations` table, and no `billing_required` column. This confirms the new book-charging migration is not deployed. Local database tests and mocked browser tests do not establish live Stripe/top-up/payment acceptance.

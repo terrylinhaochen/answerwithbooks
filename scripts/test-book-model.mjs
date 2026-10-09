@@ -8,7 +8,7 @@ import {join} from 'node:path';
 import {benchmarkSource, runModelBenchmark} from './benchmark-book-models.mjs';
 
 const result = overrides => ({model:'gpt-6-luna',usage:{prompt_tokens:100,completion_tokens:20,prompt_tokens_details:{cached_tokens:40},completion_tokens_details:{reasoning_tokens:5}},choices:[{finish_reason:'stop',message:{content:'{"ok":true}'}}],...overrides});
-const env = (values = {}) => name => ({OPENAI_API_KEY:'synthetic-secret',...values})[name];
+const env = (values = {}) => name => ({OPENAI_API_KEY:'synthetic-secret',FIREWORKS_API_KEY:'synthetic-fireworks-secret',...values})[name];
 
 test('modern models use compatible reasoning parameters and strict schema; metrics omit content',async()=>{
  const requests=[],metrics=[];let time=0;
@@ -29,17 +29,26 @@ test('explicit legacy models remain available and review has independent model a
  assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-6-astra',BOOK_REASONING_EFFORT:'none'})),/requires reasoning/);
 });
 
-test('default Mini matches the benchmark: generation none, review low, with explicit overrides preserved',async()=>{
+test('default Flash uses low reasoning for generation and review; explicit Mini overrides remain compatible',async()=>{
  const sent=[];
- const client=createBookModelClient({getEnv:env(),fetchImpl:async(_,init)=>{sent.push(JSON.parse(init.body));return Response.json(result({model:'gpt-5.4-mini-2026-03-17'}));}});
+ const client=createBookModelClient({getEnv:env(),fetchImpl:async(url,init)=>{sent.push({url,body:JSON.parse(init.body),headers:init.headers});return Response.json(result({model:'accounts/fireworks/models/glm-5p3-flash'}));}});
  await client('write','source',{schema:sectionSchema,name:'book_section'});
  await client('review','claims',{kind:'review'});
- for(const body of sent){assert.equal(body.model,'gpt-5.4-mini');assert.equal(body.max_completion_tokens,6000);assert.equal(body.max_tokens,undefined);}
- assert.equal(sent[0].reasoning_effort,'none');assert.equal(sent[1].reasoning_effort,'low');assert.equal(sent[0].response_format.type,'json_schema');
- assert.equal(bookModelConfig(env({BOOK_REASONING_EFFORT:'medium'})).effort,'medium');
+ for(const {url,body,headers} of sent){
+  assert.equal(url,'https://api.fireworks.ai/inference/v1/chat/completions');
+  assert.equal(headers.Authorization,'Bearer synthetic-fireworks-secret');
+  assert.equal(body.model,'accounts/fireworks/models/glm-5p3-flash');
+  assert.equal(body.reasoning_effort,'low');assert.equal(body.max_tokens,6000);assert.equal(body.max_completion_tokens,undefined);
+ }
+ assert.equal(sent[0].body.response_format.type,'json_schema');
+ assert.equal(bookModelConfig(env({BOOK_REASONING_EFFORT:'high'})).effort,'high');
  assert.equal(bookModelConfig(env({BOOK_REVIEW_REASONING_EFFORT:'high'}),'review').effort,'high');
- assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-5.4-mini-2026-03-17'})).effort,'none');
+ assert.throws(()=>bookModelConfig(env({BOOK_REASONING_EFFORT:'none'})),/Fireworks/);
+ assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-5.4-mini'})).effort,'none');
+ assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-5.4-mini'}),'review').effort,'low');
  assert.equal(bookModelConfig(env({BOOK_PROCESSING_MODEL:'gpt-6.1-sol'})).effort,'low');
+ const missingKey=createBookModelClient({getEnv:env({FIREWORKS_API_KEY:undefined}),fetchImpl:async()=>{throw Error('Must not fall back to OpenAI');}});
+ await assert.rejects(missingKey('system','source'),/not configured/);
 });
 
 test('provider errors, refusal and truncation cannot become accepted notes or expose provider text',async()=>{

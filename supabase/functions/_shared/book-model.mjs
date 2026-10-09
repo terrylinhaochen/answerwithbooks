@@ -1,7 +1,7 @@
 // Provider boundary shared by the worker and the bounded model evaluation CLI.
 // No prompts, source text, response contents, keys or provider error bodies enter metrics.
 export function bookModelConfig(getEnv, kind = 'generation') {
-  const model = (kind === 'review' && getEnv('BOOK_REVIEW_MODEL')) || getEnv('BOOK_PROCESSING_MODEL') || 'gpt-5.4-mini';
+  const model = (kind === 'review' && getEnv('BOOK_REVIEW_MODEL')) || getEnv('BOOK_PROCESSING_MODEL') || 'accounts/fireworks/models/glm-5p3-flash';
   if (!/^(?:accounts\/fireworks\/models\/)?[a-zA-Z0-9][a-zA-Z0-9._:-]{0,95}$/.test(model)) throw new Error('Invalid book processing model configuration.');
   const provider = model.startsWith('accounts/fireworks/models/') ? 'fireworks' : model.startsWith('gemini-') ? 'google' : 'openai';
   const reasoningModel = /^gpt-[5-9](?:[.-]|$)/.test(model) || /^o[1-9](?:[.-]|$)/.test(model);

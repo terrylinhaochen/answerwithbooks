@@ -1,0 +1,269 @@
+{
+  "version": 1,
+  "config": {
+    "model": "gpt-5.4-mini",
+    "provider": "openai",
+    "reasoningModel": true,
+    "effort": "low"
+  },
+  "sourceSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+  "benchmarkSha256": "e42c3845aaf9b7c6f04f645e43af6730c5cf5c0e4b118e0ab1ec52be9889479d",
+  "startedAt": "2026-10-09T07:55:32.646Z",
+  "metrics": [
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 6151,
+      "outcome": "complete",
+      "inputTokens": 8278,
+      "outputTokens": 771,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 48
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 7606,
+      "outcome": "complete",
+      "inputTokens": 8603,
+      "outputTokens": 1146,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 420
+    },
+    {
+      "kind": "review",
+      "provider": "openai",
+      "requestedModel": "gpt-5.4-mini",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "elapsedMs": 8759,
+      "outcome": "complete",
+      "inputTokens": 14442,
+      "outputTokens": 1353,
+      "cachedInputTokens": 0,
+      "reasoningTokens": 595
+    }
+  ],
+  "limitations": "Different-model source review of saved section notes only. Same production rubric. Not blinded human evaluation, full-book coverage, or synthesis re-review.",
+  "results": [
+    {
+      "id": "ch01",
+      "expected": null,
+      "accepted": false,
+      "pass": null,
+      "status": "graded",
+      "report": {
+        "supported": false,
+        "issues": [
+          "idea-3 overstates Smith’s agricultural point into a prescriptive rule. The cited passage says agriculture does not admit as many subdivisions, and that seasonal recurrence makes complete separation impossible; it only says this is 'perhaps the reason' agricultural productivity improvement does not keep pace with manufactures. It does not instruct readers to keep such tasks combined, nor does it mention 'no steady employment.'"
+        ],
+        "checks": [
+          {
+            "id": "summary",
+            "supported": true,
+            "reason": "The summary matches the excerpt: Smith says division of labour drives productivity and skill gains, gives the pin manufactory example, identifies three causes (dexterity, time-saving, machinery), contrasts agriculture with manufactures, and argues that specialization creates broad opulence through exchange and the interdependence of ordinary goods."
+          },
+          {
+            "id": "idea-0",
+            "supported": true,
+            "reason": "The derived application follows the source’s pin example and general claim that dividing labour proportionally increases productive power where it can be introduced. The arithmetic about roughly 48,000 pins total and about 4,800 per worker is supported by the cited numbers, and the caution that subdivision varies by art is also supported."
+          },
+          {
+            "id": "idea-1",
+            "supported": true,
+            "reason": "The excerpt explicitly names three causes for the increased quantity of work: greater dexterity, time saved in switching tasks, and invention of machinery. The proposal to evaluate specialization by checking whether those mechanisms apply is a cautious application of that principle."
+          },
+          {
+            "id": "idea-2",
+            "supported": true,
+            "reason": "The source states that machinery invention seems originally owing to division of labour because attention is concentrated on one simple object, and it provides the steam-engine boy anecdote plus the note that machine-makers and philosophers can also contribute. The application reasonably derives a process-improvement heuristic from that principle."
+          },
+          {
+            "id": "idea-3",
+            "supported": false,
+            "reason": "The source says agriculture cannot be subdivided as completely because tasks recur with the seasons, and this may explain slower productivity growth. It does not prescribe keeping all such tasks in one role, and it does not state that intermittent tasks yield 'no steady employment.'"
+          },
+          {
+            "id": "idea-4",
+            "supported": true,
+            "reason": "The excerpt explicitly says that multiplication of productions through division of labour creates universal opulence in a well-governed society because each worker has surplus goods to exchange for others’ surpluses. The application’s exchange-oriented rule and trace-through example are consistent with that principle."
+          },
+          {
+            "id": "anti-pattern-0",
+            "supported": true,
+            "reason": "Supported by the pin example: if the workers had all worked separately and independently without relevant education, each would have made perhaps not one pin a day, vastly less than under proper division and combination of operations."
+          },
+          {
+            "id": "anti-pattern-1",
+            "supported": true,
+            "reason": "Supported by the passage on switching work: moving between different jobs, tools, and places wastes time, encourages sauntering and indolent application, and reduces output independently of dexterity."
+          },
+          {
+            "id": "example-0",
+            "supported": true,
+            "reason": "The example accurately reflects the pin-manufactory passage: about eighteen operations, ten workers, roughly twelve pounds or 48,000 pins per day total, and the contrast with possibly not one pin per worker per day if working separately and untrained."
+          },
+          {
+            "id": "example-1",
+            "supported": true,
+            "reason": "The example matches the nail-maker passage: a common smith makes only a few hundred bad nails, a smith whose main business is not nail-making makes about 800–1,000, and boys devoted solely to nail-making make over 2,300, illustrating the dexterity effect of specialization."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ch02",
+      "expected": null,
+      "accepted": true,
+      "pass": null,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "summary",
+            "supported": true,
+            "reason": "The chapter states that division of labour is not planned but is a slow consequence of the human propensity to truck, barter, and exchange; that people seek others’ cooperation by appealing to self-love and mutual advantage rather than benevolence alone; that specialization follows when exchange yields more than self-provision; and that professional talent differences are more effect than cause of division of labour, with talents becoming useful through exchange into a common stock."
+          },
+          {
+            "id": "idea-0",
+            "supported": true,
+            "reason": "The application matches the cited passage: Smith says one should interest others’ self-love, show it is for their own advantage, and that bargains take the form of reciprocal exchange rather than appeals to benevolence. The caution that one cannot rely on friendship alone is also supported."
+          },
+          {
+            "id": "idea-1",
+            "supported": true,
+            "reason": "The passage supports the decision rule and steps: a person with greater readiness and dexterity in making bows and arrows exchanges them, gets more cattle and venison than by self-provision, and therefore makes that work his chief business. The explanation that this is a gradual consequence of barter, not deliberate design, is also supported."
+          },
+          {
+            "id": "idea-2",
+            "supported": true,
+            "reason": "The cited text supports that apparent professional genius is more effect than cause of division of labour, arising more from habit, custom, and education than nature, and that without exchange-based division of labour there would be no such difference of employment to produce great talent differences. The wording preserves the passage’s cautionary hedges."
+          },
+          {
+            "id": "idea-3",
+            "supported": true,
+            "reason": "The passage supports that exchange makes dissimilar talents useful to one another and brings their products into a common stock from which each person may purchase what they need. The comparison with animals and the need for barter and exchange are also explicitly stated."
+          },
+          {
+            "id": "idea-4",
+            "supported": true,
+            "reason": "This is a cautious derived application of the comparison between animals’ accidental concurrence/favor-seeking and human contract/exchange. The recommendation to prefer exchange-based cooperation for large-scale needs follows the cited basis, and it does not add unsupported factual claims or stronger obligations."
+          },
+          {
+            "id": "anti-pattern-0",
+            "supported": true,
+            "reason": "The anti-pattern is directly supported: the passage says it is vain to expect help from benevolence only, that one should interest self-love, and that most wants are obtained by treaty, barter, and purchase rather than charity alone."
+          },
+          {
+            "id": "anti-pattern-1",
+            "supported": true,
+            "reason": "The anti-pattern is directly supported: Smith says the visible professional genius is often the effect, not the cause, of division of labour, and that the differences arise more from habit, custom, and education than from nature."
+          },
+          {
+            "id": "example-0",
+            "supported": true,
+            "reason": "The example accurately restates the cited hunter/shepherd passage: the bow-maker exchanges his product, finds it more advantageous than self-provision, and becomes an armourer; the hut-maker likewise becomes a carpenter, with further examples of smith and tanner."
+          },
+          {
+            "id": "example-1",
+            "supported": true,
+            "reason": "The example is supported by the cited lines: dinner from the butcher, brewer, or baker is expected from their self-interest, not benevolence; one addresses self-love and their advantages rather than one’s own necessities, and the beggar passage about barter and purchase is correctly summarized."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ch03",
+      "expected": null,
+      "accepted": true,
+      "pass": null,
+      "status": "graded",
+      "report": {
+        "supported": true,
+        "issues": [],
+        "checks": [
+          {
+            "id": "summary",
+            "supported": true,
+            "reason": "The summary matches the cited passage: division of labour is limited by market extent (444-450), the highlands example and country trades (458-471), the nailer illustration (472-476), water-carriage and the London–Edinburgh/Leith comparison (477-511), the inland-vs-coast argument (514-526), Mediterranean first civilization (529-543), Egypt, Bengal, and China as inland-navigation examples (546-570), and the descriptions of inland Africa, Tartary/Siberia, and rivers through other territories such as the Danube (573-593)."
+          },
+          {
+            "id": "idea-0",
+            "supported": true,
+            "reason": "Supported by 444-450: the extent of the division of labour is limited by the extent of the market, and a very small market gives no encouragement to dedicate oneself entirely to one employment because surplus output cannot be exchanged."
+          },
+          {
+            "id": "idea-1",
+            "supported": true,
+            "reason": "Supported by 453-471: porter employment requires a great town; isolated Highland farmers must supply butchering, baking, and brewing themselves; and country workmen perform multiple related branches of trade."
+          },
+          {
+            "id": "idea-2",
+            "supported": true,
+            "reason": "Supported by 477-511: water-carriage opens a more extensive market than land-carriage, and the London–Edinburgh/Leith comparison shows the large difference in goods moved, men required, and the conclusion that only goods of considerable value relative to weight can bear land-carriage."
+          },
+          {
+            "id": "idea-3",
+            "supported": true,
+            "reason": "Supported by 514-593, with the source's caution preserved: water-carriage leads to earlier improvement on coasts and navigable rivers; Mediterranean, Egypt, Bengal, and eastern China are cited as examples; and inland Africa, Tartary/Siberia, and rivers that pass through another territory before reaching the sea are described as having limited commerce or remaining barbarous. The notes keep the passage's hedging language ('appear', 'seem', 'probably', 'not authenticated')."
+          },
+          {
+            "id": "anti-pattern-0",
+            "supported": true,
+            "reason": "Supported by 446-450 and 472-476: a very small market does not encourage full-time specialization, and the nailer example shows that in the remote Highlands it is impossible to dispose of even one day’s work in a year."
+          },
+          {
+            "id": "example-0",
+            "supported": true,
+            "reason": "Supported by 472-476: the Highland nailer can produce 300,000 nails a year, yet in that situation it would be impossible to dispose of 1,000 nails, i.e. one day’s work; the illustrative conclusion that the trade cannot exist there follows from the cited text."
+          },
+          {
+            "id": "example-1",
+            "supported": true,
+            "reason": "Supported by 482-503: the ship carries far more goods with far fewer people than the waggons, and Smith explicitly concludes that land-carriage can bear only goods very valuable in proportion to weight, while water-carriage gives much more encouragement to industry."
+          },
+          {
+            "id": "example-2",
+            "supported": true,
+            "reason": "Supported by 586-593: a river that runs into another territory before reaching the sea may have its communication obstructed by that territory, and the Danube is given as an example of a river of little use to Bavaria, Austria, and Hungary compared with full possession of its course."
+          }
+        ]
+      }
+    }
+  ],
+  "cases": 3,
+  "graded": 3,
+  "unavailable": 0,
+  "passed": 0,
+  "accepted": 2,
+  "rejected": 1,
+  "status": "needs_review",
+  "completedAt": "2026-10-09T07:55:41.410Z",
+  "rubricSha256": "d1bf0186769c9307a719c9b7e0148beb091d382544202de6966f88da03aa5f03",
+  "rubricHashRecordedAfterRun": true,
+  "usage": {
+    "calls": 3,
+    "models": [
+      "gpt-5.4-mini-2026-03-17"
+    ],
+    "inputTokens": 31323,
+    "outputTokens": 3270,
+    "cachedInputTokens": 0,
+    "elapsedProviderMs": 22516,
+    "knownProviderEstimateUsd": 0.03820725,
+    "textProviderEstimateUsd": 0.03820725,
+    "imageProviderEstimateUsd": 0,
+    "unpricedCalls": 0,
+    "completeEstimate": true,
+    "recordingCoverage": "recorded-calls-only",
+    "customerCharge": null,
+    "currency": "USD",
+    "rateDate": "2026-10-08",
+    "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+  }
+}
