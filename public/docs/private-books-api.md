@@ -8,12 +8,12 @@ Free actions: `list`, `lookup` (source `sha`), `status` (`id`), `export` (`id`),
 
 To process a new source, prefer the CLI `upload` command, which validates and extracts supported files, uploads the original plus extracted text, and finalizes the source. A new source waits for payment acceptance before hosted generation. A hash match reuses your existing result. A new source or revision is quoted separately; private results never become public through this cache.
 
-1. `{ "action": "quote", "id": "BOOK_ID" }` returns a quote ID, exact price in USD cents, expiration, and scope.
-2. Show that quote to the user and wait for acceptance.
-3. `{ "action": "accept-price", "id": "BOOK_ID", "quoteId": "QUOTE_ID", "acceptedPriceCents": 100 }` starts only if the exact current quote is valid and the shared wallet has enough available funds. The amount above is an example, not a tariff.
-4. Check `status`. Funds are reserved at acceptance and charged once when both the readable book and skill are ready. Failed conversions release the reservation. `cancel` releases an unfinished reservation once its current worker step has finished.
+1. `{ "action": "quote", "id": "BOOK_ID", "ceilingCents": 500 }` returns a quote ID, customer token rates, maximum additional spend in USD cents, expiration, and scope. The limit is not a fixed price or completion estimate.
+2. Show the rates and spending limit to the user and wait for explicit acceptance.
+3. `{ "action": "accept-price", "id": "BOOK_ID", "quoteId": "QUOTE_ID", "acceptedCeilingCents": 500, "pricingModel": "token-usage-v1" }` starts only if the approved current quote and spending limit are valid and the shared wallet has enough available funds. The amount above is an example spending limit.
+4. Check `status`. Funds are reserved at acceptance; actual input, cached-input and output tokens are charged at the approved rates. Generation, review, repair and covers count toward usage. Consumed usage is charged even on failure or cancellation; unused funds are released. Missing usage holds the reservation for reconciliation.
 
-An optional cover failure does not prevent text delivery. Pausing retains the reservation; cancelling releases it. Reading, exporting and installing the completed result never charge for a second conversion. Repeated acceptance and retries do not duplicate an already settled charge. Add funds separately at https://answerwithbooks.com/billing/; adding funds does not start a conversion.
+An optional cover failure does not prevent text delivery. Settlement includes all completed attempts and waits for the cover to reach a terminal state. Pausing retains the reservation; cancelling settles consumed usage after the current worker step finishes. Retrying a settled failure or failed cover requires a new approved spending limit. Reading, exporting and installing the completed result never charge for a second conversion. Repeated acceptance and retries do not duplicate an already settled charge. Add funds separately at https://answerwithbooks.com/billing/; adding funds does not start a conversion.
 
 For private retrieval, POST `{ "action": "search", "question": "YOUR TASK" }` to the sibling `/book-library` function using the same bearer key. Your current agent applies retrieved methods and checks the citations; this endpoint is retrieval, not autonomous skill execution. Search is rate limited but does not debit book-conversion credits.
 
