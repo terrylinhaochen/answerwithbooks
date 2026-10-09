@@ -15,7 +15,7 @@
 
 ## Remaining release gates
 
-1. Customer retail pricing approval. The pending selection has not been answered; no tariff has been enabled.
+1. Replace the fixed quote with the now-selected CrowdListen usage policy: 4× metered provider list cost (75% provider-cost margin), a spending ceiling and actual settlement. Pricing direction is now supplied; no tariff has been enabled. The existing tests cover the earlier fixed-quote draft, not the metering rewrite.
 2. Complete a Stripe **test** payment and observe its signed remote webhook, durable wallet credit, receipt, and fresh browser readback. `scripts/test-personal-checkout-live.mjs` is opt-in; temporary session data arrives over stdin and is never saved.
 3. Coordinate deployment of the book migration, matching Edge Functions, website, personal payment adapter, and CLI 0.5.0 release. This work is still in draft PRs. The new migration has not been applied to production.
 4. Verify a real small hosted conversion against the deployed tariff: quote → accepted hold → book and skill delivery → one charge; verify failure/cancel release too. Local SQL tests do not replace this check.

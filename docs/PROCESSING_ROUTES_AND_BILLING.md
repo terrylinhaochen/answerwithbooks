@@ -1,4 +1,18 @@
-# Existing books free; new hosted conversions quoted once
+# Book processing routes and billing
+
+## Current pricing decision — October 9
+
+The user selected CrowdListen's existing provider-usage policy, superseding the earlier flat/character-based book tariff proposal. No further selection among those old price options is required.
+
+Customer charge = 4 × metered provider list cost, rounded upward once per complete run to the nearest cent (`ceil(providerCostUsd × 400)` cents). This targets 75% margin over those provider costs, before payment processing, hosting, storage, support, taxes or refunds. It is a 300% markup, not a 75% markup. Input, cached-input and output tokens use their respective model rates. A $0.10 provider subtotal yields a $0.40 customer charge.
+
+Verified against CrowdListen's `agents/services/usage_pricing.py`, the Skills API `src/task-pricing.ts`, and the deployed PostgreSQL chain `crowdlisten_credits` → `crowdlisten_credits_before_center` → `crowdlisten_credits_before_selfserve`. The deployed settlement uses `ceil(cost*400)` and policy `crowdlisten-usage-2026-09-19-v3`. Current self-serve credit deposits are 1:1 USD; historical discounted credit packs reduce effective cash margin and must not be silently imported into AWB's USD wallet.
+
+**Implementation gap: the draft below still implements a fixed character-based quote, not this selected token tariff. Do not activate it as the customer's approved pricing.** Replace it with a customer-approved spending ceiling, metered settlement and release of unused reservation. Meter all included generation, review, repair and optional provider operations; keep rate/version evidence. Persist each operation before provider I/O and reconcile missing receipts instead of treating them as zero. The current AWB usage recorder logs after calls and merely logs persistence failures, so it is diagnostic telemetry, not yet a reliable charging ledger. CrowdListen may charge consumed provider work even if the overall run fails; matching that behavior also requires replacing AWB's draft blanket failure waiver and customer copy.
+
+Existing book reuse and own-agent generation remain free from AWB. Live personal payments stay disabled pending the metering rewrite, complete Stripe acceptance and coordinated production rollout.
+
+## Earlier fixed-quote draft (superseded pricing, retained implementation history)
 
 This change adds two genuine generation routes. Hosted processing uses the service's provider and shared account wallet. Customer-agent processing uses the customer's current agent to answer resumable JSON generation/review requests locally; it does not call an AWB model, upload a source, or require login. Both routes use the same extraction and text artifact compiler. Core's `build-processing-runtime.mjs` copies the dependency closure and records hashes.
 
