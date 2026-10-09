@@ -39,8 +39,8 @@ The service role owns these RPCs and financial tables; anonymous and authenticat
 
 ## Verification and release
 
-See [October 9 acceptance](verification/billing-2026-10-09/README.md). The real Stripe sandbox payment, webhook and $1 wallet credit passed. Local database, provider-boundary, browser and CLI checks cover metering and consent. The real Stripe test does not by itself prove a hosted book's metered completion.
+See [October 9 acceptance](verification/billing-2026-10-09/README.md). The real Stripe sandbox payment, webhook and $1 wallet credit passed on a temporary verification account. Production worker acceptance also completed a public-domain excerpt with real provider calls and an isolated QA wallet; authenticated browser, API key and published CLI checks passed. No live card transaction was made.
 
-Production personal charging remains disabled until the matched migration, processing functions, website, adapter and CLI are deployed and authenticated hosted-conversion acceptance passes. Enable an immutable metered policy version with a maximum allowed cap, preserving explicit production GPT-5.4 mini settings. The legacy minimum/character columns remain for migration compatibility and have no pricing effect.
+Production personal billing is live as of October 9, 2026. The website, matched functions, adapter and CLI 0.5.0 are deployed, with explicit GPT-5.4 mini generation and review settings preserved. Both book migration sources were applied in one atomic transaction, recorded remotely as `20261009190443_book_billing_atomic_release`; do not reapply the two source migrations individually to that database. The legacy minimum/character columns remain for migration compatibility and have no pricing effect.
 
 The Flash candidate has recorded source-quality failures; do not silently replace production Mini while releasing billing. See `verification/flash-quality-2026-10-09/README.md`. Earlier model latency samples excluded extraction, queues, covers, indexing and installation and do not establish full-book performance.
