@@ -1,6 +1,6 @@
 # Private books API
 
-The latest version of this guide is at [https://crowd-listen.mintlify.site/api/private-books](https://crowd-listen.mintlify.site/api/private-books). This URL remains available for existing integrations.
+The latest version of this guide is at [https://docs.answerwithbooks.com/api/private-books](https://docs.answerwithbooks.com/api/private-books). This URL remains available for existing integrations.
 
 Create a personal API key at https://answerwithbooks.com/api-keys/. Keep it in your secret manager or agent environment. Revoking it removes access. Browser login and revocable `awb_cli_` sessions also work; customer-agent local generation needs neither.
 

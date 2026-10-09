@@ -3,7 +3,7 @@ import Base from '../../../layouts/Base.astro';
 ---
 <Base title="Create a book skill with your own agent" description="Turn a local source into a book summary and reusable skill using your existing agent plan." path="/tools/local-book-processing/">
  <article class="awb-section max-w-3xl py-12"><a href="/tools/" class="text-sm underline">← Tools</a><h1 class="mt-6 font-serif text-4xl">Create it with your own agent</h1><p class="mt-5 text-soft">Use a local PDF, EPUB, DOCX, Markdown, HTML, RTF, or text file. Your agent generates and checks the content using its own model access. Answer with Books makes no hosted generation calls and does not upload your file.</p>
- <p class="mt-4 text-sm"><a class="underline" href="https://crowd-listen.mintlify.site/guide/own-agent">Read the latest own-agent guide in our documentation →</a></p>
+ <p class="mt-4 text-sm"><a class="underline" href="https://docs.answerwithbooks.com/guide/own-agent">Read the latest own-agent guide in our documentation →</a></p>
  <h2 class="mt-8 font-serif text-2xl">Ask your agent</h2><p class="mt-4 rounded-xl border border-line p-5">Use Answer with Books to create a summary and reusable skill from my local file. Use the customer-agent route, then install the finished skill.</p>
  <p class="mt-4 text-sm text-soft">Your agent needs the Answer with Books CLI with the <code>local</code> command. It prepares the source, answers each generation and source-review request, and saves progress between steps. No repository clone or Answer with Books login is needed.</p>
  <h2 class="mt-8 font-serif text-2xl">The commands</h2><pre class="mt-4 overflow-x-auto rounded-xl border border-line p-5 text-sm">answer-with-books local prepare ./book.pdf --output ./my-book

@@ -60,5 +60,10 @@
       "copy",
       "view"
     ]
+  },
+  "seo": {
+    "metatags": {
+      "canonical": "https://docs.answerwithbooks.com"
+    }
   }
 }
