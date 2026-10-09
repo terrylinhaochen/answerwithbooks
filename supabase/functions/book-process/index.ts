@@ -1,3 +1,4 @@
+import {customerBilling,customerUsage,customerPricingModel} from '../_shared/book-billing-public.mjs';
 import {usageReceipt} from '../_shared/book-usage.mjs';
 import {distillSectionBatch,sectionConcurrency} from '../_shared/book-parallel.mjs';
 import {createBookModelClient,bookModelConfig} from '../_shared/book-model.mjs';
@@ -22,7 +23,7 @@ const db=createClient(url,serviceKey,{auth:{persistSession:false}});
 const providerKey=()=>Deno.env.get(({openai:'OPENAI_API_KEY',google:'GEMINI_API_KEY',fireworks:'FIREWORKS_API_KEY'} as const)[bookModelConfig((name:string)=>Deno.env.get(name)).provider as 'openai'|'google'|'fireworks']);
 const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','https://chenterry.com','http://localhost:4321','http://127.0.0.1:4321']);
 const hash=async(bytes:BufferSource)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
-function publicJob(job:any) { const {source_text,chunks,notes,section_feedback,generation_feedback,overview_notes=[],lease_token,cover_lease_token,...rest}=job;return {...rest,total_sections:chunks.length,completed_sections:notes.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
+function publicJob(job:any) { const {source_text,chunks,notes,section_feedback,generation_feedback,overview_notes=[],lease_token,cover_lease_token,...rest}=job;return {...rest,billing:customerBilling(job.billing),total_sections:chunks.length,completed_sections:notes.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
 function requireOk(result:any) { if(result.error) throw new Error('Could not save processing progress. Please retry.');return result.data; }
 async function meter(job:any,operation:string,action:string,payload:any){
  const result=await db.rpc('book_usage_operation',{p_user:job.user_id,p_id:job.id,p_operation:operation,p_action:action,p_payload:payload});
@@ -181,7 +182,7 @@ Deno.serve(async req=>{
   const user=await bookUser(db,bearer);if(!user)return reply({error:'Sign in to access your private books.'},401);
   if(input.action==='billing-history') {
    const rows=requireOk(await db.from('book_payment_reservations').select('job_id,state,cents,charged_cents,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100));
-   return reply({books:rows.map((row:any)=>({id:row.job_id,state:row.state,ceilingCents:row.cents,pricingModel:'metered-4x',chargedCents:row.charged_cents||0,reservedCents:['held','reconciliation'].includes(row.state)?row.cents:0,createdAt:row.created_at}))});
+   return reply({books:rows.map((row:any)=>({id:row.job_id,state:row.state,ceilingCents:row.cents,pricingModel:customerPricingModel,chargedCents:row.charged_cents||0,reservedCents:['held','reconciliation'].includes(row.state)?row.cents:0,createdAt:row.created_at}))});
   }
   if(input.action==='list') {
    const offset=Number(input.offset||0);if(!Number.isSafeInteger(offset)||offset<0)return reply({error:'Invalid offset'},400);
@@ -257,14 +258,14 @@ Deno.serve(async req=>{
    }finally{await db.from('book_processing_jobs').update({lease_token:null,lease_until:null}).eq('id',job.id).eq('lease_token',token);}
   }
   if(['quote','accept-price'].includes(input.action)) {
-   if(input.action==='accept-price'&&(input.pricingModel!=='metered-4x'||!Number.isSafeInteger(input.acceptedCeilingCents)))return reply({error:'Review the metered-usage policy and explicitly accept a spending ceiling.',code:'USAGE_POLICY_ACCEPTANCE_REQUIRED'},409);
+   if(input.action==='accept-price'&&(input.pricingModel!==customerPricingModel||!Number.isSafeInteger(input.acceptedCeilingCents)))return reply({error:'Review the metered-usage policy and explicitly accept a spending ceiling.',code:'USAGE_POLICY_ACCEPTANCE_REQUIRED'},409);
    const models=[...new Set([bookModelConfig((name:string)=>Deno.env.get(name)).model,bookModelConfig((name:string)=>Deno.env.get(name),'review').model,...(Deno.env.get('OPENAI_API_KEY')?[Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5']:[])])];
    const modelRates=requireOk(await db.from('book_provider_rates').select('model,version,input_rate,cached_rate,output_rate').in('model',models));
    if(modelRates.length!==models.length)return reply({error:'A configured model does not have approved token rates. Your source is saved.'},503);
    const {data,error}=await db.rpc('book_billing',{p_user:user.id,p_id:job.id,p_action:input.action==='quote'?'quote':'accept',p_models:models,p_quote:input.quoteId||null,p_cents:input.action==='quote'?(input.ceilingCents??null):(input.acceptedCeilingCents??null)});
    if(error){const reason=error.message;return reply({error:reason.includes('INSUFFICIENT_FUNDS')?'Add funds in Billing, then accept this quote again.':reason.includes('BOOK_PRICING_NOT_ENABLED')?'Hosted pricing is not available yet. Your source is saved; you can use your own agent now.':reason.includes('PRICE_ACCEPTANCE_REQUIRED')?'Get a fresh quote and explicitly accept its price.':'Could not confirm this book price. Finish saving the source and retry.',code:reason.includes('INSUFFICIENT_FUNDS')?'INSUFFICIENT_FUNDS':'BOOK_PRICE_REQUIRED',billing_url:'https://answerwithbooks.com/billing/'},409);}
    if(input.action==='accept-price'&&data.state==='held')await wake();
-   return reply({billing:data,job:publicJob(requireOk(await db.from('book_processing_jobs').select('*').eq('id',job.id).eq('user_id',user.id).single()))});
+   return reply({billing:customerBilling(data),job:publicJob(requireOk(await db.from('book_processing_jobs').select('*').eq('id',job.id).eq('user_id',user.id).single()))});
   }
   if(input.action==='delete') {
    if(job.cover_lease_until&&Date.parse(job.cover_lease_until)>Date.now())return reply({error:'Wait for the cover attempt to finish before deleting this book.'},409);
@@ -304,7 +305,7 @@ Deno.serve(async req=>{
   if(input.action==='usage') {
    const operations=job.billing_required?requireOk(await db.from('book_provider_operations').select('id,kind,model,rate_version,state,cost_usd,metric,created_at').eq('job_id',job.id).eq('user_id',user.id).order('created_at').limit(10000)):[];
    const rows:any[]=[];for(let offset=0;offset<10000;offset+=500){const page=requireOk(await db.from('book_model_usage').select('usage,created_at').eq('job_id',job.id).eq('user_id',user.id).order('created_at').order('id').range(offset,offset+499));rows.push(...page);if(page.length<500)break;}
-   return reply({job_id:job.id,receipt:{...usageReceipt(rows),meteredOperations:operations.map((o:any)=>({...o,metric:{inputTokens:o.metric?.inputTokens,outputTokens:o.metric?.outputTokens,cachedInputTokens:o.metric?.cachedInputTokens}})),customerCharge:job.billing?.chargedCents!=null?job.billing.chargedCents/100:job.billing_required?null:0,customerBilling:job.billing||{state:job.billing_required?'unquoted':'free',chargedCents:0}}});
+   return reply({job_id:job.id,receipt:customerUsage(usageReceipt(rows),operations,job.billing,job.billing_required)});
   }
   if(input.action==='retry-cover') {
    if(job.billing_required&&job.billing?.state!=='held')return reply({error:'Review token rates and approve a new spending limit before retrying the cover.',code:'BOOK_PRICE_REQUIRED',job:publicJob(job)},402);
@@ -326,7 +327,7 @@ Deno.serve(async req=>{
   }
   if(input.action==='cancel') {
    if(job.status==='ready'||job.billing?.state!=='held')return reply({error:'Only an unfinished reserved conversion can be cancelled.'},409);
-   const saved=requireOk(await db.from('book_processing_jobs').update({run_state:'failed',error:'Cancelled. Actual provider usage is settled at 4× cost; unused funds are released. Missing receipts require reconciliation.',updated_at:new Date().toISOString()}).eq('id',job.id).eq('user_id',user.id).eq('updated_at',job.updated_at).or(`lease_until.is.null,lease_until.lt.${new Date().toISOString()}`).select().maybeSingle());
+   const saved=requireOk(await db.from('book_processing_jobs').update({run_state:'failed',error:'Cancelled. Actual usage is settled at your approved token rates; unused funds are released. Missing receipts require reconciliation.',updated_at:new Date().toISOString()}).eq('id',job.id).eq('user_id',user.id).eq('updated_at',job.updated_at).or(`lease_until.is.null,lease_until.lt.${new Date().toISOString()}`).select().maybeSingle());
    return saved?reply({job:publicJob(saved)}):reply({error:'Wait for the current section to finish, then cancel to release your reserved funds.'},409);
   }
   if(input.action==='pause') {

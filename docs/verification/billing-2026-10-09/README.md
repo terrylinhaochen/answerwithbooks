@@ -14,10 +14,10 @@
 
 ## Production release gates
 
-The 4× token policy is approved and implemented; no further flat-price selection is needed. Production personal charging is not enabled and the web-owned billing migrations have not been applied.
+The token-based pricing policy is approved and implemented; no further flat-price selection is needed. Production personal charging is not enabled and the web-owned billing migrations have not been applied.
 
 1. Deploy both book migrations and matched `book-process`, `book-native`, and `book-library` functions together. Preserve explicit production GPT-5.4 mini model settings.
-2. Enable the versioned `metered-4x` tariff and personal adapter with existing approved merchant, namespace, origin and signing-secret configuration. Live startup fails closed without the new tariff.
+2. Enable the versioned metered tariff and personal adapter with existing approved merchant, namespace, origin and signing-secret configuration. Live startup fails closed without the new tariff.
 3. Publish the matched CLI 0.5.0 and ship website references/account UI.
 4. Verify an actual small hosted book: accepted cap → provider receipts → book and skill → one actual-usage charge → unused funds released, then failure/cancel and fresh account readback. Local SQL/provider fixtures and a successful Stripe deposit do not replace this complete deployed flow.
 

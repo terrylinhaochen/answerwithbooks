@@ -2,7 +2,7 @@
 
 ## Customer pricing
 
-Hosted conversion charges **4 × metered provider list cost**, matching CrowdListen's existing usage policy. The total is rounded upward once over cumulative book usage: `ceil(providerCostUsd × 400)` cents. Input, cached input and output use their respective model rates. A $0.10 provider subtotal costs the customer $0.40. This targets **75% margin over provider cost**, before payment processing, hosting, storage, support, taxes or refunds; it is not a net-margin guarantee.
+Hosted conversion uses metered input, cached-input and output token rates shown to the customer before approval. Customer surfaces present the final rates and actual charge, not internal provider costs, markup or margin targets. The private billing backend repository owns internal pricing policy documentation.
 
 The customer chooses and explicitly authorizes a maximum additional spending amount. It is a cap, not a fixed book price or an estimate that the book will finish within that amount. The cap is reserved from the existing USD wallet. Deposits are 1:1 USD, not historical discounted CrowdListen credit packs. The earlier character-based tariff is superseded and is never used by the final metered function.
 
@@ -41,6 +41,6 @@ The service role owns these RPCs and financial tables; anonymous and authenticat
 
 See [October 9 acceptance](verification/billing-2026-10-09/README.md). The real Stripe sandbox payment, webhook and $1 wallet credit passed. Local database, provider-boundary, browser and CLI checks cover metering and consent. The real Stripe test does not by itself prove a hosted book's metered completion.
 
-Production personal charging remains disabled until the matched migration, processing functions, website, adapter and CLI are deployed and authenticated hosted-conversion acceptance passes. Enable an immutable `metered-4x` policy version with a maximum allowed cap, preserving explicit production GPT-5.4 mini settings. The legacy minimum/character columns remain for migration compatibility and have no pricing effect.
+Production personal charging remains disabled until the matched migration, processing functions, website, adapter and CLI are deployed and authenticated hosted-conversion acceptance passes. Enable an immutable metered policy version with a maximum allowed cap, preserving explicit production GPT-5.4 mini settings. The legacy minimum/character columns remain for migration compatibility and have no pricing effect.
 
 The Flash candidate has recorded source-quality failures; do not silently replace production Mini while releasing billing. See `verification/flash-quality-2026-10-09/README.md`. Earlier model latency samples excluded extraction, queues, covers, indexing and installation and do not establish full-book performance.

@@ -41,7 +41,7 @@ For CLI releases from the repository root, use `vercel deploy --prod --local-con
 
 ## Explicit limits
 
-Pricing is ceil(provider list cost × 400) cents: 75% margin on those modeled provider costs, rounded once per analysis. Payment fees, hosting/storage and support are excluded. X invoice discounts/daily deduplication are not allocated to individual customers. Paid provider coverage currently includes stored/supplied evidence and configured X accounts; other providers fail closed in paid mode until metered.
+Hosted processing uses metered token and API usage at the customer rates approved before work starts. Internal rate derivation is documented in the private billing backend repository. Consumed usage can be charged on failure; unused reserved funds are released. Customer-agent local reasoning is billed separately by the agent provider.
 
 Production AWB remains metering-only: this release does not enable real checkout or charge real money. The funded test environment proved the complete shared-wallet path. Existing live payment prerequisites remain unfinished: published credit terms, merchant tax configuration, matching live namespace/credentials/webhook, and an authorized real purchase check. This is distinct from the approved CrowdListen rate and shipped application code.
 
