@@ -1,11 +1,9 @@
 ---
 import '../styles/global.css';
 import '../styles/collector-theme.css';
-import NewsletterModal from '../components/NewsletterModal.astro';
 import Analytics from '../components/Analytics.astro';
 import AnalyticsNotice from '../components/AnalyticsNotice.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { newsletterSignupUrl } from '../lib/newsletter';
 
 export interface Props {
   title: string;
@@ -124,7 +122,7 @@ const current = Astro.url.pathname;
             }
           </nav>
           <div class="awb-account-links">
-          <>{installCta ? <button type="button" class="awb-nav__cta" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill</button> : <a class="awb-nav__cta" href={newsletterSignupUrl} data-open-newsletter aria-haspopup="dialog">Subscribe</a>}</>
+          <>{installCta ? <button type="button" class="awb-nav__cta" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill</button> : <a class="awb-nav__cta" href="https://docs.answerwithbooks.com/guide/quickstart-skill" data-hide-when-signed-in>Set up agent</a>}</>
           <a
             href="/profile/"
             data-auth-link
@@ -137,7 +135,6 @@ const current = Astro.url.pathname;
       </div>
     </header>}
 
-    {!readingMode && <NewsletterModal />}
     <AnalyticsNotice />
 
     <main class="flex-1 w-full">
