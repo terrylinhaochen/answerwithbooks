@@ -135,6 +135,7 @@ create function cron.schedule(name text,schedule text,command text) returns bigi
     print('PASS stable book identity, independent revisions, duplicate reuse, stale-parent guard, explicit activation and account isolation')
     import runpy
     runpy.run_path(str(ROOT/'scripts/test-book-completion-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})
+    runpy.run_path(str(ROOT/'scripts/test-book-library-metadata-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})
     if os.environ.get('BOOK_LIBRARY_DB_TEST') == '1':
         import runpy
         runpy.run_path(str(ROOT/'scripts/test-book-library-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})

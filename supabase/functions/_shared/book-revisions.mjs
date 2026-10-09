@@ -52,5 +52,5 @@ export function libraryBook(job) {
  const {skill_summary,...metadata}=job;
  return {...metadata,...(skill_summary||{}),book_id:job.book_id||job.id,revision:job.revision||1,
   source_kind:'full-source',package_ready:job.status==='ready',
-  scope_note:'Generated from the uploaded source. Extraction completeness and claims still require review.'};
+  scope_note:'Generated from the uploaded source, which may be an excerpt. Coverage of the complete book is not verified.'};
 }

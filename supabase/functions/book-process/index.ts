@@ -3,7 +3,7 @@ import {usageReceipt} from '../_shared/book-usage.mjs';
 import {distillSectionBatch,sectionConcurrency} from '../_shared/book-parallel.mjs';
 import {createBookModelClient,bookModelConfig} from '../_shared/book-model.mjs';
 import {bookUser} from '../_shared/book-cli-auth.mjs';
-import {reusableBook,cachedBookSummary} from '../_shared/book-cache.mjs';
+import {reusableBook,cachedBookSummary,findSavedBook} from '../_shared/book-cache.mjs';
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
 import {scanSkill} from '../_shared/book-skill-review.mjs';
 import {processingOptions,retryPatch} from '../_shared/book-options.mjs';
@@ -186,7 +186,7 @@ Deno.serve(async req=>{
   }
   if(input.action==='list') {
    const offset=Number(input.offset||0);if(!Number.isSafeInteger(offset)||offset<0)return reply({error:'Invalid offset'},400);
-   const jobs=requireOk(await db.from('book_processing_jobs').select('id,book_id,revision,is_current,title,author,source_name,status,run_state,cursor,created_at,error,skill_summary').eq('user_id',user.id).eq('is_current',true).order('created_at',{ascending:false}).order('id').range(offset,offset+99));
+   const jobs=requireOk(await db.from('book_processing_jobs').select('id,book_id,revision,is_current,title,author,source_name,status,run_state,cursor,created_at,error,skill_summary,total_sections,source_line_count,cover_status,cover_path').eq('user_id',user.id).eq('is_current',true).order('created_at',{ascending:false}).order('id').range(offset,offset+99));
    return reply({books:jobs.map(libraryBook),next_offset:jobs.length===100?offset+100:null});
   }
   if(input.parentId&&!/^[a-f0-9-]{36}$/i.test(input.parentId))return reply({error:'Invalid parent book ID.'},400);
@@ -197,7 +197,8 @@ Deno.serve(async req=>{
   if(['lookup','prepare','create'].includes(input.action)&&!input.parentId) {
    if(typeof input.sha!=='string'||! /^[a-f0-9]{64}$/.test(input.sha))return reply({error:'Invalid source fingerprint.'},400);
    // Read before provider availability, extraction, quotas, or signed uploads.
-   const existing=requireOk(await db.from('book_processing_jobs').select('id,title,status,run_state').eq('user_id',user.id).eq('source_sha',input.sha).neq('revision_kind','append').order('is_current',{ascending:false}).order('created_at',{ascending:false}).limit(1).maybeSingle());
+   const textSha=input.action==='create'&&typeof input.text==='string'&&input.text.length<=uploadLimits.maxTextCharacters?await hash(new TextEncoder().encode(splitSource(sanitizeSource(input.text),input.extraction?.headings||[]).text)):input.textSha;
+   const existing=await findSavedBook(db,user.id,{sha:input.sha,textSha});
    if(reusableBook(existing))return reply({job:cachedBookSummary(existing),reused:true});
    if(input.action==='lookup')return reply({job:null,reused:false});
   }
@@ -257,6 +258,11 @@ Deno.serve(async req=>{
     await wake();return reply({job:publicJob(saved)});
    }finally{await db.from('book_processing_jobs').update({lease_token:null,lease_until:null}).eq('id',job.id).eq('lease_token',token);}
   }
+  // Do not authorize or restart an identical conversion when a complete result exists.
+  if(!job.parent_job_id&&job.status!=='ready'&&['quote','accept-price','enqueue','retry','generate','process'].includes(input.action)) {
+   const duplicate=await findSavedBook(db,user.id,{textSha:job.source_text_sha,excludeId:job.id});
+   if(duplicate?.status==='ready')return reply({error:'This source already has a completed book and skill. Open the saved result from this book page.',code:'BOOK_ALREADY_SAVED',existing_book:cachedBookSummary(duplicate)},409);
+  }
   if(['quote','accept-price'].includes(input.action)) {
    if(input.action==='accept-price'&&(input.pricingModel!==customerPricingModel||!Number.isSafeInteger(input.acceptedCeilingCents)))return reply({error:'Review the metered-usage policy and explicitly accept a spending ceiling.',code:'USAGE_POLICY_ACCEPTANCE_REQUIRED'},409);
    const models=[...new Set([bookModelConfig((name:string)=>Deno.env.get(name)).model,bookModelConfig((name:string)=>Deno.env.get(name),'review').model,...(Deno.env.get('OPENAI_API_KEY')?[Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5']:[])])];
@@ -301,7 +307,10 @@ Deno.serve(async req=>{
    if(!job.analysis)return reply({error:'Analysis is not ready.'},409);
    return reply({files:{'analysis.json':JSON.stringify(job.analysis,null,2),'source.txt':job.source_text}});
   }
-  if(input.action==='status')return reply({job:publicJob(job)});
+  if(input.action==='status') {
+   const duplicate=job.status!=='ready'&&!job.parent_job_id?await findSavedBook(db,user.id,{textSha:job.source_text_sha,excludeId:job.id}):null;
+   return reply({job:{...publicJob(job),existing_book:duplicate?.status==='ready'?cachedBookSummary(duplicate):null}});
+  }
   if(input.action==='usage') {
    const operations=job.billing_required?requireOk(await db.from('book_provider_operations').select('id,kind,model,rate_version,state,cost_usd,metric,created_at').eq('job_id',job.id).eq('user_id',user.id).order('created_at').limit(10000)):[];
    const rows:any[]=[];for(let offset=0;offset<10000;offset+=500){const page=requireOk(await db.from('book_model_usage').select('usage,created_at').eq('job_id',job.id).eq('user_id',user.id).order('created_at').order('id').range(offset,offset+499));rows.push(...page);if(page.length<500)break;}

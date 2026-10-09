@@ -1,3 +1,4 @@
+import {bookStatus,bookSourceLabel} from './book-library-status.mjs';
 import {auditUpstream} from './upstream-book';
 import {zipSync,strToU8} from 'fflate';
 import {supabase} from './supabase';
@@ -97,15 +98,20 @@ async function showVersions(job:any) {
 }
 async function paint(job:any) {
  current=job;find('cancel').hidden=job.billing?.state!=='held'||job.status==='ready';find('payment').hidden=!needsPayment(job);if(!needsPayment(job)){priceQuote=null;find('pay').hidden=true;}find('cover-retry').hidden=job.cover_status!=='failed'||job.billing_required&&job.billing?.state!=='held';find('usage-show').hidden=!job.cursor&&!job.artifacts;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
+ find('source-scope').textContent=`${bookSourceLabel(job)} · ${job.source_name}`;
+ const previous=find('last-error');previous.hidden=!job.last_error;previous.textContent=job.last_error?`Previous interruption${job.last_error_at?` (${new Date(job.last_error_at).toLocaleString()})`:''}: ${job.last_error}`:'';
+ const existing=find<HTMLAnchorElement>('existing-book');existing.hidden=!job.existing_book;
+ if(job.existing_book){existing.href=`/your-book/?id=${encodeURIComponent(job.existing_book.id)}`;existing.textContent='Open the completed book and skill for this source';}
  void showVersions(job);
  if(nativePending(job))find('progress').removeAttribute('value');
  else find<HTMLProgressElement>('progress').value=job.status==='ready'?100:job.artifacts?90:Math.round((job.cursor||0)/((job.total_sections||0)+2)*85);
  find('pause').hidden=job.run_state!=='queued'||nativePending(job);find('retry').hidden=nativePending(job)||(!['failed','paused','manual'].includes(job.run_state)&&job.source_import?.state!=='failed');
- find('status').textContent=nativePending(job)?job.source_import.state==='processing'?'Reading your original file in the background…':'Your original file is saved. Waiting for background extraction…':job.source_import?.state==='failed'?job.error||'Could not read this source. Retry background extraction.':job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?job.cover_path?'Book, skill, and cover ready.':job.cover_status==='failed'?'Book and skill ready. Cover failed; you can retry it below.':'Book and skill ready. Cover is being created separately.':job.artifacts?'Book and skill ready. Creating your cover…':job.overview_total&&job.cursor===job.total_sections?`All source sections read. Assembling your book · ${job.overview_completed} of ${job.overview_total} overview groups`: `Creating your book and skill · ${job.completed_sections??job.cursor} of ${job.total_sections} source sections read`;
+ find('status').textContent=bookStatus(job);
  if(needsPayment(job)){find('status').textContent=job.status==='ready'?'Your book and skill are ready. Approve a new spending limit only if you want to retry the cover.':'Source saved. Review a spending limit to start hosted conversion.';find('retry').hidden=true;find('resume').hidden=true;}
  if(job.billing?.state==='reconciliation'){find('status').textContent='Usage needs reconciliation. Your reserved funds are held while we verify provider receipts; no further paid work will start.';find('retry').hidden=true;find('resume').hidden=true;}
  if(job.run_state==='paused'&&job.billing?.state!=='reconciliation'&&job.error?.includes('BOOK_'))find('status').textContent=job.error+' Cancel to settle recorded usage and release unused funds, then approve a new limit if needed.';
  if(job.status==='ready'||job.status==='analyzed')find('resume').hidden=true;
+ if(job.existing_book){find('payment').hidden=true;find('retry').hidden=true;find('resume').hidden=true;}
  if(job.analysis&&!analysisRendered){
   analysisRendered=true;find('analysis').hidden=false;
   for(const section of job.analysis.sections){
@@ -139,7 +145,6 @@ async function run(action?:string) {
   const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to Answer with Books, then return to this private book link.');
   if(action==='retry'&&current?.source_import?.kind==='native'&&current.source_import.state==='failed'){await nativeBookWorker({action:'retry',id});action='status';}
   await paint((await bookWorker({action:action||'status',id})).job);
-  if(!current.billing_required&&current.run_state==='manual'&&!nativePending(current)&&!['ready','analyzed'].includes(current.status))await paint((await bookWorker({action:'enqueue',id})).job);
  }catch(e){find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
  finally{running=false;}
 }
@@ -210,3 +215,6 @@ find('quote').addEventListener('click',async()=>{const button=find<HTMLButtonEle
 find('pay').addEventListener('click',async()=>{if(!priceQuote||priceQuote.state!=='quoted')return;const button=find<HTMLButtonElement>('pay');button.disabled=true;try{await bookWorker({action:'accept-price',id,quoteId:priceQuote.quoteId,acceptedCeilingCents:priceQuote.ceilingCents,pricingModel:'token-usage-v1'});priceQuote=null;await run();}catch(error){find('price-message').textContent=error instanceof Error?error.message:'Could not start. Check your balance.';}finally{button.disabled=false;}});
 
 find('cancel').addEventListener('click',()=>void run('cancel'));
+
+window.addEventListener('focus',()=>void run());
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)void run();});

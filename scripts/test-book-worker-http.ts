@@ -17,8 +17,14 @@ let rejectNextReview=false,sawTargetedRepair=false;
 let modelCalls=0,wakes=0,failProvider=false,holdProvider:(()=>Promise<void>)|null=null;
 const json=(body:any,status=200)=>new Response(JSON.stringify(paidTest&&(body?.choices||body?.data?.[0]?.b64_json)?{...body,usage:body.choices?{prompt_tokens:100,completion_tokens:30,prompt_tokens_details:{cached_tokens:0}}:{input_tokens:100,output_tokens:30,input_tokens_details:{text_tokens:100,image_tokens:0}}}:body),{status,headers:{'Content-Type':'application/json'}});
 function match(job:any,params:URLSearchParams){
+ const identity=params.get('or');
+ if(identity&&!identity.includes('lease_until')) {
+  const filters=identity.replace(/^\(|\)$/g,'').split(',');
+  if(!filters.some(filter=>{const [key,op,value]=filter.split('.');return op==='eq'&&String(key==='source_import->>textSha'?job.source_import?.textSha:job[key])===value;}))return false;
+ }
+
  const lease=params.get('or');if(lease?.includes('lease_until.lt.')&&job.lease_until&&Date.parse(job.lease_until)>=Date.parse(lease.split('lease_until.lt.')[1].replace(/\)$/,'')))return false;
- for(const key of ['id','user_id','source_sha','updated_at','lease_token','cover_lease_token','run_state']){
+ for(const key of ['id','user_id','source_sha','updated_at','lease_token','cover_lease_token','run_state','revision_kind']){
   const value=params.get(key);if(!value)continue;
   if(value.startsWith('eq.')&&String(job[key])!==value.slice(3))return false;
   if(value.startsWith('neq.')&&String(job[key])===value.slice(4))return false;
@@ -203,3 +209,26 @@ rejectMeter=false;correctionJob.run_state='queued';correctionJob.next_attempt_at
 assert.equal((await call({action:'accept-price',id:correctionId,quoteId:crypto.randomUUID(),acceptedPriceCents:100})).body.code,'USAGE_POLICY_ACCEPTANCE_REQUIRED');
 assert.equal((await call({action:'reconcile-usage',id:correctionId,operationId:crypto.randomUUID(),receipt:{}})).status,403);
 console.log('PASS paid handler: pre-call admission, durable receipts, budget pause without provider calls, explicit usage-policy consent, operator-only reconciliation');
+
+// Same text in different file formats must reuse an owner's complete package,
+// before provider availability, uploads, price authorization or model work.
+const originalReady=jobs.find(job=>job.status==='ready');
+const contentHash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(originalReady.source_text)))).map(n=>n.toString(16).padStart(2,'0')).join('');
+originalReady.source_text_sha=contentHash;originalReady.revision_kind='base';
+const beforeDuplicateCalls=modelCalls,beforeDuplicateJobs=jobs.length;
+Deno.env.delete('OPENAI_API_KEY');Deno.env.delete('FIREWORKS_API_KEY');
+for(const input of [
+ {action:'create',name:'same-book.epub',sha:'b'.repeat(64),text:originalReady.source_text},
+ {action:'prepare',name:'same-book.txt',sha:'c'.repeat(64),size:500,textSha:contentHash,textBytes:500},
+ {action:'lookup',sha:'d'.repeat(64),textSha:contentHash},
+]) {
+ const result=await call(input);assert.equal(result.status,200,JSON.stringify(result.body));assert.equal(result.body.reused,true);assert.equal(result.body.job.id,originalReady.id);assert.equal(result.body.upload,undefined);
+}
+assert.equal((await call({action:'lookup',sha:'e'.repeat(64),textSha:contentHash},'stranger-token')).body.reused,false);
+const duplicate={...originalReady,id:crypto.randomUUID(),source_sha:'f'.repeat(64),status:'processing',run_state:'failed',artifacts:null,billing_required:true};jobs.push(duplicate);
+for(const action of ['quote','accept-price','retry','enqueue']) {
+ const result=await call({action,id:duplicate.id});assert.equal(result.status,409);assert.equal(result.body.code,'BOOK_ALREADY_SAVED');assert.equal(result.body.existing_book.id,originalReady.id);
+}
+const status=(await call({action:'status',id:duplicate.id})).body.job;assert.equal(status.existing_book.id,originalReady.id);
+assert.equal(modelCalls,beforeDuplicateCalls);assert.equal(jobs.length,beforeDuplicateJobs+1);
+console.log('PASS cross-format reuse, owner isolation, completed duplicate preference and no repeated charge/provider work');

@@ -11,9 +11,16 @@ const json=(data:any,status=200)=>new Response(JSON.stringify(data),{status,head
 const hash=async(bytes:Uint8Array)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(n=>n.toString(16).padStart(2,'0')).join('');
 const active=(j:any)=>j.lease_until&&Date.parse(j.lease_until)>Date.now();
 function match(j:any,p:URLSearchParams){
+ const identity=p.get('or');
+ if(identity&&!identity.includes('lease_until')) {
+  const filters=identity.replace(/^\(|\)$/g,'').split(',');
+  if(!filters.some(filter=>{const [key,op,value]=filter.split('.');return op==='eq'&&String(key==='source_import->>textSha'?j.source_import?.textSha:j[key])===value;}))return false;
+ }
+
  for(const [key,val] of p){
   if(key==='select')continue;
-  if(key==='or'){if(active(j))return false;continue;}
+  if(key==='or'){if(val.includes('lease_until')&&active(j))return false;continue;}
+  if(val.startsWith('neq.')&&String(j[key])===val.slice(4))return false;
   if(val.startsWith('eq.')&&String(j[key])!==val.slice(3))return false;
   if(val.startsWith('gt.')&&!(Date.parse(j[key])>Date.parse(val.slice(3))))return false;
  }
@@ -118,3 +125,12 @@ assert.equal(revised.cursor,j.notes.length);assert.deepEqual(revised.notes,j.not
 assert.equal(revised.source_manifest.length,2);assert.equal(revised.source_manifest[1].startLine,j.source_text.split('\n').length+2);
 assert.equal(j.status,'ready');assert.equal(j.source_text,text);
 console.log('PASS complete native append: unchanged parent, reused notes, combined source and stable line coordinates');
+// Native files become comparable only after verified extraction. A ready match
+// must stop before queued generation, while preserving this original upload.
+j.source_text_sha=await hash(new TextEncoder().encode(j.source_text));j.revision_kind='base';
+const duplicateId=crypto.randomUUID(),duplicateLease=crypto.randomUUID();
+const duplicate={...j,id:duplicateId,parent_job_id:null,status:'uploaded',run_state:'staging',source_sha:'f'.repeat(64),source_text:'pending',chunks:[],source_text_sha:null,lease_token:duplicateLease,lease_until:new Date(Date.now()+600000).toISOString(),source_import:{kind:'native',state:'processing'}};
+jobs.push(duplicate);files.set(`${owner}/${duplicateId}/native-${duplicateLease}-extracted-source.txt`,textBytes);
+const duplicateDone=await call({action:'complete',id:duplicateId,leaseToken:duplicateLease,textSha,textBytes:textBytes.length,headings:[]},'synthetic-worker');
+assert.equal(duplicateDone.status,200,JSON.stringify(duplicateDone.body));assert.equal(duplicate.run_state,'paused');assert.match(duplicate.error,/Identical source/);assert.equal(duplicate.source_text,text);
+console.log('PASS native cross-format duplicate preserves upload and pauses before generation');
