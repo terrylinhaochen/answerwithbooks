@@ -1,5 +1,7 @@
 # Private books API
 
+The latest version of this guide is at [https://crowd-listen.mintlify.site/api/private-books](https://crowd-listen.mintlify.site/api/private-books). This URL remains available for existing integrations.
+
 Create a personal API key at https://answerwithbooks.com/api-keys/. Keep it in your secret manager or agent environment. Revoking it removes access. Browser login and revocable `awb_cli_` sessions also work; customer-agent local generation needs neither.
 
 POST JSON to `https://yozeqanibszoxnowmvsm.supabase.co/functions/v1/book-process` with `Authorization: Bearer YOUR_API_KEY`. These keys use the same account ownership checks as CLI sessions. CrowdListen workspace identities cannot read personal books.

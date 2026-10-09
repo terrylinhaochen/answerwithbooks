@@ -6,6 +6,7 @@ The customer documentation lives in `mintlify/`. Deploy that directory only; the
 
 - Plan: **Starter ($0)**. Do not activate paid AI features or a paid subscription.
 - Project name: **Answer with Books**.
+- Hosted URL: https://crowd-listen.mintlify.site (the initial hostname inherits the organization name).
 - Repository: `terrylinhaochen/answerwithbooks`.
 - Branch: `main`.
 - Documentation subdirectory/content path: `mintlify`.
@@ -34,4 +35,10 @@ npx --yes mint@4.2.994 dev --no-open --telemetry=false
 
 Validation and broken-link checks passed. The quickstart rendered on desktop and mobile without horizontal overflow. Local preview may display simulated Mintlify premium controls; it does not establish a paid plan or verify hosted plan entitlements.
 
-At preparation time, CLI authentication to the CrowdListen organization succeeded, but no Mintlify project was returned. Hosted publication, Starter plan verification and custom-domain cutover remain pending the dashboard project connection. Browser automation was unavailable in this session. Do not describe the migration as live until these checks complete.
+## Hosted verification — October 9, 2026
+
+The existing public repository was connected and onboarding finalized successfully. The dashboard project is named **Answer with Books**; both the organization and deployment report the free `hobby` tier (Starter). No paid subscription was activated. All ten published pages returned HTTP 200 with their expected headings, and no internal pricing multiplier was present. App links now point to the verified hosted docs; legacy URLs retain compatibility links.
+
+Custom-domain setup remains separate: `docs.answerwithbooks.com` is not configured. GitHub automatic synchronization still requires verification with a subsequent content update; initial publication alone does not establish webhook delivery.
+
+One account can hold multiple projects. The dashboard supports an additional Starter deployment; a second project has not been created as part of this migration.
