@@ -1,6 +1,6 @@
 import {usageReceipt} from '../_shared/book-usage.mjs';
 import {distillSectionBatch,sectionConcurrency} from '../_shared/book-parallel.mjs';
-import {createBookModelClient} from '../_shared/book-model.mjs';
+import {createBookModelClient,bookModelConfig} from '../_shared/book-model.mjs';
 import {bookUser} from '../_shared/book-cli-auth.mjs';
 import {reusableBook,cachedBookSummary} from '../_shared/book-cache.mjs';
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
@@ -19,7 +19,7 @@ import uploadLimits from '../_shared/book-upload-limits.json' with {type:'json'}
 const url=Deno.env.get('SUPABASE_URL')!;
 const serviceKey=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db=createClient(url,serviceKey,{auth:{persistSession:false}});
-const providerKey=()=>Deno.env.get('OPENAI_API_KEY');
+const providerKey=()=>Deno.env.get(({openai:'OPENAI_API_KEY',google:'GEMINI_API_KEY',fireworks:'FIREWORKS_API_KEY'} as const)[bookModelConfig((name:string)=>Deno.env.get(name)).provider as 'openai'|'google'|'fireworks']);
 const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','https://chenterry.com','http://localhost:4321','http://127.0.0.1:4321']);
 const hash=async(bytes:BufferSource)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
 function publicJob(job:any) { const {source_text,chunks,notes,section_feedback,generation_feedback,overview_notes=[],lease_token,cover_lease_token,...rest}=job;return {...rest,total_sections:chunks.length,completed_sections:notes.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
@@ -147,8 +147,12 @@ Deno.serve(async req=>{
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
    try {return reply(await repairBook({db,job:target,modelJson:modelFor(target),hash}));}catch(e){return reply({error:e instanceof Error?e.message:'Repair failed; original preserved.'},502);}
   }
-  if(bearer.startsWith('awb_cli_')&&!['list','lookup','prepare','create','finalize','enqueue','status','export','analysis-export','pause','retry','generate','revisions','activate','usage','retry-cover'].includes(input.action))return reply({error:'This action is not available to agent sessions.'},403);
+  if((bearer.startsWith('awb_cli_')||bearer.startsWith('awb_live_'))&&!['cancel','billing-history','quote','accept-price','list','lookup','prepare','create','finalize','enqueue','status','export','analysis-export','pause','retry','generate','revisions','activate','usage','retry-cover'].includes(input.action))return reply({error:'This action is not available to agent sessions.'},403);
   const user=await bookUser(db,bearer);if(!user)return reply({error:'Sign in to access your private books.'},401);
+  if(input.action==='billing-history') {
+   const rows=requireOk(await db.from('book_payment_reservations').select('job_id,state,cents,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100));
+   return reply({books:rows.map((row:any)=>({id:row.job_id,state:row.state,priceCents:row.cents,chargedCents:row.state==='settled'?row.cents:0,reservedCents:row.state==='held'?row.cents:0,createdAt:row.created_at}))});
+  }
   if(input.action==='list') {
    const offset=Number(input.offset||0);if(!Number.isSafeInteger(offset)||offset<0)return reply({error:'Invalid offset'},400);
    const jobs=requireOk(await db.from('book_processing_jobs').select('id,book_id,revision,is_current,title,author,source_name,status,run_state,cursor,created_at,error,skill_summary').eq('user_id',user.id).eq('is_current',true).order('created_at',{ascending:false}).order('id').range(offset,offset+99));
@@ -218,9 +222,15 @@ Deno.serve(async req=>{
     const text=sanitizeSource(await extracted.text());if(text.length<100||text.length>uploadLimits.maxTextCharacters)throw new Error('The extracted text exceeds the current processing capacity.');
     const parent=job.parent_job_id?requireOk(await db.from('book_processing_jobs').select('*').eq('id',job.parent_job_id).eq('user_id',user.id).single()):undefined;
     const source=finalizeBookSource(job,text,job.source_import.headings,parent);
-    const saved=requireOk(await db.from('book_processing_jobs').update({...source,status:'processing',run_state:'queued',error:null,attempts:0,next_attempt_at:now,lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('lease_token',token).select().single());
+    const saved=requireOk(await db.from('book_processing_jobs').update({...source,status:'processing',run_state:job.billing_required?'staging':'queued',source_import:{...job.source_import,state:'complete'},error:null,attempts:0,next_attempt_at:now,lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('lease_token',token).select().single());
     await wake();return reply({job:publicJob(saved)});
    }finally{await db.from('book_processing_jobs').update({lease_token:null,lease_until:null}).eq('id',job.id).eq('lease_token',token);}
+  }
+  if(['quote','accept-price'].includes(input.action)) {
+   const {data,error}=await db.rpc('book_billing',{p_user:user.id,p_id:job.id,p_action:input.action==='quote'?'quote':'accept',p_quote:input.quoteId||null,p_cents:input.acceptedPriceCents??null});
+   if(error){const reason=error.message;return reply({error:reason.includes('INSUFFICIENT_FUNDS')?'Add funds in Billing, then accept this quote again.':reason.includes('BOOK_PRICING_NOT_ENABLED')?'Hosted pricing is not available yet. Your source is saved; you can use your own agent now.':reason.includes('PRICE_ACCEPTANCE_REQUIRED')?'Get a fresh quote and explicitly accept its price.':'Could not confirm this book price. Finish saving the source and retry.',code:reason.includes('INSUFFICIENT_FUNDS')?'INSUFFICIENT_FUNDS':'BOOK_PRICE_REQUIRED',billing_url:'https://answerwithbooks.com/billing/'},409);}
+   if(input.action==='accept-price'&&data.state==='held')await wake();
+   return reply({billing:data,job:publicJob(requireOk(await db.from('book_processing_jobs').select('*').eq('id',job.id).eq('user_id',user.id).single()))});
   }
   if(input.action==='delete') {
    if(job.cover_lease_until&&Date.parse(job.cover_lease_until)>Date.now())return reply({error:'Wait for the cover attempt to finish before deleting this book.'},409);
@@ -258,7 +268,7 @@ Deno.serve(async req=>{
   if(input.action==='status')return reply({job:publicJob(job)});
   if(input.action==='usage') {
    const rows:any[]=[];for(let offset=0;offset<10000;offset+=500){const page=requireOk(await db.from('book_model_usage').select('usage,created_at').eq('job_id',job.id).eq('user_id',user.id).order('created_at').order('id').range(offset,offset+499));rows.push(...page);if(page.length<500)break;}
-   return reply({job_id:job.id,receipt:usageReceipt(rows)});
+   return reply({job_id:job.id,receipt:{...usageReceipt(rows),customerCharge:job.billing?.chargedCents!=null?job.billing.chargedCents/100:job.billing_required?null:0,customerBilling:job.billing||{state:job.billing_required?'unquoted':'free',chargedCents:0}}});
   }
   if(input.action==='retry-cover') {
    if(job.status!=='ready')return reply({error:'Finish the book before requesting a cover.'},409);
@@ -277,11 +287,17 @@ Deno.serve(async req=>{
    if(activated.error)return reply({error:activated.error.message},409);
    return reply({job:publicJob(activated.data)});
   }
+  if(input.action==='cancel') {
+   if(job.status==='ready'||job.billing?.state!=='held')return reply({error:'Only an unfinished reserved conversion can be cancelled.'},409);
+   const saved=requireOk(await db.from('book_processing_jobs').update({run_state:'failed',error:'Cancelled. Your reserved funds were released.',updated_at:new Date().toISOString()}).eq('id',job.id).eq('user_id',user.id).eq('updated_at',job.updated_at).or(`lease_until.is.null,lease_until.lt.${new Date().toISOString()}`).select().maybeSingle());
+   return saved?reply({job:publicJob(saved)}):reply({error:'Wait for the current section to finish, then cancel to release your reserved funds.'},409);
+  }
   if(input.action==='pause') {
    if(job.source_import?.kind==='native'&&job.source_import.state!=='complete')return reply({error:'Native conversion is in progress. Processing can be paused after extraction finishes.'},409);
    const saved=requireOk(await db.from('book_processing_jobs').update({run_state:'paused',updated_at:new Date().toISOString()}).eq('id',job.id).neq('run_state','complete').select().maybeSingle());
    return reply({job:publicJob(saved||job)});
   }
+  if(['enqueue','retry','generate','process'].includes(input.action)&&job.billing_required&&!['held','settled'].includes(job.billing?.state))return reply({error:'Review and accept the one-time book price before starting hosted processing.',code:'BOOK_PRICE_REQUIRED',job:publicJob(job)},402);
   if(['enqueue','retry','generate'].includes(input.action)) {
    if(job.source_import&&job.status==='uploaded')return reply({error:'Finish saving the original and extracted text before processing.'},409);
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);

@@ -87,7 +87,7 @@ Deno.serve(async req=>{
    const parent=parentId?check(await db.from('book_processing_jobs').select('*').eq('id',parentId).eq('user_id',job.user_id).maybeSingle()):undefined;
    if(parentId&&!parent)return reply({error:'Revision parent is unavailable'},409);
    const patch=await finalizeBookSource(job,text,input.headings,parent);
-   const saved=check(await update({...patch,status:'processing',run_state:'queued',source_import:{...job.source_import,state:'complete',textSha:input.textSha,textBytes:input.textBytes,metadata,completedLease:input.leaseToken},attempts:0,error:null,next_attempt_at:now(),lease_token:null,lease_until:null,updated_at:now()}));
+   const saved=check(await update({...patch,status:'processing',run_state:job.billing_required?'staging':'queued',source_import:{...job.source_import,state:'complete',textSha:input.textSha,textBytes:input.textBytes,metadata,completedLease:input.leaseToken},attempts:0,error:null,next_attempt_at:now(),lease_token:null,lease_until:null,updated_at:now()}));
    if(!saved.length)return reply({error:'Extraction lease expired'},409);
    await db.rpc('wake_book_processing',{p_count:1});
    // Retain the original; extraction text is now stored on the private job.

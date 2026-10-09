@@ -27,10 +27,11 @@ import AddBookDialog from '../components/AddBookDialog.astro';
         </div>
         <button type="button" id="signout-btn" class="profile-signout">Sign out</button>
       </header>
+      <nav aria-label="Account settings" class="mb-6 flex flex-wrap gap-5 text-sm"><a href="/api-keys/" class="underline">API keys</a><a href="/billing/" class="underline">Billing</a><a href="/processing/" class="underline">Processing queue</a></nav>
 
       <section class="profile-card mb-6">
         <div class="profile-card-heading"><h2>Your next skill</h2><a href="/tools/">How it works <span aria-hidden="true">↗</span></a></div>
-        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-soft">Upload a book, paper, or document to create a readable artifact and reusable agent instructions, with frameworks, checklists, and source references.</p>
+        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-soft">Existing books are free to use. For a new source, choose a paid hosted conversion or create the summary and skill with your own agent.</p>
         <button class="awb-pill awb-pill-primary mt-5" type="button" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Upload a source</button>
       </section>
       <BookAdditions />

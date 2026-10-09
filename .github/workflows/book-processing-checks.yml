@@ -1,0 +1,23 @@
+name: Book processing checks
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_SUPABASE_URL: ${{ vars.PUBLIC_SUPABASE_URL }}
+      PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PUBLIC_SUPABASE_ANON_KEY }}
+      PUBLIC_CAPABILITY_API_URL: ${{ vars.PUBLIC_CAPABILITY_API_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:book-pipeline
+      - run: npm run test:book-billing
+      - run: node --test scripts/test-book-api-auth.mjs scripts/test-key-dialogs.mjs
+      - run: npm run build

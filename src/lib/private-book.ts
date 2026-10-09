@@ -8,6 +8,8 @@ import bookCliRelease from './book-cli-release.json';
 const root=document.querySelector<HTMLElement>('[data-private-book]')!;
 const find=<T extends HTMLElement>(name:string)=>root.querySelector<T>(`[data-job-${name}]`)!;
 const id=new URL(location.href).searchParams.get('id');
+let priceQuote:any=null;
+const needsPayment=(job:any)=>job?.billing_required&&!job.artifacts&&!['held','settled'].includes(job.billing?.state)&&(job.source_import?.state==='complete'||!job.source_import);
 let current:any, running=false, rendered=false, analysisRendered=false, auditPassed=false, hasFindings=false, activating=false;
 let revisionsKey='',revisionCanActivate=false;
 const nativePending=(job:any)=>job?.source_import?.kind==='native'&&['queued','processing'].includes(job.source_import.state);
@@ -93,12 +95,13 @@ async function showVersions(job:any) {
  }catch {revisionsKey='';revisionCanActivate=false;find('activation').hidden=true;find('discard').hidden=true;updateActivationGate();find('version-message').textContent='Version history is unavailable right now. Your saved book remains available.';}
 }
 async function paint(job:any) {
- current=job;find('cover-retry').hidden=job.cover_status!=='failed';find('usage-show').hidden=!job.cursor&&!job.artifacts;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
+ current=job;find('cancel').hidden=job.billing?.state!=='held'||job.status==='ready';find('payment').hidden=!needsPayment(job);if(!needsPayment(job)){priceQuote=null;find('pay').hidden=true;}find('cover-retry').hidden=job.cover_status!=='failed';find('usage-show').hidden=!job.cursor&&!job.artifacts;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
  void showVersions(job);
  if(nativePending(job))find('progress').removeAttribute('value');
  else find<HTMLProgressElement>('progress').value=job.status==='ready'?100:job.artifacts?90:Math.round((job.cursor||0)/((job.total_sections||0)+2)*85);
  find('pause').hidden=job.run_state!=='queued'||nativePending(job);find('retry').hidden=nativePending(job)||(!['failed','paused','manual'].includes(job.run_state)&&job.source_import?.state!=='failed');
  find('status').textContent=nativePending(job)?job.source_import.state==='processing'?'Reading your original file in the background…':'Your original file is saved. Waiting for background extraction…':job.source_import?.state==='failed'?job.error||'Could not read this source. Retry background extraction.':job.run_state==='failed'?job.error||'Processing needs a retry.':job.run_state==='paused'?'Paused. A section already in progress may finish. Resume when you are ready.':job.status==='analyzed'?'Analysis ready. Review the notes below.':job.status==='ready'?job.cover_path?'Book, skill, and cover ready.':job.cover_status==='failed'?'Book and skill ready. Cover failed; you can retry it below.':'Book and skill ready. Cover is being created separately.':job.artifacts?'Book and skill ready. Creating your cover…':job.overview_total&&job.cursor===job.total_sections?`All source sections read. Assembling your book · ${job.overview_completed} of ${job.overview_total} overview groups`: `Creating your book and skill · ${job.completed_sections??job.cursor} of ${job.total_sections} source sections read`;
+ if(needsPayment(job)){find('status').textContent='Source saved. Review the one-time price to start hosted conversion.';find('retry').hidden=true;find('resume').hidden=true;}
  if(job.status==='ready'||job.status==='analyzed')find('resume').hidden=true;
  if(job.analysis&&!analysisRendered){
   analysisRendered=true;find('analysis').hidden=false;
@@ -133,7 +136,7 @@ async function run(action?:string) {
   const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to Answer with Books, then return to this private book link.');
   if(action==='retry'&&current?.source_import?.kind==='native'&&current.source_import.state==='failed'){await nativeBookWorker({action:'retry',id});action='status';}
   await paint((await bookWorker({action:action||'status',id})).job);
-  if(current.run_state==='manual'&&!nativePending(current)&&!['ready','analyzed'].includes(current.status))await paint((await bookWorker({action:'enqueue',id})).job);
+  if(!current.billing_required&&current.run_state==='manual'&&!nativePending(current)&&!['ready','analyzed'].includes(current.status))await paint((await bookWorker({action:'enqueue',id})).job);
  }catch(e){find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
  finally{running=false;}
 }
@@ -199,3 +202,8 @@ find('download').addEventListener('click',()=>void downloadRevision());
 find('previous').addEventListener('click',()=>void downloadRevision(true));
 
 void run();
+
+find('quote').addEventListener('click',async()=>{const button=find<HTMLButtonElement>('quote');button.disabled=true;find('pay').hidden=true;priceQuote=null;try{const result=await bookWorker({action:'quote',id});priceQuote=result.billing;if(priceQuote.state!=='quoted')return void run();const amount=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(priceQuote.priceCents/100);find('price-message').textContent=`${amount} once for this source. Quote expires ${new Date(priceQuote.expiresAt).toLocaleString()}. Your existing books remain free.`;find('pay').textContent=`Accept ${amount} & start`;find('pay').hidden=false;}catch(error){find('price-message').textContent=error instanceof Error?error.message:'Price unavailable. Your source is saved.';}finally{button.disabled=false;}});
+find('pay').addEventListener('click',async()=>{if(!priceQuote||priceQuote.state!=='quoted')return;const button=find<HTMLButtonElement>('pay');button.disabled=true;try{await bookWorker({action:'accept-price',id,quoteId:priceQuote.quoteId,acceptedPriceCents:priceQuote.priceCents});priceQuote=null;await run();}catch(error){find('price-message').textContent=error instanceof Error?error.message:'Could not start. Check your balance.';}finally{button.disabled=false;}});
+
+find('cancel').addEventListener('click',()=>void run('cancel'));

@@ -1,0 +1,671 @@
+{
+  "date": "2026-10-08",
+  "sample": "Wealth of Nations Book I Chapters I-III",
+  "rows": [
+    {
+      "model": "5.4-mini",
+      "sourceSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sourceCharacters": 39877,
+      "sections": 3,
+      "concurrency": 3,
+      "maxRepairs": 2,
+      "pipelineHashes": {
+        "book-model": "54d2f460ca175fef4c49c50308adb719470bd3ef849fe77134670d86d40dce22",
+        "book-parallel": "718e8996dcdb11d52cdf8d2b74051b6c388964dda4479c79a640bfe6b6ba2692",
+        "book-schemas": "9e94d7cedeebcb3b252890cbb1a81bf5989b270d37deed27c79d9ed1683fa27c",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "2d11eecfaf77e68a5901da04ff52f51e8d087a8c394402a52424e3c0bd0078f8",
+        "book-distillation": "8e871e5eb9b0fea1c43e08243ac463fa010d42ea3fb036b4cbde0144cf30d908",
+        "book-overview": "2347bc9ad758919596b2f7890efcad801deec04110dd418386811137794bc55d",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "status": "complete",
+      "elapsedSeconds": 32.662225922,
+      "artifactCount": 16,
+      "usage": {
+        "calls": 8,
+        "models": [
+          "gpt-5.4-mini-2026-03-17"
+        ],
+        "inputTokens": 53298,
+        "outputTokens": 7212,
+        "cachedInputTokens": 1280,
+        "elapsedProviderMs": 71079,
+        "knownProviderEstimateUsd": 0.0715635,
+        "textProviderEstimateUsd": 0.0715635,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      },
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 12552,
+          "outcome": "complete",
+          "inputTokens": 4237,
+          "outputTokens": 1298,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 14505,
+          "outcome": "complete",
+          "inputTokens": 3823,
+          "outputTokens": 1502,
+          "cachedInputTokens": 1280,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 16896,
+          "outcome": "complete",
+          "inputTokens": 6611,
+          "outputTokens": 1543,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 6159,
+          "outcome": "complete",
+          "inputTokens": 8610,
+          "outputTokens": 709,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 117
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 5228,
+          "outcome": "complete",
+          "inputTokens": 7549,
+          "outputTokens": 641,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 15
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 8680,
+          "outcome": "complete",
+          "inputTokens": 12388,
+          "outputTokens": 752,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 107
+        },
+        {
+          "kind": "generation",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 5158,
+          "outcome": "complete",
+          "inputTokens": 4720,
+          "outputTokens": 583,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 0
+        },
+        {
+          "kind": "review",
+          "provider": "openai",
+          "requestedModel": "gpt-5.4-mini",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "elapsedMs": 1901,
+          "outcome": "complete",
+          "inputTokens": 5360,
+          "outputTokens": 184,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 161
+        }
+      ]
+    },
+    {
+      "model": "glm-5.3-flash",
+      "sourceSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sourceCharacters": 39877,
+      "sections": 3,
+      "concurrency": 3,
+      "maxRepairs": 2,
+      "pipelineHashes": {
+        "book-model": "54d2f460ca175fef4c49c50308adb719470bd3ef849fe77134670d86d40dce22",
+        "book-parallel": "718e8996dcdb11d52cdf8d2b74051b6c388964dda4479c79a640bfe6b6ba2692",
+        "book-schemas": "9e94d7cedeebcb3b252890cbb1a81bf5989b270d37deed27c79d9ed1683fa27c",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "2d11eecfaf77e68a5901da04ff52f51e8d087a8c394402a52424e3c0bd0078f8",
+        "book-distillation": "8e871e5eb9b0fea1c43e08243ac463fa010d42ea3fb036b4cbde0144cf30d908",
+        "book-overview": "2347bc9ad758919596b2f7890efcad801deec04110dd418386811137794bc55d",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "status": "complete",
+      "elapsedSeconds": 38.231084026000005,
+      "artifactCount": 18,
+      "usage": {
+        "calls": 8,
+        "models": [
+          "accounts/fireworks/models/glm-5p3-flash"
+        ],
+        "inputTokens": 62598,
+        "outputTokens": 9408,
+        "cachedInputTokens": 14336,
+        "elapsedProviderMs": 86913,
+        "knownProviderEstimateUsd": 0.01237338,
+        "textProviderEstimateUsd": 0.01237338,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      },
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 15890,
+          "outcome": "complete",
+          "inputTokens": 4736,
+          "outputTokens": 2020,
+          "cachedInputTokens": 4096,
+          "reasoningTokens": 12
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 21284,
+          "outcome": "complete",
+          "inputTokens": 7018,
+          "outputTokens": 2571,
+          "cachedInputTokens": 6144,
+          "reasoningTokens": 56
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 5809,
+          "outcome": "complete",
+          "inputTokens": 9050,
+          "outputTokens": 637,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 50
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 23109,
+          "outcome": "complete",
+          "inputTokens": 4283,
+          "outputTokens": 2148,
+          "cachedInputTokens": 4096,
+          "reasoningTokens": 36
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 5789,
+          "outcome": "complete",
+          "inputTokens": 14654,
+          "outputTokens": 706,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 98
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 5557,
+          "outcome": "complete",
+          "inputTokens": 8736,
+          "outputTokens": 621,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 49
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 8306,
+          "outcome": "complete",
+          "inputTokens": 6759,
+          "outputTokens": 681,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 17
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3-flash",
+          "model": "accounts/fireworks/models/glm-5p3-flash",
+          "elapsedMs": 1169,
+          "outcome": "complete",
+          "inputTokens": 7362,
+          "outputTokens": 24,
+          "cachedInputTokens": 0,
+          "reasoningTokens": 14
+        }
+      ]
+    },
+    {
+      "model": "glm-5.3",
+      "sourceSha256": "1ee61af824a58667dfcd701cf13e65e0735a05826e6f15b87b1d09519db5a7b0",
+      "sourceCharacters": 39877,
+      "sections": 3,
+      "concurrency": 3,
+      "maxRepairs": 2,
+      "pipelineHashes": {
+        "book-model": "54d2f460ca175fef4c49c50308adb719470bd3ef849fe77134670d86d40dce22",
+        "book-parallel": "718e8996dcdb11d52cdf8d2b74051b6c388964dda4479c79a640bfe6b6ba2692",
+        "book-schemas": "9e94d7cedeebcb3b252890cbb1a81bf5989b270d37deed27c79d9ed1683fa27c",
+        "book-sections": "9ea657f17ba5edfd3d023b7deb3cb38c50e0fd55354863e7ff508c5a00d15f0d",
+        "book-fidelity": "2d11eecfaf77e68a5901da04ff52f51e8d087a8c394402a52424e3c0bd0078f8",
+        "book-distillation": "8e871e5eb9b0fea1c43e08243ac463fa010d42ea3fb036b4cbde0144cf30d908",
+        "book-overview": "2347bc9ad758919596b2f7890efcad801deec04110dd418386811137794bc55d",
+        "book-options": "676c76166325ccbe9f43c26cd2e5fb14ee63f6ec77443784a35a3857eb10476f",
+        "book-artifacts": "86491d5946e784d7b65e9fab430c4f07f791c041b9fa7024267c47e8cebd3a9a",
+        "upstream-guidance": "458de1cd96455b0be57706b2c01adfc649fa396fd51d6b67bbc5f64ee0a60f86"
+      },
+      "status": "complete",
+      "elapsedSeconds": 169.37072175600002,
+      "artifactCount": 16,
+      "usage": {
+        "calls": 14,
+        "models": [
+          "accounts/fireworks/models/glm-5p3"
+        ],
+        "inputTokens": 104348,
+        "outputTokens": 15837,
+        "cachedInputTokens": 28358,
+        "elapsedProviderMs": 252913,
+        "knownProviderEstimateUsd": 0.18344188,
+        "textProviderEstimateUsd": 0.18344188,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      },
+      "metrics": [
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 29809,
+          "outcome": "complete",
+          "inputTokens": 4736,
+          "outputTokens": 1689,
+          "cachedInputTokens": 4735,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 30905,
+          "outcome": "complete",
+          "inputTokens": 7018,
+          "outputTokens": 1677,
+          "cachedInputTokens": 1314,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 34133,
+          "outcome": "complete",
+          "inputTokens": 4283,
+          "outputTokens": 2042,
+          "cachedInputTokens": 4282,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 9553,
+          "outcome": "complete",
+          "inputTokens": 8282,
+          "outputTokens": 553,
+          "cachedInputTokens": 541,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 10081,
+          "outcome": "complete",
+          "inputTokens": 8423,
+          "outputTokens": 592,
+          "cachedInputTokens": 473,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 20840,
+          "outcome": "complete",
+          "inputTokens": 8123,
+          "outputTokens": 1284,
+          "cachedInputTokens": 461,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 22330,
+          "outcome": "complete",
+          "inputTokens": 9776,
+          "outputTokens": 1783,
+          "cachedInputTokens": 1887,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 24088,
+          "outcome": "complete",
+          "inputTokens": 9011,
+          "outputTokens": 1512,
+          "cachedInputTokens": 543,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 22567,
+          "outcome": "complete",
+          "inputTokens": 9815,
+          "outputTokens": 1819,
+          "cachedInputTokens": 7109,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 14071,
+          "outcome": "complete",
+          "inputTokens": 9275,
+          "outputTokens": 824,
+          "cachedInputTokens": 625,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 14338,
+          "outcome": "complete",
+          "inputTokens": 5723,
+          "outputTokens": 870,
+          "cachedInputTokens": 309,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 5825,
+          "outcome": "complete",
+          "inputTokens": 6574,
+          "outputTokens": 265,
+          "cachedInputTokens": 306,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "generation",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 12390,
+          "outcome": "complete",
+          "inputTokens": 6716,
+          "outputTokens": 882,
+          "cachedInputTokens": 10,
+          "reasoningTokens": null
+        },
+        {
+          "kind": "review",
+          "provider": "fireworks",
+          "requestedModel": "accounts/fireworks/models/glm-5p3",
+          "model": "accounts/fireworks/models/glm-5p3",
+          "elapsedMs": 1983,
+          "outcome": "complete",
+          "inputTokens": 6593,
+          "outputTokens": 45,
+          "cachedInputTokens": 5763,
+          "reasoningTokens": null
+        }
+      ]
+    }
+  ],
+  "limitations": "One completed run per configuration. Source checks are model-assisted, not independent human verification. Excludes extraction, upload, queue, cover, embeddings and installation. Prior attempts include a truncating Fireworks configuration and source-review failures; they are not included in each completed-run estimate.",
+  "previousAttempts": [
+    {
+      "round": "fireworks-results",
+      "model": "5.4-mini",
+      "status": "failed",
+      "elapsedSeconds": 32.476390437000006,
+      "error": "The source check requested a targeted repair. Accepted sections are saved.",
+      "completedSections": 2,
+      "usage": {
+        "calls": 5,
+        "models": [
+          "gpt-5.4-mini-2026-03-17"
+        ],
+        "inputTokens": 35880,
+        "outputTokens": 6033,
+        "cachedInputTokens": 0,
+        "elapsedProviderMs": 68600,
+        "knownProviderEstimateUsd": 0.0540585,
+        "textProviderEstimateUsd": 0.0540585,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      }
+    },
+    {
+      "round": "fireworks-results",
+      "model": "glm-5.3-flash",
+      "status": "failed",
+      "elapsedSeconds": 53.964743845,
+      "error": "The generated section was incomplete. Please retry.",
+      "completedSections": 0,
+      "usage": {
+        "calls": 3,
+        "models": [
+          "accounts/fireworks/models/glm-5p3-flash"
+        ],
+        "inputTokens": 16037,
+        "outputTokens": 18000,
+        "cachedInputTokens": 0,
+        "elapsedProviderMs": 154330,
+        "knownProviderEstimateUsd": 0.01140555,
+        "textProviderEstimateUsd": 0.01140555,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      }
+    },
+    {
+      "round": "fireworks-results",
+      "model": "glm-5.3",
+      "status": "failed",
+      "elapsedSeconds": 60.064869797,
+      "error": "The generation provider could not be reached. Please retry later.",
+      "completedSections": 0,
+      "usage": {
+        "calls": 3,
+        "models": [
+          "accounts/fireworks/models/glm-5p3"
+        ],
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cachedInputTokens": 0,
+        "elapsedProviderMs": 180009,
+        "knownProviderEstimateUsd": 0,
+        "textProviderEstimateUsd": 0,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 3,
+        "completeEstimate": false,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      }
+    },
+    {
+      "round": "fireworks-results-low",
+      "model": "5.4-mini",
+      "status": "complete",
+      "elapsedSeconds": 29.707018601,
+      "completedSections": 3,
+      "usage": {
+        "calls": 8,
+        "models": [
+          "gpt-5.4-mini-2026-03-17"
+        ],
+        "inputTokens": 52473,
+        "outputTokens": 7535,
+        "cachedInputTokens": 13568,
+        "elapsedProviderMs": 69613,
+        "knownProviderEstimateUsd": 0.06410385,
+        "textProviderEstimateUsd": 0.06410385,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      }
+    },
+    {
+      "round": "fireworks-results-low",
+      "model": "glm-5.3-flash",
+      "status": "failed",
+      "elapsedSeconds": 32.063164990000004,
+      "error": "The source check requested a targeted repair. Accepted sections are saved.",
+      "completedSections": 2,
+      "usage": {
+        "calls": 6,
+        "models": [
+          "accounts/fireworks/models/glm-5p3-flash"
+        ],
+        "inputTokens": 43400,
+        "outputTokens": 8330,
+        "cachedInputTokens": 0,
+        "elapsedProviderMs": 73405,
+        "knownProviderEstimateUsd": 0.010675,
+        "textProviderEstimateUsd": 0.010675,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      }
+    },
+    {
+      "round": "fireworks-results-low",
+      "model": "glm-5.3",
+      "status": "failed",
+      "elapsedSeconds": 82.33866944100001,
+      "error": "The source check requested a targeted synthesis repair. Accepted work is saved.",
+      "completedSections": 3,
+      "usage": {
+        "calls": 8,
+        "models": [
+          "accounts/fireworks/models/glm-5p3"
+        ],
+        "inputTokens": 59455,
+        "outputTokens": 8886,
+        "cachedInputTokens": 898,
+        "elapsedProviderMs": 160966,
+        "knownProviderEstimateUsd": 0.12131168,
+        "textProviderEstimateUsd": 0.12131168,
+        "imageProviderEstimateUsd": 0,
+        "unpricedCalls": 0,
+        "completeEstimate": true,
+        "recordingCoverage": "recorded-calls-only",
+        "customerCharge": null,
+        "currency": "USD",
+        "rateDate": "2026-10-08",
+        "notice": "Provider token estimate for recorded text and image generation calls; not a customer bill. Unreported image cache discounts, retrieval embeddings, unreported usage, taxes and service fees are not included. See the separate customer billing receipt for the accepted price and any charge."
+      }
+    }
+  ]
+}

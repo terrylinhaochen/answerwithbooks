@@ -92,3 +92,13 @@ test('Gemini uses its fixed endpoint and credential, preserving schema and bound
  const cfg=bookModelConfig(env({BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite',BOOK_REVIEW_REASONING_EFFORT:'low'}),'review');assert.equal(cfg.effort,'low');
  assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:'gemini-3.5-flash-lite',BOOK_REASONING_EFFORT:'none'})),/Invalid Gemini/);
 });
+
+test('Fireworks uses its own key and pinned endpoint with schema visible and cache usage preserved',async()=>{
+ let request;const metrics=[];
+ const client=createBookModelClient({getEnv:env({BOOK_PROCESSING_MODEL:'accounts/fireworks/models/glm-5p3-flash',FIREWORKS_API_KEY:'fireworks-test'}),onUsage:m=>metrics.push(m),fetchImpl:async(url,options)=>{request={url,...options};return Response.json(result({model:'accounts/fireworks/models/glm-5p3-flash',usage:{prompt_tokens:100,completion_tokens:10},perf_metrics:{'cached-prompt-tokens':25}}));}});
+ await client('Write original JSON notes.','source',{schema:sectionSchema,name:'book_section'});
+ assert.equal(request.url,'https://api.fireworks.ai/inference/v1/chat/completions');assert.equal(request.headers.Authorization,'Bearer fireworks-test');
+ const body=JSON.parse(request.body);assert.equal(body.service_tier,'default');assert.equal(body.max_tokens,6000);assert.equal(body.reasoning_effort,'low');assert.equal(body.context_length_exceeded_behavior,'error');assert.ok(body.messages[0].content.includes(JSON.stringify(sectionSchema)));assert.equal(body.response_format.type,'json_schema');
+ assert.equal(metrics[0].model,'accounts/fireworks/models/glm-5p3-flash');assert.equal(metrics[0].cachedInputTokens,25);assert.doesNotMatch(JSON.stringify(metrics),/fireworks-test/);
+ for(const model of ['accounts/evil/models/glm-5p3','https://example.com/model','accounts/fireworks/models/../private'])assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:model})),/Invalid/);
+});
