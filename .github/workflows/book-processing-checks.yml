@@ -21,3 +21,11 @@ jobs:
       - run: npm run test:book-billing
       - run: node --test scripts/test-book-api-auth.mjs scripts/test-key-dialogs.mjs
       - run: npm run build
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.8.3
+      - name: Verify financial admission at the provider boundary
+        run: |
+          deno cache --node-modules-dir=none scripts/test-book-worker-http.ts
+          deno check --node-modules-dir=none supabase/functions/book-process/index.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-book-worker-http.ts

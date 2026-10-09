@@ -105,7 +105,7 @@ export function mountBookUpload() {
   form.querySelectorAll<HTMLSelectElement>('select').forEach(select=>select.disabled=busy);
   submit.disabled=busy||!items.some(item=>!resolved(item)&&!item.libraryMatch&&(!item.error||item.retryable));
   const analysis=(form.elements.namedItem('mode') as HTMLSelectElement).value==='analysis';
-  submit.textContent=busy?'Preparing your sources…':!pending().length&&items.some(item=>item.retryable)?'Try again':'Upload & review price';
+  submit.textContent=busy?'Preparing your sources…':!pending().length&&items.some(item=>item.retryable)?'Try again':'Upload & review limit';
   queue.hidden=!items.some(item=>item.jobId);
   drop.setAttribute('aria-disabled',String(busy));form.setAttribute('aria-busy',String(busy));
  }
@@ -185,7 +185,7 @@ export function mountBookUpload() {
    const health=pending().some(item=>!usesNative(item))?await bookWorker({action:'health'}):null;
    if(health&&!health.available)throw new Error('Book processing is unavailable. Please try again later.');
    const options=Object.fromEntries(['mode','depth','purpose'].map(name=>[name,(form.elements.namedItem(name) as HTMLSelectElement).value]));
-   status.textContent='Keep this dialog open until the files finish uploading. Review the one-time price after the source is saved.';
+   status.textContent='Keep this dialog open until the files finish uploading. Review token rates and a spending limit after the source is saved.';
    for(const item of pending()){
     try {
      item.message='Uploading…';draw();
@@ -210,7 +210,7 @@ export function mountBookUpload() {
      if(result.textUpload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.textUpload.path,result.textUpload.token,new Blob([sourceText],{type:'text/plain'}),{contentType:'text/plain'});if(error)throw new Error('Could not save the extracted text. Choose the same book again to resume.');}
      if(result.textUpload)await bookWorker({action:'finalize',id:result.job.id});
      else if(!result.job.billing_required)await bookWorker({action:'enqueue',id:result.job.id});
-     item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':result.job.billing_required?'Saved · review price to start':'Saved · processing in the background';
+     item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':result.job.billing_required?'Saved · review spending limit to start':'Saved · processing in the background';
     }catch(error){item.error=error instanceof Error?error.message:'Upload failed. Please try again.';item.retryable=true;}
     draw();
    }

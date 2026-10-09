@@ -2,22 +2,23 @@
 
 ## Verified
 
-- A fresh synthetic confirmed account on production returned `metering-only`, `canTopUp:false`; personal book charging was not enabled. The account was deleted afterward.
-- The existing isolated Stripe test project now serves the full updated backend with `personalBilling.mode:test`, `pricingModel:quoted-book-conversion`. Production continues to serve its existing metering-only personal account configuration and native workspace prepaid billing.
-- Browser → authenticated test account API → real Stripe test Checkout opens for a $1 test deposit. The merchant is Crowdlisten and Checkout visibly identifies the sandbox. No real payment was attempted.
-- A real payment completion is **not verified**: Stripe's page presented a verification challenge and the automated run did not reach the card fields. No wallet credit or remote webhook completion is claimed. The temporary auth accounts were deleted; incomplete Stripe test purchase records are retained as test history.
-- The local integration runs the actual hosted HTTP server, all Skills API PostgreSQL migrations, and the identical book billing migration. It exercises checkout idempotency, actual Stripe signature verification, unpaid and repeated webhook events, wallet visibility, owner/quote/amount checks, service-role execution, concurrent duplicate acceptance, delivery enforcement, single settlement, and failure release. Stripe network calls are fixtures here.
-- A fresh browser build verifies own-agent/hosted choice, actual source-upload handoff, insufficient balance, checkout return navigation, explicit price acceptance once, cancel/release display, account links, and mobile overflow. Its book/auth/API responses are fixtures.
-- Backend regression: all 376 tests pass in the final full run; build passes.
-- Processing regression: all 62 pipeline tests and 11 billing/account/view tests pass.
-- CLI regression: 42 passing tests, including staged and resumed paid uploads waiting for explicit price acceptance.
-- Cover requests use the OpenAI credential even when text generation uses Fireworks; the processing handler test checks the two different Authorization headers.
+- **Real Stripe test payment completed by the user.** A synthetic confirmed account used the isolated `https://crowdlisten-skills-calls-test.vercel.app` adapter. Checkout accepted a $1 test deposit. Fresh authenticated API readback returned HTTP 200, `mode:test`, `balanceCents:100`, `heldCents:0`, `availableCents:100`, `paymentReview:false`, and one receipt. Only signed webhook evidence can credit this wallet. No real money was charged. The temporary auth account was deleted after verification; test purchase records remain.
+- The sandbox runs the complete payment backend with personal metered-book billing, its existing separate test namespace and merchant, and no cron jobs. Production personal billing remains metering-only; native workspace prepaid billing is independent.
+- Local payment integration uses the actual HTTP server, real Stripe signature verification, all Skills API PostgreSQL migrations, and exact copies of both web-owned book billing migrations under service-role privileges. Stripe network transport is mocked. It covers terms, session-only purchase authority, owner isolation, duplicate checkout/webhook/acceptance/completion, missing funds, metered settlement and release of unused funds.
+- The SQL suite passes 18 tests: 5 foundation checks and 13 metered checks. It verifies cached/input/output rates, rounding once, concurrent cap admission, unpriced models, quote-time rate snapshots, duplicate/conflicting receipts, unknown-usage holds, audited reconciliation, cross-owner denial, new caps after failure, covers, crashed leases, refunds/disputes atomic operator settlement and safe deletion after reconciliation and a new cap for cover-only retries.
+- Provider-boundary tests verify a durable operation exists before a paid call, exhausted budgets make zero provider calls, financial receipt errors stop work, and old fixed-price approvals and customer reconciliation attempts are rejected. Deno type checks pass.
+- The fresh browser test verifies desktop/mobile route choices, source-upload handoff, explicit metered cap, insufficient balance, billing/return navigation, a single explicit acceptance and account links. Its auth/book/API responses are fixtures; the post-payment wallet check above used the real API, not this browser fixture.
+- Full backend regression: 382 passing tests; build passes. The final SQL fixture revision also passes the focused personal-payment integration.
+- Pipeline: 64 passing tests. CLI: 43 passing tests. Website: fresh build of 117 pages passes.
+- No paid model calls were made during these billing checks. Earlier provider-quality and full-book runs do not validate this new charging flow.
 
-## Remaining release gates
+## Production release gates
 
-1. Replace the fixed quote with the now-selected CrowdListen usage policy: 4× metered provider list cost (75% provider-cost margin), a spending ceiling and actual settlement. Pricing direction is now supplied; no tariff has been enabled. The existing tests cover the earlier fixed-quote draft, not the metering rewrite.
-2. Complete a Stripe **test** payment and observe its signed remote webhook, durable wallet credit, receipt, and fresh browser readback. `scripts/test-personal-checkout-live.mjs` is opt-in; temporary session data arrives over stdin and is never saved.
-3. Coordinate deployment of the book migration, matching Edge Functions, website, personal payment adapter, and CLI 0.5.0 release. This work is still in draft PRs. The new migration has not been applied to production.
-4. Verify a real small hosted conversion against the deployed tariff: quote → accepted hold → book and skill delivery → one charge; verify failure/cancel release too. Local SQL tests do not replace this check.
+The 4× token policy is approved and implemented; no further flat-price selection is needed. Production personal charging is not enabled and the web-owned billing migrations have not been applied.
 
-Flash's previously recorded factual failures remain separate. Do not change the explicit production GPT-5.4 mini configuration as a side effect of releasing billing.
+1. Deploy both book migrations and matched `book-process`, `book-native`, and `book-library` functions together. Preserve explicit production GPT-5.4 mini model settings.
+2. Enable the versioned `metered-4x` tariff and personal adapter with existing approved merchant, namespace, origin and signing-secret configuration. Live startup fails closed without the new tariff.
+3. Publish the matched CLI 0.5.0 and ship website references/account UI.
+4. Verify an actual small hosted book: accepted cap → provider receipts → book and skill → one actual-usage charge → unused funds released, then failure/cancel and fresh account readback. Local SQL/provider fixtures and a successful Stripe deposit do not replace this complete deployed flow.
+
+Flash's factual failures remain a separate release gate for changing models. Do not treat billing tests as a source-quality pass.

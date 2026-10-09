@@ -13,7 +13,7 @@ export function bookModelConfig(getEnv, kind = 'generation') {
   return {model, provider, reasoningModel, effort};
 }
 
-export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_metric) => {}, now = Date.now}) {
+export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_metric) => {}, beforeCall = async (_request) => /** @type {string|null} */ (null), afterCall = async (_operation, _metric) => {}, now = Date.now}) {
   return async function modelJson(system, input, options = {}) {
     const kind = options.kind === 'review' ? 'review' : 'generation';
     const config = bookModelConfig(getEnv, kind);
@@ -21,12 +21,14 @@ export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_me
     if (!key) throw new Error('Book generation is not configured.');
     const started = now();
     const metric = {kind, provider: config.provider, requestedModel: config.model, model: null, elapsedMs: 0, outcome: 'error', inputTokens: null, outputTokens: null, cachedInputTokens: null, reasoningTokens: null};
+    let operation=null;
     try {
       const body = {
         model: config.model, messages: [{role: 'system', content: config.provider === 'fireworks' && options.schema ? system+'\nReturn JSON matching this schema: '+JSON.stringify(options.schema) : system}, {role: 'user', content: input}],
         response_format: options.schema ? {type: 'json_schema', json_schema: {name: options.name || 'book_result', strict: true, schema: options.schema}} : {type: 'json_object'},
         ...(config.provider === 'fireworks' ? {max_tokens:6000,reasoning_effort:config.effort,service_tier:'default',context_length_exceeded_behavior:'error',perf_metrics_in_response:true} : config.provider === 'google' ? {max_tokens: 6000, reasoning_effort: config.effort} : config.reasoningModel ? {max_completion_tokens: 6000, reasoning_effort: config.effort} : {max_tokens: 6000}),
       };
+      operation=await beforeCall({kind,model:config.model,inputBound:new TextEncoder().encode(JSON.stringify(body)).length+1024,outputBound:6000});
       let response;
       try {response = await fetchImpl(config.provider === 'fireworks' ? 'https://api.fireworks.ai/inference/v1/chat/completions' : config.provider === 'google' ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' : 'https://api.openai.com/v1/chat/completions', {method: 'POST', redirect: 'error', headers: {Authorization: `Bearer ${key}`, 'Content-Type': 'application/json'}, body: JSON.stringify(body), signal: AbortSignal.timeout(60000)});}
       catch {throw new Error('The generation provider could not be reached. Please retry later.');}
@@ -37,7 +39,7 @@ export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_me
       const count = n => Number.isSafeInteger(n) && n >= 0 ? n : null;
       metric.inputTokens = count(result.usage?.prompt_tokens);
       metric.outputTokens = count(result.usage?.completion_tokens);
-      metric.cachedInputTokens = count(result.usage?.prompt_tokens_details?.cached_tokens ?? result.perf_metrics?.['cached-prompt-tokens']);
+      metric.cachedInputTokens = count(result.usage?.prompt_tokens_details?.cached_tokens ?? result.perf_metrics?.['cached-prompt-tokens'] ?? 0);
       metric.reasoningTokens = count(result.usage?.completion_tokens_details?.reasoning_tokens);
       const choice = result.choices?.[0];
       if (choice?.message?.refusal) throw new Error('The generation provider declined this section. Review its source before retrying.');
@@ -49,6 +51,7 @@ export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_me
       return value;
     } finally {
       metric.elapsedMs = Math.max(0, now() - started);
+      if(operation!==null)await afterCall(operation,metric);
       // Telemetry failure must not consume another paid generation by failing the job.
       try {await onUsage(metric);} catch { /* The worker owns telemetry delivery. */ }
     }

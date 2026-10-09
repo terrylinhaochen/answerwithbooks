@@ -12,9 +12,10 @@ let handler:(req:Request)=>Promise<Response>;
 // Deno.serve normally opens a listener. Capture the actual handler instead.
 Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
 const usage:any[]=[];const jobs:any[]=[];const originals=new Map<string,Uint8Array>();const extractedFiles=new Map<string,Uint8Array>();
+let paidTest=false,rejectMeter=false;const metered=new Map<string,any>();
 let rejectNextReview=false,sawTargetedRepair=false;
 let modelCalls=0,wakes=0,failProvider=false,holdProvider:(()=>Promise<void>)|null=null;
-const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
+const json=(body:any,status=200)=>new Response(JSON.stringify(paidTest&&(body?.choices||body?.data?.[0]?.b64_json)?{...body,usage:body.choices?{prompt_tokens:100,completion_tokens:30,prompt_tokens_details:{cached_tokens:0}}:{input_tokens:100,output_tokens:30,input_tokens_details:{text_tokens:100,image_tokens:0}}}:body),{status,headers:{'Content-Type':'application/json'}});
 function match(job:any,params:URLSearchParams){
  const lease=params.get('or');if(lease?.includes('lease_until.lt.')&&job.lease_until&&Date.parse(job.lease_until)>=Date.parse(lease.split('lease_until.lt.')[1].replace(/\)$/,'')))return false;
  for(const key of ['id','user_id','source_sha','updated_at','lease_token','cover_lease_token','run_state']){
@@ -29,6 +30,7 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
  const request=new Request(input,init),url=new URL(request.url),method=request.method;
  const body=method==='GET'?null:await request.clone().json().catch(()=>null);
  if(['api.openai.com','api.fireworks.ai'].includes(url.hostname)){
+  if(paidTest)assert.ok([...metered.values()].some(m=>m.state==='started'),'paid provider call needs durable admission');
   modelCalls++;if(holdProvider)await holdProvider();
   if(failProvider)return json({error:'Synthetic busy response'},429);
   assert.equal(request.headers.get('authorization'),url.hostname==='api.openai.com'?'Bearer synthetic-provider-key':'Bearer synthetic-fireworks-key');
@@ -49,6 +51,11 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
  }
  if(url.pathname.includes('/rpc/')){
   const fn=url.pathname.split('/').at(-1);
+  if(fn==='book_usage_operation'){
+   if(body.p_action==='begin'){if(rejectMeter)return json({message:'BOOK_BUDGET_EXHAUSTED'},400);assert.ok(body.p_payload.inputBound>0);assert.ok(body.p_payload.outputBound>0);metered.set(body.p_operation,{state:'started',...body.p_payload});return json({state:'started'});}
+   assert.ok(metered.has(body.p_operation));assert.equal(body.p_payload.inputTokens,100);metered.set(body.p_operation,{state:'complete',...body.p_payload});return json({state:'complete'});
+  }
+
   if(fn==='wake_book_processing'){wakes++;return json(null);}
   if(fn==='claim_book_cover'){
    const job=jobs.find(job=>job.status==='ready'&&job.cover_status==='pending'&&!job.cover_lease_token&&(!job.cover_next_attempt_at||Date.parse(job.cover_next_attempt_at)<=Date.now()));
@@ -187,3 +194,12 @@ await drain();assert.equal(correctionJob.run_state,'failed');assert.equal(correc
 console.log('PASS saved targeted repairs, immediate review retry, private feedback, cleared successful repair and five-attempt quality stop');
 
 await call({action:'retry',id:correctionId});assert.equal(correctionJob.section_feedback[0].attempts,0);assert.ok(correctionJob.section_feedback[0].review);await drain();assert.equal(correctionJob.cursor,1);console.log('PASS explicit retry resets the review-attempt budget while retaining repair feedback');
+
+// Financial SQL is tested separately in Postgres; this proves the actual handler invokes it before every paid provider call.
+for(const saved of jobs)saved.run_state='complete';
+correctionJob.run_state='queued';correctionJob.status='processing';correctionJob.cursor=0;correctionJob.notes=[];correctionJob.billing_required=true;correctionJob.billing={state:'held',pricingModel:'metered-4x'};
+paidTest=true;rejectMeter=true;const beforePaid=modelCalls;await drain();assert.equal(modelCalls,beforePaid);assert.equal(correctionJob.run_state,'paused');assert.match(correctionJob.error,/BOOK_BUDGET_EXHAUSTED/);
+rejectMeter=false;correctionJob.run_state='queued';correctionJob.next_attempt_at=new Date(0).toISOString();await drain();assert.ok(metered.size>=2);assert.ok([...metered.values()].every(m=>m.state==='complete'));assert.equal(modelCalls-beforePaid,metered.size);
+assert.equal((await call({action:'accept-price',id:correctionId,quoteId:crypto.randomUUID(),acceptedPriceCents:100})).body.code,'USAGE_POLICY_ACCEPTANCE_REQUIRED');
+assert.equal((await call({action:'reconcile-usage',id:correctionId,operationId:crypto.randomUUID(),receipt:{}})).status,403);
+console.log('PASS paid handler: pre-call admission, durable receipts, budget pause without provider calls, explicit usage-policy consent, operator-only reconciliation');

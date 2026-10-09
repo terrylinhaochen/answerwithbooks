@@ -45,7 +45,7 @@
     "test:shelf-personalization": "node scripts/test-shelf-personalization.mjs",
     "test:shelf-sharing": "node scripts/test-shelf-sharing.mjs",
     "test:shelf-share-image": "node scripts/test-shelf-share-image.mjs",
-    "test:book-billing": "node --test scripts/test-book-billing.mjs"
+    "test:book-billing": "node --test scripts/test-book-billing.mjs scripts/test-book-metered-billing.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",

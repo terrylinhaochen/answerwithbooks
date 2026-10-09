@@ -111,3 +111,16 @@ test('Fireworks uses its own key and pinned endpoint with schema visible and cac
  assert.equal(metrics[0].model,'accounts/fireworks/models/glm-5p3-flash');assert.equal(metrics[0].cachedInputTokens,25);assert.doesNotMatch(JSON.stringify(metrics),/fireworks-test/);
  for(const model of ['accounts/evil/models/glm-5p3','https://example.com/model','accounts/fireworks/models/../private'])assert.throws(()=>bookModelConfig(env({BOOK_PROCESSING_MODEL:model})),/Invalid/);
 });
+
+
+test('financial admission precedes network; durable receipt failures propagate and never trigger a second call',async()=>{
+ let calls=0;const order=[];
+ const denied=createBookModelClient({getEnv:env(),beforeCall:async()=>{throw Error('BOOK_BUDGET_EXHAUSTED');},fetchImpl:async()=>{calls++;return Response.json(result());}});
+ await assert.rejects(denied('system','source'),/BUDGET_EXHAUSTED/);assert.equal(calls,0);
+ const client=createBookModelClient({getEnv:env(),beforeCall:async r=>{assert.equal(r.outputBound,6000);assert.ok(r.inputBound>1024);order.push('reserve');return 'operation';},fetchImpl:async()=>{calls++;order.push('provider');return Response.json(result());},afterCall:async(id,metric)=>{assert.equal(id,'operation');assert.equal(metric.inputTokens,100);order.push('receipt');throw Error('Receipt unavailable');}});
+ await assert.rejects(client('system','source'),/Receipt unavailable/);assert.equal(calls,1);assert.deepEqual(order,['reserve','provider','receipt']);
+});
+test('transport errors retain a durable unknown operation instead of zero-cost completion',async()=>{
+ const metrics=[];const client=createBookModelClient({getEnv:env(),beforeCall:async()=> 'op',afterCall:async(_,m)=>{metrics.push(m);},fetchImpl:async()=>{throw Error('offline');}});
+ await assert.rejects(client('system','source'),/could not be reached/);assert.equal(metrics.length,1);assert.equal(metrics[0].inputTokens,null);assert.equal(metrics[0].outputTokens,null);
+});
