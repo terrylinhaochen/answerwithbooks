@@ -34,3 +34,11 @@ See `verification/processing-routes-2026-10-08/model-comparison.json` for live b
 The candidate default is now GLM-5.3 Flash with low reasoning for generation and review. Explicit environment overrides still take precedence. See [quality findings and reproducible evaluations](verification/flash-quality-2026-10-09/README.md). A completed pipeline run is not a quality pass: a source comparison found a wagon-tonnage error and misattributed procedural steps in the saved Flash output. Do not deploy this candidate as quality-approved.
 
 A fresh read-only production query found no `book_processing_prices` table, no `book_payment_reservations` table, and no `billing_required` column. This confirms the new book-charging migration is not deployed. Local database tests and mocked browser tests do not establish live Stripe/top-up/payment acceptance.
+
+## Personal checkout adapter and current release state
+
+The paired Skills API change adds a separate personal-book billing adapter. Verified personal accounts can create AWB book API keys and buy USD credits without being added to the managed-tool allowlist. Managed-tool authorization and native workspace prepaid billing remain independently enforced. A live-only startup check refuses to enable credit purchases if the approved book tariff is missing or disabled.
+
+The upload handoff now stops before paid enqueue, including resumed CLI uploads. Billing retains an owner-bound return link to the selected book across Stripe checkout. Adding funds never accepts a book quote automatically. Credit terms explain one-time deposits, reservations, delivered-result charges, optional covers and failed-job release to the account balance.
+
+See [October 9 payment acceptance evidence](verification/billing-2026-10-09/README.md) for current test boundaries and deployment blockers. The Stripe sandbox checkout opens, but its verification challenge prevented completed remote payment proof. Live personal payments remain disabled pending retail approval and completed acceptance.

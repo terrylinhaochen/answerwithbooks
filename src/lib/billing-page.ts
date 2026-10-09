@@ -23,6 +23,17 @@ let currentBillingMode = '';
 const filterDays = root.querySelector<HTMLSelectElement>('[data-usage-days]')!;
 const filterSkill = root.querySelector<HTMLSelectElement>('[data-usage-skill]')!;
 const filterStatus = root.querySelector<HTMLSelectElement>('[data-usage-status]')!;
+const bookReturnStorage='awb.billing-book-return.v1';
+function restoreBookReturn(owner:string) {
+ const box=root.querySelector<HTMLElement>('[data-book-return]')!;box.hidden=true;
+ try {
+  const requested=new URL(location.href).searchParams.get('book');
+  let saved=JSON.parse(sessionStorage.getItem(bookReturnStorage)||'null');
+  if(requested&&/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(requested)){saved={owner,id:requested,expires:Date.now()+24*3600000};sessionStorage.setItem(bookReturnStorage,JSON.stringify(saved));}
+  if(saved?.owner===owner&&saved.expires>Date.now()&&/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(saved.id)){root.querySelector<HTMLAnchorElement>('[data-book-return-link]')!.href='/your-book/?id='+encodeURIComponent(saved.id);box.hidden=false;}
+  else sessionStorage.removeItem(bookReturnStorage);
+ } catch { /* Returning to the library still works when browser storage is unavailable. */ }
+}
 const checkoutStorage = 'awb.checkout-attempt.v1';
 function forgetCheckout() { try { sessionStorage.removeItem(checkoutStorage); } catch {} }
 function checkoutKey(owner: string, cents: number, policy: string) {
@@ -56,7 +67,7 @@ root.querySelectorAll<HTMLButtonElement>('[data-copy-run]').forEach(button => bu
   catch { if (current !== revision || !dialog.open || !Object.values(copyResult).includes(value)) return; copyManual.value = value; copyManual.hidden = false; copyManual.focus(); copyManual.select(); copyResultStatus.textContent = 'Copy was blocked. Select and copy the text below.'; }
 }));
 root.querySelector('[data-close-run]')!.addEventListener('click', () => dialog.close());
-function wipe() { root.querySelector('[data-book-billing-list]')!.replaceChildren(); dialog.close(); topupDialog.close(); clearResultCopy(); policyVersion = ''; canCheckout = false; openTopup.disabled = true; consent.checked = false; checkoutButton.disabled = true; recentRuns = []; currentBillingMode = ''; checkoutStatus.textContent = ''; root.querySelector('[data-run-content]')!.replaceChildren(); root.querySelectorAll('[data-billing-list]').forEach(el => el.replaceChildren()); root.querySelectorAll('[data-billing-empty]').forEach(el => { (el as HTMLElement).hidden = false; el.textContent = 'Sign in to see your history.'; }); root.querySelectorAll('[data-billing-amount]').forEach(el => { el.textContent = '—'; }); root.querySelector<HTMLElement>('[data-topup-controls]')!.hidden = true; root.querySelector<HTMLElement>('[data-topup-unavailable]')!.hidden = false; root.querySelector('[data-credit-availability]')!.textContent = 'Checking payment availability…'; root.querySelector('[data-usage-count]')!.textContent = 'Showing your most recent tasks.'; filterSkill.replaceChildren(new Option('All skills', 'all')); }
+function wipe() { root.querySelector<HTMLElement>('[data-book-return]')!.hidden=true; root.querySelector('[data-book-billing-list]')!.replaceChildren(); dialog.close(); topupDialog.close(); clearResultCopy(); policyVersion = ''; canCheckout = false; openTopup.disabled = true; consent.checked = false; checkoutButton.disabled = true; recentRuns = []; currentBillingMode = ''; checkoutStatus.textContent = ''; root.querySelector('[data-run-content]')!.replaceChildren(); root.querySelectorAll('[data-billing-list]').forEach(el => el.replaceChildren()); root.querySelectorAll('[data-billing-empty]').forEach(el => { (el as HTMLElement).hidden = false; el.textContent = 'Sign in to see your history.'; }); root.querySelectorAll('[data-billing-amount]').forEach(el => { el.textContent = '—'; }); root.querySelector<HTMLElement>('[data-topup-controls]')!.hidden = true; root.querySelector<HTMLElement>('[data-topup-unavailable]')!.hidden = false; root.querySelector('[data-credit-availability]')!.textContent = 'Checking payment availability…'; root.querySelector('[data-usage-count]')!.textContent = 'Showing your most recent tasks.'; filterSkill.replaceChildren(new Option('All skills', 'all')); }
 async function load() {
   const current = ++revision; wipe(); userId = null;
   root.querySelector<HTMLElement>('[data-call-rates]')!.hidden = true;
@@ -67,7 +78,7 @@ async function load() {
     const { data, error } = await supabase.auth.getUser();
     if (current !== revision) return;
     if (error || !data.user?.email_confirmed_at || data.user.is_anonymous) { forgetCheckout(); status.textContent = 'Sign in to view your balance and task history.'; root.querySelector('[data-credit-availability]')!.textContent = 'Sign in to manage credits.'; root.querySelector<HTMLElement>('[data-billing-signin]')!.hidden = false; return; }
-    userId = data.user.id;
+    userId = data.user.id;restoreBookReturn(userId);
     void bookWorker({action:'billing-history'}).then(result=>{if(current!==revision)return;const list=root.querySelector('[data-book-billing-list]')!;list.replaceChildren();for(const book of result.books||[]){const li=document.createElement('li'),link=document.createElement('a');link.href='/your-book/?id='+encodeURIComponent(book.id);link.textContent='Book conversion · '+book.state;li.append(link,text('span',book.state==='held'?money(book.reservedCents)+' reserved':money(book.chargedCents)+' charged'));list.append(li);}root.querySelector('[data-book-billing-status]')!.textContent=list.childElementCount?'Latest 100 conversions. Reusing the results is free.':'No paid book conversions. Existing books remain free.';}).catch(()=>{if(current===revision)root.querySelector('[data-book-billing-status]')!.textContent='Book billing history is unavailable. Open a book to check its saved price and receipt.';});
     const billing = await client.billing(userId);
     if (current !== revision) return;

@@ -9,6 +9,7 @@ import AccountNav from '../components/AccountNav.astro';
     <p class="billing-notice" data-billing-status role="status">Checking your account…</p>
     <div data-billing-signin hidden><a href="/login/?next=%2Fbilling%2F" class="awb-pill awb-pill-primary">Sign in to view billing</a></div>
     <p class="billing-notice" data-payment-return hidden>Returning from checkout does not confirm a payment. Your balance updates after Stripe confirms it; refresh if it is still pending.</p>
+    <p class="billing-notice" data-book-return hidden><a class="awb-pill awb-pill-primary" data-book-return-link>Return to your book</a><span class="ml-3 text-sm">Review and accept its price when you are ready.</span></p>
     <div class="billing-tabs" role="tablist" aria-label="Billing sections">{[['balance','Balance'],['usage','Usage'],['transactions','Transactions'],['receipts','Receipts']].map(([id,label], index) => <button type="button" id={`billing-tab-${id}`} role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls={`billing-panel-${id}`} tabindex={index === 0 ? 0 : -1} data-billing-tab={id}>{label}</button>)}</div>
     <div id="billing-panel-balance" role="tabpanel" aria-labelledby="billing-tab-balance" data-billing-panel="balance">
       <div class="balance-grid">

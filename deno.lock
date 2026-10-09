@@ -93,6 +93,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@astrojs/sitemap@^3.4.0",
+        "npm:@electric-sql/pglite@~0.5.8",
         "npm:@lobehub/icons-static-svg@^1.91.0",
         "npm:@supabase/supabase-js@^2.49.0",
         "npm:@tailwindcss/typography@~0.5.16",

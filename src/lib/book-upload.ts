@@ -208,7 +208,9 @@ export function mountBookUpload() {
      if(result.reused){reuse(item,result.job);draw();continue;}
      if(result.upload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.upload.path,result.upload.token,new Blob([item.file],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});if(error)throw new Error('Upload failed. Remove this file and choose it again to retry.');}
      if(result.textUpload){const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(result.textUpload.path,result.textUpload.token,new Blob([sourceText],{type:'text/plain'}),{contentType:'text/plain'});if(error)throw new Error('Could not save the extracted text. Choose the same book again to resume.');}
-     await bookWorker({action:result.textUpload?'finalize':'enqueue',id:result.job.id});item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':result.job.billing_required?'Saved · review price to start':'Saved · processing in the background';
+     if(result.textUpload)await bookWorker({action:'finalize',id:result.job.id});
+     else if(!result.job.billing_required)await bookWorker({action:'enqueue',id:result.job.id});
+     item.jobId=result.job.id;item.message=result.job.status==='ready'?'Already in your books':result.job.billing_required?'Saved · review price to start':'Saved · processing in the background';
     }catch(error){item.error=error instanceof Error?error.message:'Upload failed. Please try again.';item.retryable=true;}
     draw();
    }

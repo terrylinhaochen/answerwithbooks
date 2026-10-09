@@ -8,6 +8,7 @@ import bookCliRelease from './book-cli-release.json';
 const root=document.querySelector<HTMLElement>('[data-private-book]')!;
 const find=<T extends HTMLElement>(name:string)=>root.querySelector<T>(`[data-job-${name}]`)!;
 const id=new URL(location.href).searchParams.get('id');
+if(id)find<HTMLAnchorElement>('billing').href='/billing/?book='+encodeURIComponent(id);
 let priceQuote:any=null;
 const needsPayment=(job:any)=>job?.billing_required&&!job.artifacts&&!['held','settled'].includes(job.billing?.state)&&(job.source_import?.state==='complete'||!job.source_import);
 let current:any, running=false, rendered=false, analysisRendered=false, auditPassed=false, hasFindings=false, activating=false;
