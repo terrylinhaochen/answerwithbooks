@@ -78,4 +78,4 @@ for (const route of ['guides', 'answers']) {
     assert.ok(read(`guides/${slug}`), 'Keep old direct links working');
   }
 }
-console.log(JSON.stringify({ passed: true, skillExamples: 6, publicBookPrompts: publicPrompts.length, illustratedGuides: Object.keys(guideCovers).length, navigation: 'Books, Guides, Skills', deploymentAssetsPresent: true, connectionKeyAbsentFromArtifact: true }, null, 2));
+console.log(JSON.stringify({ passed: true, skillExamples: 6, publicBookPrompts: publicPrompts.length, illustratedGuides: Object.keys(guideCovers).length, navigation: 'Books, Guides, Skills, Docs', deploymentAssetsPresent: true, connectionKeyAbsentFromArtifact: true }, null, 2));

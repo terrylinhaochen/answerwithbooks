@@ -1,0 +1,92 @@
+---
+const docs = 'https://crowd-listen.mintlify.site';
+const groups = [
+  { title: 'Explore', links: [
+    { label: 'Browse books', href: '/books/' },
+    { label: 'Reading guides', href: '/guides/' },
+    { label: 'Book skills', href: '/tools/' },
+    { label: 'Your library', href: '/profile/' },
+  ] },
+  { title: 'Get started', links: [
+    { label: 'Documentation', href: docs },
+    { label: 'Set up your agent', href: `${docs}/guide/quickstart-skill` },
+    { label: 'Add a book', href: `${docs}/guide/upload` },
+    { label: 'Use your own agent', href: `${docs}/guide/own-agent` },
+  ] },
+  { title: 'Stay curious', links: [
+    { label: 'Newsletter', href: '/newsletter/' },
+    { label: 'Editorial method', href: '/editorial/' },
+    { label: 'Help & troubleshooting', href: `${docs}/guide/troubleshooting` },
+    { label: 'GitHub', href: 'https://github.com/Crowdlisten/Crowdlisten_books' },
+  ] },
+];
+---
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__main">
+      <div class="site-footer__intro">
+        <a class="site-footer__brand" href="/">Answer with Books</a>
+        <p class="site-footer__headline">Good books.<br />Useful skills.<br /><em>Better work.</em></p>
+        <p class="site-footer__description">Find an idea worth keeping. Put it to work with the agent you already use.</p>
+        <a class="site-footer__start" href={`${docs}/guide/quickstart-skill`}>Set up your agent <span aria-hidden="true">↗</span></a>
+      </div>
+      <nav class="site-footer__navigation" aria-label="Footer">
+        {groups.map(group => (
+          <div class="site-footer__group">
+            <h2>{group.title}</h2>
+            <ul>
+              {group.links.map(link => <li><a href={link.href}>{link.label}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </div>
+    <div class="site-footer__bottom">
+      <p>© {new Date().getFullYear()} Answer with Books</p>
+      <nav aria-label="Legal">
+        <a href="/terms/">Terms</a>
+        <a href="/privacy/">Privacy policy</a>
+        <a href="/privacy/#privacy-choices">Privacy choices</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: #2a302a url('/textures/book-paper.svg'); color: #eee9d9; }
+  .site-footer__inner { max-width: 1200px; margin: 0 auto; padding: 72px 32px 24px; }
+  .site-footer__main { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(0, 1.65fr); gap: 80px; padding-bottom: 64px; }
+  .site-footer__brand { display: inline-block; font-family: var(--font-serif); font-size: 24px; letter-spacing: -.035em; }
+  .site-footer__headline { margin-top: 28px; font-family: var(--font-serif); font-size: clamp(36px, 3.3vw, 46px); line-height: 1.06; letter-spacing: -.035em; }
+  .site-footer__description { max-width: 31ch; margin-top: 22px; color: #c7cabb; font-size: 14px; line-height: 1.75; }
+  .site-footer__start { display: inline-flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 46px; padding: 10px 18px; margin-top: 26px; border: 1px solid #717c68; border-radius: 7px; font-size: 14px; }
+  .site-footer__start:hover { background: #3d4936; border-color: #a8b49b; }
+  .site-footer__navigation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; padding-top: 8px; }
+  .site-footer__group h2 { margin-bottom: 23px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: #aebba3; }
+  .site-footer__group ul { list-style: none; padding: 0; margin: 0; }
+  .site-footer__group a { display: inline-flex; align-items: center; min-height: 44px; padding-block: 9px; font-size: 14px; line-height: 1.5; }
+  .site-footer a { text-decoration: none; }
+  .site-footer a:not(.site-footer__start):hover { color: #fffbed; text-decoration: underline; text-underline-offset: 5px; }
+  .site-footer a:focus-visible { outline: 2px solid #dce6ce; outline-offset: 5px; border-radius: 3px; }
+  .site-footer__bottom { border-top: 1px solid #51594c; padding-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; color: #bfc5b6; font-size: 12px; }
+  .site-footer__bottom nav { display: flex; flex-wrap: wrap; gap: 8px 26px; }
+  .site-footer__bottom a { display: inline-flex; align-items: center; min-height: 44px; }
+  @media (max-width: 1000px) {
+    .site-footer__main { grid-template-columns: minmax(220px, 1fr) minmax(0, 1.7fr); gap: 40px; }
+    .site-footer__navigation { gap: 20px; }
+  }
+  @media (max-width: 760px) {
+    .site-footer__inner { padding: 48px 24px 20px; }
+    .site-footer__main { grid-template-columns: 1fr; gap: 48px; padding-bottom: 40px; }
+    .site-footer__headline { font-size: 40px; }
+    .site-footer__description { max-width: 40ch; }
+    .site-footer__navigation { padding-top: 0; }
+    .site-footer__bottom { align-items: flex-start; flex-direction: column; gap: 8px; }
+  }
+  @media (max-width: 480px) {
+    .site-footer__inner { padding-inline: 20px; }
+    .site-footer__navigation { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
+    .site-footer__group h2 { margin-bottom: 12px; }
+    .site-footer__bottom nav { gap: 8px 20px; }
+  }
+</style>

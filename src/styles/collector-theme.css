@@ -15,7 +15,7 @@ body[data-theme='collector'] > header { border: 0; background: #f4f1e9ed; }
 body[data-theme='collector'] .awb-header { max-width: 1200px; min-height: 78px; padding-inline: 32px; }
 body[data-theme='collector'] .awb-brand { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; font-family: var(--font-serif); font-size: 25px; font-weight: 450; letter-spacing: -.045em; }
 body[data-theme='collector'] .awb-nav { background: transparent; border: 0; box-shadow: none; gap: 12px; }
-body[data-theme='collector'] .awb-nav__link { font-size: 12px; font-weight: 500; }
+body[data-theme='collector'] .awb-nav__link { font-size: 13px; font-weight: 500; }
 body[data-theme='collector'] .awb-nav__cta { background: #354734; box-shadow: none; font-size: 12px; padding-inline: 22px; min-height: 40px; margin-left: 18px; }
 body[data-theme='collector'] .awb-nav__cta:hover { background: #455a40; }
 
@@ -59,12 +59,6 @@ body[data-theme='collector'] .profile-activity > section { background: #e7e9de; 
 body[data-theme='collector'] [data-book-additions-list] > :is(article,a) { background: #fcfaf5; padding: 25px; border: 0; border-radius: 14px; }
 body[data-theme='collector'] [data-book-additions-list] > a:hover { box-shadow: 0 8px 24px #34452c10; }
 body[data-theme='collector'] [data-surface=auth] { margin-block: 54px; width: calc(100% - 40px); max-width: 440px; background: #fcfaf5; padding: 40px; border-radius: 18px; box-shadow: 0 18px 60px #34452c08; }
-body[data-theme='collector'] > footer { margin-top: 0; background: #2a302a url('/textures/book-paper.svg'); border: 0; color: #e8e6d8; }
-body[data-theme='collector'] > footer > div { padding: 46px 32px; max-width: 1184px; color: #c7cabb; }
-body[data-theme='collector'] > footer > div > div { gap: 18px 25px; }
-body[data-theme='collector'] > footer p { width: 100%; font-family: var(--font-serif); color: #eee9d9; font-size: 27px; margin-bottom: 10px; letter-spacing: -.025em; }
-body[data-theme='collector'] > footer a { font-size: 10px; text-decoration: none; }
-body[data-theme='collector'] > footer a:hover { color: #fffbed; text-decoration: underline; }
 @media (max-width: 700px) {
  body[data-theme='collector'] .awb-section { padding-inline: 24px; }
  body[data-theme='collector'] .book-row { padding: 22px; }
@@ -72,14 +66,13 @@ body[data-theme='collector'] > footer a:hover { color: #fffbed; text-decoration:
  body[data-theme='collector'] .profile-header { padding: 28px 24px; flex-wrap: wrap; }
  body[data-theme='collector'] .profile-card { padding: 24px; }
  body[data-theme='collector'] [data-book-agent] { padding: 26px; }
- body[data-theme='collector'] > footer > div { padding: 36px 24px; }
  body[data-theme='collector'] [data-surface=auth] { padding: 28px 24px; margin-inline: 20px; }
 }
 @media (max-width: 520px) {
  body[data-theme='collector'] .awb-header { padding: 12px 20px 8px; gap: 6px; min-height: 105px; }
  body[data-theme='collector'] .awb-brand { font-size: 23px; }
  body[data-theme='collector'] .awb-nav { gap: 5px; padding: 0; }
- body[data-theme='collector'] .awb-nav__link { font-size: 11px; min-height: 32px; }
+ body[data-theme='collector'] .awb-nav__link { font-size: 13px; min-height: 44px; }
  body[data-theme='collector'] .awb-nav__cta { font-size: 10px; padding-inline: 16px; min-height: 34px; margin-left: 0; }
  body[data-theme='collector'] .account-nav { width: 100%; gap: 3px; }
  body[data-theme='collector'] .awb-section .account-nav a { padding: 10px; }
