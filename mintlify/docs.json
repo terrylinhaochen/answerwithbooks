@@ -1,0 +1,64 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Answer with Books",
+  "colors": {
+    "primary": "#40523A",
+    "light": "#718465",
+    "dark": "#354734"
+  },
+  "favicon": "/images/favicon.svg",
+  "navigation": {
+    "pages": [
+      {
+        "group": "Start here",
+        "pages": [
+          "index",
+          "guide/quickstart-skill"
+        ]
+      },
+      {
+        "group": "Your books",
+        "pages": [
+          "guide/library",
+          "guide/upload",
+          "guide/hosted-processing",
+          "guide/own-agent",
+          "guide/billing"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "guide/cli",
+          "api/private-books",
+          "guide/troubleshooting"
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Books",
+        "href": "https://answerwithbooks.com/books/"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Open your library",
+      "href": "https://answerwithbooks.com/profile/"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/Crowdlisten/Crowdlisten_books"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view"
+    ]
+  }
+}

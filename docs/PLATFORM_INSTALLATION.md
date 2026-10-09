@@ -1,28 +1,11 @@
 # Public skill installation
 
-The homepage install dialog and the public-shelf FAQ share `SkillInstallOptions.astro` and `book-skill-install.mjs`. The two-step card picker reuses the earlier Answer with Books `ToolDialogs.astro` pattern: choose an agent from the icon grid, click Next, then copy its command. Back returns to the selected card; reopening the dialog starts on the picker. The sample chat prompt and setup-details link are removed. Homepage setup controls are buttons with no navigation URL. A small inline controller opens the modal even if deferred modules are unavailable. Going back or changing platforms clears copied/fallback state; a pending clipboard response cannot show confirmation for a different command.
+The primary setup is one message: `Set up https://answerwithbooks.com/SKILL.md`. The website's `SkillInstallOptions.astro` shows setup, optional private-library browser connection and an example together. Terminal commands are a collapsed fallback, with a host selector. Clipboard failure exposes selectable text; reopening clears transient state. The inline modal opener remains independent of deferred modules.
 
-## Available choices
+The root setup endpoint uses `src/lib/book-cli-release.json`, currently the published GitHub release 0.5.0. Codex installs with `install --skill`; normal setup no longer installs the optional local API. Other supported hosts use `skills@1.5.0` with the canonical repository skill and its references. That shared installer supports the Node 20 minimum used by AWB. Unknown hosts are selected interactively, not installed everywhere. OpenClaw custom profiles need the active profile's skill directory.
 
-- Codex: keep `npx --yes answer-with-books@0.1.4 install --skill --api`. This installer copies the skill and bundled corpus/runtime to Codex, plus an optional local API under the current directory. Existing installations remain usable.
-- Claude Code, Cursor, GitHub Copilot, Gemini CLI, OpenCode, OpenClaw: use `npx --yes skills@1.5.0 add Crowdlisten/Crowdlisten_books --skill answer-with-books --global --agent <id>`.
-- Other / multiple agents: the same shared command without `--agent`. The terminal presents the agent selection; it does not silently install into every supported agent. No `--all` or installer `--yes` flag is added.
+Public retrieval needs no account or API key. Private access uses the CLI browser authorization flow. The setup document does not authorize paid processing or uploads. Individual book installation remains optional, and the generic skill can retrieve from a large library.
 
-`skills@1.5.0` supports Node >=18, while Answer with Books requires Node 20+, so the UI consistently asks for Node 20+. The checked `skills@1.6.0` and `1.7.1` require Node >=22.20 and would exclude the user's Node 22.12 installation. The shared installer uses the default OpenClaw state (or its recognized legacy directories); custom profiles need their active skill folder. The UI discloses that limitation.
+Customer documentation is prepared in `mintlify/`; see `MINTLIFY_DEPLOYMENT.md` for the Starter deployment connection and cutover status. The root setup URL remains on the product domain independently of the docs host.
 
-The shared installer downloads the `skill/answer-with-books` directory from the public CLI repository. That directory contains instructions, not the bundled runtime. Its existing documented fallback is `npx --yes answer-with-books@0.1.4 ask "QUESTION" --json`; the first invocation fetches the public runtime/corpus through npm. The UI therefore does not describe these installs as a preloaded offline library. No AI provider key, account, or running local HTTP server is required. Shell-capable agents still need permission to execute the CLI.
-
-## References reviewed on 2026-10-06
-
-- [Upstream book-to-skill installation](https://github.com/virgiliojr94/book-to-skill/blob/master/docs/install.md): recommends `npx skills add`, with manual host-specific locations as alternatives.
-- [Shared skills installer](https://github.com/vercel-labs/skills): agent selection, global scope, install paths, and supported agent IDs. Actual v1.5.0 package code and npm engine metadata were checked, rather than assuming current main describes the pinned release.
-- [Public Answer with Books skill](https://github.com/Crowdlisten/Crowdlisten_books/blob/main/skill/answer-with-books/SKILL.md): bundled-runtime and published-CLI fallback paths.
-- CrowdListen's existing `frontend/src/components/collection/AgentClientPicker.jsx`: selected-agent setup and cleared copy state. The subsequent card-picker revision reuses the older Answer with Books dialog markup and existing `AgentIcon` assets; its MCP login/configuration commands do not apply to this skill.
-
-## Validation
-
-- The real pinned shared installer discovers exactly one `answer-with-books` skill in the public repository.
-- A temporary project installation for all seven named agents succeeded. Shared skill files plus Claude Code/OpenClaw links were read back. These tests used project scope to avoid replacing the user's installed skills; the advertised global destinations were checked in the pinned installer's source.
-- Executed the fallback retrieval command from that installation against the published `answer-with-books@0.1.4`: `status: hit`, three books and one published answer for the great-work career question. No API server or model invocation.
-- `node scripts/test-skill-install-ui.mjs`: every agent card leads to the appropriate copy command on both surfaces, keyboard selection and Back/reopen work, manual clipboard fallback follows the new selection, copied status resets, no browser errors or horizontal overflow at 320, 390, and 1280 px.
-- Browser installation/discovery inside each native agent application is not certified by these filesystem/CLI checks.
+Verified locally: fresh site build; all eight terminal choices; clipboard copy and denied-clipboard fallback on the homepage dialog and Skills FAQ; dialog reopen; mobile widths 320/390 and desktop 1280; published 0.5.0 public retrieval. Installation/discovery in every native host application is not certified by these checks.

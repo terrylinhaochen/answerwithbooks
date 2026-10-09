@@ -1,0 +1,31 @@
+---
+title: "CLI reference"
+description: "Use the current release without cloning a repository."
+---
+
+Most users can ask their agent in ordinary language. These commands are for scripts and terminal use.
+
+Use this prefix, followed by a command:
+
+```bash
+npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.5.0/answer-with-books-0.5.0.tgz --help
+```
+
+| Command | Purpose |
+| --- | --- |
+| `books --public --json` | List public books without signing in. |
+| `login` | Connect through browser authorization. |
+| `books --private --json` | List your connected private books. |
+| `search "QUESTION" --json` | Retrieve relevant methods from your private library. |
+| `ask "QUESTION" --book BOOK_ID --json` | Read evidence from a selected book. |
+| `upload ./book.pdf --json` | Prepare and upload a source for hosted processing. |
+| `quote BOOK_ID --ceiling-cents 500 --json` | Review rates with an example $5 additional spending cap. |
+| `accept-price BOOK_ID --quote QUOTE_ID --ceiling-cents 500 --json` | Start only after the user approves that quote and limit. |
+| `status BOOK_ID --json` | Check processing progress. |
+| `usage BOOK_ID --json` | Read saved usage and billing information. |
+| `cancel BOOK_ID --json` | Cancel work and settle consumed usage. |
+| `download BOOK_ID --output ./book-and-skill.zip` | Export a ready package. |
+| `library install-book BOOK_ID` | Install one ready private book skill. |
+| `logout` | Revoke this CLI connection. |
+
+Use returned book and quote IDs exactly. The $5 cap is an example, not a recommended book price. Approval belongs to the user. [Own-agent processing](/guide/own-agent) uses the `local` commands.

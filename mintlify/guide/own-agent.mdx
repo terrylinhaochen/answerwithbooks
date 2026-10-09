@@ -1,0 +1,37 @@
+---
+title: "Generate with your own agent"
+description: "Create a local summary and skill using the model access you already have."
+---
+
+Send this to your agent:
+
+```text
+Use Answer with Books to create a summary and reusable skill from my local file. Use my own agent for generation, then install the finished skill.
+```
+
+The agent extracts the source, answers generation and source-review requests, and saves progress locally. Answer with Books does not upload the source or make hosted generation calls in this route. Your agent provider's data handling and charges still apply.
+
+## What you need
+
+- A command-capable agent and the current Answer with Books CLI.
+- A local PDF, EPUB, DOCX, Markdown, HTML, RTF, or text source.
+- Node 20 or later. First use may download an extraction runtime; scanned pages need OCR first.
+
+No Answer with Books account or repository clone is required.
+
+## What you receive
+
+A readable summary, `SKILL.md`, chapter notes, glossary, patterns, cheatsheet, and source references. Image generation and hosted library search are separate. Your package stays local unless you separately choose to upload it.
+
+<Accordion title="How the agent drives generation">
+With the current CLI, it prepares a work directory and repeats the next/respond cycle until the package is ready:
+
+```text
+local prepare ./book.pdf --output ./my-book
+local next ./my-book
+local respond ./my-book --input ./response.json --request REQUEST_ID
+local install ./my-book
+```
+
+These are CLI arguments, not standalone shell commands. Use the [CLI prefix](/guide/cli). The agent writes responses to the current request, resolves source-review findings, and installs only a ready package.
+</Accordion>

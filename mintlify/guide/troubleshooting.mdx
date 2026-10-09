@@ -1,0 +1,28 @@
+---
+title: "Troubleshooting"
+description: "Resolve setup, connection, and processing problems."
+---
+
+<AccordionGroup>
+  <Accordion title="My agent cannot install the skill">
+    Local skills require a host that can execute commands and a supported skill directory. Use Node 20 or later. If the host cannot do this, use [the public shelf](https://answerwithbooks.com/books/) and its copyable reading prompts. Do not start a local API server just to read books.
+  </Accordion>
+  <Accordion title="The CLI is missing a command">
+    Use the current GitHub release shown in the [CLI reference](/guide/cli). The older npm registry package may have fewer commands. Preserve any local edits when updating the installed skill.
+  </Accordion>
+  <Accordion title="I signed in on the website, but my agent is not connected">
+    Website and CLI sessions are separate. Ask the agent to run login, then approve the browser authorization and check the matching terminal code. Expired or revoked sessions need a new login.
+  </Accordion>
+  <Accordion title="My book is waiting after upload">
+    New hosted work waits for a reviewed quote and spending approval. Adding credit does not approve the book. Return to the book and check its current status and pricing.
+  </Accordion>
+  <Accordion title="The cover failed but the book is ready">
+    You can read and download ready text. Retry only the cover if needed; a new paid attempt may require an additional approved limit.
+  </Accordion>
+  <Accordion title="The source is scanned or protected">
+    Scanned pages need text extraction through OCR. Use a readable, authorized copy. DRM restrictions are not bypassed.
+  </Accordion>
+  <Accordion title="I cannot see a payment in my balance">
+    Check that checkout completed and that you are viewing the same account and environment. Refresh after Stripe confirms the payment. Test credits and live credits are separate.
+  </Accordion>
+</AccordionGroup>

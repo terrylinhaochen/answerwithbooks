@@ -1,95 +1,74 @@
 ---
 import ToolCommand from './ToolCommand.astro';
-import AgentIcon from './AgentIcon.astro';
-import { bookSkillPlatforms } from '../lib/book-skill-install.mjs';
+import { bookSkillPlatforms, bookSkillSetupPrompt } from '../lib/book-skill-install.mjs';
 interface Props { id: string; }
 const {id} = Astro.props;
 const initial = bookSkillPlatforms[0];
 ---
 <div class="skill-install-options" data-book-install-options>
- <header class="install-header"><h2 id={`${id}-title`} data-book-install-title tabindex="-1">Which agent are you using?</h2></header>
- <section data-book-install-step="choose">
-  <div class="install-body">
-   <p class="install-description">Choose your agent for the right install command.</p>
-   <fieldset class="agent-grid"><legend class="sr-only">Choose your agent</legend>
-    {bookSkillPlatforms.map(platform => <label class:list={['agent-choice', {'agent-choice-other': platform.id === 'choose'}]}>
-     <input type="radio" name={`${id}-platform`} value={platform.id} checked={platform.id === initial.id} data-book-install-agent />
-     <AgentIcon id={platform.id} /><span>{platform.id === 'choose' ? 'Other agents' : platform.name}</span><span class="agent-check" aria-hidden="true">✓</span>
-    </label>)}
-   </fieldset>
-  </div>
-  <footer class="install-footer"><button class="install-next" type="button" data-book-install-continue disabled>Next <span aria-hidden="true">→</span></button></footer>
- </section>
- <section data-book-install-step="copy" hidden>
-  <div class="install-body">
-   <p class="install-description">Run this in your terminal. <span class="install-requirement">Node 20+</span></p>
-   <ToolCommand value={initial.command} install label="Copy command" />
-   <p class="install-caption" data-book-install-note>{initial.note}</p>
-  </div>
-  <footer class="install-footer"><button class="install-back" type="button" data-book-install-back>← Back</button></footer>
- </section>
+ <header class="install-header"><h2 id={`${id}-title`} tabindex="-1">Set up your agent</h2></header>
+ <div class="install-body">
+  <section class="setup-step">
+   <h3><span>1</span> Send this to your agent</h3>
+   <ToolCommand value={bookSkillSetupPrompt} label="Copy setup message" />
+   <p class="install-caption">Works with Codex, Claude Code, Cursor, and other agents that support local skills. Your agent handles the installation.</p>
+  </section>
+  <section class="setup-step">
+   <h3><span>2</span> Connect your books</h3>
+   <p class="install-caption">Public books work immediately. For your private library, ask your agent to connect Answer with Books and approve the sign-in in your browser. No API key needed.</p>
+  </section>
+  <section class="setup-step">
+   <h3><span>3</span> Try it out</h3>
+   <ToolCommand value="Use Answer with Books to help me understand organizational structure and division of labor." label="Copy example" />
+  </section>
+  <details class="terminal-setup" data-terminal-setup>
+   <summary>Prefer the terminal?</summary>
+   <label for={`${id}-platform`}>Your agent</label>
+   <select id={`${id}-platform`} data-book-install-agent>
+    {bookSkillPlatforms.map(platform => <option value={platform.id}>{platform.name}</option>)}
+   </select>
+   <div data-terminal-command><ToolCommand value={initial.command} install label="Copy command" /></div>
+   <p class="install-caption" data-book-install-note>{initial.note} Requires Node 20 or later.</p>
+  </details>
+ </div>
 </div>
 <style>
  .skill-install-options{min-width:0;border:1px solid #d8d7d0;border-radius:14px;background:#fffefa;color:#35372f;overflow:hidden;margin-top:22px}
- [hidden]{display:none!important}
  .install-header{padding:26px 58px 23px 28px;border-bottom:1px solid #e4e1d9}
  .install-header h2{font-family:var(--font-sans);font-size:23px;font-weight:600;line-height:1.3;letter-spacing:-.025em;margin:0}
  .install-header h2:focus{outline:none}
- .install-body{padding:26px 28px 30px}
- .install-body>.install-description{font-size:14px;color:#74776b;line-height:1.6;margin:0}
- .agent-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:22px}
- .agent-choice{position:relative;display:flex;align-items:center;gap:10px;min-width:0;min-height:65px;padding:13px 12px;border:1px solid #ddded5;border-radius:9px;font-size:13px;font-weight:500;line-height:1.4;cursor:pointer;background:#fffefa}
- .agent-choice:hover{background:#f5f5ee}
- .agent-choice input{position:absolute;opacity:0;width:1px;height:1px}
- .agent-choice:has(input:checked){border-color:#40523a;background:#edf0e7;box-shadow:inset 0 0 0 1px #40523a}
- .agent-choice:has(input:focus-visible){outline:2px solid #40523a;outline-offset:3px}
- .agent-check{margin-left:auto;color:#40523a;visibility:hidden;font-size:13px}
- .agent-choice:has(input:checked) .agent-check{visibility:visible}
- .agent-choice-other{grid-column:span 2}
- .install-footer{display:flex;align-items:center;justify-content:flex-end;min-height:83px;padding:18px 28px;border-top:1px solid #e4e1d9}
- .install-next{display:inline-flex;align-items:center;justify-content:center;gap:22px;min-height:44px;padding:10px 22px;background:#354734;color:#fffdf5;border-radius:7px;font-size:14px;font-weight:500;cursor:pointer}.install-next:hover{background:#455a40}.install-next:disabled{opacity:.4;cursor:default}
- .install-back{margin-right:auto;min-height:44px;padding:10px 0;font-size:13px;color:#666d5d;cursor:pointer}
- .install-requirement{white-space:nowrap;font-size:12px;margin-left:7px;color:#848878}
- .install-body :global(.tool-command){margin-top:20px}
- .install-body :global(.tool-command__row){padding:17px;background:#f1f1e9;border:1px solid #ddded2;border-radius:9px;display:flex;flex-direction:column;gap:18px}
- .install-body :global(pre){width:100%;font-size:13px;color:#35432e;line-height:1.85}
- .install-body :global([data-copy-command]){align-self:flex-end;min-height:44px;padding:10px 18px;background:#354734;color:#fffdf5;font-size:13px;font-weight:500;border-radius:6px}
- .install-body :global([data-copy-command]:hover){background:#455a40}
- .install-body>.install-caption{font-size:12px;line-height:1.7;margin:16px 0 0;color:#74776b}
- button:focus-visible{outline:2px solid #40523a;outline-offset:4px}
- @media(max-width:560px){.install-header{padding:23px 52px 21px 20px}.install-header h2{font-size:21px}.install-body{padding:22px 20px 26px}.agent-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.agent-choice{padding:12px 10px;font-size:12px;gap:8px;min-height:65px}.agent-choice :global(.agent-icon){width:22px;height:22px}.agent-check{display:none}.agent-choice-other{grid-column:auto}.install-footer{padding:15px 20px;min-height:75px}.install-body :global(pre){font-size:12px}}
- @media(max-width:360px){.install-body{padding-inline:16px}.agent-choice{font-size:11px;padding-inline:8px;gap:7px}.agent-choice :global(.agent-icon){width:19px;height:19px}}
+ .install-body{padding:24px 28px 28px}
+ .setup-step+.setup-step{margin-top:24px}
+ .setup-step h3{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;margin:0}
+ .setup-step h3 span{display:inline-grid;place-items:center;width:25px;height:25px;border:1px solid #d8ddce;border-radius:50%;color:#40523a;font-size:12px;flex:none}
+ .install-caption{font-size:13px;line-height:1.7;margin:12px 0 0;color:#74776b}
+ .install-body :global(.tool-command__row){background:#f1f1e9;border-color:#ddded2;border-radius:9px}
+ .install-body :global(pre){font-size:13px;color:#35432e}
+ .install-body :global([data-copy-command]){min-height:40px;color:#354734}
+ .terminal-setup{margin-top:26px;border-top:1px solid #e4e1d9;padding-top:18px;font-size:13px}
+ summary{cursor:pointer;font-weight:500;color:#666d5d}
+ .terminal-setup label{display:block;margin:18px 0 6px}
+ select{width:100%;min-height:42px;border:1px solid #ddded5;border-radius:7px;padding:8px;background:#fffefa}
+ summary:focus-visible,select:focus-visible{outline:2px solid #40523a;outline-offset:3px}
+ @media(max-width:560px){.install-header{padding:23px 52px 21px 20px}.install-header h2{font-size:21px}.install-body{padding:22px 20px}.install-body :global(.tool-command__row){flex-direction:column}.install-body :global([data-copy-command]){align-self:flex-end}.install-body :global(pre){font-size:12px}}
 </style>
 <script>
  import {bookSkillPlatforms} from '../lib/book-skill-install.mjs';
  document.querySelectorAll<HTMLElement>('[data-book-install-options]').forEach(root=>{
-  const choices=Array.from(root.querySelectorAll<HTMLInputElement>('[data-book-install-agent]'));
-  const title=root.querySelector<HTMLElement>('[data-book-install-title]')!;
-  const choose=root.querySelector<HTMLElement>('[data-book-install-step="choose"]')!;
-  const copy=root.querySelector<HTMLElement>('[data-book-install-step="copy"]')!;
-  const next=root.querySelector<HTMLButtonElement>('[data-book-install-continue]')!;
-  const selected=()=>bookSkillPlatforms.find(item=>item.id===choices.find(input=>input.checked)?.value)||bookSkillPlatforms[0];
-  const clearCopy=()=>{
-   root.querySelector('[data-copy-status]')!.textContent='';
-   root.querySelector<HTMLElement>('[data-copy-fallback]')!.hidden=true;
-   root.querySelector<HTMLTextAreaElement>('[data-copy-fallback] textarea')!.value='';
-  };
-  const update=()=>{
-   const platform=selected();
-   root.querySelector('[data-command-text]')!.textContent=platform.command;
-   root.querySelector('[data-book-install-note]')!.textContent=platform.note;
-   clearCopy();
-  };
-  const reset=()=>{choose.hidden=false;copy.hidden=true;title.textContent='Which agent are you using?';clearCopy();};
-  choices.forEach(input=>input.addEventListener('change',update));
-  next.disabled=false;
-  next.addEventListener('click',()=>{
-   update();choose.hidden=true;copy.hidden=false;
-   title.textContent=selected().id==='choose'?'Choose agents in your terminal':`Install in ${selected().name}`;
-   title.focus({preventScroll:true});
+  const choice=root.querySelector<HTMLSelectElement>('[data-book-install-agent]')!;
+  const terminal=root.querySelector<HTMLElement>('[data-terminal-command]')!;
+  choice.addEventListener('change',()=>{
+   const platform=bookSkillPlatforms.find(item=>item.id===choice.value)||bookSkillPlatforms[0];
+   terminal.querySelector('[data-command-text]')!.textContent=platform.command;
+   root.querySelector('[data-book-install-note]')!.textContent=platform.note+' Requires Node 20 or later.';
+   terminal.querySelector('[data-copy-status]')!.textContent='';
+   terminal.querySelector<HTMLElement>('[data-copy-fallback]')!.hidden=true;
+   terminal.querySelector<HTMLTextAreaElement>('textarea')!.value='';
   });
-  root.querySelector('[data-book-install-back]')!.addEventListener('click',()=>{reset();choices.find(input=>input.checked)?.focus({preventScroll:true});});
-  root.addEventListener('book-install-reset',reset);
-  update();
+  root.addEventListener('book-install-reset',()=>{
+   root.querySelector<HTMLDetailsElement>('[data-terminal-setup]')!.open=false;
+   root.querySelectorAll('[data-copy-status]').forEach(el=>el.textContent='');
+   root.querySelectorAll<HTMLElement>('[data-copy-fallback]').forEach(el=>el.hidden=true);
+  });
  });
 </script>

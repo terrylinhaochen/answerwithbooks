@@ -22,7 +22,7 @@ import SkillInstallOptions from './SkillInstallOptions.astro';
    if(dialog.open)return;
    opener=button;previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();
    dialog.querySelector('[data-book-install-options]')?.dispatchEvent(new Event('book-install-reset'));
-   dialog.querySelector('[data-book-install-agent]:checked')?.focus();
+   dialog.querySelector('[data-copy-command]')?.focus();
   }));
   dialog.querySelector('[data-close-skill-install]')?.addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;opener?.focus({preventScroll:true});});

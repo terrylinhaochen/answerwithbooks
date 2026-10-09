@@ -53,7 +53,7 @@ Follow the billing contract returned by the catalog:
 
 - `metering-only`: send the normal task input. The platform records usage without collecting a customer payment. Provider calls still cost the operator money.
 - `quoteRequired: true`: the separate outcome-billing sandbox requires `POST /v1/quotes` with an idempotency key and `{ "input": <exact task input>, "campaign": <customer campaign identifier>, "maxUnits": <agreed maximum> }`. It supports up to 20 GitHub/audience accounts or one X brief; CrowdListen feedback is not priced in this sandbox. Show the returned `unit_cents`, `max_units`, maximum hold (`unit_cents * max_units`), contract and expiry. Once authorized and funded, call `/v1/run` with the exact quoted input plus `quoteId`. Do not guess `acceptedPriceCents` when this contract returns a null price.
-- CrowdListen `usagePricing`: this capability uses variable usage pricing instead of a fixed call price. An owner connects the shared Answer with Books balance in CrowdListen Settings → Billing and authorizes a maximum per analysis. The charge is 4× provider API and token list cost, rounded up once to whole cents. The worker holds the approved limit before provider work and settles only fully reported costs; uncertain usage remains under review. Costs consumed by a failed analysis may still be charged. Customer-agent model and browser costs remain with that provider. Send the current `skillVersion`; do not invent an `acceptedPriceCents` for this usage contract.
+- CrowdListen `usagePricing`: this capability uses variable usage pricing instead of a fixed call price. An owner connects the shared Answer with Books balance in CrowdListen Settings → Billing and authorizes a maximum per analysis. Review the customer usage rates and maximum charge returned by the service before authorization. The worker holds the approved limit before provider work and settles only fully reported costs; uncertain usage remains under review. Costs consumed by a failed analysis may still be charged. Customer-agent model and browser costs remain with that provider. Send the current `skillVersion`; do not invent an `acceptedPriceCents` for this usage contract.
 - `pricingModel: "per-call"`: one successfully completed skill request is one billable call. Internal model/tool calls are included. Use the selected catalog entry's `version` as the request's `skillVersion`, and its non-null `priceCents` as `acceptedPriceCents`. Show the fixed price and bounded scope before starting unless already authorized. The price is held when queued, charged once on success, and released on failure or expiry. Polling and result retrieval are free. Do not submit outcome quotes to this deployment. Unknown contracts or missing prices require clarification, not a free run.
 
 Do not accept an increased price automatically or switch billing deployments to bypass funding or approval. Test balances are simulated, but upstream API calls can still incur real provider costs. Hosted production currently does not enable real-money billing.
@@ -77,10 +77,10 @@ Runs are available through `GET /v1/runs` and `GET /v1/runs/:id`, and in the acc
 
 ## Book-backed advice
 
-Book-backed answers use the separate Answer with Books book skill, not Capability Lab's `/v1/run`. If the user wants this capability and it is absent, offer the existing install command in a Node-enabled environment:
+Book-backed answers use the separate Answer with Books book skill, not Capability Lab's `/v1/run`. If the user wants this capability and it is absent, offer this setup message for their agent:
 
-```sh
-npx --yes answer-with-books@0.1.4 install --skill --api
+```text
+Set up https://answerwithbooks.com/SKILL.md
 ```
 
 This installs the book integration, not the research API. Use its published answers and editorial book digests to return a diagnosis, decision rule, next move, and boundary. Do not claim to have read inaccessible material. The Books and Guides pages also provide self-contained reading prompts for agents without source-link access.

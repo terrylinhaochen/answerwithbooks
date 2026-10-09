@@ -1,0 +1,52 @@
+---
+title: "Set up your agent"
+description: "One setup message. Browser sign-in for private books. No API key needed."
+---
+
+<Steps>
+  <Step title="Send this to your agent">
+    Paste this into Codex, Claude Code, Cursor, or another agent that supports local skills:
+
+    ```text
+    Set up https://answerwithbooks.com/SKILL.md
+    ```
+
+    Your agent installs the skill and checks that public books are available. It needs command execution and Node 20 or later. Public reading does not require an account.
+  </Step>
+  <Step title="Connect your private books">
+    Ask your agent:
+
+    ```text
+    Connect my Answer with Books library.
+    ```
+
+    Your agent opens browser sign-in. Sign in and authorize the connection after checking that the displayed code matches the terminal. You do not need to create an API key or paste credentials into chat.
+  </Step>
+  <Step title="Try it out">
+    ```text
+    Use Answer with Books to help me understand organizational structure and division of labor.
+    ```
+
+    Or try: “Use my books to help me design a better customer interview.”
+  </Step>
+</Steps>
+
+<Accordion title="Prefer the terminal?">
+For Codex, install the released skill:
+
+```bash
+npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.5.0/answer-with-books-0.5.0.tgz install --skill
+```
+
+For other supported agents, run the shared installer and choose your agent:
+
+```bash
+npx --yes skills@1.5.0 add Crowdlisten/Crowdlisten_books --skill answer-with-books --global
+```
+
+The GitHub release is the current distribution. An older npm registry version may not contain the same commands. A local API server is optional and is not needed for this setup.
+</Accordion>
+
+<Accordion title="Does Answer with Books provide MCP?">
+The book integration currently uses a skill, CLI, and hosted API. Browser authorization connects the CLI to your account. It is not a book MCP connection. A Mintlify documentation MCP searches this documentation; it does not grant access to your private books.
+</Accordion>
