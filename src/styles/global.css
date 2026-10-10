@@ -250,6 +250,7 @@ h3,
 
 .awb-brand {
   display: inline-flex;
+  gap: 9px;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;

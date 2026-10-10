@@ -5,6 +5,7 @@ import '../styles/collector-theme.css';
 import Analytics from '../components/Analytics.astro';
 import AnalyticsNotice from '../components/AnalyticsNotice.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import BrandMark from '../components/BrandMark.astro';
 
 export interface Props {
   title: string;
@@ -74,7 +75,10 @@ const current = Astro.url.pathname;
     <meta name="theme-color" content="#f4f1e9" />
     <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title="Answer with Books" href="/feed.xml" />
 
@@ -107,7 +111,7 @@ const current = Astro.url.pathname;
   <body class="min-h-screen flex flex-col bg-paper text-ink" data-theme={theme}>
     {!readingMode && <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
       <div class="awb-header mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
-        <a href="/" class="awb-brand" aria-label="Answer with Books home">Answer with Books</a>
+        <a href="/" class="awb-brand" aria-label="Answer with Books home"><BrandMark /><span>Answer with Books</span></a>
         <div class="awb-header__actions flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
           <nav aria-label="Main" class="awb-nav">
             {
