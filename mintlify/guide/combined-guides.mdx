@@ -85,7 +85,7 @@ Your agent completes the usual `local next` / `local respond` cycle in the new d
 local install ./organization-guide-v2
 ```
 
-These are CLI arguments, not standalone shell commands. Use the version 0.6.0 [CLI prefix](/guide/cli).
+These are CLI arguments, not standalone shell commands. Use the current [CLI prefix](/guide/cli).
 </Accordion>
 
 ## Update a managed book or guide
@@ -96,7 +96,7 @@ For a guide already processed on Answer with Books, ask your agent to add a sour
 upload ./new-source.pdf --book BOOK_ID --revision append --json
 ```
 
-Add one file per managed revision. Review its quote before starting paid work.
+These are agent/CLI operations; completed reader pages no longer show Add source or Replace source controls. Add one file per managed revision. Review its quote before starting paid work.
 
 ## Use the result
 
@@ -104,4 +104,4 @@ For a guide in your connected private library, your agent retrieves relevant met
 
 For device-only work, install the finished guide as one skill. Ask your agent to use it by name; some agents need a new session to discover an installation.
 
-Private-library sync of a newly completed local workspace is available in CLI 0.6.0 after connecting your account. **Private-library sync is a one-time handoff; later local revisions stay local.** Continue using updated local guides locally; do not upload them as new books and assume they updated the existing hosted guide.
+Private-library sync of a newly completed local workspace requires CLI 0.6.0 or later and a connected account. Use the current release to include the separate editorial digest introduced in 0.7.0. **Private-library sync is a one-time handoff; later local revisions stay local.** Continue using updated local guides locally; do not upload them as new books and assume they updated the existing hosted guide.

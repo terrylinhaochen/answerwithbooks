@@ -48,7 +48,7 @@ Private-library sync requires CLI 0.6.0 or later and a connected Answer with Boo
 
 Choose **Device only** or **Private library**. Device-only generation needs no AWB account. A private-library destination requires a connected account and permission to upload the extracted source and generated notes.
 
-With CLI 0.6.0, `local prepare ./book.pdf --output ./my-book --destination library` selects automatic sync on completion. The agent retries a failed upload without regenerating the book. `local publish ./my-book` sends a completed AWB workspace later.
+With the current [CLI release](/guide/cli), `local prepare ./book.pdf --output ./my-book --destination library` selects automatic sync on completion. The agent retries a failed upload without regenerating the book. `local publish ./my-book` sends a completed AWB workspace later.
 
 Once saved, the guide uses the same [private retrieval process](/guide/library) as managed books. Your current agent receives relevant methods and citations and writes the answer. AWB makes no hosted text-generation or cover-generation calls for this transfer; your agent provider's charges still apply.
 
