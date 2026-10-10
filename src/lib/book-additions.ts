@@ -1,3 +1,5 @@
+import {bookJacketMarkup} from './book-jacket.mjs';
+import {coverPalette} from '../../supabase/functions/_shared/book-cover-design.mjs';
 import {supabase} from './supabase';
 import {readAdditions,additionsKey,sameBook,type BookAddition} from './book-intake';
 import {bookStatus,bookSourceLabel,groupBookUploads} from './book-library-status.mjs';
@@ -19,9 +21,8 @@ function render() {
   const layout=document.createElement('div');layout.className='book-library-card__layout';
   const cover=document.createElement('a');cover.href=linkFor(job.id);cover.className='book-library-card__cover';cover.setAttribute('aria-label',`Open ${job.title}`);
   const jacket=document.createElement('span');jacket.className='book-library-card__jacket';
-  const placeholder=document.createElement('span');placeholder.className='book-library-card__placeholder';placeholder.textContent=job.title;
-  const signed=covers.get(job.cover_path);
-  if(signed){const img=document.createElement('img');img.src=signed.url;img.alt=`${job.title} cover`;img.loading='lazy';img.width=160;img.height=240;img.addEventListener('error',()=>jacket.replaceChildren(placeholder),{once:true});jacket.append(img);}else jacket.append(placeholder);
+  jacket.innerHTML=bookJacketMarkup({title:job.title,author:job.author||'',color:coverPalette(job).bg,coverAsset:covers.get(job.cover_path)?.url});
+  jacket.querySelector('img')?.addEventListener('error',event=>(event.target as HTMLImageElement).remove(),{once:true});
   cover.append(jacket);
   const body=document.createElement('div');body.className='book-library-card__body';
   const scope=document.createElement('p');scope.className='text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans';

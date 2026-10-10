@@ -5,7 +5,7 @@ const user={id:'00000000-0000-4000-8000-000000000001',email:'reader@example.test
 const enc=x=>Buffer.from(JSON.stringify(x)).toString('base64url');
 const session={access_token:`${enc({alg:'none',typ:'JWT'})}.${enc({sub:user.id,aud:'authenticated',exp:Math.floor(Date.now()/1000)+3600})}.mock`,refresh_token:'mock',expires_in:3600,expires_at:Math.floor(Date.now()/1000)+3600,token_type:'bearer',user};
 const fixture=(id,patch)=>({id,title:'The Wealth of Nations',author:'Adam Smith',skill_summary:{one_liner:'How specialization and exchange shape productivity and the wealth of a society.'},source_name:'wealth.epub',revision_kind:'base',status:'processing',run_state:'queued',cursor:1,total_sections:117,source_line_count:35100,...patch});
-let jobs=[fixture('full',{status:'ready',run_state:'complete',cover_status:'pending',source_text_sha:'full'}),fixture('old',{status:'processing',run_state:'failed',error:'Synthetic interruption',source_text_sha:'full'}),fixture('excerpt',{source_name:'smith-book-i-chapters-1-3.txt',total_sections:4,source_line_count:601,status:'ready',cover_status:'ready',cover_path:'private/cover.png',source_text_sha:'excerpt'}),fixture('active',{title:'Another book',cursor:10,source_text_sha:'active'})];
+let jobs=[fixture('full',{title:'An Inquiry into the Nature and Causes of the Wealth of Nations',status:'ready',run_state:'complete',cover_status:'pending',source_text_sha:'full'}),fixture('old',{status:'processing',run_state:'failed',error:'Synthetic interruption',source_text_sha:'full'}),fixture('excerpt',{source_name:'smith-book-i-chapters-1-3.txt',total_sections:4,source_line_count:601,status:'ready',cover_status:'ready',cover_path:'private/cover.png',source_text_sha:'excerpt'}),fixture('active',{title:'Another book',cursor:10,source_text_sha:'active'})];
 const browser=await chromium.launch({headless:true,channel:'chrome'});
 try {
  const context=await browser.newContext({viewport:{width:1280,height:1000}});
@@ -25,11 +25,12 @@ try {
  const page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
  await page.goto(origin+'/books/');console.log('Browser loaded');
  const shelf=page.locator('[data-book-additions]');await shelf.getByText('Private excerpt · Chapters 1–3',{exact:true}).waitFor().catch(async e=>{console.log({errors,reads,shelf:await shelf.textContent()});throw e;});
- console.log('Shelf loaded');assert.equal(await shelf.locator('article').count(),3);
+ console.log('Shelf loaded');assert.equal(await shelf.locator('article').count(),3);assert.equal(await shelf.locator('.jacket-face').count(),3);assert.equal(await shelf.locator('.jacket-type').count(),3);assert.equal(await shelf.locator('.jacket--very-long').count(),1);
  assert.equal(await shelf.getByRole('link',{name:'Use skill',exact:true}).count(),2);
  assert.equal(await shelf.getByRole('link',{name:'Read book',exact:true}).count(),2);
  assert.equal(await shelf.getByText('How specialization and exchange shape productivity and the wealth of a society.',{exact:true}).count(),3);
- await shelf.locator('img').evaluate(img=>img.complete?Promise.resolve():new Promise(resolve=>img.onload=resolve));assert.ok(await shelf.locator('img').evaluate(img=>img.naturalWidth>0));
+ await shelf.locator('.jacket-art img').scrollIntoViewIfNeeded();
+ await shelf.locator('.jacket-art img').evaluate(img=>img.complete?Promise.resolve():new Promise(resolve=>img.onload=resolve));assert.ok(await shelf.locator('.jacket-art img').evaluate(img=>img.naturalWidth>0));
  await shelf.locator('summary').first().click();
  await shelf.getByText('Book and skill ready · Creating cover',{exact:true}).waitFor();await shelf.getByRole('link',{name:/wealth.epub · Synthetic interruption/}).waitFor();
  jobs=jobs.map(job=>job.id==='active'?{...job,cursor:30}:job);

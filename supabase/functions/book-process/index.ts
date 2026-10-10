@@ -1,3 +1,4 @@
+import {imagePrompt,coverStyleVersion,coverImageDefaults} from '../_shared/book-cover-design.mjs';
 import {customerBilling,customerUsage,customerPricingModel} from '../_shared/book-billing-public.mjs';
 import {usageReceipt} from '../_shared/book-usage.mjs';
 import {distillSectionBatch,sectionConcurrency} from '../_shared/book-parallel.mjs';
@@ -85,13 +86,13 @@ async function step(job:any,token:string) {
  return publicJob(saved);
 }
 async function processCover(job:any) {
- const started=Date.now();let metric:any={kind:'image',provider:'openai',requestedModel:Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5',outcome:'error'};
+ const started=Date.now();let metric:any={kind:'image',provider:'openai',requestedModel:Deno.env.get('BOOK_COVER_MODEL')||coverImageDefaults.model,outcome:'error'};
  const patch:any={cover_lease_until:null,cover_lease_token:null};let operation:string|null=null;
- const coverPrompt=`Create an original editorial book cover illustration for ${job.title} by ${job.author}. Warm ivory background, quiet ink linework and one muted color, symbolic visual metaphor, generous negative space. No text, letters, logos, or imitation of the publisher cover. Subject context: ${job.notes[0]?.summary?.slice(0,1000)||job.title}`;
+ const coverPrompt=imagePrompt({title:job.title,author:job.author,oneLiner:job.skill_summary?.one_liner||job.notes[0]?.summary?.slice(0,1000)||job.title,readIf:job.skill_summary?.read_if||'Understand and apply the book’s central ideas.'});
  try {
   if(!Deno.env.get('OPENAI_API_KEY'))throw Error('BOOK_BILLING: Cover generation is not configured');
   if(job.billing_required){operation=crypto.randomUUID();try{await meter(job,operation,'begin',{kind:'image',model:metric.requestedModel,inputBound:new TextEncoder().encode(coverPrompt).length+1024,outputBound:10000});}catch(error){operation=null;throw error;}}
-  const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${Deno.env.get('OPENAI_API_KEY')}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5',prompt:coverPrompt,size:'1024x1536',quality:'low',n:1}),signal:AbortSignal.timeout(110000)});
+  const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${Deno.env.get('OPENAI_API_KEY')}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||coverImageDefaults.model,prompt:coverPrompt,size:coverImageDefaults.size,quality:coverImageDefaults.quality,n:1}),signal:AbortSignal.timeout(110000)});
   if(!response.ok) throw new Error('The book and skill are ready, but cover generation failed. Retry to finish the cover.');
   const result=await response.json();
   const count=(value:unknown)=>Number.isSafeInteger(value)&&Number(value)>=0?Number(value):null;
@@ -99,7 +100,7 @@ async function processCover(job:any) {
   metric.inputTextTokens=count(result.usage?.input_tokens_details?.text_tokens)??metric.inputTokens;
   metric.inputImageTokens=count(result.usage?.input_tokens_details?.image_tokens)??0;
   const b64=result.data?.[0]?.b64_json;if(!b64)throw new Error('No cover image was returned. Retry the cover.');
-  const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const coverPath=`${job.user_id}/${job.id}/cover.png`;
+  const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const coverPath=`${job.user_id}/${job.id}/cover-${coverStyleVersion}.png`;
   requireOk(await db.storage.from('private-books').upload(coverPath,bytes,{contentType:'image/png',upsert:true}));patch.cover_path=coverPath;patch.status='ready';patch.run_state='complete';
   delete patch.status;delete patch.run_state;patch.cover_status='ready';patch.cover_error=null;metric.outcome='complete';
  }catch(error){
@@ -265,7 +266,7 @@ Deno.serve(async req=>{
   }
   if(['quote','accept-price'].includes(input.action)) {
    if(input.action==='accept-price'&&(input.pricingModel!==customerPricingModel||!Number.isSafeInteger(input.acceptedCeilingCents)))return reply({error:'Review the metered-usage policy and explicitly accept a spending ceiling.',code:'USAGE_POLICY_ACCEPTANCE_REQUIRED'},409);
-   const models=[...new Set([bookModelConfig((name:string)=>Deno.env.get(name)).model,bookModelConfig((name:string)=>Deno.env.get(name),'review').model,...(Deno.env.get('OPENAI_API_KEY')?[Deno.env.get('BOOK_COVER_MODEL')||'gpt-image-1.5']:[])])];
+   const models=[...new Set([bookModelConfig((name:string)=>Deno.env.get(name)).model,bookModelConfig((name:string)=>Deno.env.get(name),'review').model,...(Deno.env.get('OPENAI_API_KEY')?[Deno.env.get('BOOK_COVER_MODEL')||coverImageDefaults.model]:[])])];
    const modelRates=requireOk(await db.from('book_provider_rates').select('model,version,input_rate,cached_rate,output_rate').in('model',models));
    if(modelRates.length!==models.length)return reply({error:'A configured model does not have approved token rates. Your source is saved.'},503);
    const {data,error}=await db.rpc('book_billing',{p_user:user.id,p_id:job.id,p_action:input.action==='quote'?'quote':'accept',p_models:models,p_quote:input.quoteId||null,p_cents:input.action==='quote'?(input.ceilingCents??null):(input.acceptedCeilingCents??null)});

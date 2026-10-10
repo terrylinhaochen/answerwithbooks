@@ -19,3 +19,17 @@ test('group only equal extracted content and prefer a completed result, preservi
  const groups=groupBookUploads(jobs);assert.equal(groups.length,4);assert.equal(groups[0].primary.id,'ready');assert.deepEqual(groups[0].copies.map(j=>j.id),['failed']);
  assert.equal(groups.reduce((n,g)=>n+1+g.copies.length,0),5);
 });
+
+test('public and private covers share art direction, title panel, and safe jacket markup',async()=>{
+ const {imagePrompt,coverPalette}=await import('../supabase/functions/_shared/book-cover-design.mjs');
+ const {bookJacketMarkup}=await import('../src/lib/book-jacket.mjs');
+ const full={title:'An Inquiry into the Nature and Causes of the Wealth of Nations',author:'Adam Smith',oneLiner:'Specialization and exchange.'};
+ const excerpt={title:'The Wealth of Nations',author:'Adam Smith',oneLiner:'Specialization and exchange.'};
+ assert.equal(imagePrompt(full),imagePrompt(excerpt));assert.deepEqual(coverPalette(full),coverPalette(excerpt));
+ assert.match(imagePrompt(full),/large sticker emblem/);assert.match(imagePrompt(full),/upper 56%/);assert.match(imagePrompt(full),/no book title/);
+ const markup=bookJacketMarkup({...full,color:coverPalette(full).bg,coverAsset:'/covers/test.png'});
+ for(const part of ['jacket-spine','jacket-art','jacket-type','jacket-title','jacket-author','jacket--very-long'])assert.ok(markup.includes(part));
+ assert.match(markup,/Adam Smith/);
+ const hostile=bookJacketMarkup({title:'<img src=x onerror=alert(1)>',author:'A&B',color:'red;bad:1',coverAsset:'javascript:alert(1)'});
+ assert.doesNotMatch(hostile,/<img/);assert.match(hostile,/&lt;img/);assert.match(hostile,/A&amp;B/);assert.doesNotMatch(hostile,/bad:1|javascript:/);
+});

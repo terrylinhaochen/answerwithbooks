@@ -1,3 +1,5 @@
+import {bookJacketMarkup} from './book-jacket.mjs';
+import {coverPalette} from '../../supabase/functions/_shared/book-cover-design.mjs';
 import {bookStatus,bookSourceLabel} from './book-library-status.mjs';
 import {auditUpstream} from './upstream-book';
 import {zipSync,strToU8} from 'fflate';
@@ -133,9 +135,9 @@ async function paint(job:any) {
   const {data}=await supabase.storage.from('private-books').createSignedUrl(`${job.user_id}/${job.id}/source`,3600);
   if(data)find<HTMLAnchorElement>('source').href=data.signedUrl;else find('source').hidden=true;
  }
- if(job.cover_path&&!find<HTMLImageElement>('cover').getAttribute('src')) {
+ if(job.cover_path&&find('cover').dataset.path!==job.cover_path) {
   const {data}=await supabase.storage.from('private-books').createSignedUrl(job.cover_path,3600);
-  if(data){find<HTMLImageElement>('cover').src=data.signedUrl;find('cover').hidden=false;}
+  if(data){const cover=find('cover');cover.innerHTML=bookJacketMarkup({title:job.title,author:job.author||'',color:coverPalette(job).bg,coverAsset:data.signedUrl,loading:'eager'});cover.dataset.path=job.cover_path;cover.setAttribute('aria-label',`${job.title} cover`);cover.hidden=false;}
  }
 }
 async function run(action?:string) {
