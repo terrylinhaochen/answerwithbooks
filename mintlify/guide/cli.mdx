@@ -29,3 +29,18 @@ npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.
 | `logout` | Revoke this CLI connection. |
 
 Use returned book and quote IDs exactly. The $5 cap is an example, not a recommended book price. Approval belongs to the user. [Own-agent processing](/guide/own-agent) uses the `local` commands.
+
+## Development commands
+
+These commands are implemented in the development checkout and are not included in the v0.5.0 release linked above. Private-library sync also requires the new hosted endpoint, which is not deployed yet.
+
+| Command | Purpose |
+| --- | --- |
+| `local prepare ./sources --combine "Guide title" --output ./guide` | Create one local guide from multiple sources. |
+| `local add ./guide ./new-source.pdf --output ./guide-v2` | Add one source while preserving earlier notes and citations. |
+| `local next ./guide-v2` | Continue generation and review in the updated workspace. |
+| `local install ./guide-v2` | Update the same installed guide after processing finishes. |
+| `local prepare ./book.pdf --output ./book --destination library` | Select automatic private-library sync for a new local workspace. |
+| `local publish ./book` | Sync a completed first-version AWB workspace without regenerating it. |
+
+See [Combine and update guides](/guide/combined-guides) and [Bring your own agent](/guide/own-agent). Hosted sync of subsequent local revisions is not supported yet.
