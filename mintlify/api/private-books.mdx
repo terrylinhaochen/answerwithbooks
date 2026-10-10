@@ -21,3 +21,9 @@ An optional cover failure does not prevent text delivery. Settlement includes al
 For private retrieval, POST `{ "action": "search", "question": "YOUR TASK" }` to the sibling `/book-library` function using the same bearer key. Your current agent applies retrieved methods and checks the citations; this endpoint is retrieval, not autonomous skill execution. Search is rate limited but does not debit book-conversion credits.
 
 A missing tariff returns `BOOK_PRICE_REQUIRED` with an explanation that hosted pricing is not enabled. The source remains saved. No retail tariff is activated merely by deploying the code.
+
+## Reader artifacts and management
+
+New completed jobs include `reader/digest.md`, `reader/digest.json`, and `reader/evidence.json` alongside their skill artifacts. Reader paragraphs map to original source ranges. Customer-agent imports receive structural and citation-bound checks; their supplied reviews are not treated as hosted verification.
+
+Use [Manage Skills](https://answerwithbooks.com/manage-skills/) to archive, restore or delete books. These lifecycle mutations require a browser account session; CLI/API-key action scopes do not grant deletion. Archived books are excluded from `list` and private retrieval. Status and owner-authorized exports remain available.

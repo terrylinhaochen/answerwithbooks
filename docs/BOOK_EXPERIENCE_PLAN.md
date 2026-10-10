@@ -298,3 +298,8 @@ silently debiting conversion credits.
    readback, not just mocked browser fixtures. Ship only after both workflows pass.
 
 No benchmark winner or completed import capability is claimed by this plan.
+
+
+## Implementation update — 2026-10-10
+
+Private readers now use the shared overview, purchase and agent-prompt components, with editorial prose separate from skill notes. The executable reader contract is documented in `content-engine/prompts/book-digest/reader-digest-v2.md`; managed generation and CLI 0.7.0 share the same module and prompt. Manage Skills supports archive/restore and confirmed deletion of a complete revision history. Archived rows are paused by a database constraint and excluded from hosted retrieval. UI source-update/download controls were removed; existing CLI update and offline commands remain available.

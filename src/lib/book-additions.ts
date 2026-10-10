@@ -14,9 +14,8 @@ function render() {
  const next=JSON.stringify([activeUserId,jobs,additions,[...covers].map(([path,entry])=>[path,entry.url])]);
  if(next===signature)return;signature=next;
  const focused=document.activeElement instanceof HTMLAnchorElement&&list.contains(document.activeElement)?document.activeElement.getAttribute('href'):null;
- const expanded=new Set([...list.querySelectorAll<HTMLDetailsElement>('details[open]')].map(el=>el.dataset.bookId));
  list.replaceChildren();root.hidden=!jobs.length&&!additions.length;
- for(const {primary:job,copies} of groupBookUploads(jobs)) {
+ for(const {primary:job} of groupBookUploads(jobs)) {
   const card=document.createElement('article');card.className='library-book';
   const layout=document.createElement('div');layout.className='library-book__layout';
   const cover=document.createElement('a');cover.href=linkFor(job.id);cover.className='library-cover';cover.style.setProperty('--book-well',['#e2e3d6','#e9e0d2','#e0e4df'][list.children.length%3]);cover.setAttribute('aria-label',`Open ${job.title}`);
@@ -33,11 +32,7 @@ function render() {
   const summary=document.createElement('p');summary.className='library-description';summary.textContent=job.skill_summary?.one_liner||job.skill_summary?.read_if||(job.status==='ready'?'Your book summary and reusable skill are ready to open.':'Your summary will appear when processing finishes.');
   body.append(scope,heading,author,summary);
   if(job.status!=='ready'){const status=document.createElement('p');status.className='mt-3 text-sm text-soft';status.textContent=bookStatus(job);body.append(status);}
-  const details=document.createElement('details');details.className='book-library-card__details';details.dataset.bookId=job.id;details.open=expanded.has(job.id);
-  const detailTitle=document.createElement('summary');detailTitle.textContent='Source details'+(copies.length?` · ${copies.length} other upload${copies.length===1?'':'s'}`:'');details.append(detailTitle);
-  for(const text of [bookSourceLabel(job),job.source_name,bookStatus(job)]){const p=document.createElement('p');p.className='mt-2';p.textContent=text;details.append(p);}
-  for(const copy of copies){const link=document.createElement('a');link.href=linkFor(copy.id);link.className='mt-2 block underline';link.textContent=`${copy.source_name} · ${bookStatus(copy)}`;details.append(link);}
-  body.append(details);layout.append(cover,body);card.append(layout);
+  layout.append(cover,body);card.append(layout);
   list.append(card);
  }
  for(const addition of additions) {
@@ -59,7 +54,7 @@ async function refresh() {
   if(activeUserId!==userId){activeUserId=userId;jobs=[];covers.clear();render();}
   if(!userId){render();message.textContent='';return;}
   const [uploads,requests]=await Promise.all([
-   supabase.from('book_processing_jobs').select('id,title,author,skill_summary,source_name,status,run_state,cursor,created_at,source_import,source_text_sha,source_line_count,total_sections,cover_status,cover_path,error,revision_kind').eq('user_id',userId).eq('is_current',true).order('created_at',{ascending:false}).limit(100),
+   supabase.from('book_processing_jobs').select('id,title,author,skill_summary,source_name,status,run_state,cursor,created_at,source_import,source_text_sha,source_line_count,total_sections,cover_status,cover_path,error,revision_kind').eq('user_id',userId).eq('is_current',true).is('archived_at',null).order('created_at',{ascending:false}).limit(100),
    supabase.from('book_requests').select('id,title,author,status,created_at,external_id,matched_book_slug').eq('user_id',userId).order('created_at',{ascending:false}).limit(100),
   ]);
   if(version!==generation||userId!==activeUserId)return;

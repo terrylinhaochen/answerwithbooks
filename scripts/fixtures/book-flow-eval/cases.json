@@ -154,7 +154,7 @@
       "capability": "Reader output",
       "prompt": "Read the generated book on the site.",
       "expected": "Separate editorial reader digest and knowledge-engineered skill using documented versioned prompts.",
-      "verification": "open-feature"
+      "verification": "automated-and-semantic"
     }
   ],
   "outOfScope": [

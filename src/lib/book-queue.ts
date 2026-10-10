@@ -9,7 +9,7 @@ async function refresh(){
  if(updating)return;updating=true;
  try{
   const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to view your private processing queue.');
-  const {data:jobs,error}=await supabase.from('book_processing_jobs').select('id,title,source_name,status,run_state,cursor,error,created_at,source_import,is_current,revision,total_sections,source_line_count,cover_status,cover_path').order('created_at',{ascending:false}).limit(100);
+  const {data:jobs,error}=await supabase.from('book_processing_jobs').select('id,title,source_name,status,run_state,cursor,error,created_at,source_import,is_current,revision,total_sections,source_line_count,cover_status,cover_path').is('archived_at',null).order('created_at',{ascending:false}).limit(100);
   if(error)throw new Error('Could not load your queue. Refresh to try again.');
   list.replaceChildren();message.textContent=jobs?.length?'Up to two of your sources process at once.':'No uploaded sources yet.';
   for(const job of jobs||[]){

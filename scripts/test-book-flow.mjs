@@ -6,6 +6,7 @@ import {prepareLocal,nextLocal,respondLocal,installLocal} from '../../core/src/l
 import {localImportPayload} from '../../core/src/local-publish.js';
 import {uploadFiles,extractSource} from '../../core/src/upload.js';
 import {finalizeBookSource} from '../supabase/functions/_shared/book-revisions.mjs';
+import {compileReader} from '../supabase/functions/_shared/book-reader.mjs';
 import {distillSection,compileDistillation} from '../supabase/functions/_shared/book-distillation.mjs';
 import {exportBookFiles} from '../supabase/functions/_shared/book-export.mjs';
 import {prepareAgentImport} from '../supabase/functions/_shared/book-agent-import.mjs';
@@ -19,7 +20,8 @@ function response(system,input,options){
   const daily=input.includes('every day'),line=Number(input.split('\n').find(l=>l.includes('Review commitments')).split(':')[0]),scope=line+1,rule=daily?'Review commitments every day.':'Review commitments once a week.';
   return {title:'Should not replace collection title',author:'Single author',summary:rule+' This policy excludes emergency response.',sourceRefs:[{startLine:line,endLine:scope}],ideas:[{name:daily?'Daily commitments':'Weekly commitments',explanation:rule,whenToUse:'Routine scheduling under this source policy.',decisionRule:null,steps:[rule],limits:'Does not apply to emergency response.',sourceRefs:[{startLine:line,endLine:scope}],applicationBasis:'source-instruction'}],antiPatterns:[],workedExamples:[]};
  }
- if(options.name==='book_cited_review')return {supported:true,issues:[],checks:JSON.parse(input).claims.map(c=>({id:c.id,supported:true,reason:'The cited fixture explicitly states this rule and limit.'}))};
+ if(['book_cited_review','book_reader_review'].includes(options.name))return {supported:true,issues:[],checks:JSON.parse(input).claims.map(c=>({id:c.id,supported:true,reason:'The cited fixture explicitly states this rule and limit.'}))};
+ if(options.name==='book_reader'){const data=JSON.parse(input),ids=data.evidence.map(e=>e.id);return {oneLiner:synthesis.oneLiner,readIf:synthesis.readIf,evidenceIds:ids,sections:[{heading:'Choose a cadence without hiding disagreement',paragraphs:[{text:'The two policies disagree about routine scheduling: Policy A requires daily review, while Policy B calls for weekly review. Both exclude emergency response from their scope.',evidenceIds:ids}]}]};}
  if(options.name==='book_synthesis')return synthesis;
  if(options.name==='book_synthesis_review')return {supported:true,issues:[]};
  throw Error('Unexpected model stage '+options.name);
@@ -36,8 +38,8 @@ test('two sources -> one guide: local and managed use identical prompts, evidenc
  assert.deepEqual(managed.chunks,local.chunks);assert.deepEqual(managed.source_manifest,local.source_manifest);
  const managedCalls=[],model=async(s,i,o)=>{managedCalls.push([s,i,o.name]);return response(s,i,o);};managed.notes=[];
  for(const [i,chunk]of managed.chunks.entries())managed.notes.push((await distillSection(chunk,i,model,managed.options)).note);
- managed.artifacts=await compileDistillation(managed,managed.notes,model,async x=>hash(x));assert.deepEqual(managedCalls,localCalls);
- const files=exportBookFiles(managed);for(const name of ['book.md','skill/SKILL.md','skill/glossary.md','skill/patterns.md','skill/cheatsheet.md','skill/source-map.json'])assert.equal(files[name],await readFile(join(dir,'package',name),'utf8'),name);
+ managed.artifacts={...await compileDistillation(managed,managed.notes,model,async x=>hash(x)),...await compileReader(managed,model)};assert.deepEqual(managedCalls,localCalls);
+ const files=exportBookFiles(managed);for(const name of ['reader/digest.md','book.md','skill/SKILL.md','skill/glossary.md','skill/patterns.md','skill/cheatsheet.md','skill/source-map.json'])assert.equal(files[name],await readFile(join(dir,'package',name),'utf8'),name);
  assert.match(files['book.md'],/sources disagree/);assert.match(files['skill/SKILL.md'],/chapters\//);
  const payload=await localImportPayload(dir),imported=await prepareAgentImport(payload);assert.equal(imported.job.source_manifest.length,2);
  assert.equal(libraryEvidence({note:imported.job.notes[1]}).sources[0].name,'b.md');

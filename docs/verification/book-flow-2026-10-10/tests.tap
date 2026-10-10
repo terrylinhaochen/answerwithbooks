@@ -2,388 +2,408 @@ TAP version 13
 # Subtest: server renders fixed paths, remaps identities, and does not trust client review flags
 ok 1 - server renders fixed paths, remaps identities, and does not trust client review flags
   ---
-  duration_ms: 25.310625
+  duration_ms: 37.673417
   ...
 # Subtest: invalid references, uploaded identities/paths and injected instructions are rejected
 ok 2 - invalid references, uploaded identities/paths and injected instructions are rejected
   ---
-  duration_ms: 2.310125
+  duration_ms: 5.048542
   ...
 # Subtest: stable fingerprint ignores key ordering but preserves actual content changes
 ok 3 - stable fingerprint ignores key ordering but preserves actual content changes
   ---
-  duration_ms: 0.15325
+  duration_ms: 0.443084
   ...
 # Subtest: HTTP requires identity before writes and cannot accept uploaded account IDs
 ok 4 - HTTP requires identity before writes and cannot accept uploaded account IDs
   ---
-  duration_ms: 18.776208
+  duration_ms: 106.856375
   ...
 # Subtest: HTTP uses authenticated owner, only import/index RPCs and a scoped extracted-source path
 ok 5 - HTTP uses authenticated owner, only import/index RPCs and a scoped extracted-source path
   ---
-  duration_ms: 4.105833
+  duration_ms: 35.127625
   ...
 # Subtest: storage failure remains retryable without asking for regeneration
 ok 6 - storage failure remains retryable without asking for regeneration
   ---
-  duration_ms: 3.509791
+  duration_ms: 14.089583
   ...
 # Subtest: two sources -> one guide: local and managed use identical prompts, evidence, review and artifacts; import preserves retrieval evidence
 ok 7 - two sources -> one guide: local and managed use identical prompts, evidence, review and artifacts; import preserves retrieval evidence
   ---
-  duration_ms: 131.7655
+  duration_ms: 1575.184041
   ...
 # Subtest: collection preserves normalized line coordinates for long unicode lines and rejects tampered/overlapping source maps
 ok 8 - collection preserves normalized line coordinates for long unicode lines and rejects tampered/overlapping source maps
   ---
-  duration_ms: 7.13625
+  duration_ms: 273.977
   ...
 # Subtest: real text extraction preserves both selected fixture sources
 ok 9 - real text extraction preserves both selected fixture sources
   ---
-  duration_ms: 563.36175
+  duration_ms: 1406.727917
   ...
 # Subtest: embedding provider preserves ordering and rejects malformed, duplicate and truncated vectors
 ok 10 - embedding provider preserves ordering and rejects malformed, duplicate and truncated vectors
   ---
-  duration_ms: 25.431375
+  duration_ms: 54.973666
   ...
 # Subtest: search inputs are bounded and candidates are diverse, not treated as a relevance verdict
 ok 11 - search inputs are bounded and candidates are diverse, not treated as a relevance verdict
   ---
-  duration_ms: 0.82975
+  duration_ms: 4.531167
   ...
 # Subtest: evidence returns exact numbered source excerpts with visible truncation, never the source bundle
 ok 12 - evidence returns exact numbered source excerpts with visible truncation, never the source bundle
   ---
-  duration_ms: 0.398958
+  duration_ms: 0.513916
   ...
 # Subtest: search sends verified owner scope and falls back honestly on embedding failure; race-deleted hits are omitted
 ok 13 - search sends verified owner scope and falls back honestly on embedding failure; race-deleted hits are omitted
   ---
-  duration_ms: 0.416541
+  duration_ms: 0.515125
   ...
 # Subtest: index failures release leased entries with backoff and stale results are lease/hash guarded
 ok 14 - index failures release leased entries with backoff and stale results are lease/hash guarded
   ---
-  duration_ms: 2.542416
+  duration_ms: 3.042833
   ...
 # Subtest: cached input and output cost is priced at 4x, rounded once, never the reserved ceiling
 ok 15 - cached input and output cost is priced at 4x, rounded once, never the reserved ceiling
   ---
-  duration_ms: 1666.232417
+  duration_ms: 4246.660667
   ...
 # Subtest: atomic per-call holds block parallel overspend and unknown models before provider work
 ok 16 - atomic per-call holds block parallel overspend and unknown models before provider work
   ---
-  duration_ms: 961.664208
+  duration_ms: 1416.753583
   ...
 # Subtest: unknown receipt holds funds, blocks work/deletion, and only audited reconciliation can release it
 ok 17 - unknown receipt holds funds, blocks work/deletion, and only audited reconciliation can release it
   ---
-  duration_ms: 994.364833
+  duration_ms: 1819.76075
   ...
 # Subtest: duplicate receipts are idempotent, conflicts and cross-owner changes are rejected
 ok 18 - duplicate receipts are idempotent, conflicts and cross-owner changes are rejected
   ---
-  duration_ms: 950.004542
+  duration_ms: 3681.805708
   ...
 # Subtest: resuming a failed book requires a new budget and charges only additional accumulated usage
 ok 19 - resuming a failed book requires a new budget and charges only additional accumulated usage
   ---
-  duration_ms: 995.149833
+  duration_ms: 2947.250625
   ...
 # Subtest: text is deliverable while cover is pending; the final cover receipt is included once
 ok 20 - text is deliverable while cover is pending; the final cover receipt is included once
   ---
-  duration_ms: 961.666166
+  duration_ms: 2466.506375
   ...
 # Subtest: a started operation from a previous lease cannot be silently reissued after a crash
 ok 21 - a started operation from a previous lease cannot be silently reissued after a crash
   ---
-  duration_ms: 924.026125
+  duration_ms: 2459.691916
   ...
 # Subtest: pinned rates survive later rate changes; missing cache counts cannot settle as free usage
 ok 22 - pinned rates survive later rate changes; missing cache counts cannot settle as free usage
   ---
-  duration_ms: 954.526166
+  duration_ms: 2467.583791
   ...
 # Subtest: refunds or disputes during a run stop new provider spend and hold settlement for review
 ok 23 - refunds or disputes during a run stop new provider spend and hold settlement for review
   ---
-  duration_ms: 970.619792
+  duration_ms: 2461.892708
   ...
 # Subtest: approved rates are pinned at quote time and unapproved models cannot spend
 ok 24 - approved rates are pinned at quote time and unapproved models cannot spend
   ---
-  duration_ms: 924.3925
+  duration_ms: 3750.518875
   ...
 # Subtest: operator settlement cannot release a running budget
 ok 25 - operator settlement cannot release a running budget
   ---
-  duration_ms: 926.513583
+  duration_ms: 2665.180209
   ...
 # Subtest: source deletion is admitted only after receipt reconciliation and stops pending covers
 ok 26 - source deletion is admitted only after receipt reconciliation and stops pending covers
   ---
-  duration_ms: 935.805875
+  duration_ms: 2273.836583
   ...
 # Subtest: a failed paid cover requires a new cap and preserves the delivered text
 ok 27 - a failed paid cover requires a new cap and preserves the delivered text
   ---
-  duration_ms: 938.90675
+  duration_ms: 1185.308625
   ...
 # Subtest: bounded parallel sections retain successes around a gap and skip paid work on retry
 ok 28 - bounded parallel sections retain successes around a gap and skip paid work on retry
   ---
-  duration_ms: 5.559875
+  duration_ms: 15.397416
   ...
 # Subtest: invalid concurrency and mismatched identities cannot advance the cursor
 ok 29 - invalid concurrency and mismatched identities cannot advance the cursor
   ---
-  duration_ms: 0.404084
+  duration_ms: 0.646916
   ...
 # Subtest: a failed early section does not leave spare parallel slots idle behind accepted siblings
 ok 30 - a failed early section does not leave spare parallel slots idle behind accepted siblings
   ---
-  duration_ms: 0.297542
+  duration_ms: 0.546583
   ...
 # Subtest: a short title and provenance prefix shares the first real chapter, retaining all citation lines
 ok 31 - a short title and provenance prefix shares the first real chapter, retaining all citation lines
   ---
-  duration_ms: 1.465834
+  duration_ms: 1.421667
   ...
 # Subtest: review sees each item with only its cited evidence, preserving non-one section offsets
 ok 32 - review sees each item with only its cited evidence, preserving non-one section offsets
   ---
-  duration_ms: 0.391792
+  duration_ms: 0.468375
   ...
 # Subtest: one unchecked, failed, duplicated or invented claim prevents section acceptance
 ok 33 - one unchecked, failed, duplicated or invented claim prevents section acceptance
   ---
-  duration_ms: 0.434541
+  duration_ms: 0.511958
   ...
 # Subtest: a rejected metadata-grounded hallucination never returns accepted notes
 ok 34 - a rejected metadata-grounded hallucination never returns accepted notes
   ---
-  duration_ms: 2.069417
+  duration_ms: 3.040583
   ...
 # Subtest: successful notes preserve application basis in all outputs and record actual review coverage
 ok 35 - successful notes preserve application basis in all outputs and record actual review coverage
   ---
-  duration_ms: 6.009333
+  duration_ms: 4.374958
   ...
 # Subtest: review notices distinguish legacy and partially checked notes; previous versions stay owner scoped
 ok 36 - review notices distinguish legacy and partially checked notes; previous versions stay owner scoped
   ---
-  duration_ms: 0.348958
+  duration_ms: 0.406916
   ...
 # Subtest: failed claims survive as targeted repair feedback without accepting the draft
 ok 37 - failed claims survive as targeted repair feedback without accepting the draft
   ---
-  duration_ms: 0.650458
+  duration_ms: 1.895291
+  ...
+# Subtest: editorial review receives each paragraph and its own original excerpts; it cannot silently accept missing checks
+ok 38 - editorial review receives each paragraph and its own original excerpts; it cannot silently accept missing checks
+  ---
+  duration_ms: 6.386417
+  ...
+# Subtest: source review failure retains draft for targeted repair; foreign citations, raw HTML and repeated prose are rejected
+ok 39 - source review failure retains draft for targeted repair; foreign citations, raw HTML and repeated prose are rejected
+  ---
+  duration_ms: 1.653833
+  ...
+# Subtest: long-source evidence budgets include every section, not just the beginning, and exclude Gutenberg end matter
+ok 40 - long-source evidence budgets include every section, not just the beginning, and exclude Gutenberg end matter
+  ---
+  duration_ms: 0.419542
+  ...
+# Subtest: customer-agent upload renders its reader through fixed paths and does not inherit semantic review claims
+ok 41 - customer-agent upload renders its reader through fixed paths and does not inherit semantic review claims
+  ---
+  duration_ms: 41.616459
   ...
 # Subtest: append preserves original citations and notes, and maps new source coordinates
-ok 38 - append preserves original citations and notes, and maps new source coordinates
+ok 42 - append preserves original citations and notes, and maps new source coordinates
   ---
-  duration_ms: 1.895209
+  duration_ms: 459.448584
   ...
 # Subtest: replacement is independent; mismatched ownership and duplicate append fail before mutation
-ok 39 - replacement is independent; mismatched ownership and duplicate append fail before mutation
+ok 43 - replacement is independent; mismatched ownership and duplicate append fail before mutation
   ---
-  duration_ms: 1.537042
+  duration_ms: 1.636041
   ...
 # Subtest: large chapter splits retain original labels across all processing sections
-ok 40 - large chapter splits retain original labels across all processing sections
+ok 44 - large chapter splits retain original labels across all processing sections
   ---
-  duration_ms: 2.682667
+  duration_ms: 27.912292
   ...
 # Subtest: technical source blocks remain byte-identical and are never model reconstructions
-ok 41 - technical source blocks remain byte-identical and are never model reconstructions
+ok 45 - technical source blocks remain byte-identical and are never model reconstructions
   ---
-  duration_ms: 0.765791
+  duration_ms: 6.491542
   ...
 # Subtest: download keeps discovery text and exports stable package identity with source map
-ok 42 - download keeps discovery text and exports stable package identity with source map
+ok 46 - download keeps discovery text and exports stable package identity with source map
   ---
-  duration_ms: 1.431
+  duration_ms: 12.263708
   ...
 # Subtest: export preserves exact technical blocks after source verification
-ok 43 - export preserves exact technical blocks after source verification
+ok 47 - export preserves exact technical blocks after source verification
   ---
-  duration_ms: 0.306125
+  duration_ms: 6.114625
   ...
 # Subtest: browser combined intake preserves both originals and maps, creates one priced job, and never starts generation
-ok 44 - browser combined intake preserves both originals and maps, creates one priced job, and never starts generation
+ok 48 - browser combined intake preserves both originals and maps, creates one priced job, and never starts generation
   ---
-  duration_ms: 13.8725
+  duration_ms: 232.957958
   ...
 # Subtest: invalid, oversized, unsupported or unreadable selections never become a partial guide
-ok 45 - invalid, oversized, unsupported or unreadable selections never become a partial guide
+ok 49 - invalid, oversized, unsupported or unreadable selections never become a partial guide
   ---
-  duration_ms: 1.4565
+  duration_ms: 7.971375
   ...
 # Subtest: retry produces the same archive identity and reuses a saved guide
-ok 46 - retry produces the same archive identity and reuses a saved guide
+ok 50 - retry produces the same archive identity and reuses a saved guide
   ---
-  duration_ms: 5.601291
+  duration_ms: 63.811208
   ...
-1..46
-# tests 46
+1..50
+# tests 50
 # suites 0
-# pass 46
+# pass 50
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 13280.485292
+# duration_ms 34130.107834
 
 TAP version 13
 # Subtest: two accounts install identical book IDs separately, preserve all files, and update atomically
 ok 1 - two accounts install identical book IDs separately, preserve all files, and update atomically
   ---
-  duration_ms: 69.030292
+  duration_ms: 81.611292
   ...
 # Subtest: failed export or atomic switch keeps the previous installed version intact
 ok 2 - failed export or atomic switch keeps the previous installed version intact
   ---
-  duration_ms: 46.691875
+  duration_ms: 124.772459
   ...
 # Subtest: edited, extra, missing, or symlinked files refuse an update without discarding user work
 ok 3 - edited, extra, missing, or symlinked files refuse an update without discarding user work
   ---
-  duration_ms: 64.916417
+  duration_ms: 214.5805
   ...
 # Subtest: unmanaged paths, foreign links and symlinked cache ancestors are rejected
 ok 4 - unmanaged paths, foreign links and symlinked cache ancestors are rejected
   ---
-  duration_ms: 19.910167
+  duration_ms: 45.513167
   ...
 # Subtest: foreign account cannot adopt an existing cached payload even if pointed at the same cache root
 ok 5 - foreign account cannot adopt an existing cached payload even if pointed at the same cache root
   ---
-  duration_ms: 15.089375
+  duration_ms: 30.03575
   ...
 # Subtest: package identity, completeness, review, and path schemas are enforced before installation
 ok 6 - package identity, completeness, review, and path schemas are enforced before installation
   ---
-  duration_ms: 14.202041
+  duration_ms: 43.406583
   ...
 # Subtest: sync skips incomplete/noncurrent/editorial books and isolates failure from other books
 ok 7 - sync skips incomplete/noncurrent/editorial books and isolates failure from other books
   ---
-  duration_ms: 13.004791
+  duration_ms: 23.938167
   ...
 # Subtest: parser, operations and private discovery expose revision controls and useful method metadata
 ok 8 - parser, operations and private discovery expose revision controls and useful method metadata
   ---
-  duration_ms: 1.018125
+  duration_ms: 2.640375
   ...
 # Subtest: native Kindle/technical uploads bypass local extraction and revision uploads bypass old-source lookup
 ok 9 - native Kindle/technical uploads bypass local extraction and revision uploads bypass old-source lookup
   ---
-  duration_ms: 4.537125
+  duration_ms: 7.836708
   ...
 # Subtest: actual CLI installs and syncs a schema-valid service export without extractor dependencies or credential output
 ok 10 - actual CLI installs and syncs a schema-valid service export without extractor dependencies or credential output
   ---
-  duration_ms: 487.86925
+  duration_ms: 903.13025
   ...
 # Subtest: service failures redact credentials from errors and review findings
 ok 11 - service failures redact credentials from errors and review findings
   ---
-  duration_ms: 0.909125
+  duration_ms: 1.201625
   ...
 # Subtest: unfinished native source retries use native worker and cannot queue placeholder text or pause
 ok 12 - unfinished native source retries use native worker and cannot queue placeholder text or pause
   ---
-  duration_ms: 0.491166
+  duration_ms: 0.745625
   ...
 # Subtest: public catalog, aliases, filtering, relevance floor and explicit book selection
 ok 13 - public catalog, aliases, filtering, relevance floor and explicit book selection
   ---
-  duration_ms: 1318.760375
+  duration_ms: 1865.310417
   ...
 # Subtest: argument parser separates booleans, file paths, and value flags
 ok 14 - argument parser separates booleans, file paths, and value flags
   ---
-  duration_ms: 1.495
+  duration_ms: 0.983
   ...
 # Subtest: session files are private and outside the project
 ok 15 - session files are private and outside the project
   ---
-  duration_ms: 50.359042
+  duration_ms: 11.968333
   ...
 # Subtest: batch reuses fingerprints, offers public matches, stages sources, and isolates failures
 ok 16 - batch reuses fingerprints, offers public matches, stages sources, and isolates failures
   ---
-  duration_ms: 25.616541
+  duration_ms: 6.412167
   ...
 # Subtest: real pinned extraction supports Markdown, HTML, RTF, EPUB, DOCX and searchable PDF without Python
 ok 17 - real pinned extraction supports Markdown, HTML, RTF, EPUB, DOCX and searchable PDF without Python
   ---
-  duration_ms: 3461.055958
+  duration_ms: 1747.136417
   ...
 # Subtest: private evidence limits long sources and preserves exact citation line numbers
 ok 18 - private evidence limits long sources and preserves exact citation line numbers
   ---
-  duration_ms: 11.178042
+  duration_ms: 5.2465
   ...
 # Subtest: paid upload finalizes staged text but never enqueues before price acceptance
 ok 19 - paid upload finalizes staged text but never enqueues before price acceptance
   ---
-  duration_ms: 7.895792
+  duration_ms: 4.09125
   ...
 # Subtest: metered book operations bind the explicit policy and maximum additional spend
 ok 20 - metered book operations bind the explicit policy and maximum additional spend
   ---
-  duration_ms: 4.108542
+  duration_ms: 1.825083
   ...
 # Subtest: agent supplies every model response, progress resumes, final package installs offline as exactly one skill
 ok 21 - agent supplies every model response, progress resumes, final package installs offline as exactly one skill
   ---
-  duration_ms: 87.479917
+  duration_ms: 182.459875
   ...
 # Subtest: wrong request, incomplete response and out-of-range citations do not advance or overwrite progress
 ok 22 - wrong request, incomplete response and out-of-range citations do not advance or overwrite progress
   ---
-  duration_ms: 13.490166
+  duration_ms: 26.930417
   ...
 # Subtest: failed source review produces targeted repair and preserves accepted work; no silent acceptance
 ok 23 - failed source review produces targeted repair and preserves accepted work; no silent acceptance
   ---
-  duration_ms: 22.878
+  duration_ms: 43.436833
   ...
 # Subtest: finished agent workspace publishes without generation and retry preserves one server identity
 ok 24 - finished agent workspace publishes without generation and retry preserves one server identity
   ---
-  duration_ms: 31.812958
+  duration_ms: 117.566209
   ...
 # Subtest: library destination automatically syncs on completion and resumes a failed sync without model requests
 ok 25 - library destination automatically syncs on completion and resumes a failed sync without model requests
   ---
-  duration_ms: 29.876292
+  duration_ms: 115.006917
   ...
 # Subtest: add a source preserves guide identity, accepted notes and citations; only new sections are processed; reinstall updates one skill
 ok 26 - add a source preserves guide identity, accepted notes and citations; only new sections are processed; reinstall updates one skill
   ---
-  duration_ms: 126.090459
+  duration_ms: 326.383959
   ...
 # Subtest: folder and quoted glob selection are bounded, deterministic and do not follow hidden directories or symlinks
 ok 27 - folder and quoted glob selection are bounded, deterministic and do not follow hidden directories or symlinks
   ---
-  duration_ms: 17.715625
+  duration_ms: 25.419583
   ...
 # Subtest: a combined collection stages preserved original files and distinct source boundaries
 ok 28 - a combined collection stages preserved original files and distinct source boundaries
   ---
-  duration_ms: 20.846958
+  duration_ms: 25.529125
   ...
 # Subtest: Python startup optimization preserves the pinned fallback extractor output
 ok 29 - Python startup optimization preserves the pinned fallback extractor output
   ---
-  duration_ms: 4913.155375
+  duration_ms: 3733.63725
   ...
 1..29
 # tests 29
@@ -393,4 +413,4 @@ ok 29 - Python startup optimization preserves the pinned fallback extractor outp
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 5103.345334
+# duration_ms 3920.84025

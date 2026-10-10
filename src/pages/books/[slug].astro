@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Base from '../../layouts/Base.astro';
+import BookOverview from '../../components/BookOverview.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookCover from '../../components/BookCover.astro';
 import CopyBookAction from '../../components/CopyBookAction.astro';
@@ -177,20 +178,7 @@ const jsonLd = [
       <BookCover book={book} size="lg" class="justify-self-start lg:justify-self-end" priority />
     </header>
 
-    <section class="mt-6 grid gap-5 lg:grid-cols-2">
-      <div class="awb-card-link p-6 text-[1rem] leading-relaxed">
-        <h2 class="awb-eyebrow mb-2">
-          When to reach for this book
-        </h2>
-        <p class="font-serif text-2xl leading-snug text-ink">{book.data.readIf}</p>
-      </div>
-      <div class="awb-card-link p-6 text-[1rem] leading-relaxed">
-        <h2 class="awb-eyebrow mb-2">
-          What the book is about
-        </h2>
-        <p class="font-serif text-2xl leading-snug text-ink">{book.data.oneLiner}</p>
-      </div>
-    </section>
+    <BookOverview readIf={book.data.readIf} oneLiner={book.data.oneLiner} />
 
     <section data-reading-content class="mt-10 rounded-2xl border border-line bg-card px-5 py-6 sm:px-7 sm:py-8">
       <div class="prose-awb prose-awb--aligned">

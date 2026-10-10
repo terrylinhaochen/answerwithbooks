@@ -1,0 +1,19 @@
+import {supabase} from './supabase';
+import {bookWorker} from './book-upload';
+import {bookSourceLabel,bookStatus} from './book-library-status.mjs';
+const root=document.querySelector<HTMLElement>('[data-manage-skills]')!,list=root.querySelector<HTMLElement>('[data-manage-list]')!,message=root.querySelector<HTMLElement>('[data-manage-message]')!;
+let tab=new URL(location.href).searchParams.get('tab')==='archived'?'archived':'active',generation=0,busy=false;
+async function refresh(){
+ const run=++generation;list.replaceChildren();message.textContent='Loading your books…';
+ for(const b of root.querySelectorAll<HTMLElement>('[data-manage-tab]'))b.setAttribute('aria-pressed',String(b.dataset.manageTab===tab));
+ try{const {data}=await supabase.auth.getSession();if(!data.session)throw Error('Sign in to manage your private books.');
+ let query=supabase.from('book_processing_jobs').select('id,title,author,source_name,status,run_state,archived_at,deletion_pending,source_import,total_sections,source_line_count,cover_status,cover_path').eq('user_id',data.session.user.id).eq('is_current',true);
+ query=tab==='archived'?query.not('archived_at','is',null):query.is('archived_at',null);
+ const {data:jobs,error}=await query.order('created_at',{ascending:false}).limit(100);if(error)throw Error('Could not load your books. Refresh to retry.');if(run!==generation)return;
+ message.textContent=jobs?.length?`${jobs.length} ${tab==='archived'?'archived':'active'} book${jobs.length===1?'':'s'}`:tab==='archived'?'No archived books.':'No active books.';
+ for(const job of jobs||[]){const row=document.createElement('article');row.className='flex flex-wrap items-center justify-between gap-5 rounded-2xl border border-line bg-card p-6';const text=document.createElement('div');text.className='min-w-0 flex-1';const title=document.createElement('a');title.className='font-serif text-2xl underline underline-offset-4';title.textContent=job.title;title.href=`/your-book/?id=${encodeURIComponent(job.id)}`;const detail=document.createElement('p');detail.className='mt-2 text-sm text-soft';detail.textContent=`${job.author} · ${bookSourceLabel(job)}`;const status=document.createElement('p');status.className='mt-2 text-sm text-soft';status.textContent=job.deletion_pending?'Deletion needs cleanup. Retry Delete.':job.archived_at?'Archived':bookStatus(job);text.append(title,detail,status);const actions=document.createElement('div');actions.className='flex flex-wrap gap-3';
+ for(const action of (job.deletion_pending?['delete-book']:[job.archived_at?'restore':'archive','delete-book'])){const button=document.createElement('button');button.className='awb-pill';button.textContent=action==='delete-book'?'Delete':action==='restore'?'Restore':'Archive';button.addEventListener('click',async()=>{if(busy)return;if(action==='delete-book'&&!confirm(`Permanently delete “${job.title}”, its skill, saved sources and all versions? This cannot be undone.`))return;busy=true;for(const b of root.querySelectorAll<HTMLButtonElement>('button'))b.disabled=true;try{await bookWorker({action,id:job.id,...(action==='delete-book'?{confirmTitle:job.title}:{})});await refresh();window.dispatchEvent(new Event('awb:book-added'));}catch(e){message.textContent=e instanceof Error?e.message:'Could not update your book.';}finally{busy=false;for(const b of root.querySelectorAll<HTMLButtonElement>('button'))b.disabled=false;}});actions.append(button);}row.append(text,actions);list.append(row);}
+ }catch(e){if(run===generation)message.textContent=e instanceof Error?e.message:'Could not load your books.';}
+}
+for(const b of root.querySelectorAll<HTMLElement>('[data-manage-tab]'))b.addEventListener('click',()=>{tab=b.dataset.manageTab!;void refresh();});
+supabase.auth.onAuthStateChange(()=>{generation++;list.replaceChildren();setTimeout(()=>void refresh(),0);});void refresh();

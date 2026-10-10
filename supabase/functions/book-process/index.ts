@@ -8,6 +8,7 @@ import {reusableBook,cachedBookSummary,findSavedBook} from '../_shared/book-cach
 import {summarizeBookGroup,overviewGroupCount,overviewGroupSize} from '../_shared/book-overview.mjs';
 import {scanSkill} from '../_shared/book-skill-review.mjs';
 import {processingOptions,retryPatch} from '../_shared/book-options.mjs';
+import {compileReader} from '../_shared/book-reader.mjs';
 import {distillSection,compileDistillation} from '../_shared/book-distillation.mjs';
 import {repairBook} from '../_shared/book-repair.mjs';
 import {previousReviewPath} from '../_shared/book-review-status.mjs';
@@ -23,7 +24,7 @@ const url=Deno.env.get('SUPABASE_URL')!;
 const serviceKey=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db=createClient(url,serviceKey,{auth:{persistSession:false}});
 const providerKey=()=>Deno.env.get(({openai:'OPENAI_API_KEY',google:'GEMINI_API_KEY',fireworks:'FIREWORKS_API_KEY'} as const)[bookModelConfig((name:string)=>Deno.env.get(name)).provider as 'openai'|'google'|'fireworks']);
-const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','https://chenterry.com','http://localhost:4321','http://127.0.0.1:4321']);
+const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','https://chenterry.com','http://localhost:4321','http://127.0.0.1:4321','http://127.0.0.1:4352']);
 const hash=async(bytes:BufferSource)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
 function publicJob(job:any) { const {source_text,chunks,notes,section_feedback,generation_feedback,overview_notes=[],lease_token,cover_lease_token,...rest}=job;return {...rest,billing:customerBilling(job.billing),total_sections:chunks.length,completed_sections:notes.length,overview_completed:overview_notes.length,overview_total:overviewGroupCount(notes)}; }
 function requireOk(result:any) { if(result.error) throw new Error('Could not save processing progress. Please retry.');return result.data; }
@@ -75,9 +76,10 @@ async function step(job:any,token:string) {
   const start=(job.overview_notes||[]).length*overviewGroupSize;
   patch.overview_notes=[...(job.overview_notes||[]),await summarizeBookGroup(job.notes.slice(start,start+overviewGroupSize),modelJson,job.generation_feedback?.phase==='overview'?job.generation_feedback:null)];
  } else if(!job.artifacts) {
-  patch.artifacts=await compileDistillation(job,job.notes,modelJson,hash);patch.skill_summary=skillSummary(patch.artifacts);patch.status='ready';patch.run_state='complete';patch.cover_status=Deno.env.get('OPENAI_API_KEY')?'pending':'skipped';patch.attempts=0;
+  patch.artifacts=await compileDistillation(job,job.notes,modelJson,hash);patch.skill_summary=skillSummary(patch.artifacts);patch.status='processing';patch.attempts=0;
  } else {
-  patch.status='ready';patch.run_state='complete';patch.cover_status=job.cover_path?'ready':'pending';
+  if(!job.artifacts['reader/digest.md'])patch.artifacts={...job.artifacts,...await compileReader(job,modelJson)};
+  patch.status='ready';patch.run_state='complete';patch.cover_status=job.cover_path?'ready':Deno.env.get('OPENAI_API_KEY')?'pending':'skipped';
  }
  let save=db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('lease_token',token);
  if(patch.run_state==='failed')save=save.neq('run_state','paused');
@@ -188,7 +190,7 @@ Deno.serve(async req=>{
   }
   if(input.action==='list') {
    const offset=Number(input.offset||0);if(!Number.isSafeInteger(offset)||offset<0)return reply({error:'Invalid offset'},400);
-   const jobs=requireOk(await db.from('book_processing_jobs').select('id,book_id,revision,is_current,title,author,source_name,status,run_state,cursor,created_at,error,skill_summary,total_sections,source_line_count,cover_status,cover_path').eq('user_id',user.id).eq('is_current',true).order('created_at',{ascending:false}).order('id').range(offset,offset+99));
+   const jobs=requireOk(await db.from('book_processing_jobs').select('id,book_id,revision,is_current,title,author,source_name,status,run_state,cursor,created_at,error,skill_summary,total_sections,source_line_count,cover_status,cover_path').eq('user_id',user.id).eq('is_current',true).is('archived_at',null).order('created_at',{ascending:false}).order('id').range(offset,offset+99));
    return reply({books:jobs.map(libraryBook),next_offset:jobs.length===100?offset+100:null});
   }
   if(input.parentId&&!/^[a-f0-9-]{36}$/i.test(input.parentId))return reply({error:'Invalid parent book ID.'},400);
@@ -246,6 +248,28 @@ Deno.serve(async req=>{
   }
   if(!/^[a-f0-9-]{36}$/i.test(input.id||''))return reply({error:'Invalid book ID'},400);
   const {data:job}=await db.from('book_processing_jobs').select('*').eq('id',input.id).eq('user_id',user.id).maybeSingle();if(!job)return reply({error:'Book not found'},404);
+  if(['archive','restore','delete-book'].includes(input.action)) {
+   if(input.action==='delete-book'&&input.confirmTitle!==job.title)return reply({error:'Confirm the book title before permanent deletion.'},400);
+   const managed=await db.rpc('manage_private_book',{p_user:user.id,p_id:job.id,p_action:input.action==='delete-book'?'prepare-delete':input.action});
+   if(managed.error)return reply({error:managed.error.message},409);
+   if(input.action==='delete-book') {
+    // The RPC pauses and locks the whole history before Storage cleanup. Retry is safe.
+    for(const revision of managed.data.revisions) {
+     const check=await db.rpc('prepare_paid_book_deletion',{p_user:user.id,p_id:revision.id});
+     if(check.error)return reply({error:'Settle or reconcile this book usage before deleting it.'},409);
+    }
+    for(const revision of managed.data.revisions) {
+     const prefix=`${user.id}/${revision.id}`;const files=requireOk(await db.storage.from('private-books').list(prefix,{limit:1000}));
+     if(files.length)requireOk(await db.storage.from('private-books').remove(files.map((file:any)=>`${prefix}/${file.name}`)));
+    }
+    // Finalize the entire history atomically after Storage cleanup.
+    requireOk(await db.rpc('manage_private_book',{p_user:user.id,p_id:job.id,p_action:'finish-delete'}));
+    return reply({deleted:true});
+   }
+   if(input.action==='restore')await db.rpc('wake_book_library');
+   return reply(managed.data);
+  }
+  if(job.archived_at&&!['status','usage','export','analysis-export','revisions'].includes(input.action))return reply({error:'Restore this book in Manage Skills before changing it.'},409);
   if(input.action==='finalize') {
    if(job.status!=='uploaded')return reply({job:publicJob(job)});
    if(!job.source_import)return reply({error:'This source does not have a staged extraction.'},409);

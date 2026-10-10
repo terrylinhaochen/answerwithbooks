@@ -1,0 +1,8 @@
+---
+interface Props { readIf?: string; oneLiner?: string; client?: boolean; }
+const {readIf='',oneLiner='',client=false}=Astro.props;
+---
+<section hidden={client} class="mt-6 grid gap-5 lg:grid-cols-2" data-job-overview={client || undefined}>
+ <div class="awb-card-link p-6 text-[1rem] leading-relaxed"><h2 class="awb-eyebrow mb-2">When to reach for this book</h2><p class="font-serif text-2xl leading-snug text-ink" data-job-read-if={client || undefined}>{readIf}</p></div>
+ <div class="awb-card-link p-6 text-[1rem] leading-relaxed"><h2 class="awb-eyebrow mb-2">What the book is about</h2><p class="font-serif text-2xl leading-snug text-ink" data-job-one-liner={client || undefined}>{oneLiner}</p></div>
+</section>

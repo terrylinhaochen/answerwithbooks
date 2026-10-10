@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "origin": "http://127.0.0.1:4352",
+  "checkedAt": "2026-10-10T22:19:39.244Z",
+  "checks": [
+    "Deployed agent import saves separate editorial digest and reusable skill without a generation charge.",
+    "Wrong-owner mutations and unconfirmed deletion are rejected.",
+    "1440px reader: shared overview, editorial body, matching copy prompts, Amazon link, nested closed skill card, no old controls or horizontal overflow.",
+    "390px reader: shared overview, editorial body, matching copy prompts, Amazon link, nested closed skill card, no old controls or horizontal overflow.",
+    "320px reader: shared overview, editorial body, matching copy prompts, Amazon link, nested closed skill card, no old controls or horizontal overflow.",
+    "Archive in the signed-in UI removes the book from the active shelf and deployed private retrieval.",
+    "Restore makes the same book and cited skill searchable again.",
+    "Cancel preserves the fixture; confirmed Delete removes its job, private source and retrieval entries."
+  ],
+  "textImageGenerationCalls": 0
+}

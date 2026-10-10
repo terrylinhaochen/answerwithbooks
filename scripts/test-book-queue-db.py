@@ -141,6 +141,7 @@ create function cron.schedule(name text,schedule text,command text) returns bigi
         runpy.run_path(str(ROOT/'scripts/test-book-library-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})
         if os.environ.get('BOOK_AGENT_IMPORT_DB_TEST') == '1':
             runpy.run_path(str(ROOT/'scripts/test-book-agent-import-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})
+            runpy.run_path(str(ROOT/'scripts/test-book-management-db.py'),init_globals={'ROOT':ROOT,'sql':sql,'scalar':scalar})
 finally:
     if started:subprocess.run([str(BIN/'pg_ctl'),'-D',str(area/'data'),'-m','immediate','-w','stop'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     shutil.rmtree(area)

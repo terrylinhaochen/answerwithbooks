@@ -21,7 +21,7 @@ Device-only work needs no Answer with Books account or repository clone. Syncing
 
 ## What you receive
 
-A readable summary, `SKILL.md`, chapter notes, glossary, patterns, cheatsheet, and source references. Image generation and hosted library search are separate. Your package is saved locally. You can also choose to sync its first version to your private library. Keep the Answer with Books workspace if you want to add sources later. Uploading the original source through managed intake starts hosted processing; it does not transfer the work your agent already completed.
+CLI 0.7.0 adds a separate paragraph-led editorial digest alongside `SKILL.md`, chapter notes, glossary, patterns, cheatsheet, and source references. Image generation and hosted library search are separate. Your package is saved locally. You can also choose to sync its first version to your private library. Keep the Answer with Books workspace if you want to add sources later. Uploading the original source through managed intake starts hosted processing; it does not transfer the work your agent already completed.
 
 <Accordion title="How the agent drives generation">
 With the current CLI, it prepares a work directory and repeats the next/respond cycle until the package is ready:
@@ -33,7 +33,7 @@ local respond ./my-book --input ./response.json --request REQUEST_ID
 local install ./my-book
 ```
 
-These are CLI arguments, not standalone shell commands. Use the [CLI prefix](/guide/cli). The agent writes responses to the current request, resolves source-review findings, and installs only a ready package.
+These are CLI arguments, not standalone shell commands. Use the [CLI prefix](/guide/cli). The agent writes responses to the current request, resolves source-review findings, and installs only a ready package. After the skill synthesis, it answers `book_reader` and `book_reader_review` requests using the same versioned editorial prompt as managed generation. These remain requests to your own agent, not hosted model calls. Selected private-library sync includes this reader digest.
 </Accordion>
 
 ## Combine sources or update a guide

@@ -1,19 +1,20 @@
 ---
 import { publicBookPrompt } from '../lib/public-book-agent';
-interface Props { title: string; author: string; bookUrl: string; digest: string; }
-const { title, author, bookUrl, digest } = Astro.props;
+interface Props { title?: string; author?: string; bookUrl?: string; digest?: string; client?: boolean; }
+const { title='', author='', bookUrl='https://answerwithbooks.com/', digest='', client=false } = Astro.props;
 const slug = new URL(bookUrl).pathname.split('/').filter(Boolean).at(-1)!;
-const prompt = publicBookPrompt({id:slug,data:{title,author},body:digest});
+const prompt = client ? '' : publicBookPrompt({id:slug,data:{title,author},body:digest});
 ---
-<section id="use-in-agent" class="mt-8 rounded-2xl border border-line bg-card p-6" data-book-agent>
+<section id={client ? 'use-skill' : 'use-in-agent'} class="mt-8 rounded-2xl border border-line bg-card p-6" data-book-agent data-private-agent={client || undefined}>
  <h2 class="font-serif text-2xl">Put this book to work.</h2>
  <p class="mt-2 text-soft">Give your agent a way to approach your task: the book’s frameworks, practical rules, and limits. Ask it to draft a plan, review a decision, or improve your next interview.</p>
  <button type="button" class="awb-pill awb-pill-primary mt-5" data-copy-book-agent>Copy prompt for your AI</button>
  <p class="mt-3 text-sm text-soft" role="status" data-book-agent-status>Includes the book’s digest and instructions. Paste into your AI chat and send.</p>
+ <slot />
  <textarea hidden readonly rows="10" class="awb-input mt-3 w-full" aria-label="Book agent prompt" data-book-agent-prompt>{prompt}</textarea>
 </section>
 <script>
- for (const root of document.querySelectorAll('[data-book-agent]')) {
+ for (const root of document.querySelectorAll('[data-book-agent]:not([data-private-agent])')) {
   const button = root.querySelector<HTMLButtonElement>('[data-copy-book-agent]')!;
   const prompt = root.querySelector<HTMLTextAreaElement>('[data-book-agent-prompt]')!;
   const status = root.querySelector('[data-book-agent-status]')!;
