@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "origin": "https://answerwithbooks.com",
+  "checkedAt": "2026-10-10T22:44:39.305Z",
+  "checks": [
+    "Deployed agent import saves separate editorial digest and reusable skill without a generation charge.",
+    "Wrong-owner mutations and unconfirmed deletion are rejected.",
+    "1440px reader: shared overview, editorial body, matching copy prompts, Amazon link, nested closed skill card, no old controls or horizontal overflow.",
+    "390px reader: shared overview, editorial body, matching copy prompts, Amazon link, nested closed skill card, no old controls or horizontal overflow.",
+    "320px reader: shared overview, editorial body, matching copy prompts, Amazon link, nested closed skill card, no old controls or horizontal overflow.",
+    "Archive in the signed-in UI removes the book from the active shelf and deployed private retrieval.",
+    "Restore makes the same book and cited skill searchable again.",
+    "Cancel preserves the fixture; confirmed Delete removes its job, private source and retrieval entries."
+  ],
+  "textImageGenerationCalls": 0,
+  "webCodeCommit": "318719739b24112c13e529845235a63c53fb686c",
+  "webDeploymentRun": 38092381972,
+  "cliCommit": "ce1de7dd182d91807d752a7ff0fd2aeb56877d2a",
+  "cliVersion": "0.7.0",
+  "cliCIRun": 38091924447,
+  "releaseDownloadSha256": "c319a71ab6e79a7688243cfcdd1653f7d9cadc4f42026ea1ef03f922f9bb7977",
+  "freshReleaseNpxHelp": "passed",
+  "mintlifyLiveLibraryManagementDocs": "verified"
+}
