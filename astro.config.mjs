@@ -22,7 +22,6 @@ const utilityPaths = [
   '/ask/',
   '/skills/',
   '/embed/book-upload/',
-  '/speed-read/',
   '/404/',
 ];
 

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 const baseURL = process.env.AWB_BASE_URL || 'http://127.0.0.1:4321';
 const browser = await chromium.launch({ headless:true, executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
-const routes = ['/','/books/','/books/the-mom-test/','/guides/','/guides/github-lead-research/','/answers/how-to-make-a-plan-that-survives-contact-with-reality/','/tools/','/topics/','/newsletter/','/login/','/signup/','/onboarding/start/','/your-book/','/upload/','/ask/','/community/','/billing/','/api-keys/','/speed-read/','/privacy/','/terms/','/editorial/','/404/'];
+const routes = ['/','/books/','/books/the-mom-test/','/guides/','/guides/github-lead-research/','/answers/how-to-make-a-plan-that-survives-contact-with-reality/','/tools/','/topics/','/newsletter/','/login/','/signup/','/onboarding/start/','/your-book/','/upload/','/ask/','/community/','/billing/','/api-keys/','/privacy/','/terms/','/editorial/','/404/'];
 const user = {id:'00000000-0000-4000-8000-000000000001',email:'reader@example.test',role:'authenticated',aud:'authenticated',user_metadata:{first_name:'Reader'},email_confirmed_at:'2026-10-01T00:00:00Z'};
 const encode = value => Buffer.from(JSON.stringify(value)).toString('base64url');
 const token = `${encode({alg:'none',typ:'JWT'})}.${encode({sub:user.id,aud:'authenticated',role:'authenticated',email:user.email,exp:Math.floor(Date.now()/1000)+3600})}.mock-signature`;
@@ -31,7 +31,6 @@ try {
     assert.equal(await page.locator('#install a, #install button').count(),1);
     assert.equal(await page.locator('.library-book [data-copy-public-book]').count(),0);assert.equal(await page.locator('.library-book .library-cover[href^="/books/"]').count(),8);
    }
-   if(route==='/speed-read/') assert.equal(await page.locator('body > header').count(),0,'focused reader remains focused');
   }
   await page.goto('/tools/');
   assert.equal(await page.locator('[data-capability]').count(),0,'broader research directory removed from AWB page');

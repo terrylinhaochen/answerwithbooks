@@ -13,7 +13,7 @@ if(id)find<HTMLAnchorElement>('billing').href='/billing/?book='+encodeURICompone
 let priceQuote:any=null;
 const needsPayment=(job:any)=>job?.billing_required&&(!job.artifacts||job.status==='ready'&&job.cover_status==='failed'&&!job.cover_path)&&!['held','reconciliation'].includes(job.billing?.state)&&(job.source_import?.state==='complete'||!job.source_import);
 let current:any, running=false, rendered=false, analysisRendered=false, auditPassed=false, hasFindings=false, activating=false;
-let revisionsKey='',revisionCanActivate=false;
+let revisionsKey='',revisionCanActivate=false,skillLinkOpened=false;
 const nativePending=(job:any)=>job?.source_import?.kind==='native'&&['queued','processing'].includes(job.source_import.state);
 function updateActivationGate(){find<HTMLButtonElement>('activate').disabled=activating||current?.status!=='ready'||!revisionCanActivate||!find<HTMLInputElement>('activate-review').checked||!auditPassed||(hasFindings&&!find<HTMLInputElement>('review-accept').checked);}
 function updateReviewGate(){const blocked=!auditPassed||(hasFindings&&!find<HTMLInputElement>('review-accept').checked);find<HTMLButtonElement>('copy').disabled=blocked;find<HTMLButtonElement>('download').disabled=blocked;updateActivationGate();}
@@ -145,6 +145,7 @@ async function run(action?:string) {
   const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to Answer with Books, then return to this private book link.');
   if(action==='retry'&&current?.source_import?.kind==='native'&&current.source_import.state==='failed'){await nativeBookWorker({action:'retry',id});action='status';}
   await paint((await bookWorker({action:action||'status',id})).job);
+  if(location.hash==='#use-skill'&&!skillLinkOpened&&current.status==='ready'){skillLinkOpened=true;find('remote').scrollIntoView({block:'start'});}
  }catch(e){find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
  finally{running=false;}
 }

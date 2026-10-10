@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import '../styles/book-library-card.css';
 import BookCover from './BookCover.astro';
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 const { book, compact = false } = Astro.props;
 ---
 
-<article class={`book-row awb-card-link group h-full ${compact ? 'p-5' : 'p-4'}`}>
+<article class={`book-row book-library-card awb-card-link group h-full ${compact ? 'p-5' : 'p-4'}`}>
   <div class={compact ? 'flex h-full flex-col gap-5' : 'grid h-full grid-cols-[4.5rem_minmax(0,1fr)] gap-4 sm:grid-cols-[5rem_minmax(0,1fr)]'}>
     <BookCover book={book} size={compact ? 'lg' : 'sm'} class={compact ? 'mx-auto' : 'shrink-0'} />
     <div class="flex min-w-0 flex-1 flex-col">
@@ -21,6 +22,7 @@ const { book, compact = false } = Astro.props;
         {book.data.author} · {book.data.year}
       </p>
       <p class={`book-row__copy mt-3 text-soft leading-relaxed ${compact ? 'text-[0.95rem]' : ''}`}>{book.data.oneLiner}</p>
+      <div class="book-library-card__actions"><a href={`/books/${book.id}/`}>Read digest</a><a href={`/books/${book.id}/#use-with-ai`}>Use with AI</a></div>
     </div>
   </div>
 </article>

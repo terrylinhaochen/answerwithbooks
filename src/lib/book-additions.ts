@@ -5,29 +5,42 @@ const root=document.querySelector<HTMLElement>('[data-book-additions]')!;
 const list=root.querySelector('[data-book-additions-list]')!;
 const message=root.querySelector('[data-book-additions-message]')!;
 let activeUserId:string|undefined, jobs:any[]=[], generation=0, refreshing=false, queued=false, signature='';
+const covers=new Map<string,{url:string;expires:number}>();
 const linkFor=(id:string)=>`/your-book/?id=${encodeURIComponent(id)}`;
 function render() {
  const additions=readAdditions(activeUserId);
- const next=JSON.stringify([activeUserId,jobs,additions]);
+ const next=JSON.stringify([activeUserId,jobs,additions,[...covers].map(([path,entry])=>[path,entry.url])]);
  if(next===signature)return;signature=next;
  const focused=document.activeElement instanceof HTMLAnchorElement&&list.contains(document.activeElement)?document.activeElement.getAttribute('href'):null;
  const expanded=new Set([...list.querySelectorAll<HTMLDetailsElement>('details[open]')].map(el=>el.dataset.bookId));
  list.replaceChildren();root.hidden=!jobs.length&&!additions.length;
  for(const {primary:job,copies} of groupBookUploads(jobs)) {
-  const card=document.createElement('article');card.className='rounded-2xl border border-line bg-card p-4';
-  const title=document.createElement('a');title.href=linkFor(job.id);title.className='font-serif text-xl';title.textContent=job.title;
-  const scope=document.createElement('p');scope.className='mt-2 text-sm text-soft';scope.textContent=bookSourceLabel(job);
-  const file=document.createElement('p');file.className='mt-1 break-words text-xs text-faint';file.textContent=job.source_name;
-  const status=document.createElement('p');status.className='mt-3 text-sm text-soft';status.textContent=bookStatus(job);
-  card.append(title,scope,file,status);
-  if(copies.length) {
-   const details=document.createElement('details');details.className='mt-3 text-sm';details.dataset.bookId=job.id;details.open=expanded.has(job.id);
-   const summary=document.createElement('summary');summary.textContent=`${copies.length} other upload${copies.length===1?'':'s'} of the same text`;details.append(summary);
-   for(const copy of copies) {
-    const link=document.createElement('a');link.href=linkFor(copy.id);link.className='mt-2 block underline';link.textContent=`${copy.source_name} · ${bookStatus(copy)}`;details.append(link);
-   }
-   card.append(details);
-  }
+  const card=document.createElement('article');card.className='book-library-card awb-card-link';
+  const layout=document.createElement('div');layout.className='book-library-card__layout';
+  const cover=document.createElement('a');cover.href=linkFor(job.id);cover.className='book-library-card__cover';cover.setAttribute('aria-label',`Open ${job.title}`);
+  const jacket=document.createElement('span');jacket.className='book-library-card__jacket';
+  const placeholder=document.createElement('span');placeholder.className='book-library-card__placeholder';placeholder.textContent=job.title;
+  const signed=covers.get(job.cover_path);
+  if(signed){const img=document.createElement('img');img.src=signed.url;img.alt=`${job.title} cover`;img.loading='lazy';img.width=160;img.height=240;img.addEventListener('error',()=>jacket.replaceChildren(placeholder),{once:true});jacket.append(img);}else jacket.append(placeholder);
+  cover.append(jacket);
+  const body=document.createElement('div');body.className='book-library-card__body';
+  const scope=document.createElement('p');scope.className='text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans';
+  const sourceScope=bookSourceLabel(job).split(' · ');scope.textContent=sourceScope[0]==='Excerpt'?`Private excerpt · ${sourceScope[1]}`:'Private book';
+  const heading=document.createElement('h3');heading.className='mt-1 text-wrap font-serif text-2xl leading-snug';
+  const title=document.createElement('a');title.href=linkFor(job.id);title.className='inline-flex min-h-8 items-center hover:text-soft';title.textContent=job.title;heading.append(title);
+  const author=document.createElement('p');author.className='mt-1 text-sm text-faint';author.textContent=job.author&&job.author!=='Unknown author'?job.author:'Author not identified';
+  const summary=document.createElement('p');summary.className='book-library-card__copy mt-3 leading-relaxed text-soft';summary.textContent=job.skill_summary?.one_liner||job.skill_summary?.read_if||(job.status==='ready'?'Your book summary and reusable skill are ready to open.':'Your summary will appear when processing finishes.');
+  body.append(scope,heading,author,summary);
+  if(job.status!=='ready'){const status=document.createElement('p');status.className='mt-3 text-sm text-soft';status.textContent=bookStatus(job);body.append(status);}
+  const actions=document.createElement('div');actions.className='book-library-card__actions';
+  const read=document.createElement('a');read.href=linkFor(job.id);read.textContent=job.status==='ready'?'Read book':'View progress';actions.append(read);
+  if(job.status==='ready'){const skill=document.createElement('a');skill.href=linkFor(job.id)+'#use-skill';skill.textContent='Use skill';actions.append(skill);}
+  body.append(actions);
+  const details=document.createElement('details');details.className='book-library-card__details';details.dataset.bookId=job.id;details.open=expanded.has(job.id);
+  const detailTitle=document.createElement('summary');detailTitle.textContent='Source details'+(copies.length?` · ${copies.length} other upload${copies.length===1?'':'s'}`:'');details.append(detailTitle);
+  for(const text of [bookSourceLabel(job),job.source_name,bookStatus(job)]){const p=document.createElement('p');p.className='mt-2';p.textContent=text;details.append(p);}
+  for(const copy of copies){const link=document.createElement('a');link.href=linkFor(copy.id);link.className='mt-2 block underline';link.textContent=`${copy.source_name} · ${bookStatus(copy)}`;details.append(link);}
+  body.append(details);layout.append(cover,body);card.append(layout);
   list.append(card);
  }
  for(const addition of additions) {
@@ -46,15 +59,23 @@ async function refresh() {
   const {data,error:authError}=await supabase.auth.getSession();if(authError)throw authError;
   if(version!==generation)return;
   const userId=data.session?.user.id;
-  if(activeUserId!==userId){activeUserId=userId;jobs=[];render();}
+  if(activeUserId!==userId){activeUserId=userId;jobs=[];covers.clear();render();}
   if(!userId){render();message.textContent='';return;}
   const [uploads,requests]=await Promise.all([
-   supabase.from('book_processing_jobs').select('id,title,source_name,status,run_state,cursor,created_at,source_import,source_text_sha,source_line_count,total_sections,cover_status,cover_path,error,revision_kind').eq('user_id',userId).eq('is_current',true).order('created_at',{ascending:false}).limit(100),
+   supabase.from('book_processing_jobs').select('id,title,author,skill_summary,source_name,status,run_state,cursor,created_at,source_import,source_text_sha,source_line_count,total_sections,cover_status,cover_path,error,revision_kind').eq('user_id',userId).eq('is_current',true).order('created_at',{ascending:false}).limit(100),
    supabase.from('book_requests').select('id,title,author,status,created_at,external_id,matched_book_slug').eq('user_id',userId).order('created_at',{ascending:false}).limit(100),
   ]);
   if(version!==generation||userId!==activeUserId)return;
   if(uploads.error||requests.error)throw new Error('Could not refresh your books. We’ll try again shortly.');
-  jobs=uploads.data||[];
+  const uploaded=uploads.data||[];
+  const paths=[...new Set(uploaded.filter(job=>job.cover_status==='ready'&&job.cover_path).map(job=>job.cover_path))];
+  const missing=paths.filter(path=>!covers.has(path)||covers.get(path)!.expires<Date.now());
+  if(missing.length){
+   const signed=await supabase.storage.from('private-books').createSignedUrls(missing,3600);
+   if(version!==generation||userId!==activeUserId)return;
+   for(const item of signed.data||[])if(item.path&&item.signedUrl&&!item.error)covers.set(item.path,{url:item.signedUrl,expires:Date.now()+3000000});
+  }
+  jobs=uploaded;
   const remote:BookAddition[]=(requests.data||[]).map(row=>({id:row.id,title:row.title,author:row.author,status:row.status,createdAt:row.created_at,externalId:row.external_id,slug:row.matched_book_slug}));
   const local=readAdditions(userId).filter(item=>!remote.some(other=>sameBook(item,other)));
   try{localStorage.setItem(additionsKey(userId),JSON.stringify([...remote,...local].slice(0,100)));}catch{}
@@ -67,7 +88,7 @@ window.addEventListener('focus',()=>void refresh());
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)void refresh();});
 supabase.auth.onAuthStateChange((_event,session)=>{
  if(activeUserId===session?.user.id)return;
- generation++;activeUserId=session?.user.id;jobs=[];render();
+ generation++;activeUserId=session?.user.id;jobs=[];covers.clear();render();
  // Keep Supabase requests outside its synchronous auth callback.
  setTimeout(()=>void refresh(),0);
 });

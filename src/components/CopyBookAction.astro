@@ -4,13 +4,13 @@ import { publicBookPrompt } from '../lib/public-book-agent';
 interface Props { book: CollectionEntry<'books'>; readingLink?: boolean; }
 const { book, readingLink = false } = Astro.props;
 ---
-<div class="copy-book-action" data-public-book-action>
+<div id="use-with-ai" class="copy-book-action" data-public-book-action>
  <div class="copy-book-actions"><button type="button" class="awb-pill awb-pill-primary" data-copy-public-book aria-label={`Copy ${book.data.title} prompt for your AI`}>Copy prompt for your AI</button>{readingLink && <a href={`/books/${book.id}/`}>Open the book</a>}</div>
  <p class="copy-book-status" role="status" data-public-book-status>Copies book notes and a task prompt. Paste into your AI chat and send.</p>
  <textarea hidden readonly class="awb-input" rows="7" aria-label={`${book.data.title} agent prompt`} data-public-book-prompt>{publicBookPrompt(book)}</textarea>
 </div>
 <style>
- .copy-book-action { position: relative; z-index: 2; margin-top: 20px; }
+ .copy-book-action { position: relative; z-index: 2; margin-top: 20px; scroll-margin-top: 100px; }
  .copy-book-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 13px 18px; }
  .copy-book-actions button { gap: 12px; cursor: pointer; white-space: nowrap; }
  .copy-book-actions a { font-size: 11px; text-underline-offset: 4px; }

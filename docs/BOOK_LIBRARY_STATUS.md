@@ -27,3 +27,11 @@ No new hosted conversion or paid provider call is needed for these checks.
 - Production metadata migration and both Edge functions deployed successfully. Authenticated lookup against the existing full-book text returned its ready package; the API reported 117 sections, 35,100 lines and a ready cover. This acceptance used lookup/list only.
 - Supabase security advisors reported no new findings; existing server-only tables without client policies and the pre-existing leaked-password-protection setting remain unchanged.
 - Browser fixture checks passed on a fresh build with production public configuration. Private account data was not embedded in the test fixtures.
+
+## Book cards and reader removal
+
+Private uploads now use the public library's cover-and-summary card layout. Cards show author, existing summary, and separate Read book / Use skill actions; source filenames, processing counts, cover diagnostics, and duplicate history live under Source details. Excerpt ranges remain visible. Cover URLs are signed under the current user's Storage permissions, cached only in memory, refreshed before expiry, and cleared on account changes. Missing covers have a title jacket fallback. No source or skill is regenerated.
+
+Public digest cards expose Read digest and Use with AI, linking to the existing book-specific prompt. This does not mislabel editorial digests as full-source installed skill packages. Completed private packages link directly to their skill section.
+
+The Speed Read page, links, navigation reference, styles, and playback tests were removed. Historical release notes are retained. The retired URL returns 404. Browser regression checks cover signed-cover loading and caching, summaries, skill/AI links, 320px layout, duplicate details, and route removal.

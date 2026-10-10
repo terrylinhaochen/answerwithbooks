@@ -56,7 +56,7 @@ try {
       if (route.startsWith('/answers/')) {
         assert.ok(prompt.includes(readBody('answers',slug)),'Full guide included');
         assert.equal(await page.locator('[data-save-answer]').count(),0);
-        assert.ok(await page.getByRole('link',{name:'Speed read source books',exact:true}).count());
+        assert.equal(await page.locator('a[href*="speed-read"]').count(),0);
         const source = readFileSync(`src/content/answers/${slug}.md`,'utf8').match(/^books: \[(.*)\]/m)[1];
         for (const book of JSON.parse(`[${source}]`)) assert.ok(prompt.includes(readBody('books',book)),`Full source-book digest: ${book}`);
       } else {

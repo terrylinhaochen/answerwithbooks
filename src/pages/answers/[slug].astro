@@ -175,14 +175,6 @@ const jsonLd = [
           <time datetime={answer.data.date.toISOString()}>{dateFmt}</time>
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-4">
-          <div class="guide-actions" role="group" aria-label="Guide actions">
-          <a
-            href={`/speed-read/?q=${encodeURIComponent(answer.data.question)}`}
-            class="guide-action" aria-label="Speed read source books" title="Speed read source books"
-          >
-<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5c-3-2-6-2-10-1v15c4-1 7-1 10 1 3-2 6-2 10-1V4c-4-1-7-1-10 1Zm0 0v15" /><path d="m15 8 4 3-4 3V8Z" fill="currentColor" stroke-width="1" /></svg>
-          </a>
-          </div>
           {topics.map((topic) => (
             <a
               href={`/topics/${topic.slug}/`}
@@ -262,9 +254,5 @@ const jsonLd = [
   }
 
   <style>
-    .guide-actions { display:flex;align-items:center;gap:8px;padding-right:16px;border-right:1px solid var(--color-line) }
-    .guide-action { display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;color:var(--color-ink);background:var(--color-card);border:1px solid var(--color-line);cursor:pointer;transition:background 150ms ease,border-color 150ms ease }
-    .guide-action:hover { background:var(--color-wash);border-color:var(--color-ink) }
-    .guide-action:focus-visible { outline:2px solid var(--color-ink);outline-offset:3px }
   </style>
 </Base>
