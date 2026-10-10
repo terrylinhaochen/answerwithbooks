@@ -168,7 +168,8 @@ const jsonLd = [
     const category = root?.querySelector<HTMLSelectElement>('[data-filter-category]');
     const count = root?.querySelector<HTMLElement>('[data-filter-count]');
     const items = Array.from(list?.querySelectorAll<HTMLElement>('[data-filter-item]') ?? []);
-    const pageSize = 10;
+    // Twelve slots fill three desktop rows; the upload card uses one slot on page one.
+    const pageSize = 12;
     const firstPageBookCount = pageSize - 1;
     let currentPage = 1;
 
@@ -200,7 +201,7 @@ const jsonLd = [
       if (requestCard) requestCard.hidden = currentPage !== 1;
 
       if (count) count.textContent = `${total} book${total === 1 ? '' : 's'}`;
-      if (pagination) pagination.hidden = total <= pageSize;
+      if (pagination) pagination.hidden = pageCount <= 1;
       if (paginationSummary) {
         paginationSummary.textContent =
           total === 0 ? 'No books found' : `Showing ${start + 1}-${end} of ${total} books`;
