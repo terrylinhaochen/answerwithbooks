@@ -17,26 +17,22 @@ function render() {
  const expanded=new Set([...list.querySelectorAll<HTMLDetailsElement>('details[open]')].map(el=>el.dataset.bookId));
  list.replaceChildren();root.hidden=!jobs.length&&!additions.length;
  for(const {primary:job,copies} of groupBookUploads(jobs)) {
-  const card=document.createElement('article');card.className='book-library-card awb-card-link';
-  const layout=document.createElement('div');layout.className='book-library-card__layout';
-  const cover=document.createElement('a');cover.href=linkFor(job.id);cover.className='book-library-card__cover';cover.setAttribute('aria-label',`Open ${job.title}`);
-  const jacket=document.createElement('span');jacket.className='book-library-card__jacket';
+  const card=document.createElement('article');card.className='library-book';
+  const layout=document.createElement('div');layout.className='library-book__layout';
+  const cover=document.createElement('a');cover.href=linkFor(job.id);cover.className='library-cover';cover.style.setProperty('--book-well',['#e2e3d6','#e9e0d2','#e0e4df'][list.children.length%3]);cover.setAttribute('aria-label',`Open ${job.title}`);
+  const jacket=document.createElement('span');jacket.className='library-jacket';
   jacket.innerHTML=bookJacketMarkup({title:job.title,author:job.author||'',color:coverPalette(job).bg,coverAsset:covers.get(job.cover_path)?.url});
   jacket.querySelector('img')?.addEventListener('error',event=>(event.target as HTMLImageElement).remove(),{once:true});
-  cover.append(jacket);
-  const body=document.createElement('div');body.className='book-library-card__body';
-  const scope=document.createElement('p');scope.className='text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans';
+  cover.append(jacket);const arrow=document.createElement('span');arrow.className='library-open';arrow.setAttribute('aria-hidden','true');arrow.textContent='↗';cover.append(arrow);
+  const body=document.createElement('div');body.className='library-copy';
+  const scope=document.createElement('p');scope.className='room-eyebrow';
   const sourceScope=bookSourceLabel(job).split(' · ');scope.textContent=sourceScope[0]==='Excerpt'?`Private excerpt · ${sourceScope[1]}`:'Private book';
-  const heading=document.createElement('h3');heading.className='mt-1 text-wrap font-serif text-2xl leading-snug';
+  const heading=document.createElement('h3');heading.className='font-serif';
   const title=document.createElement('a');title.href=linkFor(job.id);title.className='inline-flex min-h-8 items-center hover:text-soft';title.textContent=job.title;heading.append(title);
-  const author=document.createElement('p');author.className='mt-1 text-sm text-faint';author.textContent=job.author&&job.author!=='Unknown author'?job.author:'Author not identified';
-  const summary=document.createElement('p');summary.className='book-library-card__copy mt-3 leading-relaxed text-soft';summary.textContent=job.skill_summary?.one_liner||job.skill_summary?.read_if||(job.status==='ready'?'Your book summary and reusable skill are ready to open.':'Your summary will appear when processing finishes.');
+  const author=document.createElement('p');author.className='library-author';author.textContent=job.author&&job.author!=='Unknown author'?job.author:'Author not identified';
+  const summary=document.createElement('p');summary.className='library-description';summary.textContent=job.skill_summary?.one_liner||job.skill_summary?.read_if||(job.status==='ready'?'Your book summary and reusable skill are ready to open.':'Your summary will appear when processing finishes.');
   body.append(scope,heading,author,summary);
   if(job.status!=='ready'){const status=document.createElement('p');status.className='mt-3 text-sm text-soft';status.textContent=bookStatus(job);body.append(status);}
-  const actions=document.createElement('div');actions.className='book-library-card__actions';
-  const read=document.createElement('a');read.href=linkFor(job.id);read.textContent=job.status==='ready'?'Read book':'View progress';actions.append(read);
-  if(job.status==='ready'){const skill=document.createElement('a');skill.href=linkFor(job.id)+'#use-skill';skill.textContent='Use skill';actions.append(skill);}
-  body.append(actions);
   const details=document.createElement('details');details.className='book-library-card__details';details.dataset.bookId=job.id;details.open=expanded.has(job.id);
   const detailTitle=document.createElement('summary');detailTitle.textContent='Source details'+(copies.length?` · ${copies.length} other upload${copies.length===1?'':'s'}`:'');details.append(detailTitle);
   for(const text of [bookSourceLabel(job),job.source_name,bookStatus(job)]){const p=document.createElement('p');p.className='mt-2';p.textContent=text;details.append(p);}

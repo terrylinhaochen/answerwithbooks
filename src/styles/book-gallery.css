@@ -1,0 +1,30 @@
+.library-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 42px 24px; }
+.library-book { min-width: 0; }
+.library-cover { display: flex; position: relative; align-items: center; justify-content: center; height: 260px; background: var(--book-well); border-radius: 13px; perspective: 1000px; }
+.library-jacket { display: block; width: 123px; transform-style: preserve-3d; transform: rotateY(-24deg) rotateZ(-4deg); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.library-cover:hover .library-jacket, .library-cover:focus-visible .library-jacket { transform: translateY(-9px) rotateY(-32deg) rotateZ(-2deg); }
+.library-open { position: absolute; right: 17px; bottom: 14px; color: #626e57; font-size: 16px; }
+.library-copy { padding: 22px 2px 0; }
+.library-copy .room-eyebrow { font-size: 8px; }
+.library-copy h3 { font-size: 25px; line-height: 1.06; letter-spacing: -.025em; margin-top: 10px; }
+.library-copy h3 a:hover { color: #647251; }
+.library-author { font-size: 10px; line-height: 1.6; color: #6c7265; margin-top: 9px; }
+.library-description { font-size: 12px; line-height: 1.8; margin-top: 13px; color: var(--color-soft); }
+@media (max-width: 1000px) { .library-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 35px 24px; } }
+@media (max-width: 1000px) { .library-cover { height: 285px; } }
+@media (max-width: 1000px) { .library-jacket { width: 138px; } }
+@media (max-width: 700px) { .library-grid { gap: 32px 18px; } }
+@media (max-width: 700px) { .library-cover { height: 207px; } }
+@media (max-width: 700px) { .library-jacket { width: 94px; } }
+@media (max-width: 700px) { .library-copy { padding-top: 17px; } }
+@media (max-width: 700px) { .library-copy h3 { font-size: 23px; } }
+@media (max-width: 700px) { .library-author { font-size: 10px; } }
+@media (max-width: 700px) { .library-description { font-size: 11px; line-height: 1.75; } }
+@media (max-width: 360px) { .library-grid { gap: 30px 14px; } }
+@media (max-width: 360px) { .library-cover { height: 181px; } }
+@media (max-width: 360px) { .library-jacket { width: 81px; } }
+@media (max-width: 360px) { .library-copy h3 { font-size: 22px; } }
+.library-copy .room-eyebrow { font-family:var(--font-sans); font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--color-soft); }
+.library-copy h3 { font-family:var(--font-serif); overflow-wrap:anywhere; }
+.library-description { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+@media(prefers-reduced-motion:reduce){.library-jacket{transition:none}}

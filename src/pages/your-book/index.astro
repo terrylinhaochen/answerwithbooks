@@ -3,37 +3,34 @@ import Base from '../../layouts/Base.astro';
 import AddBookDialog from '../../components/AddBookDialog.astro';
 ---
 <Base title="Your book" description="Your private book, reusable agent skill, and source references." path="/your-book/" robots="noindex, nofollow">
- <article class="mx-auto max-w-4xl px-5 py-16" data-private-book>
-  <a href="/books/" class="text-sm underline">← Your books</a>
-  <header class="mt-8 grid gap-8 sm:grid-cols-[1fr_180px]">
-   <div><p class="awb-eyebrow">Your book &amp; skill</p><h1 class="mt-3 font-serif text-4xl" data-job-title>Loading your book…</h1><p class="mt-3 text-soft" data-job-author></p><p class="mt-2 text-sm text-soft" data-job-source-scope></p></div>
-   <div hidden data-job-cover class="w-44 my-4" role="img" aria-label="Generated book cover"></div>
-  </header>
-  <section class="mt-8 rounded-2xl border border-line p-5" aria-label="Processing progress"><p role="status" data-job-status>Checking your saved progress…</p><a hidden class="mt-3 block underline" data-job-existing-book></a><p hidden class="mt-3 text-sm text-soft" data-job-last-error></p><progress class="mt-4 w-full" data-job-progress max="100" value="0"></progress><p class="mt-3 text-sm text-soft" data-job-resume>Your upload is saved. Processing continues in the background; you can return to this link any time.</p><div class="mt-4 flex flex-wrap gap-3"><button hidden class="awb-pill" data-job-retry>Resume processing</button><button hidden class="awb-pill" data-job-pause>Pause</button><button hidden class="awb-pill" data-job-cancel>Cancel conversion &amp; release funds</button><button hidden class="awb-pill" data-job-cover-retry>Retry cover</button><button hidden class="awb-pill" data-job-usage-show>View usage</button><a href="/processing/" class="awb-pill">View queue</a></div><p hidden class="mt-3 text-sm text-soft" data-job-usage></p></section>
-  <section hidden class="mt-6 rounded-2xl border border-line p-5" data-job-payment><h2 class="font-serif text-2xl">Create this book and skill</h2><p class="mt-3 text-sm text-soft">Review the token rates and set a spending limit before starting. Generation, reviews, repairs and covers count toward your usage. Actual usage is charged even if processing fails or you cancel. Unused funds return to your balance. Missing usage is held for review. Reusing the result is free.</p><label class="mt-4 block text-sm">Maximum additional spend (USD)<input class="mt-2 block rounded border border-line p-2" data-job-limit type="number" min="0.01" max="1000" step="0.01" value="5.00" /></label><p class="mt-3 text-sm" role="status" data-job-price-message>Your source is saved. Review the spending limit before starting.</p><div class="mt-4 flex flex-wrap gap-3"><button type="button" class="awb-pill" data-job-quote>Review limit</button><button type="button" hidden class="awb-pill awb-pill-primary" data-job-pay></button><a href="/billing/" class="awb-pill" data-job-billing>Add funds / billing</a><a href="https://docs.answerwithbooks.com/guide/own-agent" class="awb-pill">Use my own agent</a></div></section>
-  <section hidden class="mt-6 rounded-2xl border border-line p-5" data-job-versions>
-   <p class="text-sm" data-job-version-status></p>
-   <div hidden class="mt-4 flex flex-wrap gap-3" data-job-revision-actions><button type="button" class="awb-pill" data-job-add-source>Add sources</button><button type="button" class="awb-pill" data-job-replace-source>Replace source</button></div>
-   <div hidden class="mt-4" data-job-activation>
-    <label class="flex items-start gap-3 text-sm"><input type="checkbox" class="mt-1" data-job-activate-review />I reviewed this version against its sources and want to use it as my current book and skill.</label>
-    <button type="button" class="awb-pill awb-pill-primary mt-3" data-job-activate disabled>Make current</button>
+ <article class="mx-auto max-w-5xl px-5 pt-16 pb-10" data-private-book>
+  <nav aria-label="Breadcrumb" class="mb-8 text-sm text-soft"><ol class="flex flex-wrap items-center gap-2"><li><a href="/" class="hover:text-accent">Home</a></li><li aria-hidden="true">/</li><li><a href="/books/" class="hover:text-accent">Books</a></li></ol></nav>
+  <header class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(13rem,18rem)] lg:items-start">
+   <div><p class="awb-eyebrow" data-job-digest-meta>Private book digest</p><h1 class="mt-3 text-wrap break-words font-serif text-4xl leading-tight sm:text-5xl" data-job-title>Loading your book…</h1><p class="mt-3 text-soft" data-job-author></p><p class="mt-2 text-sm text-faint">Private digest by Answer with Books</p>
+    <div hidden class="mt-5" data-job-header-actions><button class="awb-pill awb-pill-primary" data-job-copy disabled>Copy prompt for your AI</button>   <p class="mt-3 text-sm text-soft" role="status" data-job-copy-status>Copies book notes and a task prompt. Paste into your AI chat and send.</p></div>
    </div>
-   <button type="button" hidden class="awb-pill mt-3" data-job-discard>Discard this revision</button>
-   <p class="mt-3 text-sm text-soft" role="status" data-job-version-message></p>
-   <details class="mt-4 text-sm"><summary class="cursor-pointer">Sources and versions</summary><ul class="mt-3 space-y-2" data-job-sources></ul><ul class="mt-4 space-y-2" data-job-revisions></ul></details>
+   <div hidden data-job-cover class="w-24 sm:w-36 my-4 justify-self-start lg:justify-self-end" role="img" aria-label="Generated book cover"></div>
+  </header>
+  <section hidden class="mt-6 grid gap-5 lg:grid-cols-2" data-job-overview>
+   <div class="awb-card-link p-6 text-[1rem] leading-relaxed"><h2 class="awb-eyebrow mb-2">When to reach for this book</h2><p class="font-serif text-2xl leading-snug text-ink" data-job-read-if></p></div>
+   <div class="awb-card-link p-6 text-[1rem] leading-relaxed"><h2 class="awb-eyebrow mb-2">What the book is about</h2><p class="font-serif text-2xl leading-snug text-ink" data-job-one-liner></p></div>
   </section>
   <section hidden class="mt-8 rounded-2xl border border-line bg-card p-6" data-job-analysis>
    <h2 class="font-serif text-2xl">Your source analysis</h2><p class="mt-3 text-sm text-soft">Review these source-grounded notes. Creating the book and skill reuses this analysis.</p>
    <div class="mt-4 flex flex-wrap gap-3"><button class="awb-pill awb-pill-primary" data-job-generate>Create book &amp; skill</button><button class="awb-pill" data-job-analysis-download>Download analysis</button></div>
    <div class="mt-6 space-y-6" data-job-analysis-notes></div>
   </section>
-  <section hidden class="mt-8" data-job-content>
-   <p class="mb-4 text-sm text-soft" data-job-quality hidden></p>
-   <div class="flex flex-wrap gap-3"><button class="awb-pill awb-pill-primary" data-job-copy disabled>Copy prompt for your AI</button><button class="awb-pill" data-job-download disabled>Download book &amp; skill</button><a class="awb-pill" data-job-source>Original book</a><button class="awb-pill" data-job-previous hidden>Download previous version</button></div>
-   <p class="mt-3 text-sm text-soft" role="status" data-job-copy-status>Copies your book notes and skill instructions as a prompt. Paste it into your AI chat, add your task, and send. Download the package to install a reusable skill in your agent.</p>
+  <section hidden data-job-content>
+   <section data-reading-content class="mt-10 rounded-2xl border border-line bg-card px-5 py-6 sm:px-7 sm:py-8"><div class="prose-awb prose-awb--aligned" data-job-reading></div></section>
+   <p class="mt-6 text-sm text-soft">AI-generated digest. Check important claims against your original book.</p>
+   <details id="use-skill" class="mt-8 scroll-mt-24 rounded-2xl border border-line p-6" data-job-skill-tools>
+    <summary class="cursor-pointer font-serif text-2xl">Use with AI</summary>
+    <p class="mt-3 mb-5 text-sm text-soft">Apply this book through your connected agent, or download and install its reusable skill. The complete skill stays in the package.</p>
+   <div class="flex flex-wrap gap-3"><button class="awb-pill" data-job-download disabled>Download book &amp; skill</button><a class="awb-pill" data-job-source>Original book</a><button class="awb-pill" data-job-previous hidden>Download previous version</button></div>
+
    <p class="mt-3 text-sm text-soft" role="status" data-job-audit></p><button hidden class="awb-pill mt-3" data-job-audit-retry>Retry skill check</button>
    <div hidden class="mt-4 rounded-xl border border-line p-4" data-job-review><p class="text-sm">The upstream scanner flagged these passages. Review them in context before using the skill.</p><pre class="mt-3 whitespace-pre-wrap break-words text-xs" data-job-findings></pre><label class="mt-4 flex items-start gap-3 text-sm"><input type="checkbox" class="mt-1" data-job-review-accept />I reviewed these passages and accept this skill for my use.</label></div>
-   <section id="use-skill" hidden class="mt-5 scroll-mt-24 rounded-xl border border-line p-4" data-job-remote>
+   <section hidden class="mt-5 scroll-mt-24 rounded-xl border border-line p-4" data-job-remote>
     <h2 class="font-serif text-xl">Use this book in your connected agent</h2>
     <p class="mt-3 text-sm text-soft">Ask Answer with Books to apply this book to your task. Your agent retrieves the relevant methods from your private library and checks their citations. One Answer with Books skill connects your whole library.</p>
     <p class="mt-3 text-sm" data-job-remote-example></p>
@@ -48,11 +45,30 @@ import AddBookDialog from '../../components/AddBookDialog.astro';
     <p class="mt-2 text-xs text-soft">The command returns the installed skill name. Ask your agent to use that name or this book. Start a new session if your agent has not discovered the new skill yet.</p>
    </details>
    <textarea hidden readonly rows="10" class="awb-input mt-3 w-full" aria-label="Book agent prompt" data-job-prompt></textarea>
-   <div class="mt-8 rounded-2xl border border-line bg-card p-6 sm:p-8" data-job-reading></div>
-   <p class="mt-6 text-sm text-soft">AI-generated draft. Check important claims against your original book. Source section references describe extraction ranges, not verified original chapter boundaries.</p>
+
+   </details>
   </section>
+  <details open class="mt-8 rounded-2xl border border-line p-6" data-job-management>
+   <summary class="cursor-pointer font-serif text-2xl">Source details &amp; processing</summary>
+   <p class="mt-3 text-sm text-soft" data-job-source-scope></p>
+   <p class="mt-3 text-sm text-soft" data-job-quality hidden></p>
+  <section class="mt-8 rounded-2xl border border-line p-5" aria-label="Processing progress"><p role="status" data-job-status>Checking your saved progress…</p><a hidden class="mt-3 block underline" data-job-existing-book></a><p hidden class="mt-3 text-sm text-soft" data-job-last-error></p><progress class="mt-4 w-full" data-job-progress max="100" value="0"></progress><p class="mt-3 text-sm text-soft" data-job-resume>Your upload is saved. Processing continues in the background; you can return to this link any time.</p><div class="mt-4 flex flex-wrap gap-3"><button hidden class="awb-pill" data-job-retry>Resume processing</button><button hidden class="awb-pill" data-job-pause>Pause</button><button hidden class="awb-pill" data-job-cancel>Cancel conversion &amp; release funds</button><button hidden class="awb-pill" data-job-cover-retry>Retry cover</button><button hidden class="awb-pill" data-job-usage-show>View usage</button><a href="/processing/" class="awb-pill">View queue</a></div><p hidden class="mt-3 text-sm text-soft" data-job-usage></p></section>
+  <section hidden class="mt-6 rounded-2xl border border-line p-5" data-job-payment><h2 class="font-serif text-2xl">Create this book and skill</h2><p class="mt-3 text-sm text-soft">Review the token rates and set a spending limit before starting. Generation, reviews, repairs and covers count toward your usage. Actual usage is charged even if processing fails or you cancel. Unused funds return to your balance. Missing usage is held for review. Reusing the result is free.</p><label class="mt-4 block text-sm">Maximum additional spend (USD)<input class="mt-2 block rounded border border-line p-2" data-job-limit type="number" min="0.01" max="1000" step="0.01" value="5.00" /></label><p class="mt-3 text-sm" role="status" data-job-price-message>Your source is saved. Review the spending limit before starting.</p><div class="mt-4 flex flex-wrap gap-3"><button type="button" class="awb-pill" data-job-quote>Review limit</button><button type="button" hidden class="awb-pill awb-pill-primary" data-job-pay></button><a href="/billing/" class="awb-pill" data-job-billing>Add funds / billing</a><a href="https://docs.answerwithbooks.com/guide/own-agent" class="awb-pill">Use my own agent</a></div></section>
+  <section hidden class="mt-6 rounded-2xl border border-line p-5" data-job-versions>
+   <p class="text-sm" data-job-version-status></p>
+   <div hidden class="mt-4 flex flex-wrap gap-3" data-job-revision-actions><button type="button" class="awb-pill" data-job-add-source>Add sources</button><button type="button" class="awb-pill" data-job-replace-source>Replace source</button></div>
+   <div hidden class="mt-4" data-job-activation>
+    <label class="flex items-start gap-3 text-sm"><input type="checkbox" class="mt-1" data-job-activate-review />I reviewed this version against its sources and want to use it as my current book and skill.</label>
+    <button type="button" class="awb-pill awb-pill-primary mt-3" data-job-activate disabled>Make current</button>
+   </div>
+   <button type="button" hidden class="awb-pill mt-3" data-job-discard>Discard this revision</button>
+   <p class="mt-3 text-sm text-soft" role="status" data-job-version-message></p>
+   <details class="mt-4 text-sm"><summary class="cursor-pointer">Sources and versions</summary><ul class="mt-3 space-y-2" data-job-sources></ul><ul class="mt-4 space-y-2" data-job-revisions></ul></details>
+  </section>
+  </details>
+
  </article>
  <AddBookDialog />
  <script>import '../../lib/private-book';</script>
- <style>progress{accent-color:var(--color-ink);height:6px;border:0;border-radius:8px;overflow:hidden}progress::-webkit-progress-bar{background:var(--color-line)}progress::-webkit-progress-value{background:var(--color-ink)}</style>
+ <style>:global([data-job-cover]){perspective:900px}:global([data-job-cover] > .jacket){transform:rotateY(-18deg) rotateZ(-3deg)}progress{accent-color:var(--color-ink);height:6px;border:0;border-radius:8px;overflow:hidden}progress::-webkit-progress-bar{background:var(--color-line)}progress::-webkit-progress-value{background:var(--color-ink)}</style>
 </Base>

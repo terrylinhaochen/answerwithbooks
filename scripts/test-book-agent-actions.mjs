@@ -32,7 +32,7 @@ try {
   assert.equal(await p.locator('[data-filter-item] button').count(),0);
   assert.equal(await p.locator('[data-filter-item]').getByText('Open the book',{exact:true}).count(),0);
   await p.screenshot({path:`/private/tmp/awb-agent-card-${width}.png`});
-  await p.locator('[data-filter-item]:visible .book-row').click();
+  await p.locator('[data-filter-item]:visible .library-cover').click();
   await p.waitForURL(origin+'/books/the-mom-test/');await p.locator('header [data-copy-public-book]').click();const top=await p.evaluate(()=>window.copied);await p.locator('[data-copy-book-agent]').click();assert.equal(await p.evaluate(()=>window.copied),top,'top and end copy one identical book/task prompt');
   await p.goto(origin+'/tools/');await p.locator('[data-open-book-request]').first().click();assert.equal(await p.locator('#book-upload-dialog h2').innerText(),'Upload sources');
   const input=p.getByLabel('Source file');const formats=await input.getAttribute('accept');for(const ext of ['.pdf','.epub','.docx','.md','.html','.rtf','.txt']) assert.ok(formats.split(',').includes(ext));

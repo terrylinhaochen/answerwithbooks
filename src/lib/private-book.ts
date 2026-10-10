@@ -1,3 +1,4 @@
+import {bookReadingSections,readingOverviewWords} from './private-book-reading.mjs';
 import {bookJacketMarkup} from './book-jacket.mjs';
 import {coverPalette} from '../../supabase/functions/_shared/book-cover-design.mjs';
 import {bookStatus,bookSourceLabel} from './book-library-status.mjs';
@@ -15,7 +16,7 @@ if(id)find<HTMLAnchorElement>('billing').href='/billing/?book='+encodeURICompone
 let priceQuote:any=null;
 const needsPayment=(job:any)=>job?.billing_required&&(!job.artifacts||job.status==='ready'&&job.cover_status==='failed'&&!job.cover_path)&&!['held','reconciliation'].includes(job.billing?.state)&&(job.source_import?.state==='complete'||!job.source_import);
 let current:any, running=false, rendered=false, analysisRendered=false, auditPassed=false, hasFindings=false, activating=false;
-let revisionsKey='',revisionCanActivate=false,skillLinkOpened=false;
+let revisionsKey='',revisionCanActivate=false,skillLinkOpened=false,managementState='';
 const nativePending=(job:any)=>job?.source_import?.kind==='native'&&['queued','processing'].includes(job.source_import.state);
 function updateActivationGate(){find<HTMLButtonElement>('activate').disabled=activating||current?.status!=='ready'||!revisionCanActivate||!find<HTMLInputElement>('activate-review').checked||!auditPassed||(hasFindings&&!find<HTMLInputElement>('review-accept').checked);}
 function updateReviewGate(){const blocked=!auditPassed||(hasFindings&&!find<HTMLInputElement>('review-accept').checked);find<HTMLButtonElement>('copy').disabled=blocked;find<HTMLButtonElement>('download').disabled=blocked;updateActivationGate();}
@@ -30,28 +31,49 @@ async function checkSkill(files:Record<string,string>) {
   find<HTMLInputElement>('review-accept').checked=false;
   find('findings').textContent=report.findings.map(f=>`${f.path}:${f.line} · ${f.rule_id}\n${files['skill/'+f.path]?.split('\n')[f.line-1]||''}`).join('\n\n');
   updateReviewGate();
- } catch {find('audit').textContent='The skill check could not finish. Retry before exporting.';find('audit-retry').hidden=false;}
+  if(!auditPassed||hasFindings)find('copy-status').textContent='Open Use with AI below to review the skill check before copying or downloading.';
+ } catch {find('audit').textContent='The skill check could not finish. Retry before exporting.';find('audit-retry').hidden=false;find('copy-status').textContent='Open Use with AI below to retry the skill check before copying or downloading.';}
 }
 
-const renderMarkdown=(text:string)=>{
- const box=find('reading');box.replaceChildren();
- const body=text.replace(/^---\n[\s\S]*?\n---\n/,'').replace(/\n## Use this book in an agent[\s\S]*$/,'');
+function appendMarkdown(box:HTMLElement,text:string) {
  const inline=(el:HTMLElement,text:string)=>{
   for(const part of text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g)) {
    if(part.startsWith('**')&&part.endsWith('**')) {const strong=document.createElement('strong');strong.textContent=part.slice(2,-2);el.append(strong);}
-   else if(part.startsWith('`')&&part.endsWith('`')) {const code=document.createElement('code');code.textContent=part.slice(1,-1);code.className='break-all text-sm';el.append(code);}
+   else if(part.startsWith('`')&&part.endsWith('`')) {const code=document.createElement('code');code.textContent=part.slice(1,-1);el.append(code);}
    else el.append(document.createTextNode(part));
   }
  };
- for(const raw of body.split(/\n\n+/)) {
+ for(const raw of text.split(/\n\n+/)) {
   const block=raw.trim();if(!block)continue;
   const heading=block.match(/^(#{1,3}) (.+)$/);
-  if(heading) {const el=document.createElement(`h${Math.min(3,heading[1].length)}`);el.className='mt-7 font-serif text-2xl';el.textContent=heading[2];box.append(el);}
-  else if(/^1\. /.test(block)) {const ol=document.createElement('ol');ol.className='mt-4 list-decimal space-y-2 pl-6';for(const line of block.split('\n')){const li=document.createElement('li');inline(li,line.replace(/^\d+\. /,''));ol.append(li);}box.append(ol);}
-  else {const el=document.createElement('p');el.className='mt-4 whitespace-pre-wrap break-words leading-relaxed';inline(el,block);box.append(el);}
+  if(heading) {const el=document.createElement(`h${Math.max(2,heading[1].length)}`);el.textContent=heading[2];box.append(el);}
+  else if(/^(1\. |[-*] )/.test(block)) {const list=document.createElement(/^1\./.test(block)?'ol':'ul');for(const line of block.split('\n')){const li=document.createElement('li');inline(li,line.replace(/^(\d+\. |[-*] )/,''));list.append(li);}box.append(list);}
+  else {const el=document.createElement('p');el.className='whitespace-pre-wrap break-words';inline(el,block);box.append(el);}
  }
-
-};
+}
+function renderMarkdown(text:string) {
+ const box=find('reading');box.replaceChildren();const sections=bookReadingSections(text);
+ for(const section of sections) {
+  if(!section.detailed){appendMarkdown(box,(section.title?`## ${section.title}\n\n`:'')+section.text);continue;}
+  const chunks=section.text.split(/(?=^### )/m).filter(Boolean);
+  const details=document.createElement('details'),summary=document.createElement('summary');
+  details.className='my-6 rounded-xl border border-line p-5';details.dataset.readerNotes='';
+  summary.className='cursor-pointer font-serif text-xl';summary.textContent=`${section.title} · ${chunks.length} ${section.title==='Core lessons'?'source sections':'frameworks'}`;
+  details.append(summary);let expanded=false;
+  details.addEventListener('toggle',()=>{
+   if(!details.open||expanded)return;expanded=true;
+   for(const chunk of chunks){
+    const entry=document.createElement('details'),label=document.createElement('summary');
+    const heading=chunk.match(/^### ([^\n]+)\n/);label.textContent=heading?.[1]||'Notes';label.className='cursor-pointer py-3 font-medium';
+    entry.className='mt-3 border-t border-line';entry.append(label);let loaded=false;
+    entry.addEventListener('toggle',()=>{if(entry.open&&!loaded){loaded=true;const body=document.createElement('div');appendMarkdown(body,heading?chunk.slice(heading[0].length):chunk);entry.append(body);}});
+    details.append(entry);
+   }
+  });
+  box.append(details);
+ }
+ const words=readingOverviewWords(sections);find('digest-meta').textContent=`Private book digest · ${Math.max(1,Math.ceil(words/200))} min overview`;
+}
 async function showVersions(job:any) {
  find('versions').hidden=false;
  const pending=job.is_current===false;
@@ -99,7 +121,16 @@ async function showVersions(job:any) {
  }catch {revisionsKey='';revisionCanActivate=false;find('activation').hidden=true;find('discard').hidden=true;updateActivationGate();find('version-message').textContent='Version history is unavailable right now. Your saved book remains available.';}
 }
 async function paint(job:any) {
- current=job;find('cancel').hidden=job.billing?.state!=='held'||job.status==='ready';find('payment').hidden=!needsPayment(job);if(!needsPayment(job)){priceQuote=null;find('pay').hidden=true;}find('cover-retry').hidden=job.cover_status!=='failed'||job.billing_required&&job.billing?.state!=='held';find('usage-show').hidden=!job.cursor&&!job.artifacts;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
+ current=job;
+ const complete=job.status==='ready'&&!!job.artifacts;
+ const attention=!complete||job.cover_status==='failed'||job.billing?.state==='reconciliation'||job.is_current===false;
+ const managementKey=attention?'attention':'complete';
+ if(managementState!==managementKey){find<HTMLDetailsElement>('management').open=attention;managementState=managementKey;}
+ find('header-actions').hidden=!complete;
+ find('overview').hidden=!complete;
+ find('read-if').textContent=job.skill_summary?.read_if||'Use this book’s source-grounded ideas to explore your question.';
+ find('one-liner').textContent=job.skill_summary?.one_liner||'Read the central argument, core lessons, and frameworks below.';
+ find('cancel').hidden=job.billing?.state!=='held'||job.status==='ready';find('payment').hidden=!needsPayment(job);if(!needsPayment(job)){priceQuote=null;find('pay').hidden=true;}find('cover-retry').hidden=job.cover_status!=='failed'||job.billing_required&&job.billing?.state!=='held';find('usage-show').hidden=!job.cursor&&!job.artifacts;find('title').textContent=job.title;find('author').textContent=job.author==='Unknown author'?'Author not identified':job.author;
  find('source-scope').textContent=`${bookSourceLabel(job)} · ${job.source_name}`;
  const previous=find('last-error');previous.hidden=!job.last_error;previous.textContent=job.last_error?`Previous interruption${job.last_error_at?` (${new Date(job.last_error_at).toLocaleString()})`:''}: ${job.last_error}`:'';
  const existing=find<HTMLAnchorElement>('existing-book');existing.hidden=!job.existing_book;
@@ -130,8 +161,7 @@ async function paint(job:any) {
   find('quality').textContent=sourceReviewNotice(job.artifacts);
   find('previous').hidden=!previousReviewPath(job,job.user_id);
   renderMarkdown(job.artifacts['book.md']);void checkSkill(job.artifacts);
-  const skill=Object.entries(job.artifacts).filter(([name])=>name.startsWith('skill/')).map(([name,value])=>`## ${name}\n${value}`).join('\n\n');
-  find<HTMLTextAreaElement>('prompt').value=bookAgentPrompt({title:job.title,author:job.author,url:location.href,digest:job.artifacts['book.md'],skill});
+
   const {data}=await supabase.storage.from('private-books').createSignedUrl(`${job.user_id}/${job.id}/source`,3600);
   if(data)find<HTMLAnchorElement>('source').href=data.signedUrl;else find('source').hidden=true;
  }
@@ -147,8 +177,8 @@ async function run(action?:string) {
   const {data}=await supabase.auth.getSession();if(!data.session)throw new Error('Sign in to Answer with Books, then return to this private book link.');
   if(action==='retry'&&current?.source_import?.kind==='native'&&current.source_import.state==='failed'){await nativeBookWorker({action:'retry',id});action='status';}
   await paint((await bookWorker({action:action||'status',id})).job);
-  if(location.hash==='#use-skill'&&!skillLinkOpened&&current.status==='ready'){skillLinkOpened=true;find('remote').scrollIntoView({block:'start'});}
- }catch(e){find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
+  if(location.hash==='#use-skill'&&!skillLinkOpened&&current.status==='ready'){skillLinkOpened=true;find<HTMLDetailsElement>('skill-tools').open=true;find('skill-tools').scrollIntoView({block:'start'});}
+ }catch(e){find<HTMLDetailsElement>('management').open=true;find('status').textContent=e instanceof Error?e.message:'Processing paused. Please retry.';find('retry').hidden=false;}
  finally{running=false;}
 }
 setInterval(()=>{if(!document.hidden&&(current?.run_state==='queued'||current?.cover_status==='pending'||nativePending(current)))void run();},5000);
@@ -195,8 +225,10 @@ find('audit-retry').addEventListener('click',()=>void checkSkill(current.artifac
 find('retry').addEventListener('click',()=>void run('retry'));
 find('copy').addEventListener('click',async()=>{
  const prompt=find<HTMLTextAreaElement>('prompt');
+ const skill=Object.entries(current.artifacts).filter(([name])=>name.startsWith('skill/')).map(([name,value])=>`## ${name}\n${value}`).join('\n\n');
+ prompt.value=bookAgentPrompt({title:current.title,author:current.author,url:location.href,digest:current.artifacts['book.md'],skill});
  try {await navigator.clipboard.writeText(prompt.value);find('copy-status').textContent='Copied. Open your AI chat, paste the prompt, add your task, and send.';}
- catch {prompt.hidden=false;prompt.focus();prompt.select();find('copy-status').textContent='Copy was blocked. Select and copy the prompt below.';}
+ catch {find<HTMLDetailsElement>('skill-tools').open=true;find('copy-status').textContent='Clipboard access was blocked. Download the book and skill from Use with AI below.';}
 });
 async function downloadRevision(previous=false,analysis=false) {
  const button=find<HTMLButtonElement>(analysis?'analysis-download':previous?'previous':'download');button.disabled=true;

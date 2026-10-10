@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import TactileShelf from '../components/TactileShelf.astro';
 import BookAgentDemo from '../components/BookAgentDemo.astro';
+import BookRow from '../components/BookRow.astro';
 import BookJacket from '../components/BookJacket.astro';
-import AnswerCover from '../components/AnswerCover.astro';
 import { bookPalettes } from '../lib/book-palettes';
+import AnswerCover from '../components/AnswerCover.astro';
 import '../styles/collector-home.css';
 import InstallSkillDialog from '../components/InstallSkillDialog.astro';
 import AddBookDialog from '../components/AddBookDialog.astro';
@@ -177,10 +178,7 @@ const jsonLd = [
     <section id="source-books" class="home-section home-library">
       <div class="section-heading"><div><p class="room-eyebrow">Featured books</p><h2>A few good places<br /> to <em>begin.</em></h2></div><a class="room-link" href="/books/">All {books.length} books <span aria-hidden="true">↗</span></a></div>
       <div class="library-grid">
-        {shelfBooks.map((book, index) => <article class="library-book">
-          <a class="library-cover" href={`/books/${book.id}/`} aria-label={`Read ${book.data.title}`} style={`--book-well:${index % 3 === 0 ? '#e2e3d6' : index % 3 === 1 ? '#e9e0d2' : '#e0e4df'}`}><span class="library-jacket"><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} loading="lazy" /></span><span class="library-open" aria-hidden="true">↗</span></a>
-          <div class="library-copy"><p class="room-eyebrow">{book.data.tags[0]?.replaceAll('-', ' ') ?? 'Source book'}</p><h3><a href={`/books/${book.id}/`}>{book.data.title}</a></h3><p class="library-author">{book.data.author}</p><p class="library-description">{book.data.oneLiner}</p></div>
-        </article>)}
+        {shelfBooks.map((book, index) => <BookRow book={book} index={index} />)}
       </div>
     </section>
 

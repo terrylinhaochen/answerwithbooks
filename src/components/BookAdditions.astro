@@ -1,11 +1,12 @@
 ---
 import '../styles/book-library-card.css';
+import '../styles/book-gallery.css';
 ---
 <section class="mt-8 mb-10" data-book-additions hidden>
   <h2 class="font-serif text-2xl">Your books &amp; skills</h2>
   <p class="mt-2 text-sm text-soft">Read your books and put their ideas to work. <a href="/processing/" class="underline">View processing queue</a>.</p>
   <p class="mt-3 text-sm text-soft" role="status" data-book-additions-message></p>
-  <div class="mt-4 grid items-stretch gap-4 md:grid-cols-2" data-book-additions-list></div>
+  <div class="mt-4 library-grid" data-book-additions-list></div>
 </section>
 <script>
   import '../lib/book-additions';

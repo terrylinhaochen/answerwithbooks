@@ -33,3 +33,10 @@ test('public and private covers share art direction, title panel, and safe jacke
  const hostile=bookJacketMarkup({title:'<img src=x onerror=alert(1)>',author:'A&B',color:'red;bad:1',coverAsset:'javascript:alert(1)'});
  assert.doesNotMatch(hostile,/<img/);assert.match(hostile,/&lt;img/);assert.match(hostile,/A&amp;B/);assert.doesNotMatch(hostile,/bad:1|javascript:/);
 });
+
+test('reader overview excludes exhaustive notes and agent instructions without discarding references',async()=>{
+ const {bookReadingSections,readingOverviewWords}=await import('../src/lib/private-book-reading.mjs');
+ const parts=bookReadingSections('---\ntitle: "Example"\n---\n\n## Central argument\n\nA short argument.\n\n## Core lessons\n\n### One\n\nDetailed lesson.\n\n## Key frameworks\n\n### Method\n\nDetailed steps.\n\n## Source and coverage\n\nPrivate references.\n\n## Use this book in an agent\n\nSkill instructions.');
+ assert.deepEqual(parts.map(part=>part.title),['Central argument','Core lessons','Key frameworks']);
+ assert.equal(readingOverviewWords(parts),3);assert.equal(parts.filter(part=>part.detailed).length,2);assert.match(parts[1].text,/Detailed lesson/);assert.match(parts[2].text,/Detailed steps/);
+});

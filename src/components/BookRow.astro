@@ -1,41 +1,14 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import '../styles/book-library-card.css';
-import BookCover from './BookCover.astro';
-
-interface Props {
-  book: CollectionEntry<'books'>;
-  compact?: boolean;
-}
-const { book, compact = false } = Astro.props;
+import '../styles/book-gallery.css';
+import BookJacket from './BookJacket.astro';
+import { bookPalettes } from '../lib/book-palettes';
+interface Props { book: CollectionEntry<'books'>; compact?: boolean; index?: number; }
+const {book,index=0}=Astro.props;
 ---
-
-<article class={`book-row book-library-card awb-card-link group h-full ${compact ? 'p-5' : 'p-4'}`}>
-  <div class={compact ? 'flex h-full flex-col gap-5' : 'grid h-full grid-cols-[4.5rem_minmax(0,1fr)] gap-4 sm:grid-cols-[5rem_minmax(0,1fr)]'}>
-    <BookCover book={book} size={compact ? 'lg' : 'sm'} class={compact ? 'mx-auto' : 'shrink-0'} />
-    <div class="flex min-w-0 flex-1 flex-col">
-      <p class="text-xs font-semibold uppercase tracking-[0.08em] text-faint font-sans">Source book</p>
-      <h3 class={`mt-1 text-wrap font-serif leading-snug ${compact ? 'text-2xl' : 'text-2xl'}`}>
-        <a href={`/books/${book.id}/`} class="book-row__link inline-flex min-h-8 items-center hover:text-soft">{book.data.title}</a>
-      </h3>
-      <p class="mt-1 text-sm text-faint">
-        {book.data.author} · {book.data.year}
-      </p>
-      <p class={`book-row__copy mt-3 text-soft leading-relaxed ${compact ? 'text-[0.95rem]' : ''}`}>{book.data.oneLiner}</p>
-      <div class="book-library-card__actions"><a href={`/books/${book.id}/`}>Read digest</a><a href={`/books/${book.id}/#use-with-ai`}>Use with AI</a></div>
-    </div>
-  </div>
+<article class="library-book">
+ <a class="library-cover" href={`/books/${book.id}/`} aria-label={`Open ${book.data.title}`} style={`--book-well:${['#e2e3d6','#e9e0d2','#e0e4df'][index%3]}`}>
+  <span class="library-jacket"><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} /></span><span class="library-open" aria-hidden="true">↗</span>
+ </a>
+ <div class="library-copy"><p class="room-eyebrow">{book.data.tags[0]?.replaceAll('-', ' ') ?? 'Source book'}</p><h3><a href={`/books/${book.id}/`}>{book.data.title}</a></h3><p class="library-author">{book.data.author}</p><p class="library-description">{book.data.oneLiner}</p></div>
 </article>
-
-<style>
-  .book-row { position: relative; isolation: isolate; }
-  .book-row__link::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: 16px; }
-  .book-row__link:focus-visible { outline: none; }
-  .book-row__link:focus-visible::after { outline: 2px solid var(--color-ink); outline-offset: 3px; }
-  .book-row__copy {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
-</style>
