@@ -48,12 +48,12 @@ Do not silently use another provider or expand the earlier cumulative evaluation
 |---|---|---|
 | Local extraction/generation/review/resume | Automated fixture + real text extraction | Broad PDF/OCR/technical corpus testing; semantic quality |
 | One skill, chapter/topic notes, glossary/patterns/cheatsheet | Local install and package tests | Fresh-session harness discovery/selection |
-| Multiple sources → one guide | Local + managed compiler parity; source attribution and DB retrieval | Live authenticated managed acceptance and genuine model disagreement test |
-| Local workspace → private retrieval | Import/HTTP/database tests; no text-generation calls | Production migration/endpoint approval and deployment |
+| Multiple sources → one guide | Local + managed compiler parity; live managed two-source intake and private retrieval attribution | New paid conversion and genuine model disagreement test |
+| Local workspace → private retrieval | Deployed import endpoint/migration; live private import, idempotence and retrieval; zero generation usage | Broad corpus and semantic quality |
 | Managed spending limits | Existing metered-billing regressions | Paid live run settlement, not covered by isolated tests |
-| Hosted activation | Same owner-scoped index; methods/citations returned to caller | Fresh connected-client readback after deployment |
+| Hosted activation | Live owner-scoped retrieval; methods/citations read by the published 0.6.0 CLI in a fresh process | New harness session discovery/selection |
 | Append/replace hosted source | Existing revision/ownership/citation tests | Browser-to-server acceptance after release |
-| Add sources to existing local guide | Implemented and regression-tested locally | Release matching CLI; hosted sync of later local revisions is out of scope |
+| Add sources to existing local guide | Released in CLI 0.6.0 and regression-tested | Hosted sync of later local revisions is out of scope |
 | Import upstream/manual skill packages | Out of scope by user decision | No implementation planned |
 | Editorial reader digest separate from skill | Prompt design exists; runtime still uses reference-style book.md | Wire editorial generation/review into both routes and reader UI |
 | Analyze-only / resume analysis | Managed analysis exists | Local analyze-only and continuation UX parity |
@@ -77,4 +77,6 @@ Editorial reference: `content-engine/prompts/book-digest/editorial-digest-v1.md`
 
 ## Release boundary
 
-Changes are in working checkouts, not a released CLI or deployed endpoint. Automatic approval previously rejected the production migration/function deployment because persistent shared-service changes were not explicitly approved. That pending approval remains required; no alternate deployment path was used. After approval: deploy migration/import and changed processing/library functions, publish matching CLI assets/instructions, run authenticated private import + managed conversion + retrieval, then update public docs to describe verified availability.
+CLI 0.6.0 is published. The private-import migration and `book-import`, `book-process`, and `book-library` functions are deployed. Authenticated production checks cover initial private sync, idempotent retry, hybrid retrieval with citations and distinct source attribution, and managed combined-source staging through its spending-limit quote. A fresh process using the GitHub release package retrieved the imported guide. Generated test content is controlled fixture content; these checks do not establish model quality.
+
+See [0.6.0 release verification](verification/release-0.6.0-2026-10-10/README.md) for deployment and test evidence. No new paid end-to-end managed conversion was run in this release acceptance. Separate editorial generation, broad corpus quality, and fresh-session harness discovery remain unverified or unfinished as shown above. Later local revisions remain local by user decision.

@@ -1,0 +1,160 @@
+{
+  "release": "0.6.0",
+  "date": "2026-10-10",
+  "coreCommit": "6f159986fccf85e8b36c8a9f6e32f38c833f7c4d",
+  "packageSha256": "c6e145762a6ab6804d9281c4f29488e7eeb68299482028e080e3a1abe2002e23",
+  "migration": "20261010081943_book_agent_import.sql",
+  "functions": [
+    "book-import",
+    "book-process",
+    "book-library"
+  ],
+  "localRegression": {
+    "cliTestsPassed": 46,
+    "workflowTestsPassed": 75,
+    "postgresPgvector": "passed",
+    "mintlifyValidation": "passed"
+  },
+  "production": {
+    "privateSync": {
+      "status": "imported",
+      "generationChargeCents": 0,
+      "repeatSameId": true,
+      "embeddedSections": 1,
+      "database": [
+        {
+          "status": "ready",
+          "run_state": "complete",
+          "billing_required": true,
+          "billing_state": "imported",
+          "cover_status": "none",
+          "model_usage_rows": 0,
+          "provider_operation_rows": 0
+        }
+      ]
+    },
+    "freshReleasedCli": {
+      "status": "needs_reasoning",
+      "method": "hybrid",
+      "matches": 1,
+      "citationCount": 3
+    },
+    "combinedGuideRetrieval": {
+      "generationChargeCents": 0,
+      "results": [
+        {
+          "question": "daily commitments",
+          "status": "needs_reasoning",
+          "method": "hybrid",
+          "matches": [
+            {
+              "section": "ch01",
+              "sources": [
+                {
+                  "name": "a.txt",
+                  "startLine": 5,
+                  "endLine": 10
+                }
+              ],
+              "citationCount": 1,
+              "ideas": [
+                "Daily commitments"
+              ]
+            },
+            {
+              "section": "ch02",
+              "sources": [
+                {
+                  "name": "b.md",
+                  "startLine": 12,
+                  "endLine": 17
+                }
+              ],
+              "citationCount": 1,
+              "ideas": [
+                "Weekly commitments"
+              ]
+            }
+          ]
+        },
+        {
+          "question": "weekly commitments",
+          "status": "needs_reasoning",
+          "method": "hybrid",
+          "matches": [
+            {
+              "section": "ch02",
+              "sources": [
+                {
+                  "name": "b.md",
+                  "startLine": 12,
+                  "endLine": 17
+                }
+              ],
+              "citationCount": 1,
+              "ideas": [
+                "Weekly commitments"
+              ]
+            },
+            {
+              "section": "ch01",
+              "sources": [
+                {
+                  "name": "a.txt",
+                  "startLine": 5,
+                  "endLine": 10
+                }
+              ],
+              "citationCount": 1,
+              "ideas": [
+                "Daily commitments"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "managedIntake": {
+      "status": "awaiting_price_acceptance",
+      "runState": "staging",
+      "sources": [
+        {
+          "name": "observations.txt",
+          "startLine": 5,
+          "endLine": 10
+        },
+        {
+          "name": "reversible-decisions.txt",
+          "startLine": 12,
+          "endLine": 17
+        }
+      ],
+      "quoteAvailable": true,
+      "paidGenerationStarted": false
+    },
+    "managedGenerationCalls": 0,
+    "website": {
+      "commit": "de66bc3f068d35dca073637ad50569fc7670ca49",
+      "actionsRun": 38084934216,
+      "conclusion": "success",
+      "liveToolsPageHasBothChoices": true,
+      "liveSkillEntrypointVersion": "0.6.0",
+      "liveMintlifyCombinedGuidesVersion": "0.6.0",
+      "browserUiAgainstLiveSite": "passed with mocked authentication/backend"
+    }
+  },
+  "notRun": [
+    "new paid managed end-to-end generation and settlement",
+    "new semantic model-quality evaluation",
+    "fresh harness skill discovery and selection"
+  ],
+  "excluded": [
+    "arbitrary third-party skill package import",
+    "hosted sync of subsequent local revisions"
+  ],
+  "testCleanup": {
+    "testBooksRemoved": 3,
+    "testObjectsRemoved": 4,
+    "providerOperations": 0
+  }
+}
