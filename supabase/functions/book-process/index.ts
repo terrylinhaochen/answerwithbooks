@@ -16,6 +16,7 @@ import {exportBookFiles} from '../_shared/book-export.mjs';
 import {sanitizeSource} from '../_shared/upstream-sanitize.mjs';
 import { createClient } from 'npm:@supabase/supabase-js@2.49.8';
 import { splitSource } from '../_shared/book-sections.mjs';
+import {collectionSources} from '../_shared/book-collections.mjs';
 import {finalizeBookSource,skillSummary,libraryBook} from '../_shared/book-revisions.mjs';
 import uploadLimits from '../_shared/book-upload-limits.json' with {type:'json'};
 const url=Deno.env.get('SUPABASE_URL')!;
@@ -145,7 +146,7 @@ Deno.serve(async req=>{
   if(Number(req.headers.get('content-length')||0)>7000000)return reply({error:'Source too large'},413);
   const raw=await req.text();if(raw.length>2500000)return reply({error:'Source too large'},413);
   const input=JSON.parse(raw);if(!input||typeof input!=='object'||Array.isArray(input))return reply({error:'Send a JSON object.'},400);
-  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:uploadLimits.maxFileBytes,max_text_characters:uploadLimits.maxTextCharacters,max_batch_files:10,daily_source_limit:10,background_processing:true,staged_uploads:true});
+  if(input.action==='health')return reply({available:!!providerKey(),formats:['pdf','epub','docx','html','rtf','txt','md','rst','adoc'],max_file_bytes:uploadLimits.maxFileBytes,max_text_characters:uploadLimits.maxTextCharacters,max_batch_files:10,daily_source_limit:10,background_processing:true,staged_uploads:true,combined_sources:true});
   const bearer=req.headers.get('authorization')?.replace(/^Bearer /i,'');if(!bearer)return reply({error:'Sign in to upload a private book.'},401);
   if(input.action==='drain') {
    const runner=Deno.env.get('BOOK_QUEUE_RUNNER_SECRET');
@@ -207,6 +208,8 @@ Deno.serve(async req=>{
    if(!providerKey())return reply({error:'Generation is unavailable.'},503);
    if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc|collection\.zip)$/i.test(input.name)||!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes||!Number.isSafeInteger(input.textBytes)||input.textBytes<100||input.textBytes>uploadLimits.maxTextBytes||! /^[a-f0-9]{64}$/.test(input.sha||'')||! /^[a-f0-9]{64}$/.test(input.textSha||''))return reply({error:'Choose a supported source within the upload limits.'},400);
    const options=processingOptions(input.options),headings=input.extraction?.headings||[];
+   collectionSources(input.extraction?.sources);
+   if(input.extraction?.sources&&input.parentId)return reply({error:'Add one source per revision.'},400);
    if(!Array.isArray(headings)||headings.length>uploadLimits.maxSourceHeadings||headings.some((h:any)=>!h||!Number.isSafeInteger(h.line)||h.line<1||typeof h.title!=='string'||h.title.length>1000))return reply({error:'Invalid extracted source structure.'},400);
    const result=input.parentId?await db.rpc('create_book_revision',{p_user:user.id,p_parent:input.parentId,p_name:input.name,p_sha:input.sha,p_kind:input.revisionKind,p_options:options}):await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:'Source upload pending. '.repeat(6),p_title:input.name.replace(/(?:\.collection)?\.[^.]+$/,''),p_chunks:[]});
    if(result.error)return reply({error:input.parentId?result.error.message:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not save this source. Please retry.'},400);
@@ -214,7 +217,7 @@ Deno.serve(async req=>{
    if(reusableBook(job))return reply({job:cachedBookSummary(job),reused:true});
    if(job.cursor>0)return reply({job:publicJob(job)});
    if(job.lease_until&&Date.parse(job.lease_until)>Date.now())return reply({error:'This source is already being saved. Please retry shortly.'},409);
-   job=requireOk(await db.from('book_processing_jobs').update({options,run_state:'staging',source_import:{textSha:input.textSha,textBytes:input.textBytes,headings},lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('updated_at',job.updated_at).select().single());
+   job=requireOk(await db.from('book_processing_jobs').update({options,run_state:'staging',source_import:{textSha:input.textSha,textBytes:input.textBytes,headings,sources:input.extraction?.sources},lease_token:null,lease_until:null,updated_at:new Date().toISOString()}).eq('id',job.id).eq('updated_at',job.updated_at).select().single());
    const upload=requireOk(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/source`,{upsert:true}));
    const textUpload=requireOk(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/extracted-source.txt`,{upsert:true}));
    return reply({job:publicJob(job),upload,textUpload});
@@ -225,6 +228,8 @@ Deno.serve(async req=>{
    if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc|collection\.zip)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to six million readable characters.'},400);
    const options=processingOptions(input.options);
    const source=splitSource(sanitizeSource(input.text), input.extraction?.headings||[]);
+   collectionSources(input.extraction?.sources,source.text);
+   if(input.extraction?.sources&&input.parentId)return reply({error:'Add one source per revision.'},400);
    const result=input.parentId?await db.rpc('create_book_revision',{p_user:user.id,p_parent:input.parentId,p_name:input.name,p_sha:input.sha,p_kind:input.revisionKind,p_options:options}):await db.rpc('create_book_processing_job',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_text:source.text,p_title:input.name.replace(/(?:\.collection)?\.[^.]+$/,''),p_chunks:source.chunks});
    if(result.error)return reply({error:input.parentId?result.error.message:result.error.message.includes('Daily limit')?'Daily limit reached. Try again tomorrow.':'Could not create this book. Please retry.'},400);
    let job=result.data;let upload=null;
@@ -233,7 +238,7 @@ Deno.serve(async req=>{
    if(job.status==='uploaded'&&!job.lease_until) {
     // Options can change only before processing starts. Enqueue follows completed upload.
     const parent=job.parent_job_id?requireOk(await db.from('book_processing_jobs').select('*').eq('id',job.parent_job_id).eq('user_id',user.id).single()):undefined;
-    const prepared=finalizeBookSource(job,source.text,input.extraction?.headings||[],parent);
+    const prepared=finalizeBookSource({...job,source_import:{...job.source_import,sources:input.extraction?.sources}},source.text,input.extraction?.headings||[],parent);
     job=requireOk(await db.from('book_processing_jobs').update({...prepared,options,run_state:input.options?'staging':'manual'}).eq('id',job.id).eq('updated_at',job.updated_at).is('lease_token',null).select().single());
    }
    if(job.status==='uploaded')upload=requireOk(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/source`,{upsert:true}));

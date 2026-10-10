@@ -1,0 +1,2 @@
+PASS mobile two-file choice, one named guide, originals/text upload, two source maps, spending-limit navigation and no paid generation
+PASS separate-books selection retains independent source creation and spending gates

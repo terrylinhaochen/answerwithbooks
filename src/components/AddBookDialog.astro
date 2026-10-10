@@ -11,7 +11,7 @@ const library=(await getCollection('books')).map(book=>({slug:book.id,title:book
  <p class="mt-2 text-sm text-soft" data-upload-reuse-note>Existing library books are free to read, search, download, and reuse. Private books stay private.</p>
  <script type="application/json" data-upload-library set:html={JSON.stringify(library).replace(/</g,'\\u003c')} />
  <fieldset class="mt-5 grid gap-3" data-processing-route><legend class="text-sm font-semibold">How would you like to create it?</legend><label class="text-sm"><input type="radio" name="processing-route" value="hosted" checked /> Let Answer with Books process it — review token rates and a spending limit first</label><label class="text-sm"><input type="radio" name="processing-route" value="agent" /> Use my own agent — uses my agent plan, no Answer with Books generation charge</label></fieldset>
- <div hidden class="mt-5 rounded-xl border border-line p-4" data-local-processing><p class="text-sm">Ask your agent: “Use Answer with Books to turn my local file into a book summary and reusable skill. Use the customer-agent route.”</p><p class="mt-3 text-sm text-soft">Your agent reads the source, generates notes, checks citations, and saves the skill locally. Your file is not uploaded to Answer with Books. <a class="underline" href="https://docs.answerwithbooks.com/guide/own-agent">Commands and setup</a></p></div>
+ <div hidden class="mt-5 rounded-xl border border-line p-4" data-local-processing><p class="text-sm">Ask your agent: “Use Answer with Books to turn my local file into a book summary and reusable skill. Use the customer-agent route.”</p><p class="mt-3 text-sm text-soft">Your agent reads the source, generates notes, checks citations, and saves the skill locally. Choose device-only output, or ask your connected agent to save the finished guide to your private library. <a class="underline" href="https://docs.answerwithbooks.com/guide/own-agent">Commands and setup</a></p></div>
  <form class="mt-6" novalidate>
   <label class="upload-drop" data-upload-drop>
    <svg class="upload-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4" /></svg>
@@ -23,6 +23,13 @@ const library=(await getCollection('books')).map(book=>({slug:book.id,title:book
   <p id="upload-limits" data-upload-limits class="mt-3 text-sm text-soft">Up to ten files · {uploadLimits.maxFileBytes / 1024 / 1024} MB each.</p>
   <ul class="upload-files" data-upload-files aria-label="Selected sources"></ul>
   <button type="button" data-upload-clear hidden>Clear files</button>
+  <fieldset class="mt-5 grid gap-3" data-upload-grouping hidden>
+   <legend class="text-sm font-semibold">How should we organize these sources?</legend>
+   <label class="text-sm"><input type="radio" name="source-grouping" value="separate" checked /> Separate books — one book and skill per file</label>
+   <label class="text-sm"><input type="radio" name="source-grouping" value="combined" /> One guide — combine the sources into one book and skill</label>
+   <label class="text-sm" data-guide-title-label hidden>Guide title<input name="guideTitle" maxlength="200" class="awb-input mt-1 w-full" placeholder="For example, Organizational design" /></label>
+   <p class="text-xs text-soft" data-guide-note hidden>Each source keeps its references. Up to ten sources, 50 MB total. Text-readable sources only; Kindle and technical PDFs need separate processing.</p>
+  </fieldset>
   <details class="mt-4 upload-options"><summary class="cursor-pointer text-sm">Customize the result</summary>
    <div class="mt-3 grid gap-3 sm:grid-cols-2">
     <label class="text-sm">Create<select name="mode" class="awb-input mt-1 w-full"><option value="full">Book, skill &amp; cover</option><option value="analysis">Analysis first</option></select></label>
@@ -33,7 +40,7 @@ const library=(await getCollection('books')).map(book=>({slug:book.id,title:book
   <details class="mt-3 upload-options"><summary class="cursor-pointer text-sm">File requirements</summary>
    <p class="mt-3 text-sm text-soft">PDF · EPUB · DOCX · MOBI · AZW · AZW3 · Markdown · HTML · RTF · Text</p>
    <p class="mt-2 text-sm text-soft">PDFs need selectable text; scanned pages need OCR first. Kindle files must be DRM-free. Long books are read in sections automatically.</p>
-   <p class="mt-2 text-sm text-soft">Each file becomes a separate book and skill. Ten new sources per day.</p>
+   <p class="mt-2 text-sm text-soft">Choose separate books or one combined guide for multiple files. Ten new processing jobs per day.</p>
   </details>
   <p class="mt-5 text-xs leading-relaxed text-soft">Private to your account. Uploading saves your source; accept the displayed price to send its text for hosted AI generation.</p>
   <button type="submit" class="awb-pill awb-pill-primary mt-5" data-upload-submit disabled>Upload &amp; review price</button>

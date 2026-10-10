@@ -1,0 +1,3 @@
+Check supabase/functions/book-process/index.ts
+Check supabase/functions/book-import/index.ts
+Check supabase/functions/book-library/index.ts

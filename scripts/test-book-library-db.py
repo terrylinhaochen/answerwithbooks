@@ -45,8 +45,8 @@ sql(f"update book_processing_jobs set run_state='paused' where id='{book}';")
 assert search(owner,'specialization')==[]
 sql(f"update book_processing_jobs set run_state='complete' where id='{book}';")
 print('PASS current revision, paused/delete-in-progress exclusion and cross-owner hydration isolation')
-for _ in range(30):assert sql(f"select allow_book_library_search('{owner}');")=='t'
-assert sql(f"select allow_book_library_search('{owner}');")=='f'
+rate_results=sql(f"begin;select allow_book_library_search('{owner}') from generate_series(1,31);commit;").splitlines()
+assert [x for x in rate_results if x in ('t','f')]==['t']*30+['f']
 assert sql(f"select allow_book_library_search('{other}');")=='t'
 print('PASS atomic per-account query limit without storing questions')
 # Optional actual provider vectors: public source + synthetic distractors, no user data.

@@ -73,6 +73,13 @@ jobs:
           node scripts/test-book-cli-auth.mjs
           PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-cli-db.py
 
+      - name: Verify combined guides and private workspace sync
+        run: |
+          git clone --depth 1 --branch v0.6.0 https://github.com/Crowdlisten/Crowdlisten_books.git ../core
+          npm ci --prefix ../core
+          node scripts/eval-book-flow.mjs
+          deno check --node-modules-dir=none supabase/functions/book-import/index.ts
+
       - name: Verify authentication email branding
         run: node scripts/test-auth-email-templates.mjs
 

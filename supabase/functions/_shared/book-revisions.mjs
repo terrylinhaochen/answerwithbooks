@@ -1,3 +1,4 @@
+import {collectionSources,collectionChunks} from './book-collections.mjs';
 import {splitSource} from './book-sections.mjs';
 import limits from './book-upload-limits.json' with {type:'json'};
 
@@ -14,10 +15,11 @@ export function finalizeBookSource(job,text,headings=[],parent) {
  if(typeof text!=='string'||text.trim().length<100)throw new Error('The source needs at least 100 readable characters.');
  const source=splitSource(text,headings);
  if(job.parent_job_id&&(!parent||parent.id!==job.parent_job_id||parent.user_id!==job.user_id||parent.book_id!==job.book_id||parent.status!=='ready'))throw new Error('The prior revision does not belong to this book or is not ready.');
+ const collection=collectionSources(job.source_import?.sources,source.text);
  const entry={name:job.source_name,sha:job.source_sha,jobId:job.id};
  if(job.revision_kind!=='append')return {
-  source_text:source.text,chunks:source.chunks,cursor:0,notes:[],overview_notes:[],
-  source_manifest:[{...entry,sourceId:'S1',startLine:1,endLine:source.lineCount}],
+  source_text:source.text,chunks:collectionChunks(source.chunks,collection),cursor:0,notes:[],overview_notes:[],
+  source_manifest:collection?.map(s=>({...s,jobId:job.id}))||[{...entry,sourceId:'S1',startLine:1,endLine:source.lineCount}],
  };
  if(!parent||parent.notes.length!==parent.chunks.length)throw new Error('Finish the prior revision before adding sources.');
  const manifest=sourceManifest(parent);

@@ -1,3 +1,4 @@
+import {uploadCombinedSources} from './book-upload-combined.mjs';
 import {needsStructuredPdf} from './pdf-processing-route.mjs';
 import {matchLibraryFile} from './library-match.mjs';
 import {extractUpstream,analyzeUpstream} from './upstream-book';
@@ -74,6 +75,7 @@ export function mountBookUpload() {
  const usesNative=(item:UploadItem)=>/\.(mobi|azw|azw3)$/i.test(item.file.name)||item.extractionMode==='technical';
  const revisionFields=()=>context.parentId?{parentId:context.parentId,revisionKind:context.revisionKind}:{};
  const checkNative=async()=>{const health=await nativeBookWorker({action:'health'});if(!health.available)throw new Error('This file’s background reader is temporarily unavailable. Please try again shortly. Your file has not been uploaded.');};
+ const combined=()=>!context.parentId&&items.length>1&&(form.elements.namedItem('source-grouping') as RadioNodeList).value==='combined';
  const resolved=(item:UploadItem)=>!!(item.jobId||item.libraryBook);
  const href=(item:UploadItem)=>item.libraryBook?`/books/${item.libraryBook.slug}/`:`/your-book/?id=${item.jobId}`;
  const pending=()=>items.filter(item=>!resolved(item)&&!item.libraryMatch&&!item.error);
@@ -87,7 +89,7 @@ export function mountBookUpload() {
    if(name instanceof HTMLAnchorElement)name.href=href(item);
    const detail=document.createElement('small');detail.textContent=item.error||item.message;
    info.append(name,detail);row.append(info);
-   if(item.libraryMatch){
+   if(item.libraryMatch&&!combined()){
     const book=item.libraryMatch,choices=document.createElement('div');choices.className='upload-reuse';
     detail.textContent=`Library match: ${book.title} by ${book.author}. Saved digest and AI prompt available.`;
     const use=document.createElement('button');use.type='button';use.textContent='Use library book';use.disabled=busy;
@@ -100,10 +102,16 @@ export function mountBookUpload() {
    list.append(row);
   }
   dialog.querySelectorAll<HTMLInputElement>('[name="processing-route"]').forEach(radio=>radio.disabled=busy);
+  const grouping=dialog.querySelector<HTMLElement>('[data-upload-grouping]')!;
+  grouping.hidden=!!context.parentId||items.length<2;
+  dialog.querySelector('[data-upload-limits]')!.textContent=context.parentId?`One file up to ${maxFileMB} MB.`:combined()?`Up to ten files · ${maxFileMB} MB total.`:`Up to ten files · ${maxFileMB} MB each.`;
+  grouping.querySelectorAll<HTMLInputElement>('input').forEach(el=>el.disabled=busy||items.some(resolved));
+  dialog.querySelector<HTMLElement>('[data-guide-title-label]')!.hidden=!combined();
+  dialog.querySelector<HTMLElement>('[data-guide-note]')!.hidden=!combined();
   clear.hidden=!items.length;clear.disabled=busy;
   input.disabled=busy;close.disabled=busy;
   form.querySelectorAll<HTMLSelectElement>('select').forEach(select=>select.disabled=busy);
-  submit.disabled=busy||!items.some(item=>!resolved(item)&&!item.libraryMatch&&(!item.error||item.retryable));
+  submit.disabled=busy||(combined()?items.some(resolved):!items.some(item=>!resolved(item)&&!item.libraryMatch&&(!item.error||item.retryable)));
   const analysis=(form.elements.namedItem('mode') as HTMLSelectElement).value==='analysis';
   submit.textContent=busy?'Preparing your sources…':!pending().length&&items.some(item=>item.retryable)?'Try again':'Upload & review limit';
   queue.hidden=!items.some(item=>item.jobId);
@@ -125,6 +133,7 @@ export function mountBookUpload() {
  const resetDrag=()=>{dragDepth=0;drop.classList.remove('is-dragging');};
  input.addEventListener('change',()=>{selectFiles(Array.from(input.files||[]));input.value='';});
  clear.addEventListener('click',()=>{items=[];input.value='';draw();status.textContent='Choose your sources.';input.focus();});
+ form.querySelectorAll('[name=source-grouping]').forEach(radio=>radio.addEventListener('change',draw));
  form.querySelectorAll('select').forEach(select=>select.addEventListener('change',draw));
  drop.addEventListener('dragenter',event=>{event.preventDefault();if(!busy&&event.dataTransfer?.types.includes('Files')){dragDepth++;drop.classList.add('is-dragging');}});
  drop.addEventListener('dragover',event=>{event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect=busy?'none':'copy';});
@@ -153,9 +162,21 @@ export function mountBookUpload() {
  form.addEventListener('submit',async event=>{
   event.preventDefault();if(busy)return;
   for(const item of items)if(item.retryable){item.error=undefined;item.retryable=false;}
-  if(!pending().length)return;busy=true;draw();login.hidden=true;
+  const asGuide=combined();
+  if(!asGuide&&!pending().length)return;busy=true;draw();login.hidden=true;
   try {
    const {data}=await supabase.auth.getSession();if(!data.session){login.hidden=false;throw new Error('Sign in first to keep your books private.');}
+   if(asGuide){
+    const title=(form.elements.namedItem('guideTitle') as HTMLInputElement).value.trim();
+    const options=Object.fromEntries(['mode','depth','purpose'].map(name=>[name,(form.elements.namedItem(name) as HTMLSelectElement).value]));
+    const result=await uploadCombinedSources(items.map(item=>item.file),title,options,{
+     call:bookWorker,extract:extractFullBook,
+     progress:(index:number,message:string)=>{items[index].message=message;draw();},
+     put:async(target:{path:string;token:string},bytes:Uint8Array)=>{const {error}=await supabase.storage.from('private-books').uploadToSignedUrl(target.path,target.token,new Blob([bytes],{type:'application/octet-stream'}),{contentType:'application/octet-stream'});if(error)throw Error('Could not save all sources. Retry this same guide to resume.');}
+    });
+    for(const item of items){item.jobId=result.job.id;item.libraryMatch=undefined;item.error=undefined;item.message='Saved in one guide · review its spending limit';}
+    status.textContent='Your guide is saved. Review its spending limit to start generation.';draw();window.dispatchEvent(new Event('awb:book-added'));location.assign(href(items[0]));return;
+   }
     for(const item of pending()){
      try{
       item.message='Checking your saved books…';draw();

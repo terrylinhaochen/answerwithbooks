@@ -1,3 +1,15 @@
+## October 10: scope and intake choices
+
+Private-library sync remains a one-time handoff of a newly completed local guide. Syncing subsequent local revisions is explicitly out of scope, not an unfinished release requirement. Multiple selected sources must offer **One guide** or **Separate books** in the agent and upload UI. The UI choice is now implemented locally, with one combined source archive/manifest, a single spending-limit review and a server capability check. It is not deployed yet.
+
+## October 10 scope correction
+
+Importing packages produced by upstream book-to-skill or other tools is out of scope. Earlier proposals for arbitrary package import are superseded. Retain AWB own-agent workspace sync and incremental local guide updates. `local add` now preserves notes/citations and guide identity, regenerates synthesis, and updates one installed skill. See the Mintlify pages `guide/combined-guides`, `guide/own-agent`, and `guide/cli` for version availability; these development changes are not released or deployed yet.
+
+## October 10: pasted-experience evaluation
+
+See [BOOK_FLOW_EVALUATION.md](BOOK_FLOW_EVALUATION.md) for the 16-case transcript-derived evaluation, implementation details and explicit gaps. Multi-source local generation, managed source-map preservation and imported retrieval attribution are implemented in working checkouts; 71 regression checks pass. They are not released or deployed. Independent semantic scoring and live acceptance remain unverified.
+
 # One book experience, two generated artifacts
 
 Status: implementation plan, 2026-10-09. This document and the prompt templates
@@ -43,6 +55,79 @@ investigation.
    `book-library`, and no local-publish command in the installed CLI. Uploading
    the original is not the same as importing the generated artifacts. The docs'
    old “unless you separately choose to upload it” wording was ambiguous.
+
+## October 10 implementation update
+
+The private local-workspace import bridge is now implemented and locally tested.
+Production deployment was rejected by automatic approval review pending explicit
+user authorization. See [implementation and test evidence](verification/byoa-import-2026-10-10/README.md).
+The findings below describe the earlier deployed state; they do not claim this
+new implementation is released.
+
+## October 10 follow-up: managed default and Bring your own agent
+
+Decision: managed generation is the default; **Bring your own agent** is the
+alternative. Generation provider and storage destination are separate choices.
+The live profile page already preselects hosted processing. The shipped agent
+route guide still presents a route choice, with the own-agent option first; it
+has not been aligned to a consistent managed-first recommendation.
+
+Verified this round: the local prepare/next/respond/install implementation and
+three offline tests pass, the live own-agent guide explicitly says finished
+package import is unsupported, and book-library exposes search plus internal
+index draining, not artifact ingestion. No import implementation or deployment
+is included in this follow-up.
+
+| Path | Intended behavior | Current gap |
+| --- | --- | --- |
+| Managed generation (default) | Upload source, approve spending limit, generate reader digest and skill, index privately, retrieve from any connected agent | Separate editorial generation and its checks remain planned; existing conversion produces a reference-style book artifact |
+| Bring your own agent | Current agent runs the same versioned contracts, saves a resumable package, then automatically uploads/indexes if the user chose their library | AWB workspace sync is implemented locally but not deployed; no external-package import is planned |
+
+Bring your own agent consumes the customer's existing agent plan or provider
+usage; it is not necessarily an on-device model. Plain import must not trigger
+hosted text generation or a second conversion charge. Indexing, optional cover
+creation and optional hosted semantic review have separate costs/policies.
+Both paths must converge on the same reader, skill and retrieval contract.
+
+### Source fidelity: observed failures and design response
+
+The saved evaluations show derived checklists labeled as author instructions,
+qualified claims becoming universal, and numerical meanings changing. The
+extraction prompt already says to preserve conditions, cite each idea and label
+derived applications. Structural validators check shapes and citation bounds;
+they cannot prove that cited text supports a claim. The default review model
+falls back to the generator model, and the own-agent route uses the same agent
+for both. Review false acceptance is observed; correlated mistakes are a likely
+contributor, not an experimentally isolated cause. The experimental reader-v2
+benchmark also generates a separate editorial directly and does not run the
+production per-claim skill reviewer on that editorial.
+
+Use a factual evidence brief before either output, retaining source range,
+attribution, conditions and numeric meaning. Generate the reader digest and
+agent applications separately. Keep derived applications visibly distinct from
+author instructions. Review both final artifacts against original cited source,
+not only compressed notes. Add focused checks for quantities, polarity,
+qualifiers and prescriptive attribution; permit dropping unsupported claims.
+Use a separate calibrated review pass for ambiguous claims and record its
+provenance. Importing local artifacts must validate the same contract without
+trusting a client-written passed flag. A local agent shifts generation cost;
+it does not itself solve fidelity.
+
+### Catalog expansion
+
+Import goes to the owner's private library by default. Public catalog growth is
+a separate **Submit to catalog** action with explicit publication consent,
+source-rights/provenance review, editorial quality review, and work/edition
+matching. Publish only approved reader/skill artifacts and permitted source
+material. This lets internal editors or contributors use existing agents for
+generation without automatically publishing private uploads. Submission and
+public promotion remain proposed features, not verified capabilities.
+
+Acceptance for the missing bridge: generate a fixture locally, import it twice
+without duplicates, recover from interrupted sync, retrieve its cited methods
+through a fresh authenticated agent, and verify there were no hosted text-model
+calls or conversion debits during import. Reject cross-account access and invalid
+source references. Public publication must require the separate submission path.
 
 ## Product decisions
 
@@ -131,10 +216,25 @@ implementation work.
 
 ### Finished local package -> hosted retrieval
 
-Add an explicit “Add to my library” flow and a corresponding CLI operation
-(proposed syntax: `library import-package ./my-book/package`; not available yet).
-It requires login and explains that the selected package and source evidence will
-be uploaded privately. Never auto-upload during local generation/install.
+Choose the destination at intake, independently of who runs generation:
+
+- **My Answer with Books library:** after login, explain that the source evidence,
+  editorial digest and structured skill will be stored privately. Selecting this
+  destination authorizes automatic upload and indexing when customer-agent
+  generation finishes. Do not ask the user to perform another manual upload.
+- **This device only:** generate/install offline with no automatic upload. Offer
+  “Add to my library” later through the same import protocol.
+
+The cloud destination is the recommended connected flow. It must be explicit in
+intake; installing a skill or merely being signed in does not select it. Store
+that destination in resumable local job state. A synchronization failure keeps
+completed local files and retries the upload, not generation. Show generation
+complete and library indexing ready as separate states.
+
+Both paths use a corresponding CLI operation (proposed syntax:
+`library import-package ./my-book/package`; not available yet). The connected
+flow invokes it automatically with the selected destination. Standalone imports
+require login and explain the package and source evidence being uploaded.
 
 Proposed import protocol:
 

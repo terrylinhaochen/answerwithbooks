@@ -1,0 +1,107 @@
+---
+title: "Combine and update guides"
+description: "Build one guide from several sources and add material as your work develops."
+---
+
+A guide can draw on several books, papers, or your own documents. Keep related sources together when you want your agent to compare their ideas and apply them to one problem.
+
+Each source keeps its own references. Combining sources does not mean they agree: the guide should distinguish shared ideas, different assumptions, and conflicting recommendations.
+
+## Create one guide
+
+Tell your agent:
+
+```text
+Create one organizational-design guide from these files. Keep each author's claims and references separate, and explain where their recommendations differ.
+```
+
+Choose [managed generation](/guide/hosted-processing) to have Answer with Books process the sources in the background, or [bring your own agent](/guide/own-agent) to generate locally using your agent's model access.
+
+Managed intake accepts up to ten files, a folder, or a quoted glob. Files create separate books unless you explicitly request one combined guide. Your agent shows the spending limit before starting new hosted generation.
+
+<Accordion title="Managed CLI example">
+Use the [CLI prefix](/guide/cli) followed by:
+
+```text
+upload ./sources --combine "Organizational design" --json
+```
+
+Review and accept the returned quote before processing. Keep the originals: extraction may miss scanned pages or complex formatting.
+</Accordion>
+
+## Choose in the upload dialog
+
+<Note>
+Select multiple files in the upload dialog to choose one guide or separate books.
+</Note>
+
+After selecting two or more files, choose **Separate books** or **One guide**. For one guide, enter a title. The upload keeps the selected originals and their individual references together, then opens one spending-limit review. Generation starts only after you accept that limit.
+
+A combined upload supports text-readable sources totalling up to 50 MB. Kindle files and PDFs requiring structured processing need separate processing or a suitable converted source. If one source cannot be read, the combined upload stops so your guide is not silently missing a source.
+
+Your agent offers the same choice when you provide multiple files. If you have already asked for one guide or separate books, it keeps your choice.
+
+## Add to an existing local guide
+
+<Note>
+Local multi-source creation and incremental updates require CLI 0.6.0 or later.
+</Note>
+
+Tell your agent:
+
+```text
+Add this new source to my existing organizational-design guide. Keep the earlier notes and citations, update the combined explanation, and update the installed skill when it is ready.
+```
+
+The agent uses the saved Answer with Books workspace. Keep that workspace after the first conversion; the installed skill alone does not contain the processing history needed to continue it.
+
+Adding a source:
+
+- Reuses the existing accepted notes and preserves their source line references.
+- Processes and checks the new material.
+- Rebuilds the combined explanation, glossary and indexes.
+- Keeps the same guide identity and updates the same installed skill.
+- Saves the revision in a new workspace directory, leaving the previous version usable.
+
+Add one source per update. Finish the current revision before adding the next. An identical source is rejected rather than processed again. A guide supports up to ten sources.
+
+<Accordion title="CLI examples">
+Create a new guide from multiple sources:
+
+```text
+local prepare ./sources --combine "Organizational design" --output ./organization-guide
+```
+
+Add a source to a completed guide:
+
+```text
+local add ./organization-guide ./new-source.pdf --output ./organization-guide-v2
+local next ./organization-guide-v2
+```
+
+Your agent completes the usual `local next` / `local respond` cycle in the new directory. Once ready:
+
+```text
+local install ./organization-guide-v2
+```
+
+These are CLI arguments, not standalone shell commands. Use the version 0.6.0 [CLI prefix](/guide/cli).
+</Accordion>
+
+## Update a managed book or guide
+
+For a guide already processed on Answer with Books, ask your agent to add a source to that guide. Managed append/replace operations create a new revision and require their own spending-limit approval. Append preserves earlier source references; replacement processes the replacement source.
+
+```text
+upload ./new-source.pdf --book BOOK_ID --revision append --json
+```
+
+Add one file per managed revision. Review its quote before starting paid work.
+
+## Use the result
+
+For a guide in your connected private library, your agent retrieves relevant methods and source excerpts, then applies them to your task. The server does not execute a skill or write your answer. You do not need to install every guide locally.
+
+For device-only work, install the finished guide as one skill. Ask your agent to use it by name; some agents need a new session to discover an installation.
+
+Private-library sync of a newly completed local workspace is available in CLI 0.6.0 after connecting your account. **Private-library sync is a one-time handoff; later local revisions stay local.** Continue using updated local guides locally; do not upload them as new books and assume they updated the existing hosted guide.

@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "id": "book-flow-v1",
+  "origin": {
+    "attachmentSha256": "32c9ce89e7b276f3e1ae43d86e30f40cda8c60d1cac0bc4f12de19a28fb7bad3",
+    "description": "User-supplied upstream book-to-skill transcript; reported 808-pass run corroborated by saved report, not rerun here. Multi-source flow is a separate user requirement, not a transcript demonstration.",
+    "upstreamCommit": "e180fc46365e8c1aab0120778cc8a40b9515324b"
+  },
+  "qualityGate": {
+    "repeatsPerRoute": 3,
+    "dimensions": [
+      "source_fidelity",
+      "scope_and_attribution",
+      "usefulness",
+      "progressive_disclosure"
+    ],
+    "minimumEach": 4,
+    "scale": 5,
+    "hardFailures": [
+      "invented citation",
+      "outside claim attributed to source",
+      "wrong edition or scope",
+      "hidden source disagreement",
+      "cross-account disclosure"
+    ],
+    "requireIndependentJudge": true,
+    "status": "not_run",
+    "note": "Deterministic fixtures validate contracts, not real-model quality. No paid model calls made for this suite."
+  },
+  "cases": [
+    {
+      "id": "selection-correction",
+      "origin": "transcript",
+      "capability": "File discovery",
+      "prompt": "Missing smith1776_1, then Wealth of Nations.pdf",
+      "expected": "Do not fabricate a match; preserve the corrected selection.",
+      "verification": "manual"
+    },
+    {
+      "id": "edition-scope",
+      "origin": "transcript",
+      "capability": "Scope",
+      "prompt": "Does this cover the entire Wealth of Nations?",
+      "expected": "Identify Jonathan Bennett modernization, supplied Book I chapters 1-11, later books listed only in contents; no full-work claim.",
+      "verification": "semantic"
+    },
+    {
+      "id": "package",
+      "origin": "transcript",
+      "capability": "Packaging",
+      "prompt": "Create and install a reusable skill.",
+      "expected": "One installed skill, chapter/topic index, glossary, patterns, cheatsheet, bundled citations.",
+      "verification": "automated"
+    },
+    {
+      "id": "progressive",
+      "origin": "transcript",
+      "capability": "Activation",
+      "prompt": "Use the book to analyze specialization.",
+      "expected": "Load relevant chapters 1 and 3, verify citations, keep unrelated chapters unloaded.",
+      "verification": "semantic"
+    },
+    {
+      "id": "analogy",
+      "origin": "transcript",
+      "capability": "Application",
+      "prompt": "Does fine-tuning an LLM follow Smith\u2019s division of labour?",
+      "expected": "Separate dexterity, switching and machinery; distinguish modern analogy from Smith; repeated inference is not training.",
+      "verification": "semantic"
+    },
+    {
+      "id": "qualifications",
+      "origin": "transcript",
+      "capability": "Fidelity",
+      "prompt": "Does specialization always win?",
+      "expected": "Preserve market-size, repeatability and cost conditions; do not invent permanent assignment prescriptions.",
+      "verification": "semantic"
+    },
+    {
+      "id": "outside-knowledge",
+      "origin": "transcript",
+      "capability": "Attribution",
+      "prompt": "Compare Smith with LoRA and model routing.",
+      "expected": "Mark modern sources as external; no LoRA claims attributed to Smith; verify current empirical claims separately.",
+      "verification": "semantic"
+    },
+    {
+      "id": "teaching",
+      "origin": "transcript",
+      "capability": "Teaching",
+      "prompt": "Quiz me on effectual demand, one question at a time.",
+      "expected": "Use relevant chapter, await the answer before revealing feedback; cite the source and distinguish demand from desire.",
+      "verification": "semantic"
+    },
+    {
+      "id": "missing-scope",
+      "origin": "extension",
+      "capability": "Refusal to invent",
+      "prompt": "Explain Book V taxes using only this Book I edition.",
+      "expected": "State the missing source; offer another source without inventing Book V coverage.",
+      "verification": "semantic"
+    },
+    {
+      "id": "combine",
+      "origin": "user-request",
+      "capability": "Many sources to one guide",
+      "prompt": "Combine two sources with daily vs weekly commitment reviews.",
+      "expected": "One guide with separate filenames, hashes, line ranges and source-specific rules; no invented consensus.",
+      "verification": "automated-and-semantic"
+    },
+    {
+      "id": "resume",
+      "origin": "extension",
+      "capability": "Durability",
+      "prompt": "Interrupt, resume, fail a source review, then repair.",
+      "expected": "Accepted sections survive; stale responses rejected; no silent pass; upload retry does not regenerate.",
+      "verification": "automated"
+    },
+    {
+      "id": "managed-parity",
+      "origin": "user-request",
+      "capability": "Managed path",
+      "prompt": "Process the same two sources in each route.",
+      "expected": "Identical model instructions, schema/evidence and compiled results under controlled responses; managed billing still gated.",
+      "verification": "automated"
+    },
+    {
+      "id": "private-sync",
+      "origin": "prior-user-request",
+      "capability": "Library",
+      "prompt": "Finish locally and sync to my library.",
+      "expected": "Automatic sync only for selected library destination; retry idempotent; same index and citations; other owner cannot retrieve.",
+      "verification": "automated"
+    },
+    {
+      "id": "fresh-session",
+      "origin": "transcript",
+      "capability": "Harness discovery",
+      "prompt": "Start a new agent session and ask it to use the installed skill.",
+      "expected": "Actual harness loads installed skill and relevant references; installation alone is not evidence.",
+      "verification": "manual"
+    },
+    {
+      "id": "fold-in",
+      "origin": "upstream-skill",
+      "capability": "Incremental guide",
+      "prompt": "Add another source to this existing local guide.",
+      "expected": "Reuse prior notes and source line coordinates, process new source only, rebuild synthesis/indexes, preserve guide identity and update one local skill; previous workspace remains usable.",
+      "verification": "automated"
+    },
+    {
+      "id": "editorial",
+      "origin": "prior-user-request",
+      "capability": "Reader output",
+      "prompt": "Read the generated book on the site.",
+      "expected": "Separate editorial reader digest and knowledge-engineered skill using documented versioned prompts.",
+      "verification": "open-feature"
+    }
+  ],
+  "outOfScope": [
+    "Importing skill packages generated by other tools",
+    "Syncing subsequent local guide revisions to the hosted library"
+  ]
+}

@@ -8,7 +8,7 @@ Most users can ask their agent in ordinary language. These commands are for scri
 Use this prefix, followed by a command:
 
 ```bash
-npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.5.0/answer-with-books-0.5.0.tgz --help
+npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.6.0/answer-with-books-0.6.0.tgz --help
 ```
 
 | Command | Purpose |
@@ -29,3 +29,18 @@ npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.
 | `logout` | Revoke this CLI connection. |
 
 Use returned book and quote IDs exactly. The $5 cap is an example, not a recommended book price. Approval belongs to the user. [Own-agent processing](/guide/own-agent) uses the `local` commands.
+
+## Local guides and private sync (0.6.0)
+
+Use the 0.6.0 release linked above. Private-library sync requires a connected account; device-only work does not.
+
+| Command | Purpose |
+| --- | --- |
+| `local prepare ./sources --combine "Guide title" --output ./guide` | Create one local guide from multiple sources. |
+| `local add ./guide ./new-source.pdf --output ./guide-v2` | Add one source while preserving earlier notes and citations. |
+| `local next ./guide-v2` | Continue generation and review in the updated workspace. |
+| `local install ./guide-v2` | Update the same installed guide after processing finishes. |
+| `local prepare ./book.pdf --output ./book --destination library` | Select automatic private-library sync for a new local workspace. |
+| `local publish ./book` | Sync a completed first-version AWB workspace without regenerating it. |
+
+See [Combine and update guides](/guide/combined-guides) and [Bring your own agent](/guide/own-agent). Private-library sync is a one-time handoff; later local revisions stay local.
