@@ -29,6 +29,18 @@ upload ./sources --combine "Organizational design" --json
 Review and accept the returned quote before processing. Keep the originals: extraction may miss scanned pages or complex formatting.
 </Accordion>
 
+## Choose in the upload dialog
+
+<Note>
+The upload-dialog choice is implemented in development and has not been deployed yet. The current site still creates separate books from multiple selected files.
+</Note>
+
+After selecting two or more files, choose **Separate books** or **One guide**. For one guide, enter a title. The upload keeps the selected originals and their individual references together, then opens one spending-limit review. Generation starts only after you accept that limit.
+
+A combined upload supports text-readable sources totalling up to 50 MB. Kindle files and PDFs requiring structured processing need separate processing or a suitable converted source. If one source cannot be read, the combined upload stops so your guide is not silently missing a source.
+
+Your agent offers the same choice when you provide multiple files. If you have already asked for one guide or separate books, it keeps your choice.
+
 ## Add to an existing local guide
 
 <Note>
@@ -92,4 +104,4 @@ For a guide in your connected private library, your agent retrieves relevant met
 
 For device-only work, install the finished guide as one skill. Ask your agent to use it by name; some agents need a new session to discover an installation.
 
-Private-library sync of a newly completed local workspace is under development. **Syncing subsequent local revisions to that hosted guide is not supported yet.** Continue using updated local guides locally; do not upload them as new books and assume they updated the existing hosted guide.
+Private-library sync of a newly completed local workspace is under development. **Private-library sync is a one-time handoff; later local revisions stay local.** Continue using updated local guides locally; do not upload them as new books and assume they updated the existing hosted guide.
