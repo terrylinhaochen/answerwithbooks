@@ -17,6 +17,14 @@ Keep the generic Answer with Books skill for a large library. You do not need to
 
 To install one, ask “Install the skill for this book.” A ready full-source package includes `SKILL.md`, chapter notes, glossary, patterns, cheatsheet, and source references. Some hosts discover newly installed skills on the next turn or in a new session.
 
+## Hosted retrieval or local installation
+
+Hosted retrieval is the default for a connected private library. Your agent asks the authenticated `book-library` endpoint for relevant methods and source excerpts, then applies that evidence to your task. The endpoint does not execute `SKILL.md` or write the final answer. You do not need to download each book.
+
+“Download book & skill” saves a ZIP for backup or optional offline installation. It includes generated notes, the skill files and extracted source text for checking citations. Downloading the ZIP does not install the skill or change how hosted retrieval works.
+
+A book generated entirely with your own agent remains local. Importing that finished package for hosted retrieval is not available yet; see [Generate with your own agent](/guide/own-agent).
+
 ## Public and private sources
 
 Public recommendations can include books outside the catalog. When choosing a reading set, the agent should show the selection criteria and let you choose before starting a conversion.
