@@ -1,11 +1,11 @@
 """Run in the isolated queue + real pgvector harness after library tests."""
-import json,concurrent.futures
+import json,concurrent.futures,tempfile
 from pathlib import Path
 sql('alter table public.book_processing_jobs add column billing_required boolean not null default true;alter table public.book_processing_jobs add column billing jsonb;')
 sql((ROOT/'supabase/migrations/20261010081943_book_agent_import.sql').read_text())
 owner='00000000-0000-4000-8000-000000000081';other='00000000-0000-4000-8000-000000000082'
 sql(f"insert into auth.users values('{owner}'),('{other}');")
-payload=json.loads(Path('/private/tmp/awb-agent-import-fixture.json').read_text())
+payload=json.loads((Path(tempfile.gettempdir())/'awb-agent-import-fixture.json').read_text())
 quote=lambda s:"'"+str(s).replace("'","''")+"'"
 job=json.dumps(payload['job']);sha=payload['packageSha']
 def call(user=owner):return json.loads(sql(f"select import_agent_book('{user}','{sha}',{quote(job)}::jsonb);"))['id']
@@ -22,7 +22,7 @@ try:sql(f"set role authenticated;select import_agent_book('{owner}','{sha}',{quo
 except RuntimeError as e:assert 'permission denied' in str(e)
 else:raise AssertionError('Untrusted client can choose an import owner')
 print('PASS concurrent idempotent import, existing lexical retrieval and citations, cross-owner isolation, service-only RPC, zero generation receipts and paid-operation guard retained')
-collection=json.loads(Path('/private/tmp/awb-agent-collection-fixture.json').read_text())
+collection=json.loads((Path(tempfile.gettempdir())/'awb-agent-collection-fixture.json').read_text())
 collection_id=json.loads(sql(f"select import_agent_book('{owner}',{quote(collection['packageSha'])},{quote(json.dumps(collection['job']))}::jsonb);"))['id']
 assert sql(f"select jsonb_array_length(source_manifest) from book_processing_jobs where id='{collection_id}';")=='2'
 assert sql(f"select count(*) from book_library_entries where user_id='{owner}' and job_id='{collection_id}';")=='2'

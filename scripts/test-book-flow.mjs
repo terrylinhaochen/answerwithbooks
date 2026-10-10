@@ -44,7 +44,7 @@ test('two sources -> one guide: local and managed use identical prompts, evidenc
  const exported=exportBookFiles(imported.job);assert.equal(JSON.parse(exported['skill/source-map.json']).sources.length,2);
  for(const note of imported.job.notes){const ref=note.ideas[0].sourceRefs[0],text=imported.job.source_text.split('\n').slice(ref.startLine-1,ref.endLine).join('\n');assert.match(text,/Review commitments/);assert.ok(imported.job.source_manifest.some(s=>ref.startLine>=s.startLine&&ref.endLine<=s.endLine));}
  const installed=await installLocal(dir,{}, {skillsDir:join(root,'skills'),cacheRoot:join(root,'cache')});assert.equal(installed.status,'installed');assert.equal((await readdir(installed.path,{recursive:true})).filter(p=>p.endsWith('SKILL.md')).length,1);
- await writeFile('/private/tmp/awb-agent-collection-fixture.json',JSON.stringify(imported));
+ await writeFile(join(tmpdir(),'awb-agent-collection-fixture.json'),JSON.stringify(imported));
 });
 test('collection preserves normalized line coordinates for long unicode lines and rejects tampered/overlapping source maps',async t=>{
  const {root,paths}=await setup(t);await writeFile(paths[0],'😀'.repeat(1200)+'\r\n'+sources[0][1]);
