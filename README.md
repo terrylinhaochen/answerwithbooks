@@ -82,3 +82,7 @@ CrowdListen demand -> book lenses -> answer -> reader behavior -> better demand
 ## Deployment
 
 This repo deploys the static site with GitHub Pages and GitHub Actions. See [DEPLOY.md](./DEPLOY.md) for setup and DNS notes.
+
+## Operate and verify accounts
+
+See [Signup tracking and launch acceptance](docs/SIGNUP_TRACKING.md) for the private signup report, account attribution, and opt-in live authentication checks. Account signup, newsletter subscription, and analytics consent are separate flows.

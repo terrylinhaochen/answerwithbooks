@@ -15,7 +15,7 @@ const deps = { fields, redirectTo, auth: { signUp: async value => { signups.push
 assert.equal((await createToolAccount(deps)).state, 'confirmation');
 assert.deepEqual(subscriptions, [], 'Account creation must not subscribe');
 assert.equal(signups[0].options.emailRedirectTo, redirectTo);
-assert.deepEqual(signups[0].options.data, { first_name: 'Demo', last_name: 'Reader', username: 'demo_reader' });
+assert.deepEqual(signups[0].options.data, { first_name: 'Demo', last_name: 'Reader', username: 'demo_reader', awb_signup: {version:1,product:'answerwithbooks',entrypoint:'tools'} });
 assert.ok(!JSON.stringify(signups[0].options.data).includes(fields.password));
 await assert.rejects(createToolAccount({ ...deps, redirectTo: 'javascript:alert(1)' }));
 await assert.rejects(createToolAccount({ ...deps, redirectTo: 'https://example.com/elsewhere/' }));

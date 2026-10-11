@@ -68,7 +68,7 @@ await privateContext.addInitScript(key=>localStorage.setItem(key,JSON.stringify(
 let privateLoads = 0;
 await privateContext.route('https://www.googletagmanager.com/**',r=>{privateLoads++;return r.abort();});
 const privatePage = await privateContext.newPage();
-for (const path of ['/login/','/signup/','/upload/','/profile/','/processing/','/connect-agent/','/your-book/','/my-books/','/auth/confirm/','/reset-password/','/embed/book-upload/']) {
+for (const path of ['/login/','/signup/','/upload/','/profile/','/processing/','/connect-agent/','/your-book/','/my-books/','/manage-skills/','/billing/','/api-keys/','/auth/confirm/','/reset-password/','/embed/book-upload/']) {
   await privatePage.goto(`${origin}${path}`);
   assert.equal(await privatePage.locator('[data-awb-analytics]').count(),0);
   assert.equal(await privatePage.locator('[data-analytics-notice]').isVisible(),false);

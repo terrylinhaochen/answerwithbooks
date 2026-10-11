@@ -38,8 +38,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify signup backend (no email sent)
-        run: node scripts/check-signup-backend.mjs
+      - name: Verify account auth and newsletter routing (no email sent)
+        run: |
+          node scripts/check-account-auth.mjs
+          node scripts/check-signup-backend.mjs
+          node --test scripts/test-signup-metadata.mjs scripts/test-tool-auth.mjs
 
       - name: Verify upstream book adaptation
         run: |

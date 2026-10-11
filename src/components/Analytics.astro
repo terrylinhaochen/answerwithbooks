@@ -7,7 +7,7 @@ const { ids } = Astro.props;
     const key = 'awb:analytics-consent:v1';
     const maxAge = 180 * 24 * 60 * 60 * 1000;
     const blocked = navigator.globalPrivacyControl === true || navigator.doNotTrack === '1';
-    const privateRoute = /^\/(login|signup|auth|reset-password|profile|my-books|your-book|processing|connect-agent|billing|api-keys|onboarding|upload|ask|embed|acquired-intelligence|community)(\/|$)/.test(location.pathname);
+    const privateRoute = /^\/(login|signup|auth|reset-password|profile|my-books|your-book|manage-skills|processing|connect-agent|billing|api-keys|onboarding|upload|ask|embed|acquired-intelligence|community)(\/|$)/.test(location.pathname);
     let choice = null;
     let loaded = false;
     try {

@@ -1,3 +1,5 @@
+import { signupMetadata } from './signup-metadata.mjs';
+
 export function validateToolSignup(fields) {
   const email = String(fields.email || '').trim().toLowerCase();
   const firstName = String(fields.firstName || '').trim();
@@ -27,7 +29,7 @@ export async function createToolAccount({ auth, fields, redirectTo }) {
       options: {
         emailRedirectTo: redirectTo,
         // Display metadata only. Never used for authorization or unique identity.
-        data: { first_name: value.firstName, last_name: value.lastName, username: value.username },
+        data: { first_name: value.firstName, last_name: value.lastName, username: value.username, ...signupMetadata('tools') },
       },
     });
     if (error) return { state: 'error', message: error.status === 429
