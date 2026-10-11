@@ -10,16 +10,19 @@
 - The local/BYOA and managed functional suite passes 79 tests. The billing database suite passes 18 tests. These are functional checks, not a fresh model-quality evaluation.
 - Account signup attribution is separate from newsletter subscriptions and optional analytics. The private aggregate report excludes fixtures and does not claim legacy project accounts as Answer with Books customers. Read-only account-auth configuration now has its own CI check.
 
+- Actual confirmation and password-recovery emails arrived in the authorized inbox, as confirmed by the recipient. The real confirmation link marked the fixture account confirmed; a password login then succeeded. The deployed signup form persisted the new attribution. The temporary account and owner-readable secret file were deleted.
+- Two original local sources completed the real CLI generation protocol with deterministic agent-response fixtures, automatically synced into one hosted guide, returned methods through hosted CLI retrieval, and rendered a separate editorial digest. This verifies transport and guide lifecycle, not independent LLM quality.
+
 ## Defects fixed during dogfood
 
+- Recipient feedback identified confusing “Terminal code” copy. The connection page now says “Connection code,” explains that the agent creates it, and gives a next step when no code is present.
 - The old email smoke test could treat throttling as success and used an implicit hardcoded recipient. The default test is now read-only; real delivery uses an explicit authorized inbox, disposable plus-tagged account, and cleanup.
 - Manage Skills was missing from the sensitive-route analytics exclusion. It is now excluded even after analytics consent. Manage Skills, Processing and Connect Agent are also excluded from the sitemap.
 - Compatible dependency patches were applied, including `fflate` 0.8.3. The full static build still contains 117 pages and passes product-surface checks.
 
 ## Remaining launch acceptance
 
-1. Verify a real confirmation email and recovery email arrive in the authorized inbox. An API 200 is not proof of delivery. Use `scripts/test-account-email-live.mjs`; do not save links, passwords or inbox addresses in this report.
-2. Complete one fresh **live-funded customer** managed conversion: top-up → signed webhook credit → explicit cap approval → editorial digest, skill and cover → settled usage → agent retrieval. This run made no paid generation calls or card charges. The prior [billing acceptance](../billing-2026-10-09/README.md) proved a real sandbox payment and real deployed excerpt generation separately, with the generation charged to the isolated QA namespace. It does not establish this complete live-money journey.
+1. Complete one fresh **live-funded customer** managed conversion: top-up → signed webhook credit → explicit cap approval → editorial digest, skill and cover → settled usage → agent retrieval. This run made no paid generation calls or card charges. The prior [billing acceptance](../billing-2026-10-09/README.md) proved a real sandbox payment and real deployed excerpt generation separately, with the generation charged to the isolated QA namespace. It does not establish this complete live-money journey.
 
 ## Dependency maintenance
 
@@ -31,4 +34,8 @@ Primary advisory references: [Astro AVIF processing](https://github.com/advisori
 
 ## Reproduction
 
-See [signup tracking](../../SIGNUP_TRACKING.md). Browser receipts and screenshots stay in private temporary storage; no customer account data, credentials, or payment links are committed. Fresh deployment and inbox results are recorded separately below when verified.
+See [signup tracking](../../SIGNUP_TRACKING.md). The continuous CLI/guide assertions passed and production fixtures were removed. Chrome exited but one close handshake timed out; the operator test now bounds that teardown after persisting account cleanup and records `browserClosed:false` separately. Browser receipts and screenshots stay in private temporary storage; no customer account data, credentials, or payment links are committed. Fresh deployment and inbox results are recorded separately below when verified.
+
+## Production release
+
+Signup tracking and privacy changes at `67b8afcc636f1f4381e63ccbe6d116b12677f3d7` passed [GitHub Pages run 38114262394](https://github.com/terrylinhaochen/answerwithbooks/actions/runs/38114262394). Fresh production browser checks verified signup attribution, account/newsletter separation, mobile layout, private-route analytics exclusion, and sitemap exclusions. Later commits add the connection-code copy and reusable continuous local-guide acceptance.

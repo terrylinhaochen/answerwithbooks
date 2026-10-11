@@ -45,7 +45,7 @@ Report whether retrieval succeeded. Public books require no account or API key. 
 ${cli} login
 \`\`\`
 
-The CLI opens browser authorization. Let the user sign in and approve the connection, matching the terminal code. Do not ask for passwords, API keys or session tokens in chat. Wait for actual authorization; an opened browser is not a completed login. Then verify with books --private --json. Use logout to revoke access.
+The CLI opens browser authorization. Let the user sign in and approve the connection, matching the connection code shown by the agent. Do not ask for passwords, API keys or session tokens in chat. Wait for actual authorization; an opened browser is not a completed login. Then verify with books --private --json. Use logout to revoke access.
 
 ## Try it
 

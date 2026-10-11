@@ -28,7 +28,7 @@ node --test scripts/test-signup-metadata.mjs
 node scripts/test-tool-auth.mjs
 
 # Disposable production accounts. Requires operator access and installed core sibling.
-# Generated links test actual confirmation, recovery, CLI pairing and billing UI.
+# Generated links test confirmation, recovery, CLI pairing, billing UI and two-source local-to-hosted guide retrieval.
 # They do not test mailbox delivery and do not make a payment or run a model.
 AWB_LAUNCH_AUTH_TEST=1 node scripts/test-launch-auth-live.mjs
 ```
