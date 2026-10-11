@@ -40,7 +40,7 @@ try {
  loginProcess=spawn(process.execPath,[cli,'login','--no-browser'],{env,cwd:work,stdio:['ignore','pipe','pipe']});let output='';loginProcess.stdout.on('data',x=>output+=x);loginProcess.stderr.on('data',()=>{});
  const done=new Promise((resolve,reject)=>{loginProcess.on('exit',c=>c===0?resolve():reject(Error('CLI login failed')));loginProcess.on('error',reject)});done.catch(()=>{});
  let code;for(let i=0;i<80&&!code;i++){code=output.match(/Code: ([A-F0-9-]+)/)?.[1];if(!code)await new Promise(r=>setTimeout(r,250));}assert.ok(code);
- await page.goto(origin+'/connect-agent/?code='+code);await page.getByRole('button',{name:'Connect agent',exact:true}).click();await page.getByText('Connected. Return to your agent to use your books.').waitFor();await done;loginProcess=null;
+ await page.goto(origin+'/connect-agent/?code='+code);assert.equal(await page.locator('#agent-code').isVisible(),false);assert.equal(await page.locator('#agent-code').inputValue(),code);assert.equal(await page.locator('[data-agent-start]').isVisible(),false);await page.getByRole('button',{name:'Connect agent',exact:true}).click();await page.getByText('Connected. Return to your agent to use your books.').waitFor();await done;loginProcess=null;
  const library=JSON.parse(execFileSync(process.execPath,[cli,'books','--private','--json'],{env,cwd:work,encoding:'utf8',stdio:['ignore','pipe','pipe']}));assert.equal(library.count,0);
  record('Fresh account connects CLI through real browser approval and reads an empty private library');
  stage='Local guide to hosted retrieval';

@@ -12,7 +12,7 @@ try {
    if(path.includes('/auth/v1/')){authCalls.push({path,body:req.postData()?req.postDataJSON():null});return route.fulfill({status:200,json:path.endsWith('/signup')?{user:{id:'sample'},session:null}:{}});}
    return route.fulfill({status:200,json:[]});
   });
-  await page.goto(base+'/connect-agent/');assert.equal(await page.getByLabel('Connection code',{exact:true}).count(),1);assert.equal(await page.locator('[data-agent-start]').isVisible(),true);await page.getByLabel('Connection code',{exact:true}).fill('ABCD-1234-EF56');assert.equal(await page.locator('[data-agent-start]').isVisible(),false);
+  await page.goto(base+'/connect-agent/');assert.equal(await page.getByLabel('Connection code',{exact:true}).count(),1);assert.equal(await page.locator('[data-agent-start]').isVisible(),true);assert.equal(await page.getByLabel('Connection code',{exact:true}).isVisible(),false);await page.locator('[data-agent-details] summary').click();await page.getByLabel('Connection code',{exact:true}).fill('ABCD-1234-EF56');assert.equal(await page.locator('[data-agent-start]').isVisible(),false);
   await page.goto(base+'/login/');assert.match(await page.locator('[data-signup-link]').getAttribute('href'),/^\/signup\//);
   await page.locator('[data-signup-link]').click();await page.waitForURL('**/signup/');
   await page.locator('#email').fill('reader+alias@example.com');await page.locator('#password').fill('test-password-only');await page.locator('#submit-btn').click();

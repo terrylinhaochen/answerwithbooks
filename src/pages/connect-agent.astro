@@ -6,16 +6,21 @@ import Base from '../layouts/Base.astro';
   <p class="awb-eyebrow">Answer with Books</p>
   <h1 class="mt-3 font-serif text-4xl">Connect your agent.</h1>
   <p class="mt-5 text-soft">Your agent can read your private books, upload sources, and download skills. Access expires after 30 days. Ask your agent to log out of Answer with Books to revoke it sooner.</p>
-  <p class="mt-4 text-sm text-soft">Only approve a connection you started. Check that this code matches the one shown by your agent.</p>
-  <form data-connect-agent class="mt-7 space-y-5">
-   <label class="block" for="agent-code">Connection code</label>
-   <p id="agent-code-help" class="text-sm text-soft">Your agent creates this temporary code when you ask it to connect your Answer with Books library. You do not need to create a code or API key.</p>
-   <input id="agent-code" name="code" aria-describedby="agent-code-help" class="awb-input font-mono" required maxlength="14" autocomplete="off" spellcheck="false" placeholder="ABCD-1234-EF56" pattern="[A-Fa-f0-9]{4}-?[A-Fa-f0-9]{4}-?[A-Fa-f0-9]{4}" />
-   <p data-agent-start class="text-sm text-soft">No code yet? Ask your agent: <strong>“Connect my Answer with Books library.”</strong> It will open this page with the code filled in. <a href="https://docs.answerwithbooks.com/guide/quickstart-skill" class="underline">Set up your agent</a> if you haven’t connected before.</p>
+  <p class="mt-4 text-sm text-soft">Only approve a connection you started from your agent.</p>
+  <form data-connect-agent class="mt-7 space-y-5" novalidate>
+   <p data-agent-start class="text-sm text-soft">Ask your agent: <strong>“Connect my Answer with Books library.”</strong> It will open this page ready for you to approve. <a href="https://docs.answerwithbooks.com/guide/quickstart-skill" class="underline">Set up your agent</a> if you haven’t connected before.</p>
    <p data-agent-account class="text-sm text-soft"></p>
    <button type="submit" data-agent-connect class="awb-pill awb-pill-primary" disabled>Connect agent</button>
    <a href="/login/?from=agent" data-agent-login class="awb-pill awb-pill-primary" hidden>Sign in to connect</a>
    <p data-agent-status role="status" class="text-sm text-soft"></p>
+   <details data-agent-details class="text-sm text-soft">
+    <summary class="cursor-pointer">Connection details</summary>
+    <div class="mt-4 space-y-3">
+     <label class="block" for="agent-code">Connection code</label>
+     <p id="agent-code-help">This temporary code links this request to your agent. It is filled in automatically. You can compare it with the code shown by your agent, or enter one manually if you opened this page on another device.</p>
+     <input id="agent-code" name="code" aria-describedby="agent-code-help" class="awb-input font-mono" required maxlength="14" autocomplete="off" spellcheck="false" placeholder="ABCD-1234-EF56" pattern="[A-Fa-f0-9]{4}-?[A-Fa-f0-9]{4}-?[A-Fa-f0-9]{4}" />
+    </div>
+   </details>
   </form>
  </section>
  <script>
@@ -23,21 +28,37 @@ import Base from '../layouts/Base.astro';
   const form=document.querySelector<HTMLFormElement>('[data-connect-agent]')!;
   const input=form.querySelector<HTMLInputElement>('input')!,button=form.querySelector<HTMLButtonElement>('button')!;
   const status=form.querySelector<HTMLElement>('[data-agent-status]')!,login=form.querySelector<HTMLAnchorElement>('[data-agent-login]')!,account=form.querySelector<HTMLElement>('[data-agent-account]')!;
+  const details=form.querySelector<HTMLDetailsElement>('[data-agent-details]')!;
+  let signedIn=false,connecting=false,connected=false;
+  const validCode=()=>input.validity.valid;
+  const render=()=>{
+   const ready=validCode();
+   form.querySelector<HTMLElement>('[data-agent-start]')!.hidden=ready||connected;
+   details.querySelector('summary')!.textContent=ready||connected?'Connection details':'Enter a code manually';
+   button.hidden=!signedIn||connected;
+   button.disabled=!signedIn||!ready||connecting||connected;
+   login.hidden=signedIn||!ready||connected;
+  };
   const supplied=new URLSearchParams(location.search).get('code');
-  try{input.value=supplied||sessionStorage.getItem('answerwithbooks-agent-code')||'';}catch{input.value=supplied||'';}
-  const remember=()=>{form.querySelector<HTMLElement>('[data-agent-start]')!.hidden=Boolean(input.value.trim());try{sessionStorage.setItem('answerwithbooks-agent-code',input.value);}catch{}};
+  try{input.value=supplied??sessionStorage.getItem('answerwithbooks-agent-code')??'';}catch{input.value=supplied??'';}
+  const remember=()=>{render();try{if(validCode())sessionStorage.setItem('answerwithbooks-agent-code',input.value);else sessionStorage.removeItem('answerwithbooks-agent-code');}catch{}};
   input.addEventListener('input',remember);remember();
-  async function refresh(){const {data}=await supabase.auth.getSession();button.hidden=!data.session;button.disabled=!data.session;login.hidden=!!data.session;account.textContent=data.session?'Signed in as '+data.session.user.email:'';}
+  async function refresh(){const {data}=await supabase.auth.getSession();signedIn=!!data.session;account.textContent=data.session?'Signed in as '+data.session.user.email:'';render();}
   void refresh();supabase.auth.onAuthStateChange(()=>{void refresh();});
   form.addEventListener('submit',async event=>{
-   event.preventDefault();if(!form.reportValidity())return;button.disabled=true;status.textContent='Connecting…';
+   event.preventDefault();if(connecting||connected)return;
+   if(!validCode()){details.open=true;input.reportValidity();return;}
+   if(!signedIn){status.textContent='Sign in to approve this connection.';return;}
+   connecting=true;input.readOnly=true;render();status.textContent='Connecting…';
    try{
     const {data,error}=await supabase.functions.invoke('book-cli-auth',{body:{action:'approve',code:input.value}});
-    if(error){let message='Could not connect. Run login again and check the code.';try{message=(await error.context.json()).error||message;}catch{}throw new Error(message);}
+    if(error){let message='Could not connect. Ask your agent to start a new connection, then open its link.';try{message=(await error.context.json()).error||message;}catch{}throw new Error(message);}
     if(!data.connected)throw new Error('Could not connect. Please retry.');
-    status.textContent='Connected. Return to your agent to use your books.';button.hidden=true;input.disabled=true;
+    connected=true;status.textContent='Connected. Return to your agent to use your books.';input.disabled=true;details.open=false;
     try{sessionStorage.removeItem('answerwithbooks-agent-code');}catch{}
-   }catch(error){status.textContent=error instanceof Error?error.message:'Could not connect.';button.disabled=false;}
+    const cleanUrl=new URL(location.href);cleanUrl.searchParams.delete('code');history.replaceState(null,'',cleanUrl);
+   }catch(error){status.textContent=error instanceof Error?error.message:'Could not connect.';}
+   finally{connecting=false;input.readOnly=false;render();}
   });
  </script>
 </Base>

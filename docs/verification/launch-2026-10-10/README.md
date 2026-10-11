@@ -15,7 +15,7 @@
 
 ## Defects fixed during dogfood
 
-- Recipient feedback identified confusing “Terminal code” copy. The connection page now says “Connection code,” explains that the agent creates it, and gives a next step when no code is present.
+- Recipient feedback identified confusing “Terminal code” copy. Agent-opened links now fill the code automatically and hide it under collapsed **Connection details**. The normal flow is sign in, then select **Connect agent**. The no-request state explains how to start from the agent and offers manual entry for another device. The request still needs explicit approval; URL navigation never grants access. Browser checks cover desktop/mobile, missing/invalid/expired requests, retry, the sign-in return link, duplicate-submit protection, and removal of the completed request from session storage and the URL.
 - The old email smoke test could treat throttling as success and used an implicit hardcoded recipient. The default test is now read-only; real delivery uses an explicit authorized inbox, disposable plus-tagged account, and cleanup.
 - Manage Skills was missing from the sensitive-route analytics exclusion. It is now excluded even after analytics consent. Manage Skills, Processing and Connect Agent are also excluded from the sitemap.
 - Compatible dependency patches were applied, including `fflate` 0.8.3. The full static build still contains 117 pages and passes product-surface checks.
