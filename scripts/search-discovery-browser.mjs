@@ -22,6 +22,17 @@ try {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${path} overflows at ${width}`);
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
         assert.equal(canonical, `https://answerwithbooks.com${path}`);
+        if (path.startsWith('/reading-lists/')) {
+          const covers = page.locator('[data-reading-path-cover]');
+          assert.equal(await covers.count(), path === '/reading-lists/' ? 6 : 1, 'Every reading path has artwork');
+          for (const cover of await covers.all()) {
+            const image = cover.locator('img');
+            await image.scrollIntoViewIfNeeded();
+            await image.evaluate(img => img.decode());
+            assert.ok(await image.evaluate(img => img.naturalWidth === 1536 && img.naturalHeight === 864));
+            assert.ok(await cover.locator('.guide-cover__label').evaluate(label => label.scrollHeight <= label.clientHeight + 1), 'Cover label fits');
+          }
+        }
         if (path.startsWith('/reading-lists/') && path !== '/reading-lists/') {
           assert.equal(await page.locator('[data-reading-choice]').count(), 3);
           assert.equal(await page.locator('[data-reading-choice]').first().isVisible(), true);

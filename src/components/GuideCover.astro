@@ -3,11 +3,12 @@ import { guideCovers } from '../lib/guide-covers.mjs';
 
 interface Props {
   slug: string;
+  cover?: { src: string; label: string; topic: string; background: string };
   class?: string;
   priority?: boolean;
 }
 const { slug, priority = false } = Astro.props;
-const cover = guideCovers[slug as keyof typeof guideCovers];
+const cover = Astro.props.cover ?? guideCovers[slug as keyof typeof guideCovers];
 ---
 
 {cover && (

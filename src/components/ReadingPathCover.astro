@@ -1,0 +1,11 @@
+---
+import GuideCover from './GuideCover.astro';
+import { readingPathCovers } from '../lib/reading-path-covers.mjs';
+interface Props { slug: string; priority?: boolean; class?: string; }
+const { slug, priority = false } = Astro.props;
+const cover = readingPathCovers[slug as keyof typeof readingPathCovers];
+if (!cover) throw new Error(`Missing reading-path artwork: ${slug}`);
+---
+<span class={`block ${Astro.props.class ?? ''}`} data-reading-path-cover={slug}>
+  <GuideCover slug={slug} cover={cover} priority={priority} />
+</span>

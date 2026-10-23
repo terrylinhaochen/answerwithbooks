@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync, writeFileSync } from 'node:fs';
+import { readingPathCovers } from '../src/lib/reading-path-covers.mjs';
 import { readingLists } from '../src/lib/reading-lists.ts';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
@@ -22,6 +23,11 @@ assert.match(html('/answers/'), /https:\/\/answerwithbooks.com\/guides\//, 'Lega
 for (const list of readingLists) {
   const path = `/reading-lists/${list.slug}/`;
   const page = html(path);
+  const cover = readingPathCovers[list.slug];
+  assert.ok(cover, `Missing reading-path cover: ${list.slug}`);
+  assert.ok(existsSync(new URL(`../public${cover.src}`, import.meta.url)));
+  assert.ok(page.includes(`content="https://answerwithbooks.com${cover.src}"`), 'Share image uses the path artwork');
+  for (const surface of [page, html('/reading-lists/'), catalog, guides]) assert.ok(surface.includes(`src="${cover.src}"`), 'Cover is rendered wherever the reading path is offered');
   assert.ok(sitemap.includes(`https://answerwithbooks.com${path}`));
   assert.ok(llms.includes(`https://answerwithbooks.com${path}`));
   for (const source of [catalog, guides, html('/reading-lists/')]) assert.ok(source.includes(`href="${path}"`), `Reading path orphaned: ${path}`);
