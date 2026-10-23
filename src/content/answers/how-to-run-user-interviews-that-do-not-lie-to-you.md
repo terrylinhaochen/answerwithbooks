@@ -3,13 +3,43 @@ question: "How to run user interviews that do not lie to you"
 description: "A compact field guide to user interviews that produce evidence instead of polite encouragement: past behavior, specific incidents, bad-data detection, and commitment tests from The Mom Test."
 books: ["the-mom-test"]
 date: 2026-05-05
+updated: 2026-10-23
 featured: false
 tags: ["customer research", "interviews", "product"]
 ---
 
-CrowdListen-style Reddit discovery found the same user-research pain from several angles: PMs asking how to do research when compliance limits access, founders asking where to find early interviewees, and researchers saying interviews are mentally exhausting because staying focused is hard. The shared problem is not "what is the book about?" It is: *How do I get real signal from conversations that are socially, operationally, and cognitively messy?*
+To run useful customer interviews, ask about a recent real event before describing your idea. Reconstruct what the person did, what it cost, and what alternatives they tried. Keep their account separate from your interpretation, then choose a next step that tests the uncertainty behind your product decision.
 
-Rob Fitzpatrick's [*The Mom Test*](/books/the-mom-test/) is the rare business book that is actually a method — short enough to read in an evening, specific enough to use the next morning. Here is the whole apparatus.
+This guide applies Rob Fitzpatrick’s [*The Mom Test*](/books/the-mom-test/). The questions and note template below are our examples, not quotations from the book. For a team-wide discovery process or a jobs-to-be-done lens, [compare three books for customer interviews](/reading-lists/customer-interviews/).
+
+## Customer interview questions you can use
+
+Adapt these prompts to the person’s situation. Follow the story rather than reading every question mechanically.
+
+| What you need to learn | Ask about an actual event | Avoid treating this as evidence |
+| --- | --- | --- |
+| Whether the problem occurs | “Tell me about the last time you had to reconcile those reports.” | “Would a reporting tool be useful?” |
+| How the work happens | “Walk me through what you did, from the first request to sending the result.” | “Is your workflow inefficient?” |
+| What the problem costs | “How long did that take? What other work had to wait?” | “Would saving time be valuable?” |
+| Which alternatives matter | “What have you tried already? Why did you keep or stop using it?” | “Would you prefer our approach?” |
+| Who participates in a decision | “Who was involved when you last chose a tool for this?” | Assuming the user is also the buyer |
+| What a useful next step might be | “Could we look at an anonymized example together next week?” | Counting “keep me posted” as a commitment |
+
+Do not ask for confidential documents or pressure someone into an introduction. A refusal can be useful information about access, timing, or trust; it does not by itself prove that the problem is unimportant.
+
+## A simple interview plan and notes template
+
+Before the call, write the decision you are making, the assumption at risk, and what would change your mind. Ask permission to take notes or record. Start with the person’s role and a recent incident, then follow their sequence of events. If you introduce your idea later, mark that transition: reactions afterward are responses to a pitch.
+
+Use these fields after each conversation:
+
+- **Context:** role, workflow, situation, and when the event happened.
+- **Observed or reported facts:** actions, alternatives, costs, and exact wording worth preserving. Label reported behavior as reported rather than independently verified.
+- **Interpretation:** what you think the facts suggest, and another explanation that could fit.
+- **Decision:** which assumption became stronger or weaker, and what remains unknown.
+- **Next step:** a specific follow-up, owner, and date, or a decision not to pursue this segment.
+
+Compare interviews within similar contexts before combining them. A buyer, an end user, and someone outside the target market can describe the same problem while facing different constraints. There is no universal interview count that proves demand.
 
 ## The premise: everyone lies, politely
 
@@ -41,7 +71,7 @@ The strongest signal is that they have already tried to solve the problem. They 
 
 Specificity and emotion are the next signal. A real story about last Thursday's failure is more valuable than a general statement about a "pain point." The useful detail is not only that they were frustrated; it is what triggered the frustration, what it interrupted, and what it cost.
 
-Commitment is the exit measurement. A meeting went well only if the other person gave up something of value: scheduled time with a clear agenda, an introduction to someone with budget, access to a real artifact, or money in the form of a deposit, pilot, pre-order, or letter of intent. "Sounds great, keep me posted" is often a rejection delivered politely.
+Commitment is the exit measurement. A promising demand signal becomes stronger when the other person commits something of value: scheduled time with a clear agenda, an introduction to someone with budget, access to a real artifact, or money in the form of a deposit, pilot, pre-order, or letter of intent. "Sounds great, keep me posted" is often a rejection delivered politely.
 
 ## Practical mechanics
 
@@ -49,8 +79,15 @@ Before any conversation, decide the three things you most need to learn. The fri
 
 Keep early learning conversations casual when the context allows it. A good conversation about someone's workflow can happen in a support thread, at a conference, or in a normal customer call. Formality can make people perform as interview subjects instead of describing how they actually work.
 
-Take notes in their words, not in your interpretation. "Spends three hours a week reconciling exports by hand" is data. "Loves the idea" is not. Afterward, review the notes with the team and decide what changed. An interview that never alters a decision was only a coffee chat.
+Take notes in their words, not in your interpretation. "Spends three hours a week reconciling exports by hand" is data. "Loves the idea" is not. Afterward, review the notes with the team and decide what changed. An interview can usefully confirm an existing view, but the notes should explain what was tested and what remains uncertain.
 
 ## The one-line summary
 
 Stop asking people to predict their future behavior or judge your idea; start collecting documented evidence of their past behavior and present commitments. Everything in the book is a technique for making that swap stick under social pressure — and the discipline transfers far beyond startups, to any situation where people would rather be kind to you than accurate.
+
+
+## What interviews cannot tell you on their own
+
+A conversation is not a usability test: to learn whether someone can use an interface, observe them attempting a task. It is not a market-size estimate, a retention study, or proof that a stated price will be paid. Past behavior is a useful starting point, but changing regulations, technology, or circumstances may require a separate test of a new behavior.
+
+Use [a small product experiment](/answers/how-to-test-a-risky-idea-before-you-build-too-much/) when the uncertainty is about actual adoption. If conversations remain pleasant but uninformative, [diagnose the interview failure](/answers/how-to-fix-user-interviews-that-are-not-teaching-you-anything/) before simply scheduling more calls.

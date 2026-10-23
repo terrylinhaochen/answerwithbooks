@@ -53,7 +53,9 @@ for (const route of ['tools', 'books', 'guides']) {
   assert.match(nav, />\s*Skills\s*</);
   assert.doesNotMatch(nav, />\s*Tools\s*</);
 }
-for (const route of ['guides', 'answers']) {
+assert.match(read('answers'), /http-equiv="refresh"/);
+assert.match(read('answers'), /href="https:\/\/answerwithbooks\.com\/guides\/"/);
+for (const route of ['guides']) {
   const html = read(route);
   assert.match(html, /See how book ideas become better questions/);
   assert.doesNotMatch(html, /New: hands-on AI tutorials|More work guides/);

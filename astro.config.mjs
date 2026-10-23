@@ -36,6 +36,7 @@ export default defineConfig({
   devToolbar: { enabled: false },
   trailingSlash: 'always',
   redirects: {
+    '/answers/': '/guides/',
     '/guides/tinker-audience-to-client-sheet/': '/guides/audience-enrichment/',
     '/answers/how-do-i-know-if-my-startup-idea-is-any-good/':
       '/answers/how-to-validate-an-idea-without-fooling-yourself/',
@@ -53,7 +54,6 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !utilityPaths.some((path) => page.endsWith(path)),
-      lastmod: new Date(),
     }),
   ],
   vite: {

@@ -3,6 +3,8 @@ import { getCollection, render } from 'astro:content';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Base from '../../layouts/Base.astro';
+import ReadingListLinks from '../../components/ReadingListLinks.astro';
+import { readingListsForBook } from '../../lib/reading-lists';
 import BookOverview from '../../components/BookOverview.astro';
 import AnswerRow from '../../components/AnswerRow.astro';
 import BookCover from '../../components/BookCover.astro';
@@ -44,8 +46,8 @@ const answers = (await getCollection('answers'))
 const answerQuestions = answers.map((answer) => answer.data.question);
 
 const url = `https://answerwithbooks.com/books/${book.id}/`;
-const bookCoverPath = fileURLToPath(new URL(`../../../public/covers/${book.id}.jpg`, import.meta.url));
-const bookImage = existsSync(bookCoverPath) ? `/covers/${book.id}.jpg` : '/og.svg';
+const coverExtension = ['jpg', 'jpeg', 'png', 'svg'].find(ext => existsSync(fileURLToPath(new URL(`../../../public/covers/${book.id}.${ext}`, import.meta.url))));
+const bookImage = coverExtension ? `/covers/${book.id}.${coverExtension}` : '/og.svg';
 const breadcrumbs = [
   { name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
   { name: 'Books', url: 'https://answerwithbooks.com/books/' },
@@ -111,7 +113,7 @@ const jsonLd = [
     description: book.data.oneLiner,
     image: new URL(bookImage, 'https://answerwithbooks.com').href,
     url,
-    workExample: answers.map((answer) => ({
+    subjectOf: answers.map((answer) => ({
       '@type': 'CreativeWork',
       name: answer.data.question,
       url: `https://answerwithbooks.com/answers/${answer.id}/`,
@@ -190,6 +192,8 @@ const jsonLd = [
 
     <BookDigestPersonalizer title={book.data.title} author={book.data.author} bookUrl={url} digest={book.body ?? ''} />
   </article>
+
+  <ReadingListLinks lists={readingListsForBook(book.id)} compact />
 
   <FaqList items={faqs} eyebrow="Book Q&A" title="How this book is used" width="medium" />
 

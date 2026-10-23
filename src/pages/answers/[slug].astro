@@ -2,6 +2,8 @@
 import { getCollection, render } from 'astro:content';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import ReadingListLinks from '../../components/ReadingListLinks.astro';
+import { readingLists } from '../../lib/reading-lists';
 import Base from '../../layouts/Base.astro';
 import ReadingPersonalizer from '../../components/ReadingPersonalizer.astro';
 import { buildGuideReadingPrompt } from '../../lib/reading-handoff';
@@ -112,7 +114,7 @@ const jsonLd = [
     headline: answer.data.question,
     description: answer.data.description,
     datePublished: answer.data.date.toISOString(),
-    dateModified: answer.data.date.toISOString(),
+    dateModified: (answer.data.updated ?? answer.data.date).toISOString(),
     image: new URL(answerImage, 'https://answerwithbooks.com').href,
     author: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
     publisher: { '@type': 'Organization', '@id': 'https://answerwithbooks.com/#organization', name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
@@ -173,6 +175,7 @@ const jsonLd = [
           By <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Answer with Books</a>
           <span aria-hidden="true"> · </span>
           <time datetime={answer.data.date.toISOString()}>{dateFmt}</time>
+          {answer.data.updated && <span> · Updated <time datetime={answer.data.updated.toISOString()}>{answer.data.updated.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</time></span>}
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-4">
           {topics.map((topic) => (
@@ -229,6 +232,8 @@ const jsonLd = [
 
     <ReadingPersonalizer kind="guide" prompt={readingPrompt} />
   </article>
+
+  <ReadingListLinks lists={readingLists.filter(list => list.guides.includes(answer.id))} compact />
 
   <FaqList items={faqs} eyebrow="Guide Q&A" title="How to use this guide" width="medium" />
 

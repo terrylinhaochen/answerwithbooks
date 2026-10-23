@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import ReadingListLinks from '../../components/ReadingListLinks.astro';
+import { readingLists } from '../../lib/reading-lists';
+const url = 'https://answerwithbooks.com/reading-lists/';
+const description = 'Find books for customer interviews, startup validation, strategy, management, decisions, and focus. Compare their methods and limits before choosing what to read.';
+const jsonLd = [
+  { '@type': 'CollectionPage', '@id': `${url}#webpage`, url, name: 'Choose books by the problem you want to solve', description, mainEntity: { '@id': `${url}#list` } },
+  { '@type': 'ItemList', '@id': `${url}#list`, itemListElement: readingLists.map((list, index) => ({ '@type': 'ListItem', position: index + 1, name: list.title, url: `${url}${list.slug}/` })) },
+];
+---
+<Base title="Book recommendations by task" description={description} path="/reading-lists/" jsonLd={jsonLd}>
+  <header class="awb-section pt-16 pb-2">
+    <p class="awb-eyebrow">Find your next book</p>
+    <h1 class="awb-display mt-3 text-4xl sm:text-6xl max-w-3xl">Start with the problem you want to solve.</h1>
+    <p class="awb-copy mt-5 max-w-2xl">A useful recommendation explains when a book helps, where it falls short, and what to try next. These reading paths compare selections from our public library; they are not exhaustive rankings of every book on a subject.</p>
+  </header>
+  <ReadingListLinks />
+  <section class="awb-section pb-14 text-soft">
+    <h2 class="font-serif text-2xl text-ink">Already know what you want to read?</h2>
+    <p class="mt-3"><a class="underline underline-offset-4" href="/books/">Browse all book digests</a> or <a class="underline underline-offset-4" href="/guides/">open a practical guide</a> for a specific question. Our selections are editorial applications of the linked digests; consult the original book for its complete argument.</p>
+  </section>
+</Base>

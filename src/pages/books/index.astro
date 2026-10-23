@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import ReadingListLinks from '../../components/ReadingListLinks.astro';
 import Base from '../../layouts/Base.astro';
 import AddBookDialog from '../../components/AddBookDialog.astro';
 import BookAdditions from '../../components/BookAdditions.astro';
@@ -159,6 +160,8 @@ const jsonLd = [
   </section>
 
   <AddBookDialog catalog={books.map((book,index) => ({ slug: book.id, title: book.data.title, author: book.data.author, year: book.data.year }))} />
+  <ReadingListLinks />
+
   <FaqList items={faqs} eyebrow="Book library Q&A" title="How the source shelf works" width="wide" />
 
   <script>

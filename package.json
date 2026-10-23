@@ -46,7 +46,9 @@
     "test:shelf-sharing": "node scripts/test-shelf-sharing.mjs",
     "test:shelf-share-image": "node scripts/test-shelf-share-image.mjs",
     "test:book-billing": "node --test scripts/test-book-billing.mjs scripts/test-book-metered-billing.mjs",
-    "report:signups": "python3 scripts/report-signups.py"
+    "report:signups": "python3 scripts/report-signups.py",
+    "audit:discovery": "node --experimental-strip-types scripts/search-discovery-audit.mjs",
+    "discovery:inventory": "node --experimental-strip-types scripts/search-discovery-audit.mjs --write-inventory"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",

@@ -28,6 +28,7 @@ const answers = defineCollection({
     description: z.string(),
     books: z.array(z.string()).min(1),
     date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
     featured: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
   }),

@@ -6,7 +6,7 @@ import Base from '../layouts/Base.astro';
   <a href="/profile/" class="text-sm underline">← Your library</a>
   <h1 class="mt-8 font-serif text-4xl">Manage Skills</h1>
   <p class="mt-4 max-w-2xl text-soft">Manage a book and its skill together. Archive hides it from your shelf and your agent’s library search; you can restore it later. Delete permanently removes it and its saved sources.</p>
-  <div class="mt-6 flex gap-3" role="group" aria-label="Library view"><button class="awb-pill" data-manage-tab="active" aria-pressed="true">Active</button><button class="awb-pill" data-manage-tab="archived" aria-pressed="false">Archived</button><a href="/processing/" class="awb-pill">Books in the making</a></div>
+  <div class="mt-6 flex gap-3" role="group" aria-label="Library view"><button type="button" class="awb-pill" data-manage-tab="active" aria-pressed="true">Active</button><button type="button" class="awb-pill" data-manage-tab="archived" aria-pressed="false">Archived</button><a href="/processing/" class="awb-pill">Books in the making</a></div>
   <p class="mt-5 text-sm text-soft" role="status" data-manage-message>Loading your books…</p>
   <div class="mt-6 grid gap-4" data-manage-list></div>
  </section>

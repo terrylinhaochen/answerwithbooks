@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import ReadingListLinks from './ReadingListLinks.astro';
 import Base from '../layouts/Base.astro';
 import AnswerRow from './AnswerRow.astro';
 import PracticalGuideCard from './PracticalGuideCard.astro';
@@ -29,7 +30,7 @@ const categories = [{ slug: 'ai', label: 'AI', description: 'Practical workflows
   count: answers.filter((answer) => topicsForTags(answer.data.tags).some((answerTopic) => answerTopic.slug === topic.slug)).length
     + practicalGuides.filter(guide => guide.categories.includes(topic.slug)).length,
 }))];
-const { path = '/answers/' } = Astro.props;
+const { path = '/guides/' } = Astro.props;
 const url = `https://answerwithbooks.com${path}`;
 const faqs = [
   {
@@ -84,8 +85,8 @@ const jsonLd = [
 ---
 
 <Base
-  title={path === '/guides/' ? 'Guides' : 'Answers'}
-  description={path === '/guides/' ? 'Practical AI guides for GitHub lead research, X discourse analysis, and audience handoffs, alongside book-backed answers to real questions.' : 'Real questions framed as agent-ready briefs, each grounded in source-book digests and ready for personalized advice.'}
+  title="Practical guides grounded in books"
+  description="Book-grounded guides to customer interviews, startup validation, strategy, management, and everyday decisions. Find a practical next step and its source books."
   path={path}
   jsonLd={jsonLd}
 >
@@ -133,6 +134,8 @@ const jsonLd = [
       <p class="mt-6 text-sm text-soft">All guides are shown because JavaScript is off. Enable it to use search and pagination.</p>
     </noscript>
   </section>
+
+  <ReadingListLinks />
 
   <FaqList items={faqs} eyebrow="Answer Q&A" title="How these guides work" width="wide" />
 

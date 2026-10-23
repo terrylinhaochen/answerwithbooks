@@ -1,0 +1,795 @@
+{
+  "note": "Editorial query hypotheses, not measured search volume or ranking evidence. One canonical owner per intent; wording variants share a page.",
+  "pages": [
+    {
+      "intent": "book selection",
+      "queries": [
+        "books for customer interviews",
+        "The Mom Test vs Continuous Discovery Habits",
+        "books for product discovery"
+      ],
+      "canonical": "https://answerwithbooks.com/reading-lists/customer-interviews/",
+      "sourceDigests": [
+        "/books/the-mom-test/",
+        "/books/continuous-discovery-habits/",
+        "/books/competing-against-luck/"
+      ]
+    },
+    {
+      "intent": "book selection",
+      "queries": [
+        "books to validate a startup idea",
+        "The Mom Test vs The Lean Startup",
+        "books about finding first customers"
+      ],
+      "canonical": "https://answerwithbooks.com/reading-lists/startup-validation/",
+      "sourceDigests": [
+        "/books/the-mom-test/",
+        "/books/the-lean-startup/",
+        "/books/traction/"
+      ]
+    },
+    {
+      "intent": "book selection",
+      "queries": [
+        "books for business strategy",
+        "Good Strategy Bad Strategy vs Playing to Win",
+        "books on product positioning"
+      ],
+      "canonical": "https://answerwithbooks.com/reading-lists/business-strategy/",
+      "sourceDigests": [
+        "/books/good-strategy-bad-strategy/",
+        "/books/playing-to-win/",
+        "/books/obviously-awesome/"
+      ]
+    },
+    {
+      "intent": "book selection",
+      "queries": [
+        "books for new managers",
+        "books about team structure",
+        "books about psychological safety"
+      ],
+      "canonical": "https://answerwithbooks.com/reading-lists/management-and-team-design/",
+      "sourceDigests": [
+        "/books/high-output-management/",
+        "/books/team-topologies/",
+        "/books/the-fearless-organization/"
+      ]
+    },
+    {
+      "intent": "book selection",
+      "queries": [
+        "books for decision making",
+        "Thinking in Bets vs Noise",
+        "books about changing your mind"
+      ],
+      "canonical": "https://answerwithbooks.com/reading-lists/decision-making/",
+      "sourceDigests": [
+        "/books/thinking-in-bets/",
+        "/books/noise/",
+        "/books/the-scout-mindset/"
+      ]
+    },
+    {
+      "intent": "book selection",
+      "queries": [
+        "books for task overwhelm",
+        "Getting Things Done vs Deep Work",
+        "books about choosing priorities"
+      ],
+      "canonical": "https://answerwithbooks.com/reading-lists/focus-and-priorities/",
+      "sourceDigests": [
+        "/books/getting-things-done/",
+        "/books/deep-work/",
+        "/books/four-thousand-weeks/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Accelerate summary",
+        "Accelerate key ideas",
+        "when to use Accelerate"
+      ],
+      "canonical": "https://answerwithbooks.com/books/accelerate/",
+      "sourceDigests": [
+        "/books/accelerate/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Atomic Habits summary",
+        "Atomic Habits key ideas",
+        "when to use Atomic Habits"
+      ],
+      "canonical": "https://answerwithbooks.com/books/atomic-habits/",
+      "sourceDigests": [
+        "/books/atomic-habits/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Competing Against Luck summary",
+        "Competing Against Luck key ideas",
+        "when to use Competing Against Luck"
+      ],
+      "canonical": "https://answerwithbooks.com/books/competing-against-luck/",
+      "sourceDigests": [
+        "/books/competing-against-luck/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Continuous Discovery Habits summary",
+        "Continuous Discovery Habits key ideas",
+        "when to use Continuous Discovery Habits"
+      ],
+      "canonical": "https://answerwithbooks.com/books/continuous-discovery-habits/",
+      "sourceDigests": [
+        "/books/continuous-discovery-habits/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Crucial Conversations summary",
+        "Crucial Conversations key ideas",
+        "when to use Crucial Conversations"
+      ],
+      "canonical": "https://answerwithbooks.com/books/crucial-conversations/",
+      "sourceDigests": [
+        "/books/crucial-conversations/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Deep Work summary",
+        "Deep Work key ideas",
+        "when to use Deep Work"
+      ],
+      "canonical": "https://answerwithbooks.com/books/deep-work/",
+      "sourceDigests": [
+        "/books/deep-work/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Designing Your Life summary",
+        "Designing Your Life key ideas",
+        "when to use Designing Your Life"
+      ],
+      "canonical": "https://answerwithbooks.com/books/designing-your-life/",
+      "sourceDigests": [
+        "/books/designing-your-life/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Difficult Conversations summary",
+        "Difficult Conversations key ideas",
+        "when to use Difficult Conversations"
+      ],
+      "canonical": "https://answerwithbooks.com/books/difficult-conversations/",
+      "sourceDigests": [
+        "/books/difficult-conversations/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Don't Make Me Think summary",
+        "Don't Make Me Think key ideas",
+        "when to use Don't Make Me Think"
+      ],
+      "canonical": "https://answerwithbooks.com/books/dont-make-me-think/",
+      "sourceDigests": [
+        "/books/dont-make-me-think/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Four Thousand Weeks summary",
+        "Four Thousand Weeks key ideas",
+        "when to use Four Thousand Weeks"
+      ],
+      "canonical": "https://answerwithbooks.com/books/four-thousand-weeks/",
+      "sourceDigests": [
+        "/books/four-thousand-weeks/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Getting Things Done summary",
+        "Getting Things Done key ideas",
+        "when to use Getting Things Done"
+      ],
+      "canonical": "https://answerwithbooks.com/books/getting-things-done/",
+      "sourceDigests": [
+        "/books/getting-things-done/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Getting to Yes summary",
+        "Getting to Yes key ideas",
+        "when to use Getting to Yes"
+      ],
+      "canonical": "https://answerwithbooks.com/books/getting-to-yes/",
+      "sourceDigests": [
+        "/books/getting-to-yes/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Good Strategy Bad Strategy summary",
+        "Good Strategy Bad Strategy key ideas",
+        "when to use Good Strategy Bad Strategy"
+      ],
+      "canonical": "https://answerwithbooks.com/books/good-strategy-bad-strategy/",
+      "sourceDigests": [
+        "/books/good-strategy-bad-strategy/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "High Output Management summary",
+        "High Output Management key ideas",
+        "when to use High Output Management"
+      ],
+      "canonical": "https://answerwithbooks.com/books/high-output-management/",
+      "sourceDigests": [
+        "/books/high-output-management/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Made to Stick summary",
+        "Made to Stick key ideas",
+        "when to use Made to Stick"
+      ],
+      "canonical": "https://answerwithbooks.com/books/made-to-stick/",
+      "sourceDigests": [
+        "/books/made-to-stick/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Make It Stick summary",
+        "Make It Stick key ideas",
+        "when to use Make It Stick"
+      ],
+      "canonical": "https://answerwithbooks.com/books/make-it-stick/",
+      "sourceDigests": [
+        "/books/make-it-stick/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Never Split the Difference summary",
+        "Never Split the Difference key ideas",
+        "when to use Never Split the Difference"
+      ],
+      "canonical": "https://answerwithbooks.com/books/never-split-the-difference/",
+      "sourceDigests": [
+        "/books/never-split-the-difference/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Noise summary",
+        "Noise key ideas",
+        "when to use Noise"
+      ],
+      "canonical": "https://answerwithbooks.com/books/noise/",
+      "sourceDigests": [
+        "/books/noise/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Obviously Awesome summary",
+        "Obviously Awesome key ideas",
+        "when to use Obviously Awesome"
+      ],
+      "canonical": "https://answerwithbooks.com/books/obviously-awesome/",
+      "sourceDigests": [
+        "/books/obviously-awesome/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Playing to Win summary",
+        "Playing to Win key ideas",
+        "when to use Playing to Win"
+      ],
+      "canonical": "https://answerwithbooks.com/books/playing-to-win/",
+      "sourceDigests": [
+        "/books/playing-to-win/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Radical Candor summary",
+        "Radical Candor key ideas",
+        "when to use Radical Candor"
+      ],
+      "canonical": "https://answerwithbooks.com/books/radical-candor/",
+      "sourceDigests": [
+        "/books/radical-candor/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Scarcity summary",
+        "Scarcity key ideas",
+        "when to use Scarcity"
+      ],
+      "canonical": "https://answerwithbooks.com/books/scarcity/",
+      "sourceDigests": [
+        "/books/scarcity/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Seeing Like a State summary",
+        "Seeing Like a State key ideas",
+        "when to use Seeing Like a State"
+      ],
+      "canonical": "https://answerwithbooks.com/books/seeing-like-a-state/",
+      "sourceDigests": [
+        "/books/seeing-like-a-state/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Slow Productivity summary",
+        "Slow Productivity key ideas",
+        "when to use Slow Productivity"
+      ],
+      "canonical": "https://answerwithbooks.com/books/slow-productivity/",
+      "sourceDigests": [
+        "/books/slow-productivity/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "So Good They Can't Ignore You summary",
+        "So Good They Can't Ignore You key ideas",
+        "when to use So Good They Can't Ignore You"
+      ],
+      "canonical": "https://answerwithbooks.com/books/so-good-they-cant-ignore-you/",
+      "sourceDigests": [
+        "/books/so-good-they-cant-ignore-you/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Superforecasting summary",
+        "Superforecasting key ideas",
+        "when to use Superforecasting"
+      ],
+      "canonical": "https://answerwithbooks.com/books/superforecasting/",
+      "sourceDigests": [
+        "/books/superforecasting/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Team Topologies summary",
+        "Team Topologies key ideas",
+        "when to use Team Topologies"
+      ],
+      "canonical": "https://answerwithbooks.com/books/team-topologies/",
+      "sourceDigests": [
+        "/books/team-topologies/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Checklist Manifesto summary",
+        "The Checklist Manifesto key ideas",
+        "when to use The Checklist Manifesto"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-checklist-manifesto/",
+      "sourceDigests": [
+        "/books/the-checklist-manifesto/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Crowd summary",
+        "The Crowd key ideas",
+        "when to use The Crowd"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-crowd/",
+      "sourceDigests": [
+        "/books/the-crowd/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Design of Everyday Things summary",
+        "The Design of Everyday Things key ideas",
+        "when to use The Design of Everyday Things"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-design-of-everyday-things/",
+      "sourceDigests": [
+        "/books/the-design-of-everyday-things/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Effective Executive summary",
+        "The Effective Executive key ideas",
+        "when to use The Effective Executive"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-effective-executive/",
+      "sourceDigests": [
+        "/books/the-effective-executive/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Fearless Organization summary",
+        "The Fearless Organization key ideas",
+        "when to use The Fearless Organization"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-fearless-organization/",
+      "sourceDigests": [
+        "/books/the-fearless-organization/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Goal summary",
+        "The Goal key ideas",
+        "when to use The Goal"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-goal/",
+      "sourceDigests": [
+        "/books/the-goal/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Good Life summary",
+        "The Good Life key ideas",
+        "when to use The Good Life"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-good-life/",
+      "sourceDigests": [
+        "/books/the-good-life/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Happiness Trap summary",
+        "The Happiness Trap key ideas",
+        "when to use The Happiness Trap"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-happiness-trap/",
+      "sourceDigests": [
+        "/books/the-happiness-trap/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Lean Startup summary",
+        "The Lean Startup key ideas",
+        "when to use The Lean Startup"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-lean-startup/",
+      "sourceDigests": [
+        "/books/the-lean-startup/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Mom Test summary",
+        "The Mom Test key ideas",
+        "when to use The Mom Test"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-mom-test/",
+      "sourceDigests": [
+        "/books/the-mom-test/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Scout Mindset summary",
+        "The Scout Mindset key ideas",
+        "when to use The Scout Mindset"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-scout-mindset/",
+      "sourceDigests": [
+        "/books/the-scout-mindset/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Structure of Scientific Revolutions summary",
+        "The Structure of Scientific Revolutions key ideas",
+        "when to use The Structure of Scientific Revolutions"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-structure-of-scientific-revolutions/",
+      "sourceDigests": [
+        "/books/the-structure-of-scientific-revolutions/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "The Wisdom of Crowds summary",
+        "The Wisdom of Crowds key ideas",
+        "when to use The Wisdom of Crowds"
+      ],
+      "canonical": "https://answerwithbooks.com/books/the-wisdom-of-crowds/",
+      "sourceDigests": [
+        "/books/the-wisdom-of-crowds/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Thinking, Fast and Slow summary",
+        "Thinking, Fast and Slow key ideas",
+        "when to use Thinking, Fast and Slow"
+      ],
+      "canonical": "https://answerwithbooks.com/books/thinking-fast-and-slow/",
+      "sourceDigests": [
+        "/books/thinking-fast-and-slow/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Thinking in Bets summary",
+        "Thinking in Bets key ideas",
+        "when to use Thinking in Bets"
+      ],
+      "canonical": "https://answerwithbooks.com/books/thinking-in-bets/",
+      "sourceDigests": [
+        "/books/thinking-in-bets/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Thinking in Systems summary",
+        "Thinking in Systems key ideas",
+        "when to use Thinking in Systems"
+      ],
+      "canonical": "https://answerwithbooks.com/books/thinking-in-systems/",
+      "sourceDigests": [
+        "/books/thinking-in-systems/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Traction summary",
+        "Traction key ideas",
+        "when to use Traction"
+      ],
+      "canonical": "https://answerwithbooks.com/books/traction/",
+      "sourceDigests": [
+        "/books/traction/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Working Identity summary",
+        "Working Identity key ideas",
+        "when to use Working Identity"
+      ],
+      "canonical": "https://answerwithbooks.com/books/working-identity/",
+      "sourceDigests": [
+        "/books/working-identity/"
+      ]
+    },
+    {
+      "intent": "book digest",
+      "queries": [
+        "Zero to One summary",
+        "Zero to One key ideas",
+        "when to use Zero to One"
+      ],
+      "canonical": "https://answerwithbooks.com/books/zero-to-one/",
+      "sourceDigests": [
+        "/books/zero-to-one/"
+      ]
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to decide what to do with your career next"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-decide-what-to-do-with-your-career-next/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to delegate without losing control"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-delegate-without-losing-control/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to explain an idea so people remember it"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-explain-an-idea-so-people-remember-it/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to fix user interviews that are not teaching you anything"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-fix-user-interviews-that-are-not-teaching-you-anything/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to get out of task overwhelm without reorganizing your whole life"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-get-out-of-task-overwhelm-without-reorganizing-your-whole-life/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to have a hard conversation without making it worse"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-have-a-hard-conversation-without-making-it-worse/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to keep a smart team from making a dumb decision"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-keep-a-smart-team-from-making-a-dumb-decision/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to know when to trust your gut"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-know-when-to-trust-your-gut/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to know whether your metrics are lying to you"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-know-whether-your-metrics-are-lying-to-you/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to make a confusing page easier to use"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-make-a-confusing-page-easier-to-use/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to make a healthy habit survive a busy week"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-make-a-healthy-habit-survive-a-busy-week/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to make a plan that survives contact with reality"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-make-a-plan-that-survives-contact-with-reality/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to make project estimates less fictional"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-make-project-estimates-less-fictional/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to negotiate salary without guessing your worth"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-negotiate-salary-without-guessing-your-worth/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to prioritize when every request sounds urgent"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-prioritize-when-every-request-sounds-urgent/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to run user interviews that do not lie to you"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-run-user-interviews-that-do-not-lie-to-you/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to tell whether to pivot or keep going"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-tell-whether-to-pivot-or-keep-going/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to tell whether your value proposition is actually different"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-tell-whether-your-value-proposition-is-actually-different/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to test a risky idea before you build too much"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-test-a-risky-idea-before-you-build-too-much/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to turn a vague goal into an actual strategy"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-turn-a-vague-goal-into-an-actual-strategy/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to turn messy feedback into a real signal"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-turn-messy-feedback-into-a-real-signal/"
+    },
+    {
+      "intent": "application",
+      "queries": [
+        "How to validate an idea without fooling yourself"
+      ],
+      "canonical": "https://answerwithbooks.com/answers/how-to-validate-an-idea-without-fooling-yourself/"
+    }
+  ]
+}

@@ -92,6 +92,11 @@ jobs:
       - name: Verify Skills and illustrated guide catalog
         run: node scripts/check-product-surface.mjs
 
+      - name: Verify search discovery and public metadata
+        run: |
+          npm run audit:seo
+          npm run audit:discovery
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

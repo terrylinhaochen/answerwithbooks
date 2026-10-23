@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BookCover from '../../components/BookCover.astro';
+import FaqList from '../../components/FaqList.astro';
+import { readingLists } from '../../lib/reading-lists';
+import { faqJsonLd } from '../../lib/seo';
+export function getStaticPaths() {
+  return readingLists.map(list => ({ params: { slug: list.slug }, props: { list } }));
+}
+const { list } = Astro.props;
+const books = await getCollection('books');
+const answers = await getCollection('answers');
+const choices = list.choices.map(choice => {
+  const book = books.find(book => book.id === choice.book);
+  if (!book) throw new Error(`Unknown reading-list source: ${choice.book}`);
+  return { ...choice, book };
+});
+const guides = list.guides.map(id => {
+  const guide = answers.find(answer => answer.id === id);
+  if (!guide) throw new Error(`Unknown reading-list guide: ${id}`);
+  return guide;
+});
+const url = `https://answerwithbooks.com/reading-lists/${list.slug}/`;
+const faqs = [
+  { question: list.question, answer: list.answer },
+  { question: 'Do I need to read all of these books?', answer: list.sequence },
+];
+const jsonLd = [
+  { '@type': 'WebPage', '@id': `${url}#webpage`, url, name: list.title, description: list.description, mainEntity: { '@id': `${url}#article` } },
+  { '@type': 'Article', '@id': `${url}#article`, headline: list.title, description: list.description, mainEntityOfPage: { '@id': `${url}#webpage` }, author: { '@type': 'Organization', name: 'Answer with Books', url: 'https://answerwithbooks.com/editorial/' }, inLanguage: 'en', isAccessibleForFree: true, citation: choices.map(({ book }) => ({ '@type': 'CreativeWork', name: `${book.data.title} — editorial digest`, url: `https://answerwithbooks.com/books/${book.id}/` })), about: choices.map(({ book }) => ({ '@type': 'Book', '@id': `https://answerwithbooks.com/books/${book.id}/#book`, name: book.data.title })) },
+  { '@type': 'ItemList', '@id': `${url}#books`, itemListOrder: 'https://schema.org/ItemListUnordered', itemListElement: choices.map(({ book }, index) => ({ '@type': 'ListItem', position: index + 1, name: book.data.title, url: `https://answerwithbooks.com/books/${book.id}/` })) },
+  { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Books', item: 'https://answerwithbooks.com/books/' }, { '@type': 'ListItem', position: 2, name: 'Reading paths', item: 'https://answerwithbooks.com/reading-lists/' }, { '@type': 'ListItem', position: 3, name: list.title, item: url }] },
+  faqJsonLd(url, faqs),
+];
+---
+<Base title={list.title} description={list.description} path={`/reading-lists/${list.slug}/`} jsonLd={jsonLd} ogType="article">
+  <article class="mx-auto max-w-5xl px-5 pt-12 pb-12">
+    <nav aria-label="Breadcrumb" class="text-sm text-soft"><a href="/books/">Books</a> / <a href="/reading-lists/">Reading paths</a></nav>
+    <header class="mt-8 border-b border-line pb-8">
+      <p class="awb-eyebrow">Choose by the job</p>
+      <h1 class="mt-3 font-serif text-4xl sm:text-5xl leading-tight max-w-3xl">{list.title}</h1>
+      <p class="mt-4 text-sm text-soft">By <a href="/editorial/" class="underline underline-offset-4">Answer with Books</a></p>
+      <p class="mt-6 text-lg leading-relaxed max-w-3xl">{list.answer}</p>
+      <p class="mt-4 text-soft leading-relaxed max-w-3xl">{list.context}</p>
+    </header>
+    <section class="mt-10" aria-labelledby="compare-books">
+      <h2 id="compare-books" class="font-serif text-3xl">Which book fits your situation?</h2>
+      <div class="mt-6 space-y-5">
+        {choices.map(choice => <section class="awb-panel p-5 sm:p-7 grid gap-5 sm:grid-cols-[5rem_minmax(0,1fr)]" data-reading-choice>
+          <BookCover book={choice.book} size="sm" />
+          <div class="min-w-0">
+            <h3 class="font-serif text-2xl"><a class="hover:text-accent" href={`/books/${choice.book.id}/`}>{choice.book.data.title}</a></h3>
+            <p class="mt-1 text-sm text-soft">{choice.book.data.author}</p>
+            <dl class="mt-5 space-y-4 text-soft leading-relaxed">
+              <div><dt class="font-semibold text-ink">Choose it when</dt><dd>{choice.when}</dd></div>
+              <div><dt class="font-semibold text-ink">What it contributes</dt><dd>{choice.why}</dd></div>
+              <div><dt class="font-semibold text-ink">Try this next</dt><dd>{choice.action}</dd></div>
+              <div><dt class="font-semibold text-ink">Where it falls short</dt><dd>{choice.limit}</dd></div>
+            </dl>
+            <a href={`/books/${choice.book.id}/`} class="mt-5 inline-block text-accent underline underline-offset-4">Read the digest and apply it with your AI →</a>
+          </div>
+        </section>)}
+      </div>
+    </section>
+    <section class="mt-10 max-w-3xl"><h2 class="font-serif text-3xl">Where to start</h2><p class="mt-4 text-soft leading-relaxed">{list.sequence}</p></section>
+    <section class="mt-8 awb-panel p-6"><h2 class="font-serif text-2xl">Put the reading to work</h2><p class="mt-4 text-soft leading-relaxed">{list.exercise}</p><p class="mt-4 text-sm text-soft">The selection, comparisons, and exercises are our editorial synthesis of the linked digests, not quotations or worksheets supplied by the authors. These are starting points, not a complete survey of the field.</p></section>
+    <section class="mt-10"><h2 class="font-serif text-3xl">Apply the ideas to a real question</h2><ul class="mt-5 space-y-3">{guides.map(guide => <li><a class="underline underline-offset-4 hover:text-accent" href={`/answers/${guide.id}/`}>{guide.data.question} →</a></li>)}</ul></section>
+  </article>
+  <FaqList items={faqs} eyebrow="Reading Q&A" title="Choosing your next book" width="medium" />
+</Base>

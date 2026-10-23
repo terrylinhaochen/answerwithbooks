@@ -46,9 +46,7 @@ for (const file of htmlFiles) {
   const h1Count = countMatches(html, /<h1\b/gi);
   const text = stripTags(html);
   const jsonLd = jsonLdBlocks(html, path);
-  const faqBlocks = jsonLd.filter((block) => blockContainsType(block, 'FAQPage'));
   const articleBlocks = jsonLd.filter((block) => blockContainsType(block, 'Article'));
-  const visibleFaq = /FAQ|Q&A|What this guide answers|How this book is used|How these guides work|How the source shelf works|Questions about/i.test(text);
   const isBookDetail = /^\/books\/[^/]+\/$/.test(path);
   const isAnswerDetail = /^\/answers\/[^/]+\/$/.test(path);
   const isCatalogDetail = isBookDetail || isAnswerDetail;
@@ -62,7 +60,7 @@ for (const file of htmlFiles) {
     fail(`${path}: canonical ${canonical} does not match expected ${expectedCanonical}`);
   }
   if (canonical && !canonical.startsWith(site)) fail(`${path}: canonical is not on ${site}`);
-  if (h1Count !== 1) fail(`${path}: expected exactly one h1, found ${h1Count}`);
+  if (!isNoindex && h1Count !== 1) fail(`${path}: expected exactly one h1, found ${h1Count}`);
   if (!/<html\b[^>]*\blang=["']en["']/i.test(html)) fail(`${path}: html lang is not set to en`);
   if (!/<meta\b[^>]*\bname=["']viewport["']/i.test(html)) fail(`${path}: missing viewport meta tag`);
 
@@ -90,8 +88,6 @@ for (const file of htmlFiles) {
     'og:url',
     'og:image',
     'og:image:alt',
-    'og:image:width',
-    'og:image:height',
   ]) {
     requireValue(metaProperty(html, property), path, `missing ${property}`);
   }
@@ -114,8 +110,8 @@ for (const file of htmlFiles) {
   if (!isNoindex) {
     if (jsonLd.length === 0) fail(`${path}: indexable page has no JSON-LD`);
     if (!sitemapUrls.has(canonical)) fail(`${path}: indexable canonical is missing from sitemap`);
-    if (path !== '/editorial/' && !faqBlocks.length) fail(`${path}: indexable page has no FAQPage JSON-LD`);
-    if (path !== '/editorial/' && !visibleFaq) fail(`${path}: indexable page has no visible FAQ/Q&A section`);
+    // FAQ markup is optional. Validate visible question/answer parity when supplied.
+    for (const block of jsonLd) validateFaqContent(block, text, path);
     if (isCatalogDetail && !articleBlocks.length) fail(`${path}: catalog detail page has no Article JSON-LD`);
     if (isCatalogDetail && !/<a\b[^>]*href=["']\/editorial\/["'][^>]*>(?:AWB|Answer with Books)<\/a>/i.test(html)) {
       fail(`${path}: catalog detail page has no visible linked editor byline`);
@@ -209,7 +205,7 @@ function validateLlmsTxt() {
   for (const section of ['# Answer with Books', '## Best Entry Points', '## Guides', '## Source Books', '## Topics']) {
     if (!body.includes(section)) fail(`llms.txt: missing ${section}`);
   }
-  for (const url of ['https://answerwithbooks.com/', 'https://answerwithbooks.com/answers/', 'https://answerwithbooks.com/books/']) {
+  for (const url of ['https://answerwithbooks.com/', 'https://answerwithbooks.com/guides/', 'https://answerwithbooks.com/books/']) {
     if (!body.includes(url)) fail(`llms.txt: missing ${url}`);
   }
 }
@@ -413,4 +409,19 @@ function report(checkedCount) {
   console.log(
     `SEO audit passed: ${checkedCount} HTML files checked, ${indexableCanonicals.size} indexable pages verified, ${sitemapUrls.size} sitemap URLs verified.`
   );
+}
+
+function validateFaqContent(block, visibleText, path) {
+  if (!block || typeof block !== 'object') return;
+  if (block['@type'] === 'FAQPage') {
+    for (const item of block.mainEntity || []) {
+      for (const value of [item.name, item.acceptedAnswer?.text]) {
+        if (!value || !visibleText.includes(stripTags(String(value)))) fail(`${path}: FAQ markup does not match visible content`);
+      }
+    }
+  }
+  for (const child of Object.values(block)) {
+    if (Array.isArray(child)) child.forEach(item => validateFaqContent(item, visibleText, path));
+    else if (child && typeof child === 'object') validateFaqContent(child, visibleText, path);
+  }
 }

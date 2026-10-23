@@ -41,7 +41,7 @@ const fullTitle = path === '/' ? title : `${title} | Answer with Books`;
 const imageUrl = new URL(image, site).href;
 const structuredData = Array.isArray(jsonLd)
   ? { '@context': 'https://schema.org', '@graph': jsonLd }
-  : jsonLd;
+  : jsonLd ?? { '@context': 'https://schema.org', '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: title, description };
 // Keep the site's primary property even when additional destinations are configured.
 const gaMeasurementIds = [...new Set([
   'G-FNWRC3EMV4',
@@ -51,7 +51,7 @@ const gaMeasurementIds = [...new Set([
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const nav = [
-  { href: '/books/', label: 'Books', prefixes: ['/books/'] },
+  { href: '/books/', label: 'Books', prefixes: ['/books/', '/reading-lists/'] },
   { href: '/guides/', label: 'Guides', prefixes: ['/guides/', '/answers/'] },
   { href: '/tools/', label: 'Skills', prefixes: ['/tools/', '/skills/'] },
   { href: 'https://docs.answerwithbooks.com', label: 'Docs', prefixes: [] },
@@ -90,8 +90,6 @@ const current = Astro.url.pathname;
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:alt" content={imageAlt} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
@@ -105,7 +103,7 @@ const current = Astro.url.pathname;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&display=swap"
     />
 
-    {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+    {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />}
     <Analytics ids={gaMeasurementIds} />
   </head>
   <body class="min-h-screen flex flex-col bg-paper text-ink" data-theme={theme}>

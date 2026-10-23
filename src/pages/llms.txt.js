@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { readingLists } from '../lib/reading-lists';
 import { collectTopics } from '../lib/topics';
 
 const site = 'https://answerwithbooks.com';
@@ -20,11 +21,16 @@ The site is maintained by Answer with Books.
 - Home: ${site}/
 - Skills and agent connections: ${site}/tools/
 - Skills: ${site}/tools/#book-skill
-- Guides: ${site}/answers/
+- Guides: ${site}/guides/
+- Choose books by task: ${site}/reading-lists/
 - Source books: ${site}/books/
 - Topics: ${site}/topics/
 - RSS: ${site}/feed.xml
 - Sitemap: ${site}/sitemap-index.xml
+
+## Reading Paths
+
+${readingLists.map(list => `- [${list.title}](${site}/reading-lists/${list.slug}/): ${list.description}`).join('\n')}
 
 ## Guides
 

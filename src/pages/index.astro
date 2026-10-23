@@ -190,7 +190,7 @@ const jsonLd = [
     </section>
 
     <section id="featured-answers" class="home-section home-answers">
-      <div class="section-heading"><div><p class="room-eyebrow">Answers from the shelf</p><h2>For the question<br /> <em>on your mind.</em></h2></div><a href="/answers/" class="room-link">All answers <span aria-hidden="true">↗</span></a></div>
+      <div class="section-heading"><div><p class="room-eyebrow">Answers from the shelf</p><h2>For the question<br /> <em>on your mind.</em></h2></div><a href="/guides/" class="room-link">All answers <span aria-hidden="true">↗</span></a></div>
       <div class="answer-grid">
         {shelfAnswers.map((answer, index) => <article class="answer-paper"><div class="answer-paper-image"><AnswerCover answer={answer}/></div><div class="answer-paper-copy"><p class="room-eyebrow">Reading note {String(index + 1).padStart(2,'0')} · {answer.data.books.length} {answer.data.books.length === 1 ? 'source book' : 'source books'}</p><h3><a href={`/answers/${answer.id}/`}>{answer.data.question}</a></h3><p>{answer.data.description}</p><a class="room-link" href={`/answers/${answer.id}/`}>Read the answer <span aria-hidden="true">↗</span></a></div></article>)}
       </div>
