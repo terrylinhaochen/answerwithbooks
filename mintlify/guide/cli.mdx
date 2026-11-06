@@ -1,48 +1,20 @@
 ---
-title: "CLI reference"
-description: "Use the current release without cloning a repository."
+title: "Skill commands"
+description: "One skill, one hosted reading service."
 ---
-
-Most users can ask their agent in ordinary language. These commands are for scripts and terminal use.
-
-Use this prefix, followed by a command:
-
-```bash
-npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.7.1/answer-with-books-0.7.1.tgz --help
-```
+Use the installed Answer with Books runtime. Run `--help` for commands supported by that version.
 
 | Command | Purpose |
 | --- | --- |
-| `books --public --json` | List public books without signing in. |
-| `login` | Connect through browser authorization. |
-| `books --private --json` | List your connected private books. |
-| `search "QUESTION" --json` | Retrieve relevant methods from your private library. |
-| `ask "QUESTION" --book BOOK_ID --json` | Read evidence from a selected book. |
-| `upload ./book.pdf --json` | Prepare and upload a source for hosted processing. |
-| `quote BOOK_ID --ceiling-cents 500 --json` | Review rates with an example $5 additional spending cap. |
-| `accept-price BOOK_ID --quote QUOTE_ID --ceiling-cents 500 --json` | Start only after the user approves that quote and limit. |
-| `status BOOK_ID --json` | Check processing progress. |
-| `usage BOOK_ID --json` | Read saved usage and billing information. |
-| `cancel BOOK_ID --json` | Cancel work and settle consumed usage. |
-| `download BOOK_ID --output ./book-and-skill.zip` | Export a ready package. |
-| `library install-book BOOK_ID` | Install one ready private book skill. |
-| `logout` | Revoke this CLI connection. |
+| `books` / `book ID` | Shared catalog, book introduction and chapter references |
+| `guides` / `guides --mine` | Published guides or your creation history |
+| `guide ID` | Original-text reading or processing progress |
+| `create-guide "QUESTION" --request-key UUID` | Start a public guide proposal; reuse the key on retry |
+| `confirm-guide ID --minutes 10\|25\|45` | Confirm books and reserve one guide allowance |
+| `ask "QUESTION"` | Answer using existing guides and source references |
+| `source ID --start-line N --end-line M` | Subscriber access to 1–500 original source lines |
+| `upload FILE [...]` | Free public upload and hosted processing |
+| `plan` | Subscription and remaining guides |
+| `login` / `logout` | Browser sign-in or revoke access |
 
-Use returned book and quote IDs exactly. The $5 cap is an example, not a recommended book price. Approval belongs to the user. [Own-agent processing](/guide/own-agent) uses the `local` commands.
-
-## Local guides and private sync
-
-Use the 0.7.1 release linked above. Private-library sync requires a connected account; device-only work does not.
-
-| Command | Purpose |
-| --- | --- |
-| `local prepare ./sources --combine "Guide title" --output ./guide` | Create one local guide from multiple sources. |
-| `local add ./guide ./new-source.pdf --output ./guide-v2` | Add one source while preserving earlier notes and citations. |
-| `local next ./guide-v2` | Continue generation and review in the updated workspace. |
-| `local install ./guide-v2` | Update the same installed guide after processing finishes. |
-| `local prepare ./book.pdf --output ./book --destination library` | Select automatic private-library sync for a new local workspace. |
-| `local publish ./book` | Sync a completed first-version AWB workspace without regenerating it. |
-
-Generation produces a separate editorial digest and agent skill. The agent completes both generation and source-review requests before the first version syncs to a selected private library. Hosted use needs no per-book download or installation; the export and install commands above are optional.
-
-See [Combine and update guides](/guide/combined-guides) and [Bring your own agent](/guide/own-agent). Private-library sync is a one-time handoff; later local revisions stay local.
+No local server, local book processing, per-book skill installation or source-file download is part of this workflow.

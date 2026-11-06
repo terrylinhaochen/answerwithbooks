@@ -23,8 +23,6 @@
           "guide/library",
           "guide/upload",
           "guide/hosted-processing",
-          "guide/own-agent",
-          "guide/combined-guides",
           "guide/billing"
         ]
       },
@@ -32,7 +30,7 @@
         "group": "Reference",
         "pages": [
           "guide/cli",
-          "api/private-books",
+          "api/reading",
           "guide/troubleshooting"
         ]
       }

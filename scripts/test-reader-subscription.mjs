@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {createHmac} from 'node:crypto';
+import {verifyStripeEvent,subscriptionState,validPlanPrice} from '../supabase/functions/_shared/reader-subscription.mjs';
+const timestamp=1700000000,raw=JSON.stringify({id:'evt_test',type:'invoice.paid'}),secret='test-only-signing-key';
+const signature=`t=${timestamp},v1=${createHmac('sha256',secret).update(timestamp+'.'+raw).digest('hex')}`;
+assert.equal((await verifyStripeEvent(raw,signature,secret,timestamp*1000)).id,'evt_test');
+await assert.rejects(verifyStripeEvent(raw+' ',signature,secret,timestamp*1000));await assert.rejects(verifyStripeEvent(raw,signature,secret,(timestamp+301)*1000));
+const price={id:'price_24',active:true,currency:'usd',unit_amount:2400,recurring:{interval:'month',interval_count:1}};
+assert(validPlanPrice(price));assert(!validPlanPrice({...price,unit_amount:240}));
+const sub={id:'sub_test',status:'active',items:{data:[{price,quantity:1}]},current_period_start:timestamp,current_period_end:timestamp+2500000,latest_invoice:{status:'paid'}};
+assert.equal(subscriptionState(sub,price.id).status,'active');assert.equal(subscriptionState({...sub,latest_invoice:{status:'open'}},price.id).status,'unpaid');assert.equal(subscriptionState(sub,'other').status,'unpaid');assert.equal(subscriptionState({...sub,status:'canceled'},price.id).status,'canceled');
+console.log('PASS raw webhook signatures, timestamp bounds, exact $24/month plan, unpaid/wrong-price/canceled entitlement rejection');

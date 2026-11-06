@@ -73,9 +73,9 @@ try {
  await page.locator('[data-share-shelf-image]').click();assert.match(await page.locator('[data-shelf-image-status]').innerText(),/Download the image or copy the link/);
  console.log('PASS native-share payload includes the PNG and exact shelf URL; cancel is quiet and failure keeps download available. Native OS share menu mocked.');
  await page.goto(`${origin}/shelf/?books=the-mom-test`);await page.locator('[data-reshare-shelf]').click();
- await page.route('**/covers/the-mom-test.jpg',route=>route.fulfill({status:404,body:'missing'}));
+ await page.route('**/covers/rendered/the-mom-test.*.jpg',route=>route.fulfill({status:404,body:'missing'}));
  await page.locator('[data-create-shelf-image]').click();await page.getByText('Couldn’t create the image. Please try again.',{exact:true}).waitFor();assert.equal(await page.locator('[data-create-shelf-image]').isEnabled(),true);assert.equal(await page.locator('[data-download-shelf-image]').isVisible(),false);
- await page.unroute('**/covers/the-mom-test.jpg');await makeImage(page);
+ await page.unroute('**/covers/rendered/the-mom-test.*.jpg');await makeImage(page);
  const one=page.waitForEvent('download');await page.locator('[data-download-shelf-image]').click();await (await one).saveAs('/private/tmp/awb-shelf-card-one.png');
  await page.keyboard.press('Escape');await page.locator('[data-reshare-shelf]').click();
  await page.evaluate(()=>{

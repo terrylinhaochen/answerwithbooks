@@ -1,6 +1,6 @@
 ---
 title: "Set up your agent"
-description: "One setup message. Browser sign-in for private books. No API key needed."
+description: "One setup message. Browser sign-in for guide creation and source access. No API key needed."
 ---
 
 <Steps>
@@ -8,16 +8,22 @@ description: "One setup message. Browser sign-in for private books. No API key n
     Paste this into Codex, Claude Code, Cursor, or another agent that supports local skills:
 
     ```text
-    Set up https://answerwithbooks.com/SKILL.md
+    Install Answer with Books in this agent. Read this setup guide first:
+    https://docs.answerwithbooks.com/guide/quickstart-skill
+    Then follow https://answerwithbooks.com/SKILL.md for this agent,
+    install the skill with its references, and verify public book retrieval.
+    Preserve existing credentials and user edits. If this host cannot install
+    skills, explain the limitation instead of claiming success. Do not upload
+    books or start paid work as part of setup.
     ```
 
     Your agent installs the skill and checks that public books are available. It needs command execution and Node 20 or later. Public reading does not require an account.
   </Step>
-  <Step title="Connect your private books">
+  <Step title="Connect your account">
     Ask your agent:
 
     ```text
-    Connect my Answer with Books library.
+    Connect my Answer with Books account.
     ```
 
     Your agent opens browser sign-in. Sign in and select **Connect agent** to approve the request you started. The temporary connection code is filled in automatically and tucked under **Connection details**, where you can compare it with your agent’s code if needed. You do not need to create an API key or paste credentials into chat.
@@ -35,18 +41,18 @@ description: "One setup message. Browser sign-in for private books. No API key n
 For Codex, install the released skill:
 
 ```bash
-npx --yes https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.7.1/answer-with-books-0.7.1.tgz install --skill
+npx --yes https://answerwithbooks.com/downloads/answer-with-books-0.8.0.tgz install --skill
 ```
 
-For other supported agents, run the shared installer and choose your agent:
+For another supported agent, select its host (for example Claude Code):
 
 ```bash
-npx --yes skills@1.5.0 add Crowdlisten/Crowdlisten_books --skill answer-with-books --global
+npx --yes https://answerwithbooks.com/downloads/answer-with-books-0.8.0.tgz install --skill --agent claude-code
 ```
 
-The GitHub release is the current distribution. An older npm registry version may not contain the same commands. A local API server is optional and is not needed for this setup.
+The versioned package is the current distribution. An older npm registry version may not contain the same commands. No local API server or local processing setup is needed.
 </Accordion>
 
 <Accordion title="Does Answer with Books provide MCP?">
-The book integration currently uses a skill, CLI, and hosted API. Browser authorization connects the CLI to your account. It is not a book MCP connection. A Mintlify documentation MCP searches this documentation; it does not grant access to your private books.
+The book integration currently uses a skill, CLI, and hosted API. Browser authorization connects the CLI to your account. It is not a book MCP connection. A Mintlify documentation MCP searches this documentation; it does not grant subscriber access to source text.
 </Accordion>

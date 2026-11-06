@@ -1,9 +1,8 @@
 ---
+import {publicCover} from '../../lib/public-cover.mjs';
 import { getCollection, render } from 'astro:content';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import ReadingListLinks from '../../components/ReadingListLinks.astro';
-import { readingLists } from '../../lib/reading-lists';
 import Base from '../../layouts/Base.astro';
 import ReadingPersonalizer from '../../components/ReadingPersonalizer.astro';
 import { buildGuideReadingPrompt } from '../../lib/reading-handoff';
@@ -70,7 +69,7 @@ const readingPrompt = buildGuideReadingPrompt({
   })),
 });
 const answerCoverPath = fileURLToPath(new URL(`../../../public/answer-covers/${answer.id}.jpg`, import.meta.url));
-const answerImage = existsSync(answerCoverPath) ? `/answer-covers/${answer.id}.jpg` : '/og.svg';
+const answerImage = publicCover(existsSync(answerCoverPath) ? `/answer-covers/${answer.id}.jpg` : '/og.svg');
 const breadcrumbs = [
   { name: 'Answer with Books', url: 'https://answerwithbooks.com/' },
   { name: 'Guides', url: 'https://answerwithbooks.com/guides/' },
@@ -233,7 +232,6 @@ const jsonLd = [
     <ReadingPersonalizer kind="guide" prompt={readingPrompt} />
   </article>
 
-  <ReadingListLinks lists={readingLists.filter(list => list.guides.includes(answer.id))} compact />
 
   <FaqList items={faqs} eyebrow="Guide Q&A" title="How to use this guide" width="medium" />
 

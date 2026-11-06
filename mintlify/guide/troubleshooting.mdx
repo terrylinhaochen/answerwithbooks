@@ -3,32 +3,30 @@ title: "Troubleshooting"
 description: "Resolve setup, connection, and processing problems."
 ---
 
-<AccordionGroup>
-  <Accordion title="My agent cannot install the skill">
-    Local skills require a host that can execute commands and a supported skill directory. Use Node 20 or later. If the host cannot do this, use [the public shelf](https://answerwithbooks.com/books/) and its copyable reading prompts. Do not start a local API server just to read books.
-  </Accordion>
-  <Accordion title="The CLI is missing a command">
-    Use the current GitHub release shown in the [CLI reference](/guide/cli). The older npm registry package may have fewer commands. Preserve any local edits when updating the installed skill.
-  </Accordion>
-  <Accordion title="I signed in on the website, but my agent is not connected">
-    Website and CLI sessions are separate. Ask the agent to run login, then sign in and select **Connect agent** in the browser. The code is filled in automatically; **Connection details** lets you check it against your agent. If you opened the page separately, use **Enter a code manually** or reopen the link from your agent. Expired or revoked sessions need a new login.
-  </Accordion>
-  <Accordion title="My book is waiting after upload">
-    New hosted work waits for a reviewed quote and spending approval. Adding credit does not approve the book. Return to the book and check its current status and pricing.
-  </Accordion>
-  <Accordion title="The cover failed but the book is ready">
-    You can read ready text and use its methods through your connected agent. Retry only the cover if needed; a new paid attempt may require an additional approved limit.
-  </Accordion>
-  <Accordion title="My older book has no editorial summary">
-    Earlier conversions may include skill notes without a separate reader digest. The reader reports the missing summary instead of showing reference notes as a finished digest. New managed conversions and own-agent generation with CLI 0.7.0 or later produce both. Updating the CLI alone does not regenerate existing books.
-  </Accordion>
-  <Accordion title="An archived book no longer appears in my agent’s results">
-    Archiving removes a book from your active shelf and hosted retrieval. Open [Manage Skills](https://answerwithbooks.com/manage-skills/), select Archived, and restore it. Files already installed on your device are separate and remain there.
-  </Accordion>
-  <Accordion title="The source is scanned or protected">
-    Scanned pages need text extraction through OCR. Use a readable, authorized copy. DRM restrictions are not bypassed.
-  </Accordion>
-  <Accordion title="I cannot see a payment in my balance">
-    Check that checkout completed and that you are viewing the same account and environment. Refresh after Stripe confirms the payment. Test credits and live credits are separate.
-  </Accordion>
-</AccordionGroup>
+## My agent cannot install the skill
+
+Use Node 20 or later and the current package in the [CLI reference](/guide/cli). The host must support local skills and running commands. Otherwise, read guides in the browser. Installation does not run a local processing server.
+
+## Website sign-in did not connect my agent
+
+Website and CLI sessions are separate. Run login, then sign in and select Connect agent in the browser. An expired authorization requires a fresh login. Never paste a password or token into chat.
+
+## My book is still processing
+
+The processing card updates as the hosted worker extracts the file and maps its chapters. You may leave and return. Failed jobs show Retry processing for the uploader. Duplicate uploads reuse the existing edition, including work already in progress. Upload processing is free.
+
+## A guide needs a subscription or has no allowance left
+
+Check Billing for the current period and remaining allowance. Creating a new guide requires an active $24/month plan. Up to 30 guides may be completed or in progress per billing month. Failed generation releases its slot. Removing a completed guide does not refund it. A checkout return page alone does not activate the plan; the service waits for verified payment.
+
+## A book has no cover yet
+
+A ready book remains readable while its illustration finishes. A cover failure does not invalidate its source text.
+
+## My old private book is not on the public shelf
+
+Existing private books and guides are not automatically published. They remain accessible through your profile. Previous prepaid receipts remain under Previous billing.
+
+## The source is scanned or protected
+
+Use a readable copy you are authorized to upload. Hosted PDF extraction can read scanned pages; DRM restrictions are not bypassed.

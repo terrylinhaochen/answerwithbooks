@@ -3,12 +3,12 @@ import type { CollectionEntry } from 'astro:content';
 import '../styles/book-gallery.css';
 import BookJacket from './BookJacket.astro';
 import { bookPalettes } from '../lib/book-palettes';
-interface Props { book: CollectionEntry<'books'>; compact?: boolean; index?: number; }
-const {book,index=0}=Astro.props;
+interface Props { book: CollectionEntry<'books'>; compact?: boolean; index?: number; excerpt?: boolean; }
+const {book,index=0,excerpt=false}=Astro.props;
 ---
 <article class="library-book">
  <a class="library-cover" href={`/books/${book.id}/`} aria-label={`Open ${book.data.title}`} style={`--book-well:${['#e2e3d6','#e9e0d2','#e0e4df'][index%3]}`}>
   <span class="library-jacket"><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} /></span><span class="library-open" aria-hidden="true">↗</span>
  </a>
- <div class="library-copy"><p class="room-eyebrow">{book.data.tags[0]?.replaceAll('-', ' ') ?? 'Source book'}</p><h3><a href={`/books/${book.id}/`}>{book.data.title}</a></h3><p class="library-author">{book.data.author}</p><p class="library-description">{book.data.oneLiner}</p></div>
+ <div class="library-copy"><p class="room-eyebrow">{book.data.tags[0]?.replaceAll('-', ' ') ?? 'Source book'}</p><h3><a href={`/books/${book.id}/`}>{book.data.title}</a></h3><p class="library-author">{book.data.author}</p><p class="library-description">{book.data.oneLiner}</p>{excerpt && <button type="button" class="mt-4 text-sm underline" data-find-excerpt data-excerpt-title={book.data.title} data-excerpt-author={book.data.author} aria-haspopup="dialog">Find an excerpt</button>}</div>
 </article>

@@ -12,7 +12,7 @@ let handler:(req:Request)=>Promise<Response>;
 // Deno.serve normally opens a listener. Capture the actual handler instead.
 Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
 const usage:any[]=[];const jobs:any[]=[];const originals=new Map<string,Uint8Array>();const extractedFiles=new Map<string,Uint8Array>();
-let paidTest=false,rejectMeter=false;const metered=new Map<string,any>();
+let sharedFixture=false;let paidTest=false,rejectMeter=false;const metered=new Map<string,any>();
 let rejectNextReview=false,sawTargetedRepair=false;
 let modelCalls=0,wakes=0,failProvider=false,holdProvider:(()=>Promise<void>)|null=null;
 const json=(body:any,status=200)=>new Response(JSON.stringify(paidTest&&(body?.choices||body?.data?.[0]?.b64_json)?{...body,usage:body.choices?{prompt_tokens:100,completion_tokens:30,prompt_tokens_details:{cached_tokens:0}}:{input_tokens:100,output_tokens:30,input_tokens_details:{text_tokens:100,image_tokens:0}}}:body),{status,headers:{'Content-Type':'application/json'}});
@@ -40,8 +40,15 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
   modelCalls++;if(holdProvider)await holdProvider();
   if(failProvider)return json({error:'Synthetic busy response'},429);
   assert.equal(request.headers.get('authorization'),url.hostname==='api.openai.com'?'Bearer synthetic-provider-key':'Bearer synthetic-fireworks-key');
-  if(url.pathname.includes('/images/')){assert.match(body.prompt,/large sticker emblem/);assert.match(body.prompt,/upper 56%/);assert.equal(body.quality,'high');assert.equal(body.size,'1024x1536');return json({data:[{b64_json:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZQmcAAAAASUVORK5CYII='}]});}
+  if(url.pathname.includes('/images/')){assert.match(body.prompt,/large sticker emblem/);assert.match(body.prompt,/upper 56%/);assert.equal(body.quality,'high');assert.equal(body.background,'opaque');assert.equal(body.size,'1024x1536');return json({data:[{b64_json:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZQmcAAAAASUVORK5CYII='}]});}
   const prompt=body.messages[0].content;
+  if(sharedFixture&&!prompt.startsWith('Write a finished Answer')&&!prompt.startsWith('Check generated')){
+   const data=JSON.parse(body.messages[1].content);let content;
+   if(prompt.includes('Read ALL the numbered source lines'))content={title:'A shared life',author:'Fixture author',summary:'A person tries a bounded experiment.',scenes:[{title:'The experiment',account:'A prediction is compared with observations.',startLine:data.start,endLine:data.end}]};
+   else if(prompt.includes('Write a concise per-book orientation'))content={orientation:'A person experimenting with work.',questions:[1,2,3].map(n=>({question:'What does trial '+n+' show?',contribution:'It compares prediction with observation.'}))};
+   else{assert(prompt.includes('Check the account')||prompt.includes('Check this orientation'),'No legacy essay or skill generation');content={passed:true,reason:'Supported by the supplied text.'};}
+   return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify(content)}}]});
+  }
   if(prompt.startsWith('You distill')&&body.messages[1].content.includes('previousDraft'))sawTargetedRepair=true;
   if((prompt.startsWith('Check generated')||prompt.startsWith('Verify only'))&&rejectNextReview){rejectNextReview=false;return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({supported:false,issues:['Keep the original condition.'],checks:[]})}}]});}
 
@@ -233,3 +240,19 @@ for(const action of ['quote','accept-price','retry','enqueue']) {
 const status=(await call({action:'status',id:duplicate.id})).body.job;assert.equal(status.existing_book.id,originalReady.id);
 assert.equal(modelCalls,beforeDuplicateCalls);assert.equal(jobs.length,beforeDuplicateJobs+1);
 console.log('PASS cross-format reuse, owner isolation, completed duplicate preference and no repeated charge/provider work');
+
+// The public pipeline saves maps and a concise orientation, with a reviewed editorial digest, without per-book skills.
+paidTest=false;sharedFixture=true;failProvider=false;holdProvider=null;Deno.env.set('OPENAI_API_KEY','synthetic-provider-key');Deno.env.set('FIREWORKS_API_KEY','synthetic-fireworks-key');
+for(const saved of jobs){saved.run_state='complete';saved.cover_status='skipped';}
+const sharedJob={...originalReady,id:crypto.randomUUID(),visibility:'public',billing_required:false,options:{mode:'reading'},chunks:[originalReady.chunks[0]],notes:[],overview_notes:[],artifacts:null,cursor:0,status:'processing',run_state:'queued',attempts:0,lease_token:null,lease_until:null,next_attempt_at:new Date(0).toISOString()};jobs.push(sharedJob);
+const sharedCalls=modelCalls;for(let i=0;i<4;i++){const r=await drain();assert.equal(r.status,200,JSON.stringify(r.body));}
+assert.equal(sharedJob.status,'ready');assert.equal(sharedJob.run_state,'complete');assert.equal(sharedJob.cover_status,'pending');assert.equal(modelCalls-sharedCalls,6,'Map, editorial digest and orientation each receive a review');
+assert.deepEqual(Object.keys(sharedJob.artifacts).sort(),['book.md','reader/digest.json','reader/digest.md','reader/evidence.json','reading/map.json']);const map=JSON.parse(sharedJob.artifacts['reading/map.json']);assert.equal(map.sections.length,1);assert.equal(map.questions.length,3);assert.equal(sharedJob.source_text,originalReady.source_text);
+console.log('PASS public mapping, source review, book orientation/questions and cover queue without per-book skill artifacts');
+
+const beforeRefresh=JSON.stringify(sharedJob.artifacts),beforeRefreshCalls=modelCalls;
+assert.equal((await call({action:'refresh-digest',id:sharedJob.id})).status,403);
+assert.equal(JSON.stringify(sharedJob.artifacts),beforeRefresh);assert.equal(modelCalls,beforeRefreshCalls);
+assert.equal((await call({action:'refresh-digest',id:sharedJob.id},'synthetic-queue-secret')).body.refreshed,false);
+assert.equal(modelCalls,beforeRefreshCalls,'An already upgraded digest does not repeat paid generation');
+console.log('PASS digest refresh authorization and idempotent skip');

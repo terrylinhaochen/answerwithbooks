@@ -10,7 +10,7 @@ export function readerEvidence(job){
  const endMatter=lines.findIndex(l=>/^\*\*\* END OF (?:THE|THIS) PROJECT GUTENBERG/i.test(l));
  const evidence=[];
  for(const note of chosen){
-  const refs=[...(note.ideas||[]).flatMap(i=>i.sourceRefs||[]),...(note.sourceRefs||[])],seen=new Set();let remaining=perSection;
+  const refs=[...(note.ideas||[]).flatMap(i=>i.sourceRefs||[]),...(note.scenes||[]).map(s=>({startLine:s.startLine,endLine:s.endLine})),...(note.sourceRefs||[])],seen=new Set();let remaining=perSection;
   for(const ref of refs){
    if(!Number.isInteger(ref.startLine)||!Number.isInteger(ref.endLine)||ref.startLine<1||ref.endLine>lines.length||ref.endLine<ref.startLine)throw Error('Invalid reader evidence coordinates.');
    if(remaining<300||seen.has(ref.startLine)||(endMatter>=0&&ref.startLine>endMatter))continue;seen.add(ref.startLine);
@@ -45,7 +45,7 @@ export function validateReader(draft,job,evidence=readerEvidence(job)){
   for(const p of section.paragraphs){checkText(p.text,4000);checkRefs(p.evidenceIds);if(seen.has(p.text.trim()))throw Error('Repeated editorial paragraph.');seen.add(p.text.trim());}
  }
  const count=words(draft.sections.flatMap(s=>s.paragraphs.map(p=>p.text)).join(' '));
- if(count<bounds.minWords||count>bounds.maxWords)throw Error(`Editorial body needs ${bounds.minWords}–${bounds.maxWords} words from this evidence; received ${count}. Do not pad. Narrow unsupported claims and use source-backed mechanisms.`);
+ if(count<bounds.minWords||count>bounds.maxWords)throw Error(`Editorial body needs ${bounds.minWords}–${bounds.maxWords} words from this evidence; received ${count}. ${count<bounds.minWords?'Develop additional source-backed mechanisms, examples and tensions toward the midpoint; preserve accurate material.':'Condense repetition while preserving the argument.'} Do not pad or invent evidence.`);
  return draft;
 }
 export function readerClaims(draft,evidence){
@@ -60,8 +60,27 @@ export function renderReader(draft,job,evidence,review){
 }
 export async function compileReader(job,modelJson){
  const evidence=readerEvidence(job),bounds=readerBounds(job);
- const input={title:job.title,author:job.author,bounds,scope:'Only the supplied source excerpts. Original chapter completeness is unverified.',evidence};
- const draft=await modelJson(prompt.instructions,JSON.stringify(repairInput(input,job.generation_feedback?.phase==='editorial'?job.generation_feedback:null)),{name:'book_reader',schema:readerSchema(evidence,bounds)});
+ const targetWords=Math.round((bounds.minWords+bounds.maxWords)/2);
+ const input={title:job.title,author:job.author,bounds,writingBudget:{targetWords,approximateParagraphs:Math.ceil(targetWords/90),wordsPerParagraph:90,note:'Develop the source-backed argument across these paragraphs. Word bounds count body paragraphs only, not headings or metadata.'},scope:'Only the supplied source excerpts. Original chapter completeness is unverified.',evidence};
+ const previous=job.generation_feedback?.phase==='editorial'?job.generation_feedback:null;
+ const request=repairInput(input,previous);
+ if(previous?.review?.issues?.some(issue=>String(issue).includes('Editorial body needs')))request.task=`Rewrite the complete digest with about ${targetWords} words in the body paragraphs, excluding headings and metadata. The previous draft failed the measured length bounds. Preserve its accurate material and develop source-backed explanations, examples, tensions and consequences to reach the target. Plan about ${Math.ceil(targetWords/90)} paragraphs averaging 90 words. Stay within ${bounds.minWords}–${bounds.maxWords} words. Do not pad, repeat points or invent claims; cite the supplied original evidence for each paragraph.`;
+ let draft;
+ const failed=previous?.review?.checks?.filter(check=>check.supported===false).map(check=>check.id)||[];
+ if(failed.length){
+  // Repair individual rejected claims; don't regenerate already approved paragraphs.
+  const original=previous.draft,claims=readerClaims(original,evidence),paragraphIds=failed.filter(id=>id!=='metadata');
+  if(failed.some(id=>!claims.some(c=>c.id===id)))throw new GenerationReviewError('editorial',original,{issues:['Repair findings must identify existing claims.']});
+  const base=readerSchema(evidence,bounds),obj=properties=>({type:'object',properties,required:Object.keys(properties),additionalProperties:false});
+  const refs=base.properties.evidenceIds;
+  const metadata=failed.includes('metadata')?obj({oneLiner:base.properties.oneLiner,readIf:base.properties.readIf,evidenceIds:refs}):{type:'null'};
+  const schema=obj({metadata,paragraphs:{type:'array',minItems:paragraphIds.length,maxItems:paragraphIds.length,items:obj({id:paragraphIds.length?{type:'string',enum:paragraphIds}:{type:'string'},text:{type:'string',minLength:1,maxLength:4000},evidenceIds:refs})}});
+  const correction=await modelJson(prompt.instructions+' Repair only the rejected claims named in this request. Return metadata only when it failed, otherwise null. Return exactly one paragraph per rejected paragraph ID. Preserve the existing heading and argument, correct its evidence citations, and remove or qualify unsupported claims. All other paragraphs are already saved and must not be rewritten.',JSON.stringify({title:job.title,author:job.author,evidence,previousDraft:original,rejectedClaims:claims.filter(c=>failed.includes(c.id)),findings:previous.review}),{name:'book_reader_repair',schema});
+  if(!Array.isArray(correction.paragraphs)||correction.paragraphs.length!==paragraphIds.length||new Set(correction.paragraphs.map(p=>p.id)).size!==paragraphIds.length||correction.paragraphs.some(p=>!paragraphIds.includes(p.id)))throw new GenerationReviewError('editorial',original,previous.review);
+  draft=structuredClone(original);
+  if(failed.includes('metadata')){if(!correction.metadata)throw new GenerationReviewError('editorial',original,previous.review);Object.assign(draft,correction.metadata);}
+  for(const p of correction.paragraphs){const [,section,paragraph]=/^s(\d+)p(\d+)$/.exec(p.id);draft.sections[Number(section)-1].paragraphs[Number(paragraph)-1]={text:p.text,evidenceIds:p.evidenceIds};}
+ }else draft=await modelJson(prompt.instructions,JSON.stringify(request),{name:'book_reader',schema:readerSchema(evidence,bounds)});
  try{validateReader(draft,job,evidence);}catch(e){throw new GenerationReviewError('editorial',draft,{issues:[e.message]});}
  const claims=readerClaims(draft,evidence);
  const review=await modelJson(citedFidelityInstructions,JSON.stringify({claims}),{kind:'review',name:'book_reader_review',schema:citedReviewSchema(claims.map(c=>c.id))});

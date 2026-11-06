@@ -25,3 +25,41 @@ test('long-source evidence budgets include every section, not just the beginning
 test('customer-agent upload renders its reader through fixed paths and does not inherit semantic review claims',async()=>{
  const book={oneLiner:'Keep commitments explicit.',readIf:'You record actions.',thesis:'Record the person and agreed deadline, then review.',tags:['commitments'],year:null,glossary:[]};const payload={schemaVersion:1,title:job.title,author:job.author,sourceText:source,book,chapters:[note],glossary:[],reader:draft()};const imported=await prepareAgentImport(payload);assert.equal(JSON.parse(imported.job.artifacts['reader/digest.json']).review.status,'customer-agent');assert.match(imported.job.artifacts['reader/digest.md'],/incomplete/);payload.reader.evidenceIds=['fake'];await assert.rejects(prepareAgentImport(payload),/evidence IDs/);
 });
+
+import {summarizeReadingBook,publishReadingDigest} from '../supabase/functions/_shared/reading-guides.mjs';
+test('shared summaries reuse reviewed editorial prose and preserve maps, questions and provenance',async()=>{
+ const reader=await compileReader(job,async(_s,i,o)=>o.name==='book_reader'?draft():review(JSON.parse(i).claims));
+ const shared={...job,chunks:[{}],artifacts:reader};
+ let calls=0;
+ const generated=await summarizeReadingBook(shared,async(system)=>{calls++;assert.doesNotMatch(system,/summary:string/);return calls===1?{orientation:'A book about commitments.',questions:Array.from({length:3},(_,i)=>({question:`How can I keep commitment ${i+1}?`,contribution:'Explores how records support follow-through.'}))}:{passed:true};},async()=> 'hash');
+ const map=JSON.parse(generated['reading/map.json']);
+ assert.equal(map.summary,reader['reader/digest.md']);assert.equal(generated['reader/digest.json'],reader['reader/digest.json']);assert.deepEqual(map.sections,job.notes);
+ assert.match(generated['book.md'],/## Preserve/);assert.doesNotMatch(generated['book.md'],/undefined|SKILL.md/);
+ await assert.rejects(summarizeReadingBook(job,async()=>{throw Error('Must not call model');},async()=> 'hash'),/Compile the reviewed/);
+ const old={...job,artifacts:{'reading/map.json':JSON.stringify({...map,summary:'Old short overview.'}),'other':'keep'}};
+ const updated=publishReadingDigest(old,reader);
+ assert.equal(updated.other,'keep');assert.equal(JSON.parse(updated['reading/map.json']).summary,map.summary);assert.deepEqual(JSON.parse(updated['reading/map.json']).questions,map.questions);assert.equal(JSON.parse(old.artifacts['reading/map.json']).summary,'Old short overview.');
+});
+test('shared scene coordinates supply original evidence beyond a chapter preamble',()=>{
+ const evidence=readerEvidence({...job,notes:[{...note,ideas:[],scenes:[{startLine:3,endLine:3}]}]});
+ assert.equal(evidence[0].startLine,3);assert.match(evidence[0].text,/incomplete/);
+});
+
+test('length repairs develop the digest rather than reuse the factual narrowing instruction',async()=>{
+ let sawRepair=false;
+ await compileReader({...job,generation_feedback:{phase:'editorial',draft:draft(),review:{issues:['Editorial body needs more words.']}}},async(system,input,options)=>{
+  if(options.name==='book_reader'){const request=JSON.parse(input);assert.equal(system,readerPrompt.instructions);assert.match(request.task,/Rewrite the complete digest/);assert.match(request.task,/Preserve its accurate material/);assert.ok(request.source.writingBudget.targetWords);sawRepair=true;return draft();}
+  return review(JSON.parse(input).claims);
+ });
+ assert.ok(sawRepair);
+});
+
+test('source repairs change only failed paragraphs and preserve approved prose',async()=>{
+ const previous=draft();previous.sections[0].paragraphs.push({text:'An incorrect claim needs correction.',evidenceIds:['E1']});
+ const feedback={phase:'editorial',draft:previous,review:{supported:false,issues:['s1p2 needs correction.'],checks:[{id:'metadata',supported:true},{id:'s1p1',supported:true},{id:'s1p2',supported:false}]}};
+ const artifacts=await compileReader({...job,generation_feedback:feedback},async(_system,input,options)=>{
+  if(options.name==='book_reader_repair'){assert.deepEqual(JSON.parse(input).rejectedClaims.map(c=>c.id),['s1p2']);return {metadata:null,paragraphs:[{id:'s1p2',text:'The record is reviewed at the next meeting.',evidenceIds:['E1']}]};}
+  return review(JSON.parse(input).claims);
+ });
+ const saved=JSON.parse(artifacts['reader/digest.json']);assert.deepEqual(saved.sections[0].paragraphs[0],previous.sections[0].paragraphs[0]);assert.equal(saved.sections[0].paragraphs[1].text,'The record is reviewed at the next meeting.');assert.equal(saved.oneLiner,previous.oneLiner);
+});

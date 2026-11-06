@@ -1,27 +1,11 @@
 ---
-title: "Hosted processing"
-description: "Approve a spending limit and let the service generate your summary and skill."
+title: "How books become readings"
+description: "Hosted extraction, model reasoning and original passages."
 ---
+The website runs on GitHub Pages. Supabase in Northern Virginia stores private originals, extracted text, chapter maps, guide records and subscription allowances. A dedicated AWS worker in Ohio extracts uploaded books. Supabase Edge Functions and database queues handle model processing and guide generation.
 
-Hosted processing extracts the source and prepares it for generation. New work waits for your price approval before paid generation starts.
+Each new book produces a checked chapter map, an orientation and questions to explore. It does not generate a separate agent skill or a long essay. The original text is preserved with stable line coordinates.
 
-1. Review the quoted customer token rates and maximum additional spending amount.
-2. Add funds to the same account if needed.
-3. Approve the quote to start generation.
-4. Check progress in your library or ask your agent for the book's status.
+For a guide, the model considers the shared book maps, nominates scenes, reads their original text, and proposes a connected reading. After book and length confirmation it selects continuous passages, writes context and transitions, and checks the finished guide against the originals. Exact excerpt text comes from the saved source coordinates, not model-generated quotations.
 
-Once queued, generation runs on the service. You can leave the page and return later. A checkout redirect or deposit does not start a conversion by itself.
-
-## What you receive
-
-The result includes a separate editorial book summary and an agent skill with chapter notes, glossary, patterns, cheatsheet, source references, and review findings. Hosted processing also attempts a cover. Ready text can be used while its optional cover is pending or has failed.
-
-The service saves the checked skill first, then writes and checks the editorial digest against cited original excerpts. An editorial retry preserves completed skill extraction. Both stages use your approved token rates and spending limit.
-
-The source and generation requests are processed by the service's AI providers. Model source checks are fallible; use the references to verify important claims.
-
-## Pause, cancel, and retry
-
-Pausing keeps the current reservation. Cancellation settles usage already consumed and releases unused funds after active work finishes. Retrying settled work or a failed cover requires a new approved limit. A cover retry can run without regenerating the book text.
-
-An unresolved usage receipt can leave billing under review. Do not start duplicate conversions to work around an unresolved job. [Read the billing rules](/guide/billing).
+Keyword matching and vector similarity do not choose guide passages. Fingerprints only detect duplicate editions. There is one Answer with Books skill for uploads, guide creation and answers from guides.

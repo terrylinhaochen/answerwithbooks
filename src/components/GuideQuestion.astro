@@ -1,0 +1,87 @@
+---
+import '../styles/reading-guides.css';
+import InstallSkillDialog from './InstallSkillDialog.astro';
+interface Props { modalOnly?: boolean; }
+const {modalOnly=false}=Astro.props;
+---
+<section class={modalOnly?'':'awb-section pb-12'} data-guide-composer data-modal-only={String(modalOnly)}>
+  {!modalOnly && <div class="awb-panel p-6 sm:p-8">
+    <div class="flex flex-wrap items-center justify-between gap-3"><h2 class="font-serif text-3xl">Create your guide</h2><a href="#your-guides" data-open-saved-guides hidden class="text-sm underline underline-offset-4">Your Guides →</a></div>
+    <p class="mt-3 max-w-2xl text-soft">Start with a question to explore through original passages from your books.</p>
+    <p class="mt-2 text-sm text-soft" data-guide-allowance>3 free guides every month. No card needed.</p>
+    <form data-guide-launcher>
+      <label class="sr-only" for="guide-question">Your question</label>
+      <textarea id="guide-question" class="awb-input mt-5 w-full" rows="3" required minlength="3" maxlength="2000" placeholder="When is it time to leave your job and start something?"></textarea>
+      <div class="mt-4 flex flex-wrap items-center gap-4"><button type="submit" class="awb-pill awb-pill-primary">Create guide</button><span class="text-sm text-soft">or</span><button type="button" class="awb-pill" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill <span aria-hidden="true">↗</span></button></div>
+    </form>
+  </div>}
+  <dialog data-guide-dialog aria-labelledby="guide-dialog-title" class="guide-create-dialog">
+    <header class="guide-dialog-header"><h2 id="guide-dialog-title" class="font-serif text-3xl">Create your guide</h2><button type="button" data-close-guide aria-label="Close guide creation" class="guide-dialog-close">×</button></header>
+    <form data-guide-question>
+      <label for="guide-modal-question" class="block mt-5 text-sm">Your question</label>
+      <textarea id="guide-modal-question" class="awb-input mt-2 w-full" rows="3" required minlength="3" maxlength="2000" placeholder="What would you like to explore?"></textarea>
+      <div class="guide-source-picker"><div data-selected-source hidden><p class="guide-field-label">Read from</p><ul data-selected-books class="guide-book-shelf mt-3"></ul></div><p data-book-selection-note class="text-sm text-soft">We’ll suggest books that bring your question to life.</p>
+        <details data-add-guide-books class="mt-4"><summary class="guide-add-books">Add books <span aria-hidden="true">+</span></summary><p class="mt-3 text-sm text-soft">Choose up to four books.</p><div data-guide-book-choices class="guide-book-choices mt-3"></div></details>
+        <button type="button" data-guide-upload hidden class="awb-pill mt-4">Add the book’s PDF or EPUB</button>
+      </div>
+      <button type="submit" class="awb-pill awb-pill-primary mt-6">Find passages</button>
+    </form>
+    <section data-guide-checking hidden class="guide-request-check" role="status">
+      <span class="guide-check-spinner" aria-hidden="true"></span><h3>Starting your guide</h3><p>Checking your request…</p>
+    </section>
+    <section data-guide-access hidden class="guide-access-panel">
+      <p class="awb-eyebrow">Your next reading</p><h3 data-access-title>A question worth exploring.</h3><p data-access-question class="guide-access-question"></p>
+      <div class="guide-plan-offer"><p><strong>$24</strong><span> / month</span></p><p data-access-description>Up to 30 guides, built from original book passages.</p></div>
+      <button type="button" class="awb-pill awb-pill-primary" data-access-action data-billing-action="checkout">Subscribe · $24/month →</button><button type="button" data-edit-question class="guide-edit-question">Edit question</button>
+    </section>
+    <section data-guide-processing hidden class="guide-processing" aria-labelledby="guide-processing-title" aria-busy="true">
+      <div data-processing-cover></div><div class="guide-processing-copy"><p class="awb-eyebrow">In progress</p><h3 id="guide-processing-title" data-processing-title></h3><p data-processing-question class="guide-processing-question"></p><ol class="guide-processing-steps"><li data-guide-step="finding">Read the books</li><li data-guide-step="confirmation">Confirm books &amp; reading time</li><li data-guide-step="composing">Create your reading</li></ol><p class="text-sm text-soft">You can close this window. Processing continues in Your Guides.</p></div>
+    </section>
+    <section data-guide-proposal hidden class="mt-6 border-t border-line pt-6">
+      <p data-proposal-question class="font-serif text-2xl mb-5"></p><h3 class="text-sm text-soft">Suggested books</h3><ul data-proposal-books class="guide-book-shelf mt-4"></ul><p data-proposal-connection class="mt-4 text-soft"></p>
+      <button type="button" data-edit-guide-books class="mt-4 text-sm underline">Add or change books</button>
+      <fieldset class="guide-length-options"><legend class="mb-3 text-sm">Reading time</legend><label><input type="radio" name="length" value="short" /> ~10 minutes</label><label><input type="radio" name="length" value="standard" checked /> ~25 minutes</label><label><input type="radio" name="length" value="long" /> ~45 minutes</label></fieldset>
+      <button type="button" data-confirm-guide class="awb-pill awb-pill-primary">Create guide with these books</button>
+    </section>
+    <section data-guide-ready hidden class="guide-ready-preview">
+      <div data-ready-cover></div>
+      <div class="guide-ready-copy"><p class="awb-eyebrow">Ready to read</p><h3 data-ready-title></h3><p data-ready-meta class="guide-ready-meta"></p><p data-ready-introduction class="guide-ready-introduction"></p><a data-open-ready-guide class="awb-pill awb-pill-primary mt-5">Read your guide →</a><p class="guide-ready-saved">Saved in <a href="/guides/#your-guides">Your Guides</a>.</p></div>
+    </section>
+    <button type="button" data-new-question hidden class="mt-5 text-sm underline">Ask another question</button>
+    <p data-guide-status role="status" aria-live="polite" class="mt-4 text-sm text-soft"></p><a data-guide-login hidden href="/login/?from=guides" class="mt-3 underline">Sign in to create and save your guide →</a>
+    <footer class="guide-dialog-footer"><p>Your question and finished guide will be public.</p><p data-guide-plan></p></footer>
+  </dialog>
+  <section id="your-guides" data-your-guides hidden class="mt-8 scroll-mt-28"><h2 class="font-serif text-3xl">Your Guides</h2><div data-saved-guides class="guide-saved-grid mt-4"></div></section>
+  {!modalOnly && <section id="all-guides" data-public-guides aria-busy="true" aria-labelledby="all-guides-title" class="mt-12 scroll-mt-28"><h2 id="all-guides-title" class="font-serif text-3xl">All guides</h2><div data-public-guide-list class="guide-saved-grid mt-4"><p class="text-soft" role="status">Loading guides…</p></div></section>}
+</section>
+{!modalOnly && <InstallSkillDialog />}
+<script>import {mountGuides} from '../lib/reading-guides';mountGuides();</script>
+<style>
+ textarea{resize:vertical;min-height:110px;font-size:18px;line-height:1.6}button:disabled{opacity:.5;cursor:wait}
+ .guide-create-dialog{margin:auto;width:min(720px,calc(100vw - 24px));max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;border:1px solid var(--color-line);border-radius:24px;padding:32px;background:var(--color-card);color:var(--color-ink)}
+ .guide-create-dialog::backdrop{background:#17211888;backdrop-filter:blur(4px)}
+ .guide-dialog-header{display:flex;align-items:start;justify-content:space-between;gap:16px}.guide-dialog-close{flex-shrink:0;width:40px;height:40px;border-radius:50%;font-size:28px;background:var(--color-wash)}
+ .guide-ready-preview{display:grid;grid-template-columns:220px minmax(0,1fr);align-items:start;gap:24px;margin-top:28px}
+ .guide-ready-copy{min-width:0}.guide-ready-copy h3{font-family:var(--font-serif);font-size:27px;line-height:1.2;margin-top:12px;overflow-wrap:anywhere}
+ .guide-ready-meta{font-size:12px;color:var(--color-soft);margin-top:12px}.guide-ready-meta:empty,.guide-ready-introduction:empty{display:none}
+ .guide-ready-introduction{font-size:15px;line-height:1.65;margin-top:18px;color:var(--color-soft)}
+ .guide-ready-saved{font-size:12px;color:var(--color-soft);margin-top:16px}.guide-ready-saved a{text-decoration:underline;text-underline-offset:3px}
+ @media(max-width:600px){.guide-ready-preview{grid-template-columns:1fr;gap:20px}.guide-ready-preview [data-ready-cover]{max-width:300px}.guide-ready-copy h3{font-size:25px}}
+ .guide-source-picker{margin-top:24px;padding:20px;background:var(--color-wash);border-radius:16px}
+ .guide-field-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-soft);margin-bottom:14px}
+ .guide-add-books{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:14px;font-weight:600;list-style:none}.guide-add-books::-webkit-details-marker{display:none}
+ .guide-add-books span{font-size:21px;font-weight:400}
+ .guide-dialog-footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--color-line);font-size:12px;line-height:1.6;color:var(--color-soft)}
+ .guide-dialog-footer p:empty{display:none}
+ .guide-length-options{margin:24px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.guide-length-options legend{font-size:14px;margin-bottom:12px;color:var(--color-soft)}
+ .guide-length-options label{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 6px;border:1px solid var(--color-line);border-radius:12px;font-size:14px;cursor:pointer}.guide-length-options label:has(input:checked){border-color:var(--color-ink);background:var(--color-wash)}
+ .guide-request-check{text-align:center;padding:54px 16px}.guide-request-check h3{font-family:var(--font-serif);font-size:28px;margin-top:20px}.guide-request-check p{color:var(--color-soft);margin-top:10px;font-size:14px}
+ .guide-check-spinner{display:block;width:26px;height:26px;border:2px solid var(--color-line);border-top-color:var(--color-ink);border-radius:50%;margin:auto;animation:guide-spin 1s linear infinite}
+ .guide-access-panel{padding:30px 0 8px}.guide-access-panel h3{font-family:var(--font-serif);font-size:32px;line-height:1.15;margin-top:12px}
+ .guide-access-question{color:var(--color-soft);line-height:1.6;margin-top:14px;overflow-wrap:anywhere}
+ .guide-plan-offer{padding:22px;margin:24px 0;background:var(--color-wash);border:1px solid var(--color-line);border-radius:16px}.guide-plan-offer strong{font-family:var(--font-serif);font-size:38px;font-weight:400}.guide-plan-offer span,.guide-plan-offer p+p{font-size:14px;color:var(--color-soft)}.guide-plan-offer p+p{margin-top:8px;line-height:1.5}
+ .guide-edit-question{font-size:14px;margin-left:20px;text-decoration:underline;text-underline-offset:4px}
+ [data-guide-status]:empty{display:none}.guide-create-dialog[data-state="access"] [data-guide-plan]{display:none}
+ @media(prefers-reduced-motion:reduce){.guide-check-spinner{animation:none}}
+ @media(max-width:600px){.guide-create-dialog{padding:20px}.guide-create-dialog :global(.guide-processing){grid-template-columns:1fr}.guide-create-dialog :global([data-processing-cover]){max-width:240px}.guide-length-options{gap:6px}.guide-length-options label{font-size:12px}}
+</style>

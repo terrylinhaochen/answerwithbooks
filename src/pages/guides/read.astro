@@ -1,0 +1,44 @@
+---
+import '../../styles/reading-guides.css';
+import Base from '../../layouts/Base.astro';
+import ReadingPersonalizer from '../../components/ReadingPersonalizer.astro';
+import FaqList from '../../components/FaqList.astro';
+import ContentFeedback from '../../components/ContentFeedback.astro';
+const faqs = [
+ {question:'About this guide',answer:''},
+ {question:'Which books is this guide grounded in?',answer:''},
+ {question:'How do I make this guide personal?',answer:'Choose your preferred AI in Personalize. For published guides, the short prompt links to a readable Markdown copy and the Answer with Books skill. Paste it into your AI to connect the reading to your experience. Private readings stay in the copied prompt rather than being published. This does not install the skill or give the AI access to your library.'},
+];
+---
+<Base title="Your guide" description="Your saved guide through original sources." path="/guides/read/" robots="noindex, nofollow">
+ <main class="guide-layout">
+  <aside class="guide-contents"><a href="/guides/#your-guides">← Back to Your Guides</a><nav data-reading-nav aria-label="Reading sections"></nav></aside>
+  <article class="guide-article">
+   <p data-reader-status role="status">Opening your guide…</p>
+   <div data-reader hidden>
+    <nav aria-label="Breadcrumb" class="mb-8 text-sm text-soft"><a href="/">Home</a><span aria-hidden="true"> / </span><a href="/guides/#your-guides">Your Guides</a></nav>
+    <header id="introduction" class="guide-reader-header border-b border-line pb-10">
+     <div><p class="awb-eyebrow">Guide</p><h1 data-guide-title class="mt-3 text-wrap break-words font-serif text-4xl leading-tight sm:text-5xl"></h1>
+      <p class="mt-4 text-sm text-faint">By <a href="/editorial/" class="underline decoration-line underline-offset-4 hover:text-ink">Answer with Books</a><span aria-hidden="true"> · </span><time data-guide-date></time></p>
+      <div class="mt-6 flex flex-wrap items-center gap-4"><span data-guide-topic class="inline-flex min-h-8 items-center rounded-full bg-wash px-3 py-1 text-xs text-soft"></span><span data-guide-duration class="text-sm text-soft"></span></div>
+     </div><div data-reader-cover></div>
+    </header>
+    <section class="guide-reader-orientation mt-6">
+     <div class="awb-card-link p-6 text-base leading-relaxed"><h2 class="awb-eyebrow mb-3">Reading lens</h2><p data-guide-introduction class="text-soft"></p></div>
+     <div class="awb-card-link p-5"><h2 class="awb-eyebrow">Source lens</h2><ul data-guide-books class="guide-book-shelf reader-book-shelf mt-4" aria-label="Books in this guide"></ul></div>
+    </section>
+    <div data-reading-content class="guide-passages mt-10 rounded-2xl border border-line bg-card px-5 py-6 sm:px-7 sm:py-8"></div>
+    <ReadingPersonalizer kind="guide" prompt="" />
+    <div id="guide-qa" data-guide-faq><FaqList items={faqs} eyebrow="Guide Q&A" title="How to use this guide" width="medium" contained /></div>
+    <ContentFeedback contentType="guide" contentSlug="" contentTitle="" />
+    <aside id="related-guides" data-related-guides hidden class="mt-12 border-t border-line pt-8 pb-12"><h2 class="awb-eyebrow">Related guides</h2><p class="mt-2 text-sm text-soft">More questions explored through these books.</p><div data-related-list class="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3"></div></aside>
+   </div>
+  </article>
+ </main>
+ <script>import {mountReader} from '../../lib/reading-guides';mountReader();</script>
+</Base>
+<style>
+.guide-layout{max-width:1380px;margin:64px auto;padding:0 28px;display:grid;grid-template-columns:190px minmax(0,1fr);gap:46px}.guide-contents{position:sticky;top:100px;height:max-content;font-size:13px;line-height:1.5}.guide-contents nav{display:grid;gap:15px;margin-top:30px;color:var(--color-soft);max-height:70vh;overflow:auto}.guide-contents a:hover{color:var(--color-ink)}.guide-article{min-width:0}.guide-reader-header{display:grid;gap:32px;grid-template-columns:minmax(0,1fr) minmax(0,0.85fr)}.guide-reader-orientation{display:grid;gap:16px;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}[data-reader][hidden],[data-related-guides][hidden]{display:none}.reader-book-shelf{display:grid}.guide-article :global([id]){scroll-margin-top:100px}
+.guide-passages :global(section){max-width:700px;margin:0 auto}.guide-passages :global(section+section){border-top:1px solid var(--color-line);margin-top:48px;padding-top:40px}.guide-passages :global(h2){font-family:var(--font-serif);font-size:30px;line-height:1.25;margin:0 0 20px}.guide-passages :global(p){white-space:pre-line;line-height:1.8;font-size:17px;margin:20px 0}.guide-passages :global(.original){font-family:var(--font-serif);font-size:21px;line-height:1.9;white-space:pre-wrap;margin:32px 0}.guide-passages :global(.attribution){font-size:14px;color:var(--color-soft)}.guide-passages :global(details){font-size:14px;color:var(--color-soft);margin:24px 0}.guide-passages :global(details p){font-size:16px}.guide-passages :global(summary){cursor:pointer}.guide-passages :global(button){text-decoration:underline;font-size:14px;cursor:pointer}.guide-passages :global(.completion h2:not(:first-child)){margin-top:35px}.guide-passages :global(.completion p){font-size:16px}
+@media(max-width:1100px){.guide-reader-header,.guide-reader-orientation{grid-template-columns:1fr}.guide-layout{gap:30px;grid-template-columns:170px minmax(0,1fr)}[data-reader-cover]{max-width:540px}}@media(max-width:850px){.guide-layout{display:block;max-width:760px;margin-top:30px;padding:0 20px}.guide-contents{position:static;margin-bottom:30px}.guide-contents nav{display:none}.guide-passages :global(.original){font-size:20px}}
+</style>

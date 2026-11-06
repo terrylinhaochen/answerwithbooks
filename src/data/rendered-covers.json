@@ -1,0 +1,428 @@
+{
+  "/covers/accelerate.jpg": {
+    "src": "/covers/rendered/accelerate.d9b1fc3b5976.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "AccelerateNicole Forsgren, Jez Humble, and Gene Kim"
+  },
+  "/covers/atomic-habits.jpg": {
+    "src": "/covers/rendered/atomic-habits.7bd22f940e19.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Atomic HabitsJames Clear"
+  },
+  "/covers/competing-against-luck.jpg": {
+    "src": "/covers/rendered/competing-against-luck.a656a9902368.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Competing Against LuckClayton M. Christensen, Taddy Hall, Karen Dillon, and David S. Duncan"
+  },
+  "/covers/continuous-discovery-habits.jpg": {
+    "src": "/covers/rendered/continuous-discovery-habits.f1b80f2eb817.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Continuous Discovery HabitsTeresa Torres"
+  },
+  "/covers/crucial-conversations.jpg": {
+    "src": "/covers/rendered/crucial-conversations.835674db7518.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Crucial ConversationsKerry Patterson, Joseph Grenny, Ron McMillan, and Al Switzler"
+  },
+  "/covers/deep-work.jpg": {
+    "src": "/covers/rendered/deep-work.1bb989b03251.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Deep WorkCal Newport"
+  },
+  "/covers/designing-your-life.jpg": {
+    "src": "/covers/rendered/designing-your-life.b8d3b280d381.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Designing Your LifeBill Burnett and Dave Evans"
+  },
+  "/covers/difficult-conversations.jpg": {
+    "src": "/covers/rendered/difficult-conversations.922898da4003.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Difficult ConversationsDouglas Stone, Bruce Patton, and Sheila Heen"
+  },
+  "/covers/dont-make-me-think.jpg": {
+    "src": "/covers/rendered/dont-make-me-think.b0c596a033c4.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Don't Make Me ThinkSteve Krug"
+  },
+  "/covers/four-thousand-weeks.jpg": {
+    "src": "/covers/rendered/four-thousand-weeks.76c111624b2a.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Four Thousand WeeksOliver Burkeman"
+  },
+  "/covers/getting-things-done.jpg": {
+    "src": "/covers/rendered/getting-things-done.8d53eb882204.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Getting Things DoneDavid Allen"
+  },
+  "/covers/getting-to-yes.jpg": {
+    "src": "/covers/rendered/getting-to-yes.c0414da9b4e6.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Getting to YesRoger Fisher, William Ury, and Bruce Patton"
+  },
+  "/covers/good-strategy-bad-strategy.jpg": {
+    "src": "/covers/rendered/good-strategy-bad-strategy.f8ab62652a28.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Good Strategy Bad StrategyRichard Rumelt"
+  },
+  "/covers/high-output-management.jpg": {
+    "src": "/covers/rendered/high-output-management.b1af258a5215.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "High Output ManagementAndrew S. Grove"
+  },
+  "/covers/made-to-stick.jpg": {
+    "src": "/covers/rendered/made-to-stick.77b1e77ec223.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Made to StickChip Heath and Dan Heath"
+  },
+  "/covers/make-it-stick.jpg": {
+    "src": "/covers/rendered/make-it-stick.f46abf4f180d.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Make It StickPeter C. Brown, Henry L. Roediger III, and Mark A. McDaniel"
+  },
+  "/covers/never-split-the-difference.jpg": {
+    "src": "/covers/rendered/never-split-the-difference.3de828e7605f.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Never Split the DifferenceChris Voss with Tahl Raz"
+  },
+  "/covers/noise.jpg": {
+    "src": "/covers/rendered/noise.79c931e79278.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "NoiseDaniel Kahneman, Olivier Sibony, and Cass R. Sunstein"
+  },
+  "/covers/obviously-awesome.jpg": {
+    "src": "/covers/rendered/obviously-awesome.137e858a0e7d.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Obviously AwesomeApril Dunford"
+  },
+  "/covers/playing-to-win.jpg": {
+    "src": "/covers/rendered/playing-to-win.d0228440cc52.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Playing to WinA.G. Lafley and Roger L. Martin"
+  },
+  "/covers/radical-candor.jpg": {
+    "src": "/covers/rendered/radical-candor.7f68c3fe52d8.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Radical CandorKim Scott"
+  },
+  "/covers/scarcity.jpg": {
+    "src": "/covers/rendered/scarcity.0139d7932232.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "ScarcitySendhil Mullainathan and Eldar Shafir"
+  },
+  "/covers/seeing-like-a-state.jpg": {
+    "src": "/covers/rendered/seeing-like-a-state.fe11c1e3cdd1.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Seeing Like a StateJames C. Scott"
+  },
+  "/covers/slow-productivity.jpg": {
+    "src": "/covers/rendered/slow-productivity.aae93cab2a4b.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Slow ProductivityCal Newport"
+  },
+  "/covers/so-good-they-cant-ignore-you.jpg": {
+    "src": "/covers/rendered/so-good-they-cant-ignore-you.ab4596ec3448.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "So Good They Can't Ignore YouCal Newport"
+  },
+  "/covers/superforecasting.jpg": {
+    "src": "/covers/rendered/superforecasting.391510d8183d.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "SuperforecastingPhilip E. Tetlock and Dan Gardner"
+  },
+  "/covers/team-topologies.jpg": {
+    "src": "/covers/rendered/team-topologies.fad171e3055b.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Team TopologiesMatthew Skelton and Manuel Pais"
+  },
+  "/covers/the-checklist-manifesto.jpg": {
+    "src": "/covers/rendered/the-checklist-manifesto.df1ff0b410c4.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Checklist ManifestoAtul Gawande"
+  },
+  "/covers/the-crowd.png": {
+    "src": "/covers/rendered/the-crowd.b95d559d7fa0.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The CrowdGustave Le Bon"
+  },
+  "/covers/the-design-of-everyday-things.jpg": {
+    "src": "/covers/rendered/the-design-of-everyday-things.35617464ab5a.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Design of Everyday ThingsDon Norman"
+  },
+  "/covers/the-effective-executive.jpg": {
+    "src": "/covers/rendered/the-effective-executive.e8442cb12ef6.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Effective ExecutivePeter F. Drucker"
+  },
+  "/covers/the-fearless-organization.jpg": {
+    "src": "/covers/rendered/the-fearless-organization.9dd27e822a7e.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Fearless OrganizationAmy C. Edmondson"
+  },
+  "/covers/the-goal.jpg": {
+    "src": "/covers/rendered/the-goal.4c1e24140640.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The GoalEliyahu M. Goldratt and Jeff Cox"
+  },
+  "/covers/the-good-life.jpg": {
+    "src": "/covers/rendered/the-good-life.2df51734979e.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Good LifeRobert Waldinger and Marc Schulz"
+  },
+  "/covers/the-happiness-trap.jpg": {
+    "src": "/covers/rendered/the-happiness-trap.fb8ff0671e5c.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Happiness TrapRuss Harris"
+  },
+  "/covers/the-lean-startup.jpg": {
+    "src": "/covers/rendered/the-lean-startup.e37debd028d8.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Lean StartupEric Ries"
+  },
+  "/covers/the-mom-test.jpg": {
+    "src": "/covers/rendered/the-mom-test.30ba9962f55d.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Mom TestRob Fitzpatrick"
+  },
+  "/covers/the-scout-mindset.jpg": {
+    "src": "/covers/rendered/the-scout-mindset.a45247e66fd7.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Scout MindsetJulia Galef"
+  },
+  "/covers/the-structure-of-scientific-revolutions.jpg": {
+    "src": "/covers/rendered/the-structure-of-scientific-revolutions.f0de31e585f9.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Structure of Scientific RevolutionsThomas S. Kuhn"
+  },
+  "/covers/the-wisdom-of-crowds.jpg": {
+    "src": "/covers/rendered/the-wisdom-of-crowds.1a879f880cc1.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "The Wisdom of CrowdsJames Surowiecki"
+  },
+  "/covers/thinking-fast-and-slow.jpg": {
+    "src": "/covers/rendered/thinking-fast-and-slow.fc2cbc8e7b41.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Thinking, Fast and SlowDaniel Kahneman"
+  },
+  "/covers/thinking-in-bets.jpg": {
+    "src": "/covers/rendered/thinking-in-bets.b46444bdfcd9.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Thinking in BetsAnnie Duke"
+  },
+  "/covers/thinking-in-systems.jpg": {
+    "src": "/covers/rendered/thinking-in-systems.95d4f7375a9f.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Thinking in SystemsDonella H. Meadows"
+  },
+  "/covers/traction.jpg": {
+    "src": "/covers/rendered/traction.2927e1f77b70.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "TractionGabriel Weinberg and Justin Mares"
+  },
+  "/covers/working-identity.jpg": {
+    "src": "/covers/rendered/working-identity.3a492ff732c1.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Working IdentityHerminia Ibarra"
+  },
+  "/covers/zero-to-one.png": {
+    "src": "/covers/rendered/zero-to-one.e59d63f5b51f.jpg",
+    "width": 1200,
+    "height": 1800,
+    "caption": "Zero to OnePeter Thiel with Blake Masters"
+  },
+  "/answer-covers/how-to-decide-what-to-do-with-your-career-next.jpg": {
+    "src": "/answer-covers/rendered/how-to-decide-what-to-do-with-your-career-next.14e034710212.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Career Career Move"
+  },
+  "/answer-covers/how-to-delegate-without-losing-control.jpg": {
+    "src": "/answer-covers/rendered/how-to-delegate-without-losing-control.46fa7228147b.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Management Delegate"
+  },
+  "/answer-covers/how-to-explain-an-idea-so-people-remember-it.jpg": {
+    "src": "/answer-covers/rendered/how-to-explain-an-idea-so-people-remember-it.8561ce41291f.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Communication Make It Stick"
+  },
+  "/answer-covers/how-to-fix-user-interviews-that-are-not-teaching-you-anything.jpg": {
+    "src": "/answer-covers/rendered/how-to-fix-user-interviews-that-are-not-teaching-you-anything.f94d8b8ee70c.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Startups User Interviews"
+  },
+  "/answer-covers/how-to-get-out-of-task-overwhelm-without-reorganizing-your-whole-life.jpg": {
+    "src": "/answer-covers/rendered/how-to-get-out-of-task-overwhelm-without-reorganizing-your-whole-life.fb49ac38e948.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Productivity Open Loops"
+  },
+  "/answer-covers/how-to-have-a-hard-conversation-without-making-it-worse.jpg": {
+    "src": "/answer-covers/rendered/how-to-have-a-hard-conversation-without-making-it-worse.d6ec3c14c99a.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Communication Hard Talk"
+  },
+  "/answer-covers/how-to-keep-a-smart-team-from-making-a-dumb-decision.jpg": {
+    "src": "/answer-covers/rendered/how-to-keep-a-smart-team-from-making-a-dumb-decision.5b8b12e2fec9.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Teams Team Decisions"
+  },
+  "/answer-covers/how-to-know-when-to-trust-your-gut.jpg": {
+    "src": "/answer-covers/rendered/how-to-know-when-to-trust-your-gut.6891133c6c25.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Decision Making Trust Your Gut"
+  },
+  "/answer-covers/how-to-know-whether-your-metrics-are-lying-to-you.jpg": {
+    "src": "/answer-covers/rendered/how-to-know-whether-your-metrics-are-lying-to-you.0836d9bb7d14.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Metrics Bad Metrics"
+  },
+  "/answer-covers/how-to-make-a-confusing-page-easier-to-use.jpg": {
+    "src": "/answer-covers/rendered/how-to-make-a-confusing-page-easier-to-use.181d0f7cfd1b.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Design Clear Pages"
+  },
+  "/answer-covers/how-to-make-a-healthy-habit-survive-a-busy-week.jpg": {
+    "src": "/answer-covers/rendered/how-to-make-a-healthy-habit-survive-a-busy-week.86d76f5221e3.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Health Busy Habit"
+  },
+  "/answer-covers/how-to-make-a-plan-that-survives-contact-with-reality.jpg": {
+    "src": "/answer-covers/rendered/how-to-make-a-plan-that-survives-contact-with-reality.1848bbd7e2a6.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Planning Reality Plan"
+  },
+  "/answer-covers/how-to-make-project-estimates-less-fictional.jpg": {
+    "src": "/answer-covers/rendered/how-to-make-project-estimates-less-fictional.8011e02d599d.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Planning Real Estimates"
+  },
+  "/answer-covers/how-to-negotiate-salary-without-guessing-your-worth.jpg": {
+    "src": "/answer-covers/rendered/how-to-negotiate-salary-without-guessing-your-worth.97935c823ced.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Career Salary Ask"
+  },
+  "/answer-covers/how-to-prioritize-when-every-request-sounds-urgent.jpg": {
+    "src": "/answer-covers/rendered/how-to-prioritize-when-every-request-sounds-urgent.03fbceb65b88.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Product Prioritize"
+  },
+  "/answer-covers/how-to-run-user-interviews-that-do-not-lie-to-you.jpg": {
+    "src": "/answer-covers/rendered/how-to-run-user-interviews-that-do-not-lie-to-you.fed04f928134.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Customer Research Better Research"
+  },
+  "/answer-covers/how-to-tell-whether-to-pivot-or-keep-going.jpg": {
+    "src": "/answer-covers/rendered/how-to-tell-whether-to-pivot-or-keep-going.8cca5738cb28.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Strategy Pivot?"
+  },
+  "/answer-covers/how-to-tell-whether-your-value-proposition-is-actually-different.jpg": {
+    "src": "/answer-covers/rendered/how-to-tell-whether-your-value-proposition-is-actually-different.f07a1b5ef620.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Business Different?"
+  },
+  "/answer-covers/how-to-test-a-risky-idea-before-you-build-too-much.jpg": {
+    "src": "/answer-covers/rendered/how-to-test-a-risky-idea-before-you-build-too-much.f0ab716d0cc5.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Startups Risk Test"
+  },
+  "/answer-covers/how-to-turn-a-vague-goal-into-an-actual-strategy.jpg": {
+    "src": "/answer-covers/rendered/how-to-turn-a-vague-goal-into-an-actual-strategy.e921ddd51207.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Strategy Strategy"
+  },
+  "/answer-covers/how-to-turn-messy-feedback-into-a-real-signal.jpg": {
+    "src": "/answer-covers/rendered/how-to-turn-messy-feedback-into-a-real-signal.b781630fbe26.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Customer Research Feedback Signal"
+  },
+  "/answer-covers/how-to-validate-an-idea-without-fooling-yourself.jpg": {
+    "src": "/answer-covers/rendered/how-to-validate-an-idea-without-fooling-yourself.02b81bbec0cc.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "Startups Idea Validation"
+  },
+  "/guide-covers/audience-enrichment.jpg": {
+    "src": "/guide-covers/rendered/audience-enrichment.4bbb95723135.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "GrowthAudience Research"
+  },
+  "/guide-covers/github-lead-research.jpg": {
+    "src": "/guide-covers/rendered/github-lead-research.c1484dff365c.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "GrowthGitHub Leads"
+  },
+  "/guide-covers/x-discourse-analysis.jpg": {
+    "src": "/guide-covers/rendered/x-discourse-analysis.9a21ac4181d4.jpg",
+    "width": 1200,
+    "height": 675,
+    "caption": "ResearchX Discourse"
+  }
+}

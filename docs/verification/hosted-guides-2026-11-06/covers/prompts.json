@@ -1,0 +1,18 @@
+[
+  {
+    "file": "dividing-work.png",
+    "label": "Working Together",
+    "topic": "Work",
+    "background": "#0b6bdc",
+    "tool": "built-in image_gen",
+    "prompt": "Use case: stylized-concept. Create ONE original landscape editorial guide cover, 16:9. Follow the inspected site's cover style: bold flat vector-like sticker art, chunky dark outlines, saturated solid fills, crisp offset shadow. Guide concept: division of work enables skill and productive coordination, but depends on others. Primary emblem: three large distinct interlocking puzzle-like blocks joining into one precise upward-pointing arrow, a single unified clean readable silhouette. Entire emblem and shadow within right 48% of canvas, x=53–94%, y=15–85%. LEFT 46% must be completely empty solid saturated electric cobalt #0b6bdc for HTML title. Yellow, cyan, and ivory shapes with dark navy outlines. No books, no book jackets, no text, no letters, no numerals, no logo, no watermark, no border, no gradient, no texture, no tiny decoration. Strong thumbnail readability. Save the generated image as an available local file."
+  },
+  {
+    "file": "shaping-distinction.png",
+    "label": "How Talent Takes Shape",
+    "topic": "Learning",
+    "background": "#6a24d8",
+    "tool": "built-in image_gen",
+    "prompt": "Use case: stylized-concept. ONE original 16:9 landscape editorial guide cover. Flat vector-like sticker illustration with chunky dark purple outlines, rounded joins, saturated solid fills, crisp hard-edged offset shadow. Guide concept: how practice and circumstances shape distinction rather than fixed innate talent. Subject: one large sculptor's chisel meeting a rough cream stone block, with a luminous lime-green faceted star visibly emerging from that same stone; one unified bold silhouette, very simple. All objects and shadows contained in RIGHT 48% of canvas x=53–94%, y=15–85%. LEFT 46% completely empty solid saturated violet #6a24d8 for separate HTML typography. Palette violet backdrop, warm ivory stone, lime star, coral chisel, dark purple outlines. No books or book jackets. Absolutely no text, letters, numerals, fake glyphs, logos, borders, watermarks, texture, gradients, photorealism, or scattered little decorations. Strong readable metaphor at thumbnail size. New artwork, not a variation of a gear or arrow image."
+  }
+]

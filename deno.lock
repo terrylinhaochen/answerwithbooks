@@ -99,14 +99,12 @@
         "npm:@tailwindcss/typography@~0.5.16",
         "npm:@tailwindcss/vite@^4.1.0",
         "npm:astro@^5.12.0",
-        "npm:fflate@0.8.2",
+        "npm:fflate@0.8.3",
+        "npm:hash-wasm@4.12.0",
         "npm:html-to-image@1.11.13",
         "npm:motion@12.40.0",
-        "npm:pdfjs-dist@5.4.624",
         "npm:playwright@^1.61.1",
-        "npm:pyodide@314.0.7",
-        "npm:tailwindcss@^4.1.0",
-        "npm:tesseract.js@7.0.0"
+        "npm:tailwindcss@^4.1.0"
       ]
     }
   }

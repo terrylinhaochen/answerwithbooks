@@ -36,8 +36,6 @@
     "engine:compile": "node scripts/compile-book-artifacts.mjs",
     "test:book-processing": "node --test scripts/test-book-processing.mjs",
     "test:book-pipeline": "node --test scripts/test-book-evals.mjs scripts/test-book-model.mjs scripts/test-book-quality.mjs scripts/test-book-worker.mjs scripts/test-book-processing.mjs scripts/test-book-parity.mjs scripts/test-long-book.mjs scripts/test-book-revisions.mjs scripts/test-book-parallel.mjs scripts/test-book-library.mjs scripts/test-book-usage.mjs scripts/test-book-library-status.mjs",
-    "predev": "node scripts/build-book-runtime.mjs",
-    "prebuild": "node scripts/build-book-runtime.mjs",
     "test:book-purchases": "node scripts/test-book-purchases.mjs",
     "test:book-skills": "node scripts/test-book-skills.mjs",
     "test:book-agent-actions": "node scripts/test-book-agent-actions.mjs",
@@ -48,7 +46,9 @@
     "test:book-billing": "node --test scripts/test-book-billing.mjs scripts/test-book-metered-billing.mjs",
     "report:signups": "python3 scripts/report-signups.py",
     "audit:discovery": "node --experimental-strip-types scripts/search-discovery-audit.mjs",
-    "discovery:inventory": "node --experimental-strip-types scripts/search-discovery-audit.mjs --write-inventory"
+    "discovery:inventory": "node --experimental-strip-types scripts/search-discovery-audit.mjs --write-inventory",
+    "covers:export": "AWB_EXPORT_COVERS=1 npm run build && node scripts/export-rendered-covers.mjs && npm run build",
+    "test:shared-library": "node scripts/test-reader-subscription.mjs && node --test scripts/test-reading-guides.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.0",
@@ -58,12 +58,10 @@
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^5.12.0",
     "fflate": "0.8.3",
+    "hash-wasm": "4.12.0",
     "html-to-image": "1.11.13",
     "motion": "12.40.0",
-    "pdfjs-dist": "5.4.624",
-    "pyodide": "314.0.7",
-    "tailwindcss": "^4.1.0",
-    "tesseract.js": "7.0.0"
+    "tailwindcss": "^4.1.0"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",

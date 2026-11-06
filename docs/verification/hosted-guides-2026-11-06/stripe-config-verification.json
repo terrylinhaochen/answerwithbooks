@@ -1,0 +1,73 @@
+{
+  "portal": {
+    "id": "bpc_1UYsZjA3c3cnLmThThidciEx",
+    "is_default": false,
+    "default_return_url": "https://answerwithbooks.com/billing/",
+    "features": {
+      "customer_update": {
+        "allowed_updates": [],
+        "enabled": false
+      },
+      "invoice_history": {
+        "enabled": true
+      },
+      "payment_method_update": {
+        "enabled": true,
+        "payment_method_configuration": null
+      },
+      "subscription_cancel": {
+        "cancellation_reason": {
+          "enabled": false,
+          "feedback_options": [],
+          "options": [
+            "too_expensive",
+            "missing_features",
+            "switched_service",
+            "unused",
+            "other"
+          ]
+        },
+        "enabled": true,
+        "mode": "at_period_end",
+        "proration_behavior": "none"
+      },
+      "subscription_pause": {
+        "duration": {
+          "interval_options": [
+            {
+              "interval": "month",
+              "interval_count": 1
+            }
+          ],
+          "type": "interval_options"
+        },
+        "enabled": false
+      },
+      "subscription_update": {
+        "billing_cycle_anchor": "unchanged",
+        "default_allowed_updates": [],
+        "enabled": false,
+        "proration_behavior": "none",
+        "schedule_at_period_end": {
+          "conditions": []
+        },
+        "trial_update_behavior": "end_trial"
+      }
+    },
+    "business_profile": {
+      "headline": "Manage your Answer With Books plan",
+      "privacy_policy_url": null,
+      "terms_of_service_url": null
+    }
+  },
+  "checkout": {
+    "amount_total": 2400,
+    "currency": "usd",
+    "mode": "subscription",
+    "status": "open",
+    "payment_status": "unpaid",
+    "subscription": null,
+    "success_url": "https://answerwithbooks.com/billing/?checkout=returned",
+    "cancel_url": "https://answerwithbooks.com/billing/"
+  }
+}

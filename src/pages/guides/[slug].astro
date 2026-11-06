@@ -1,4 +1,5 @@
 ---
+import {publicCover} from '../../lib/public-cover.mjs';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ReadingPersonalizer from '../../components/ReadingPersonalizer.astro';
@@ -38,7 +39,7 @@ const faqs = [
   { question: 'Does checking the boxes certify my output?', answer: 'No. The checklist is a self-review aid, not an automated assessment or certification. It is saved only in this browser. You remain responsible for checking the result and obtaining any approvals.' },
 ];
 ---
-<Base title={guide.title} description={guide.description} path={`/guides/${guide.slug}/`} jsonLd={[faqJsonLd(`https://answerwithbooks.com/guides/${guide.slug}/`, faqs)]}>
+<Base image={hasCover ? publicCover(guideCovers[guide.slug].src) : undefined} imageAlt={`${guide.title} guide cover`} title={guide.title} description={guide.description} path={`/guides/${guide.slug}/`} jsonLd={[faqJsonLd(`https://answerwithbooks.com/guides/${guide.slug}/`, faqs)]}>
   <article class="mx-auto max-w-5xl px-5 pt-16 pb-10" data-guide={guide.slug}>
     <a href="/guides/" class="text-sm text-soft hover:text-ink">← All guides</a>
     <header class:list={['mt-8', { 'grid items-center gap-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]': hasCover }]}>

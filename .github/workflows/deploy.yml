@@ -50,7 +50,7 @@ jobs:
           npm run test:book-pipeline
           npm run test:book-billing
           node --test scripts/test-book-api-auth.mjs
-          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs scripts/test-book-revisions.mjs scripts/test-long-book.mjs scripts/test-book-cache.mjs scripts/test-pdf-processing-route.mjs
+          node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs scripts/test-book-revisions.mjs scripts/test-long-book.mjs scripts/test-book-cache.mjs
           python3 -m unittest discover -s scripts/native-book-worker -p test_worker.py
 
       - name: Set up Deno for the processing handler tests
@@ -76,12 +76,16 @@ jobs:
           node scripts/test-book-cli-auth.mjs
           PG_BIN="$(pg_config --bindir)" python3 scripts/test-book-cli-db.py
 
-      - name: Verify combined guides and private workspace sync
+      - name: Verify shared library, subscription and guide allowance
         run: |
-          git clone --depth 1 --branch v0.7.1 https://github.com/Crowdlisten/Crowdlisten_books.git ../core
-          npm ci --prefix ../core
-          node scripts/eval-book-flow.mjs
-          deno check --node-modules-dir=none supabase/functions/book-import/index.ts
+          npm run test:shared-library
+          node --test scripts/test-book-reader.mjs scripts/test-reading-text.mjs scripts/test-source-stream.mjs
+          deno check --node-modules-dir=none supabase/functions/shared-library/index.ts supabase/functions/reader-subscription/index.ts supabase/functions/reading-guides/index.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-shared-http.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-reader-subscription-http.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-reading-http.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-guide-markdown-http.ts
+          PG_BIN="$(pg_config --bindir)" python3 scripts/test-shared-subscription-db.py
 
       - name: Verify authentication email branding
         run: node scripts/test-auth-email-templates.mjs
@@ -94,6 +98,7 @@ jobs:
 
       - name: Verify search discovery and public metadata
         run: |
+          node scripts/check-rendered-covers.mjs
           npm run audit:seo
           npm run audit:discovery
 

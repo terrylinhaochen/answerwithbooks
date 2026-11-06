@@ -1,0 +1,66 @@
+{
+  "recordedAt": "2026-11-06T21:47:45.016734+00:00",
+  "batchSize": 10,
+  "jobs": [
+    {
+      "id": "eae70a50-be31-43e8-bfae-2c9529d97f82",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=eae70a50-be31-43e8-bfae-2c9529d97f82",
+      "filename": "As I See It J. Paul Getty.pdf"
+    },
+    {
+      "id": "3570e47e-0e64-4c62-87da-cdc08484302c",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=3570e47e-0e64-4c62-87da-cdc08484302c",
+      "filename": "How to Be Rich J. Paul Getty.pdf"
+    },
+    {
+      "id": "16fbe76f-785b-40e1-841b-88db8208ee4b",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=16fbe76f-785b-40e1-841b-88db8208ee4b",
+      "filename": "Money Talks Bullshit Walks Sam Zell.pdf"
+    },
+    {
+      "id": "d647391b-5531-4afc-91c7-4963ecf4a685",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=d647391b-5531-4afc-91c7-4963ecf4a685",
+      "filename": "Richer Wiser Happier William Green.pdf"
+    },
+    {
+      "id": "a65677d4-6347-4f45-9084-f797850a453a",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=a65677d4-6347-4f45-9084-f797850a453a",
+      "filename": "Sam Walton Inside Story.pdf"
+    },
+    {
+      "id": "1cf12374-87d8-4919-b0c5-c7375b75dc8a",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=1cf12374-87d8-4919-b0c5-c7375b75dc8a",
+      "filename": "The Presentation Secrets of Steve Jobs.pdf"
+    },
+    {
+      "id": "95058c82-6a36-4d88-8cc7-98e3daf0cd44",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=95058c82-6a36-4d88-8cc7-98e3daf0cd44",
+      "filename": "The Russian Rockefellers Nobel Family Oil Industry.pdf"
+    },
+    {
+      "id": "1e4853b5-7140-4357-9479-6c441f088e03",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=1e4853b5-7140-4357-9479-6c441f088e03",
+      "filename": "The Whole Story John Mackey.pdf"
+    },
+    {
+      "id": "ceb910e6-c039-4467-a027-0e6f5445fde3",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=ceb910e6-c039-4467-a027-0e6f5445fde3",
+      "filename": "What I Talk About When I Talk About Running Haruki Murakami.pdf"
+    },
+    {
+      "id": "3d5c6697-a29a-45be-b271-c9d50da9e3dc",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=3d5c6697-a29a-45be-b271-c9d50da9e3dc",
+      "filename": "The Power of Fastenal People Robert A Kierlin.pdf"
+    }
+  ]
+}

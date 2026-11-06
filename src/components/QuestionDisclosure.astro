@@ -1,0 +1,12 @@
+---
+interface Props {question?:string;answer?:string;client?:boolean;}
+const {question='',answer='',client=false}=Astro.props;
+---
+<details class="group rounded-2xl border border-line bg-card" data-question-item={client||undefined}>
+ <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4">
+  <h3 class="font-serif text-xl leading-snug" data-question-title={client||undefined}>{question}</h3>
+  <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line font-sans text-sm text-faint transition-colors group-open:border-ink group-open:text-ink" aria-hidden="true"><span class="group-open:hidden">+</span><span class="hidden group-open:inline">−</span></span>
+ </summary>
+ <div class="px-5 pb-5"><p class="leading-relaxed text-soft" data-question-context={client||undefined}>{answer}</p><slot /></div>
+</details>
+<style>summary::-webkit-details-marker{display:none}</style>

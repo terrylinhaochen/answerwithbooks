@@ -17,15 +17,25 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: node --test scripts/test-reading-guides.mjs scripts/test-book-reader.mjs scripts/test-reading-text.mjs scripts/test-source-stream.mjs
       - run: npm run test:book-pipeline
       - run: npm run test:book-billing
       - run: node --test scripts/test-book-api-auth.mjs scripts/test-key-dialogs.mjs
       - run: npm run build
+      - run: node scripts/check-rendered-covers.mjs
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.8.3
       - name: Verify financial admission at the provider boundary
         run: |
-          deno cache --node-modules-dir=none scripts/test-book-worker-http.ts
-          deno check --node-modules-dir=none supabase/functions/book-process/index.ts
+          deno cache --node-modules-dir=none scripts/test-book-worker-http.ts scripts/test-reading-http.ts
+          deno check --node-modules-dir=none supabase/functions/book-process/index.ts supabase/functions/reading-guides/index.ts
           deno run --node-modules-dir=none --allow-env --allow-read scripts/test-book-worker-http.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-reading-http.ts
+      - name: Verify shared sources and subscription allowance
+        run: |
+          npm run test:shared-library
+          deno check --node-modules-dir=none supabase/functions/shared-library/index.ts supabase/functions/reader-subscription/index.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-shared-http.ts
+          deno run --node-modules-dir=none --allow-env --allow-read scripts/test-reader-subscription-http.ts
+          PG_BIN="$(pg_config --bindir)" python3 scripts/test-shared-subscription-db.py

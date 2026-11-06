@@ -1,3 +1,4 @@
+import {verifySourceStream} from '../_shared/book-source-stream.mjs';
 import {createClient} from 'npm:@supabase/supabase-js@2.49.8';
 import {bookUser} from '../_shared/book-cli-auth.mjs';
 import {processingOptions} from '../_shared/book-options.mjs';
@@ -23,8 +24,9 @@ function metadataSafe(value:any){
  return Object.fromEntries(['extractor','upstreamCommit','structure','estimatedTokens','removedInvisible','upstreamMetadata'].filter(k=>value[k]!==undefined).map(k=>[k,value[k]]));
 }
 async function originalValid(j:any){
- const blob=check(await db.storage.from('private-books').download(`${j.user_id}/${j.id}/source`));
- if(blob.size!==j.source_import.originalBytes||blob.size>limits.maxFileBytes||await hash(await blob.arrayBuffer())!==j.source_sha)throw new Error('The original upload is incomplete or changed. Upload the same file to retry.');
+ const signed=check(await db.storage.from('private-books').createSignedUrl(`${j.user_id}/${j.id}/source`,180));
+ const response=await fetch(signed.signedUrl,{redirect:'error',signal:AbortSignal.timeout(120000)});
+ await verifySourceStream(response,j.source_import.originalBytes,j.source_sha,limits.maxFileBytes);
 }
 
 Deno.serve(async req=>{
@@ -44,7 +46,7 @@ Deno.serve(async req=>{
    const configured=!!Deno.env.get('BOOK_NATIVE_WORKER_SECRET');
    const {data}=configured?await db.from('book_native_worker_health').select('last_seen_at').eq('id','native').maybeSingle():{data:null};
    const online=!!data?.last_seen_at&&Date.parse(data.last_seen_at)>Date.now()-180000;
-   return reply({available:configured&&online,worker_configured:configured,worker_online:online,formats:['pdf','mobi','azw','azw3'],technical_pdf:true,max_file_bytes:limits.maxFileBytes,max_text_characters:limits.maxTextCharacters});
+   return reply({available:configured&&online,worker_configured:configured,worker_online:online,formats:['pdf','epub','mobi','azw','azw3','docx','html','rtf','txt','md'],technical_pdf:true,max_file_bytes:limits.maxFileBytes,max_text_characters:limits.maxTextCharacters});
   }
   const bearer=req.headers.get('authorization')?.replace(/^Bearer /i,'');if(!bearer)return reply({error:'Authentication required'},401);
   const workerActions=['claim','heartbeat','complete','fail'];
@@ -87,6 +89,13 @@ Deno.serve(async req=>{
    const parent=parentId?check(await db.from('book_processing_jobs').select('*').eq('id',parentId).eq('user_id',job.user_id).maybeSingle()):undefined;
    if(parentId&&!parent)return reply({error:'Revision parent is unavailable'},409);
    const patch=await finalizeBookSource(job,text,input.headings,parent);
+   if(job.visibility==='public'){
+    const normalized=patch.source_text.normalize('NFC').replace(/\s+/gu,' ').trim();
+    const canonical=check(await db.rpc('claim_shared_book',{p_id:job.id,p_lease:input.leaseToken,p_kind:'text',p_sha:await hash(new TextEncoder().encode(normalized)),p_patch:{...patch,source_import:{state:'complete',textSha:input.textSha,textBytes:input.textBytes,metadata,completedLease:input.leaseToken}}}));
+    check(await db.rpc('wake_book_processing',{p_count:1}));
+    await db.storage.from('private-books').remove([attemptPath(job,input.leaseToken)]);
+    return reply({completed:true,id:canonical});
+   }
    const duplicate=!parentId?await findSavedBook(db,job.user_id,{textSha:await hash(new TextEncoder().encode(patch.source_text)),excludeId:job.id}):null;
    const alreadyReady=duplicate?.status==='ready';
    const saved=check(await update({...patch,status:'processing',run_state:alreadyReady?'paused':job.billing_required?'staging':'queued',source_import:{...job.source_import,state:'complete',textSha:input.textSha,textBytes:input.textBytes,metadata,completedLease:input.leaseToken},attempts:0,error:alreadyReady?'Identical source already has a completed book and skill. Open the saved result.':null,next_attempt_at:now(),lease_token:null,lease_until:null,updated_at:now()}));
@@ -99,10 +108,20 @@ Deno.serve(async req=>{
   if(!['prepare','finalize','retry'].includes(input.action))return reply({error:'Unknown action'},400);
   const user=await bookUser(db,bearer);if(!user)return reply({error:'Sign in to access your private books.'},401);
   if(input.action==='prepare'){
-   if(typeof input.name!=='string'||input.name.length<1||input.name.length>255||!Number.isSafeInteger(input.size)||input.size<1||input.size>limits.maxFileBytes||!sha(input.sha))return reply({error:'Choose a supported source up to 50 MB.'},400);
+   if(typeof input.name!=='string'||input.name.length<1||input.name.length>255||!Number.isSafeInteger(input.size)||input.size<1||input.size>limits.maxFileBytes||!sha(input.sha))return reply({error:`Choose a supported source up to ${limits.maxFileBytes/1024/1024} MB.`},400);
    const ext=input.name.split('.').at(-1)?.toLowerCase();
-   const mode=input.extractionMode??input.options?.extractionMode??(ext==='pdf'?'technical':'text');
-   if(!(ext==='pdf'&&mode==='technical'||['mobi','azw','azw3'].includes(ext)&&mode==='text'))return reply({error:'Native extraction accepts technical PDFs or MOBI/AZW/AZW3 books.'},400);
+   const mode=input.extractionMode??input.options?.extractionMode??'text';
+   if(!(ext==='pdf'&&['text','technical'].includes(mode)||['epub','docx','html','htm','xhtml','rtf','txt','text','md','markdown','rst','adoc','asciidoc','mobi','azw','azw3'].includes(ext)&&mode==='text'))return reply({error:'Choose a supported book format and extraction mode.'},400);
+   if(input.visibility==='public'){
+    if(input.parentId||input.options)return reply({error:'Upload one edition without processing options.'},400);
+    const match=check(await db.from('shared_book_fingerprints').select('book_id').eq('kind','file').eq('sha',input.sha).maybeSingle());
+    if(match){check(await db.from('reader_books').upsert({user_id:user.id,book_id:match.book_id},{onConflict:'user_id,book_id'}));return reply({job:{id:match.book_id},reused:true});}
+    const result=await db.rpc('create_shared_book',{p_user:user.id,p_name:input.name,p_sha:input.sha,p_bytes:input.size,p_mode:mode});
+    if(result.error)return reply({error:result.error.message.includes('UPLOAD_LIMIT')?'Up to 100 new uploads per account in 24 hours. Try again later.':'Could not prepare this upload.'},429);
+    const job=result.data;
+    const upload=check(await db.storage.from('private-books').createSignedUploadUrl(`${user.id}/${job.id}/source`,{upsert:true}));
+    return reply({job:publicJob(job),upload});
+   }
    const options={...processingOptions(input.options),extractionMode:mode};
    let parent:any;
    if(input.parentId!==undefined){
@@ -136,6 +155,10 @@ Deno.serve(async req=>{
   if(!claim.length)return reply({error:'This source is already being saved'},409);
   try{
    await originalValid(job);
+   if(job.visibility==='public'){
+    const canonical=check(await db.rpc('claim_shared_book',{p_id:job.id,p_lease:token,p_kind:'file',p_sha:job.source_sha,p_patch:{}}));
+    return reply({job:{id:canonical},reused:canonical!==job.id});
+   }
    const saved=check(await db.from('book_processing_jobs').update({source_import:{...job.source_import,state:'queued'},run_state:'staging',attempts:0,error:null,next_attempt_at:now(),lease_token:null,lease_until:null,updated_at:now()}).eq('id',job.id).eq('lease_token',token).select().single());
    return reply({job:publicJob(saved)});
   }catch(e){await db.from('book_processing_jobs').update({lease_token:null,lease_until:null,updated_at:now()}).eq('id',job.id).eq('lease_token',token);throw e;}

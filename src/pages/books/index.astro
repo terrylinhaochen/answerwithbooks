@@ -1,9 +1,8 @@
 ---
+import GuideQuestion from '../../components/GuideQuestion.astro';
 import { getCollection } from 'astro:content';
-import ReadingListLinks from '../../components/ReadingListLinks.astro';
 import Base from '../../layouts/Base.astro';
 import AddBookDialog from '../../components/AddBookDialog.astro';
-import BookAdditions from '../../components/BookAdditions.astro';
 import BookRow from '../../components/BookRow.astro';
 import FaqList from '../../components/FaqList.astro';
 import { faqJsonLd } from '../../lib/seo';
@@ -71,7 +70,7 @@ const jsonLd = [
 
 <Base
   title="Books"
-  description="Read useful book digests, apply their frameworks in your agent, or upload a book to create a reusable skill."
+  description="Explore books and find original passages around your questions. Add a book to the shared library."
   path="/books/"
   jsonLd={jsonLd}
 >
@@ -79,7 +78,7 @@ const jsonLd = [
     <p class="awb-eyebrow">The book library</p>
     <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">Books to put to work.</h1>
     <p class="awb-copy mt-4 max-w-2xl">
-      Find an idea for your next task. Read a digest, then use Copy prompt for your AI to apply its frameworks to your work. Upload your own book to create a complete skill.
+      Start with a book, find an excerpt, and follow your question through original passages. Add more books to bring different experiences together.
     </p>
   </section>
 
@@ -112,20 +111,21 @@ const jsonLd = [
     </div>
   </section>
 
-  <div class="awb-section"><BookAdditions /></div>
-
   <section class="awb-section pb-16 pt-2">
+    <p class="mb-4 text-sm text-soft" data-catalog-status role="status"></p>
     <div class="library-grid" data-filter-list>
       <div class="h-full" data-book-request-card>
         <button type="button" class="library-book block w-full text-left" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">
           <span class="library-cover" style="--book-well:#e9e0d2"><span class="font-serif text-6xl text-soft" aria-hidden="true">+</span></span>
-          <span class="library-copy block"><span class="room-eyebrow">Your own source</span><span class="mt-2 block font-serif text-2xl">Upload a source</span><span class="library-description block">Upload a PDF, EPUB, document, or notes to create a private book and reusable skill.</span></span>
+          <span class="library-copy block"><span class="room-eyebrow">Your own source</span><span class="mt-2 block font-serif text-2xl">Upload a source</span><span class="library-description block">Add a PDF or EPUB to the shared library for original-text readings.</span></span>
         </button>
       </div>
       {books.map((book,index) => (
         <div
           class="h-full"
           data-filter-item
+          data-catalog-title={book.data.title}
+          data-catalog-author={book.data.author}
           data-tags={JSON.stringify(book.data.tags)}
           data-categories={JSON.stringify(topicsForTags(book.data.tags).map((topic) => topic.slug))}
           data-search={`${book.data.title} ${book.data.author} ${book.data.year} ${book.data.oneLiner} ${book.data.readIf} ${book.data.tags.join(' ')}`.toLowerCase()}
@@ -160,7 +160,7 @@ const jsonLd = [
   </section>
 
   <AddBookDialog catalog={books.map((book,index) => ({ slug: book.id, title: book.data.title, author: book.data.author, year: book.data.year }))} />
-  <ReadingListLinks />
+
 
   <FaqList items={faqs} eyebrow="Book library Q&A" title="How the source shelf works" width="wide" />
 
@@ -170,10 +170,10 @@ const jsonLd = [
     const search = root?.querySelector<HTMLInputElement>('[data-filter-search]');
     const category = root?.querySelector<HTMLSelectElement>('[data-filter-category]');
     const count = root?.querySelector<HTMLElement>('[data-filter-count]');
-    const items = Array.from(list?.querySelectorAll<HTMLElement>('[data-filter-item]') ?? []);
-    // Twelve slots fill three desktop rows; the upload card uses one slot on page one.
+    // The upload card occupies the first of twelve slots on page one.
     const pageSize = 12;
     const firstPageBookCount = pageSize - 1;
+    const requestCard = list?.querySelector<HTMLElement>('[data-book-request-card]');
     let currentPage = 1;
 
     const pagination = document.querySelector<HTMLElement>('[data-pagination]');
@@ -181,9 +181,9 @@ const jsonLd = [
     const paginationPage = pagination?.querySelector<HTMLElement>('[data-pagination-page]');
     const previous = pagination?.querySelector<HTMLButtonElement>('[data-pagination-prev]');
     const next = pagination?.querySelector<HTMLButtonElement>('[data-pagination-next]');
-    const requestCard = list?.querySelector<HTMLElement>('[data-book-request-card]');
 
     const render = () => {
+      const items = Array.from(list?.querySelectorAll<HTMLElement>('[data-filter-item]') ?? []);
       const query = search?.value.trim().toLowerCase() ?? '';
       const activeCategory = category?.value ?? 'all';
       const matches = items.filter((item) => {
@@ -195,9 +195,8 @@ const jsonLd = [
       const total = matches.length;
       const pageCount = Math.max(1, Math.ceil((total + 1) / pageSize));
       currentPage = Math.min(currentPage, pageCount);
-      const start = total === 0 ? 0 : currentPage === 1 ? 0 : firstPageBookCount + (currentPage - 2) * pageSize;
-      const booksOnPage = currentPage === 1 ? firstPageBookCount : pageSize;
-      const end = Math.min(start + booksOnPage, total);
+      const start = currentPage === 1 ? 0 : firstPageBookCount + (currentPage - 2) * pageSize;
+      const end = Math.min(start + (currentPage === 1 ? firstPageBookCount : pageSize), total);
       const pageItems = new Set(matches.slice(start, end));
 
       for (const item of items) item.hidden = !pageItems.has(item);
@@ -219,6 +218,7 @@ const jsonLd = [
       render();
     };
 
+    window.addEventListener('awb:catalog-updated', render);
     search?.addEventListener('input', resetAndRender);
     category?.addEventListener('change', resetAndRender);
     previous?.addEventListener('click', () => {
@@ -230,7 +230,10 @@ const jsonLd = [
       render();
     });
     render();
+    import {mountSharedCatalog} from '../../lib/shared-library';
+    mountSharedCatalog();
   </script>
 
 
-</Base>
+
+<GuideQuestion modalOnly /></Base>

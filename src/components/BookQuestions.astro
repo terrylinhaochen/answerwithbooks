@@ -1,0 +1,8 @@
+---
+import QuestionDisclosure from './QuestionDisclosure.astro';
+---
+<section class="mt-10 border-t border-line pt-8" aria-labelledby="book-questions-heading">
+ <p class="awb-eyebrow">Explore</p><h2 id="book-questions-heading" class="mt-3 font-serif text-3xl">Questions to explore with this book</h2>
+ <div data-book-questions class="mt-6 grid gap-3"></div>
+ <template data-book-question-template><QuestionDisclosure client><button type="button" data-explore-question class="awb-pill awb-pill-outline mt-4" aria-haspopup="dialog">Explore this question <span aria-hidden="true">→</span></button></QuestionDisclosure></template>
+</section>

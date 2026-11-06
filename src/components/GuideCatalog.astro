@@ -1,95 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
-import ReadingListLinks from './ReadingListLinks.astro';
 import Base from '../layouts/Base.astro';
-import AnswerRow from './AnswerRow.astro';
-import PracticalGuideCard from './PracticalGuideCard.astro';
-import GuideFilters from './GuideFilters.astro';
-import GuidePagination from './GuidePagination.astro';
+import GuideQuestion from './GuideQuestion.astro';
 import FaqList from './FaqList.astro';
-import QuestionInvite from './QuestionInvite.astro';
 import { faqJsonLd } from '../lib/seo';
-import { capabilityGuides } from '../lib/capability-guides';
-import { CANONICAL_TOPICS, topicsForTags } from '../lib/topics';
 
-const answers = (await getCollection('answers')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
-const books = await getCollection('books');
-const bookTitles = new Map(books.map((b) => [b.id, b.data.title]));
-const practicalGuides = capabilityGuides.map(guide => ({
-  ...guide,
-  categories: ['ai', ...topicsForTags(guide.audience.toLowerCase().split(' · ')).map(topic => topic.slug)],
-}));
-const guideCount = practicalGuides.length + answers.length;
-const featuredGuides = answers.filter(answer => answer.data.featured).slice(0, 3);
-const categories = [{ slug: 'ai', label: 'AI', description: 'Practical workflows for using AI at work.', count: practicalGuides.length }, ...CANONICAL_TOPICS.map((topic) => ({
-  slug: topic.slug,
-  label: topic.label,
-  description: topic.description,
-  count: answers.filter((answer) => topicsForTags(answer.data.tags).some((answerTopic) => answerTopic.slug === topic.slug)).length
-    + practicalGuides.filter(guide => guide.categories.includes(topic.slug)).length,
-}))];
 const { path = '/guides/' } = Astro.props;
 const url = `https://answerwithbooks.com${path}`;
 const faqs = [
-  {
-    question: 'What makes these answers different from normal book summaries?',
-    answer:
-      'Each guide starts with a practical question and useful source-book ideas. After reading, choose your preferred AI to copy the full guide and source digests, then personalize them using context you have shared. No skill installation or link access is required.',
-  },
-  {
-    question: 'How are answers chosen?',
-    answer:
-      'Answers are chosen from recurring practical questions, then matched to books that can make the answer more useful than generic advice.',
-  },
-  {
-    question: 'How many books does each answer use?',
-    answer:
-      'Most answers draw on one to three books so the synthesis stays focused and the source trail remains easy to inspect.',
-  },
+  {question:'What makes these guides different from book summaries?',answer:'Each guide explores a question through original passages from books, with brief context and connections to help the reading flow.'},
+  {question:'How are the books chosen?',answer:'The model considers your question and the available books, then suggests sources for you to confirm before creating the reading.'},
+  {question:'Where can I revisit my guide?',answer:'Sign in and open Your Guides on this page to resume a reading or an unfinished request. Published readings also appear in All guides.'},
 ];
 const jsonLd = [
-  {
-    '@type': 'CollectionPage',
-    '@id': `${url}#webpage`,
-    url,
-    name: 'Answer with Books guides',
-    description:
-      'Practical AI workflows and book-backed guidance for career, learning, and everyday decisions.',
-    isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
-    breadcrumb: { '@id': `${url}#breadcrumb` },
-    mainEntity: { '@id': `${url}#itemlist` },
-  },
-  {
-    '@type': 'ItemList',
-    '@id': `${url}#itemlist`,
-    itemListElement: [...capabilityGuides.map(guide => ({ name: guide.title, url: `https://answerwithbooks.com/guides/${guide.slug}/` })), ...answers.map(answer => ({ name: answer.data.question, url: `https://answerwithbooks.com/answers/${answer.id}/` }))].map((guide, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      ...guide,
-    })),
-  },
-  {
-    '@type': 'BreadcrumbList',
-    '@id': `${url}#breadcrumb`,
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Answer with Books', item: 'https://answerwithbooks.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: url },
-    ],
-  },
-  {
-    ...faqJsonLd(url, faqs),
-  },
+  {'@type':'CollectionPage','@id':`${url}#webpage`,url,name:'Answer with Books guides',description:'Questions explored through original book passages.',isPartOf:{'@id':'https://answerwithbooks.com/#website'}},
+  faqJsonLd(url,faqs),
 ];
 ---
-
-<Base
-  title="Practical guides grounded in books"
-  description="Book-grounded guides to customer interviews, startup validation, strategy, management, and everyday decisions. Find a practical next step and its source books."
-  path={path}
-  jsonLd={jsonLd}
->
+<Base title="Guides through original book passages" description="Explore questions about life and work through original passages from books." path={path} jsonLd={jsonLd}>
   <section class="awb-section pt-16 pb-8">
     <p class="awb-eyebrow">Guides</p>
     <h1 class="awb-display mt-3 text-5xl leading-tight sm:text-6xl">Good ideas, in practice.</h1>
@@ -98,48 +25,6 @@ const jsonLd = [
     </p>
   </section>
 
-  <section class="awb-section pb-12" aria-labelledby="featured-guides-title" data-featured-guides>
-    <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <h2 id="featured-guides-title" class="font-serif text-3xl">Featured guides</h2>
-        <p class="mt-2 text-soft">Three ways to put book ideas to work.</p>
-      </div>
-      <a href="#all-guides" class="text-sm font-semibold hover:text-soft">Browse all guides ↓</a>
-    </div>
-    <div class="grid gap-4 md:grid-cols-3">
-      {featuredGuides.map(answer => <AnswerRow answer={answer} bookTitles={bookTitles} />)}
-    </div>
-  </section>
-
-  <section id="all-guides" class="awb-section scroll-mt-28 pb-16" aria-labelledby="all-guides-title" data-guide-catalog>
-    <span id="practical-ai" class="scroll-mt-28"></span>
-    <span id="career-learning" class="scroll-mt-28"></span>
-    <span id="ai-tutorials" class="scroll-mt-28"></span>
-    <h2 id="all-guides-title" class="font-serif text-3xl">All guides</h2>
-    <GuideFilters id="guides" categories={categories} count={guideCount} />
-    <div class="grid items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3 scroll-mt-28" data-filter-list>
-        {practicalGuides.map((guide, index) => (
-          <PracticalGuideCard guide={guide} hidden={index >= 6} />
-        ))}
-        {answers.map((answer, index) => (
-          <div class="h-full" data-filter-item data-categories={JSON.stringify(topicsForTags(answer.data.tags).map(topic => topic.slug))} data-search={`${answer.data.question} ${answer.data.description} ${answer.data.tags.join(' ')} ${answer.data.books.map(slug => bookTitles.get(slug) ?? slug).join(' ')}`.toLowerCase()} hidden={index + practicalGuides.length >= 6}>
-            <AnswerRow answer={answer} bookTitles={bookTitles} />
-          </div>
-        ))}
-    </div>
-    <GuidePagination count={guideCount} />
-    <div class="mt-10"><QuestionInvite /></div>
-    <noscript>
-      <style is:inline>@layer base{[data-guide-catalog] [data-filter-item][hidden]{display:block!important}}[data-guide-filter],[data-pagination]{display:none!important}</style>
-      <p class="mt-6 text-sm text-soft">All guides are shown because JavaScript is off. Enable it to use search and pagination.</p>
-    </noscript>
-  </section>
-
-  <ReadingListLinks />
-
-  <FaqList items={faqs} eyebrow="Answer Q&A" title="How these guides work" width="wide" />
-
-  <script>
-    import '../lib/guide-catalog';
-  </script>
+  <GuideQuestion />
+  <FaqList items={faqs} eyebrow="Guide Q&A" title="How these guides work" width="wide" />
 </Base>

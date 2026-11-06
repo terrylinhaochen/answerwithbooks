@@ -6,7 +6,6 @@ The public shelf has 46 book digests and 22 application guides. The missing laye
 
 - Book digest: “The Mom Test summary” → `/books/the-mom-test/`.
 - Application: “how to do user interviews” → `/answers/how-to-run-user-interviews-that-do-not-lie-to-you/`.
-- Book choice: “books for customer interviews” and “The Mom Test vs Continuous Discovery Habits” → `/reading-lists/customer-interviews/`.
 
 The paths cover interviews/product discovery, startup validation/distribution, strategy/positioning, management/team design, decisions, and focus/priorities. Each explains when to choose a book, its mechanism, a next action, and a limitation. These are selections from our existing library, not a claim to rank every relevant book. Recommendations are grounded in linked public digests; exercises and comparisons are explicitly our editorial synthesis. No quotations or primary-source page citations are invented.
 
@@ -55,12 +54,14 @@ A passing audit proves the pages are available and internally consistent. It doe
 
 Use `visibility-observations.csv` to record exact engine, surface (consumer UI versus API), prompt, locale, timestamp, relevant returned URLs, and evidence location. Record zero citations as zero; record a failed/unavailable query as unobserved, not zero. Separate AWB mentions, AWB citations, and AWB recommendations. Do not infer consumer-search performance from a model API response.
 
-The six reading-path query clusters and their existing book/application counterparts are the initial panel. Sample the same prompts at least three times per engine over different days. Report citations per successful observation, the number of unique prompts, and per-engine results; do not combine providers into an unexplained score. Avoid repeated prompts in the same chat, which can contaminate context. Paid provider tests require a separate spend approval.
+Use the existing book and application-guide queries as the initial panel. Sample the same prompts at least three times per engine over different days. Report citations per successful observation, the number of unique prompts, and per-engine results; do not combine providers into an unexplained score. Avoid repeated prompts in the same chat, which can contaminate context. Paid provider tests require a separate spend approval.
 
 For Google Search Console, use the existing verified property only after confirming access. Submit the normal sitemap and inspect representative URLs; do not use Google's job/live-event Indexing API for these pages. Compare 28-day impressions, clicks, query groups, and landing pages before/after release, with brand/non-brand and new/existing pages separated. Seasonality and indexing delay prevent causal claims from a simple before/after chart. Export observations rather than inventing missing data.
 
-GA4 events and page views remain subject to existing consent. Search referrals, reading-path visits, and clicks through to digests can be assessed in the existing property without adding fingerprinting or private-library content to analytics. A future external outreach campaign, paid engine panel, or large new content wave is a separate action, not silently part of this release.
+GA4 events and page views remain subject to existing consent. Search referrals, guide visits, and clicks through to digests can be assessed in the existing property without adding fingerprinting or private-library content to analytics. A future external outreach campaign, paid engine panel, or large new content wave is a separate action, not silently part of this release.
 
 ## Initial observed baseline
 
 On 2026-10-23, the web-search tool query `site:answerwithbooks.com "The Mom Test"` returned the public book digest, the interview guide, validation guides, the books catalog, and the legacy answers index. The raw returned result is saved in `search-baseline.json`. This establishes that those URLs were discoverable in that tool at that time. It is not a Google Search Console indexing report, a reproducible ranking position, or an observation of a consumer AI answer citing the site. No post-release visibility lift has yet been measured.
+
+The book-comparison Reading paths feature has been retired. Its cards, pages, assets and discovery entries are removed; old URLs redirect to Books.

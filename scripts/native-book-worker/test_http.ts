@@ -6,7 +6,7 @@ Deno.env.set('BOOK_NATIVE_WORKER_SECRET','synthetic-worker');
 const owner='00000000-0000-4000-8000-000000000001',other='00000000-0000-4000-8000-000000000002';
 let handler:any;
 Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
-const jobs:any[]=[],files=new Map<string,Uint8Array>();let wakes=0,lastSeen:string|null=null;
+const jobs:any[]=[],files=new Map<string,Uint8Array>();const fingerprints=new Map<string,string>(),shelves:any[]=[];let wakes=0,lastSeen:string|null=null;
 const json=(data:any,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}});
 const hash=async(bytes:Uint8Array)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(n=>n.toString(16).padStart(2,'0')).join('');
 const active=(j:any)=>j.lease_until&&Date.parse(j.lease_until)>Date.now();
@@ -33,6 +33,15 @@ globalThis.fetch=async(input:any,init?:RequestInit)=>{
  if(p==='/auth/v1/user')return req.headers.get('authorization')==='Bearer user-token'?json({id:owner}):req.headers.get('authorization')==='Bearer other-token'?json({id:other}):json({message:'Unauthorized'},401);
  if(p.startsWith('/rest/v1/rpc/')){
   const action=p.split('/').at(-1);
+  if(action==='create_shared_book'){
+   const job={id:crypto.randomUUID(),user_id:body.p_user,visibility:'public',billing_required:false,source_name:body.p_name,source_sha:body.p_sha,source_text:'Pending source. '.repeat(10),title:body.p_name,author:'',chunks:[],notes:[],cursor:0,overview_notes:[],status:'uploaded',run_state:'staging',attempts:0,source_import:{kind:'native',state:'awaiting_upload',originalBytes:body.p_bytes,extractionMode:body.p_mode},lease_token:null,lease_until:null,updated_at:new Date().toISOString(),options:{mode:'reading'}};jobs.push(job);return json(job);
+  }
+  if(action==='claim_shared_book'){
+   const job=jobs.find(j=>j.id===body.p_id);assert.equal(job.lease_token,body.p_lease);const key=body.p_kind+':'+body.p_sha,canonical=fingerprints.get(key)||job.id;fingerprints.set(key,canonical);
+   if(body.p_kind==='file'){job.source_import.state='queued';job.next_attempt_at=new Date(0).toISOString();}
+   else{Object.assign(job,body.p_patch);job.status='processing';job.run_state='queued';}
+   job.lease_token=null;job.lease_until=null;return json(canonical);
+  }
   if(action==='wake_book_processing'){wakes++;return json(null);}
   if(action==='create_book_processing_job'||action==='create_book_revision'){
    let job=jobs.find(j=>j.user_id===body.p_user&&j.source_sha===body.p_sha);
@@ -45,6 +54,8 @@ globalThis.fetch=async(input:any,init?:RequestInit)=>{
   }
   throw Error('Unexpected RPC '+action);
  }
+ if(p==='/rest/v1/shared_book_fingerprints'){const id=fingerprints.get(url.searchParams.get('kind')!.slice(3)+':'+url.searchParams.get('sha')!.slice(3));return id?json({book_id:id}):json({code:'PGRST116',details:'The result contains 0 rows'},406);}
+ if(p==='/rest/v1/reader_books'){shelves.push(body);return json(null);}
  if(p==='/rest/v1/book_native_worker_health'){if(req.method!=='GET')lastSeen=body.last_seen_at;return req.method==='GET'?json(lastSeen?{last_seen_at:lastSeen}:null):json(null);}
  if(p==='/rest/v1/book_processing_jobs'){
   const selected=jobs.filter(j=>match(j,url.searchParams));
@@ -53,10 +64,10 @@ globalThis.fetch=async(input:any,init?:RequestInit)=>{
   return single?(selected.length===1?json(selected[0]):json({code:'PGRST116',details:'The result contains 0 rows'},406)):json(selected);
  }
  if(p.startsWith('/storage/v1/object/upload/sign/'))return json({url:p.replace('/storage/v1','')+'?token=synthetic',token:'synthetic'});
- if(p.startsWith('/storage/v1/object/sign/'))return json({signedURL:p.replace('/storage/v1','')+'?token=synthetic'});
+ if(p.startsWith('/storage/v1/object/sign/')&&req.method==='POST')return json({signedURL:p.replace('/storage/v1','')+'?token=synthetic'});
  if(p==='/storage/v1/object/private-books'&&req.method==='DELETE'){for(const path of body.prefixes)files.delete(path);return json([]);}
  if(p.startsWith('/storage/v1/object/')){
-  const key=decodeURIComponent(p.replace(/^\/storage\/v1\/object\/(?:authenticated\/)?private-books\//,''));
+  const key=decodeURIComponent(p.replace(/^\/storage\/v1\/object\/(?:(?:authenticated|sign)\/)?private-books\//,''));
   const value=files.get(key);return value?new Response(value):json({message:'Missing'},404);
  }
  throw Error('Unexpected request '+p);
@@ -75,7 +86,7 @@ assert.equal((await call({action:'claim'})).status,403);
 assert.equal((await call({action:'prepare',name:'x.pdf'},'invalid')).status,401);
 assert.equal((await call({action:'health'},'none','https://bad.invalid')).status,403);
 assert.equal((await call({action:'prepare',url:'https://bad.invalid/secret'})).status,400);
-assert.equal((await call({action:'prepare',name:'x.pdf',size:original.length,sha:fingerprint,extractionMode:'text'})).status,400);
+assert.equal((await call({action:'prepare',name:'x.pdf',size:original.length,sha:fingerprint,extractionMode:'unsupported'})).status,400);
 const created=await call({action:'prepare',name:'fixture.mobi',size:original.length,sha:fingerprint,options:{depth:'reference'}});
 assert.equal(created.status,200,JSON.stringify(created.body));assert.ok(created.body.upload);assert.equal(created.body.textUpload,undefined);
 const id=created.body.job.id,j=jobs[0];assert.equal(j.run_state,'staging');assert.equal(j.source_import.state,'awaiting_upload');assert.equal(j.chunks.length,0);
@@ -134,3 +145,20 @@ jobs.push(duplicate);files.set(`${owner}/${duplicateId}/native-${duplicateLease}
 const duplicateDone=await call({action:'complete',id:duplicateId,leaseToken:duplicateLease,textSha,textBytes:textBytes.length,headings:[]},'synthetic-worker');
 assert.equal(duplicateDone.status,200,JSON.stringify(duplicateDone.body));assert.equal(duplicate.run_state,'paused');assert.match(duplicate.error,/Identical source/);assert.equal(duplicate.source_text,text);
 console.log('PASS native cross-format duplicate preserves upload and pauses before generation');
+
+// New public path: no quote/local conversion; exact bytes verified before shared claim.
+for(const job of jobs){job.run_state='paused';job.lease_token=null;job.lease_until=null;}
+const epub=new TextEncoder().encode('Public EPUB protocol fixture; parsing tested on the hosted worker.'),epubSha=await hash(epub);
+const shared=await call({action:'prepare',visibility:'public',name:'shared.epub',size:epub.length,sha:epubSha});assert.equal(shared.status,200,JSON.stringify(shared.body));
+const sharedId=shared.body.job.id,sharedJob=jobs.find(j=>j.id===sharedId);assert.equal(sharedJob.billing_required,false);assert.equal(sharedJob.options.mode,'reading');
+assert.equal((await call({action:'prepare',visibility:'public',name:'shared.epub',size:epub.length,sha:epubSha,options:{depth:'reference'}})).status,400);
+files.set(`${owner}/${sharedId}/source`,epub);assert.equal((await call({action:'finalize',id:sharedId})).body.job.id,sharedId);
+const joined=await call({action:'prepare',visibility:'public',name:'renamed.epub',size:epub.length,sha:epubSha},'other-token');assert.equal(joined.body.reused,true);assert.equal(joined.body.job.id,sharedId);assert.equal(joined.body.upload,undefined);assert.equal(shelves.at(-1).user_id,other);
+const publicClaim=await call({action:'claim'},'synthetic-worker');assert.equal(publicClaim.body.job.id,sharedId);const publicLease=publicClaim.body.job.leaseToken;
+files.set(`${owner}/${sharedId}/native-${publicLease}-extracted-source.txt`,textBytes);
+const publicDone=await call({action:'complete',id:sharedId,leaseToken:publicLease,textSha,textBytes:textBytes.length,headings:[{line:1,title:'Chapter 1'}],metadata:{extractor:'fixture'}},'synthetic-worker');assert.equal(publicDone.status,200,JSON.stringify(publicDone.body));assert.equal(sharedJob.source_text,text);assert.equal(sharedJob.run_state,'queued');assert.equal(sharedJob.visibility,'public');
+console.log('PASS public EPUB prepare/finalize/complete, free hosted admission, duplicate cross-account join, no repeated upload, original source preservation');
+
+const large=await call({action:'prepare',visibility:'public',name:'large.pdf',size:500*1024*1024,sha:'e'.repeat(64)});assert.equal(large.status,200,JSON.stringify(large.body));assert.equal(jobs.find(j=>j.id===large.body.job.id).source_import.extractionMode,'text');
+assert.equal((await call({action:'prepare',visibility:'public',name:'too-large.pdf',size:500*1024*1024+1,sha:'f'.repeat(64)})).status,400);
+console.log('PASS 500 MB admission boundary and hosted text PDF default');

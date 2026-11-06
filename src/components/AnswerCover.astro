@@ -1,4 +1,5 @@
 ---
+import {renderedCover} from '../lib/public-cover.mjs';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { CollectionEntry } from 'astro:content';
@@ -43,6 +44,7 @@ const assetCandidates = ['jpg', 'jpeg', 'png', 'svg'].map((extension) => ({
   filePath: fileURLToPath(new URL(`../../public/answer-covers/${answer.id}.${extension}`, import.meta.url)),
 }));
 const coverAsset = assetCandidates.find((asset) => existsSync(asset.filePath)) ?? null;
+const rendered = coverAsset ? renderedCover(coverAsset.href) : null;
 const isBitmap = Boolean(coverAsset && coverAsset.extension !== 'svg');
 const coverTitle = labelByAnswer[answer.id] ?? 'Insight';
 const darkLabelAnswers = new Set([
@@ -67,8 +69,8 @@ const topicLabel = (answer.data.tags?.[0] ?? 'Insight')
   {
     coverAsset ? (
       <img
-        src={coverAsset.href}
-        alt=""
+        src={rendered?.src ?? coverAsset.href}
+        alt={`${answer.data.question} — Answer with Books guide`}
         class="answer-cover__image"
         width="1200"
         height="675"
@@ -84,7 +86,7 @@ const topicLabel = (answer.data.tags?.[0] ?? 'Insight')
     )
   }
   {
-    isBitmap ? (
+    isBitmap && !rendered ? (
       <span class="answer-cover__label" aria-hidden="true">
         <span class="answer-cover__topic">{topicLabel}</span>
         <span class="answer-cover__title">{coverTitle}</span>

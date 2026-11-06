@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 \
     HF_HOME=/tmp/huggingface TMPDIR=/tmp QT_QPA_PLATFORM=offscreen \
     CALIBRE_CONFIG_DIRECTORY=/tmp/calibre-config XDG_CACHE_HOME=/tmp/cache XDG_CONFIG_HOME=/tmp/config
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    calibre poppler-utils libgl1 libglib2.0-0 libgomp1 ca-certificates \
+    calibre poppler-utils tesseract-ocr tesseract-ocr-eng libgl1 libglib2.0-0 libgomp1 ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY scripts/native-book-worker/requirements.txt /app/scripts/native-book-worker/requirements.txt

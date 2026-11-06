@@ -2,6 +2,10 @@
 export const coverStyleVersion='sticker-v3';
 export const coverImageDefaults=Object.freeze({model:'gpt-image-1.5',size:'1024x1536',quality:'high'});
 const symbolByBook = {
+  'shoe-dog': 'one running shoe whose sole becomes a winding forward path, no brand logo',
+  'invention-a-life': 'one cyclone spiral inside a simple transparent vacuum chamber, a single inventive mechanism',
+  'open': 'one tennis racket with a single broken string opening into a free curved line',
+
   'the-wealth-of-nations': 'one flat yellow gear joined with a single upright pin, a bold unified emblem for specialization and productive work',
   'atomic-habits': 'one clean loop arrow wrapping a single seed',
   'crucial-conversations': 'two simple speech stones meeting in the center',
@@ -51,6 +55,10 @@ const symbolByBook = {
 };
 
 const paletteByBook = {
+  'shoe-dog': { bg: '#f04b32', accent: '#fff2b2', warm: '#64e0d5', ink: '#4b1008', name: 'track vermilion' },
+  'invention-a-life': { bg: '#2341ff', accent: '#ffce32', warm: '#8cf5e0', ink: '#071178', name: 'inventor ultramarine' },
+  'open': { bg: '#702f84', accent: '#d8ff43', warm: '#ffac6b', ink: '#280d31', name: 'court violet' },
+
   'the-wealth-of-nations': { bg: '#1252a4', accent: '#ffd145', warm: '#7bffd2', ink: '#061f43', name: 'royal economic blue' },
   'atomic-habits': { bg: '#0f8f5f', accent: '#d7ff3f', warm: '#ff5a4f', ink: '#071d17', name: 'emerald green' },
   'crucial-conversations': { bg: '#d8326f', accent: '#fff0d6', warm: '#ff7a1a', ink: '#2a0716', name: 'raspberry pink' },

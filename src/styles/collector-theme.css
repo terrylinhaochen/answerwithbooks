@@ -16,8 +16,6 @@ body[data-theme='collector'] .awb-header { max-width: 1200px; min-height: 78px; 
 body[data-theme='collector'] .awb-brand { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; font-family: var(--font-serif); font-size: 25px; font-weight: 450; letter-spacing: -.045em; }
 body[data-theme='collector'] .awb-nav { background: transparent; border: 0; box-shadow: none; gap: 12px; }
 body[data-theme='collector'] .awb-nav__link { font-size: 13px; font-weight: 500; }
-body[data-theme='collector'] .awb-nav__cta { background: #354734; box-shadow: none; font-size: 12px; padding-inline: 22px; min-height: 40px; margin-left: 18px; }
-body[data-theme='collector'] .awb-nav__cta:hover { background: #455a40; }
 
 /* Shared materials and rhythm, including account and reading surfaces. */
 body[data-theme='collector'] .awb-section { max-width: 1184px; padding-inline: 32px; }
@@ -73,7 +71,6 @@ body[data-theme='collector'] [data-surface=auth] { margin-block: 54px; width: ca
  body[data-theme='collector'] .awb-brand { font-size: 23px; }
  body[data-theme='collector'] .awb-nav { gap: 5px; padding: 0; }
  body[data-theme='collector'] .awb-nav__link { font-size: 13px; min-height: 44px; }
- body[data-theme='collector'] .awb-nav__cta { font-size: 10px; padding-inline: 16px; min-height: 34px; margin-left: 0; }
  body[data-theme='collector'] .account-nav { width: 100%; gap: 3px; }
  body[data-theme='collector'] .awb-section .account-nav a { padding: 10px; }
 }

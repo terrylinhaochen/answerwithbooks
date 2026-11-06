@@ -20,11 +20,13 @@ function dataUrl(blob: Blob): Promise<string> {
  });
 }
 
-let fontCSS: Promise<string> | undefined;
+let fontCSS: string | undefined;
 function embeddedFonts(signal: AbortSignal): Promise<string> {
  const href = document.querySelector<HTMLLinkElement>('link[rel="stylesheet"][href^="https://fonts.googleapis.com/"]')?.href;
  if (!href) return Promise.resolve('');
- if (!fontCSS) fontCSS = (async () => {
+ if (fontCSS !== undefined) return Promise.resolve(fontCSS);
+ // Cache only completed CSS: a retry must not inherit an aborted export's fetch.
+ return (async () => {
   const response = await fetch(href, { signal, credentials: 'omit' });
   if (!response.ok) throw new Error('Fonts unavailable');
   let css = await response.text();
@@ -35,9 +37,10 @@ function embeddedFonts(signal: AbortSignal): Promise<string> {
    return [source, await dataUrl(await font.blob())] as const;
   }));
   for (const [source, data] of embedded) css = css.split(source).join(data);
+  signal.throwIfAborted();
+  fontCSS = css;
   return css;
- })().catch(error => { fontCSS = undefined; throw error; });
- return fontCSS;
+ })();
 }
 
 async function embedCover(image: HTMLImageElement, signal: AbortSignal) {

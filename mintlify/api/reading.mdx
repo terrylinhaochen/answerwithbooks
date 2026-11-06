@@ -1,0 +1,37 @@
+---
+title: "Reading API"
+description: "Shared books, original passages, question-led guides, and subscription status."
+---
+
+POST JSON to `https://yozeqanibszoxnowmvsm.supabase.co/functions/v1/ENDPOINT`.
+The CLI's browser sign-in supplies a revocable account session. Authenticated calls use `Authorization: Bearer SESSION_TOKEN`. Keep tokens out of chat and source files.
+
+| Endpoint | Action | Access |
+| --- | --- | --- |
+| shared-library | list, get | Public book metadata, orientation, questions and chapter references |
+| shared-library | mine, save, remove | Signed-in reader's shelf |
+| shared-library | source | Subscriber; original text at 1–500 source lines per request |
+| reading-guides | public-list, get | Public finished guides; private guides require their owner |
+| reading-guides | list, progress, feedback, answer | Signed-in reader |
+| reading-guides | propose, confirm | Subscriber; confirmation reserves a monthly guide |
+| reader-subscription | status, checkout, portal | Signed-in reader |
+
+List shared books with `{ "action": "list", "offset": 0 }`. Continue using `nextOffset` until null. Read a book or guide with `{ "action": "get", "id": "UUID" }`.
+
+Read source lines with `{ "action": "source", "id": "BOOK_UUID", "startLine": 1, "endLine": 200 }`. The response includes original text, coordinates, and its source hash. There is no raw-text or original-file download endpoint.
+
+Propose a guide with `{ "action": "propose", "question": "YOUR QUESTION", "requestKey": "STABLE_UUID" }`. Save the ID and poll get until suggested books are ready. Confirm those books and reading minutes with the user, then send `{ "action": "confirm", "id": "GUIDE_UUID", "length": "standard" }`. API lengths short, standard and long correspond to about 10, 25 and 45 minutes. Repeated confirmation is idempotent. Failed generation releases its slot; deleting a finished guide does not refund it.
+
+Use the CLI upload command for book intake. It calls book-native prepare with visibility public, transfers the original through a signed upload, then finalizes it. The server verifies file bytes and extracted-text fingerprints. Duplicate editions join their existing processing job. This path has no quote, credit purchase, or local extraction.
+
+Existing private records remain available through their owner-authorized compatibility routes. New uploads and guides use this shared reading API.
+
+
+To start from particular books, include optional `bookIds: ["PUBLIC_READY_BOOK_UUID"]` in propose (one to four distinct IDs). The service checks source availability, limits model reading to those editions, and requires a relevant passage from every confirmed book. With no bookIds, the model suggests books from the shared library. Reuse a request key only for an unchanged question and book selection.
+
+
+## Read a published guide as Markdown
+
+`GET https://yozeqanibszoxnowmvsm.supabase.co/functions/v1/reading-guides/{GUIDE_ID}.md`
+
+Returns `text/markdown` for a public, ready guide without authentication. The document contains its selected original passages, editorial context, conclusion, and source references. It never exposes the complete source books. Private, unfinished, and missing guides return 404; unavailable source material returns 503. HEAD is supported. Reading does not consume a guide allowance.

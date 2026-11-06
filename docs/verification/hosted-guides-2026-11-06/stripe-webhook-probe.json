@@ -1,0 +1,16 @@
+[
+  {
+    "case": "valid",
+    "status": 200,
+    "body": {
+      "received": true
+    }
+  },
+  {
+    "case": "invalid",
+    "status": 400,
+    "body": {
+      "error": "Invalid webhook signature"
+    }
+  }
+]

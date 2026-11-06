@@ -1,3 +1,4 @@
+import {publicCover} from '../src/lib/public-cover.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -7,14 +8,15 @@ import { availableTools } from '../src/lib/tool-catalog.mjs';
 const dist = process.env.AWB_TEST_DIST || 'dist';
 const read = route => fs.readFileSync(path.join(dist, route, 'index.html'), 'utf8');
 const skills = read('tools');
-assert.match(skills, /Give your agent/);
+assert.match(skills, /Give your questions/);
 assert.equal((skills.match(/data-example-tab="\d+"/g) || []).length, 6);
 assert.equal((skills.match(/data-example-panel="\d+"/g) || []).length, 6);
 for (const label of ['Customer interviews', 'Better decisions', 'Habits that last', 'Focused work', 'Career moves', 'Difficult conversations']) assert.ok(skills.includes(label));
 assert.doesNotMatch(skills, /data-open-tool=|data-tool-detail=|name="tools-agent"/);
-assert.match(skills, /Upload a source/);
-assert.match(skills, /PDF · EPUB · DOCX · MOBI · AZW · AZW3 · Markdown · HTML · RTF · Text/);
-assert.match(skills, /fuller downloadable skill package/);
+assert.match(skills, /Add a book/);
+assert.match(skills, /PDF, EPUB, DOCX, Markdown, HTML, RTF/);
+assert.doesNotMatch(skills, /fuller downloadable skill package|data-local-processing/);
+assert.match(skills, /shared library/);
 const homepage = read('');
 assert.match(homepage, /data-direction="table"/);
 for (const marker of ['data-personalize-shelf', 'data-personal-shelf-heading', 'data-shelf-date', 'data-shelf-preferences', 'data-clear-shelf', 'data-share-shelf', 'data-copy-shelf-link', 'data-create-shelf-image']) assert.ok(homepage.includes(marker));
@@ -52,6 +54,7 @@ for (const route of ['tools', 'books', 'guides']) {
   assert.ok(nav, `${route}: main navigation exists`);
   assert.match(nav, />\s*Skills\s*</);
   assert.doesNotMatch(nav, />\s*Tools\s*</);
+  assert.doesNotMatch(nav, />\s*Docs\s*</);
 }
 assert.match(read('answers'), /http-equiv="refresh"/);
 assert.match(read('answers'), /href="https:\/\/answerwithbooks\.com\/guides\/"/);
@@ -60,24 +63,17 @@ for (const route of ['guides']) {
   assert.match(html, /See how book ideas become better questions/);
   assert.doesNotMatch(html, /New: hands-on AI tutorials|More work guides/);
   assert.doesNotMatch(html, /role="tab"|role="tabpanel"|data-guide-tab/);
-  assert.equal((html.match(/<div\b[^>]*data-filter-list[^>]*>/g) || []).length, 1);
-  assert.equal((html.match(/data-pagination aria-label/g) || []).length, 1);
-  assert.match(html, /Showing 1–6 of/);
-  assert.match(html, /data-filter-category="ai"/);
-  assert.match(html, /Featured guides/);
-  assert.match(html, /Three ways to put book ideas to work\./);
-  assert.equal((html.match(/data-guide-ai-tag/g) || []).length, Object.keys(guideCovers).length);
-  const cards = [...html.matchAll(/<(?:a|div)\b[^>]*data-filter-item[^>]*>/g)].map(match => match[0]);
-  assert.equal(cards.filter(card => !/\bhidden(?:\s|>)/.test(card)).length, 6, 'Render only six guides total before JavaScript loads');
+  for (const marker of ['data-guide-dialog','data-guide-question','data-your-guides','data-public-guide-list','data-guide-proposal','data-guide-ready']) assert.ok(html.includes(marker), `${route}: ${marker} is present`);
+  assert.match(html, /All guides/);
+  assert.doesNotMatch(html, /Featured guides|From the shared library|data-guide-ai-tag/);
   for (const [slug, cover] of Object.entries(guideCovers)) {
-    assert.ok(html.includes(`href="/guides/${slug}/"`), `${route}: ${slug} is discoverable`);
-    assert.ok(html.includes(`data-guide-cover="${slug}"`), `${route}: ${slug} has its cover`);
-    assert.ok(fs.statSync(path.join(dist, cover.src)).size > 0, `${slug}: cover is in the deployment artifact`);
-    assert.ok(read(`guides/${slug}`).includes(`src="${cover.src}"`));
+    assert.ok(!html.includes(`href="/guides/${slug}/"`), 'Legacy guides are not in the new catalog');
+    assert.ok(fs.statSync(path.join(dist, publicCover(cover.src))).size > 0, `${slug}: compatibility artwork remains`);
+    assert.ok(read(`guides/${slug}`).includes(`src="${publicCover(cover.src)}"`));
   }
   for (const slug of ['meeting-notes-to-action-plan', 'customer-feedback-to-evidence', 'evidence-to-decision-memo']) {
     assert.ok(!html.includes(`href="/guides/${slug}/"`), `${route}: old tutorials removed from catalog`);
     assert.ok(read(`guides/${slug}`), 'Keep old direct links working');
   }
 }
-console.log(JSON.stringify({ passed: true, skillExamples: 6, publicBookPrompts: publicPrompts.length, illustratedGuides: Object.keys(guideCovers).length, navigation: 'Books, Guides, Skills, Docs', deploymentAssetsPresent: true, connectionKeyAbsentFromArtifact: true }, null, 2));
+console.log(JSON.stringify({ passed: true, skillExamples: 6, publicBookPrompts: publicPrompts.length, illustratedGuides: Object.keys(guideCovers).length, navigation: 'Books, Guides, Skills', deploymentAssetsPresent: true, connectionKeyAbsentFromArtifact: true }, null, 2));
