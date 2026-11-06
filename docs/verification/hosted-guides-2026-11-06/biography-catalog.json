@@ -1,0 +1,49 @@
+{
+  "verifiedAt": "2026-11-06T09:21:31.393Z",
+  "anonymousCatalog": true,
+  "viewports": [
+    390,
+    1280
+  ],
+  "books": [
+    {
+      "title": "Shoe Dog",
+      "author": "Phil Knight",
+      "id": "c9d37d22-0c77-4c6a-97b3-158f3f2a1719",
+      "progress": {
+        "completed": 34,
+        "total": 34
+      },
+      "questions": 6,
+      "summaryCharacters": 3212,
+      "coverReady": true,
+      "rawSourceRequiresAuth": true
+    },
+    {
+      "title": "Invention: A Life",
+      "author": "James Dyson",
+      "id": "9004d927-7785-4c3a-acf1-647f732485f7",
+      "progress": {
+        "completed": 31,
+        "total": 31
+      },
+      "questions": 6,
+      "summaryCharacters": 4002,
+      "coverReady": true,
+      "rawSourceRequiresAuth": true
+    },
+    {
+      "title": "Open",
+      "author": "Andre Agassi",
+      "id": "80c10600-ed6e-43ce-90b5-ef1b19159566",
+      "progress": {
+        "completed": 38,
+        "total": 38
+      },
+      "questions": 6,
+      "summaryCharacters": 2553,
+      "coverReady": true,
+      "rawSourceRequiresAuth": true
+    }
+  ]
+}

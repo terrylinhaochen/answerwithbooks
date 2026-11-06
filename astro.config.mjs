@@ -3,6 +3,8 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 const utilityPaths = [
+  '/reading-lists/',
+  '/guides/read/',
   '/shelf-preview/',
   '/shelf/',
   '/shelf-lab/',
@@ -18,6 +20,8 @@ const utilityPaths = [
   '/profile/',
   '/api-keys/',
   '/billing/',
+  '/billing-history/',
+  '/books/read/',
   '/onboarding/start/',
   '/upload/',
   '/community/',
@@ -36,6 +40,14 @@ export default defineConfig({
   devToolbar: { enabled: false },
   trailingSlash: 'always',
   redirects: {
+    '/reading-lists/': '/books/',
+    '/reading-lists/customer-interviews/': '/books/',
+    '/reading-lists/startup-validation/': '/books/',
+    '/reading-lists/business-strategy/': '/books/',
+    '/reading-lists/management-and-team-design/': '/books/',
+    '/reading-lists/decision-making/': '/books/',
+    '/reading-lists/focus-and-priorities/': '/books/',
+
     '/answers/': '/guides/',
     '/guides/tinker-audience-to-client-sheet/': '/guides/audience-enrichment/',
     '/answers/how-do-i-know-if-my-startup-idea-is-any-good/':

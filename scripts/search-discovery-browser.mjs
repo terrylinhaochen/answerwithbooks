@@ -5,7 +5,7 @@ const base = process.env.DISCOVERY_BASE_URL || 'http://127.0.0.1:4363';
 const output = process.env.DISCOVERY_SCREENSHOTS || '/private/tmp/awb-search-discovery';
 mkdirSync(output, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: true });
-const paths = ['/reading-lists/', ...['customer-interviews', 'startup-validation', 'business-strategy', 'management-and-team-design', 'decision-making', 'focus-and-priorities'].map(slug => `/reading-lists/${slug}/`), '/answers/how-to-run-user-interviews-that-do-not-lie-to-you/', '/books/the-mom-test/', '/guides/'];
+const paths = ['/books/', '/answers/how-to-run-user-interviews-that-do-not-lie-to-you/', '/books/the-mom-test/', '/guides/'];
 const results = [];
 try {
   for (const javaScriptEnabled of [true, false]) {
@@ -22,27 +22,7 @@ try {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${path} overflows at ${width}`);
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
         assert.equal(canonical, `https://answerwithbooks.com${path}`);
-        if (path.startsWith('/reading-lists/')) {
-          const covers = page.locator('[data-reading-path-cover]');
-          assert.equal(await covers.count(), path === '/reading-lists/' ? 6 : 1, 'Every reading path has artwork');
-          for (const cover of await covers.all()) {
-            const image = cover.locator('img');
-            await image.scrollIntoViewIfNeeded();
-            await image.evaluate(img => img.decode());
-            assert.ok(await image.evaluate(img => img.naturalWidth === 1536 && img.naturalHeight === 864));
-            assert.ok(await cover.locator('.guide-cover__label').evaluate(label => label.scrollHeight <= label.clientHeight + 1), 'Cover label fits');
-          }
-        }
-        if (path.startsWith('/reading-lists/') && path !== '/reading-lists/') {
-          assert.equal(await page.locator('[data-reading-choice]').count(), 3);
-          assert.equal(await page.locator('[data-reading-choice]').first().isVisible(), true);
-          const images = page.locator('[data-reading-choice] img');
-          for (const image of await images.all()) {
-            await image.scrollIntoViewIfNeeded();
-            await image.evaluate(img => img.decode());
-            assert.ok(await image.evaluate(img => img.naturalWidth > 0));
-          }
-        }
+        assert.equal(await page.locator('a[href^="/reading-lists/"]').count(), 0, 'No retired reading-path links');
         if (path.includes('how-to-run-user-interviews')) {
           assert.equal(await page.locator('main table').count(), 1);
           assert.ok(await page.getByRole('heading', { name: 'What interviews cannot tell you on their own' }).isVisible());
@@ -50,9 +30,9 @@ try {
         if (!javaScriptEnabled && path === '/guides/') {
           for (const card of await page.locator('[data-filter-item]').all()) assert.equal(await card.isVisible(), true, 'Guide hidden without JavaScript');
         }
-        if (javaScriptEnabled && (path === '/reading-lists/customer-interviews/' || path === '/reading-lists/')) {
+        if (javaScriptEnabled && (path === '/books/the-mom-test/' || path === '/books/')) {
           await page.evaluate(() => window.scrollTo(0, 0));
-          await page.screenshot({ path: `${output}/${path === '/reading-lists/' ? 'index' : 'interviews'}-${width}.png`, fullPage: true });
+          await page.screenshot({ path: `${output}/${path === '/books/' ? 'books' : 'mom-test'}-${width}.png`, fullPage: true });
         }
         results.push({ path, width, javaScriptEnabled, status: 'passed' });
       }

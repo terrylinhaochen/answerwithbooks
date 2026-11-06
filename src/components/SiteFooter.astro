@@ -4,16 +4,14 @@ const docs = 'https://docs.answerwithbooks.com';
 const groups = [
   { title: 'Explore', links: [
     { label: 'Browse books', href: '/books/' },
-    { label: 'Choose a book', href: '/reading-lists/' },
     { label: 'Reading guides', href: '/guides/' },
     { label: 'Book skills', href: '/tools/' },
     { label: 'Your library', href: '/profile/' },
   ] },
   { title: 'Get started', links: [
     { label: 'Documentation', href: docs },
-    { label: 'Set up your agent', href: `${docs}/guide/quickstart-skill` },
+    { label: 'Install skill', href: '/tools/#install-skill' },
     { label: 'Add a book', href: `${docs}/guide/upload` },
-    { label: 'Use your own agent', href: `${docs}/guide/own-agent` },
   ] },
   { title: 'Help & resources', links: [
     { label: 'Help & troubleshooting', href: `${docs}/guide/troubleshooting` },
@@ -30,7 +28,7 @@ const groups = [
         <a class="site-footer__brand" href="/"><BrandMark /><span>Answer with Books</span></a>
         <p class="site-footer__headline">Good books.<br />Useful skills.<br /><em>Better work.</em></p>
         <p class="site-footer__description">Find an idea worth keeping. Put it to work with the agent you already use.</p>
-        <a class="site-footer__start" href={`${docs}/guide/quickstart-skill`}>Set up your agent <span aria-hidden="true">↗</span></a>
+        <a class="site-footer__start" href="/tools/#install-skill">Install skill <span aria-hidden="true">↗</span></a>
       </div>
       <nav class="site-footer__navigation" aria-label="Footer">
         {groups.map(group => (

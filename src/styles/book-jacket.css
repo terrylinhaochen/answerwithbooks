@@ -32,7 +32,9 @@
     opacity: .5;
   }
   .jacket-art { position: relative; display: block; overflow: hidden; background: var(--cloth); }
-  .jacket-art img { display: block; position: absolute; width: 100%; height: auto; max-width: none; top: -1%; left: 0; user-select: none; }
+  /* The lower 40% belongs exclusively to type. Contain the entire illustration
+     in the art cell so generation drift cannot crop a diagram at the title plate. */
+  .jacket-art img { display: block; position: absolute; width: 100%; height: 100%; object-fit: contain; max-width: none; top: 0; left: 0; user-select: none; }
   .jacket-type { position: relative; display: flex; flex-direction: column; text-align: left; padding: 7cqw 9cqw 7cqw 10cqw; color: #25231f; background: #eee8db; overflow: hidden; }
   .jacket-title { font-family: var(--font-serif); font-size: 12cqw; line-height: .99; letter-spacing: -.045em; font-weight: 450; max-width: 14ch; text-wrap: balance; }
   .jacket-author { display: block; font-size: 4.6cqw; line-height: 1.3; margin-top: auto; padding-top: 3cqw; letter-spacing: .035em; }
@@ -77,3 +79,10 @@
   .jacket-board-foot { position: absolute; left: 0; right: 0; bottom: 0; height: var(--board); transform-origin: center bottom; transform: translateZ(calc(var(--half-depth) - var(--board))) rotateX(-90deg); background: color-mix(in srgb, var(--cloth) 78%, #18221c); }
 
 .jacket--very-long .jacket-title { font-size:6.4cqw; line-height:1.04; max-width:24ch; }
+
+/* Exported public covers already contain the exact title panel and paper finish. */
+.jacket--composed .jacket-face{display:block}
+.jacket--composed .jacket-face::after{display:none}
+.jacket--composed .jacket-art{position:absolute;inset:0}
+.jacket--composed .jacket-art img{top:0;width:100%;height:100%;object-fit:fill}
+.jacket--composed .jacket-type{display:none}

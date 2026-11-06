@@ -1,3 +1,5 @@
+import {serviceCall} from './book-upload';
+import {sharedBookCard} from './shared-book-card';
 import {bookJacketMarkup} from './book-jacket.mjs';
 import {coverPalette} from '../../supabase/functions/_shared/book-cover-design.mjs';
 import {supabase} from './supabase';
@@ -6,15 +8,16 @@ import {bookStatus,bookSourceLabel,groupBookUploads} from './book-library-status
 const root=document.querySelector<HTMLElement>('[data-book-additions]')!;
 const list=root.querySelector('[data-book-additions-list]')!;
 const message=root.querySelector('[data-book-additions-message]')!;
-let activeUserId:string|undefined, jobs:any[]=[], generation=0, refreshing=false, queued=false, signature='';
+let activeUserId:string|undefined, jobs:any[]=[], sharedBooks:any[]=[], generation=0, refreshing=false, queued=false, signature='';
 const covers=new Map<string,{url:string;expires:number}>();
 const linkFor=(id:string)=>`/your-book/?id=${encodeURIComponent(id)}`;
 function render() {
  const additions=readAdditions(activeUserId);
- const next=JSON.stringify([activeUserId,jobs,additions,[...covers].map(([path,entry])=>[path,entry.url])]);
+ const next=JSON.stringify([activeUserId,jobs,sharedBooks.map(({coverUrl,...book})=>({...book,hasCover:!!coverUrl})),additions,[...covers].map(([path,entry])=>[path,entry.url])]);
  if(next===signature)return;signature=next;
  const focused=document.activeElement instanceof HTMLAnchorElement&&list.contains(document.activeElement)?document.activeElement.getAttribute('href'):null;
- list.replaceChildren();root.hidden=!jobs.length&&!additions.length;
+ list.replaceChildren();root.hidden=!jobs.length&&!sharedBooks.length&&!additions.length;
+ for(const [index,book] of sharedBooks.entries())list.append(sharedBookCard(book,index,root.dataset.showExcerpts!=='false'));
  for(const {primary:job} of groupBookUploads(jobs)) {
   const card=document.createElement('article');card.className='library-book';
   const layout=document.createElement('div');layout.className='library-book__layout';
@@ -51,11 +54,12 @@ async function refresh() {
   const {data,error:authError}=await supabase.auth.getSession();if(authError)throw authError;
   if(version!==generation)return;
   const userId=data.session?.user.id;
-  if(activeUserId!==userId){activeUserId=userId;jobs=[];covers.clear();render();}
+  if(activeUserId!==userId){activeUserId=userId;jobs=[];sharedBooks=[];covers.clear();render();}
   if(!userId){render();message.textContent='';return;}
-  const [uploads,requests]=await Promise.all([
-   supabase.from('book_processing_jobs').select('id,title,author,skill_summary,source_name,status,run_state,cursor,created_at,source_import,source_text_sha,source_line_count,total_sections,cover_status,cover_path,error,revision_kind').eq('user_id',userId).eq('is_current',true).is('archived_at',null).order('created_at',{ascending:false}).limit(100),
+  const [uploads,requests,shared]=await Promise.all([
+   supabase.from('book_processing_jobs').select('id,title,author,skill_summary,source_name,status,run_state,cursor,created_at,source_import,source_text_sha,source_line_count,total_sections,cover_status,cover_path,error,revision_kind').eq('user_id',userId).eq('visibility','private').eq('is_current',true).is('archived_at',null).order('created_at',{ascending:false}).limit(100),
    supabase.from('book_requests').select('id,title,author,status,created_at,external_id,matched_book_slug').eq('user_id',userId).order('created_at',{ascending:false}).limit(100),
+   serviceCall('shared-library',{action:'mine'}),
   ]);
   if(version!==generation||userId!==activeUserId)return;
   if(uploads.error||requests.error)throw new Error('Could not refresh your books. We’ll try again shortly.');
@@ -67,7 +71,7 @@ async function refresh() {
    if(version!==generation||userId!==activeUserId)return;
    for(const item of signed.data||[])if(item.path&&item.signedUrl&&!item.error)covers.set(item.path,{url:item.signedUrl,expires:Date.now()+3000000});
   }
-  jobs=uploaded;
+  jobs=uploaded;sharedBooks=shared.books||[];
   const remote:BookAddition[]=(requests.data||[]).map(row=>({id:row.id,title:row.title,author:row.author,status:row.status,createdAt:row.created_at,externalId:row.external_id,slug:row.matched_book_slug}));
   const local=readAdditions(userId).filter(item=>!remote.some(other=>sameBook(item,other)));
   try{localStorage.setItem(additionsKey(userId),JSON.stringify([...remote,...local].slice(0,100)));}catch{}
@@ -80,7 +84,7 @@ window.addEventListener('focus',()=>void refresh());
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)void refresh();});
 supabase.auth.onAuthStateChange((_event,session)=>{
  if(activeUserId===session?.user.id)return;
- generation++;activeUserId=session?.user.id;jobs=[];covers.clear();render();
+ generation++;activeUserId=session?.user.id;jobs=[];sharedBooks=[];covers.clear();render();
  // Keep Supabase requests outside its synchronous auth callback.
  setTimeout(()=>void refresh(),0);
 });

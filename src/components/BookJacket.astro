@@ -1,4 +1,5 @@
 ---
+import {renderedCover} from '../lib/public-cover.mjs';
 import {bookJacketMarkup} from '../lib/book-jacket.mjs';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -7,6 +8,8 @@ const { title, author, slug, color, loading = 'eager' } = Astro.props;
 const extension = ['jpg', 'jpeg', 'png', 'svg'].find(ext =>
   existsSync(fileURLToPath(new URL(`../../public/covers/${slug}.${ext}`, import.meta.url)))
 );
-const coverAsset = extension ? `/covers/${slug}.${extension}` : undefined;
+const artwork = extension ? `/covers/${slug}.${extension}` : undefined;
+const rendered = artwork ? renderedCover(artwork) : null;
+const coverAsset = rendered?.src ?? artwork;
 ---
-<Fragment set:html={bookJacketMarkup({title,author,color,coverAsset,loading})} />
+<Fragment set:html={bookJacketMarkup({title,author,color,coverAsset,loading,composed:!!rendered})} />

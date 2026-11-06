@@ -10,7 +10,7 @@ tags: ["customer research", "interviews", "product"]
 
 To run useful customer interviews, ask about a recent real event before describing your idea. Reconstruct what the person did, what it cost, and what alternatives they tried. Keep their account separate from your interpretation, then choose a next step that tests the uncertainty behind your product decision.
 
-This guide applies Rob Fitzpatrick’s [*The Mom Test*](/books/the-mom-test/). The questions and note template below are our examples, not quotations from the book. For a team-wide discovery process or a jobs-to-be-done lens, [compare three books for customer interviews](/reading-lists/customer-interviews/).
+This guide applies Rob Fitzpatrick’s [*The Mom Test*](/books/the-mom-test/). The questions and note template below are our examples, not quotations from the book.
 
 ## Customer interview questions you can use
 

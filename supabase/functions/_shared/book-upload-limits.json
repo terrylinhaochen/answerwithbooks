@@ -1,5 +1,5 @@
 {
-  "maxFileBytes": 52428800,
+  "maxFileBytes": 524288000,
   "maxTextCharacters": 6000000,
   "maxPdfPages": 1500,
   "maxArchiveExpandedBytes": 104857600,

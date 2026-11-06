@@ -60,7 +60,7 @@ class AdapterTests(unittest.TestCase):
     def test_file_and_text_limits_still_apply(self):
         path=self.root/'too-large.epub'
         with path.open('wb') as file: file.truncate(MAX_BYTES+1)
-        with self.assertRaisesRegex(ValueError,'50 MB'): extract(path,browser=True)
+        with self.assertRaisesRegex(ValueError,f'{MAX_BYTES // (1024*1024)} MB'): extract(path,browser=True)
         with self.assertRaisesRegex(ValueError,'processing capacity'): analyze('A'*(MAX_TEXT+1))
     def test_cleanup_structure_and_native_adapter(self):
         data=extract(self.root/'manual.md',browser=True)

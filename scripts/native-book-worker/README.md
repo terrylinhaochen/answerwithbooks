@@ -1,6 +1,6 @@
 # Native extraction worker
 
-This worker polls `book-native` for private original files, invokes the pinned book adapter in a subprocess, and returns verified text to the existing book queue. It supports technical PDF extraction with Docling and unencrypted MOBI/AZW/AZW3 conversion with Calibre. DRM removal is not implemented. The host needs only the dedicated worker secret; it never receives a Supabase service-role key or user credential.
+This worker polls `book-native` for private original files, invokes the pinned book adapter in a subprocess, and returns verified text to the existing book queue. It accepts originals up to 500 MB. PDFs use hosted text extraction by default, with bounded English Tesseract OCR for image-only PDFs, with technical layout extraction through Docling available explicitly; unencrypted MOBI/AZW/AZW3 conversion uses Calibre. DRM removal is not implemented. The host needs only the dedicated worker secret; it never receives a Supabase service-role key or user credential.
 
 ## Protocol
 
@@ -38,7 +38,7 @@ The image uses Python 3.12, system Calibre/Poppler, and pinned Docling. It prelo
 
 ## Native systemd host alternative
 
-Install Python 3.12 and `calibre poppler-utils libgl1 libglib2.0-0 libgomp1 ca-certificates`; create a virtualenv and install `requirements.txt`. Copy the pinned `vendor/book-to-skill`, `scripts/book-adapter`, `scripts/native-book-worker`, and `supabase/functions/_shared/book-upload-limits.json`, preserving their paths beneath one application root.
+Install Python 3.12 and `calibre poppler-utils tesseract-ocr tesseract-ocr-eng libgl1 libglib2.0-0 libgomp1 ca-certificates`; create a virtualenv and install `requirements.txt`. Copy the pinned `vendor/book-to-skill`, `scripts/book-adapter`, `scripts/native-book-worker`, and `supabase/functions/_shared/book-upload-limits.json`, preserving their paths beneath one application root.
 
 ```sh
 /path/to/venv/bin/docling-tools models download layout tableformer tableformerv2 code_formula --output-dir /opt/docling-models

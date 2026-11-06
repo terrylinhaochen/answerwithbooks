@@ -1,12 +1,10 @@
 import {animate} from 'motion/mini';
 
-// One local conversation loops: list the catalog -> ask -> apply the matched book.
+// One illustrated conversation: books -> question -> original passage.
 export function mountSkillDemo(){
  const root=document.querySelector<HTMLElement>('[data-agent-demo]');if(!root)return;
  const conversation=root.querySelector<HTMLElement>('[data-demo-conversation]')!;
- const control=root.querySelector<HTMLButtonElement>('[data-demo-playback]')!;
- const controlLabel=root.querySelector<HTMLElement>('[data-demo-playback-label]')!;
- const controlPath=root.querySelector<SVGPathElement>('[data-demo-playback-icon] path')!;
+ const scroller=root.querySelector<HTMLElement>('[data-demo-scroll]')!;
  const runState=root.querySelector<HTMLElement>('[data-demo-run-state]')!;
  const callLabel=root.querySelector<HTMLElement>('[data-demo-call-label]')!;
  const matchedLabel=callLabel.textContent!;
@@ -16,19 +14,22 @@ export function mountSkillDemo(){
  const askTool=root.querySelector<HTMLElement>('[data-demo-tool="ask"]')!;
  const reveals=[...root.querySelectorAll<HTMLElement>('[data-demo-reveal]')];
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
- const starts=[0,750,2100,4500,6600,7900,8350,8950,9550,10200],duration=10800,fadeAt=18500,cycle=19000;
- let elapsed=0,last=0,frame=0,visible=false,userPaused=false,finished=false,fading=false,iteration=0;
+ const starts=[0,750,2100,4500,6600,7900,8350,8950,9550,10200],duration=10800;
+ let elapsed=0,last=0,frame=0,visible=false,manualScroll=false,finished=false;
  let animations:ReturnType<typeof animate>[]=[];
- const canPlay=()=>visible&&!document.hidden&&!userPaused&&!reduced.matches;
+ const canPlay=()=>visible&&!document.hidden&&!finished&&!reduced.matches;
  function stopAnimations(){animations.forEach(a=>a.stop());animations=[];}
+ function settleReveals(){
+  stopAnimations();
+  reveals.filter(el=>el.dataset.visible==='true').forEach(el=>el.removeAttribute('style'));
+ }
  function playback(){
-  const label=userPaused?'Play':'Pause';
-  controlLabel.textContent=label;control.setAttribute('aria-label',`${label} demo`);
-  controlPath.setAttribute('d',userPaused?'m8 5 11 7-11 7z':'M8 5v14M16 5v14');
   root!.dataset.demoPaused=String(!canPlay());
-  runState.textContent=userPaused?'Paused':finished?'Ready to use':elapsed<4500?'Listing books':elapsed<7900?'Asking the books':'Applying the book';
+  runState.textContent=finished?'Ready to use':elapsed<4500?'Listing books':elapsed<7900?'Asking the books':'Opening the reading';
  }
  function paint(instant=false){
+  const follow=!instant&&!manualScroll;
+  let revealed=false;
   const step=elapsed<4500?0:elapsed<7900?1:2;
   finished=elapsed>=duration;
   root!.dataset.demoPhase=['catalog','ask','apply'][step];
@@ -39,18 +40,30 @@ export function mountSkillDemo(){
   callLabel.textContent=elapsed<6600?'Finding a match…':matchedLabel;
   reveals.forEach(el=>{
    if(el.dataset.visible==='true'||elapsed<starts[Number(el.dataset.demoReveal)])return;
-   el.dataset.visible='true';el.removeAttribute('aria-hidden');el.inert=false;
-   if(!instant&&!reduced.matches)animations.push(animate(el,{opacity:[0,1],transform:['translateY(7px)','translateY(0)']},{duration:.34,ease:[.2,.7,.2,1]}));
+   revealed=true;el.dataset.visible='true';el.removeAttribute('aria-hidden');el.inert=false;
+   if(!instant&&!reduced.matches){
+    const animation=animate(el,{opacity:[0,1],transform:['translateY(7px)','translateY(0)']},{duration:.34,ease:[.2,.7,.2,1]});
+    animations.push(animation);
+    // Finished native animations are cancelled internally. Playing or pausing
+    // those controls again can restore their initial, invisible keyframe.
+    animation.then(()=>{animations=animations.filter(active=>active!==animation);});
+   }
   });
-  if(elapsed>=fadeAt&&!fading&&!reduced.matches){fading=true;animations.push(animate(conversation,{opacity:[1,0]},{duration:.5}));}
+  if(finished)settleReveals();
+  if(revealed&&follow)requestAnimationFrame(()=>{
+   if(manualScroll)return;
+   const card=conversation.querySelector<HTMLElement>('.demo-answer')!;
+   // Keep the start of the reading in view as its paragraphs arrive.
+   const top=elapsed>=starts[5]?scroller.scrollTop+card.getBoundingClientRect().top-scroller.getBoundingClientRect().top-20:scroller.scrollHeight;
+   scroller.scrollTo({top,behavior:'smooth'});
+  });
   playback();
  }
  function tick(now:number){
   frame=0;if(!canPlay())return;
   const before=elapsed;elapsed+=Math.min(now-last,80);last=now;
-  if(elapsed>=cycle){iteration++;reset();return;}
-  if([...starts,duration,fadeAt].some(time=>before<time&&elapsed>=time))paint();
-  frame=requestAnimationFrame(tick);
+  if([...starts,duration].some(time=>before<time&&elapsed>=time))paint();
+  if(canPlay())frame=requestAnimationFrame(tick);
  }
  function sync(){
   animations.forEach(a=>canPlay()?a.play():a.pause());
@@ -59,30 +72,27 @@ export function mountSkillDemo(){
   playback();
  }
  function reset(instant=false){
-  if(frame)cancelAnimationFrame(frame);frame=0;stopAnimations();elapsed=instant?duration:0;finished=false;fading=false;
-  root!.dataset.demoIteration=String(iteration);conversation.removeAttribute('style');
+  if(frame)cancelAnimationFrame(frame);frame=0;stopAnimations();elapsed=instant?duration:0;finished=false;
+  conversation.removeAttribute('style');scroller.scrollTop=0;
   conversation.querySelectorAll('details').forEach(el=>el.open=false);
   reveals.forEach(el=>{el.removeAttribute('style');el.dataset.visible='false';el.setAttribute('aria-hidden','true');el.inert=true;});
-  if(iteration&&!instant)animations.push(animate(conversation,{opacity:[0,1]},{duration:.35}));
   paint(instant);sync();
  }
- function pause(){
-  userPaused=true;
-  // Inspecting a tool must hold this step, rather than skip to the final reply.
-  if(fading){stopAnimations();conversation.removeAttribute('style');elapsed=duration;fading=false;paint(true);}
-  sync();
+ // Reader input only disables scroll-following. The timed reveals keep playing.
+ function stopFollowing(){
+  manualScroll=true;
+  scroller.scrollTo({top:scroller.scrollTop,behavior:'instant'});
  }
- root.dataset.demoEnhanced='true';control.hidden=reduced.matches;reset(reduced.matches);
- control.addEventListener('click',()=>{
-  if(userPaused){conversation.querySelectorAll('details').forEach(el=>el.open=false);userPaused=false;}else{pause();return;}
-  sync();
- });
- conversation.querySelectorAll('details').forEach(details=>details.addEventListener('toggle',()=>{if(details.open)pause();}));
- // Preserve the current stage while a keyboard reader inspects a source.
- conversation.addEventListener('focusin',pause);
+ root.dataset.demoEnhanced='true';reset(reduced.matches);
+ conversation.querySelectorAll('details').forEach(details=>details.addEventListener('toggle',()=>{if(details.open)stopFollowing();}));
+ conversation.addEventListener('focusin',stopFollowing);
+ scroller.addEventListener('pointerdown',stopFollowing,{passive:true});
+ scroller.addEventListener('wheel',stopFollowing,{passive:true});
+ scroller.addEventListener('touchstart',stopFollowing,{passive:true});
+ scroller.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))stopFollowing();});
  const observer=new IntersectionObserver(entries=>{const entry=entries[0];visible=entry.isIntersecting&&entry.intersectionRatio>=.25;sync();},{threshold:[0,.25]});observer.observe(root.querySelector('[data-demo-window]')!);
  document.addEventListener('visibilitychange',sync);
- reduced.addEventListener('change',()=>{control.hidden=reduced.matches;if(reduced.matches){userPaused=false;reset(true);}else sync();});
+ reduced.addEventListener('change',()=>{if(reduced.matches){manualScroll=false;reset(true);}else sync();});
  window.addEventListener('pagehide',()=>{if(frame)cancelAnimationFrame(frame);frame=0;animations.forEach(a=>a.pause());});
  window.addEventListener('pageshow',sync);
 }

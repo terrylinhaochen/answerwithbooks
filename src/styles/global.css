@@ -294,8 +294,7 @@ h3,
 .awb-account-links { display:flex; align-items:center; gap:0.5rem; }
 
 .awb-nav__link,
-.awb-nav__action,
-.awb-nav__cta {
+.awb-nav__action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -341,26 +340,10 @@ h3,
   display: none;
 }
 
-.awb-nav__cta.hidden {
-  display: none;
-}
-
 .awb-nav__action:hover,
 .awb-nav__action--current {
   border-color: color-mix(in srgb, var(--color-ink) 22%, var(--color-line));
   background: var(--color-card);
-}
-
-.awb-nav__cta {
-  background: var(--color-ink);
-  color: white;
-  padding: 0 1rem;
-  box-shadow: 0 12px 26px rgb(12 10 9 / 0.12);
-}
-
-.awb-nav__cta:hover {
-  background: var(--color-soft);
-  transform: translateY(-1px);
 }
 
 @media (max-width: 520px) {
@@ -399,7 +382,6 @@ h3,
     min-width: 0;
   }
 
-  .awb-nav__cta,
   .awb-nav__action {
     grid-column: 2;
     grid-row: 1;

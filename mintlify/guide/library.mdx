@@ -1,50 +1,9 @@
 ---
-title: "Use your library"
-description: "Ask questions naturally and retrieve only the book methods that matter."
+title: "Books and guides"
+description: "A shared library organized around questions."
 ---
+Books contains the existing editorial shelf and newly processed shared books. A book's page introduces its author and subject, offers a short summary, then shows three **Questions to explore with this book** with more available to expand.
 
-Once connected, ask your agent:
+Guides begins with a question. The model suggests books, you confirm them and a reading time, and a processing card becomes a continuous reading of original passages with context and a closing synthesis. Finished guides are public; Your Guides keeps your creation history. Reading progress and feedback belong to your account.
 
-```text
-Use my books to help me divide responsibilities across a growing team.
-```
-
-The agent searches relevant chapter methods, reads the evidence, and applies useful ideas to your question. The agent you are using writes the answer; saved book skills are reusable instructions and references.
-
-## One skill is enough
-
-Keep the generic Answer with Books skill for a large library. You do not need to clone a repository or install every book. Individual book skills are optional for favorites and local use.
-
-To install one, ask “Install the skill for this book.” A ready full-source package includes `SKILL.md`, chapter notes, glossary, patterns, cheatsheet, and source references. Some hosts discover newly installed skills on the next turn or in a new session.
-
-## Hosted retrieval or local installation
-
-Hosted retrieval is the default for a connected private library. Your agent asks the authenticated `book-library` endpoint for relevant methods and source excerpts, then applies that evidence to your task. The endpoint does not execute `SKILL.md` or write the final answer. You do not need to download each book.
-
-The reader page uses **Copy prompt for your AI**. It includes the editorial digest and task instructions; a connected agent can retrieve the full cited methods when needed. The **Agent Skill Card** is collapsed under **Put this book to work**. Optional CLI exports and offline installation remain available, but no download is required for hosted use.
-
-Own-agent generation saves work locally and can sync a newly completed AWB workspace to your private library; see [Generate with your own agent](/guide/own-agent) for availability and limits. You can also [combine sources and update a guide](/guide/combined-guides).
-
-## Read and manage your books
-
-Private reader pages follow the same structure as the public shelf: when to reach for the book, what it is about, an editorial summary, an Amazon link, and **Put this book to work**. Core lessons and frameworks are optional expandable reference notes. An excerpt remains labeled with its scope. Amazon links for uploads search by title and author; they do not imply a verified edition.
-
-Open [Manage Skills](https://answerwithbooks.com/manage-skills/) from your profile or book page:
-
-- **Archive** hides a book from your active shelf and excludes its skill from hosted retrieval. Restore it from the Archived tab.
-- **Delete** permanently removes the book, its skill, uploaded sources and saved revisions after confirmation. Billing records required for your account are retained.
-- Pause active work and let its current step finish before managing it. Settle or cancel an active paid conversion first. Archiving does not cancel a charge or remove files installed on your device.
-
-[Books in the making](https://answerwithbooks.com/processing/) is the full-width queue for unfinished conversions. Completed reader pages do not show source replacement or download controls. Agent/CLI guide updates remain available through [combined guides](/guide/combined-guides).
-
-Earlier conversions may contain only skill notes. They show an explicit missing-summary state rather than presenting those notes as a finished editorial digest. New managed conversions and CLI 0.7.0 local generations produce both outputs.
-
-## Public and private sources
-
-Public recommendations can include books outside the catalog. When choosing a reading set, the agent should show the selection criteria and let you choose before starting a conversion.
-
-Private search only uses your connected account's eligible books. Hosted semantic retrieval sends the search question to the configured embedding provider. Public CLI retrieval uses the bundled public corpus.
-
-## Disconnect
-
-Ask your agent to log out of Answer with Books. This revokes its account connection. Book skills already installed on your machine remain local files after logout.
+New uploads join the public library. Old private books and guides remain private unless explicitly published; changing the product does not change their visibility. Removing a shared book from your shelf leaves its source available to everyone else.

@@ -144,7 +144,10 @@ def extract(path, browser=False, extraction_mode='text'):
         if not browser:
             if path.suffix.lower() == '.pdf' and count_pages(str(path)) > LIMITS['maxPdfPages']:
                 raise ValueError('This PDF exceeds the processing page capacity.')
-            if extraction_mode == 'technical' and path.suffix.lower() == '.pdf':
+            if extraction_mode == 'text' and path.suffix.lower() == '.pdf' and looks_image_only(str(path)):
+                from ocr_pdf import extract_scanned_pdf
+                result = extract_scanned_pdf(path, count_pages(str(path)), MAX_TEXT)
+            elif extraction_mode == 'technical' and path.suffix.lower() == '.pdf':
                 if looks_image_only(str(path)):
                     raise ValueError('Scanned PDFs need OCR before extraction.')
                 result = {'text': extract_technical_pdf(path), 'extraction_method': 'docling',

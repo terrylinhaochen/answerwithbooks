@@ -1,0 +1,30 @@
+---
+import GuideQuestion from '../../../components/GuideQuestion.astro';
+import AddBookDialog from '../../../components/AddBookDialog.astro';
+import Base from '../../../layouts/Base.astro';
+import BookPageHeader from '../../../components/BookPageHeader.astro';
+import BookReadingPanel from '../../../components/BookReadingPanel.astro';
+import BookOverview from '../../../components/BookOverview.astro';
+import BookQuestions from '../../../components/BookQuestions.astro';
+import CopyBookAction from '../../../components/CopyBookAction.astro';
+import BookDigestPersonalizer from '../../../components/BookDigestPersonalizer.astro';
+import ContentFeedback from '../../../components/ContentFeedback.astro';
+---
+<Base title="Book digest" description="Read a book introduction and explore questions through original passages." path="/books/read/" robots="noindex, follow">
+ <article class="mx-auto max-w-5xl px-5 pt-16 pb-10" data-shared-book>
+  <BookPageHeader client>
+   <div slot="actions"><CopyBookAction client /><button data-book-save type="button" class="mt-4 text-sm underline underline-offset-4" disabled>Save to your books</button></div>
+   <div slot="cover" class="book-cover book-cover--lg w-24 sm:w-36 justify-self-start lg:justify-self-end"><span class="book-cover-object" data-book-cover></span></div>
+  </BookPageHeader>
+  <p data-book-status role="status" class="mt-8 text-soft">Loading…</p>
+  <div data-book-body hidden>
+   <BookOverview client showReadIf={false} />
+   <BookReadingPanel><div data-book-summary></div></BookReadingPanel>
+   <BookQuestions />
+   <BookDigestPersonalizer shared />
+   <ContentFeedback contentType="book" contentSlug="" contentTitle="" />
+  </div>
+ </article>
+ <GuideQuestion modalOnly /><AddBookDialog />
+</Base>
+<script>import {mountSharedBook} from '../../../lib/shared-library';mountSharedBook();</script>

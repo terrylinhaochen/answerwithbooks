@@ -25,3 +25,6 @@ supabase/.temp/
 public/book-runtime/
 __pycache__/
 *.pyc
+
+# Local payment-dashboard proof may contain account details; never publish it.
+docs/verification/hosted-guides-2026-11-06/stripe-*.png

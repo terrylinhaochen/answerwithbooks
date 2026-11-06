@@ -8,9 +8,43 @@ const page=await context.newPage(),errors=[];
 page.setDefaultTimeout(120000);page.setDefaultNavigationTimeout(120000);
 page.on('pageerror',error=>errors.push(error.message));
 try {
- for(const surface of ['dialog','page']) {
-  await page.goto(origin+(surface==='dialog'?'/':'/tools/#public-shelf-install'));
+ for (const path of ['/', '/books/', '/guides/', '/tools/']) {
+  await page.goto(origin+path);
+  const header=page.locator('body > header');
+  assert.equal(await header.locator('.awb-nav__cta, [data-open-skill-install]').count(),0);
+  assert.equal(await header.getByRole('link',{name:'Skills',exact:true}).count(),1);
+ }
+ await page.goto(origin+'/tools/#install-skill');
+ const setup=page.locator('#install-skill');
+ const initialUrl=page.url();
+ assert.equal(await setup.locator('pre').isVisible(),false);
+ assert.equal(await setup.locator('[data-command-text]').textContent(),bookSkillSetupPrompt);
+ await setup.getByRole('button',{name:'Install skill (copy prompt)',exact:true}).click();
+ assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),bookSkillSetupPrompt);
+ assert.ok(bookSkillSetupPrompt.length<250);
+ assert.equal(page.url(),initialUrl);
+ assert.equal(await page.locator('dialog[open]').count(),0);
+ assert.equal(context.pages().length,1);
+ const markdown=setup.getByRole('link',{name:'SKILL.md'});
+ assert.equal(await markdown.getAttribute('href'),'/SKILL.md');
+ assert.equal(await markdown.getAttribute('download'),'answer-with-books-setup.md');
+ const mdResponse=await context.request.get(origin+'/SKILL.md',{maxRedirects:0});
+ assert.equal(mdResponse.status(),200);
+ assert.match(mdResponse.headers()['content-type'],/text\/markdown/);
+ assert.match(await mdResponse.text(),/install --skill/);
+ for(const width of [1280,390,320]) {
+  await page.setViewportSize({width,height:900});
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await page.screenshot({path:`/private/tmp/awb-inline-install-${width}.png`});
+ }
+ await page.evaluate(()=>{navigator.clipboard.writeText=async()=>{throw new Error('Clipboard denied for test');};});
+ await setup.getByRole('button',{name:'Install skill (copy prompt)',exact:true}).click();
+ assert.equal(await setup.getByRole('textbox',{name:'Text to copy manually'}).inputValue(),bookSkillSetupPrompt);
+ await page.setViewportSize({width:1280,height:1000});
+ for(const surface of ['dialog']) {
+  await page.goto(origin+'/guides/');
   if(surface==='dialog')await page.locator('[data-open-skill-install]').first().click();
+  await page.locator('#skill-install-dialog[open]').waitFor();
   const root=page.locator('[data-book-install-options]');
   await root.getByRole('button',{name:'Copy setup message',exact:true}).click();
   assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),bookSkillSetupPrompt);
@@ -21,7 +55,7 @@ try {
   assert.match(guide.headers()['content-type'],/text\/markdown/);
   const instructions=await guide.text();
   assert.match(instructions,/install --skill/);
-  assert.match(instructions,/v0\.5\.0/);
+  assert.match(instructions,/0\.8\.0/);
   assert.doesNotMatch(instructions,/install --skill --api/);
   await root.getByRole('button',{name:'Copy example',exact:true}).click();
   assert.match(await page.evaluate(()=>navigator.clipboard.readText()),/organizational structure/);
@@ -60,19 +94,19 @@ try {
  }
  // Opening must not depend on deferred modules loading successfully.
  const unbundled=await context.newPage();
- await unbundled.route(origin+'/',async route=>{
+ await unbundled.route(origin+'/guides/',async route=>{
   const response=await route.fetch();
   const html=(await response.text()).replace(/<script\b(?=[^>]*type=["']module["'])[^>]*>[\s\S]*?<\/script>/gi,'');
   await route.fulfill({response,body:html});
  });
- await unbundled.goto(origin+'/');
+ await unbundled.goto(origin+'/guides/');
  for(const trigger of await unbundled.locator('[data-open-skill-install]').all()){
   await trigger.click();
-  assert.equal(unbundled.url(),origin+'/');
+  assert.equal(unbundled.url(),origin+'/guides/');
   assert.equal(await unbundled.locator('#skill-install-dialog').isVisible(),true);
   await unbundled.keyboard.press('Escape');
  }
  await unbundled.close();
  assert.deepEqual(errors,[]);
- console.log(JSON.stringify({passed:true,platforms:bookSkillPlatforms.map(p=>p.name),surfaces:['homepage dialog','Skills FAQ'],clipboard:true,fallback:true,mobile:true}));
+ console.log(JSON.stringify({passed:true,platforms:bookSkillPlatforms.map(p=>p.name),surfaces:['Skills inline installer','Guides install dialog'],clipboard:true,fallback:true,mobile:true}));
 } finally {await browser.close();}

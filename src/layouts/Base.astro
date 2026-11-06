@@ -19,7 +19,6 @@ export interface Props {
   jsonLd?: object | object[];
   readingMode?: boolean;
   theme?: 'collector';
-  installCta?: boolean;
 }
 
 const {
@@ -33,7 +32,6 @@ const {
   jsonLd,
   readingMode = false,
   theme = 'collector',
-  installCta = false,
 } = Astro.props;
 const site = 'https://answerwithbooks.com';
 const canonical = new URL(path, site).href;
@@ -51,10 +49,9 @@ const gaMeasurementIds = [...new Set([
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const nav = [
-  { href: '/books/', label: 'Books', prefixes: ['/books/', '/reading-lists/'] },
+  { href: '/books/', label: 'Books', prefixes: ['/books/'] },
   { href: '/guides/', label: 'Guides', prefixes: ['/guides/', '/answers/'] },
   { href: '/tools/', label: 'Skills', prefixes: ['/tools/', '/skills/'] },
-  { href: 'https://docs.answerwithbooks.com', label: 'Docs', prefixes: [] },
 ];
 const current = Astro.url.pathname;
 ---
@@ -125,7 +122,6 @@ const current = Astro.url.pathname;
             }
           </nav>
           <div class="awb-account-links">
-          <>{installCta ? <button type="button" class="awb-nav__cta" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill</button> : <a class="awb-nav__cta" href="https://docs.answerwithbooks.com/guide/quickstart-skill" data-hide-when-signed-in>Set up agent</a>}</>
           <a
             href="/profile/"
             data-auth-link
@@ -195,5 +191,6 @@ const current = Astro.url.pathname;
       supabase.auth.onAuthStateChange((_event, session) => renderAccountNav(Boolean(session)));
       supabase.auth.getSession().then(({ data }) => renderAccountNav(Boolean(data.session))).catch(() => renderAccountNav(false));
     </script>
+    <script>import {mountBookCoverLayout} from '../lib/book-cover-layout';mountBookCoverLayout();</script>
   </body>
 </html>

@@ -23,15 +23,15 @@ import AddBookDialog from '../components/AddBookDialog.astro';
             Welcome back<span id="user-name"></span>.
           </h1>
           <p id="profile-email" class="profile-email"></p>
-          <p class="profile-description mt-5 max-w-md text-sm leading-relaxed">A home for the books you learn from and the skills you bring to your work.</p>
+          <p class="profile-description mt-5 max-w-md text-sm leading-relaxed">Your books, saved guides, and reading preferences.</p>
         </div>
         <button type="button" id="signout-btn" class="profile-signout">Sign out</button>
       </header>
-      <nav aria-label="Account settings" class="mb-6 flex flex-wrap gap-5 text-sm"><a href="/manage-skills/" class="underline">Manage Skills</a><a href="/api-keys/" class="underline">API keys</a><a href="/billing/" class="underline">Billing</a><a href="/processing/" class="underline">Processing queue</a></nav>
+      <nav aria-label="Account settings" class="mb-6 flex flex-wrap gap-5 text-sm"><a href="/guides/#your-guides" class="underline">Your guides</a><a href="/billing/" class="underline">Billing</a></nav>
 
       <section class="profile-card mb-6">
-        <div class="profile-card-heading"><h2>Your next skill</h2><a href="/tools/">How it works <span aria-hidden="true">↗</span></a></div>
-        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-soft">Existing books are free to use. For a new source, choose a paid hosted conversion or create the summary and skill with your own agent.</p>
+        <div class="profile-card-heading"><h2>Add to your library</h2><a href="/tools/">How it works <span aria-hidden="true">↗</span></a></div>
+        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-soft">Upload a book to read it here and explore its ideas in your guides.</p>
         <button class="awb-pill awb-pill-primary mt-5" type="button" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Upload a source</button>
       </section>
       <BookAdditions />
@@ -40,6 +40,7 @@ import AddBookDialog from '../components/AddBookDialog.astro';
         <div class="profile-card-heading"><h2>Your preferences</h2><a href="/onboarding/start/?from=profile">Edit preferences <span aria-hidden="true">→</span></a></div>
         <p id="profile-preferences" class="mt-3 text-soft">Choose the topics and questions you want to explore.</p>
       </section>
+      <details class="mt-6 text-sm text-soft"><summary class="cursor-pointer">Advanced account settings</summary><a href="/api-keys/" class="mt-3 inline-block underline">Manage existing API keys</a></details>
       <div class="profile-activity"><ActivityPanel eyebrow="Your activity" title="Keep your learning going." description="Your reading activity on this browser." showLink={false} showDetails={false} /></div>
     </div>
   </section>
@@ -86,6 +87,7 @@ import AddBookDialog from '../components/AddBookDialog.astro';
       });
     }
   </script>
+
 </Base>
 <style>
   .profile-page{padding-top:44px;padding-bottom:80px}.profile-header{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:36px}.profile-header>div{min-width:0}.profile-title{margin-top:12px;font-family:var(--font-serif);font-size:clamp(30px,4vw,42px);line-height:1.2;overflow-wrap:anywhere}.profile-email{margin-top:12px;font-size:14px;color:var(--color-soft);overflow-wrap:anywhere}.profile-signout{font-size:13px;color:var(--color-soft);border:1px solid var(--color-line);padding:9px 15px;border-radius:8px;white-space:nowrap;cursor:pointer}.profile-signout:hover{color:var(--color-ink);background:var(--color-wash)}.profile-card{min-width:0;padding:24px;border:1px solid var(--color-line);border-radius:14px;background:var(--color-paper)}.profile-card-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}.profile-card-heading h2{font-size:16px;font-weight:600}.profile-card-heading a{font-size:13px;color:var(--color-soft);display:inline-flex;align-items:center;gap:8px}.profile-card-heading a:hover{text-decoration:underline;text-underline-offset:4px}.profile-preferences,.profile-activity{margin-top:24px}.profile-signout:focus-visible{outline:2px solid var(--color-ink);outline-offset:4px}@media(max-width:640px){.profile-page{padding-top:28px}.profile-header{align-items:flex-start;gap:12px}.profile-title{font-size:30px}.profile-card{padding:20px}.profile-card-heading{flex-wrap:wrap;gap:8px}.profile-preferences,.profile-activity{margin-top:16px}}

@@ -1,4 +1,5 @@
 ---
+import {renderedCover} from '../lib/public-cover.mjs';
 import { guideCovers } from '../lib/guide-covers.mjs';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 }
 const { slug, priority = false } = Astro.props;
 const cover = Astro.props.cover ?? guideCovers[slug as keyof typeof guideCovers];
+const rendered = cover ? renderedCover(cover.src) : null;
 ---
 
 {cover && (
@@ -19,18 +21,18 @@ const cover = Astro.props.cover ?? guideCovers[slug as keyof typeof guideCovers]
     aria-hidden="true"
   >
     <img
-      src={cover.src}
-      alt=""
+      src={rendered?.src ?? cover.src}
+      alt={`${cover.label} — ${cover.topic}`}
       width="1536"
       height="864"
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
       fetchpriority={priority ? 'high' : 'auto'}
     />
-    <span class="guide-cover__label">
+    {!rendered && <span class="guide-cover__label">
       <span class="guide-cover__topic">{cover.topic}</span>
       <span class="guide-cover__title">{cover.label}</span>
-    </span>
+    </span>}
   </span>
 )}
 

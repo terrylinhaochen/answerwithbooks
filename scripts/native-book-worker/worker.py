@@ -187,7 +187,7 @@ class Worker:
         try:
             extension = Path(job['name']).suffix.lower()
             mode = job.get('extractionMode')
-            if not (extension == '.pdf' and mode == 'technical' or extension in ('.mobi', '.azw', '.azw3') and mode == 'text'):
+            if not (extension == '.pdf' and mode in ('text', 'technical') or extension in ('.epub', '.docx', '.html', '.htm', '.xhtml', '.rtf', '.txt', '.text', '.md', '.markdown', '.rst', '.adoc', '.asciidoc', '.mobi', '.azw', '.azw3') and mode == 'text'):
                 raise WorkerError('unsupported')
             with tempfile.TemporaryDirectory(prefix='awb-native-', dir=self.temp_root) as directory:
                 # Names from documents never become local paths.

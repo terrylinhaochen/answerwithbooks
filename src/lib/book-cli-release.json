@@ -1,11 +1,15 @@
 {
-  "version": "0.7.1",
-  "package": "https://github.com/Crowdlisten/Crowdlisten_books/releases/download/v0.7.1/answer-with-books-0.7.1.tgz",
+  "version": "0.8.0",
+  "package": "https://answerwithbooks.com/downloads/answer-with-books-0.8.0.tgz",
   "commands": [
     "books",
+    "guides",
+    "create-guide",
+    "confirm-guide",
     "ask",
     "upload",
-    "status"
+    "source",
+    "plan"
   ],
   "entrypoints": {
     "codex": "$answer-with-books",

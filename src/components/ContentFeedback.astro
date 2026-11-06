@@ -1,6 +1,6 @@
 ---
 interface Props {
-  contentType: 'book' | 'answer';
+  contentType: 'book' | 'answer' | 'guide';
   contentSlug: string;
   contentTitle: string;
 }
@@ -19,7 +19,7 @@ const { contentType, contentSlug, contentTitle } = Astro.props;
     <div>
       <p class="awb-eyebrow">Feedback</p>
       <h2 class="mt-2 font-serif text-3xl leading-tight">Was this useful?</h2>
-      <p class="mt-2 text-sm leading-relaxed text-soft">A quick note helps us make the shelf more useful.</p>
+      <p class="mt-2 text-sm leading-relaxed text-soft">{contentType === 'guide' ? 'A quick note helps us make your guides more useful.' : 'A quick note helps us make the shelf more useful.'}</p>
     </div>
 
     <form class="grid gap-4" data-feedback-form>
@@ -52,6 +52,7 @@ const { contentType, contentSlug, contentTitle } = Astro.props;
 
 <script>
   import { supabase } from '../lib/supabase';
+  import { guideCall } from '../lib/reading-guides';
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-content-feedback]')) {
     const form = root.querySelector<HTMLFormElement>('[data-feedback-form]');
@@ -89,14 +90,20 @@ const { contentType, contentSlug, contentTitle } = Astro.props;
         status.classList.remove('hidden');
       }
 
-      const { error } = await supabase.from('content_feedback').insert({
-        content_type: root.dataset.contentType,
-        content_slug: root.dataset.contentSlug,
-        content_title: root.dataset.contentTitle,
-        sentiment: selected,
-        comment: String(formData.get('comment') ?? '').trim(),
-        source_path: window.location.pathname,
-      });
+      let error = false;
+      try {
+        const comment = String(formData.get('comment') ?? '').trim();
+        if (root.dataset.contentType === 'guide') {
+          await guideCall({action:'feedback',id:root.dataset.contentSlug,sentiment:selected,comment});
+        } else {
+          const result = await supabase.from('content_feedback').insert({
+            content_type: root.dataset.contentType, content_slug: root.dataset.contentSlug,
+            content_title: root.dataset.contentTitle, sentiment:selected, comment,
+            source_path:window.location.pathname,
+          });
+          error = !!result.error;
+        }
+      } catch { error = true; }
 
       if (submit) {
         submit.textContent = error ? 'Try again' : 'Feedback sent';

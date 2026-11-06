@@ -6,12 +6,12 @@ const {id} = Astro.props;
 const initial = bookSkillPlatforms[0];
 ---
 <div class="skill-install-options" data-book-install-options>
- <header class="install-header"><h2 id={`${id}-title`} tabindex="-1">Set up your agent</h2></header>
+ <header class="install-header"><h2 id={`${id}-title`} tabindex="-1">Install Answer with Books</h2></header>
  <div class="install-body">
   <section class="setup-step">
    <h3><span>1</span> Send this to your agent</h3>
    <ToolCommand value={bookSkillSetupPrompt} label="Copy setup message" />
-   <p class="install-caption">Works with Codex, Claude Code, Cursor, and other agents that support local skills. Your agent handles the installation.</p>
+   <p class="install-caption">Works with Codex, Claude Code, Cursor, and other agents that support local skills. The prompt asks your agent to read the setup docs, install the skill, and check it works.</p>
   </section>
   <section class="setup-step">
    <h3><span>2</span> Connect your books</h3>

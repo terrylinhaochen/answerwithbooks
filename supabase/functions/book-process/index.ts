@@ -1,3 +1,4 @@
+import {mapReadingSection,summarizeReadingBook,publishReadingDigest} from '../_shared/reading-guides.mjs';
 import {imagePrompt,coverStyleVersion,coverImageDefaults} from '../_shared/book-cover-design.mjs';
 import {customerBilling,customerUsage,customerPricingModel} from '../_shared/book-billing-public.mjs';
 import {usageReceipt} from '../_shared/book-usage.mjs';
@@ -34,7 +35,7 @@ async function meter(job:any,operation:string,action:string,payload:any){
  if(action==='finish'&&result.data?.state==='unknown')throw new Error('BOOK_BILLING: BOOK_USAGE_RECONCILIATION');
  return result.data;
 }
-const modelFor=(job:any)=>createBookModelClient({getEnv:(name:string)=>Deno.env.get(name),
+const modelFor=(job:any,editorial=false)=>createBookModelClient({getEnv:(name:string)=>editorial&&name==='BOOK_REASONING_EFFORT'?(Deno.env.get('BOOK_READER_REASONING_EFFORT')||'low'):Deno.env.get(name),
  beforeCall:async(request:any)=>{if(!job.billing_required)return null;const operation=crypto.randomUUID();await meter(job,operation,'begin',request);return operation;},
  afterCall:async(operation:string,metric:any)=>{await meter(job,operation,'finish',metric);},
  onUsage:async(metric:unknown)=>{const result=await db.from('book_model_usage').insert({job_id:job.id,user_id:job.user_id,section:job.cursor,phase:job.status,usage:metric});if(result.error)console.error('book_usage_receipt_failed',job.id);}});
@@ -46,6 +47,21 @@ async function step(job:any,token:string) {
   const source=requireOk(await db.storage.from('private-books').download(`${job.user_id}/${job.id}/source`));
   if(source.size>uploadLimits.maxFileBytes||await hash(await source.arrayBuffer())!==job.source_sha) throw new Error('The source upload is incomplete or changed. Upload the same file again.');
   patch.status='processing';
+ } else if(job.visibility==='public') {
+  // Shared editions produce a navigation map and orientation, never per-book skills.
+  if(job.cursor<job.chunks.length){
+   const note=await mapReadingSection(job.chunks[job.cursor],job.cursor,modelJson,job.generation_feedback?.phase==='reading-map'&&job.generation_feedback?.sectionIndex===job.cursor?job.generation_feedback:null);
+   patch.notes=[...job.notes,note];patch.cursor=job.cursor+1;patch.status='processing';
+   if(job.cursor===0&&typeof note.bookTitle==='string'&&note.bookTitle.trim())patch.title=note.bookTitle.slice(0,200);
+   if(job.cursor===0&&typeof note.bookAuthor==='string'&&note.bookAuthor.trim())patch.author=note.bookAuthor.slice(0,200);
+  }else if(!job.artifacts?.['reader/digest.json']){
+   // Checkpoint the source-reviewed editorial before generating orientation/questions.
+   patch.artifacts={...job.artifacts,...await compileReader(job,modelFor(job,true))};
+  }else if(job.artifacts['reading/map.json']&&JSON.parse(job.artifacts['reading/map.json']).summary!==job.artifacts['reader/digest.md']){
+   patch.artifacts=publishReadingDigest(job,job.artifacts);
+  }else if(!job.artifacts['reading/map.json']){
+   patch.artifacts=await summarizeReadingBook(job,modelJson,hash);
+  }else{patch.status='ready';patch.run_state='complete';patch.cover_status=job.cover_path?'ready':Deno.env.get('OPENAI_API_KEY')?'pending':'skipped';}
  } else if(job.cursor<job.chunks.length) {
   const batch=await distillSectionBatch({chunks:job.chunks,notes:job.notes,cursor:job.cursor,
    concurrency:sectionConcurrency(Deno.env.get('BOOK_SECTION_CONCURRENCY')||'1'),
@@ -78,7 +94,7 @@ async function step(job:any,token:string) {
  } else if(!job.artifacts) {
   patch.artifacts=await compileDistillation(job,job.notes,modelJson,hash);patch.skill_summary=skillSummary(patch.artifacts);patch.status='processing';patch.attempts=0;
  } else {
-  if(!job.artifacts['reader/digest.md'])patch.artifacts={...job.artifacts,...await compileReader(job,modelJson)};
+  if(!job.artifacts['reader/digest.md'])patch.artifacts={...job.artifacts,...await compileReader(job,modelFor(job,true))};
   patch.status='ready';patch.run_state='complete';patch.cover_status=job.cover_path?'ready':Deno.env.get('OPENAI_API_KEY')?'pending':'skipped';
  }
  let save=db.from('book_processing_jobs').update(patch).eq('id',job.id).eq('lease_token',token);
@@ -95,7 +111,7 @@ async function processCover(job:any) {
  try {
   if(!Deno.env.get('OPENAI_API_KEY'))throw Error('BOOK_BILLING: Cover generation is not configured');
   if(job.billing_required){operation=crypto.randomUUID();try{await meter(job,operation,'begin',{kind:'image',model:metric.requestedModel,inputBound:new TextEncoder().encode(coverPrompt).length+1024,outputBound:10000});}catch(error){operation=null;throw error;}}
-  const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${Deno.env.get('OPENAI_API_KEY')}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||coverImageDefaults.model,prompt:coverPrompt,size:coverImageDefaults.size,quality:coverImageDefaults.quality,n:1}),signal:AbortSignal.timeout(110000)});
+  const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${Deno.env.get('OPENAI_API_KEY')}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||coverImageDefaults.model,prompt:coverPrompt,size:coverImageDefaults.size,quality:coverImageDefaults.quality,background:'opaque',n:1}),signal:AbortSignal.timeout(110000)});
   if(!response.ok) throw new Error('The book and skill are ready, but cover generation failed. Retry to finish the cover.');
   const result=await response.json();
   const count=(value:unknown)=>Number.isSafeInteger(value)&&Number(value)>=0?Number(value):null;
@@ -157,6 +173,23 @@ Deno.serve(async req=>{
    const claim=requireOk(await db.rpc('claim_book_processing_job'));
    if(!claim?.id){const cover=requireOk(await db.rpc('claim_book_cover'));return reply(cover?.id?await processCover(cover):{idle:true});}
    const result=await processClaim(claim);return reply(result.error?{error:result.error}:{processed:claim.id,status:result.job?.status},result.error?502:200);
+  }
+  if(input.action==='refresh-digest') {
+   const runner=Deno.env.get('BOOK_QUEUE_RUNNER_SECRET');
+   const isRunner=runner&&await hash(new TextEncoder().encode(bearer))===await hash(new TextEncoder().encode(runner));
+   if(!isRunner&&!await verifyOperator(bearer,{url,serviceKey}))return reply({error:'Digest refresh requires operator authorization.'},403);
+   if(!/^[a-f0-9-]{36}$/i.test(input.id||''))return reply({error:'Invalid book ID'},400);
+   const target=requireOk(await db.from('book_processing_jobs').select('*').eq('id',input.id).eq('visibility','public').maybeSingle());
+   if(!target||target.status!=='ready'||!target.artifacts?.['reading/map.json'])return reply({error:'Finish processing before refreshing this digest.'},409);
+   if(target.artifacts['reader/digest.json'])return reply({id:target.id,refreshed:false});
+   // Publish atomically after review; the existing page and passages stay available.
+   let reader;
+   try{reader=await compileReader(target,modelFor(target,true));}catch(error){
+    if((error as any)?.generationFeedback)requireOk(await db.from('book_processing_jobs').update({generation_feedback:(error as any).generationFeedback}).eq('id',target.id).eq('updated_at',target.updated_at));
+    throw error;
+   }
+   requireOk(await db.from('book_processing_jobs').update({artifacts:publishReadingDigest(target,reader),generation_feedback:null,updated_at:new Date().toISOString()}).eq('id',target.id).eq('updated_at',target.updated_at).eq('status','ready').select('id').single());
+   return reply({id:target.id,refreshed:true});
   }
   if(input.action==='settle-usage') {
    if(!await verifyOperator(bearer,{url,serviceKey}))return reply({error:'Usage settlement requires server operator authorization.'},403);
@@ -226,7 +259,7 @@ Deno.serve(async req=>{
   }
   if(input.action==='create') {
    if(!providerKey())return reply({error:'Book processing is being connected. Please try again later.'},503);
-   if(input.size!==undefined&&(!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes))return reply({error:'Choose a non-empty source file up to 50 MB.'},400);
+   if(input.size!==undefined&&(!Number.isSafeInteger(input.size)||input.size<1||input.size>uploadLimits.maxFileBytes))return reply({error:`Choose a non-empty source file up to ${Math.round(uploadLimits.maxFileBytes/1024/1024)} MB.`},400);
    if(typeof input.name!=='string'||input.name.length>255||! /\.(pdf|epub|docx|rtf|html|htm|xhtml|txt|text|md|markdown|rst|adoc|asciidoc|collection\.zip)$/i.test(input.name)||typeof input.text!=='string'||input.text.length<100||input.text.length>uploadLimits.maxTextCharacters||! /^[a-f0-9]{64}$/.test(input.sha||''))return reply({error:'Choose a supported source with 100 to six million readable characters.'},400);
    const options=processingOptions(input.options);
    const source=splitSource(sanitizeSource(input.text), input.extraction?.headings||[]);
@@ -248,6 +281,7 @@ Deno.serve(async req=>{
   }
   if(!/^[a-f0-9-]{36}$/i.test(input.id||''))return reply({error:'Invalid book ID'},400);
   const {data:job}=await db.from('book_processing_jobs').select('*').eq('id',input.id).eq('user_id',user.id).maybeSingle();if(!job)return reply({error:'Book not found'},404);
+  if(job.visibility==='public'&&!['status','usage'].includes(input.action))return reply({error:'Use the shared library to access this edition.'},409);
   if(['archive','restore','delete-book'].includes(input.action)) {
    if(input.action==='delete-book'&&input.confirmTitle!==job.title)return reply({error:'Confirm the book title before permanent deletion.'},400);
    const managed=await db.rpc('manage_private_book',{p_user:user.id,p_id:job.id,p_action:input.action==='delete-book'?'prepare-delete':input.action});
@@ -374,6 +408,7 @@ Deno.serve(async req=>{
    const saved=requireOk(await db.from('book_processing_jobs').update({run_state:'paused',updated_at:new Date().toISOString()}).eq('id',job.id).neq('run_state','complete').select().maybeSingle());
    return reply({job:publicJob(saved||job)});
   }
+  if(job.visibility==='public'&&input.action!=='status')return reply({error:'Use the shared library to access this edition.'},409);
   if(['enqueue','retry','generate','process'].includes(input.action)&&job.billing_required&&job.billing?.state!=='held')return reply({error:'Review token rates and approve a spending limit before starting hosted processing.',code:'BOOK_PRICE_REQUIRED',job:publicJob(job)},402);
   if(['enqueue','retry','generate'].includes(input.action)) {
    if(job.source_import&&job.status==='uploaded')return reply({error:'Finish saving the original and extracted text before processing.'},409);

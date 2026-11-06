@@ -39,3 +39,7 @@ The old draft prompt targets approximately 1,500 words, paragraphs and idea-led
 headings. The earlier private renderer displayed the concatenated section notes in `book.md`; the reader now displays the separate `reader/digest.md`. The distinction is purpose, not a demonstrated model-quality
 ranking. Retain exhaustive source extraction for the agent, and use the editorial
 contract to write the reader artifact from the same grounded evidence.
+
+## Shared upload processing
+
+Shared uploads use `reader-digest-v2` and `compileReader` for the main digest: 4–6 idea-led sections and 1,200–1,800 words for full books, with paragraph-level original-source review. Scene coordinates feed evidence selection. The worker checkpoints the reviewed digest before generating the short orientation and reader questions. The short orientation is catalog copy, not the digest. An operator can refresh an existing published digest atomically without re-extracting its source, rebuilding maps, changing questions, or regenerating its cover.

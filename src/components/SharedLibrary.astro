@@ -1,0 +1,8 @@
+---
+import '../styles/book-gallery.css';
+import '../styles/book-library-card.css';
+interface Props { mine?: boolean; }
+const {mine=false}=Astro.props;
+---
+<section class="awb-section pb-10" data-shared-library data-mine={mine?'true':'false'} hidden><h2 class="font-serif text-3xl">{mine?'Your shared books':'From the shared library'}</h2><p data-shared-status class="mt-3 text-sm text-soft" role="status"></p><div data-shared-books class="library-grid mt-5"></div><button type="button" data-shared-more class="awb-pill mt-5" hidden>More books</button></section>
+<script>import {mountSharedLibraries} from '../lib/shared-library';mountSharedLibraries();</script>

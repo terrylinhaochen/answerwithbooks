@@ -47,8 +47,8 @@ for (const file of htmlFiles) {
   const text = stripTags(html);
   const jsonLd = jsonLdBlocks(html, path);
   const articleBlocks = jsonLd.filter((block) => blockContainsType(block, 'Article'));
-  const isBookDetail = /^\/books\/[^/]+\/$/.test(path);
-  const isAnswerDetail = /^\/answers\/[^/]+\/$/.test(path);
+  const isBookDetail = !isNoindex && /^\/books\/[^/]+\/$/.test(path);
+  const isAnswerDetail = !isNoindex && /^\/answers\/[^/]+\/$/.test(path);
   const isCatalogDetail = isBookDetail || isAnswerDetail;
 
   requireValue(title, path, 'missing <title>');

@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import BookJacket from './BookJacket.astro';
+import '../styles/book-cover.css';
 import { bookPalettes } from '../lib/book-palettes';
 interface Props { book: CollectionEntry<'books'>; size?: 'xs' | 'sm' | 'md' | 'lg'; class?: string; priority?: boolean; }
 const { book, size = 'md', priority = false } = Astro.props;
@@ -9,9 +10,3 @@ const sizeClass = { xs: 'w-14 sm:w-16', sm: 'w-16 sm:w-20', md: 'w-20 sm:w-28', 
 <a href={`/books/${book.id}/`} class={`book-cover book-cover--${size} ${sizeClass} ${Astro.props.class ?? ''}`} aria-label={`Open ${book.data.title}`}>
  <span class="book-cover-object"><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} loading={priority ? 'eager' : 'lazy'} /></span>
 </a>
-<style>
- .book-cover { display: block; position: relative; aspect-ratio: 2 / 3; perspective: 900px; align-self: start; margin-block: 8px; text-decoration: none; }
- .book-cover-object { display: block; transform-style: preserve-3d; transform: rotateY(-18deg) rotateZ(-3deg); transition: transform .3s ease; }
- .book-cover:hover .book-cover-object, .book-cover:focus-visible .book-cover-object { transform: translateY(-4px) rotateY(-26deg) rotateZ(-1deg); }
- @media (prefers-reduced-motion: reduce) { .book-cover-object { transition: none; } }
-</style>

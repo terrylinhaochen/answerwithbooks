@@ -60,3 +60,14 @@ Color palette: teal backdrop, ivory/yellow/coral accents, dark teal outlines.
 Text: absolutely no text.
 Constraints: new original image, not an edit of an existing cover. No actual brand or platform logos, no generated letters or words or tiny text, no realistic people, no watermark, no UI frame, no gradients, no texture, no photorealism, no tiny decorations, no crowded elements. Do not place anything on the left side. Keep the backdrop truly uniform.
 ```
+
+
+## Private question guides
+
+Private guides follow this same art direction. The repeated green book-jacket collage has been removed. Covers use a short HTML label, a distinct question-specific emblem, and a saturated background; source book jackets remain in the separate books list.
+
+For newly generated guides, `_shared/guide-cover.mjs` asks the language model to plan the metaphor, short label, and palette from the question and reading. Recent covers in the same account are supplied to discourage repetition. A separate queue stage calls the existing hosted image provider and stores the image in `private-books`. The API signs image URLs after owner checks. Image failure leaves the reading available. The reader and saved-guide list refresh while artwork is pending.
+
+The two initial private guide illustrations were created with the built-in image-generation tool, visually inspected against the existing covers, copied into the workspace, and imported into their owners' private guide records. Their exact prompts and final PNG files are recorded in `docs/verification/hosted-guides-2026-11-06/covers/`. Source images were resized to 1536 × 864. This is a cover-only update; passages and editorial text were preserved.
+
+Verification distinguishes the two paths: built-in-generated cover import, private storage, fresh signed-image readback, and desktop/mobile rendering were checked live. Automatic planning/image requests, queue claims/retries, and failure isolation were checked with transport fixtures and local PostgreSQL; a new paid hosted image-generation job was not run for this repair. Visual review is still needed when curating future covers.
