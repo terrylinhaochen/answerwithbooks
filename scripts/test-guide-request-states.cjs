@@ -1,4 +1,5 @@
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
+const origin=process.env.AWB_TEST_ORIGIN||'http://127.0.0.1:4321';
 (async()=>{const browser=await chromium.launch({channel:'chrome',headless:true});try{
  const context=await browser.newContext({viewport:{width:1280,height:950}});
  await context.addInitScript(()=>localStorage.setItem('sb-yozeqanibszoxnowmvsm-auth-token',JSON.stringify({access_token:'fixture',refresh_token:'fixture',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:'owner',aud:'authenticated'}})));
@@ -20,7 +21,7 @@ const {chromium}=require('playwright');const assert=require('node:assert/strict'
   throw Error('Unexpected request '+input.action);
  });
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto('http://127.0.0.1:4321/guides/');await page.locator('#guide-question').fill('How do I find work worth doing?');await page.getByRole('button',{name:'Create guide',exact:true}).click();
+ await page.goto(origin+'/guides/');await page.locator('#guide-question').fill('How do I find work worth doing?');await page.getByRole('button',{name:'Create guide',exact:true}).click();
  await page.locator('[data-guide-checking]:visible').waitFor();assert.equal(await page.locator('[data-guide-processing]').isVisible(),false);
  await page.waitForTimeout(250);assert.equal(await page.locator('[data-guide-checking]').isVisible(),true);release();
  await page.locator('[data-guide-access]:visible').waitFor();assert.equal(await page.locator('[data-guide-processing]').isVisible(),false);assert.equal(await page.locator('[data-guide-question]').isVisible(),false);
@@ -29,17 +30,17 @@ const {chromium}=require('playwright');const assert=require('node:assert/strict'
  await page.setViewportSize({width:390,height:844});await page.locator('[data-guide-dialog]').screenshot({path:'/private/tmp/awb-guide-plan-mobile.png'});
  assert.ok(await page.locator('[data-guide-dialog]').evaluate(e=>e.scrollWidth<=e.clientWidth+1));
  await page.locator('[data-edit-question]').click();assert.equal(await page.locator('[data-guide-question] textarea').inputValue(),'How do I find work worth doing?');assert.equal(await page.locator('[data-selected-source]').isVisible(),false);
- mode='accepted';gate=new Promise(resolve=>release=resolve);await page.getByRole('button',{name:'Find passages',exact:true}).click();await page.locator('[data-guide-checking]:visible').waitFor();assert.equal(await page.locator('[data-guide-processing]').isVisible(),false);release();
+ mode='accepted';gate=new Promise(resolve=>release=resolve);await page.getByRole('button',{name:'Suggest books',exact:true}).click();await page.locator('[data-guide-checking]:visible').waitFor();assert.equal(await page.locator('[data-guide-processing]').isVisible(),false);release();
  await page.locator('[data-guide-processing]:visible').waitFor();assert.equal(await page.locator('[data-processing-cover]').isVisible(),true);assert.match(await page.locator('[data-processing-cover]').innerText(),/taking shape/);
  await page.waitForTimeout(250);assert.equal(await page.locator('[data-guide-processing]').isVisible(),true);
  await page.locator('[data-guide-dialog]').screenshot({path:'/private/tmp/awb-guide-processing-mobile.png'});
  // Upgrade creates checkout directly, with visible retry and no Billing-page detour.
- mode='subscription';gate=Promise.resolve();await page.goto('http://127.0.0.1:4321/guides/');await page.locator('#guide-question').fill('Keep this question through checkout');await page.getByRole('button',{name:'Create guide',exact:true}).click();await page.locator('[data-guide-access]:visible').waitFor();
+ mode='subscription';gate=Promise.resolve();await page.goto(origin+'/guides/');await page.locator('#guide-question').fill('Keep this question through checkout');await page.getByRole('button',{name:'Create guide',exact:true}).click();await page.locator('[data-guide-access]:visible').waitFor();
  const pay=page.getByRole('button',{name:'Subscribe · $24/month →',exact:true});await pay.click();await page.getByText('Checkout temporarily unavailable. Try again.',{exact:true}).waitFor();assert.equal(await pay.isDisabled(),false);assert.equal(new URL(page.url()).pathname,'/guides/');
  paymentMode='unsafe';await pay.click();await page.getByText('Could not open the payment page. Please try again.',{exact:true}).waitFor();assert.equal(new URL(page.url()).hostname,'127.0.0.1');
  assert.equal(await page.evaluate(()=>sessionStorage.getItem('awb:guide-question-draft')),'Keep this question through checkout');
  paymentMode='valid';await pay.click();await page.waitForURL('https://checkout.stripe.com/**');assert.equal(checkoutCalls,3);
- mode='paid';await page.goto('http://127.0.0.1:4321/guides/');await page.getByRole('button',{name:'Create guide',exact:true}).click();await page.getByRole('button',{name:'Manage subscription →',exact:true}).click();await page.waitForURL('https://billing.stripe.com/**');assert.equal(portalCalls,1);assert.equal(checkoutCalls,3);
+ mode='paid';await page.goto(origin+'/guides/');await page.getByRole('button',{name:'Create guide',exact:true}).click();await page.getByRole('button',{name:'Manage subscription →',exact:true}).click();await page.waitForURL('https://billing.stripe.com/**');assert.equal(portalCalls,1);assert.equal(checkoutCalls,3);
  console.log('PASS upgrade opens Stripe checkout directly; failed checkout retries; unsafe redirect rejected; question preserved; paid quota opens management without another checkout. No live payment sessions.');
  assert.deepEqual(errors,[]);console.log('PASS delayed acceptance has no fake processing; rejected request has a single plan card; edit preserves question; accepted processing persists with mobile cover.');
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1)});
