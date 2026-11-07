@@ -6,7 +6,6 @@ import '../styles/book-jacket.css';
 import '../styles/collector-theme.css';
 import '../styles/reading-surfaces.css';
 import Analytics from '../components/Analytics.astro';
-import AnalyticsNotice from '../components/AnalyticsNotice.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import BrandMark from '../components/BrandMark.astro';
 import BookPreviewDialog from '../components/BookPreviewDialog.astro';
@@ -140,7 +139,6 @@ const current = Astro.url.pathname;
       </div>
     </header>}
 
-    <AnalyticsNotice />
 
     <main class="flex-1 w-full">
       <slot />
