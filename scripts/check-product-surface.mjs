@@ -38,7 +38,8 @@ for (const route of ['', 'books', 'tools', 'guides', 'privacy']) {
  const ids = JSON.parse(html.match(/const ids = (\[[^;]*\]);/)?.[1] || '[]');
  assert.equal(ids.filter(id => id === 'G-FNWRC3EMV4').length, 1, `${route}: primary Google Analytics destination appears exactly once`);
  assert.equal(ids.length, new Set(ids).size, 'Analytics destinations must not duplicate pageviews');
- assert.match(html, /data-analytics-notice/, `${route}: discoverable analytics choice`);
+ assert.doesNotMatch(html, /data-analytics-notice/, `${route}: no analytics banner`);
+ assert.match(html, /href="\/privacy\/#privacy-choices"/, `${route}: privacy choices remain discoverable`);
 }
 const sharedShelf = read('shelf');
 assert.match(sharedShelf, /name="robots" content="noindex, follow"/);

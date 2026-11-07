@@ -5,15 +5,14 @@ const { ids } = Astro.props;
 <script is:inline define:vars={{ ids }}>
   (() => {
     const key = 'awb:analytics-consent:v1';
-    const maxAge = 180 * 24 * 60 * 60 * 1000;
     const blocked = navigator.globalPrivacyControl === true || navigator.doNotTrack === '1';
     const privateRoute = /^\/(guides|login|signup|auth|reset-password|profile|my-books|your-book|manage-skills|processing|connect-agent|billing|api-keys|onboarding|upload|ask|embed|acquired-intelligence|community)(\/|$)/.test(location.pathname);
-    let choice = null;
+    let choice = 'on';
     let loaded = false;
     try {
       const stored = JSON.parse(localStorage.getItem(key) || 'null');
-      if (['on', 'off'].includes(stored?.value) && Number.isFinite(stored.at) && stored.at <= Date.now() && Date.now() - stored.at < maxAge) choice = stored.value;
-    } catch { /* No storage or invalid preference: analytics stays off. */ }
+      if (['on', 'off'].includes(stored?.value) && Number.isFinite(stored.at) && stored.at <= Date.now()) choice = stored.value;
+    } catch { /* No saved preference: use the approved default analytics setting. */ }
     if (blocked) choice = 'off';
     const disable = () => ids.forEach(id => { window[`ga-disable-${id}`] = true; });
     const clearAnalyticsCookies = () => {
@@ -25,7 +24,7 @@ const { ids } = Astro.props;
         domains.forEach(domain => { document.cookie = `${name}=; Max-Age=0; path=/${domain}; SameSite=Lax`; });
       }
     };
-    // Google's basic consent mode: no Google Analytics requests until a visitor opts in.
+    // Analytics defaults on for public pages; saved opt-outs and browser privacy signals win.
     window.dataLayer = window.dataLayer || [];
     const gtag = function () { window.dataLayer.push(arguments); };
     window.gtag = gtag;
@@ -50,11 +49,8 @@ const { ids } = Astro.props;
       document.head.appendChild(script);
     };
     const render = () => {
-      document.querySelectorAll('[data-analytics-notice]').forEach(node => {
-        node.hidden = choice !== null || blocked || privateRoute || !ids.length || /^\/privacy(\/|$)/.test(location.pathname);
-      });
       document.querySelectorAll('[data-analytics-status]').forEach(node => {
-        node.textContent = blocked ? 'Analytics is off because your browser requests no tracking.' : `Optional analytics is ${choice === 'on' ? 'on' : 'off'}. This choice applies to this browser.`;
+        node.textContent = blocked ? 'Analytics is off because your browser requests no tracking.' : `Analytics is ${choice === 'on' ? 'on' : 'off'}. This choice applies to this browser.`;
       });
       document.querySelectorAll('[data-analytics-choice]').forEach(button => {
         button.disabled = blocked && button.dataset.analyticsChoice === 'on';

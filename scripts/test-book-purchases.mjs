@@ -19,7 +19,7 @@ try {
    const link = doc.querySelector('[data-book-purchase]');
    const card = doc.querySelector('#buy-the-book');
    const digest = doc.querySelector('[data-reading-content]');
-   const agent = doc.querySelector('[data-book-agent]');
+   const agent = doc.querySelector('[data-book-agent], [data-book-reading-cta]');
    return { count: doc.querySelectorAll('[data-book-purchase]').length, href: link?.getAttribute('href'), slug: link?.dataset.bookSlug, target: link?.target, rel: link?.rel, afterDigest: Boolean(digest?.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING), beforeAgent: Boolean(card?.compareDocumentPosition(agent) & Node.DOCUMENT_POSITION_FOLLOWING) };
   }, html);
   const record = verified.find(record => record.slug === slug);
@@ -32,11 +32,11 @@ try {
  console.log(`PASS ${entries.length} books: verified destinations, one card each, correct placement, no affiliate tags.`);
  await page.close();
  const cases = [
-  {name:'default off'},
+  {name:'default on',events:1},
   {name:'consent on',value:'on',events:1},
   {name:'consent off',value:'off'},
-  {name:'expired consent',value:'on',age:181*86400000},
-  {name:'future consent',value:'on',age:-86400000},
+  {name:'old on preference',value:'on',age:181*86400000,events:1},
+  {name:'invalid timestamp uses default',value:'on',age:-86400000,events:1},
   {name:'Do Not Track',value:'on',dnt:true},
   {name:'Global Privacy Control',value:'on',gpc:true},
   {name:'JavaScript disabled',javaScriptEnabled:false},
@@ -71,7 +71,7 @@ try {
    await page.evaluate(()=>{window.gtag=()=>{throw new Error('simulated unavailable analytics');};});
    await outbound(); // Analytics failure cannot block the native link.
    await page.goto(`${base}/privacy/`);
-   await page.getByRole('button',{name:'Keep analytics off',exact:true}).click();await page.waitForTimeout(300);
+   await page.getByRole('button',{name:'Turn analytics off',exact:true}).click();await page.waitForTimeout(300);
    await page.goto(bookUrl);await outbound();assert.equal((await getEvents()).length,0,'withdrawal persists');
   }
   console.log(`PASS ${test.name}: outbound link works; ${test.events?'consented event and withdrawal verified':'no purchase event'}.`);
