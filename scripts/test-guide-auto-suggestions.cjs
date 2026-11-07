@@ -23,7 +23,7 @@ const books=[{id:'00000000-0000-4000-8000-000000000001',title:'Shoe Dog',author:
   assert.equal(requests.filter(r=>r.action==='suggest').length,1);assert.equal(requests.some(r=>['create','propose','confirm'].includes(r.action)),false);
   await page.locator('[data-edit-guide-books]').click();await page.getByLabel('Open · Andre Agassi',{exact:true}).uncheck();await page.getByRole('button',{name:'Update books',exact:true}).click();
   await page.locator('[data-guide-proposal]:visible').waitFor();assert.equal(await page.locator('[data-proposal-books] li').count(),1);assert.equal(requests.filter(r=>r.action==='suggest').length,1);
-  await page.getByLabel('~10 minutes',{exact:true}).check();await page.locator('[data-confirm-guide]').click();await page.waitForURL('**/login/?from=guides');
+  await page.getByLabel('~10 minutes',{exact:true}).check();await page.locator('[data-confirm-guide]').click();await page.waitForURL('**/login/?from=guides&resume=*');
   const saved=await page.evaluate(()=>JSON.parse(sessionStorage.getItem('awb:guide-book-review')));assert.deepEqual(saved.bookIds,[books[0].id]);assert.equal(saved.length,'short');
   // Simulate returning from sign-in: restored review, no extra recommendation call.
   await context.addInitScript(()=>localStorage.setItem('sb-yozeqanibszoxnowmvsm-auth-token',JSON.stringify({access_token:'fixture',refresh_token:'fixture',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:'owner',aud:'authenticated'}})));

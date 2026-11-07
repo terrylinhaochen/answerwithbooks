@@ -1,3 +1,4 @@
+import { guideAuthPaths } from './guide-draft.mjs';
 import { supabase } from './supabase';
 import { consumeAuthCallback, emailRedirectTo } from './auth-callback';
 import { hasPendingOnboarding, persistOnboardingProfile } from './onboarding';
@@ -15,7 +16,8 @@ const loginCopy = document.querySelector<HTMLElement>('[data-login-copy]');
 const signupLink = document.querySelector<HTMLAnchorElement>('[data-signup-link]');
 const from = new URLSearchParams(location.search).get('from');
 const pendingOnboarding = from === 'onboarding' || hasPendingOnboarding();
-const destination = from === 'guides' ? '/guides/' : from === 'agent' ? '/connect-agent/' : from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : from === 'upload' ? '/upload/' : '/my-books/';
+const guideReturn = guideAuthPaths(location.search);
+const destination = from === 'guides' ? guideReturn!.destination : from === 'agent' ? '/connect-agent/' : from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : from === 'upload' ? '/upload/' : '/my-books/';
 let passwordMode = false;
 let busy = false;
 let resendAt = 0;
@@ -24,7 +26,7 @@ if (!email.value) email.value = readSignupFlow()?.email || '';
 
 if (from === 'guides') {
   if (loginCopy) loginCopy.textContent = 'Sign in to create and save your guide.';
-  if (signupLink) signupLink.href = '/signup/?from=guides';
+  if (signupLink) signupLink.href = guideReturn!.signup;
 } else if (from === 'agent') {
   if (loginCopy) loginCopy.textContent = 'Sign in to connect your agent to your private books.';
   if (signupLink) signupLink.href = '/signup/?from=agent';
@@ -100,7 +102,7 @@ form.addEventListener('submit', async event => {
     } else {
       const { error } = await supabase.auth.signInWithOtp({
         email: address,
-        options: { shouldCreateUser: false, emailRedirectTo: emailRedirectTo(from === 'guides' ? '/auth/confirm/?from=guides' : from === 'agent' ? '/auth/confirm/?from=agent' : from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/') },
+        options: { shouldCreateUser: false, emailRedirectTo: emailRedirectTo(from === 'guides' ? guideReturn!.callback : from === 'agent' ? '/auth/confirm/?from=agent' : from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/') },
       });
       resendAt = Date.now() + 60000;
       // Do not reveal whether an address has an account.
