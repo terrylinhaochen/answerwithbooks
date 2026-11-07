@@ -3,13 +3,16 @@ import assert from 'node:assert/strict';
 Deno.env.set('SUPABASE_URL','https://reading-test.invalid');Deno.env.set('SUPABASE_SERVICE_ROLE_KEY','synthetic-service');
 const owner='00000000-0000-4000-8000-000000000001',other='00000000-0000-4000-8000-000000000002',id='00000000-0000-4000-8000-000000000003';
 let testPlan={active:true,used:0,limit:30};
+let suggestionAllowed=true,modelCalls=0;
+Deno.env.set('BOOK_PROCESSING_MODEL','gpt-4.1-mini');Deno.env.set('OPENAI_API_KEY','fixture');
 let archivedSource=false,deletingSource=false,bookReads=0;
 let handler:any;Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
 let rows:any[]=[{id,user_id:owner,question:'What is worth doing?',status:'awaiting_confirmation',book_ids:[],proposal:{bookIds:[]},progress:{internal:'private'},lease_token:'secret'}],wakes=0;
 const json=(v:any,status=200)=>new Response(JSON.stringify(v),{status,headers:{'Content-Type':'application/json'}});
-globalThis.fetch=async(input:any,init?:RequestInit)=>{const req=new Request(input,init),url=new URL(req.url);assert.equal(url.hostname,'reading-test.invalid');
+globalThis.fetch=async(input:any,init?:RequestInit)=>{const req=new Request(input,init),url=new URL(req.url);if(url.hostname==='api.openai.com'){modelCalls++;return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify({bookIds:['00000000-0000-4000-8000-000000000004'],connection:'A useful starting point.',gap:''})}}]});}assert.equal(url.hostname,'reading-test.invalid');
  if(url.pathname==='/auth/v1/user')return req.headers.get('authorization')==='Bearer owner'?json({id:owner}):req.headers.get('authorization')==='Bearer other'?json({id:other}):json({message:'Unauthorized'},401);
  if(url.pathname==='/rest/v1/rpc/wake_reading_guides'){wakes++;return json(null);}
+ if(url.pathname==='/rest/v1/rpc/consume_guide_suggestion'){const body=await req.json();assert.match(body.p_bucket,/^[a-f0-9]{64}$/);return json(suggestionAllowed);}
  if(url.pathname==='/rest/v1/rpc/reader_plan')return json(testPlan);
  if(url.pathname==='/rest/v1/rpc/consume_reading_request')return json(true);
  if(url.pathname==='/rest/v1/book_processing_jobs'){
@@ -20,6 +23,8 @@ globalThis.fetch=async(input:any,init?:RequestInit)=>{const req=new Request(inpu
    if(!allowed||deletingSource)return json([]);
    return json([{id:'book-owned',title:'Owned book',author:'Writer',visibility:'private',archived_at:'2026-11-06T00:00:00Z',source_text:'Original archived passage.',cover_status:'none'}]);
   }
+  if(url.searchParams.get('select')==='id,title,author,artifacts'){assert.equal(url.searchParams.get('visibility'),'eq.public');assert.equal(url.searchParams.get('archived_at'),'is.null');assert.equal(url.searchParams.get('deletion_pending'),'eq.false');return json([{id:'00000000-0000-4000-8000-000000000004',title:'Public source',artifacts:{}}]);}
+  if(url.searchParams.get('or')==='(visibility.eq.public)')return json([{id:'00000000-0000-4000-8000-000000000004',title:'Public source',cover_status:'none'}]);
   if(url.searchParams.get('visibility')==='eq.public'){assert.equal(url.searchParams.get('status'),'eq.ready');assert.equal(url.searchParams.get('is_current'),'eq.true');assert.equal(url.searchParams.get('duplicate_of'),'is.null');return json(url.searchParams.get('id')?.includes('00000000-0000-4000-8000-000000000004')?[{id:'00000000-0000-4000-8000-000000000004'}]:[]);}
 
   assert.equal(url.searchParams.get('or'),`(visibility.eq.public,user_id.eq.${owner})`);
@@ -28,7 +33,7 @@ globalThis.fetch=async(input:any,init?:RequestInit)=>{const req=new Request(inpu
  }
  if(url.pathname==='/storage/v1/object/sign/private-books/owner/book/cover.png')return json({signedURL:'/object/sign/private-books/owner/book/cover.png?token=fixture'});
  if(url.pathname==='/rest/v1/reader_guide_state')return json([]);
- if(url.pathname==='/rest/v1/rpc/confirm_reader_guide'){const body=await req.json();const row=rows.find(r=>r.id===body.p_id&&r.user_id===body.p_user);row.status='composing';row.length=body.p_length;return json(row.id);}
+ if(url.pathname==='/rest/v1/rpc/confirm_reader_guide'){const body=await req.json();const row=rows.find(r=>r.id===body.p_id&&r.user_id===body.p_user);if(testPlan.used>=testPlan.limit)return json({message:'FREE_GUIDE_LIMIT'},400);row.status='composing';row.length=body.p_length;return json(row.id);}
  if(url.pathname==='/rest/v1/reading_guides'){
   if(req.method==='POST'){const row={...await req.json(),id:crypto.randomUUID()};rows.push(row);return json({id:row.id});}
   const selected=rows.filter(row=>[...url.searchParams].every(([k,v])=>!v.startsWith('eq.')||String(row[k])===v.slice(3)));
@@ -83,3 +88,19 @@ testPlan.used=3;const rowCount=rows.length;
 const exhausted=await call({action:'propose',question:'One more free question',requestKey:crypto.randomUUID(),bookIds:[chosen]});
 assert.equal(exhausted.status,402);assert.equal((await exhausted.json()).code,'FREE_GUIDE_LIMIT');assert.equal(rows.length,rowCount);
 console.log('PASS free account proposal accepted; exhausted free tier returns upgrade state without adding a job.');
+
+// Public suggestions do not require auth or create guide records/allowances.
+const beforeSuggestions=rows.length;
+assert.equal((await call({action:'suggest',question:'What is worth doing?'},'invalid')).status,200);
+assert.equal(modelCalls,1);assert.equal(rows.length,beforeSuggestions);
+suggestionAllowed=false;assert.equal((await call({action:'suggest',question:'What is worth doing?'},'invalid')).status,429);assert.equal(modelCalls,1);suggestionAllowed=true;
+assert.equal((await call({action:'suggest',question:'x'},'invalid')).status,400);
+// Confirmed selections create directly, with auth, availability, quota and idempotency.
+assert.equal((await call({action:'create',question:'What is worth doing?',bookIds:[chosen],requestKey:crypto.randomUUID(),length:'short'},'invalid')).status,401);
+testPlan={active:false,used:0,limit:3};
+for(const bookIds of [[],[chosen,chosen],[missing]])assert.equal((await call({action:'create',question:'What is worth doing?',bookIds,requestKey:crypto.randomUUID(),length:'short'})).status,bookIds.includes(missing)?409:400);
+const createKey=crypto.randomUUID(),createInput={action:'create',question:'What is worth doing?',bookIds:[chosen],requestKey:createKey,length:'short'};
+assert.equal((await call(createInput)).status,202);const direct=rows.find(r=>r.request_key===createKey);assert.equal(direct.status,'composing');assert.deepEqual(direct.book_ids,[chosen]);assert.equal(direct.length,'short');
+const countAfterCreate=rows.length;assert.equal((await call(createInput)).status,200);assert.equal(rows.length,countAfterCreate);
+testPlan.used=3;const capped=await call({...createInput,requestKey:crypto.randomUUID()});assert.equal(capped.status,402);assert.equal((await capped.json()).code,'FREE_GUIDE_LIMIT');
+console.log('PASS public bounded suggestions without a saved job; direct confirmed creation enforces auth, source scope, quota and idempotency.');

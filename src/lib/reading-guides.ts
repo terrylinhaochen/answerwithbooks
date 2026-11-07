@@ -43,7 +43,7 @@ export async function mountGuides(){
  const processing=root.querySelector<HTMLElement>('[data-guide-processing]')!,ready=root.querySelector<HTMLElement>('[data-guide-ready]')!,newQuestion=root.querySelector<HTMLButtonElement>('[data-new-question]')!;
  let listRequest=0,scrollToSaved=location.hash==='#your-guides';
  let active='',epoch=0,requestKey=crypto.randomUUID(),timer:ReturnType<typeof setTimeout>|undefined,listTimer:ReturnType<typeof setTimeout>|undefined,owner:string|undefined,books:GuideBook[]=[],selected:GuideBook[]=[],catalog:GuideBook[]|null=null;
- const query=new URLSearchParams(location.search),draftKey='awb:guide-question-draft';
+ const query=new URLSearchParams(location.search),draftKey='awb:guide-question-draft',reviewKey='awb:guide-book-review';
  try{question.value=query.get('question')||sessionStorage.getItem(draftKey)||'';}catch{question.value=query.get('question')||'';}if(launchQuestion)launchQuestion.value=question.value;
  const open=()=>{if(!dialog.open)dialog.showModal();};
  root.querySelector('[data-close-guide]')!.addEventListener('click',()=>dialog.close());
@@ -73,7 +73,7 @@ export async function mountGuides(){
   root.querySelector('[data-selected-books]')!.replaceChildren(...selected.map(book=>{const card=bookCard(book),remove=el('button','Remove','text-sm underline mt-2');remove.type='button';remove.setAttribute('aria-label',`Remove ${book.title}`);remove.addEventListener('click',()=>{selected=selected.filter(b=>b!==book);reset();drawSelection();});card.lastElementChild!.append(remove);return card;}));
   const unavailable=selected.filter(b=>!b.id);root.querySelector('[data-book-selection-note]')!.textContent=unavailable.length?`The original text for ${unavailable.map(b=>b.title).join(', ')} isn’t in the shared library yet. Add the source to find excerpts.`:selected.length?'We’ll look for passages in these books.':'We’ll suggest books from the library for your question. You can review them before creating your guide.';
   root.querySelector<HTMLElement>('[data-auto-guide-books]')!.hidden=!selected.length;
-  submit.textContent=selected.length?'Find passages':'Suggest books';
+  submit.textContent=selected.length?'Update books':'Update suggestions';
   login.textContent=selected.length?'Sign in to create and save your guide →':'Sign in to get suggested books →';
   (root.querySelector('[data-guide-upload]') as HTMLElement).hidden=!unavailable.length;submit.disabled=!!unavailable.length;
   const choices=root.querySelector('[data-guide-book-choices]')!;choices.replaceChildren();
@@ -143,18 +143,43 @@ export async function mountGuides(){
    showProcessing(guide.status);timer=setTimeout(()=>poll(id,version),5000);
   }catch(error){if(version!==epoch)return;showError(error);timer=setTimeout(()=>poll(id,version),15000);}
  }
+ const showReview=(sourceBooks:GuideBook[],connection:string)=>{
+  books=sourceBooks;view('proposal');status.textContent='';login.hidden=true;
+  root.querySelector('[data-proposal-question]')!.textContent=question.value;
+  root.querySelector('[data-proposal-books]')!.replaceChildren(...books.map(bookCard));
+  root.querySelector('[data-proposal-connection]')!.textContent=connection;
+  confirm.disabled=!books.length;
+ };
  const begin=async()=>{
   open();if(!form.reportValidity())return;if(selected.some(b=>!b.id)){view('form');drawSelection();return;}
-  const {data}=await supabase.auth.getSession();owner=data.session?.user.id;saveDraft();
-  if(!owner){view('form');login.hidden=false;status.textContent=selected.length?'Sign in to find passages in your chosen books. Your question stays here.':'Sign in and we’ll suggest books for your question automatically. No need to choose books yourself. Your question stays here.';return;}
-  submit.disabled=true;login.hidden=true;const version=++epoch;clearTimeout(timer);view('checking');status.textContent='';
-  try{const result=await guideCall({action:'propose',question:question.value.trim(),requestKey,...(selected.length?{bookIds:selected.map(b=>b.id)}:{})});if(version!==epoch)return;active=result.id;updateUrl();showProcessing('scanning');void list();await poll(active,version);}catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('form');drawSelection();showError(error);}}}finally{submit.disabled=selected.some(b=>!b.id);}
+  saveDraft();login.hidden=true;const version=++epoch;clearTimeout(timer);active='';status.textContent='';
+  if(selected.length){showReview([...selected],'Your selected books. We’ll find original passages after you confirm.');return;}
+  view('checking');root.querySelector('[data-checking-title]')!.textContent='Finding books for your question';root.querySelector('[data-checking-copy]')!.textContent='Looking across the library…';
+  try{const result=await guideCall({action:'suggest',question:question.value.trim()});if(version!==epoch)return;
+   if(!result.books?.length){view('form');drawSelection();status.textContent=result.gap||'No suitable books were found. Try editing your question or choosing books yourself.';return;}
+   showReview(result.books,result.connection);
+  }catch(error){if(version===epoch){view('form');drawSelection();showError(error);}}
  };
- confirm.addEventListener('click',async()=>{confirm.disabled=true;const version=epoch;view('checking');status.textContent='';try{await guideCall({action:'confirm',id:active,length:root.querySelector<HTMLInputElement>('input[name=length]:checked')!.value});if(version!==epoch)return;showProcessing('composing');void list();void loadPlan();await poll(active,version);}catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('proposal');showError(error);}confirm.disabled=false;}}});
+ confirm.addEventListener('click',async()=>{
+  if(confirm.disabled)return;confirm.disabled=true;const version=epoch;
+  const length=root.querySelector<HTMLInputElement>('input[name=length]:checked')!.value;
+  const {data}=await supabase.auth.getSession();if(version!==epoch)return;owner=data.session?.user.id;
+  if(!owner){
+   saveDraft();try{sessionStorage.setItem(reviewKey,JSON.stringify({question:question.value,bookIds:books.map(b=>b.id),length}));}catch{}
+   location.assign('/login/?from=guides');return;
+  }
+  view('checking');root.querySelector('[data-checking-title]')!.textContent='Starting your guide';root.querySelector('[data-checking-copy]')!.textContent='Confirming your books and reading time…';status.textContent='';
+  try{
+   const result=await guideCall(active?{action:'confirm',id:active,length}:{action:'create',question:question.value.trim(),bookIds:books.map(b=>b.id),length,requestKey});
+   if(version!==epoch)return;active=result.id;updateUrl();try{sessionStorage.removeItem(reviewKey);}catch{}
+   showProcessing('composing');void list();void loadPlan();await poll(active,version);
+  }catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('proposal');showError(error);}confirm.disabled=false;}}
+ });
  form.addEventListener('submit',event=>{event.preventDefault();void begin();});
  launcher?.addEventListener('submit',event=>{event.preventDefault();reset();selected=[];(root.querySelector('[data-add-guide-books]') as HTMLDetailsElement).open=false;question.value=launchQuestion!.value;drawSelection();void begin();});
  newQuestion.addEventListener('click',()=>{reset();selected=[];question.value='';saveDraft();drawSelection();question.focus();});
  question.addEventListener('input',()=>{reset();saveDraft();});
+ root.querySelector('[data-edit-suggested-question]')!.addEventListener('click',()=>{reset();selected=[];drawSelection();question.focus();});
  root.querySelector('[data-edit-guide-books]')!.addEventListener('click',()=>{selected=[...books];reset();drawSelection();(root.querySelector('[data-add-guide-books]') as HTMLDetailsElement).open=true;});
  const openBook=async(seed:{id?:string;title:string;author?:string;coverUrl?:string|null;coverColor?:string;question?:string})=>{
   reset();selected=[{id:seed.id||'',title:seed.title,author:seed.author,coverUrl:seed.coverUrl,coverColor:seed.coverColor}];if(seed.question)question.value=seed.question;open();drawSelection();question.focus();const originalSelection=selected[0];
@@ -169,8 +194,20 @@ export async function mountGuides(){
  const {data}=await supabase.auth.getSession();owner=data.session?.user.id;drawSelection();
  // The personal shelf must not wait for public browsing or billing requests.
  const loadPlan=async()=>{const currentOwner=owner;if(!currentOwner)return;try{const plan=await serviceCall('reader-subscription',{action:'status'});if(owner!==currentOwner)return;const allowance=`${Math.max(0,plan.limit-plan.used)} of ${plan.limit} ${plan.active?'':'free '}guides remaining this month`;root.querySelector('[data-guide-plan]')!.textContent=allowance;const caption=root.querySelector('[data-guide-allowance]');if(caption)caption.textContent=allowance;}catch{if(owner===currentOwner)root.querySelector('[data-guide-plan]')!.textContent='Plan status is temporarily unavailable.';}};
- const {data:auth}=supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user.id===owner)return;owner=session?.user.id;listRequest++;clearTimeout(listTimer);reset();root.querySelector('[data-saved-guides]')!.replaceChildren();root.querySelector<HTMLElement>('[data-your-guides]')!.hidden=!owner||modalOnly;const savedLink=root.querySelector<HTMLElement>('[data-open-saved-guides]');if(savedLink)savedLink.hidden=!owner;root.querySelector('[data-guide-plan]')!.textContent='';const caption=root.querySelector('[data-guide-allowance]');if(caption)caption.textContent='3 free guides every month. No card needed.';login.hidden=!!owner;if(owner)setTimeout(()=>{void list();void loadPlan();},0);});
+ const {data:auth}=supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user.id===owner)return;owner=session?.user.id;listRequest++;clearTimeout(listTimer);reset();root.querySelector('[data-saved-guides]')!.replaceChildren();root.querySelector<HTMLElement>('[data-your-guides]')!.hidden=!owner||modalOnly;const savedLink=root.querySelector<HTMLElement>('[data-open-saved-guides]');if(savedLink)savedLink.hidden=!owner;root.querySelector('[data-guide-plan]')!.textContent='';const caption=root.querySelector('[data-guide-allowance]');if(caption)caption.textContent='3 free guides every month. No card needed.';login.hidden=true;if(owner)setTimeout(()=>{void list();void loadPlan();},0);});
  void list();void loadPlan();
+ if(owner&&!query.get('id')){
+  try{const saved=JSON.parse(sessionStorage.getItem(reviewKey)||'null');
+   if(saved&&typeof saved.question==='string'&&Array.isArray(saved.bookIds)&&saved.bookIds.length>0&&saved.bookIds.length<=4){
+    const version=epoch;await loadCatalog();if(version===epoch){
+     const restored=saved.bookIds.map((id:string)=>catalog!.find(book=>book.id===id)).filter(Boolean) as GuideBook[];
+     question.value=saved.question;saveDraft();open();
+     if(restored.length===saved.bookIds.length){showReview(restored,'Your books are saved. Confirm when you’re ready to create your guide.');const length=root.querySelector<HTMLInputElement>(`input[name=length][value="${['short','standard','long'].includes(saved.length)?saved.length:'standard'}"]`);if(length)length.checked=true;}
+     else{view('form');drawSelection();status.textContent='A selected book is no longer available. Update your suggestions.';}
+    }
+   }
+  }catch{status.textContent='Could not restore your books. Your question is saved; please try again.';}
+ }
  if(!modalOnly){
   void loadPublicGuides();
   if(query.get('id')&&owner){active=query.get('id')!;open();void poll(active,epoch);}
