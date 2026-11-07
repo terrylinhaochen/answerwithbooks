@@ -1,3 +1,4 @@
+import {suggestGuideBooks} from '../_shared/guide-suggestions.mjs';
 import {guideMarkdown} from '../_shared/guide-markdown.mjs';
 import {generateGuideCover,validateGuideCoverDesign,decodeImportedGuideCover,guideCoverVersion} from '../_shared/guide-cover.mjs';
 import {createClient} from 'npm:@supabase/supabase-js@2.49.8';
@@ -54,6 +55,20 @@ Deno.serve(async req=>{
    const rows=checked(await db.from('reading_guides').select('id,question,created_at,cover_path,cover_status,cover_design,book_ids').eq('visibility','public').eq('status','ready').order('created_at',{ascending:false}).limit(100));
    return reply({guides:await Promise.all(rows.map(presentGuide))});
   }
+  if(input.action==='suggest'){
+   if(typeof input.question!=='string'||input.question.trim().length<3||input.question.length>2000)return reply({error:'Enter a question between 3 and 2,000 characters.'},400);
+   // Keep only a daily salted digest, never the visitor's IP or question.
+   const ip=(req.headers.get('x-forwarded-for')||req.headers.get('x-real-ip')||'unknown').split(',')[0].trim().slice(0,100);
+   const bucket=await hash(new TextEncoder().encode(`${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}|${new Date().toISOString().slice(0,10)}|${ip}`));
+   if(!checked(await db.rpc('consume_guide_suggestion',{p_bucket:bucket})))return reply({error:'Suggestions are busy. Try again later, or choose books yourself.'},429);
+   const catalog=checked(await db.from('book_processing_jobs').select('id,title,author,artifacts').eq('visibility','public').eq('status','ready').eq('is_current',true).eq('deletion_pending',false).is('archived_at',null).is('duplicate_of',null).order('id').limit(100));
+   let result;
+   try{result=await suggestGuideBooks(input.question.trim(),catalog,createBookModelClient({getEnv:(n:string)=>Deno.env.get(n)}));}
+   catch(error){console.error('guide_suggestion_failed',error instanceof Error?error.message:'Unknown suggestion failure');return reply({error:'Book suggestions are temporarily unavailable. Please retry or choose books yourself.'},503);}
+   const shown=await displayBooks(null,result.bookIds);
+   if(shown.length!==result.bookIds.length)return reply({error:'The library changed. Please try your question again.'},409);
+   return reply({...result,books:result.bookIds.map((id:string)=>shown.find((book:any)=>book.id===id))});
+  }
   const user=bearer?await bookUser(db,bearer):null;
   if(input.action==='get'&&uuid(input.id)){
    const shared=checked(await db.from('reading_guides').select('id,question,status,length,book_ids,guide,created_at,cover_path,cover_status,cover_design,visibility').eq('id',input.id).eq('visibility','public').eq('status','ready').maybeSingle());
@@ -77,6 +92,22 @@ Deno.serve(async req=>{
     input.includeBooks===false?Promise.resolve([]):displayBooks(user.id,visible.flatMap((g:any)=>g.book_ids||[]))
    ]);
    return reply({guides,books});
+  }
+  if(input.action==='create'){
+   if(typeof input.question!=='string'||input.question.trim().length<3||input.question.length>2000||!uuid(input.requestKey)||!['short','standard','long'].includes(input.length))return reply({error:'Check your question and reading time.'},400);
+   if(!Array.isArray(input.bookIds)||input.bookIds.length<1||input.bookIds.length>4||input.bookIds.some((id:unknown)=>!uuid(id))||new Set(input.bookIds).size!==input.bookIds.length)return reply({error:'Confirm one to four different books.'},400);
+   let existing=checked(await db.from('reading_guides').select('id,status').eq('user_id',user.id).eq('request_key',input.requestKey).maybeSingle());
+   if(existing&&['composing','ready'].includes(existing.status))return reply({id:existing.id});
+   if(!existing){
+    const available=checked(await db.from('book_processing_jobs').select('id').eq('visibility','public').eq('status','ready').eq('is_current',true).eq('deletion_pending',false).is('archived_at',null).is('duplicate_of',null).in('id',input.bookIds));
+    if(available.length!==input.bookIds.length)return reply({error:'A selected book is no longer available. Update your books.'},409);
+    if(!checked(await db.rpc('consume_reading_request',{p_user:user.id})))return reply({error:'You have reached today’s reading limit. Please try again later.'},429);
+    const result=await db.from('reading_guides').insert({user_id:user.id,question:input.question.trim(),request_key:input.requestKey,visibility:'public',status:'awaiting_confirmation',book_ids:input.bookIds,proposal:{bookIds:input.bookIds,connection:'Books confirmed by the reader.'},progress:{}}).select('id').single();
+    if(result.error?.code==='23505')existing=checked(await db.from('reading_guides').select('id,status').eq('user_id',user.id).eq('request_key',input.requestKey).single());else existing=checked(result);
+   }
+   const confirmation=await db.rpc('confirm_reader_guide',{p_user:user.id,p_id:existing.id,p_length:input.length});
+   if(confirmation.error){const code=confirmation.error.message.includes('FREE_GUIDE_LIMIT')?'FREE_GUIDE_LIMIT':confirmation.error.message.includes('GUIDE_LIMIT')?'GUIDE_LIMIT':'';return reply({error:code?'Your monthly guide allowance is used.':'Could not confirm this guide. Please retry.',...(code?{code}:{})},code==='FREE_GUIDE_LIMIT'?402:code?429:409);}
+   checked(await db.rpc('wake_reading_guides',{p_count:1}));return reply({id:existing.id},202);
   }
   if(['propose','answer'].includes(input.action)){
    if(typeof input.question!=='string'||input.question.trim().length<3||input.question.length>2000)return reply({error:'Enter a question between 3 and 2,000 characters.'},400);
