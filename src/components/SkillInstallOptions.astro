@@ -10,8 +10,8 @@ const initial = bookSkillPlatforms[0];
  <div class="install-body">
   <section class="setup-step">
    <h3><span>1</span> Send this to your agent</h3>
-   <ToolCommand value={bookSkillSetupPrompt} label="Copy setup message" />
-   <p class="install-caption">Works with Codex, Claude Code, Cursor, and other agents that support local skills. The prompt asks your agent to read the setup docs, install the skill, and check it works.</p>
+   <ToolCommand value={bookSkillSetupPrompt} label="Install skill" compact prominent />
+   <p class="install-caption">Copy the prompt, then paste it into Codex, Claude Code, Cursor, or your agent. It will install the skill and check it works.</p>
   </section>
   <section class="setup-step">
    <h3><span>2</span> Connect your books</h3>
@@ -19,7 +19,8 @@ const initial = bookSkillPlatforms[0];
   </section>
   <section class="setup-step">
    <h3><span>3</span> Try it out</h3>
-   <ToolCommand value="Use Answer with Books to help me understand organizational structure and division of labor." label="Copy example" />
+   <p class="install-caption">How do I find something worthwhile doing?</p>
+   <ToolCommand value="Use Answer with Books to help me explore: How do I find something worthwhile doing?" label="Copy example" compact />
   </section>
   <details class="terminal-setup" data-terminal-setup>
    <summary>Prefer the terminal?</summary>
@@ -33,24 +34,26 @@ const initial = bookSkillPlatforms[0];
  </div>
 </div>
 <style>
- .skill-install-options{min-width:0;border:1px solid #d8d7d0;border-radius:14px;background:#fffefa;color:#35372f;overflow:hidden;margin-top:22px}
+ .skill-install-options{min-width:0;border:1px solid #d8d7d0;border-radius:14px;background:var(--color-card);color:var(--color-ink);overflow:hidden;margin-top:22px}
  .install-header{padding:26px 58px 23px 28px;border-bottom:1px solid #e4e1d9}
- .install-header h2{font-family:var(--font-sans);font-size:23px;font-weight:600;line-height:1.3;letter-spacing:-.025em;margin:0}
+ .install-header h2{font-family:var(--font-serif);font-size:28px;font-weight:400;line-height:1.3;letter-spacing:-.025em;margin:0}
  .install-header h2:focus{outline:none}
  .install-body{padding:24px 28px 28px}
  .setup-step+.setup-step{margin-top:24px}
  .setup-step h3{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;margin:0}
  .setup-step h3 span{display:inline-grid;place-items:center;width:25px;height:25px;border:1px solid #d8ddce;border-radius:50%;color:#40523a;font-size:12px;flex:none}
  .install-caption{font-size:13px;line-height:1.7;margin:12px 0 0;color:#74776b}
- .install-body :global(.tool-command__row){background:#f1f1e9;border-color:#ddded2;border-radius:9px}
- .install-body :global(pre){font-size:13px;color:#35432e}
- .install-body :global([data-copy-command]){min-height:40px;color:#354734}
+ .terminal-setup :global(.tool-command__row){background:#f1f1e9;border-color:#ddded2;border-radius:9px}
+ .terminal-setup :global(pre){font-size:13px;color:#35432e}
+ .install-body :global([data-copy-command]){min-height:44px}
+ .install-body :global(.compact){background:transparent;border:0;padding:0}
+ .install-body :global(.compact [data-copy-command]){align-self:flex-start}
  .terminal-setup{margin-top:26px;border-top:1px solid #e4e1d9;padding-top:18px;font-size:13px}
  summary{cursor:pointer;font-weight:500;color:#666d5d}
  .terminal-setup label{display:block;margin:18px 0 6px}
  select{width:100%;min-height:42px;border:1px solid #ddded5;border-radius:7px;padding:8px;background:#fffefa}
  summary:focus-visible,select:focus-visible{outline:2px solid #40523a;outline-offset:3px}
- @media(max-width:560px){.install-header{padding:23px 52px 21px 20px}.install-header h2{font-size:21px}.install-body{padding:22px 20px}.install-body :global(.tool-command__row){flex-direction:column}.install-body :global([data-copy-command]){align-self:flex-end}.install-body :global(pre){font-size:12px}}
+ @media(max-width:560px){.install-header{padding:23px 52px 21px 20px}.install-header h2{font-size:21px}.install-body{padding:22px 20px}.terminal-setup :global(.tool-command__row){flex-direction:column}.terminal-setup :global([data-copy-command]){align-self:flex-end}.terminal-setup :global(pre){font-size:12px}}
 </style>
 <script>
  import {bookSkillPlatforms} from '../lib/book-skill-install.mjs';
