@@ -62,6 +62,21 @@ body[data-print-study] .profile-page .library-description { -webkit-line-clamp: 
 body[data-print-study] .print-footer-opening em,
 body[data-print-study] .skill-object-caption em { font-style: normal; color: inherit; }
 
+/* Keep the book and reading note legible before the desktop columns get tight. */
+@media(max-width:1100px) {
+ body[data-print-study] .skill-intro { grid-template-columns: 1fr; gap: 36px; }
+ body[data-print-study] .skill-object { width: 100%; max-width: 680px; min-height: 360px; }
+ body[data-print-study] .skill-object-book { max-width: 210px; }
+ body[data-print-study] .skill-note { max-width: 270px; }
+}
+@media(max-width:480px) {
+ body[data-print-study] .skill-object { flex-direction: column; }
+ body[data-print-study] .skill-object-book { width: 150px; flex: 0 0 auto; }
+ body[data-print-study] .skill-note { width: 100%; max-width: none; padding: 0; }
+ body[data-print-study] .skill-note ol { font-size: 13px; }
+ body[data-print-study] .skill-note-footer { font-size: 11px; }
+}
+
 @media(max-width:700px) {
  body[data-print-study] .skill-intro { gap: 32px; padding-block: 40px; }
  body[data-print-study] .skill-intro h1 { font-size: 48px; }
