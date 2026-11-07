@@ -1,10 +1,12 @@
+import {printStudyEnabled} from './print-study.mjs';
 import {bookJacketMarkup} from './book-jacket.mjs';
 const el=(tag:string,text='',className='')=>{const node=document.createElement(tag);node.textContent=text;node.className=className;return node;};
 // Public uploads use the same shelf layout as the curated catalog and private books.
 export function sharedBookCard(book:any,index=0,showExcerpt=true){
  const card=el('article','','library-book');card.dataset.sharedBookId=book.id;
  const href=`/books/read/?id=${encodeURIComponent(book.id)}`;
- const cover=document.createElement('a');cover.href=href;cover.className='library-cover';cover.setAttribute('aria-label',`Open ${book.title}`);cover.style.setProperty('--book-well',['#e2e3d6','#e9e0d2','#e0e4df'][index%3]);
+ if(printStudyEnabled&&book.stage==='ready')card.dataset.bookPreview=JSON.stringify({title:book.title,author:book.author,year:book.year,category:'Source book',description:book.orientation||'',href});
+ const cover=document.createElement('a');cover.href=href;cover.className='library-cover';cover.setAttribute('aria-label',`Open ${book.title}`);if(card.dataset.bookPreview){cover.setAttribute('aria-label',`Preview ${book.title}`);cover.setAttribute('aria-haspopup','dialog');}cover.style.setProperty('--book-well',['#e2e3d6','#e9e0d2','#e0e4df'][index%3]);
  const jacket=el('span','','library-jacket');jacket.innerHTML=bookJacketMarkup({title:book.title,author:book.author||'',color:book.coverColor,coverAsset:book.coverUrl});
  const arrow=el('span','↗','library-open');arrow.setAttribute('aria-hidden','true');cover.append(jacket,arrow);
  const body=el('div','','library-copy'),heading=el('h3'),link=document.createElement('a');link.href=href;link.textContent=book.title;heading.append(link);

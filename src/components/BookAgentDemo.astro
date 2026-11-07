@@ -1,8 +1,12 @@
 ---
 import {skillDemoFlow as flow} from '../lib/skill-demo-flow';
 import BookJacket from './BookJacket.astro';
+import {printGuideMarkup,printStudyEnabled} from '../lib/print-study.mjs';
+import PrintReadingDemo from './PrintReadingDemo.astro';
+const studyCover=printGuideMarkup(flow.question);
 const catalogBooks=flow.catalog.books;
 ---
+{printStudyEnabled ? <PrintReadingDemo /> : <>
 <script is:inline>document.documentElement.classList.add("awb-demo-js");</script>
 <section id="question-first-reading" class="home-section agent-demo" data-agent-demo aria-labelledby="agent-demo-heading">
  <header class="demo-heading"><div><p class="room-eyebrow">Skills in action</p><h2 id="agent-demo-heading">Your agent, <em>well read.</em></h2></div><p>Your question.<br />A reading across lives.</p></header>
@@ -24,6 +28,7 @@ const catalogBooks=flow.catalog.books;
      </details>
      <p class="demo-source-note" data-demo-reveal="4"><span aria-hidden="true">↳</span> {flow.sourceNote}</p>
      <article class="demo-answer" data-demo-reveal="5" aria-label="Excerpt from the illustrated guide">
+      {studyCover && <div class="print-demo-cover" set:html={studyCover} />}
       <div><p class="demo-scene-label">{flow.scene}</p><h3 class="demo-answer-title">{flow.result}</h3></div>
       <p class="demo-reading-context" data-demo-reveal="6">{flow.contextBefore}</p>
       <figure class="demo-excerpt" data-demo-reveal="7"><span class="demo-excerpt-label">Original passage</span><blockquote>{flow.excerpt}</blockquote><figcaption>{flow.citation}</figcaption></figure>
@@ -37,6 +42,7 @@ const catalogBooks=flow.catalog.books;
  </div>
  <p class="sr-only" data-demo-announcement role="status" aria-live="polite"></p>
 </section>
+</>}
 <style>
  .agent-demo{--demo-ink:#eeeee7;--demo-muted:#aaa9a0;--demo-accent:#d8bd88}
  .demo-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:32px}.demo-heading h2{margin-top:12px}.demo-heading>p{font-size:14px;line-height:1.7;color:var(--color-soft);padding-bottom:3px}

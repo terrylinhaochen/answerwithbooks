@@ -12,13 +12,14 @@ let activeUserId:string|undefined, jobs:any[]=[], sharedBooks:any[]=[], generati
 const covers=new Map<string,{url:string;expires:number}>();
 const linkFor=(id:string)=>`/your-book/?id=${encodeURIComponent(id)}`;
 function render() {
- const additions=readAdditions(activeUserId);
+ const additions=root.dataset.sharedOnly==='true'?[]:readAdditions(activeUserId);
+ const visibleJobs=root.dataset.sharedOnly==='true'?[]:jobs;
  const next=JSON.stringify([activeUserId,jobs,sharedBooks.map(({coverUrl,...book})=>({...book,hasCover:!!coverUrl})),additions,[...covers].map(([path,entry])=>[path,entry.url])]);
  if(next===signature)return;signature=next;
  const focused=document.activeElement instanceof HTMLAnchorElement&&list.contains(document.activeElement)?document.activeElement.getAttribute('href'):null;
- list.replaceChildren();root.hidden=!jobs.length&&!sharedBooks.length&&!additions.length;
+ list.replaceChildren();root.hidden=!visibleJobs.length&&!sharedBooks.length&&!additions.length;
  for(const [index,book] of sharedBooks.entries())list.append(sharedBookCard(book,index,root.dataset.showExcerpts!=='false'));
- for(const {primary:job} of groupBookUploads(jobs)) {
+ for(const {primary:job} of groupBookUploads(visibleJobs)) {
   const card=document.createElement('article');card.className='library-book';
   const layout=document.createElement('div');layout.className='library-book__layout';
   const cover=document.createElement('a');cover.href=linkFor(job.id);cover.className='library-cover';cover.style.setProperty('--book-well',['#e2e3d6','#e9e0d2','#e0e4df'][list.children.length%3]);cover.setAttribute('aria-label',`Open ${job.title}`);

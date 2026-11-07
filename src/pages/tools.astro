@@ -1,130 +1,56 @@
 ---
-import uploadLimits from '../../supabase/functions/_shared/book-upload-limits.json';
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ToolCommand from '../components/ToolCommand.astro';
-import {bookSkillSetupPrompt} from '../lib/book-skill-install.mjs';
+import { bookSkillSetupPrompt } from '../lib/book-skill-install.mjs';
 import AddBookDialog from '../components/AddBookDialog.astro';
 import BookJacket from '../components/BookJacket.astro';
-import { bookPalettes } from '../lib/book-palettes';
-import { bookAgentPrompt } from '../../supabase/functions/_shared/book-handoff.mjs';
 import '../styles/book-skills.css';
-const books = await getCollection('books');
-const examples = [
- { slug: 'the-mom-test', label: 'Customer interviews', title: 'Ask for evidence, not compliments.', task: 'Help me prepare a customer interview. First ask about my product and what I need to learn. Use The Mom Test to draft questions about specific past behavior, flag leading questions, and give me a checklist for reviewing the evidence afterward.', methods: ['Ask about a specific recent experience.', 'Separate observed behavior from opinions.', 'Look for commitments, costs, and workarounds.'], outcome: 'An interview plan and a way to evaluate what you hear.' },
- { slug: 'thinking-fast-and-slow', label: 'Better decisions', title: 'Give your first instinct a second look.', task: 'Help me review a decision I am about to make. Ask for the options and stakes. Use the supplied Thinking, Fast and Slow digest to examine framing, overconfidence, and missing base rates. Separate what we know from what we are assuming, then suggest a next step.', methods: ['Check the framing of the choice.', 'Seek base rates and outside evidence.', 'Make uncertainty explicit.'], outcome: 'A decision review with assumptions and evidence gaps.' },
- { slug: 'atomic-habits', label: 'Habits that last', title: 'Design the conditions for follow-through.', task: 'Help me make one work habit easier to maintain. Ask about the behavior, my routine, and where I get stuck. Apply the supplied Atomic Habits digest to propose a small starting action, a clear cue, and an environment change. Give me a simple one-week experiment.', methods: ['Make the first action small.', 'Connect it to a clear cue.', 'Adjust the environment, then review.'], outcome: 'A small experiment designed around your actual routine.' },
- { slug: 'deep-work', label: 'Focused work', title: 'Make room for the work that matters.', task: 'Help me plan a week of focused work. First ask about my most valuable project, schedule, and unavoidable interruptions. Use the supplied Deep Work digest to choose realistic focus blocks, define an output for each, and batch routine work. Include a restart note and a way to review what worked.', methods: ['Choose a focus schedule that fits your role.', 'Give each block a clear output and boundaries.', 'Batch routine work and leave a restart note.'], outcome: 'A realistic weekly focus plan with clear outputs and room for interruptions.' },
- { slug: 'designing-your-life', label: 'Career moves', title: 'Try a direction before you commit.', task: 'Help me explore my next career move. First ask about my situation, interests, energy, and constraints. Use the supplied Designing Your Life digest to sketch three different possible directions. Turn the biggest uncertainty in each into a small experience or a conversation, and define what I should learn before making a commitment.', methods: ['Separate fixed constraints from assumptions.', 'Sketch several genuinely different directions.', 'Use small experiences to test a specific question.'], outcome: 'Three possible directions and practical experiments to learn which fits.' },
- { slug: 'difficult-conversations', label: 'Difficult conversations', title: 'Prepare to be clear and curious.', task: 'Help me prepare for a difficult conversation. First ask what happened, what I want to change, and what constraints matter. Use the supplied Difficult Conversations digest to separate observations from assumptions about intent, consider feelings and identity, and draft an opening that describes the gap between our perspectives. Suggest questions, a clear request, and boundaries without inventing the other person’s motives.', methods: ['Separate impact from assumed intent.', 'Notice what the issue threatens for each person.', 'Open with the difference between perspectives.'], outcome: 'A conversation plan with an opening, useful questions, and a clear request.' },
-].map(example => {
- const book = books.find(book => book.id === example.slug)!;
- return { ...example, book, prompt: `${bookAgentPrompt({ title: book.data.title, author: book.data.author, url: `https://answerwithbooks.com/books/${book.id}/`, digest: book.body })}\n\nMY TASK\n${example.task}` };
-});
 ---
-<Base title="Skills" description="Create reading guides around your questions, connect original passages, and explore books with one agent skill." path="/tools/">
+<Base title="Skills" description="Bring a book’s ideas into your next question or task with the Answer with Books skill." path="/tools/">
  <div class="book-skills awb-section">
   <section class="skill-intro" id="book-skill" aria-labelledby="skill-title">
    <div class="skill-intro-copy">
-    <p class="awb-eyebrow">Books, with a job to do</p>
-    <h1 id="skill-title">Give your questions<br /><em>something to read.</em></h1>
-    <p class="skill-lead">One skill to add books, create a connected reading, and answer questions from original passages.</p>
+    <p class="awb-eyebrow">Put your reading to work</p>
+    <h1 id="skill-title">Turn what you read<br />into how you work.</h1>
+    <p class="skill-lead">Bring the ideas in a book to your next decision, project, or conversation. Start with the agent you already use.</p>
     <section id="install-skill" class="skill-setup mt-6" aria-label="Install skill">
-      <ToolCommand value={bookSkillSetupPrompt} label="Install skill (copy prompt)" compact />
-      <p class="skill-caption">Paste into your agent. <a href="/SKILL.md" download="answer-with-books-setup.md" class="underline">SKILL.md ↓</a></p>
+      <ToolCommand value={bookSkillSetupPrompt} label="Install skill" compact prominent />
+      <p class="skill-caption">Copy the prompt, then paste it into your agent. <a href="/SKILL.md" download="answer-with-books-setup.md" class="underline">Download skill ↓</a></p>
     </section>
-    <div class="skill-actions"><button type="button" class="awb-pill" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Upload a source <span aria-hidden="true">↗</span></button></div>
    </div>
-   <div class="skill-object" aria-label="A book becomes practical instructions with supporting references">
-    <div class="skill-object-book"><BookJacket title="The Mom Test" author="Rob Fitzpatrick" slug="the-mom-test" color="#077f8e" /></div>
-    <div class="skill-note"><p class="skill-note-label"><span aria-hidden="true">↳</span> One reading skill</p><h2>Better customer<br /><em>interviews.</em></h2><ol><li>Start with past behavior.</li><li>Listen for real workarounds.</li><li>Ask for a concrete commitment.</li></ol><div class="skill-note-footer">Questions · Passages · Connections</div></div>
-    <span class="skill-object-caption">From something you know.<br /><em>To something you can do.</em></span>
+   <div class="skill-object" aria-label="Invention: A Life, with a question to put its ideas to work">
+    <a class="skill-object-book" href="/books/read/?id=9004d927-7785-4c3a-acf1-647f732485f7" aria-label="Read Invention: A Life"><BookJacket title="Invention: A Life" author="James Dyson" slug="invention-a-life" color="#2434ad" coverAsset="/print-study/invention-a-life-r29.webp" /></a>
+    <div class="skill-note"><p class="skill-note-label">A question to begin with</p><h2>When is it worth<br />trying again?</h2><ol><li>Describe what you are working on.</li><li>Read how others approached it.</li><li>Choose something to try next.</li></ol><div class="skill-note-footer">Your question. A book. A next step.</div></div>
    </div>
   </section>
-
   <section class="skill-method" aria-labelledby="method-title">
-   <div class="skill-section-heading"><div><p class="awb-eyebrow">What a skill actually does</p><h2 id="method-title">A reading your agent<br /><em>can help you explore.</em></h2></div><p>The skill connects your question to a coherent reading. The model reads source passages, introduces the people and context, and carries a thread across books.</p></div>
+   <div class="skill-section-heading"><div><p class="awb-eyebrow">One skill, every book</p><h2 id="method-title">Read with a question.<br />Leave with an idea.</h2></div><p>The skill helps your agent find a book, explore its original passages, and connect what you read to your own experience.</p></div>
    <div class="skill-method-grid">
-    <article><span class="skill-step">01</span><h3>Bring the source.</h3><p>Upload a book, paper, or document in PDF, EPUB, DOCX, Markdown, HTML, RTF, or text. The processing flow extracts and works through its sections.</p></article>
-    <article><span class="skill-step">02</span><h3>Ask a question.<br /> Find a thread.</h3><p>The model suggests books from the shared library. Confirm them and choose about 10, 25, or 45 minutes.</p></article>
-    <article><span class="skill-step">03</span><h3>Read the originals.</h3><p>Read original excerpts in one continuous guide, with context, connections, and a closing synthesis. Ask follow-up questions through the same skill.</p></article>
+    <article><span class="skill-step">01</span><h3>Bring a question.</h3><p>A decision you are weighing. A project that has stalled. Something you want to understand about life or work.</p></article>
+    <article><span class="skill-step">02</span><h3>Explore a few lives.</h3><p>Find books that speak to your question and read their original passages together in a guide.</p></article>
+    <article><span class="skill-step">03</span><h3>Make it your own.</h3><p>Talk through what resonates, where the ideas have limits, and what you could try in your own situation.</p></article>
    </div>
   </section>
-
-  <section id="try-a-skill" class="skill-examples" aria-labelledby="examples-title">
-   <div class="skill-section-heading"><div><p class="awb-eyebrow">Try it with the public shelf</p><h2 id="examples-title">What are you<br /><em>working on?</em></h2></div><p>These examples copy a public book’s editorial digest and a task into your agent. For a reading of original passages across books, create a guide from the shared library.</p></div>
-   <div class="skill-tabs" role="tablist" aria-label="Choose a book application">
-    {examples.map((example, index) => <button type="button" role="tab" id={`example-tab-${index}`} aria-controls={`example-panel-${index}`} aria-selected={index === 0} tabindex={index === 0 ? 0 : -1} data-example-tab={index}>{example.label}</button>)}
-   </div>
-   {examples.map((example,index) => <article class="skill-example" role="tabpanel" id={`example-panel-${index}`} aria-labelledby={`example-tab-${index}`} tabindex="0" hidden={index !== 0} data-example-panel={index}>
-    <div class="skill-example-source"><a class="skill-example-jacket" href={`/books/${example.slug}/`} aria-label={`Read ${example.book.data.title}`}><BookJacket title={example.book.data.title} author={example.book.data.author} slug={example.slug} color={bookPalettes[example.slug]?.cover ?? '#304c44'} loading="lazy" /></a><p>{example.book.data.title}</p><span>{example.book.data.author}</span><a class="skill-source-link" href={`/books/${example.slug}/`}>Read the source digest ↗</a></div>
-    <div class="skill-example-body"><p class="awb-eyebrow">A task you can try</p><h3>{example.title}</h3><p class="skill-example-task">{example.task}</p><ul>{example.methods.map(method => <li>{method}</li>)}</ul><p class="skill-example-outcome"><span>Work toward</span>{example.outcome}</p><button type="button" class="awb-pill awb-pill-primary" data-copy-example>Copy prompt for your AI</button><p class="skill-copy-status" role="status">Copies the digest, source link, and this task. Paste into your AI chat and send.</p><textarea class="awb-input mt-4" readonly hidden aria-label="Book and task prompt" data-example-prompt>{example.prompt}</textarea></div>
-   </article>)}
-  </section>
-
   <section class="skill-package" id="install" aria-labelledby="package-title">
-   <div><p class="awb-eyebrow">Your sources. Your working toolkit.</p><h2 id="package-title">Readable for you.<br /><em>Reusable by your agent.</em></h2><p>Each uploaded book joins the shared library. One installed skill helps you create guides and retrieve answers, without installing a separate package for each book.</p><button type="button" class="awb-pill" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Upload a source ↗</button></div>
-   <dl class="skill-files"><div><dt>Book introduction</dt><dd>Who the book follows, what it explores, and questions worth reading toward.</dd></div><div><dt>Skill instructions <code>SKILL.md</code></dt><dd>One connection for uploads, guides, and source-grounded answers.</dd></div><div><dt>Original passages</dt><dd>Saved source text with stable references, read through the subscriber skill.</dd></div><div><dt>Book cover</dt><dd>A distinct cover for the shared shelf.</dd></div></dl>
+   <div><p class="awb-eyebrow">Keep something worth returning to</p><h2 id="package-title">A shelf of lives.<br />Room for your own.</h2><p>Explore the books already here, or add a source you want to read more closely.</p><div class="skill-actions"><a class="awb-pill awb-pill-primary" href="/books/">Explore the books ↗</a><button type="button" class="awb-pill" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Add a book ↗</button></div></div>
+   <dl class="skill-files"><div><dt>Books</dt><dd>Introductions, ideas, and questions to help you find your next reading.</dd></div><div><dt>Guides</dt><dd>Original passages brought together around a question that matters to you.</dd></div><div><dt>Your agent</dt><dd>A place to connect the reading to your experience and decide what to do with it.</dd></div></dl>
   </section>
-
-  <section class="skill-faq" aria-labelledby="skill-faq-title"><div><p class="awb-eyebrow">Before you begin</p><h2 id="skill-faq-title">A few useful<br /><em>details.</em></h2></div><div>
-   <details><summary>Can I use this with my existing agent?</summary><p>Yes. Install the single Answer with Books skill in a compatible agent. It connects through browser sign-in. You can also copy a guide’s personalization prompt into a chat; that does not install a skill.</p></details>
-   <details id="public-shelf-install"><summary>Can my agent search the public shelf?</summary><p>Yes. Install the Answer with Books skill to let a compatible agent find books and retrieve their ideas.</p><p><code>books</code> browses the shared library. <code>create-guide</code> proposes a reading. <code>ask</code> answers from existing guides. <code>upload</code> adds a shared book.</p><p>Public books and guides are free to read. Run <code>login</code> to connect your account. The $24/month plan includes 30 new guides and source-text access through the skill.</p></details>
-   <details><summary>What can I upload?</summary><p>Books, research papers, documentation, and notes in PDF, EPUB, DOCX, Markdown, HTML, RTF, or plain text. Sign in, then drop or choose up to ten searchable files, each up to {uploadLimits.maxFileBytes / 1024 / 1024} MB. Keep the dialog open until uploading finishes; processing then continues in the background. Each file becomes a shared book. Longer sources are processed in sections, up to six million extracted characters. Follow progress on the book card. Processing is free and hosted. Books and guides are public; original files stay in private storage. Scanned PDFs need OCR first.</p></details>
-   <details><summary>Does each book need its own skill?</summary><p>No. There is one Answer with Books skill. Newly uploaded books store original text and a chapter map for guide creation. The existing editorial shelf also remains available to read.</p></details>
-   <details><summary>How are passages checked?</summary><p>The model reads the candidate originals and reviews the complete guide against them. Excerpt text is copied from saved source coordinates. Editorial interpretation remains separate from the author’s words.</p></details>
+  <section class="skill-faq" aria-labelledby="skill-faq-title"><div><p class="awb-eyebrow">Before you begin</p><h2 id="skill-faq-title">A few useful details.</h2></div><div>
+   <details><summary>Can I use this with my existing agent?</summary><p>Install the Answer with Books skill in an agent that supports skills. Copy the install prompt above and paste it into your agent to get started. You can also copy a guide’s personalization prompt into an AI chat.</p></details>
+   <details><summary>Does each book need its own skill?</summary><p>No. The same skill connects your agent to the library, including books added later.</p></details>
+   <details><summary>Where do I return to my reading?</summary><p>Find your saved reading in <a href="/guides/">Guides</a> and your books in <a href="/profile/">Profile</a>. Published books and guides are also available in the shared catalog.</p></details>
+   <details><summary>Can I add a book?</summary><p>Yes. Sign in and choose Add a book to upload a PDF, EPUB, document, or notes. Books you add join the shared library.</p></details>
   </div></section>
-  <p class="skill-credit">Built with adapted parsing tools from the MIT-licensed <a href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener noreferrer">book-to-skill project ↗</a>.</p>
  </div>
  <AddBookDialog />
 </Base>
 <script>
  import { readToolsAuthContext } from '../lib/tools-auth.mjs';
- // Older research-setup email links still finish at the existing account-access surface.
  const researchSetup = readToolsAuthContext(location.pathname, location.search);
  if (researchSetup) location.replace(`/api-keys/?from=tools&agent=${encodeURIComponent(researchSetup.agentId)}`);
- const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-example-tab]'));
- const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-example-panel]'));
- function selectExample(index: number, focus = false) {
-  tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
-  panels.forEach((panel, i) => { panel.hidden = i !== index; });
-  if (focus) tabs[index]?.focus({ preventScroll: true });
-  const selected = tabs[index];
-  if (selected) {
-   const row = selected.parentElement!;
-   const rowBounds = row.getBoundingClientRect();
-   const tabBounds = selected.getBoundingClientRect();
-   if (tabBounds.left < rowBounds.left + 5) row.scrollLeft -= rowBounds.left + 5 - tabBounds.left;
-   else if (tabBounds.right > rowBounds.right - 5) row.scrollLeft += tabBounds.right - rowBounds.right + 5;
-  }
- }
- tabs.forEach((tab,index) => {
-  tab.addEventListener('click', () => selectExample(index));
-  tab.addEventListener('keydown', event => {
-   let next = index;
-   if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-   else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-   else if (event.key === 'Home') next = 0;
-   else if (event.key === 'End') next = tabs.length - 1;
-   else return;
-   event.preventDefault(); selectExample(next, true);
-  });
- });
- panels.forEach(panel => {
-  panel.querySelector('[data-copy-example]')?.addEventListener('click', async () => {
-   const prompt = panel.querySelector<HTMLTextAreaElement>('[data-example-prompt]')!;
-   const status = panel.querySelector('.skill-copy-status')!;
-   try { await navigator.clipboard.writeText(prompt.value); status.textContent = 'Copied. Paste into your AI chat to start with the book and your task.'; }
-   catch { prompt.hidden = false; prompt.focus(); prompt.select(); status.textContent = 'Copy was blocked. Select and copy the prompt below.'; }
-  });
- });
 </script>
-
 <style>
  .skill-setup{scroll-margin-top:110px;max-width:560px}
- .skill-setup :global(.tool-command__row:not(.compact)){flex-direction:column;align-items:stretch;background:var(--color-card);padding:20px}
- .skill-setup :global(pre){font-family:var(--font-sans);font-size:15px;line-height:1.65}
- .skill-setup :global(pre code){font-family:inherit}
  .skill-setup :global([data-copy-command]){align-self:flex-start;background:var(--color-ink);color:var(--color-paper);padding:11px 18px;border-radius:999px;min-height:42px}
  .skill-setup :global([data-copy-command]:hover){background:var(--color-soft)}
 </style>

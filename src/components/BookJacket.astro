@@ -3,13 +3,13 @@ import {renderedCover} from '../lib/public-cover.mjs';
 import {bookJacketMarkup} from '../lib/book-jacket.mjs';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-interface Props { title: string; author: string; slug: string; color: string; index?: number; loading?: 'eager' | 'lazy'; }
-const { title, author, slug, color, loading = 'eager' } = Astro.props;
+interface Props { title: string; author: string; slug?: string; color: string; coverAsset?: string; index?: number; loading?: 'eager' | 'lazy'; }
+const { title, author, slug, color, coverAsset: suppliedArtwork, loading = 'eager' } = Astro.props;
 const extension = ['jpg', 'jpeg', 'png', 'svg'].find(ext =>
   existsSync(fileURLToPath(new URL(`../../public/covers/${slug}.${ext}`, import.meta.url)))
 );
 const artwork = extension ? `/covers/${slug}.${extension}` : undefined;
 const rendered = artwork ? renderedCover(artwork) : null;
-const coverAsset = rendered?.src ?? artwork;
+const coverAsset = suppliedArtwork ?? rendered?.src ?? artwork;
 ---
-<Fragment set:html={bookJacketMarkup({title,author,color,coverAsset,loading,composed:!!rendered})} />
+<Fragment set:html={bookJacketMarkup({title,author,color,coverAsset,loading,composed:!suppliedArtwork && !!rendered})} />

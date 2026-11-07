@@ -1,11 +1,15 @@
 ---
 import '../styles/global.css';
+import '../styles/print-study.css';
+import {printStudyEnabled} from '../lib/print-study.mjs';
 import '../styles/book-jacket.css';
 import '../styles/collector-theme.css';
+import '../styles/reading-surfaces.css';
 import Analytics from '../components/Analytics.astro';
 import AnalyticsNotice from '../components/AnalyticsNotice.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import BrandMark from '../components/BrandMark.astro';
+import BookPreviewDialog from '../components/BookPreviewDialog.astro';
 
 export interface Props {
   title: string;
@@ -72,10 +76,10 @@ const current = Astro.url.pathname;
     <meta name="theme-color" content="#f4f1e9" />
     <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=book-fan" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=book-fan" />
+    <link rel="icon" href="/favicon.ico?v=book-fan" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=book-fan" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title="Answer with Books" href="/feed.xml" />
 
@@ -100,10 +104,12 @@ const current = Astro.url.pathname;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&display=swap"
     />
 
+    {printStudyEnabled && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&display=swap" />}
+
     {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />}
     <Analytics ids={gaMeasurementIds} />
   </head>
-  <body class="min-h-screen flex flex-col bg-paper text-ink" data-theme={theme}>
+  <body id="top" class="min-h-screen flex flex-col bg-paper text-ink" data-theme={theme} data-print-study={printStudyEnabled || undefined}>
     {!readingMode && <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-xl">
       <div class="awb-header mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
         <a href="/" class="awb-brand" aria-label="Answer with Books home"><BrandMark /><span>Answer with Books</span></a>
@@ -140,6 +146,7 @@ const current = Astro.url.pathname;
       <slot />
     </main>
 
+    {printStudyEnabled && <BookPreviewDialog />}
     {!readingMode && <SiteFooter />}
 
     <script>

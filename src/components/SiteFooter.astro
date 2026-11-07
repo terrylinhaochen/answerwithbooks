@@ -1,5 +1,7 @@
 ---
 import BrandMark from './BrandMark.astro';
+import PrintFooter from './PrintFooter.astro';
+import {printStudyEnabled} from '../lib/print-study.mjs';
 const docs = 'https://docs.answerwithbooks.com';
 const groups = [
   { title: 'Explore', links: [
@@ -21,7 +23,7 @@ const groups = [
   ] },
 ];
 ---
-<footer class="site-footer">
+{printStudyEnabled ? <PrintFooter /> : <footer class="site-footer">
   <div class="site-footer__inner">
     <div class="site-footer__main">
       <div class="site-footer__intro">
@@ -50,7 +52,7 @@ const groups = [
       </nav>
     </div>
   </div>
-</footer>
+</footer>}
 
 <style>
   .site-footer { background: #2a302a url('/textures/book-paper.svg'); color: #eee9d9; }

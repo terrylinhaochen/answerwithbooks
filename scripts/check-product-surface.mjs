@@ -8,18 +8,31 @@ import { availableTools } from '../src/lib/tool-catalog.mjs';
 const dist = process.env.AWB_TEST_DIST || 'dist';
 const read = route => fs.readFileSync(path.join(dist, route, 'index.html'), 'utf8');
 const skills = read('tools');
-assert.match(skills, /Give your questions/);
-assert.equal((skills.match(/data-example-tab="\d+"/g) || []).length, 6);
-assert.equal((skills.match(/data-example-panel="\d+"/g) || []).length, 6);
-for (const label of ['Customer interviews', 'Better decisions', 'Habits that last', 'Focused work', 'Career moves', 'Difficult conversations']) assert.ok(skills.includes(label));
-assert.doesNotMatch(skills, /data-open-tool=|data-tool-detail=|name="tools-agent"/);
+const uploadedBooks = JSON.parse(fs.readFileSync('src/lib/uploaded-books.json','utf8'));
+assert.match(skills, /Turn what you read/);
+assert.match(skills, /Install skill/);
+assert.doesNotMatch(skills, /data-example-tab|data-example-panel|Install skill \(copy prompt\)|The Mom Test|data-local-processing/);
 assert.match(skills, /Add a book/);
-assert.match(skills, /PDF, EPUB, DOCX, Markdown, HTML, RTF/);
-assert.doesNotMatch(skills, /fuller downloadable skill package|data-local-processing/);
 assert.match(skills, /shared library/);
 const homepage = read('');
-assert.match(homepage, /data-direction="table"/);
-for (const marker of ['data-personalize-shelf', 'data-personal-shelf-heading', 'data-shelf-date', 'data-shelf-preferences', 'data-clear-shelf', 'data-share-shelf', 'data-copy-shelf-link', 'data-create-shelf-image']) assert.ok(homepage.includes(marker));
+assert.ok(homepage.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').includes('Live a thousand lives.'));
+assert.doesNotMatch(homepage, /data-personal-shelf-heading|data-shelf-date|The Mom Test/);
+assert.equal((read('books').match(/data-filter-item/g)||[]).length,13);
+for(const book of uploadedBooks) {
+ assert.ok(read('books').includes(book.id) || book.stage !== 'ready');
+ assert.ok(read('books').includes(`/print-study/${book.art}`));
+ assert.ok(fs.statSync(path.join(dist,'print-study',book.art)).size > 0);
+}
+for(const route of ['', 'books','tools','guides']) {
+ const html = read(route);
+ assert.match(html,/data-print-study/);
+ assert.doesNotMatch(html, /name="robots" content="noindex/);
+ assert.match(html,/images\/brand\/book-fan-128.webp/);
+ assert.match(html,/favicon-32.png\?v=book-fan/);
+}
+for(const asset of ['images/brand/book-fan-128.webp','images/brand/book-fan-256.webp','favicon.ico','favicon-32.png','favicon-48.png','apple-touch-icon.png']) {
+ assert.deepEqual(fs.readFileSync(path.join(dist,asset)),fs.readFileSync(path.join('public',asset)));
+}
 for (const route of ['', 'books', 'tools', 'guides', 'privacy']) {
  const html = read(route);
  const ids = JSON.parse(html.match(/const ids = (\[[^;]*\]);/)?.[1] || '[]');
@@ -76,4 +89,4 @@ for (const route of ['guides']) {
     assert.ok(read(`guides/${slug}`), 'Keep old direct links working');
   }
 }
-console.log(JSON.stringify({ passed: true, skillExamples: 6, publicBookPrompts: publicPrompts.length, illustratedGuides: Object.keys(guideCovers).length, navigation: 'Books, Guides, Skills', deploymentAssetsPresent: true, connectionKeyAbsentFromArtifact: true }, null, 2));
+console.log(JSON.stringify({ passed: true, uploadedBooks: uploadedBooks.length, publicBookPrompts: publicPrompts.length, illustratedGuides: Object.keys(guideCovers).length, navigation: 'Books, Guides, Skills', deploymentAssetsPresent: true, connectionKeyAbsentFromArtifact: true }, null, 2));

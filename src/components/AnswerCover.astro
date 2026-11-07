@@ -1,4 +1,5 @@
 ---
+import {printAnswerMarkup} from '../lib/print-study.mjs';
 import {renderedCover} from '../lib/public-cover.mjs';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +13,7 @@ interface Props {
 
 const { answer, priority = false } = Astro.props;
 const className = Astro.props.class ?? '';
+const printCover = printAnswerMarkup(answer.id);
 
 const labelByAnswer: Record<string, string> = {
   'how-to-decide-what-to-do-with-your-career-next': 'Career Move',
@@ -63,11 +65,11 @@ const topicLabel = (answer.data.tags?.[0] ?? 'Insight')
 
 <a
   href={`/answers/${answer.id}/`}
-  class={`answer-cover ${isBitmap ? 'answer-cover--bitmap' : ''} ${useDarkLabel ? 'answer-cover--dark-label' : ''} ${className}`}
+  class={`answer-cover ${printCover ? 'answer-cover--print' : ''} ${isBitmap ? 'answer-cover--bitmap' : ''} ${useDarkLabel ? 'answer-cover--dark-label' : ''} ${className}`}
   aria-label={`Open ${answer.data.question}`}
 >
   {
-    coverAsset ? (
+    printCover ? <Fragment set:html={printCover} /> : coverAsset ? (
       <img
         src={rendered?.src ?? coverAsset.href}
         alt={`${answer.data.question} — Answer with Books guide`}
@@ -86,7 +88,7 @@ const topicLabel = (answer.data.tags?.[0] ?? 'Insight')
     )
   }
   {
-    isBitmap && !rendered ? (
+    !printCover && isBitmap && !rendered ? (
       <span class="answer-cover__label" aria-hidden="true">
         <span class="answer-cover__topic">{topicLabel}</span>
         <span class="answer-cover__title">{coverTitle}</span>
