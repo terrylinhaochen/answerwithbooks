@@ -1,4 +1,5 @@
 import {printGuideMarkup} from './print-study.mjs';
+import {generatedGuideCoverMarkup} from './generated-guide-cover.mjs';
 import {buildOriginalGuideReadingPrompt} from './reading-handoff';
 import {serviceCall} from './book-upload';
 import {supabase} from './supabase';
@@ -20,9 +21,9 @@ function bookCover(book:GuideBook){
  return jacket;
 }
 function bookCard(book:GuideBook){const card=el('li','','reading-book-card'),copy=el('div');copy.append(el('strong',book.title),el('small',book.author||''));card.append(bookCover(book),copy);return card;}
-type GuideCover={src?:string|null;label?:string;topic?:string;background?:string;status?:string};
+type GuideCover={src?:string|null;label?:string;topic?:string;background?:string;version?:string;status?:string};
 function guideCover(_question:string,design:GuideCover={}){
- const study=design.src?printGuideMarkup(_question):null;
+ const study=design.src?(generatedGuideCoverMarkup(_question,design)||printGuideMarkup(_question)):null;
  if(study){const holder=document.createElement('div');holder.innerHTML=study;return holder.firstElementChild as HTMLDivElement;}
  const cover=el('div','','reading-guide-cover');cover.setAttribute('aria-hidden','true');
  if(!design.src){cover.classList.add('reading-guide-cover-pending');cover.append(el('small',design.status==='failed'?'Your reading is ready':'Illustrating your cover'));return cover;}
@@ -191,7 +192,7 @@ export async function mountReader(){
   const target=root.querySelector('[data-related-list]')!;for(const item of related){const card=el('article','','awb-card-link p-4'),link=el('a'),heading=el('h3',item.question,'mt-4 font-serif text-xl leading-snug');link.href=`/guides/read/?id=${encodeURIComponent(item.id)}`;link.append(guideCover(item.question,item.cover),heading);card.append(link,el('p',item.proposal?.connection||'Another question explored through these sources.','mt-3 text-sm leading-relaxed text-soft'));target.append(card);}(root.querySelector('[data-related-guides]') as HTMLElement).hidden=false;addNav('Related guides','related-guides');
  }).catch(()=>{});
  let coverTimer:ReturnType<typeof setTimeout>,closed=false;
- const refreshCover=async()=>{try{const response=await guideCall({action:row.visibility==='public'?'get':'cover',id});const cover=response.cover||response.guide.cover;if(closed)return;root.querySelector('[data-reader-cover] .reading-guide-cover')?.replaceWith(guideCover(row.question,cover));if(cover.status==='pending')coverTimer=setTimeout(refreshCover,10000);}catch{if(!closed)coverTimer=setTimeout(refreshCover,15000);}};
+ const refreshCover=async()=>{try{const response=await guideCall({action:row.visibility==='public'?'get':'cover',id});const cover=response.cover||response.guide.cover;if(closed)return;root.querySelector('[data-reader-cover] > div')?.replaceWith(guideCover(row.question,cover));if(cover.status==='pending')coverTimer=setTimeout(refreshCover,10000);}catch{if(!closed)coverTimer=setTimeout(refreshCover,15000);}};
  if(row.cover?.status==='pending')coverTimer=setTimeout(refreshCover,5000);
  window.addEventListener('pagehide',()=>{closed=true;clearTimeout(coverTimer);});
  const observed:HTMLElement[]=[];

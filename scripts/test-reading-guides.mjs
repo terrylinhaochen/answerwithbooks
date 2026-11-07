@@ -71,14 +71,14 @@ test('reading time includes editorial text as well as original passages',async()
 });
 
 import {guideCoverPrompt,validateGuideCoverDesign,generateGuideCover,decodeImportedGuideCover} from '../supabase/functions/_shared/guide-cover.mjs';
-const coverDesign={label:'Working Together',topic:'Work',metaphor:'Three distinct pieces interlocking into one arrow',background:'#0b6bdc'};
+const coverDesign={label:'Working Together',topic:'Work',metaphor:'Three distinct pieces interlocking into one arrow',background:'#d93825'};
 test('guide art direction uses an individual metaphor, empty title area, and no baked text',()=>{
- const prompt=guideCoverPrompt(coverDesign);assert.match(prompt,/Three distinct pieces/);assert.match(prompt,/LEFT 46%/);assert.match(prompt,/NO text/);assert.match(prompt,/book jackets/);
+ const prompt=guideCoverPrompt(coverDesign);assert.match(prompt,/Three distinct pieces/);assert.match(prompt,/halftone grain/);assert.match(prompt,/ONE ink/);assert.match(prompt,/NO text/);assert.match(prompt,/book jackets/);
  assert.throws(()=>validateGuideCoverDesign({...coverDesign,background:'url(evil)'}));assert.throws(()=>decodeImportedGuideCover(btoa('<svg>not a JPEG</svg>')));
 });
 test('hosted cover generation uses the configured image provider and captures usage',async()=>{
  const result=await generateGuideCover(coverDesign,{getEnv:key=>({OPENAI_API_KEY:'synthetic',BOOK_COVER_MODEL:'configured-image-model'})[key],fetchImpl:async(url,options)=>{
-  assert.equal(url,'https://api.openai.com/v1/images/generations');const body=JSON.parse(options.body);assert.equal(body.model,'configured-image-model');assert.equal(body.size,'1536x1024');assert.equal(body.n,1);
+  assert.equal(url,'https://api.openai.com/v1/images/generations');const body=JSON.parse(options.body);assert.equal(body.model,'configured-image-model');assert.equal(body.size,'1024x1024');assert.equal(body.n,1);
   return new Response(JSON.stringify({data:[{b64_json:btoa(String.fromCharCode(137,80,78,71,13,10,26,10))}],usage:{input_tokens:10,output_tokens:20}}));
  }});assert.equal(result.usage.outputTokens,20);assert.equal(result.bytes[0],137);
 });
@@ -107,3 +107,25 @@ test('final passage refinement keeps every confirmed book',async()=>{await asser
 test('mapping and review receive the same absolute numbered original lines',async()=>{const inputs=[];const chunk={start:41,end:43,text:'41: First line\n42: Second line\n43: Third line'};await mapReadingSection(chunk,3,async(prompt,input)=>{inputs.push(JSON.parse(input));return inputs.length===1?{summary:'Three lines',scenes:[]}:{passed:true};});assert.equal(inputs[0].text,'41: First line\n42: Second line\n43: Third line');assert.equal(inputs[1].source,inputs[0].text);});
 
 test('source-check findings return to the next map attempt without lowering the review gate',async()=>{let feedback;try{await mapReadingSection({start:1,end:1,text:'1: Original'},0,modelResponses({summary:'A scene',scenes:[]},{passed:false,reason:'Outcome goes beyond this source.'}));}catch(e){feedback=e.generationFeedback;}assert.equal(feedback.phase,'reading-map');let input;await mapReadingSection({start:1,end:1,text:'1: Original'},0,async(prompt,data)=>{input??=JSON.parse(data);return prompt.includes('Check the account')?{passed:true}:{summary:'Supported account',scenes:[]};},feedback);assert.equal(input.repairFeedback,'Outcome goes beyond this source.');});
+
+test('pending legacy cover designs finish with current ink and persist the style version',async()=>{
+ const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');
+ const {guideCoverVersion}=await import('../supabase/functions/_shared/guide-cover.mjs');
+ let saved,rendered,uploaded;
+ const job={id:'guide',user_id:'owner',lease_token:'lease',status:'ready',cover_status:'pending',cover_design:{...coverDesign,background:'#0b6bdc',version:'editorial-v1'},attempts:1};
+ const db={rpc:async()=>({data:job}),storage:{from:()=>({upload:async path=>{uploaded=path;return {data:{}};}})},from:()=>{const q={update:p=>{saved=p;return q},eq:()=>q,select:()=>q,single:async()=>({data:{id:'guide'}})};return q;}};
+ await drainGuide(db,()=>{},hash,async design=>{rendered=design;return {bytes:new Uint8Array([137,80,78,71]),usage:{provider:'fixture'}}});
+ assert.equal(rendered.background,'#d93825');assert.equal(saved.cover_design.version,guideCoverVersion);assert.equal(saved.cover_status,'ready');assert.match(uploaded,new RegExp(guideCoverVersion));
+});
+
+test('new questions receive print markup without a title-specific override, and metadata is escaped',async()=>{
+ const {generatedGuideCoverMarkup}=await import('../src/lib/generated-guide-cover.mjs');
+ const {guideCoverVersion}=await import('../supabase/functions/_shared/guide-cover.mjs');
+ const design={...coverDesign,version:guideCoverVersion,src:'https://example.com/art.png?one=1&two=2'};
+ const markup=generatedGuideCoverMarkup('A completely new question?',design);
+ assert.match(markup,/print-guide-generated/);assert.match(markup,/--print-ink:#d93825/);assert.match(markup,/Working Together/);
+ assert.ok(!generatedGuideCoverMarkup('Question',{...design,version:'editorial-v1'}));
+ assert.ok(!generatedGuideCoverMarkup('Question',{...design,src:'javascript:alert(1)'}));
+ const escaped=generatedGuideCoverMarkup('Question',{...design,label:'<img onerror="bad">',topic:'<script>'});
+ assert.ok(!escaped.includes('<img onerror'));assert.match(escaped,/&lt;script&gt;/);assert.match(markup,/one=1&amp;two=2/);
+});
