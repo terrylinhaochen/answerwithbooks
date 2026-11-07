@@ -17,7 +17,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node --test scripts/test-guide-suggestions.mjs scripts/test-reading-guides.mjs scripts/test-book-reader.mjs scripts/test-reading-text.mjs scripts/test-source-stream.mjs
+      - run: node --test scripts/test-guide-suggestions.mjs scripts/test-guide-draft.mjs scripts/test-reading-guides.mjs scripts/test-book-reader.mjs scripts/test-reading-text.mjs scripts/test-source-stream.mjs
       - run: npm run test:book-pipeline
       - run: npm run test:book-billing
       - run: node --test scripts/test-book-api-auth.mjs scripts/test-key-dialogs.mjs

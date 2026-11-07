@@ -1,3 +1,4 @@
+import {saveGuideDraft,readGuideDraft,clearGuideDraft,guideAuthPaths} from './guide-draft.mjs';
 import {printGuideMarkup} from './print-study.mjs';
 import {generatedGuideCoverMarkup} from './generated-guide-cover.mjs';
 import {buildOriginalGuideReadingPrompt} from './reading-handoff';
@@ -43,7 +44,8 @@ export async function mountGuides(){
  const processing=root.querySelector<HTMLElement>('[data-guide-processing]')!,ready=root.querySelector<HTMLElement>('[data-guide-ready]')!,newQuestion=root.querySelector<HTMLButtonElement>('[data-new-question]')!;
  let listRequest=0,scrollToSaved=location.hash==='#your-guides';
  let active='',epoch=0,requestKey=crypto.randomUUID(),timer:ReturnType<typeof setTimeout>|undefined,listTimer:ReturnType<typeof setTimeout>|undefined,owner:string|undefined,books:GuideBook[]=[],selected:GuideBook[]=[],catalog:GuideBook[]|null=null;
- const query=new URLSearchParams(location.search),draftKey='awb:guide-question-draft',reviewKey='awb:guide-book-review';
+ const query=new URLSearchParams(location.search),draftKey='awb:guide-question-draft';
+ let resumeId=query.get('resume');
  try{question.value=query.get('question')||sessionStorage.getItem(draftKey)||'';}catch{question.value=query.get('question')||'';}if(launchQuestion)launchQuestion.value=question.value;
  const open=()=>{if(!dialog.open)dialog.showModal();};
  root.querySelector('[data-close-guide]')!.addEventListener('click',()=>dialog.close());
@@ -165,13 +167,12 @@ export async function mountGuides(){
   const length=root.querySelector<HTMLInputElement>('input[name=length]:checked')!.value;
   const {data}=await supabase.auth.getSession();if(version!==epoch)return;owner=data.session?.user.id;
   if(!owner){
-   saveDraft();try{sessionStorage.setItem(reviewKey,JSON.stringify({question:question.value,bookIds:books.map(b=>b.id),length}));}catch{}
-   location.assign('/login/?from=guides');return;
+   saveDraft();try{const saved=saveGuideDraft({question:question.value,bookIds:books.map(b=>b.id),length,guideId:active},resumeId);resumeId=saved.id;location.assign(guideAuthPaths(`?from=guides&resume=${saved.id}`)!.login);}catch(error){confirm.disabled=false;showError(error);}return;
   }
   view('checking');root.querySelector('[data-checking-title]')!.textContent='Starting your guide';root.querySelector('[data-checking-copy]')!.textContent='Confirming your books and reading time…';status.textContent='';
   try{
    const result=await guideCall(active?{action:'confirm',id:active,length}:{action:'create',question:question.value.trim(),bookIds:books.map(b=>b.id),length,requestKey});
-   if(version!==epoch)return;active=result.id;updateUrl();try{sessionStorage.removeItem(reviewKey);}catch{}
+   if(version!==epoch)return;active=result.id;updateUrl();clearGuideDraft(resumeId);resumeId=null;
    showProcessing('composing');void list();void loadPlan();await poll(active,version);
   }catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('proposal');showError(error);}confirm.disabled=false;}}
  });
@@ -194,20 +195,24 @@ export async function mountGuides(){
  const {data}=await supabase.auth.getSession();owner=data.session?.user.id;drawSelection();
  // The personal shelf must not wait for public browsing or billing requests.
  const loadPlan=async()=>{const currentOwner=owner;if(!currentOwner)return;try{const plan=await serviceCall('reader-subscription',{action:'status'});if(owner!==currentOwner)return;const allowance=`${Math.max(0,plan.limit-plan.used)} of ${plan.limit} ${plan.active?'':'free '}guides remaining this month`;root.querySelector('[data-guide-plan]')!.textContent=allowance;const caption=root.querySelector('[data-guide-allowance]');if(caption)caption.textContent=allowance;}catch{if(owner===currentOwner)root.querySelector('[data-guide-plan]')!.textContent='Plan status is temporarily unavailable.';}};
- const {data:auth}=supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user.id===owner)return;owner=session?.user.id;listRequest++;clearTimeout(listTimer);reset();root.querySelector('[data-saved-guides]')!.replaceChildren();root.querySelector<HTMLElement>('[data-your-guides]')!.hidden=!owner||modalOnly;const savedLink=root.querySelector<HTMLElement>('[data-open-saved-guides]');if(savedLink)savedLink.hidden=!owner;root.querySelector('[data-guide-plan]')!.textContent='';const caption=root.querySelector('[data-guide-allowance]');if(caption)caption.textContent='3 free guides every month. No card needed.';login.hidden=true;if(owner)setTimeout(()=>{void list();void loadPlan();},0);});
+ const {data:auth}=supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user.id===owner)return;owner=session?.user.id;listRequest++;clearTimeout(listTimer);reset();root.querySelector('[data-saved-guides]')!.replaceChildren();root.querySelector<HTMLElement>('[data-your-guides]')!.hidden=!owner||modalOnly;const savedLink=root.querySelector<HTMLElement>('[data-open-saved-guides]');if(savedLink)savedLink.hidden=!owner;root.querySelector('[data-guide-plan]')!.textContent='';const caption=root.querySelector('[data-guide-allowance]');if(caption)caption.textContent='3 free guides every month. No card needed.';login.hidden=true;if(owner)setTimeout(()=>{void list();void loadPlan();void restoreReview();},0);});
  void list();void loadPlan();
- if(owner&&!query.get('id')){
-  try{const saved=JSON.parse(sessionStorage.getItem(reviewKey)||'null');
-   if(saved&&typeof saved.question==='string'&&Array.isArray(saved.bookIds)&&saved.bookIds.length>0&&saved.bookIds.length<=4){
-    const version=epoch;await loadCatalog();if(version===epoch){
-     const restored=saved.bookIds.map((id:string)=>catalog!.find(book=>book.id===id)).filter(Boolean) as GuideBook[];
-     question.value=saved.question;saveDraft();open();
-     if(restored.length===saved.bookIds.length){showReview(restored,'Your books are saved. Confirm when you’re ready to create your guide.');const length=root.querySelector<HTMLInputElement>(`input[name=length][value="${['short','standard','long'].includes(saved.length)?saved.length:'standard'}"]`);if(length)length.checked=true;}
-     else{view('form');drawSelection();status.textContent='A selected book is no longer available. Update your suggestions.';}
-    }
-   }
-  }catch{status.textContent='Could not restore your books. Your question is saved; please try again.';}
+ async function restoreReview(){
+  if(!owner||query.get('id'))return;
+  const saved=readGuideDraft(resumeId);
+  if(!saved){if(resumeId){open();view('form');status.textContent='This draft is no longer available in this browser. Return to the browser where you started, or enter your question again.';}return;}
+  resumeId=saved.id;const version=epoch;
+  question.value=saved.question;saveDraft();open();view('checking');
+  root.querySelector('[data-checking-title]')!.textContent='Returning to your guide';root.querySelector('[data-checking-copy]')!.textContent='Restoring your books and reading time…';
+  try{
+   if(saved.guideId){active=saved.guideId;updateUrl();await poll(active,version);return;}
+   await loadCatalog();if(version!==epoch)return;
+   const restored=saved.bookIds.map((id:string)=>catalog!.find(book=>book.id===id)).filter(Boolean) as GuideBook[];
+   if(restored.length===saved.bookIds.length){showReview(restored,'Your books are saved. Confirm when you’re ready to create your guide.');const length=root.querySelector<HTMLInputElement>(`input[name=length][value="${saved.length}"]`);if(length)length.checked=true;}
+   else{selected=restored;view('form');drawSelection();status.textContent='A selected book is no longer available. Update your suggestions.';}
+  }catch{if(version===epoch){view('form');drawSelection();status.textContent='Could not restore your books. Your question is saved; please try again.';}}
  }
+ await restoreReview();
  if(!modalOnly){
   void loadPublicGuides();
   if(query.get('id')&&owner){active=query.get('id')!;open();void poll(active,epoch);}

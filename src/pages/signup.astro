@@ -60,6 +60,7 @@ import Base from '../layouts/Base.astro';
   </section>
 
   <script>
+    import { guideAuthPaths } from '../lib/guide-draft.mjs';
     import { supabase } from '../lib/supabase';
     import { consumeAuthCallback, emailRedirectTo } from '../lib/auth-callback';
     import { hasPendingOnboarding, persistOnboardingProfile } from '../lib/onboarding';
@@ -74,11 +75,12 @@ import Base from '../layouts/Base.astro';
     const fromOnboarding = from === 'onboarding';
     const fromUpload = from === 'upload';
     const pendingOnboarding = fromOnboarding || hasPendingOnboarding();
-    const redirectAfterAuth = from === 'guides' ? '/guides/' : from === 'agent' ? '/connect-agent/' : from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
-    const authReturnPath = from === 'guides' ? '/auth/confirm/?from=guides' : from === 'agent' ? '/auth/confirm/?from=agent' : from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/';
+    const guideReturn = guideAuthPaths(location.search);
+    const redirectAfterAuth = from === 'guides' ? guideReturn!.destination : from === 'agent' ? '/connect-agent/' : from === 'shelf' ? '/?personalize=1' : pendingOnboarding ? '/profile/?onboarded=1' : fromUpload ? '/upload/' : '/my-books/';
+    const authReturnPath = from === 'guides' ? guideReturn!.callback : from === 'agent' ? '/auth/confirm/?from=agent' : from === 'shelf' ? '/auth/confirm/?from=shelf' : '/auth/confirm/';
 
     if (from === 'guides') {
-      if (loginLink) loginLink.href = '/login/?from=guides';
+      if (loginLink) loginLink.href = guideReturn!.login;
     } else if (from === 'agent') {
       if (signupCopy) signupCopy.textContent = 'Create an account to connect your agent to your private books.';
       if (loginLink) loginLink.href = '/login/?from=agent';
