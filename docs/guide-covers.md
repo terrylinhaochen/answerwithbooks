@@ -71,3 +71,16 @@ For newly generated guides, `_shared/guide-cover.mjs` asks the language model to
 The two initial private guide illustrations were created with the built-in image-generation tool, visually inspected against the existing covers, copied into the workspace, and imported into their owners' private guide records. Their exact prompts and final PNG files are recorded in `docs/verification/hosted-guides-2026-11-06/covers/`. Source images were resized to 1536 × 864. This is a cover-only update; passages and editorial text were preserved.
 
 Verification distinguishes the two paths: built-in-generated cover import, private storage, fresh signed-image readback, and desktop/mobile rendering were checked live. Automatic planning/image requests, queue claims/retries, and failure isolation were checked with transport fixtures and local PostgreSQL; a new paid hosted image-generation job was not run for this repair. Visual review is still needed when curating future covers.
+
+## Current generation: question-first print (November 7, 2026)
+
+This section supersedes the saturated sticker direction above for **new question guides**. The saved version is `question-print-v2`.
+
+- Artwork is a square, single-ink engraving / risograph illustration: stippling, irregular halftone grain, broken ink, and a dotted field fading into warm cream paper (`#e9ddc7`). Vermilion is the default; muted blue, green, plum, and rust are alternatives.
+- The subject follows the actual question and source scenes. Concrete human gestures and meaningful objects are preferred to generic AI or book icons.
+- The renderer puts artwork on the right and a short, upright serif title on the left. Metadata, a bottom rule, paper texture and a surround use the same ink. Text is HTML, never generated into the artwork.
+- All new questions use this template through `generated-guide-cover.mjs`, without matching a hard-coded question. Existing approved covers retain their overrides. Existing legacy assets remain readable with their original renderer.
+- Pending jobs planned in the old palette are normalized before rendering, and the saved design and API response include the current version. Cover failure never prevents reading the guide.
+- The source-based reading format remains: introduction, editorial context, original passages with book attribution, transitions, conclusion, and Personalize. Public personalization uses the short hosted Markdown prompt. Private readings keep their text in the private prompt.
+
+Validation covers worker rendering and persisted version, hosted request shape, input escaping, pending-cover refresh, the full creation/confirmation/reader UI with intercepted provider responses, and mobile/desktop layout. It does not establish visual quality for every future model-generated image; those remain subject-specific.

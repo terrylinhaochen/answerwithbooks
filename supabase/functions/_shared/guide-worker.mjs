@@ -1,4 +1,4 @@
-import {planGuideCover,guideCoverVersion} from './guide-cover.mjs';
+import {planGuideCover,guideCoverVersion,currentGuideCoverDesign} from './guide-cover.mjs';
 import {nominateBooks,proposeReading,selectReading,writeReading,reviewReading,hydrateReading,readingInstructions} from './reading-guides.mjs';
 export function checked(result){if(result.error)throw Error('Could not access saved reading data.');return result.data;}
 export async function allRows(makeQuery){const rows=[];for(let start=0;;start+=500){const batch=checked(await makeQuery().range(start,start+499));rows.push(...batch);if(batch.length<500)return rows;}}
@@ -15,7 +15,7 @@ export async function drainGuide(db,model,hash,renderCover){
  try {
   if(job.status==='ready'&&job.cover_status==='pending'){
    if(!job.cover_design){const recent=checked(await db.from('reading_guides').select('cover_design').eq('user_id',job.user_id).not('cover_design','is',null).order('created_at',{ascending:false}).limit(12));patch.cover_design=await planGuideCover(job,recent.map(r=>r.cover_design),model);}
-   else{const result=await renderCover(job.cover_design);const path=`${job.user_id}/reading-guides/${job.id}/cover-${guideCoverVersion}.png`;checked(await db.storage.from('private-books').upload(path,result.bytes,{contentType:'image/png',upsert:true}));patch.cover_path=path;patch.cover_status='ready';patch.cover_usage=result.usage;}
+   else{const design=currentGuideCoverDesign(job.cover_design);patch.cover_design=design;const result=await renderCover(design);const path=`${job.user_id}/reading-guides/${job.id}/cover-${guideCoverVersion}.png`;checked(await db.storage.from('private-books').upload(path,result.bytes,{contentType:'image/png',upsert:true}));patch.cover_path=path;patch.cover_status='ready';patch.cover_usage=result.usage;}
   }else if(job.status==='scanning'){
    const offset=job.progress.offset||0;
    // Snapshot every eligible source ID once. No lexical or embedding candidate filter.

@@ -19,7 +19,7 @@ async function displayBooks(userId:string|null,ids:string[],savedReading=false){
 async function presentGuide(row:any){
  const {cover_path,cover_design,cover_usage,...safe}=row;
  let src=null;if(row.cover_status==='ready'&&cover_path){const {data}=await db.storage.from('private-books').createSignedUrl(cover_path,3600);src=data?.signedUrl||null;}
- return {...safe,cover:{src,status:row.cover_status||'none',label:cover_design?.label||'',topic:cover_design?.topic||'',background:cover_design?.background||'#e5e2d9'}};
+ return {...safe,cover:{src,status:row.cover_status||'none',label:cover_design?.label||'',topic:cover_design?.topic||'',background:cover_design?.background||'#e5e2d9',version:cover_design?.version||'editorial-v1'}};
 }
 Deno.serve(async req=>{
  const origin=req.headers.get('origin')||'',headers={'Content-Type':'application/json','Cache-Control':'no-store','Vary':'Origin','Access-Control-Allow-Origin':allowed.has(origin)?origin:'https://answerwithbooks.com','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-client-info','Access-Control-Allow-Methods':'GET,HEAD,POST,OPTIONS'};
