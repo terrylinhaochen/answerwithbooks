@@ -12,9 +12,9 @@
   </div>
 </section>
 <style>
-.lives-hero{position:relative;isolation:isolate;height:min(850px,calc(100svh - 78px));min-height:700px;max-height:900px;background:var(--color-paper) var(--print-paper-texture,url('/print-study/paper-soft.svg'));background-size:var(--print-paper-size,180px 180px);overflow:hidden;border-bottom:1px solid #d0c7b8;color:#272820}
+.lives-hero{position:relative;isolation:isolate;display:flex;flex-direction:column;gap:24px;min-height:max(700px,min(850px,calc(100svh - 78px)));background:var(--color-paper) var(--print-paper-texture,url('/print-study/paper-soft.svg'));background-size:var(--print-paper-size,180px 180px);overflow:hidden;border-bottom:1px solid #d0c7b8;color:#272820}
 .lives-hero::before{content:'';position:absolute;inset:40% 0 0;background:radial-gradient(#8c735a .55px,transparent .8px);background-size:5px 5px;opacity:.1;mask-image:linear-gradient(transparent,#000);pointer-events:none;z-index:-1}
-.lives-heading{position:relative;text-align:center;z-index:2;padding:56px 24px 0;pointer-events:none}
+.lives-heading{flex-shrink:0;position:relative;text-align:center;z-index:2;padding:56px 24px 0;pointer-events:none}
 .lives-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.14em;margin:0 0 26px;color:#6d685e}
 .lives-heading h1{font-family:var(--font-serif);font-size:clamp(90px,9.3vw,144px);font-weight:400;letter-spacing:-.055em;line-height:.87;margin:0}
 .lives-heading h1 em{font-style:normal}
@@ -24,9 +24,9 @@
 .lives-actions a:hover{color:#b53321;border-color:#b53321}.lives-actions span{margin-left:8px}
 .lives-side{position:absolute;top:220px;font-size:12px;line-height:1.55;color:#635d53;margin:0;z-index:2}
 .lives-side-left{left:6%}.lives-side-right{right:6%;text-align:right}
-.lives-people{position:absolute;bottom:0;left:0;width:100%;line-height:0;z-index:1}
+.lives-people{position:relative;flex-shrink:0;margin-top:auto;width:100%;line-height:0;z-index:1}
 .lives-people img{display:block;width:100%;height:auto;max-width:1800px;margin:0 auto;mix-blend-mode:multiply}
 @media(min-width:1700px){.lives-heading{padding-top:40px}.lives-hero{min-height:850px}}
-@media(max-width:1000px){.lives-side{display:none}.lives-hero{height:760px}.lives-heading{padding-top:75px}.lives-heading h1{font-size:110px}.lives-people img{width:115%;max-width:none;margin-left:-7.5%}}
-@media(max-width:600px){.lives-hero{height:690px;min-height:690px}.lives-heading{padding:60px 15px 0}.lives-kicker{font-size:8px;margin-bottom:27px}.lives-heading h1{font-size:clamp(65px,17vw,100px);line-height:.94;letter-spacing:-.05em}.lives-description{max-width:250px;margin:25px auto 15px;line-height:1.6;font-size:12px}.lives-actions{gap:20px;font-size:11px}.lives-people{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#b4a590 transparent}.lives-people img{width:900px;max-width:none;margin:0}.lives-people:focus-visible{outline:2px solid #b53321;outline-offset:-2px}}
+@media(max-width:1000px){.lives-side{display:none}.lives-hero{min-height:760px}.lives-heading{padding-top:75px}.lives-heading h1{font-size:110px}.lives-people img{width:115%;max-width:none;margin-left:-7.5%}}
+@media(max-width:600px){.lives-hero{min-height:690px}.lives-heading{padding:60px 15px 0}.lives-kicker{font-size:8px;margin-bottom:27px}.lives-heading h1{font-size:clamp(65px,17vw,100px);line-height:.94;letter-spacing:-.05em}.lives-description{max-width:250px;margin:25px auto 15px;line-height:1.6;font-size:12px}.lives-actions{gap:20px;font-size:11px}.lives-people{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#b4a590 transparent}.lives-people img{width:900px;max-width:none;margin:0}.lives-people:focus-visible{outline:2px solid #b53321;outline-offset:-2px}}
 </style>
