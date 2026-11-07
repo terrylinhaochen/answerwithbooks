@@ -1,0 +1,12 @@
+---
+import BookJacket from './BookJacket.astro';
+import '../styles/book-gallery.css';
+const {book}=Astro.props;
+const ready=book.stage==='ready';
+const href=`/books/read/?id=${book.id}`;
+const preview=ready?JSON.stringify({title:book.title,author:book.author,year:book.year,category:book.category,description:book.oneLiner,href}):undefined;
+---
+<article class="library-book" data-book-preview={preview}>
+ {ready ? <a class="library-cover" href={href} aria-label={`Preview ${book.title}`} aria-haspopup="dialog"><span class="library-jacket"><BookJacket title={book.title} author={book.author} color={book.color} coverAsset={`/print-study/${book.art}`} /></span><span class="library-open" aria-hidden="true">↗</span></a> : <div class="library-cover"><span class="library-jacket"><BookJacket title={book.title} author={book.author} color={book.color} coverAsset={`/print-study/${book.art}`} /></span></div>}
+ <div class="library-copy"><p class="room-eyebrow">{book.category}</p><h3>{ready?<a href={href}>{book.title}</a>:book.title}</h3><p class="library-author">{book.author}</p>{book.oneLiner&&<p class="library-description">{book.oneLiner}</p>}{!ready&&<p class="mt-3 text-sm text-soft">Not yet available to read</p>}</div>
+</article>

@@ -1,80 +1,27 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import TactileShelf from '../components/TactileShelf.astro';
+import ThousandLivesHero from '../components/ThousandLivesHero.astro';
+import {printStudyEnabled} from '../lib/print-study.mjs';
 import BookAgentDemo from '../components/BookAgentDemo.astro';
-import BookRow from '../components/BookRow.astro';
-import BookJacket from '../components/BookJacket.astro';
-import { bookPalettes } from '../lib/book-palettes';
-import AnswerCover from '../components/AnswerCover.astro';
+import UploadedBookRow from '../components/UploadedBookRow.astro';
+import uploadedBooks from '../lib/uploaded-books.json';
 import '../styles/collector-home.css';
 import AddBookDialog from '../components/AddBookDialog.astro';
 import ActivityPanel from '../components/ActivityPanel.astro';
 import QuestionInvite from '../components/QuestionInvite.astro';
+import InstallSkillDialog from '../components/InstallSkillDialog.astro';
 import { faqJsonLd } from '../lib/seo';
 
 const { preview = false, shelfLab = false } = Astro.props;
-const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
-const answers = (await getCollection('answers')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
-const featuredBooks = books.filter((b) => b.data.featured);
-const featuredAnswers = answers.filter((a) => a.data.featured);
-const shelfBooks = [
-  ...featuredBooks,
-  ...books.filter((book) => !featuredBooks.some((featuredBook) => featuredBook.id === book.id)),
-].slice(0, 8);
-const shelfAnswers = [
-  ...featuredAnswers,
-  ...answers.filter((answer) => !featuredAnswers.some((featuredAnswer) => featuredAnswer.id === answer.id)),
-].slice(0, 6);
-const bookById = new Map(books.map((b) => [b.id, b]));
-const carouselIds = [
-  'how-to-fix-user-interviews-that-are-not-teaching-you-anything',
-  'how-to-tell-whether-to-pivot-or-keep-going',
-  'how-to-make-a-plan-that-survives-contact-with-reality',
-];
-const carouselCopy = new Map([
-  [
-    'how-to-fix-user-interviews-that-are-not-teaching-you-anything',
-    {
-      title: 'Ask about recent behavior.',
-      body: 'The Mom Test turns vague praise into evidence you can act on.',
-    },
-  ],
-  [
-    'how-to-tell-whether-to-pivot-or-keep-going',
-    {
-      title: 'Separate puzzles from anomalies.',
-      body: 'Kuhn helps you tell normal iteration from evidence that the whole frame is wrong.',
-    },
-  ],
-  [
-    'how-to-make-a-plan-that-survives-contact-with-reality',
-    {
-      title: 'Keep local facts in the plan.',
-      body: 'Seeing Like a State shows why plans fail when messy ground truth gets deleted.',
-    },
-  ],
-]);
-const carouselItems = carouselIds
-  .map((id) => answers.find((answer) => answer.id === id))
-  .filter(Boolean)
-  .map((answer) => ({
-    answer,
-    books: answer.data.books.map((slug) => bookById.get(slug)).filter(Boolean).slice(0, 3),
-    copy: carouselCopy.get(answer.id) ?? {
-      title: answer.data.question,
-      body: answer.data.description,
-    },
-  }));
-const siteDescription = 'Turn books into practical skills for your AI agent. Read a digest, apply its methods to your work, or upload a book to create a reusable skill.';
+const books = uploadedBooks;
+const shelfBooks = ['shoe-dog','invention-a-life','open','the-whole-story'].map(slug => books.find(book => book.slug === slug)!);
+const siteDescription = 'Explore lives and ideas through books. Follow a question through original passages, then connect the reading to your own experience.';
 const homeFaqs = [
-  { question: 'What is a skill?', answer: 'A skill gives an agent instructions for applying a book’s methods: useful frameworks, decision rules, checklists, and mistakes to avoid. Supporting reference notes provide context for the task.' },
-  { question: 'How do I use a book with my agent?', answer: 'Open a book and choose Copy prompt for your AI. This copies the book notes and instructions to your clipboard. Paste them into your AI chat and describe your task. For an uploaded book, the prompt also includes the generated skill and references. No installation is needed for this copy-and-paste flow.' },
-  { question: 'What does uploading a book create?', answer: 'One searchable upload creates a readable book artifact, a reusable skill with supporting references, and a cover. Keep the upload dialog open until saving finishes; processing then continues in the background. Your files and results stay private to your account.' },
-  { question: 'How is the public shelf different?', answer: 'Public book pages are editorial digests with agent prompts. The fuller downloadable skill package is generated from your own uploaded source. Public pages do not contain the original book’s full text.' },
-  { question: 'Can I keep and reuse the skill?', answer: 'Yes. An uploaded book has Download book & skill, which exports a ZIP with the book artifact, SKILL.md, reference notes, patterns, a cheatsheet, and a glossary. Add those files to an agent that supports skills, or use Copy prompt for your AI for a single task.' },
+ {question:'What does the skill do?',answer:'It lets your agent explore the shared books, create a guide around your question, and help connect a reading to your experience.'},
+ {question:'How do I begin?',answer:'Install the skill in your agent, or visit Guides to start with a question. You can choose the books and reading time before creating your guide.'},
+ {question:'Can I add a book?',answer:'Yes. Upload a book from the Books page. Books and finished guides join the public library; original files are not available for download.'},
+ {question:'Where are my books and guides?',answer:'Your books are saved in Profile, and your readings are in Your Guides. Readable books and published guides also appear in the public catalog.'},
 ];
 
 const jsonLd = [
@@ -104,12 +51,12 @@ const jsonLd = [
     isPartOf: { '@id': 'https://answerwithbooks.com/#website' },
     mainEntity: {
       '@type': 'ItemList',
-      name: 'Featured book-grounded answers',
-      itemListElement: shelfAnswers.map((answer, index) => ({
+      name: 'Featured books',
+      itemListElement: shelfBooks.map((book, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        name: answer.data.question,
-        url: `https://answerwithbooks.com/answers/${answer.id}/`,
+        name: book.title,
+        url: `https://answerwithbooks.com/books/read/?id=${book.id}`,
       })),
     },
   },
@@ -120,7 +67,7 @@ const jsonLd = [
       'https://answerwithbooks.com/books/',
       'https://answerwithbooks.com/guides/',
       'https://answerwithbooks.com/tools/',
-      'https://answerwithbooks.com/tools/#public-shelf-install',
+      'https://answerwithbooks.com/tools/#install-skill',
     ],
   },
   {
@@ -137,61 +84,33 @@ const jsonLd = [
   jsonLd={jsonLd}
   theme="collector"
 >
-  <TactileShelf showControls={shelfLab} />
+  {!shelfLab && <ThousandLivesHero />}
+  {shelfLab && <TactileShelf showControls={shelfLab} />}
 
   <div class="reading-room">
-    <section id="home-intro" class="home-section home-intro">
-      <div class="home-intro-copy">
-        <p class="room-eyebrow">Book knowledge, ready for your agent</p>
-        <h1><span>Turn what you read into</span> <em>how you work.</em></h1>
-        <p class="room-description">Give your agent the frameworks, questions, and practical rules inside a good book. Turn them into a better interview, a clearer decision, or a plan you can use.</p>
-        <div class="home-start-actions">
-          <button type="button" class="room-button room-button-primary" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Use skill <span aria-hidden="true">↗</span></button>
-          <button class="room-link" type="button" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Add a book <span aria-hidden="true">＋</span></button>
-        </div>
-      </div>
-      <div id="ideas-for-work" class="insight-paper" data-insight-carousel aria-label="Ideas for your work" aria-roledescription="carousel">
-        {carouselItems.map((item, slideIndex) => (
-          <article data-carousel-slide={slideIndex} hidden={slideIndex !== 0} aria-label={`Insight ${slideIndex + 1} of ${carouselItems.length}`}>
-            <div class="paper-heading"><p class="room-eyebrow">Ideas for your work</p><span class="paper-count">0{slideIndex + 1} / 0{carouselItems.length}</span></div>
-            <p class="insight-label">A question worth asking</p>
-            <h2>{item.answer.data.question}</h2>
-            <div class="insight-body">
-              <div class="insight-books" aria-label="Source books">
-                {item.books.map((book, index) => <a class="small-jacket" href={`/books/${book.id}/`} aria-label={`Read ${book.data.title}`} style={`--lean:${index === 0 ? -7 : 5}deg`}><BookJacket title={book.data.title} author={book.data.author} slug={book.id} color={bookPalettes[book.id]?.cover ?? '#304c44'} loading="lazy" /></a>)}
-              </div>
-              <div class="insight-takeaway"><p class="room-eyebrow">Useful takeaway</p><h3>{item.copy.title}</h3><p>{item.copy.body}</p></div>
-            </div>
-            <div class="insight-bottom">
-              <div class="insight-dots" role="group" aria-label="Choose an insight">{carouselItems.map((_, dotIndex) => <button type="button" class:list={["insight-dot", {"is-current": dotIndex === slideIndex}]} aria-label={`Show insight ${dotIndex + 1}`} aria-pressed={dotIndex === slideIndex} data-carousel-dot={dotIndex}></button>)}</div>
-              <a class="room-link" href={`/answers/${item.answer.id}/`}>Open insight <span aria-hidden="true">↗</span></a>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-
     <BookAgentDemo />
 
     <section id="source-books" class="home-section home-library">
       <div class="section-heading"><div><p class="room-eyebrow">Featured books</p><h2>A few good places<br /> to <em>begin.</em></h2></div><a class="room-link" href="/books/">All {books.length} books <span aria-hidden="true">↗</span></a></div>
       <div class="library-grid">
-        {shelfBooks.map((book, index) => <BookRow book={book} index={index} />)}
+        {shelfBooks.map(book => <UploadedBookRow book={book} />)}
       </div>
     </section>
 
     <section id="install" class="home-section home-install">
       <div class="agent-room agent-room-simple">
+        {printStudyEnabled ? <>
+          <div class="print-install-copy"><h2>Give your agent<br /><em>a useful skill.</em></h2><p>Turn the methods in a book or document into a way to tackle your next task.</p><button type="button" class="room-button room-button-light" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Use skill <span aria-hidden="true">↗</span></button></div>
+          <div class="print-install-art" aria-hidden="true"><img src="/print-study/reader-globe-lithograph-v3.png" width="1536" height="1024" loading="lazy" alt="" /></div>
+        </> : <>
         <div><h2>Give your agent<br /><em>a useful skill.</em></h2><p>Turn the methods in a book or document into a way to tackle your next task.</p></div>
         <button type="button" class="room-button room-button-light" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Use skill <span aria-hidden="true">↗</span></button>
+        </>}
       </div>
     </section>
 
     <section id="featured-answers" class="home-section home-answers">
-      <div class="section-heading"><div><p class="room-eyebrow">Answers from the shelf</p><h2>For the question<br /> <em>on your mind.</em></h2></div><a href="/guides/" class="room-link">All answers <span aria-hidden="true">↗</span></a></div>
-      <div class="answer-grid">
-        {shelfAnswers.map((answer, index) => <article class="answer-paper"><div class="answer-paper-image"><AnswerCover answer={answer}/></div><div class="answer-paper-copy"><p class="room-eyebrow">Reading note {String(index + 1).padStart(2,'0')} · {answer.data.books.length} {answer.data.books.length === 1 ? 'source book' : 'source books'}</p><h3><a href={`/answers/${answer.id}/`}>{answer.data.question}</a></h3><p>{answer.data.description}</p><a class="room-link" href={`/answers/${answer.id}/`}>Read the answer <span aria-hidden="true">↗</span></a></div></article>)}
-      </div>
+      <div class="section-heading"><div><p class="room-eyebrow">A question of your own</p><h2>For the question<br /> <em>on your mind.</em></h2></div><a href="/guides/" class="room-link">All guides <span aria-hidden="true">↗</span></a></div>
       <QuestionInvite />
     </section>
 
@@ -205,18 +124,8 @@ const jsonLd = [
     </section>
   </div>
 
-  <script>
-    const carousel = document.querySelector<HTMLElement>('[data-insight-carousel]');
-    const slides = Array.from(carousel?.querySelectorAll<HTMLElement>('[data-carousel-slide]') ?? []);
-    carousel?.addEventListener('click', (event) => {
-      const dot = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-carousel-dot]');
-      if (!dot) return;
-      const index = Number(dot.dataset.carouselDot);
-      slides.forEach((slide, i) => { slide.hidden = i !== index; });
-      // Keep keyboard focus on the equivalent control in the newly visible slide.
-      slides[index]?.querySelector<HTMLButtonElement>(`[data-carousel-dot="${index}"]`)?.focus({preventScroll:true});
-    });
-  </script>
+
 
   <AddBookDialog />
+  <InstallSkillDialog />
 </Base>

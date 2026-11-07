@@ -1,0 +1,110 @@
+{
+  "copy": {
+    "status": "",
+    "copied": "Read https://answerwithbooks.com/SKILL.md and install the Answer with Books skill for this agent. Verify that you can list the public books, and tell me when it’s ready."
+  },
+  "catalog": [
+    {
+      "title": "The Whole Story",
+      "src": "/print-study/the-whole-story-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "The Presentation Secrets of Steve Jobs",
+      "src": "/print-study/the-presentation-secrets-of-steve-jobs-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "Sam Walton: The Inside Story of America's Richest Man",
+      "src": "/print-study/sam-walton-inside-story-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "Richer, Wiser, Happier",
+      "src": "/print-study/richer-wiser-happier-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "Money Talks, Bullsh*t Walks",
+      "src": "/print-study/money-talks-bullshit-walks-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "How to Be Rich",
+      "src": "/print-study/how-to-be-rich-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "Invention: A Life",
+      "src": "/print-study/invention-a-life-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "Open",
+      "src": "/print-study/open-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "Shoe Dog",
+      "src": "/print-study/shoe-dog-r29.webp",
+      "imageReady": true,
+      "hasReadLink": true
+    },
+    {
+      "title": "The Power of Fastenal People",
+      "src": "/print-study/the-power-of-fastenal-people-r29.webp",
+      "imageReady": true,
+      "hasReadLink": false
+    },
+    {
+      "title": "What I Talk About When I Talk About Running",
+      "src": "/print-study/what-i-talk-about-when-i-talk-about-running-r29.webp",
+      "imageReady": true,
+      "hasReadLink": false
+    },
+    {
+      "title": "The Russian Rockefellers",
+      "src": "/print-study/the-russian-rockefellers-r29.webp",
+      "imageReady": true,
+      "hasReadLink": false
+    },
+    {
+      "title": "As I See It",
+      "src": "/print-study/as-i-see-it-r29.webp",
+      "imageReady": true,
+      "hasReadLink": false
+    }
+  ],
+  "page2": 2,
+  "search": 1,
+  "preview": 1,
+  "quote": {
+    "before": "none",
+    "text": "The most contrarian thing of all is not to oppose the crowd but to think for yourself.",
+    "overflows": false
+  },
+  "detail": {
+    "title": "How to Be Rich",
+    "art": [
+      {
+        "src": "/print-study/how-to-be-rich-r29.webp",
+        "ready": true
+      }
+    ]
+  },
+  "mobile": {
+    "overflow": false
+  },
+  "profileLayout": {
+    "overflow": false,
+    "validation": "SSR layout only; authenticated account not exercised"
+  }
+}

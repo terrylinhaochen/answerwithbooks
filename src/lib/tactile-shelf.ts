@@ -49,7 +49,7 @@ if (lab) {
    prompts.set(book.slug,result.prompt);
    if(books[selected]?.slug===book.slug){prompt.value=result.prompt;copy.disabled=false;text('[data-detail-copy-status]','Copies the book’s digest and this task. Paste into your AI chat and send.');}
   }).catch(()=>{if(books[selected]?.slug===book.slug)text('[data-detail-copy-status]','Couldn’t load the task. Open the book, or close and try again.');});
-  lab.querySelector<HTMLAnchorElement>('[data-detail-link]')!.href=`/books/${book.slug}/`;
+  lab.querySelector<HTMLAnchorElement>('[data-detail-link]')!.href=book.href||`/books/${book.slug}/`;
   lab.querySelectorAll<HTMLElement>('[data-detail-jacket]').forEach((item,i)=>{item.hidden=i!==selected;});
  };
  const pickUp = (index: number, source: HTMLButtonElement) => {

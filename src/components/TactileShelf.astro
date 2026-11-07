@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BookJacket from './BookJacket.astro';
+import {printStudyEnabled,printBooks} from '../lib/print-study.mjs';
 import ShelfPersonalizer from './ShelfPersonalizer.astro';
 import ShelfShareDialog from './ShelfShareDialog.astro';
 import { bookPalettes } from '../lib/book-palettes';
@@ -15,8 +16,15 @@ const picks = [
  {slug:'designing-your-life',color:'#224eb8',label:'New possibilities',angle:-3,lift:-20,question:'What could my next chapter look like?'},
  {slug:'atomic-habits',color:'#16805c',label:'Small beginnings',angle:5,lift:-5,question:'How do I make a change that lasts?'},
  {slug:'deep-work',color:'#132e79',label:'Room to focus',angle:-5,lift:10,question:'What deserves my undivided attention?'},
-].map((pick,index)=>{ const book=books.find(book=>book.id===pick.slug)!; return {...pick,index,...book.data,task:publicBookTask(book),prompt:publicBookPrompt(book)}; });
+].map((pick,index)=>{
+ const slug=printStudyEnabled?['the-mom-test','thinking-fast-and-slow','zero-to-one','the-wisdom-of-crowds','shoe-dog'][index]:pick.slug;
+ const study=printStudyEnabled?printBooks.find(book=>book.slug===slug):null;
+ if(study)return {...pick,...study,index,href:`/books/read/?id=${study.id}`,task:{label:study.question},prompt:`Read https://answerwithbooks.com/books/read/?id=${study.id} and https://answerwithbooks.com/SKILL.md. Help me explore: ${study.question}`};
+ const book=books.find(book=>book.id===slug)!;
+ return {...pick,slug,index,...book.data,label:printStudyEnabled?book.data.tags[0].replaceAll('-',' '):pick.label,task:publicBookTask(book),prompt:publicBookPrompt(book)};
+});
 const catalog = books.map(book => ({ slug: book.id, title: book.data.title, author: book.data.author, year: book.data.year, oneLiner: book.data.oneLiner, label: picks.find(pick => pick.slug === book.id)?.label ?? book.data.tags[0]?.replaceAll('-', ' ') ?? 'Your choice', color: picks.find(pick => pick.slug === book.id)?.color ?? bookPalettes[book.id]?.cover ?? '#304c44', task: publicBookTask(book) }));
+if(printStudyEnabled)for(const pick of picks)if(!catalog.some(b=>b.slug===pick.slug))catalog.push(pick);
 ---
 <div class="shelf-lab" data-shelf-lab data-direction={showControls ? "room" : "table"} data-shelf-production={!showControls || undefined}>
  {showControls && <script is:inline>

@@ -28,7 +28,8 @@ for (const page of [catalog,guides,html('/books/the-mom-test/'),html('/answers/h
 for (const file of readdirSync(new URL('../src/content/books/', import.meta.url)).filter(file => file.endsWith('.md'))) {
   const slug = file.slice(0, -3), path = `/books/${slug}/`, body = read(`src/content/books/${file}`), title = field(body, 'title');
   assert.ok(sitemap.includes(`https://answerwithbooks.com${path}`));
-  assert.ok(catalog.includes(`href="${path}"`));
+  assert.ok(!catalog.includes(`href="${path}"`), 'Retired curated books stay off the active catalog');
+  assert.ok(existsSync(new URL(`../dist${path}index.html`,import.meta.url)), 'Legacy direct links remain available');
   rows.push({ intent: 'book digest', queries: [`${title} summary`, `${title} key ideas`, `when to use ${title}`], canonical: `https://answerwithbooks.com${path}`, sourceDigests: [path] });
 }
 for (const file of readdirSync(new URL('../src/content/answers/', import.meta.url)).filter(file => file.endsWith('.md'))) {

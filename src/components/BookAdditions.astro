@@ -1,10 +1,10 @@
 ---
 import '../styles/book-library-card.css';
 import '../styles/book-gallery.css';
-interface Props { excerpts?: boolean; }
-const {excerpts=true}=Astro.props;
+interface Props { excerpts?: boolean; sharedOnly?: boolean; }
+const {excerpts=true,sharedOnly=false}=Astro.props;
 ---
-<section class="mt-8 mb-10" data-book-additions data-show-excerpts={String(excerpts)} hidden>
+<section class="mt-8 mb-10" data-book-additions data-show-excerpts={String(excerpts)} data-shared-only={String(sharedOnly)} hidden>
   <div class="flex flex-wrap items-center justify-between gap-3"><h2 class="font-serif text-2xl">Your books</h2><a href="/manage-skills/" class="text-sm underline underline-offset-4">Manage books</a></div>
   <p class="mt-2 text-sm text-soft">Read your books and explore their ideas in your guides.</p>
   <p class="mt-3 text-sm text-soft" role="status" data-book-additions-message></p>

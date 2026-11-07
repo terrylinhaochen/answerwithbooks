@@ -1,0 +1,96 @@
+/* Shared upright editorial headings, including pages outside the print preview. */
+body[data-theme='collector'] .prose-awb blockquote { padding: 20px 24px; border: 0; border-left: 2px solid var(--color-accent); border-radius: 0; line-height: 1.55; }
+body[data-theme='collector'] .prose-awb blockquote p::before,
+body[data-theme='collector'] .prose-awb blockquote p::after { content: none; }
+body[data-theme='collector'] .prose-awb blockquote p { margin-top: 0; margin-bottom: .75em; }
+body[data-theme='collector'] .prose-awb blockquote p:last-child { margin-bottom: 0; }
+body[data-theme='collector'] :is(h1,h2,h3,h4,h5,h6),
+body[data-theme='collector'] :is(h1,h2,h3,h4,h5,h6) :is(em,i,.italic) {
+  font-style: normal !important;
+}
+body[data-theme='collector'] :is(h1,h2,h3,h4,h5,h6) em {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
+/* Skills and account pages use the same paper, rules and type as the landing. */
+body[data-print-study] .book-skills,
+body[data-print-study] .profile-page { max-width: 1184px; }
+body[data-print-study] .skill-intro { gap: 64px; padding-block: 76px; border-bottom: 1px solid var(--color-line); }
+body[data-print-study] .skill-intro h1 { font-size: clamp(48px,5.5vw,76px); letter-spacing: -.045em; line-height: 1.03; }
+body[data-print-study] .skill-object { display: flex; align-items: center; justify-content: center; gap: 22px; padding: 40px 26px; min-height: 420px; perspective: none; border-radius: 0; background: #eee6d7 var(--print-paper-texture); background-size: var(--print-paper-size); border: 1px solid var(--color-line); }
+body[data-print-study] .skill-object-book { position: relative; inset: auto; width: 43%; flex: 0 0 43%; transform: none; }
+body[data-print-study] .skill-note { position: relative; inset: auto; width: 48%; padding: 20px 0; background: transparent; border-radius: 0; box-shadow: none; transform: none; }
+body[data-print-study] .skill-note h2 { font-size: clamp(25px,2.3vw,32px); }
+body[data-print-study] :is(.skill-note-label,.skill-note ol,.skill-note-footer) { color: var(--color-soft); }
+body[data-print-study] .skill-note-footer { border-color: var(--color-line); line-height: 1.6; }
+body[data-print-study] .skill-object-caption { display: none; }
+body[data-print-study] .skill-method { padding-block: 64px; }
+body[data-print-study] .skill-method-grid { gap: 0; border-block: 1px solid var(--color-line); }
+body[data-print-study] .skill-method-grid article { border-radius: 0; background: transparent; padding: 30px; border-right: 1px solid var(--color-line); }
+body[data-print-study] .skill-method-grid article:last-child { border-right: 0; }
+body[data-print-study] .skill-step { color: var(--color-accent); }
+body[data-print-study] .skill-tabs { padding: 0 0 10px; border-bottom: 1px solid var(--color-line); }
+body[data-print-study] .skill-tabs button { background: transparent; color: var(--color-soft); border-radius: 0; border: 1px solid transparent; }
+body[data-print-study] .skill-tabs button[aria-selected=true] { background: var(--color-wash); border-color: var(--color-line); color: var(--color-ink); }
+body[data-print-study] .skill-example { border: 1px solid var(--color-line); border-radius: 0; background: var(--color-card) var(--print-paper-texture); }
+body[data-print-study] .skill-example-source { background: #eee6d7 var(--print-paper-texture); border-radius: 0; border-right: 1px solid var(--color-line); }
+body[data-print-study] .skill-example-jacket { transform: none; width: 165px; margin: 10px 0 30px; }
+body[data-print-study] .skill-example-jacket:hover { transform: translateY(-4px); }
+body[data-print-study] .skill-example-body ul { color: var(--color-soft); }
+body[data-print-study] .skill-package { background: #eee6d7 var(--print-paper-texture); background-size: var(--print-paper-size); color: var(--color-ink); border: 1px solid var(--color-line); border-radius: 0; }
+body[data-print-study] .skill-package :is(.awb-eyebrow,dd,code),
+body[data-print-study] .skill-package > div > p:not(.awb-eyebrow) { color: var(--color-soft); }
+body[data-print-study] .skill-files > div { border-color: var(--color-line); }
+body[data-print-study] .skill-package .awb-pill { background: var(--color-accent); color: var(--color-card); }
+
+body[data-theme='collector'][data-print-study] .profile-header { padding: 30px 0 40px; align-items: flex-start; border-bottom: 1px solid var(--color-line); border-radius: 0; background: transparent; }
+body[data-print-study] .profile-title { font-weight: 400; font-size: clamp(44px,5.5vw,72px); line-height: 1.05; letter-spacing: -.04em; }
+body[data-print-study] .profile-description { font-size: 16px; color: var(--color-soft); }
+body[data-print-study] .profile-signout { border-radius: 0; margin-top: 8px; }
+body[data-print-study] .profile-nav { display: flex; gap: 28px; padding: 0 0 22px; margin-bottom: 32px; border-bottom: 1px solid var(--color-line); font-size: 14px; }
+body[data-print-study] .profile-nav a { text-underline-offset: 6px; }
+body[data-theme='collector'][data-print-study] .profile-card { background: var(--color-card) var(--print-paper-texture); border-radius: 0; padding: 32px; }
+body[data-print-study] .profile-card-heading h2 { font-family: var(--font-serif); font-size: 30px; font-weight: 400; letter-spacing: -.025em; }
+body[data-print-study] .profile-page [data-book-additions] { margin-block: 48px; }
+body[data-print-study] .profile-page [data-book-additions] > div:first-child { border-bottom: 1px solid var(--color-line); padding-bottom: 16px; }
+body[data-print-study] .profile-page [data-book-additions] h2 { font-size: 34px; }
+body[data-theme='collector'][data-print-study] .profile-activity > section { background: transparent; border-radius: 0; padding: 32px; }
+body[data-print-study] .profile-activity .rounded-2xl { border-radius: 0; }
+body[data-print-study] .profile-activity .bg-wash\/70 { background: #eee6d7 var(--print-paper-texture); }
+body[data-print-study] .profile-page .library-description { -webkit-line-clamp: 2; }
+body[data-print-study] .print-footer-opening em,
+body[data-print-study] .skill-object-caption em { font-style: normal; color: inherit; }
+
+@media(max-width:700px) {
+ body[data-print-study] .skill-intro { gap: 32px; padding-block: 40px; }
+ body[data-print-study] .skill-intro h1 { font-size: 48px; }
+ body[data-print-study] .skill-object { min-height: 330px; gap: 18px; padding: 24px 20px; }
+ body[data-print-study] .skill-note h2 { font-size: 27px; }
+ body[data-print-study] .skill-method { padding-block: 44px; }
+ body[data-print-study] .skill-method-grid article { border-right: 0; border-bottom: 1px solid var(--color-line); padding: 28px 20px; }
+ body[data-print-study] .skill-method-grid article:last-child { border-bottom: 0; }
+ body[data-print-study] .skill-example-source { border-right: 0; border-bottom: 1px solid var(--color-line); }
+ body[data-print-study] .skill-example-jacket { width: 135px; }
+ body[data-print-study] .profile-header { flex-wrap: wrap; }
+ body[data-print-study] .profile-title { font-size: 46px; }
+ body[data-theme='collector'][data-print-study] .profile-card,
+ body[data-theme='collector'][data-print-study] .profile-activity > section { padding: 24px; }
+}
+
+/* Compact copy prompts remain full-sized actions, with no exposed prompt block. */
+body[data-theme='collector'] .skill-setup [data-copy-command] {
+ display: inline-flex; align-items: center; justify-content: center;
+ min-height: 44px; padding: 11px 22px; border-radius: 4px;
+ background: var(--color-accent); color: var(--color-card);
+ text-decoration: none; font: 500 14px/1.4 var(--font-sans);
+}
+body[data-print-study] .skill-package .skill-actions { gap: 12px; }
+body[data-print-study] .skill-package .skill-actions .awb-pill { margin-top: 0; }
+body[data-print-study] .skill-object-book { display: block; }
+body[data-theme='collector'][data-print-study] .profile-header { color: var(--color-ink); }
+body[data-theme='collector'][data-print-study] .profile-header :is(.awb-eyebrow,.profile-email,.profile-signout,.profile-description) { color: var(--color-soft); }
+body[data-theme='collector'][data-print-study] .profile-header .awb-eyebrow { color: var(--color-accent); }
+body[data-theme='collector'][data-print-study] .profile-signout { border-color: var(--color-line); }
+body[data-theme='collector'][data-print-study] .profile-signout:hover { background: var(--color-wash); color: var(--color-ink); }
+body[data-theme='collector'][data-print-study] .profile-activity > section { background: var(--color-card) var(--print-paper-texture); border: 1px solid var(--color-line); border-radius: 0; }

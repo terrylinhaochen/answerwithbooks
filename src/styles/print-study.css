@@ -1,0 +1,152 @@
+/* Opt-in material study. Layout, content, and account flows stay with the site. */
+body[data-theme='collector'][data-print-study] {
+ --color-paper:#f5f0e6;--color-ink:#302c29;--color-soft:#665e53;--color-faint:#74695c;
+ --color-accent:#8b4936;--color-accent-dark:#713b2c;--color-line:#d7cbbc;--color-wash:#ecddc7;--color-card:#fbf7ef;--print-copper:#8b4936;--print-sage:#496455;--print-plum:#72566b;
+ background:var(--color-paper) url('/print-study/paper.svg');
+}
+body[data-theme='collector'][data-print-study] > header{background:#f5f0e6f2;border-bottom:1px solid #d7d1c4}
+body[data-theme='collector'][data-print-study] :is(.awb-pill-primary,.room-button-primary,.detail-link){background:var(--color-accent);color:#faf6ec}
+body[data-theme='collector'][data-print-study] :is(.awb-pill-primary,.room-button-primary,.detail-link):hover{background:var(--color-accent-dark)}
+body[data-theme='collector'][data-print-study] :is(a,button,input,textarea,summary):focus-visible{outline-color:var(--color-accent)}
+body[data-theme='collector'][data-print-study] :is(.awb-panel,.awb-card,.awb-card-link,.insight-paper){border-radius:4px;box-shadow:none}
+body[data-theme='collector'][data-print-study] .awb-panel{background:#ecddc7 url('/print-study/paper-soft.svg')}
+body[data-theme='collector'][data-print-study] .insight-paper{background:#eddcc9 url('/print-study/paper-soft.svg')}
+body[data-theme='collector'][data-print-study] :is(.room-eyebrow,.awb-eyebrow,.detail-eyebrow){color:var(--color-accent)}
+body[data-theme='collector'][data-print-study] .shelf-lab[data-direction=table]{--shelf-paper:#eee8dc;--shelf-ink:#282923;--shelf-muted:#68645c;--shelf-line:#bcb4a5}
+body[data-theme='collector'][data-print-study] .shelf-lab[data-direction=table] .tactile-hero{border:12px solid #d93825;border-radius:2px;box-shadow:none;background:#eee8dc}
+body[data-theme='collector'][data-print-study] .tactile-hero::before{background:url('/print-study/paper.svg');opacity:.6}
+body[data-theme='collector'][data-print-study] .tactile-heading h2 em{color:#d93825}
+body[data-theme='collector'][data-print-study] .room-light{filter:none!important;inset:0!important;background:radial-gradient(#d9382533 .7px,transparent 1px)!important;background-size:5px 5px!important;mask-image:radial-gradient(ellipse,#000 20%,transparent 72%)}
+body[data-theme='collector'][data-print-study] .shelf-lab .table-stamp{color:#9c817060}
+body[data-theme='collector'][data-print-study] .shelf-lab[data-direction=table] .pick-book{transform:rotateZ(var(--rest-angle))}
+body[data-theme='collector'][data-print-study] .shelf-lab[data-direction=table] .book-place:hover .pick-book,
+body[data-theme='collector'][data-print-study] .shelf-lab[data-direction=table] .pick-book:focus-visible{transform:translateY(-12px) rotateZ(0deg)}
+body[data-theme='collector'][data-print-study] .jacket{--book-depth:0px;--half-depth:0px;--board:0px}
+body[data-theme='collector'][data-print-study] :is(.jacket-back,.jacket-pages,.jacket-page-top,.jacket-page-bottom,.jacket-spine,.jacket-board-edge,.jacket-board-foot){display:none}
+body[data-theme='collector'][data-print-study] .jacket-face{transform:none;border-radius:1px;box-shadow:0 2px 6px #30251915}
+body[data-theme='collector'][data-print-study] :is(.library-jacket,.detail-jacket,.book-cover-object){transform:none!important}
+body[data-theme='collector'][data-print-study] .library-cover{background:transparent}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-art{background:var(--print-paper);overflow:hidden}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-art img{top:16%;left:5%;width:90%;height:81%;object-fit:contain;mix-blend-mode:multiply}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-type{background:var(--print-paper);color:var(--cloth);padding:6cqw 9cqw 8cqw}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-type::before{content:'';position:absolute;top:0;left:9%;right:9%;border-top:1px solid currentColor;opacity:.6}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-face::after{background:url('/print-study/paper.svg');opacity:.5}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-title{font-size:14cqw;font-weight:400;line-height:.96;letter-spacing:-.06em;text-wrap:initial}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-author{font-size:3.6cqw}
+.print-book-meta{position:absolute;top:10%;left:9%;right:9%;display:flex;justify-content:space-between;font-size:2.3cqw;letter-spacing:.08em;color:var(--cloth);text-transform:uppercase}
+/* Question-first guide composition: matching ink, surround and dot field. */
+.print-guide{display:block;width:100%;aspect-ratio:16/9;padding:3.5%;background:var(--print-ink,#d93825);position:relative;overflow:hidden;container-type:inline-size}
+.print-guide-paper{height:100%;width:100%;position:relative;background:#e9ddc7;color:var(--print-ink,#d93825);isolation:isolate;overflow:hidden}
+.print-guide-paper::after{content:'';position:absolute;inset:0;background:url('/print-study/paper.svg');opacity:.65;mix-blend-mode:multiply;pointer-events:none;z-index:3}
+.print-guide-meta{position:absolute;top:7%;left:5.4%;right:5.4%;display:flex;justify-content:space-between;font-size:1.1cqw;letter-spacing:.08em;text-transform:uppercase}
+.print-guide-title{position:absolute;left:5.4%;top:29%;width:48%;z-index:2}
+.print-guide-title small{display:block;font-family:var(--font-sans);font-size:1.1cqw;text-transform:uppercase;letter-spacing:.075em;margin-bottom:4cqw}
+.print-guide-title>span{display:block;font-family:var(--font-serif);font-size:7.5cqw;line-height:.94;letter-spacing:-.045em;font-weight:400}
+.print-guide-art{position:absolute;left:50%;right:2%;top:17%;bottom:15%;isolation:isolate;display:flex;align-items:center}
+.print-guide-art::before{content:'';position:absolute;inset:-9% -8% -5% -8%;background:radial-gradient(currentColor .7px,transparent 1px);background-size:4px 4px;opacity:.2;mask-image:radial-gradient(ellipse,#000 30%,transparent 70%);z-index:-1}
+.print-guide-art img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.print-guide-foot{position:absolute;left:5.4%;right:5.4%;bottom:6%;border-top:1px solid color-mix(in srgb,var(--print-ink,#d93825) 50%,transparent);display:flex;justify-content:space-between;padding-top:2%;font-size:1cqw;letter-spacing:.01em}
+body[data-theme='collector'][data-print-study] .print-demo-cover{margin-bottom:28px}
+body[data-theme='collector'][data-print-study] .guide-saved-card{border-radius:3px;box-shadow:none}
+body[data-theme='collector'][data-print-study] .demo-window{border-radius:4px}
+@media(max-width:700px){body[data-theme='collector'][data-print-study] .shelf-lab[data-direction=table] .tactile-hero{border-width:6px}body[data-theme='collector'][data-print-study] .print-demo-cover{margin-bottom:20px}}
+
+body[data-theme='collector'][data-print-study] .jacket--print-long .jacket-title{font-size:10.5cqw;line-height:1;letter-spacing:-.045em}
+body[data-theme='collector'][data-print-study] .print-book-meta span:last-child{max-width:46%;text-align:right}
+
+body[data-theme='collector'][data-print-study] .answer-cover--print{border:0;border-radius:0;box-shadow:none}
+body[data-theme='collector'][data-print-study] .answer-cover--print:hover{box-shadow:none}
+
+/* Reference composition: ink surround, broad image field, bold title, ruled colophon. */
+body[data-theme='collector'][data-print-study] .jacket--print{background:var(--cloth)}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-face{inset:4cqw;grid-template-rows:67% 33%;background:var(--print-paper);border-radius:0;box-shadow:none}
+body[data-theme='collector'][data-print-study] .jacket--print .print-book-meta{top:6%;left:7%;right:7%;font-family:var(--font-sans);font-size:2.5cqw;letter-spacing:0;font-weight:700}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-art{isolation:isolate}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-art::before{content:'';position:absolute;inset:16% 7% 5%;background:repeating-linear-gradient(90deg,var(--cloth) 0 .55px,transparent .55px 7px);opacity:.14;mask-image:radial-gradient(ellipse,#000 30%,transparent 75%);z-index:-1}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-art img{top:13%;left:7%;width:86%;height:82%}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-type{padding:3cqw 6.5cqw 4cqw;overflow:hidden}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-type::before{left:7%;right:7%;opacity:1}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-title{font-family:var(--font-sans);font-weight:750;font-size:11.5cqw;line-height:1.02;letter-spacing:-.045em;max-width:none;margin:0;text-wrap:initial}
+body[data-theme='collector'][data-print-study] .jacket--print-long .jacket-title{font-size:8.9cqw;line-height:1.04;letter-spacing:-.045em}
+.print-book-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:3cqw;margin-top:auto;padding-top:2cqw;padding-bottom:2cqw;border-top:.45cqw solid currentColor;border-bottom:1.1cqw solid currentColor;font-family:var(--font-sans);line-height:1.1}
+.print-book-edition{font-size:2.6cqw;font-weight:650;max-width:34%}
+body[data-theme='collector'][data-print-study] .jacket--print .print-book-footer .jacket-author{font-size:3.6cqw;line-height:1.1;font-weight:700;letter-spacing:-.02em;margin:0;padding:0;text-align:right;max-width:70%}
+
+/* Cover-only type: rounder, heavier letterforms for the printed jacket. */
+body[data-theme='collector'][data-print-study] .jacket--print{--font-print:"Outfit",var(--font-sans)}
+body[data-theme='collector'][data-print-study] .jacket--print :is(.jacket-title,.print-book-meta,.print-book-footer){font-family:var(--font-print);font-synthesis:none}
+body[data-theme='collector'][data-print-study] .jacket--print .jacket-title{font-weight:700;letter-spacing:-.025em;line-height:1.03}
+body[data-theme='collector'][data-print-study] .jacket--print-long .jacket-title{font-size:8.6cqw;line-height:1.06}
+
+/* Ceramic palette across navigation, tools, catalog, reader and account surfaces. */
+body[data-theme='collector'][data-print-study] :is(.awb-card,.awb-panel,.awb-card-link,.answer-paper,.method-card,.profile-paper,.profile-card,.guide-saved-card,.reading-guide-cover,.faq-pages details,.guide-book-choice,.awb-input,.awb-select){border-radius:3px;box-shadow:none;border-color:var(--color-line)}
+body[data-theme='collector'][data-print-study] :is(.awb-card,.awb-card-link,.answer-paper,.profile-card){background:var(--color-card)}
+body[data-theme='collector'][data-print-study] :is(.awb-pill,.awb-page-button,.room-button){border-radius:3px}
+body[data-theme='collector'][data-print-study] :is(.awb-input,.awb-select){background:#fbf8f1}
+body[data-theme='collector'][data-print-study] :is(.profile-paper,[data-book-agent],.profile-activity>section,.account-nav,.home-answers [data-question-invite]){background:#eadcc5 url('/print-study/paper-soft.svg');border-radius:3px}
+body[data-theme='collector'][data-print-study] .method-card:nth-child(1){background:#eddfd3}
+body[data-theme='collector'][data-print-study] .method-card:nth-child(2){background:#e9ddc4}
+body[data-theme='collector'][data-print-study] .method-card:nth-child(3){background:#ead5c9}
+body[data-theme='collector'][data-print-study] :is(.agent-room,.profile-header){background:#804735 url('/print-study/paper-soft.svg');border-radius:3px}
+body[data-theme='collector'][data-print-study] .faq-pages details{background:#eee7db}
+body[data-theme='collector'][data-print-study] .faq-pages details[open]{background:#fbf7ef}
+body[data-theme='collector'][data-print-study] :is(.agent-room,.profile-header) .room-eyebrow{color:#e1c4ae}
+body[data-theme='collector'][data-print-study] :is(a,button,input,select,textarea,summary):focus-visible{outline-color:var(--color-accent)}
+body[data-theme='collector'][data-print-study] dialog{background:var(--color-card) url('/print-study/paper-soft.svg');border-radius:4px}
+body[data-theme='collector'][data-print-study] dialog::backdrop{background:#302b2588}
+body[data-theme='collector'][data-print-study] .preview-actions button{background:var(--color-accent)}
+body[data-theme='collector'][data-print-study] .prose-awb{--tw-prose-body:#554f46;--tw-prose-headings:#302c29;--tw-prose-links:#8b4936;--tw-prose-quotes:#496455;--tw-prose-quote-borders:#a5afa0}
+body[data-theme='collector'][data-print-study] .prose-awb blockquote{background:#ead8bd80;border-radius:0}
+body[data-theme='collector'][data-print-study] :is(.home-method,.home-answers){position:relative;isolation:isolate}
+body[data-theme='collector'][data-print-study] :is(.home-method,.home-answers)::before{content:'';position:absolute;inset:0 -30px;pointer-events:none;z-index:-1;background:radial-gradient(#9d7356 .65px,transparent .85px);background-size:5px 5px;opacity:.10;mask-image:linear-gradient(120deg,#000,transparent 24%,transparent 80%,#000)}
+/* The demo reads like a paper conversation, with the same animation and controls. */
+body[data-theme='collector'][data-print-study] .demo-window{background:#f8f3e9;border:1px solid #d4c7b5;color:#39342e;box-shadow:none}
+body[data-theme='collector'][data-print-study] :is(.demo-titlebar,.demo-window-bottom){background:#ecddc7;border-color:#d6c2a7;color:#68543f}
+body[data-theme='collector'][data-print-study] .demo-scene{scrollbar-color:#a7aa98 #f8f3e9}
+body[data-theme='collector'][data-print-study] :is(.demo-speaker,.demo-agent-message>.demo-speaker,.demo-user-message>.demo-speaker,.demo-terminal-mark,.demo-run-state){color:#625d52}
+body[data-theme='collector'][data-print-study] .demo-user-message>p{background:#eddfd3;color:#43352d;border-color:#dac6b4;border-radius:4px}
+body[data-theme='collector'][data-print-study] .demo-user-context{color:#766152;border-color:#d5bdab}
+body[data-theme='collector'][data-print-study] :is(.demo-skill-call,.demo-catalog li){background:#f0e4d0;color:#66503b;border-color:#d8c5a8;border-radius:3px}
+body[data-theme='collector'][data-print-study] :is(.demo-call-action,.demo-call-book,.demo-call-state,.demo-call-chevron,.demo-source-note,.demo-methods,.demo-methods>p,.demo-methods>span){color:#66503b}
+body[data-theme='collector'][data-print-study] .demo-methods pre{background:#fbf3e4;color:#604d37;border-color:#e0ceb2}
+body[data-theme='collector'][data-print-study] .agent-demo[data-demo-matched=true] [data-demo-choice=true]{background:#e8cbb5;color:#70432f;border-color:#b08060}
+body[data-theme='collector'][data-print-study] .demo-answer{background:#fffaf2;color:#39342e;border:1px solid #d8cdbb;border-radius:3px}
+body[data-theme='collector'][data-print-study] :is(.demo-answer-title,.demo-excerpt blockquote){color:#39342e}
+body[data-theme='collector'][data-print-study] :is(.demo-reading-context,.demo-connection,.demo-answer-note,.demo-excerpt figcaption){color:#6a6051}
+body[data-theme='collector'][data-print-study] :is(.demo-scene-label,.demo-excerpt-label){color:#8b4936}
+body[data-theme='collector'][data-print-study] .demo-answer-note{border-color:#dfd2bf}
+body[data-theme='collector'][data-print-study] .demo-excerpt{border-color:#a96449}
+
+/* Coarse ink fields sit at the margins; reading text keeps a quiet paper ground. */
+body[data-theme='collector'][data-print-study] :is(.insight-paper,.profile-paper,.awb-panel,.method-card,.home-answers [data-question-invite]){background-image:url('/print-study/halftone-warm.svg'),url('/print-study/paper.svg');background-size:600px 400px,180px 180px;background-repeat:no-repeat,repeat;background-position:right bottom,0 0}
+body[data-theme='collector'][data-print-study] :is(.home-library,.home-answers){background-image:url('/print-study/halftone-warm.svg');background-repeat:no-repeat;background-position:right bottom;background-size:700px 470px}
+body[data-theme='collector'][data-print-study] .agent-room-simple{padding:0;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;background:#804735 url('/print-study/paper.svg');border-radius:0}
+body[data-theme='collector'][data-print-study] .print-install-copy{padding:48px 44px;position:relative;z-index:1}
+body[data-theme='collector'][data-print-study] .print-install-copy h2{font-size:clamp(36px,4vw,52px);color:#fff2df}
+body[data-theme='collector'][data-print-study] .print-install-copy>p{color:#f2dfc9;max-width:38ch}
+body[data-theme='collector'][data-print-study] .print-install-copy .room-button{margin-top:26px;background:#fbefdc;color:#683b2c;border:1px solid #f3d9bb}
+body[data-theme='collector'][data-print-study] .print-install-art{align-self:stretch;display:flex;align-items:center;min-height:350px;background:#eedbc0 url('/print-study/halftone-warm.svg') center/cover;overflow:hidden}
+body[data-theme='collector'][data-print-study] .print-install-art img{width:115%;max-width:none;margin-left:-7.5%;mix-blend-mode:multiply}
+body[data-theme='collector'][data-print-study] .print-footer{background-image:url('/print-study/paper.svg')}
+@media(max-width:700px){body[data-theme='collector'][data-print-study] .agent-room-simple{grid-template-columns:1fr}body[data-theme='collector'][data-print-study] .print-install-copy{padding:32px 26px}body[data-theme='collector'][data-print-study] .print-install-art{min-height:0;aspect-ratio:1.8}body[data-theme='collector'][data-print-study] .print-install-art img{width:100%;margin:0}}
+
+/* The material continues through the space between sections, like a printed sheet. */
+body[data-theme='collector'][data-print-study]{background-image:url('/print-study/page-ink-fields.svg'),url('/print-study/paper.svg');background-size:1440px 1400px,180px 180px;background-position:center 800px,0 0;background-repeat:repeat-y,repeat}
+body[data-theme='collector'][data-print-study] .reading-room{background:transparent}
+body[data-theme='collector'][data-print-study] .agent-room-simple{position:relative;isolation:isolate;min-height:490px;display:flex;align-items:flex-end;background:#466fae var(--print-paper-texture);background-size:var(--print-paper-size);color:#faf3df;overflow:hidden}
+body[data-theme='collector'][data-print-study] .print-install-copy{width:49%;padding:48px 44px;z-index:2;background:transparent}
+body[data-theme='collector'][data-print-study] .print-install-copy h2{color:#fff5e2;font-size:clamp(35px,3.8vw,50px)}
+body[data-theme='collector'][data-print-study] .print-install-copy>p{color:#ece7dc;font-size:13px;max-width:35ch}
+body[data-theme='collector'][data-print-study] .print-install-copy .room-button{background:#f4efdd;color:#294875;border-color:#f4efdd;gap:20px}
+body[data-theme='collector'][data-print-study] .print-install-art{position:absolute;inset:0 0 0 37%;display:flex;align-items:flex-end;min-height:0;background:none;z-index:1;pointer-events:none}
+body[data-theme='collector'][data-print-study] .print-install-art img{display:block;width:100%;height:100%;object-fit:contain;object-position:right bottom;margin:0;mix-blend-mode:normal}
+body[data-theme='collector'][data-print-study] .print-footer{background-color:var(--color-paper)}
+@media(max-width:700px){body[data-theme='collector'][data-print-study] .agent-room-simple{display:flex;flex-direction:column;align-items:stretch;min-height:0}body[data-theme='collector'][data-print-study] .print-install-copy{width:100%;padding:32px 26px 18px}body[data-theme='collector'][data-print-study] .print-install-copy h2{font-size:37px}body[data-theme='collector'][data-print-study] .print-install-art{position:relative;inset:auto;align-self:stretch;aspect-ratio:1.5;margin-top:-15px}body[data-theme='collector'][data-print-study] .print-install-art img{width:100%;margin:0}}
+
+/* Shared straight-edged page illustrations; the library is a cropped print panel. */
+body[data-theme='collector'][data-print-study]{--print-scene-radius:0px;--print-paper-texture:url('/print-study/paper-soft.svg');--print-paper-size:180px 180px}
+body[data-theme='collector'][data-print-study] :is(.lives-hero,.print-footer,.print-footer-view,.print-footer-view img,.agent-room-simple){border-radius:var(--print-scene-radius)}
+body[data-theme='collector'][data-print-study] .print-footer-view{overflow:hidden}
+body[data-theme='collector'][data-print-study] .print-install-art{inset:0 0 0 50%;overflow:hidden;clip-path:inset(0)}
+body[data-theme='collector'][data-print-study] .print-install-art img{width:100%;height:100%;object-fit:cover;object-position:right bottom}
+@media(max-width:700px){body[data-theme='collector'][data-print-study] .print-install-art{inset:auto;margin-top:0;aspect-ratio:1.45}body[data-theme='collector'][data-print-study] .print-install-art img{object-position:right center}}

@@ -483,14 +483,7 @@ h3,
   color: var(--color-ink);
 }
 .prose-awb blockquote::before {
-  position: absolute;
-  top: 0.75rem;
-  left: 1.25rem;
-  content: '“';
-  color: var(--color-accent);
-  font-family: var(--font-serif);
-  font-size: 3.25rem;
-  line-height: 1;
+  content: none;
 }
 .prose-awb blockquote p {
   margin-bottom: 0.5rem;

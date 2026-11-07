@@ -1,3 +1,4 @@
+import {printGuideMarkup} from './print-study.mjs';
 import {buildOriginalGuideReadingPrompt} from './reading-handoff';
 import {serviceCall} from './book-upload';
 import {supabase} from './supabase';
@@ -21,6 +22,8 @@ function bookCover(book:GuideBook){
 function bookCard(book:GuideBook){const card=el('li','','reading-book-card'),copy=el('div');copy.append(el('strong',book.title),el('small',book.author||''));card.append(bookCover(book),copy);return card;}
 type GuideCover={src?:string|null;label?:string;topic?:string;background?:string;status?:string};
 function guideCover(_question:string,design:GuideCover={}){
+ const study=design.src?printGuideMarkup(_question):null;
+ if(study){const holder=document.createElement('div');holder.innerHTML=study;return holder.firstElementChild as HTMLDivElement;}
  const cover=el('div','','reading-guide-cover');cover.setAttribute('aria-hidden','true');
  if(!design.src){cover.classList.add('reading-guide-cover-pending');cover.append(el('small',design.status==='failed'?'Your reading is ready':'Illustrating your cover'));return cover;}
  if(/^#[a-f0-9]{6}$/i.test(design.background||''))cover.style.backgroundColor=design.background!;

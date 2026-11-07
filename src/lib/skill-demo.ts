@@ -5,6 +5,7 @@ export function mountSkillDemo(){
  const root=document.querySelector<HTMLElement>('[data-agent-demo]');if(!root)return;
  const conversation=root.querySelector<HTMLElement>('[data-demo-conversation]')!;
  const scroller=root.querySelector<HTMLElement>('[data-demo-scroll]')!;
+ const readingUI=root.dataset.demoUi==='reading';
  const runState=root.querySelector<HTMLElement>('[data-demo-run-state]')!;
  const callLabel=root.querySelector<HTMLElement>('[data-demo-call-label]')!;
  const matchedLabel=callLabel.textContent!;
@@ -14,7 +15,8 @@ export function mountSkillDemo(){
  const askTool=root.querySelector<HTMLElement>('[data-demo-tool="ask"]')!;
  const reveals=[...root.querySelectorAll<HTMLElement>('[data-demo-reveal]')];
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
- const starts=[0,750,2100,4500,6600,7900,8350,8950,9550,10200],duration=10800;
+ const starts=readingUI?[0,900,3000,5500,8500,10500,11700,13000,14500,16000]:[0,750,2100,4500,6600,7900,8350,8950,9550,10200];
+ const duration=starts[9]+700;
  let elapsed=0,last=0,frame=0,visible=false,manualScroll=false,finished=false;
  let animations:ReturnType<typeof animate>[]=[];
  const canPlay=()=>visible&&!document.hidden&&!finished&&!reduced.matches;
@@ -25,19 +27,19 @@ export function mountSkillDemo(){
  }
  function playback(){
   root!.dataset.demoPaused=String(!canPlay());
-  runState.textContent=finished?'Ready to use':elapsed<4500?'Listing books':elapsed<7900?'Asking the books':'Opening the reading';
+  runState.textContent=readingUI?(finished?'Ready to read':elapsed<starts[3]?'Choosing books':elapsed<starts[5]?'Connecting passages':'Opening your reading'):(finished?'Ready to use':elapsed<starts[3]?'Listing books':elapsed<starts[5]?'Asking the books':'Opening the reading');
  }
  function paint(instant=false){
   const follow=!instant&&!manualScroll;
   let revealed=false;
-  const step=elapsed<4500?0:elapsed<7900?1:2;
+  const step=elapsed<starts[3]?0:elapsed<starts[5]?1:2;
   finished=elapsed>=duration;
   root!.dataset.demoPhase=['catalog','ask','apply'][step];
-  root!.dataset.demoMatched=String(elapsed>=6600);
-  catalogTool.dataset.loading=String(elapsed>=750&&elapsed<2100);
-  askTool.dataset.loading=String(elapsed>=4500&&elapsed<6600);
-  catalogLabel.textContent=elapsed<2100?'Listing…':catalogCount;
-  callLabel.textContent=elapsed<6600?'Finding a match…':matchedLabel;
+  root!.dataset.demoMatched=String(elapsed>=starts[4]);
+  catalogTool.dataset.loading=String(elapsed>=starts[1]&&elapsed<starts[2]);
+  askTool.dataset.loading=String(elapsed>=starts[3]&&elapsed<starts[4]);
+  catalogLabel.textContent=elapsed<starts[2]?(readingUI?'Finding perspectives…':'Listing…'):catalogCount;
+  callLabel.textContent=elapsed<starts[4]?(readingUI?'Finding the connection…':'Finding a match…'):matchedLabel;
   reveals.forEach(el=>{
    if(el.dataset.visible==='true'||elapsed<starts[Number(el.dataset.demoReveal)])return;
    revealed=true;el.dataset.visible='true';el.removeAttribute('aria-hidden');el.inert=false;
@@ -52,7 +54,7 @@ export function mountSkillDemo(){
   if(finished)settleReveals();
   if(revealed&&follow)requestAnimationFrame(()=>{
    if(manualScroll)return;
-   const card=conversation.querySelector<HTMLElement>('.demo-answer')!;
+   const card=conversation.querySelector<HTMLElement>('[data-demo-reading],.demo-answer')!;
    // Keep the start of the reading in view as its paragraphs arrive.
    const top=elapsed>=starts[5]?scroller.scrollTop+card.getBoundingClientRect().top-scroller.getBoundingClientRect().top-20:scroller.scrollHeight;
    scroller.scrollTo({top,behavior:'smooth'});

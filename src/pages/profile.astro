@@ -27,14 +27,14 @@ import AddBookDialog from '../components/AddBookDialog.astro';
         </div>
         <button type="button" id="signout-btn" class="profile-signout">Sign out</button>
       </header>
-      <nav aria-label="Account settings" class="mb-6 flex flex-wrap gap-5 text-sm"><a href="/guides/#your-guides" class="underline">Your guides</a><a href="/billing/" class="underline">Billing</a></nav>
+      <nav aria-label="Account settings" class="profile-nav mb-6 flex flex-wrap gap-5 text-sm"><a href="/guides/#your-guides" class="underline">Your guides</a><a href="/billing/" class="underline">Billing</a></nav>
 
       <section class="profile-card mb-6">
         <div class="profile-card-heading"><h2>Add to your library</h2><a href="/tools/">How it works <span aria-hidden="true">↗</span></a></div>
         <p class="mt-3 max-w-2xl text-sm leading-relaxed text-soft">Upload a book to read it here and explore its ideas in your guides.</p>
         <button class="awb-pill awb-pill-primary mt-5" type="button" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Upload a source</button>
       </section>
-      <BookAdditions />
+      <BookAdditions sharedOnly excerpts={false} />
 
       <section id="preferences" class="profile-card profile-preferences">
         <div class="profile-card-heading"><h2>Your preferences</h2><a href="/onboarding/start/?from=profile">Edit preferences <span aria-hidden="true">→</span></a></div>
