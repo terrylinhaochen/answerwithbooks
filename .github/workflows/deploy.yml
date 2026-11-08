@@ -53,10 +53,11 @@ jobs:
           node --test scripts/test-book-processing.mjs scripts/test-book-worker.mjs scripts/test-book-parity.mjs scripts/test-book-revisions.mjs scripts/test-long-book.mjs scripts/test-book-cache.mjs
           python3 -m unittest discover -s scripts/native-book-worker -p test_worker.py
 
-      - name: Set up Deno for the processing handler tests
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.8.3
+      - name: Install pinned Deno from the official npm package
+        # Avoid the GitHub release download outage; keep the runtime and tests unchanged.
+        run: |
+          npm install --global deno@2.8.3
+          deno --version
 
       - name: Verify processing handler without network or provider access
         run: |

@@ -23,9 +23,11 @@ jobs:
       - run: node --test scripts/test-book-api-auth.mjs scripts/test-key-dialogs.mjs
       - run: npm run build
       - run: node scripts/check-rendered-covers.mjs
-      - uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.8.3
+      - name: Install pinned Deno from the official npm package
+        # Avoid the GitHub release download outage; keep the runtime and tests unchanged.
+        run: |
+          npm install --global deno@2.8.3
+          deno --version
       - name: Verify financial admission at the provider boundary
         run: |
           deno cache --node-modules-dir=none scripts/test-book-worker-http.ts scripts/test-reading-http.ts
