@@ -1,0 +1,51 @@
+{
+  "site": "http://127.0.0.1:4327",
+  "checkedAt": "2026-11-08T09:15:14.249Z",
+  "checks": [
+    {
+      "width": 320,
+      "overflow": false,
+      "demos": 3,
+      "coversLoaded": 7,
+      "coversMatchCatalog": true,
+      "installPromptCopied": true,
+      "consoleErrors": []
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "demos": 3,
+      "coversLoaded": 7,
+      "coversMatchCatalog": true,
+      "installPromptCopied": true,
+      "consoleErrors": []
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "demos": 3,
+      "coversLoaded": 7,
+      "coversMatchCatalog": true,
+      "installPromptCopied": true,
+      "consoleErrors": []
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "demos": 3,
+      "coversLoaded": 7,
+      "coversMatchCatalog": true,
+      "installPromptCopied": true,
+      "consoleErrors": []
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "demos": 3,
+      "coversLoaded": 7,
+      "coversMatchCatalog": true,
+      "installPromptCopied": true,
+      "consoleErrors": []
+    }
+  ]
+}

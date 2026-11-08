@@ -2,8 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ToolCommand from '../components/ToolCommand.astro';
 import { bookSkillSetupPrompt } from '../lib/book-skill-install.mjs';
-import AddBookDialog from '../components/AddBookDialog.astro';
-import BookJacket from '../components/BookJacket.astro';
+import SkillFeatureDemo from '../components/SkillFeatureDemo.astro';
 import '../styles/book-skills.css';
 ---
 <Base title="Skills" description="Bring a book’s ideas into your next question or task with the Answer with Books skill." path="/tools/">
@@ -11,38 +10,29 @@ import '../styles/book-skills.css';
   <section class="skill-intro" id="book-skill" aria-labelledby="skill-title">
    <div class="skill-intro-copy">
     <p class="awb-eyebrow">Put your reading to work</p>
-    <h1 id="skill-title">Turn what you read<br />into how you work.</h1>
-    <p class="skill-lead">Bring the ideas in a book to your next decision, project, or conversation. Start with the agent you already use.</p>
+    <h1 id="skill-title">Build a skill from books you've read.</h1>
+    <p class="skill-lead">Give your agent access to the library. Find books, create a reading guide, and bring the ideas into your next task—all with one skill.</p>
     <section id="install-skill" class="skill-setup mt-6" aria-label="Install skill">
       <ToolCommand value={bookSkillSetupPrompt} label="Install skill" compact prominent />
       <p class="skill-caption">Copy the prompt, then paste it into your agent. <a href="/SKILL.md" download="answer-with-books-setup.md" class="underline">Download skill ↓</a></p>
     </section>
    </div>
-   <div class="skill-object" aria-label="Invention: A Life, with a question to put its ideas to work">
-    <a class="skill-object-book" href="/books/read/?id=9004d927-7785-4c3a-acf1-647f732485f7" aria-label="Read Invention: A Life"><BookJacket title="Invention: A Life" author="James Dyson" slug="invention-a-life" color="#2434ad" coverAsset="/print-study/invention-a-life-r29.webp" /></a>
-    <div class="skill-note"><p class="skill-note-label">A question to begin with</p><h2>When is it worth<br />trying again?</h2><ol><li>Describe what you are working on.</li><li>Read how others approached it.</li><li>Choose something to try next.</li></ol><div class="skill-note-footer">Your question. A book. A next step.</div></div>
-   </div>
   </section>
-  <section class="skill-method" aria-labelledby="method-title">
-   <div class="skill-section-heading"><div><p class="awb-eyebrow">One skill, every book</p><h2 id="method-title">Read with a question.<br />Leave with an idea.</h2></div><p>The skill helps your agent find a book, explore its original passages, and connect what you read to your own experience.</p></div>
-   <div class="skill-method-grid">
-    <article><span class="skill-step">01</span><h3>Bring a question.</h3><p>A decision you are weighing. A project that has stalled. Something you want to understand about life or work.</p></article>
-    <article><span class="skill-step">02</span><h3>Explore a few lives.</h3><p>Find books that speak to your question and read their original passages together in a guide.</p></article>
-    <article><span class="skill-step">03</span><h3>Make it your own.</h3><p>Talk through what resonates, where the ideas have limits, and what you could try in your own situation.</p></article>
-   </div>
+  <section class="skill-features" aria-label="What the skill can do">
+   <article class="skill-feature" id="find-books">
+    <div class="skill-feature-copy"><p class="awb-eyebrow">01 / Find books</p><h2>A library your agent can explore.</h2><p>Ask for books that speak to your question. Your agent can browse the shared library, read introductions, and explore chapter maps before you choose where to go deeper.</p><a href="/books/">Explore the books <span aria-hidden="true">→</span></a></div>
+    <SkillFeatureDemo kind="books" />
+   </article>
+   <article class="skill-feature skill-feature-reverse" id="create-reading">
+    <div class="skill-feature-copy"><p class="awb-eyebrow">02 / Create a guide</p><h2>Your question.<br />A reading across lives.</h2><p>Start with something you want to understand. Review suggested books, choose your reading time, and get a guide built around original passages and the connections between them.</p><a href="/guides/">Find your next reading <span aria-hidden="true">→</span></a></div>
+    <SkillFeatureDemo kind="guide" />
+   </article>
+   <article class="skill-feature" id="ask-the-books">
+    <div class="skill-feature-copy"><p class="awb-eyebrow">03 / Ask with sources</p><h2>Bring the reading into your work.</h2><p>Ask a follow-up, weigh a decision, or explore a next step with your agent. It can retrieve existing guides and cited passages, so you can trace an idea back to its source.</p><a href="#install-skill">Use it with your agent <span aria-hidden="true">→</span></a></div>
+    <SkillFeatureDemo kind="ask" />
+   </article>
   </section>
-  <section class="skill-package" id="install" aria-labelledby="package-title">
-   <div><p class="awb-eyebrow">Keep something worth returning to</p><h2 id="package-title">A shelf of lives.<br />Room for your own.</h2><p>Explore the books already here, or add a source you want to read more closely.</p><div class="skill-actions"><a class="awb-pill awb-pill-primary" href="/books/">Explore the books ↗</a><button type="button" class="awb-pill" data-open-book-request aria-haspopup="dialog" aria-controls="book-upload-dialog">Add a book ↗</button></div></div>
-   <dl class="skill-files"><div><dt>Books</dt><dd>Introductions, ideas, and questions to help you find your next reading.</dd></div><div><dt>Guides</dt><dd>Original passages brought together around a question that matters to you.</dd></div><div><dt>Your agent</dt><dd>A place to connect the reading to your experience and decide what to do with it.</dd></div></dl>
-  </section>
-  <section class="skill-faq" aria-labelledby="skill-faq-title"><div><p class="awb-eyebrow">Before you begin</p><h2 id="skill-faq-title">A few useful details.</h2></div><div>
-   <details><summary>Can I use this with my existing agent?</summary><p>Install the Answer with Books skill in an agent that supports skills. Copy the install prompt above and paste it into your agent to get started. You can also copy a guide’s personalization prompt into an AI chat.</p></details>
-   <details><summary>Does each book need its own skill?</summary><p>No. The same skill connects your agent to the library, including books added later.</p></details>
-   <details><summary>Where do I return to my reading?</summary><p>Find your saved reading in <a href="/guides/">Guides</a> and your books in <a href="/profile/">Profile</a>. Published books and guides are also available in the shared catalog.</p></details>
-   <details><summary>Can I add a book?</summary><p>Yes. Sign in and choose Add a book to upload a PDF, EPUB, document, or notes. Books you add join the shared library.</p></details>
-  </div></section>
  </div>
- <AddBookDialog />
 </Base>
 <script>
  import { readToolsAuthContext } from '../lib/tools-auth.mjs';
@@ -50,6 +40,21 @@ import '../styles/book-skills.css';
  if (researchSetup) location.replace(`/api-keys/?from=tools&agent=${encodeURIComponent(researchSetup.agentId)}`);
 </script>
 <style>
+ .skill-intro{display:block}
+ .skill-intro-copy{max-width:820px}
+ .skill-intro h1{text-wrap:balance;max-width:17ch}
+ .skill-lead{max-width:56ch}
+ .skill-features{display:grid;gap:28px;padding-top:48px}
+ .skill-feature{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr);align-items:center;gap:48px;padding:24px 24px 24px 40px;background:#eee8de;border:1px solid #d9d1c4;border-radius:12px}
+ .skill-feature-reverse{grid-template-columns:minmax(0,1.35fr) minmax(0,.8fr);padding:24px 40px 24px 24px}
+ .skill-feature-reverse .skill-feature-copy{order:2}
+ .skill-feature-copy{padding-block:24px;min-width:0}
+ .skill-feature-copy h2{font-size:clamp(30px,3.1vw,43px);line-height:1.12;letter-spacing:-.025em;margin:18px 0}
+ .skill-feature-copy>p:not(.awb-eyebrow){font-size:15px;line-height:1.8;color:var(--color-soft);max-width:38ch}
+ .skill-feature-copy>a{display:inline-flex;gap:14px;align-items:center;margin-top:28px;font-size:14px;text-decoration:underline;text-underline-offset:5px}
+ .skill-feature-copy>a:hover{color:#8c4937}
+ @media(max-width:900px){.skill-feature,.skill-feature-reverse{gap:24px;padding:24px;grid-template-columns:1fr 1.2fr}.skill-feature-reverse .skill-feature-copy{order:0}}
+ @media(max-width:700px){.skill-feature,.skill-feature-reverse{grid-template-columns:1fr;gap:24px;padding:22px 16px 16px}.skill-feature-copy{padding:8px}.skill-feature-copy h2{font-size:34px}.skill-feature-copy>p:not(.awb-eyebrow){max-width:none}.skill-features{padding-top:28px;gap:22px}}
  .skill-setup{scroll-margin-top:110px;max-width:560px}
  .skill-setup :global([data-copy-command]){align-self:flex-start;background:var(--color-ink);color:var(--color-paper);padding:11px 18px;border-radius:999px;min-height:42px}
  .skill-setup :global([data-copy-command]:hover){background:var(--color-soft)}

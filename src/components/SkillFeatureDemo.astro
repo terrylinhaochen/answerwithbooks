@@ -1,0 +1,74 @@
+---
+import BookJacket from './BookJacket.astro';
+import uploadedBooks from '../lib/uploaded-books.json';
+interface Props { kind: 'books' | 'guide' | 'ask' }
+const { kind } = Astro.props;
+// Use the same catalog records and complete jacket renderer as /books/.
+const books = [
+ {title: 'Shoe Dog', note: 'Building through uncertainty'},
+ {title: 'Invention: A Life', note: 'Learning through experiments'},
+ {title: 'Open', note: 'Finding a direction of your own'},
+].map(({ title, note }) => {
+ const book = uploadedBooks.find(book => book.title === title);
+ if (!book) throw new Error(`Missing demo book: ${title}`);
+ return {...book, note};
+});
+const descriptions = {
+ books: 'Example: an agent explores Shoe Dog, Invention: A Life, and Open for a question about finding worthwhile work.',
+ guide: 'Example: review three suggested books and choose a 25-minute reading before confirming a guide.',
+ ask: 'Example: an agent connects a question about a stalled project to a source-backed guide and proposes a small experiment.',
+};
+---
+<figure class:list={['feature-demo', `feature-demo-${kind}`]}>
+ <div class="demo-scene" role="img" aria-label={descriptions[kind]}>
+  <div class="demo-window" aria-hidden="true">
+   <div class="demo-toolbar"><span class="demo-mark">a<span>↗</span></span><span>Answer with Books</span><span class="demo-mode">{kind === 'books' ? 'Library' : kind === 'guide' ? 'Your reading' : 'Your agent'}</span></div>
+   {kind === 'books' ? <div class="demo-library">
+    <div class="demo-query">Find books about doing worthwhile work.<span>↗</span></div>
+    <p class="demo-response">Three lives. Different ways of finding a direction.</p>
+    <div class="demo-books">{books.map(book => <div class="demo-book"><span class="demo-cover"><BookJacket title={book.title} author={book.author} color={book.color} coverAsset={`/print-study/${book.art}`} loading="lazy" /></span><h3>{book.title}</h3><p>{book.author}</p></div>)}</div>
+    <div class="demo-bottom"><span class="demo-status-dot"></span> Introductions & chapter maps ready to explore</div>
+   </div> : kind === 'guide' ? <div class="demo-guide">
+    <p class="demo-kicker">Your question</p><h3>How do I find something<br />worthwhile doing?</h3>
+    <p class="demo-small">A reading through three different lives.</p>
+    <div class="demo-sources">{books.map(book => <div><span class="demo-mini-cover"><BookJacket title={book.title} author={book.author} color={book.color} coverAsset={`/print-study/${book.art}`} loading="lazy" /></span><span><strong>{book.title}</strong><small>{book.note}</small></span><span class="demo-check">✓</span></div>)}</div>
+    <div class="demo-time"><span>Reading time</span><div><span>10 min</span><span class="selected">25 min</span><span>45 min</span></div></div>
+    <div class="demo-confirm">Confirm & create guide <span>→</span></div>
+   </div> : <div class="demo-chat">
+    <div class="demo-message"><span>You</span><p>My project has stalled. What could I try this week?</p></div>
+    <div class="demo-agent"><p class="demo-kicker">Your agent</p><div class="demo-retrieval"><span>✓</span> Found a relevant guide and its sources</div><h3>Make the next step an experiment.</h3><p>Choose one assumption to test. Try a small version, notice what changes, and decide what to adjust.</p><div class="demo-citation"><span class="demo-mini-cover"><BookJacket title={books[1].title} author={books[1].author} color={books[1].color} coverAsset={`/print-study/${books[1].art}`} loading="lazy" /></span><span><strong>Invention: A Life</strong><small>Explore the guide & source passages ↗</small></span></div><p class="demo-followup">What is the one thing you most need to learn?</p></div>
+   </div>}
+  </div>
+ </div>
+ <figcaption>Illustrative example · {kind === 'books' ? 'Explore the library' : kind === 'guide' ? 'Review before creating' : 'Connect an idea to a task'}</figcaption>
+</figure>
+<style>
+ .feature-demo{min-width:0;margin:0;align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+ .demo-scene{background:#c5b5a0 url('/textures/book-paper.svg');border-radius:6px;padding:42px 26px;display:flex;align-items:center;justify-content:center;min-height:460px;color:#302d27}
+ .feature-demo-guide .demo-scene{background-color:#aab4a3}.feature-demo-ask .demo-scene{background-color:#c7a594}
+ .demo-window{background:#faf7f0;border:1px solid #fff9;box-shadow:0 16px 32px #29261f1a;border-radius:8px;width:100%;max-width:520px;overflow:hidden}
+ .demo-toolbar{display:flex;align-items:center;gap:9px;border-bottom:1px solid #e5dfd4;padding:15px 20px;font-size:11px}
+ .demo-mark{font-family:var(--font-serif);font-size:22px;line-height:1}.demo-mark span{font-size:12px}
+ .demo-mode{margin-left:auto;color:#777065;font-size:10px}
+ .demo-library,.demo-guide,.demo-chat{padding:24px}
+ .demo-query{border:1px solid #d6cfc2;border-radius:6px;padding:14px;font-size:12px;display:flex;gap:12px;align-items:center;justify-content:space-between;line-height:1.5}
+ .demo-query>span{font-size:18px}
+ .demo-response{font-size:12px;line-height:1.7;margin:20px 0;color:#625c52}
+ .demo-books{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+ .demo-cover{display:block;width:100%}.demo-mini-cover{display:block;width:34px;flex:0 0 34px}
+ .demo-book h3{font-size:12px;margin:12px 0 4px;font-weight:500;line-height:1.4}.demo-book p{font-size:10px;color:#746b60;line-height:1.4}
+ .demo-bottom{display:flex;align-items:center;gap:7px;border-top:1px solid #e4ddd2;padding-top:17px;margin-top:24px;font-size:10px;line-height:1.6;color:#625c52}
+ .demo-status-dot{width:5px;height:5px;background:#65745e;border-radius:50%;flex-shrink:0}
+ .demo-kicker{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#756d61}
+ .demo-guide h3{font-family:var(--font-serif);font-size:29px;font-weight:400;line-height:1.12;margin:12px 0}
+ .demo-small{font-size:11px;color:#71685c;line-height:1.5}
+ .demo-sources{display:grid;gap:12px;margin:20px 0}.demo-sources>div{display:flex;gap:12px;align-items:center}.demo-sources strong,.demo-citation strong{font-size:11px;font-weight:500;display:block}.demo-sources small,.demo-citation small{font-size:10px;color:#746b60;display:block;line-height:1.5;margin-top:3px}.demo-check{margin-left:auto;color:#637456}
+ .demo-time{display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px solid #e5dfd4;padding-top:16px;font-size:10px;flex-wrap:wrap}.demo-time>div{display:flex;gap:4px}.demo-time>div>span{padding:7px 8px;border-radius:4px}.demo-time .selected{background:#e3e8dc;color:#3e5039}
+ .demo-confirm{margin-top:17px;background:#383f32;color:#f9f6ef;border-radius:5px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px;font-size:11px}
+ .demo-message{background:#eee7dc;border-radius:7px;padding:14px 17px;margin-left:35px}.demo-message>span{font-size:9px;color:#766c61}.demo-message p{font-size:13px;line-height:1.6;margin-top:5px}
+ .demo-agent{padding-top:24px}.demo-retrieval{font-size:10px;color:#6a735d;margin:12px 0 17px;display:flex;gap:8px;line-height:1.5}.demo-agent h3{font-family:var(--font-serif);font-size:25px;font-weight:400;line-height:1.15}.demo-agent>p:not(.demo-kicker){font-size:12px;line-height:1.8;margin-top:12px;color:#625b51}.demo-citation{display:flex;align-items:center;gap:12px;margin-top:18px;padding:12px;background:#f0ece2;border-radius:4px}.demo-agent>.demo-followup{border-top:1px solid #e5dfd4;padding-top:14px}
+ figcaption{font-size:9px;color:var(--color-soft);margin-top:10px;line-height:1.5}
+ @media(max-width:1000px){.demo-scene{padding:26px 16px}.demo-library,.demo-guide,.demo-chat{padding:18px}.demo-toolbar{padding:13px 16px}.demo-books{gap:10px}}
+ @media(max-width:700px){.demo-scene{min-height:0;padding:24px 12px}.demo-window{max-width:470px}.demo-guide h3{font-size:27px}.demo-agent h3{font-size:25px}.demo-response{font-size:11px}}
+ @media(max-width:370px){.demo-library,.demo-guide,.demo-chat{padding:14px}.demo-toolbar{gap:6px;padding:12px}.demo-mode{font-size:9px}.demo-message{margin-left:12px}.demo-sources small{font-size:9px}.demo-time>div>span{padding:6px}.demo-guide h3{font-size:25px}}
+</style>
