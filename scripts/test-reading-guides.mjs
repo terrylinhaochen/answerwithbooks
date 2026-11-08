@@ -106,7 +106,7 @@ test('final passage refinement keeps every confirmed book',async()=>{await asser
 
 test('mapping and review receive the same absolute numbered original lines',async()=>{const inputs=[];const chunk={start:41,end:43,text:'41: First line\n42: Second line\n43: Third line'};await mapReadingSection(chunk,3,async(prompt,input)=>{inputs.push(JSON.parse(input));return inputs.length===1?{summary:'Three lines',scenes:[]}:{passed:true};});assert.equal(inputs[0].text,'41: First line\n42: Second line\n43: Third line');assert.equal(inputs[1].source,inputs[0].text);});
 
-test('source-check findings return to the next map attempt without lowering the review gate',async()=>{let feedback;try{await mapReadingSection({start:1,end:1,text:'1: Original'},0,modelResponses({summary:'A scene',scenes:[]},{passed:false,reason:'Outcome goes beyond this source.'}));}catch(e){feedback=e.generationFeedback;}assert.equal(feedback.phase,'reading-map');let input;await mapReadingSection({start:1,end:1,text:'1: Original'},0,async(prompt,data)=>{input??=JSON.parse(data);return prompt.includes('Check the account')?{passed:true}:{summary:'Supported account',scenes:[]};},feedback);assert.equal(input.repairFeedback,'Outcome goes beyond this source.');});
+test('source-check findings return to the next map attempt without lowering the review gate',async()=>{let feedback;try{await mapReadingSection({start:1,end:1,text:'1: Original'},0,modelResponses({summary:'A scene',scenes:[]},{passed:false,reason:'Outcome goes beyond this source.'}));}catch(e){feedback=e.generationFeedback;}assert.equal(feedback.phase,'reading-map');let input;await mapReadingSection({start:1,end:1,text:'1: Original'},0,async(prompt,data,options)=>{input??=JSON.parse(data);return options?.kind==='review'?{passed:true}:{summary:'Supported account',scenes:[]};},feedback);assert.equal(input.repairFeedback,'Outcome goes beyond this source.');});
 
 test('pending legacy cover designs finish with current ink and persist the style version',async()=>{
  const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');
@@ -128,4 +128,13 @@ test('new questions receive print markup without a title-specific override, and 
  assert.ok(!generatedGuideCoverMarkup('Question',{...design,src:'javascript:alert(1)'}));
  const escaped=generatedGuideCoverMarkup('Question',{...design,label:'<img onerror="bad">',topic:'<script>'});
  assert.ok(!escaped.includes('<img onerror'));assert.match(escaped,/&lt;script&gt;/);assert.match(markup,/one=1&amp;two=2/);
+});
+
+for(const kind of ['table of contents','bibliography','index','copyright page'])test(`non-narrative ${kind} maps without fabricated scenes`,async()=>{
+ const chunk={start:1,end:2,text:`1: ${kind}\n2: Names and page references`};const calls=[];
+ const note=await mapReadingSection(chunk,0,async(prompt,input)=>{calls.push({prompt,input:JSON.parse(input)});return calls.length===1?{summary:`This section contains a ${kind}.`,scenes:[]}:{passed:true,reason:'Accurate reference-matter description.'};});
+ assert.deepEqual(note.scenes,[]);assert.match(calls[0].prompt,/non-narrative material.*scenes:\[\]/);assert.match(calls[1].prompt,/not for usefulness as a narrative reading/);assert.match(calls[1].prompt,/Still reject invented events/);assert.match(calls[1].prompt,/mixed section/);assert.equal(calls[1].input.source,chunk.text);
+});
+test('a fabricated account in reference matter still fails source review',async()=>{
+ await assert.rejects(mapReadingSection({start:1,end:1,text:'1: Index: Factory, 42'},0,modelResponses({summary:'He opened a factory.',scenes:[{title:'Factory',account:'He opened it.',startLine:1,endLine:1}]},{passed:false,reason:'An index entry is not evidence of an event.'})),/failed its source check/);
 });
