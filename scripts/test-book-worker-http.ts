@@ -46,7 +46,7 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
    const data=JSON.parse(body.messages[1].content);let content;
    if(prompt.includes('Read ALL the numbered source lines'))content={title:'A shared life',author:'Fixture author',summary:'A person tries a bounded experiment.',scenes:[{title:'The experiment',account:'A prediction is compared with observations.',startLine:data.start,endLine:data.end}]};
    else if(prompt.includes('Write a concise per-book orientation'))content={orientation:'A person experimenting with work.',questions:[1,2,3].map(n=>({question:'What does trial '+n+' show?',contribution:'It compares prediction with observation.'}))};
-   else{assert(prompt.includes('Check the account')||prompt.includes('Check this orientation'),'No legacy essay or skill generation');content={passed:true,reason:'Supported by the supplied text.'};}
+   else{assert(prompt.includes('Validate this section map')||prompt.includes('Check this orientation'),'No legacy essay or skill generation');content={passed:true,reason:'Supported by the supplied text.'};}
    return json({choices:[{finish_reason:'stop',message:{content:JSON.stringify(content)}}]});
   }
   if(prompt.startsWith('You distill')&&body.messages[1].content.includes('previousDraft'))sawTargetedRepair=true;

@@ -49,6 +49,11 @@ export async function mountGuides(){
  try{question.value=query.get('question')||sessionStorage.getItem(draftKey)||'';}catch{question.value=query.get('question')||'';}if(launchQuestion)launchQuestion.value=question.value;
  const open=()=>{if(!dialog.open)dialog.showModal();};
  root.querySelector('[data-close-guide]')!.addEventListener('click',()=>dialog.close());
+ // Closing a review keeps its draft, but consumes the explicit open intent.
+ dialog.addEventListener('close',()=>{
+  query.delete('resume');query.delete('id');
+  if(!modalOnly){const url=new URL(location.href);url.searchParams.delete('resume');url.searchParams.delete('id');history.replaceState(null,'',url.pathname+url.search+url.hash);}
+ });
  dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
  const view=(state:'form'|'checking'|'access'|'processing'|'proposal'|'ready')=>{form.hidden=state!=='form';processing.hidden=state!=='processing';proposal.hidden=state!=='proposal';ready.hidden=state!=='ready';root.querySelector<HTMLElement>('[data-guide-checking]')!.hidden=state!=='checking';root.querySelector<HTMLElement>('[data-guide-access]')!.hidden=state!=='access';newQuestion.hidden=['form','checking','access'].includes(state);dialog.dataset.state=state;root.querySelector('#guide-dialog-title')!.textContent=state==='proposal'?'Choose your reading':state==='processing'?'Your guide is on its way':'Create your guide';};
  const showAccess=(error:any)=>{view('access');status.textContent='';root.querySelector('[data-access-question]')!.textContent=question.value;const freeLimit=error.code==='FREE_GUIDE_LIMIT',limited=error.code==='GUIDE_LIMIT';root.querySelector('[data-access-title]')!.textContent=freeLimit?'You’ve read your 3 free guides this month.':limited?'You’ve used this month’s guides.':'A question worth exploring.';root.querySelector('[data-access-description]')!.textContent=freeLimit?'Upgrade for up to 30 guides per billing month, or wait for your 3 free guides to reset next month.':limited?'Your allowance renews with your next billing period. Your saved guides are still available.':'Up to 30 guides, built from original book passages.';const action=root.querySelector<HTMLButtonElement>('[data-access-action]')!;action.textContent=limited?'Manage subscription →':'Subscribe · $24/month →';action.dataset.billingAction=limited?'portal':'checkout';};
@@ -99,7 +104,15 @@ export async function mountGuides(){
    const retry=el('button','Try again','underline');retry.addEventListener('click',()=>void list());target.replaceChildren(el('p','Could not load your guides.','text-soft'),retry);return;
   }
   if(currentOwner!==owner||request!==listRequest)return;shelf.setAttribute('aria-busy','false');
-  target.replaceChildren();if(!guides.length)target.append(el('p','Your saved guides will appear here.','text-soft'));
+  target.replaceChildren();
+  const draft=readGuideDraft();
+  if(draft&&!guides.some(guide=>guide.id===draft.guideId)){
+   const row=el('article','','guide-saved-card'),link=el('a');link.href=`/guides/?resume=${encodeURIComponent(draft.id)}`;
+   link.append(el('h3',draft.question),el('small','Resume book selection · Saved in this browser'));
+   const discard=el('button','Discard draft');discard.type='button';discard.addEventListener('click',()=>{clearGuideDraft(draft.id);if(resumeId===draft.id)resumeId=null;void list();});
+   row.append(link,discard);target.append(row);
+  }
+  if(!guides.length&&!target.children.length)target.append(el('p','Your saved guides will appear here.','text-soft'));
   for(const guide of guides){const row=el('article','','guide-saved-card'),link=el('a');link.href=guide.status==='ready'?`/guides/read/?id=${guide.id}`:`/guides/?id=${guide.id}`;link.append(guideCover(guide.question,guide.cover),el('h3',guide.question));
    const label=guide.completed?'Finished':({ready:'Continue reading',awaiting_confirmation:'Suggested books ready',scanning:'Finding passages',proposing:'Connecting the passages',composing:'Creating your guide',gap:'No suitable passages found',failed:'Could not complete this guide'} as Record<string,string>)[guide.status]||guide.status;link.append(el('small',label));
    if(guide.status!=='ready')link.addEventListener('click',event=>{event.preventDefault();reset();active=guide.id;question.value=guide.question;open();updateUrl();void poll(active,epoch);});
@@ -198,7 +211,8 @@ export async function mountGuides(){
  const {data:auth}=supabase.auth.onAuthStateChange((_event,session)=>{if(session?.user.id===owner)return;owner=session?.user.id;listRequest++;clearTimeout(listTimer);reset();root.querySelector('[data-saved-guides]')!.replaceChildren();root.querySelector<HTMLElement>('[data-your-guides]')!.hidden=!owner||modalOnly;const savedLink=root.querySelector<HTMLElement>('[data-open-saved-guides]');if(savedLink)savedLink.hidden=!owner;root.querySelector('[data-guide-plan]')!.textContent='';const caption=root.querySelector('[data-guide-allowance]');if(caption)caption.textContent='3 free guides every month. No card needed.';login.hidden=true;if(owner)setTimeout(()=>{void list();void loadPlan();void restoreReview();},0);});
  void list();void loadPlan();
  async function restoreReview(){
-  if(!owner||query.get('id'))return;
+  // Ordinary navigation never reopens a pending review. Auth return and saved-draft links carry explicit intent.
+  if(modalOnly||!owner||!query.get('resume')||query.get('id'))return;
   const saved=readGuideDraft(resumeId);
   if(!saved){if(resumeId){open();view('form');status.textContent='This draft is no longer available in this browser. Return to the browser where you started, or enter your question again.';}return;}
   resumeId=saved.id;const version=epoch;

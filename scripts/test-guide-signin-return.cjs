@@ -34,6 +34,26 @@ const session={access_token:token,refresh_token:'fixture',token_type:'bearer',ex
   await returned.waitForURL(`**/guides/?resume=${resume}`);await returned.locator('[data-guide-proposal]:visible').waitFor();
   assert.equal(await returned.locator('[data-proposal-question]').innerText(),question);assert.deepEqual(await returned.locator('[data-proposal-books] strong').allTextContents(),['Shoe Dog']);assert.equal(await returned.getByLabel('~10 minutes',{exact:true}).isChecked(),true);
   assert.equal(actions.filter(a=>a==='suggest').length,1);assert.equal(actions.some(a=>['create','propose','confirm'].includes(a)),false);assert.deepEqual(errors,[]);
-  console.log('PASS '+method+' actual auth UI and callback → exact draft restored; no email, account or guide created');await context.close();
+  await returned.locator('[data-close-guide]').click();await returned.waitForURL(url=>!url.searchParams.has('resume'));
+  assert.equal(new URL(returned.url()).searchParams.has('resume'),false,'closing consumes the resume URL');
+  if(method==='password')await returned.setViewportSize({width:390,height:844});
+  for(const path of ['/','/books/','/books/read/?id='+books[0].id,'/tools/','/guides/']){
+   await returned.goto(origin+path);
+   if(!await returned.locator('[data-guide-composer]').count())continue;
+   await returned.waitForFunction(()=>document.querySelector('[data-guide-plan]')?.textContent?.includes('remaining')).catch(async error=>{console.log({url:returned.url(),plan:await returned.locator('[data-guide-plan]').allTextContents(),errors});throw error;});
+   assert.equal(await returned.locator('[data-guide-dialog]').evaluate(dialog=>dialog.open),false,`ordinary navigation to ${path} must not reopen the saved draft`);
+  }
+  const resumeLink=returned.locator('[data-saved-guides] a').filter({hasText:'Resume book selection'});
+  assert.equal(await resumeLink.count(),1,'draft remains available in Your Guides');await resumeLink.click();
+  await returned.locator('[data-guide-proposal]:visible').waitFor();
+  assert.equal(await returned.locator('[data-proposal-question]').innerText(),question);
+  await returned.locator('[data-close-guide]').click();await returned.waitForURL(url=>!url.searchParams.has('resume'));await returned.reload();
+  await returned.waitForFunction(()=>document.querySelector('[data-guide-plan]')?.textContent?.includes('remaining')).catch(async error=>{console.log({url:returned.url(),plan:await returned.locator('[data-guide-plan]').allTextContents(),errors});throw error;});
+  assert.equal(await returned.locator('[data-guide-dialog]').evaluate(dialog=>dialog.open),false,'refresh after closing stays closed');
+  await returned.getByRole('button',{name:'Discard draft',exact:true}).click();
+  await returned.waitForFunction(()=>!document.querySelector('[data-saved-guides]')?.textContent?.includes('Resume book selection'));
+  assert.equal(await returned.evaluate(()=>localStorage.getItem('awb:pending-guide-review')),null);
+  assert.equal(actions.some(a=>['create','propose','confirm'].includes(a)),false);assert.deepEqual(errors,[]);
+  console.log('PASS '+method+' auth return, close, cross-page navigation, manual resume and discard; no guide created');await context.close();
  }
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
