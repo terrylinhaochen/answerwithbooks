@@ -55,3 +55,10 @@ test('new generated print art uses the same cream jacket without replacing exist
  assert.match(old,/shoe-dog-r29.webp/);assert.ok(!old.includes(cover));
  assert.doesNotMatch(bookJacketMarkup({title:'Other',coverAsset:'/cover-sticker-v3.png'}),/jacket--print/);
 });
+
+
+test('a defined cover subject does not send unrelated source passages to image generation',async()=>{
+ const {imagePrompt}=await import('../supabase/functions/_shared/book-cover-design.mjs');
+ const prompt=imagePrompt({title:'Walt Disney',oneLiner:'Unrelated biographical passage that the illustration does not need.'});
+ assert.match(prompt,/drawing board/);assert.doesNotMatch(prompt,/Unrelated biographical passage/);
+});

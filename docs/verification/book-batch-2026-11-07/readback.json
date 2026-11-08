@@ -1,15 +1,17 @@
 {
-  "checkedAt": "2026-11-08T08:05:53.050Z",
+  "checkedAt": "2026-11-08T09:02:43.965Z",
   "books": [
     {
       "id": "24ce4be8-a764-4d3e-aa90-ce3448321976",
       "title": "Insanely Simple",
-      "stage": "reading",
-      "summaryCharacters": 0,
-      "summaryWords": 0,
-      "orientationCharacters": 0,
-      "questions": 0,
-      "coverReady": false
+      "stage": "ready",
+      "summaryCharacters": 9710,
+      "summaryWords": 1539,
+      "orientationCharacters": 580,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 1885594,
+      "coverSha256": "12ba43b4aa2bce512c0915f081e0255862a14de86d87b9843660f8894b4ec25e"
     },
     {
       "id": "65b167ee-c39c-435c-a74e-8ff0a1baeeb8",
@@ -26,12 +28,14 @@
     {
       "id": "64afb45b-3511-467d-8bd6-afff1bd8290b",
       "title": "George Lucas: A Life",
-      "stage": "reading",
-      "summaryCharacters": 0,
-      "summaryWords": 0,
-      "orientationCharacters": 0,
-      "questions": 0,
-      "coverReady": false
+      "stage": "ready",
+      "summaryCharacters": 10861,
+      "summaryWords": 1768,
+      "orientationCharacters": 539,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 2160392,
+      "coverSha256": "e8b8f2dbd44e69eb8e04b57ccbc1e73eeed539e6045d8745fe81dbef5da96054"
     },
     {
       "id": "46c93992-e913-4077-b4b3-d4f5d2ffb50b",
@@ -41,7 +45,9 @@
       "summaryWords": 1369,
       "orientationCharacters": 358,
       "questions": 6,
-      "coverReady": false
+      "coverReady": true,
+      "coverBytes": 1932283,
+      "coverSha256": "e78f3a60e7b40c45a30bcc59ed3f47f6aec006536e9811cd11ab2815e4598a8f"
     },
     {
       "id": "3fd8e2ef-f305-43eb-8927-67c359054715",
@@ -58,52 +64,62 @@
     {
       "id": "c000cd39-0ef1-4b65-afb8-92e5e7ada42d",
       "title": "The Lessons of History",
-      "stage": "reading",
-      "summaryCharacters": 0,
-      "summaryWords": 0,
-      "orientationCharacters": 0,
-      "questions": 0,
-      "coverReady": false
+      "stage": "ready",
+      "summaryCharacters": 9001,
+      "summaryWords": 1396,
+      "orientationCharacters": 410,
+      "questions": 5,
+      "coverReady": true,
+      "coverBytes": 2031218,
+      "coverSha256": "521e2047e78f49418f54c4ef20b0c93f6f19117725c5561c883eda76ad07bce7"
     },
     {
       "id": "9f3ce006-d8d0-49f8-b725-b65dfb24023a",
       "title": "The Match King",
-      "stage": "reading",
-      "summaryCharacters": 0,
-      "summaryWords": 0,
-      "orientationCharacters": 0,
-      "questions": 0,
-      "coverReady": false
+      "stage": "ready",
+      "summaryCharacters": 8352,
+      "summaryWords": 1301,
+      "orientationCharacters": 709,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 1711216,
+      "coverSha256": "382d1049ba3b45de75749a7872c90ecfcf36bd6889ace8a99b7c3f3d3b645bc0"
     },
     {
       "id": "d0367f88-3078-440f-b9f1-3747b9c77ef8",
       "title": "Tycoon’s War",
-      "stage": "reading",
-      "summaryCharacters": 0,
-      "summaryWords": 0,
-      "orientationCharacters": 0,
-      "questions": 0,
-      "coverReady": false
+      "stage": "ready",
+      "summaryCharacters": 9172,
+      "summaryWords": 1416,
+      "orientationCharacters": 456,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 1996125,
+      "coverSha256": "44a882261ec02b2db648227f366930ceeb29aa6abdf0b4bd1f8158520682e99a"
     },
     {
       "id": "d160198b-d4b4-4f11-87fc-86013bf11c51",
       "title": "Walt Disney",
-      "stage": "reading",
-      "summaryCharacters": 0,
-      "summaryWords": 0,
-      "orientationCharacters": 0,
-      "questions": 0,
-      "coverReady": false
+      "stage": "ready",
+      "summaryCharacters": 10743,
+      "summaryWords": 1737,
+      "orientationCharacters": 464,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 1897476,
+      "coverSha256": "b36111625c39591f53a87a1256760e51debcacdba43d52bea50633b331926f2e"
     },
     {
       "id": "b1400f3a-6316-4068-9417-ea4788a7e605",
       "title": "Wildcatters",
-      "stage": "reading",
-      "summaryCharacters": 0,
-      "summaryWords": 0,
-      "orientationCharacters": 0,
-      "questions": 0,
-      "coverReady": false
+      "stage": "ready",
+      "summaryCharacters": 9603,
+      "summaryWords": 1572,
+      "orientationCharacters": 621,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 2222601,
+      "coverSha256": "69a4f6c631b6a59e5f4e626ec274e3df7913b5cd4fc16828cc979df813d7bd1d"
     }
   ]
 }

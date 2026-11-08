@@ -123,5 +123,8 @@
       "url": "https://answerwithbooks.com/books/read/?id=b1400f3a-6316-4068-9417-ea4788a7e605",
       "uploadState": "queued"
     }
-  ]
+  ],
+  "completionVerifiedAt": "2026-11-08T09:02:43.965Z",
+  "processingState": "complete",
+  "coversReady": 10
 }
