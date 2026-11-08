@@ -1,0 +1,109 @@
+{
+  "checkedAt": "2026-11-08T08:05:53.050Z",
+  "books": [
+    {
+      "id": "24ce4be8-a764-4d3e-aa90-ce3448321976",
+      "title": "Insanely Simple",
+      "stage": "reading",
+      "summaryCharacters": 0,
+      "summaryWords": 0,
+      "orientationCharacters": 0,
+      "questions": 0,
+      "coverReady": false
+    },
+    {
+      "id": "65b167ee-c39c-435c-a74e-8ff0a1baeeb8",
+      "title": "Disney’s Land",
+      "stage": "ready",
+      "summaryCharacters": 8738,
+      "summaryWords": 1388,
+      "orientationCharacters": 614,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 2187221,
+      "coverSha256": "0a5702174ec3a659e827b5864702567b006534277d425ece03e33ff7d9beaeeb"
+    },
+    {
+      "id": "64afb45b-3511-467d-8bd6-afff1bd8290b",
+      "title": "George Lucas: A Life",
+      "stage": "reading",
+      "summaryCharacters": 0,
+      "summaryWords": 0,
+      "orientationCharacters": 0,
+      "questions": 0,
+      "coverReady": false
+    },
+    {
+      "id": "46c93992-e913-4077-b4b3-d4f5d2ffb50b",
+      "title": "How to Make a Few Billion Dollars",
+      "stage": "ready",
+      "summaryCharacters": 8648,
+      "summaryWords": 1369,
+      "orientationCharacters": 358,
+      "questions": 6,
+      "coverReady": false
+    },
+    {
+      "id": "3fd8e2ef-f305-43eb-8927-67c359054715",
+      "title": "Jesus: A Biography from a Believer",
+      "stage": "ready",
+      "summaryCharacters": 10918,
+      "summaryWords": 1725,
+      "orientationCharacters": 449,
+      "questions": 6,
+      "coverReady": true,
+      "coverBytes": 1775060,
+      "coverSha256": "7c2738e05883c9023c7f88edaf6527ad2c96670678a30139b71131342edb2142"
+    },
+    {
+      "id": "c000cd39-0ef1-4b65-afb8-92e5e7ada42d",
+      "title": "The Lessons of History",
+      "stage": "reading",
+      "summaryCharacters": 0,
+      "summaryWords": 0,
+      "orientationCharacters": 0,
+      "questions": 0,
+      "coverReady": false
+    },
+    {
+      "id": "9f3ce006-d8d0-49f8-b725-b65dfb24023a",
+      "title": "The Match King",
+      "stage": "reading",
+      "summaryCharacters": 0,
+      "summaryWords": 0,
+      "orientationCharacters": 0,
+      "questions": 0,
+      "coverReady": false
+    },
+    {
+      "id": "d0367f88-3078-440f-b9f1-3747b9c77ef8",
+      "title": "Tycoon’s War",
+      "stage": "reading",
+      "summaryCharacters": 0,
+      "summaryWords": 0,
+      "orientationCharacters": 0,
+      "questions": 0,
+      "coverReady": false
+    },
+    {
+      "id": "d160198b-d4b4-4f11-87fc-86013bf11c51",
+      "title": "Walt Disney",
+      "stage": "reading",
+      "summaryCharacters": 0,
+      "summaryWords": 0,
+      "orientationCharacters": 0,
+      "questions": 0,
+      "coverReady": false
+    },
+    {
+      "id": "b1400f3a-6316-4068-9417-ea4788a7e605",
+      "title": "Wildcatters",
+      "stage": "reading",
+      "summaryCharacters": 0,
+      "summaryWords": 0,
+      "orientationCharacters": 0,
+      "questions": 0,
+      "coverReady": false
+    }
+  ]
+}
