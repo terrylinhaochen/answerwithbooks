@@ -28,7 +28,7 @@ try:
  source=(ROOT/'supabase/migrations/20261007003000_book_processing_queue.sql').read_text();sql('\n'.join(l for l in source.splitlines() if not l.startswith('create extension')))
  migration('20261007013000_long_book_processing.sql');migration('20261007023000_book_library_revisions.sql');migration('20261008180000_book_processing_completion.sql')
  sql('alter table book_processing_jobs add column billing_required boolean default true,add column archived_at timestamptz,add column source_text_sha text;')
- migration('20261106054659_hosted_question_guides.sql');migration('20261106070000_reading_guide_covers.sql');migration('20261106072605_shared_library_subscription.sql');migration('20261106184909_reader_plan_thirty_guides.sql');migration('20261106194006_reader_free_monthly_guides.sql')
+ migration('20261106054659_hosted_question_guides.sql');migration('20261106070000_reading_guide_covers.sql');migration('20261106072605_shared_library_subscription.sql');migration('20261106184909_reader_plan_thirty_guides.sql');migration('20261106194006_reader_free_monthly_guides.sql');migration('20261108191844_complimentary_reader_access.sql')
  a,b=['00000000-0000-4000-8000-'+str(i).zfill(12) for i in (1,2)]
  sql(f"insert into auth.users values('{a}'),('{b}');insert into reader_subscriptions(user_id,customer_id,status,period_start,period_end) values('{a}','cus_a','active',now()-interval '1 day',now()+interval '29 days');")
  sql(f"insert into reading_guides(user_id,request_key,question,status) select '{a}',gen_random_uuid(),'Question '||n,'awaiting_confirmation' from generate_series(1,34)n;")
@@ -107,6 +107,37 @@ try:
  assert sql(f"select apply_reader_subscription('evt_stale','{a}',0,'sub_a','canceled',null,null,false);")=='f'
  assert sql(f"select status from reader_subscriptions where user_id='{a}';")=='active'
  print('PASS webhook idempotency and stale canonical-read CAS rejection')
+ # Complimentary access is server-managed, calendar-month based and independent of Stripe.
+ c='00000000-0000-4000-8000-000000000003'
+ sql(f"insert into auth.users values('{c}');insert into reader_complimentary_access(user_id,reason) values('{c}','Owner account');")
+ comp=json.loads(sql(f"set role service_role;select reader_plan('{c}')").splitlines()[-1]);assert comp['active'] and comp['tier']=='complimentary' and comp['limit']==30 and comp['priceCents']==0
+ assert sql(f"select count(*) from reader_subscriptions where user_id='{c}';")=='0'
+ for role in ['anon','authenticated']:
+  assert 'permission denied' in sql(f"set role {role};select * from reader_complimentary_access;",True)
+  assert 'permission denied' in sql(f"set role {role};insert into reader_complimentary_access(user_id,reason) values('{b}','Self grant');",True)
+ sql(f"insert into reading_guides(user_id,request_key,question,status) select '{c}',gen_random_uuid(),'Complimentary question '||n,'awaiting_confirmation' from generate_series(1,34)n;")
+ comp_ids=sql(f"select id from reading_guides where user_id='{c}' order by id").splitlines()
+ def compconfirm(id):
+  try:return sql(f"select confirm_reader_guide('{c}','{id}','short');")
+  except RuntimeError as e:assert 'GUIDE_LIMIT' in str(e);return None
+ with concurrent.futures.ThreadPoolExecutor(max_workers=34) as pool:comp_results=list(pool.map(compconfirm,comp_ids))
+ comp_taken=[r for r in comp_results if r];assert len(comp_taken)==30
+ assert compconfirm(comp_taken[0])==comp_taken[0]
+ assert json.loads(sql(f"select reader_plan('{c}')"))['used']==30
+ sql(f"update reading_guides set status='failed' where id='{comp_taken[0]}';")
+ assert json.loads(sql(f"select reader_plan('{c}')"))['used']==29
+ sql(f"update reader_complimentary_access set revoked_at=now() where user_id='{c}';")
+ assert json.loads(sql(f"select reader_plan('{c}')"))['tier']=='free'
+ assert json.loads(sql(f"select reader_plan('{b}')"))['tier']=='free'
+ sql(f"update reader_complimentary_access set revoked_at=null where user_id='{c}';")
+ assert json.loads(sql(f"select reader_plan('{c}')"))['used']==29
+ sql(f"update reader_complimentary_access set granted_at=now()-interval '2 days',expires_at=now()-interval '1 day' where user_id='{c}';")
+ assert json.loads(sql(f"select reader_plan('{c}')"))['tier']=='free'
+ sql(f"update reader_complimentary_access set expires_at=null where user_id='{c}';update reader_guide_allowances set period_start=period_start-interval '1 month' where user_id='{c}';")
+ assert json.loads(sql(f"select reader_plan('{c}')"))['used']==0
+ sql(f"insert into reader_subscriptions(user_id,customer_id,status,period_start,period_end) values('{c}','cus_c','active',now(),now()+interval '30 days');")
+ assert json.loads(sql(f"select reader_plan('{c}')"))['tier']=='paid'
+ print('PASS complimentary owner-only administration, 30 concurrent reservations, idempotency, failure release, revocation/expiry, monthly reset and paid precedence')
 finally:
  if started:run(str(BIN/'pg_ctl'),'-D',str(area/'data'),'-m','immediate','-w','stop')
  shutil.rmtree(area)

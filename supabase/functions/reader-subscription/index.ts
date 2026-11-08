@@ -40,8 +40,10 @@ Deno.serve(async req=>{
  }
  const input=JSON.parse(raw);const user=await bookUser(db,req.headers.get('authorization')?.replace(/^Bearer /i,'')||'');
  if(!user)return reply({error:'Sign in to manage your plan.'},401);
- if(input.action==='status')return reply({...check(await db.rpc('reader_plan',{p_user:user.id})),checkoutAvailable:configured()});
+ const plan=check(await db.rpc('reader_plan',{p_user:user.id}));
+ if(input.action==='status')return reply({...plan,checkoutAvailable:configured()&&plan.tier!=='complimentary'});
  if(!['checkout','portal'].includes(input.action))return reply({error:'Unknown action'},400);
+ if(plan.tier==='complimentary')return reply({error:'Your account already has complimentary access. No subscription payment is needed.'},409);
  if(!configured())return reply({error:'Subscription checkout is not available yet.'},503);
  let account=check(await db.from('reader_subscriptions').select('*').eq('user_id',user.id).maybeSingle());
  if(!account){const customer=await stripe('customers',{'metadata[awb_user_id]':user.id},`awb-reader-customer-${user.id}`);check(await db.from('reader_subscriptions').upsert({user_id:user.id,customer_id:customer.id},{onConflict:'user_id',ignoreDuplicates:true}));account=check(await db.from('reader_subscriptions').select('*').eq('user_id',user.id).single());}
