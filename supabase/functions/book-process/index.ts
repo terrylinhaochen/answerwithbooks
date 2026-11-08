@@ -111,7 +111,7 @@ async function processCover(job:any) {
  try {
   if(!Deno.env.get('OPENAI_API_KEY'))throw Error('BOOK_BILLING: Cover generation is not configured');
   if(job.billing_required){operation=crypto.randomUUID();try{await meter(job,operation,'begin',{kind:'image',model:metric.requestedModel,inputBound:new TextEncoder().encode(coverPrompt).length+1024,outputBound:10000});}catch(error){operation=null;throw error;}}
-  const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${Deno.env.get('OPENAI_API_KEY')}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||coverImageDefaults.model,prompt:coverPrompt,size:coverImageDefaults.size,quality:coverImageDefaults.quality,background:'opaque',n:1}),signal:AbortSignal.timeout(110000)});
+  const response=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{Authorization:`Bearer ${Deno.env.get('OPENAI_API_KEY')}`,'Content-Type':'application/json'},body:JSON.stringify({model:Deno.env.get('BOOK_COVER_MODEL')||coverImageDefaults.model,prompt:coverPrompt,size:coverImageDefaults.size,quality:coverImageDefaults.quality,background:coverImageDefaults.background,n:1}),signal:AbortSignal.timeout(110000)});
   if(!response.ok) throw new Error('The book and skill are ready, but cover generation failed. Retry to finish the cover.');
   const result=await response.json();
   const count=(value:unknown)=>Number.isSafeInteger(value)&&Number(value)>=0?Number(value):null;

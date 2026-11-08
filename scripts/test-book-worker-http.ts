@@ -40,7 +40,7 @@ globalThis.fetch=async (input:any,init?:RequestInit)=>{
   modelCalls++;if(holdProvider)await holdProvider();
   if(failProvider)return json({error:'Synthetic busy response'},429);
   assert.equal(request.headers.get('authorization'),url.hostname==='api.openai.com'?'Bearer synthetic-provider-key':'Bearer synthetic-fireworks-key');
-  if(url.pathname.includes('/images/')){assert.match(body.prompt,/large sticker emblem/);assert.match(body.prompt,/upper 56%/);assert.equal(body.quality,'high');assert.equal(body.background,'opaque');assert.equal(body.size,'1024x1536');return json({data:[{b64_json:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZQmcAAAAASUVORK5CYII='}]});}
+  if(url.pathname.includes('/images/')){assert.match(body.prompt,/grainy editorial screen print/);assert.match(body.prompt,/whole subject visible/);assert.equal(body.quality,'high');assert.equal(body.background,'transparent');assert.equal(body.size,'1024x1024');return json({data:[{b64_json:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZQmcAAAAASUVORK5CYII='}]});}
   const prompt=body.messages[0].content;
   if(sharedFixture&&!prompt.startsWith('Write a finished Answer')&&!prompt.startsWith('Check generated')){
    const data=JSON.parse(body.messages[1].content);let content;

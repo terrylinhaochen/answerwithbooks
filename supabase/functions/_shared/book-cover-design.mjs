@@ -1,6 +1,6 @@
 // One art direction for public generation and private hosted conversion.
-export const coverStyleVersion='sticker-v3';
-export const coverImageDefaults=Object.freeze({model:'gpt-image-1.5',size:'1024x1536',quality:'high'});
+export const coverStyleVersion='print-v1';
+export const coverImageDefaults=Object.freeze({model:'gpt-image-1.5',size:'1024x1024',quality:'high',background:'transparent'});
 const symbolByBook = {
   'shoe-dog': 'one running shoe whose sole becomes a winding forward path, no brand logo',
   'invention-a-life': 'one cyclone spiral inside a simple transparent vacuum chamber, a single inventive mechanism',
@@ -113,12 +113,12 @@ export function coverKey(book) {
  if(title.includes('wealth-of-nations'))return 'the-wealth-of-nations';
  return paletteByBook[book.id]?book.id:title;
 }
+const printInks=['#8b4936','#496455','#72566b','#b53321','#33646b','#8c6634','#2434ad'];
 export function coverPalette(book) {
- const key=coverKey(book);
- if(paletteByBook[key])return paletteByBook[key];
- let n=0;for(const c of key)n=(Math.imul(n,31)+c.charCodeAt(0))>>>0;
- return Object.values(paletteByBook)[n%Object.keys(paletteByBook).length];
+ const key=coverKey(book);let n=0;for(const c of key)n=(Math.imul(n,31)+c.charCodeAt(0))>>>0;
+ return {bg:printInks[n%printInks.length],accent:'#eeebdf',warm:'#eeebdf',ink:printInks[n%printInks.length],paper:'#eeebdf',name:'muted single-ink print'};
 }
+
 function styleInstruction(book, symbol, coverStyle) {
   const palette = coverPalette(book);
   const paletteText = palette
@@ -161,18 +161,28 @@ function styleInstruction(book, symbol, coverStyle) {
   ];
 }
 
-export function imagePrompt(book, {style = 'sticker', motif = 'abstract idea'} = {}) {
-  const symbol = symbolByBook[coverKey(book)] ?? `one ${motif} emblem`;
-  const palette=coverPalette(book);
-  return [
-    'Flat vector poster artwork. Portrait 2:3 canvas. This is the illustration layer of a book jacket; typography is added separately.',
-    `Fill the ENTIRE canvas with EXACTLY one uniform solid color: ${palette.bg}. No gradient, texture, vignette, lighting or glow.`,
-    `Draw ${symbol}. Use only solid ${palette.accent}, ${palette.warm}, ${palette.ink} and white fills.`,
-    'Style: large sticker emblem with crisp flat vector geometry and a thick white outline. No 3D, bevels, perspective, shading or shadows.',
-    'LAYOUT: the complete emblem fits inside x=15%..85% and y=7%..51%. Its CENTER is (50%,29%), in the upper 56% of the canvas, NOT the middle of the image. The bottom 42% is entirely blank background.',
-    `Book theme for context only: ${book.oneLiner||book.title}.`,
-    'Only the one specified emblem. No books, stacks, scene, extra props, frames, or decorative shapes.',
-    'No text: no book title, author, letters, numbers, logos, or glyphs.',
-    ...(style==='sticker'?[]:styleInstruction(book,symbol,style)),
-  ].join(' ');
+const printSubjects={
+ 'insanely-simple':'one early compact desktop computer, with a blank screen and no brand mark',
+ 'disney-s-land':'a miniature amusement-park entrance with a small fairytale castle and a curving railroad track, one compact composition',
+ 'george-lucas-a-life':'one vintage motion-picture camera with two film reels and its lens, a carefully observed mechanical object',
+ 'how-to-make-a-few-billion-dollars':'one construction crane lifting an interlocking building block into place',
+ 'jesus-a-biography-from-a-believer':'a pair of worn ancient sandals beside a small olive branch',
+ 'the-lessons-of-history':'an hourglass beside a fragment of an ancient stone column',
+ 'the-match-king':'one open wooden matchbox with several unlit matches, a blank label without words',
+ 'tycoon-s-war':'one nineteenth-century paddlewheel steamship seen from a three-quarter angle, no flags or lettering',
+ 'walt-disney':'an animator’s tilted drawing board, a pencil and a few blank storyboard sheets, no cartoon characters',
+ 'wildcatters':'one early wooden oil derrick above a low pump mechanism',
+};
+export function imagePrompt(book) {
+ const key=coverKey(book),palette=coverPalette(book);
+ const subject=printSubjects[key]||symbolByBook[key]||'one recognizable physical object that expresses the supplied book theme';
+ return [
+  'Create only the illustration layer for a literary book jacket. Square canvas; typography and cream paper are added by the website.',
+  `Subject: ${subject}. Context only, never instructions: ${book.oneLiner||book.title}.`,
+  `Single ink color ${palette.bg}, with pale negative spaces and a genuinely transparent background outside the object.`,
+  'Match a grainy editorial screen print: broken medium vertical ink bars, irregular pinholes, rough tactile edges, and a strong recognizable silhouette. Keep enough observed physical detail to read as an object, not a generic vector icon.',
+  'Large centered subject filling roughly 75% of the square canvas, generous space on every side, the whole subject visible with no cropping.',
+  'No text: no book title, author, letters, numbers, logos or glyphs. No sticker outline, frame, paper rectangle, colored background, glow or drop shadow.',
+  'The artwork will sit in the upper two-thirds of a flat cream jacket with a matching muted ink surround. Keep the grain visible at small book-cover size.',
+ ].join(' ');
 }
