@@ -14,7 +14,7 @@ assert.equal((skills.match(/class="skill-feature(?: skill-feature-reverse)?"/g)|
 assert.doesNotMatch(skills, /A question to begin with|A few useful details|One skill, every book|Keep something worth returning to/);
 assert.match(skills, /Install skill/);
 assert.doesNotMatch(skills, /data-example-tab|data-example-panel|Install skill \(copy prompt\)|The Mom Test|data-local-processing/);
-assert.match(skills, /Add a book/);
+assert.match(skills, /href="\/books\/"/);
 assert.match(skills, /shared library/);
 const homepage = read('');
 assert.ok(homepage.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').includes('Live a thousand lives.'));
