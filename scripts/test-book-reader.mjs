@@ -58,8 +58,16 @@ test('source repairs change only failed paragraphs and preserve approved prose',
  const previous=draft();previous.sections[0].paragraphs.push({text:'An incorrect claim needs correction.',evidenceIds:['E1']});
  const feedback={phase:'editorial',draft:previous,review:{supported:false,issues:['s1p2 needs correction.'],checks:[{id:'metadata',supported:true},{id:'s1p1',supported:true},{id:'s1p2',supported:false}]}};
  const artifacts=await compileReader({...job,generation_feedback:feedback},async(_system,input,options)=>{
-  if(options.name==='book_reader_repair'){assert.deepEqual(JSON.parse(input).rejectedClaims.map(c=>c.id),['s1p2']);return {metadata:null,paragraphs:[{id:'s1p2',text:'The record is reviewed at the next meeting.',evidenceIds:['E1']}]};}
+  if(options.name==='book_reader_repair'){assert.deepEqual(JSON.parse(input).rejectedClaims.map(c=>c.id),['s1p2']);return {metadata:null,paragraphs:[{id:'s1p2',text:'Preserve an incomplete commitment\nThe record is reviewed at the next meeting.',evidenceIds:['E1']}]};}
   return review(JSON.parse(input).claims);
  });
  const saved=JSON.parse(artifacts['reader/digest.json']);assert.deepEqual(saved.sections[0].paragraphs[0],previous.sections[0].paragraphs[0]);assert.equal(saved.sections[0].paragraphs[1].text,'The record is reviewed at the next meeting.');assert.equal(saved.oneLiner,previous.oneLiner);
+});
+
+
+test('repair commentary cannot publish as a digest even when factual claims would pass',async()=>{
+ const d=draft();d.sections[0].paragraphs[0].text+=' The source does not support a universal claim that every missing deadline cancels an action.';
+ let reviews=0;
+ await assert.rejects(compileReader(job,async(_s,input,options)=>{if(options.name==='book_reader')return d;reviews++;return review(JSON.parse(input).claims);}),error=>error.generationFeedback.phase==='editorial'&&error.generationFeedback.review.checks.some(c=>c.id==='s1p1'&&!c.supported));
+ assert.equal(reviews,0);
 });

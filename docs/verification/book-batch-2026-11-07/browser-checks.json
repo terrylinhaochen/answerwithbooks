@@ -1,0 +1,187 @@
+{
+  "checkedAt": "2026-11-08T09:03:44.050Z",
+  "site": "https://answerwithbooks.com",
+  "mocked": false,
+  "checks": [
+    {
+      "id": "24ce4be8-a764-4d3e-aa90-ce3448321976",
+      "title": "Insanely Simple",
+      "coverSha256": "12ba43b4aa2bce512c0915f081e0255862a14de86d87b9843660f8894b4ec25e",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "65b167ee-c39c-435c-a74e-8ff0a1baeeb8",
+      "title": "Disney’s Land",
+      "coverSha256": "0a5702174ec3a659e827b5864702567b006534277d425ece03e33ff7d9beaeeb",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "64afb45b-3511-467d-8bd6-afff1bd8290b",
+      "title": "George Lucas: A Life",
+      "coverSha256": "e8b8f2dbd44e69eb8e04b57ccbc1e73eeed539e6045d8745fe81dbef5da96054",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "46c93992-e913-4077-b4b3-d4f5d2ffb50b",
+      "title": "How to Make a Few Billion Dollars",
+      "coverSha256": "e78f3a60e7b40c45a30bcc59ed3f47f6aec006536e9811cd11ab2815e4598a8f",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "3fd8e2ef-f305-43eb-8927-67c359054715",
+      "title": "Jesus: A Biography from a Believer",
+      "coverSha256": "7c2738e05883c9023c7f88edaf6527ad2c96670678a30139b71131342edb2142",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "c000cd39-0ef1-4b65-afb8-92e5e7ada42d",
+      "title": "The Lessons of History",
+      "coverSha256": "521e2047e78f49418f54c4ef20b0c93f6f19117725c5561c883eda76ad07bce7",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "9f3ce006-d8d0-49f8-b725-b65dfb24023a",
+      "title": "The Match King",
+      "coverSha256": "382d1049ba3b45de75749a7872c90ecfcf36bd6889ace8a99b7c3f3d3b645bc0",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "d0367f88-3078-440f-b9f1-3747b9c77ef8",
+      "title": "Tycoon’s War",
+      "coverSha256": "44a882261ec02b2db648227f366930ceeb29aa6abdf0b4bd1f8158520682e99a",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "d160198b-d4b4-4f11-87fc-86013bf11c51",
+      "title": "Walt Disney",
+      "coverSha256": "b36111625c39591f53a87a1256760e51debcacdba43d52bea50633b331926f2e",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "b1400f3a-6316-4068-9417-ea4788a7e605",
+      "title": "Wildcatters",
+      "coverSha256": "69a4f6c631b6a59e5f4e626ec274e3df7913b5cd4fc16828cc979df813d7bd1d",
+      "width": 1440,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "24ce4be8-a764-4d3e-aa90-ce3448321976",
+      "title": "Insanely Simple",
+      "coverSha256": "12ba43b4aa2bce512c0915f081e0255862a14de86d87b9843660f8894b4ec25e",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "65b167ee-c39c-435c-a74e-8ff0a1baeeb8",
+      "title": "Disney’s Land",
+      "coverSha256": "0a5702174ec3a659e827b5864702567b006534277d425ece03e33ff7d9beaeeb",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "64afb45b-3511-467d-8bd6-afff1bd8290b",
+      "title": "George Lucas: A Life",
+      "coverSha256": "e8b8f2dbd44e69eb8e04b57ccbc1e73eeed539e6045d8745fe81dbef5da96054",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "46c93992-e913-4077-b4b3-d4f5d2ffb50b",
+      "title": "How to Make a Few Billion Dollars",
+      "coverSha256": "e78f3a60e7b40c45a30bcc59ed3f47f6aec006536e9811cd11ab2815e4598a8f",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "3fd8e2ef-f305-43eb-8927-67c359054715",
+      "title": "Jesus: A Biography from a Believer",
+      "coverSha256": "7c2738e05883c9023c7f88edaf6527ad2c96670678a30139b71131342edb2142",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "c000cd39-0ef1-4b65-afb8-92e5e7ada42d",
+      "title": "The Lessons of History",
+      "coverSha256": "521e2047e78f49418f54c4ef20b0c93f6f19117725c5561c883eda76ad07bce7",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "9f3ce006-d8d0-49f8-b725-b65dfb24023a",
+      "title": "The Match King",
+      "coverSha256": "382d1049ba3b45de75749a7872c90ecfcf36bd6889ace8a99b7c3f3d3b645bc0",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "d0367f88-3078-440f-b9f1-3747b9c77ef8",
+      "title": "Tycoon’s War",
+      "coverSha256": "44a882261ec02b2db648227f366930ceeb29aa6abdf0b4bd1f8158520682e99a",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "d160198b-d4b4-4f11-87fc-86013bf11c51",
+      "title": "Walt Disney",
+      "coverSha256": "b36111625c39591f53a87a1256760e51debcacdba43d52bea50633b331926f2e",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    },
+    {
+      "id": "b1400f3a-6316-4068-9417-ea4788a7e605",
+      "title": "Wildcatters",
+      "coverSha256": "69a4f6c631b6a59e5f4e626ec274e3df7913b5cd4fc16828cc979df813d7bd1d",
+      "width": 390,
+      "loadedCover": true,
+      "noHorizontalOverflow": true,
+      "coverTextFits": true
+    }
+  ]
+}

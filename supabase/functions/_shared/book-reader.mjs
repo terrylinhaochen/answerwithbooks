@@ -3,6 +3,8 @@ import {GenerationReviewError,repairInput,citedFidelityInstructions,requireFaith
 import {citedReviewSchema} from './book-schemas.mjs';
 const words=text=>String(text).trim().split(/\s+/).filter(Boolean).length;
 export const readerPrompt=prompt;
+// A digest explains evidence; it need not repeat a source sentence verbatim.
+export const readerReviewInstructions=citedFidelityInstructions+` This is an editorial digest, not a quotation extraction. Distinguish historical facts and author-attributed claims from clearly framed editorial interpretation. A limited synthesis or cautious implication can be supported by the cited events even when no source sentence states that synthesis verbatim. Do not reject such a claim solely for being interpretive or for lacking identical wording: explain any actual unsupported premise, leap, contradiction, or excess scope. Still reject invented facts, motives, author intentions, universal causal rules, guaranteed outcomes, and stronger claims than the evidence supports. Interpretations must remain identifiable as the editor's reading, not be attributed to the author without evidence. Reader-fit metadata can describe a relevant situation without claiming the author explicitly recommended it. All existing per-claim evidence, attribution, uncertainty, and factual-support requirements still apply.`;
 // Give every processing section a bounded source budget, including late chapters.
 export function readerEvidence(job){
  const lines=job.source_text.split('\n'),notes=job.notes||[],chosen=notes;
@@ -75,15 +77,19 @@ export async function compileReader(job,modelJson){
   const refs=base.properties.evidenceIds;
   const metadata=failed.includes('metadata')?obj({oneLiner:base.properties.oneLiner,readIf:base.properties.readIf,evidenceIds:refs}):{type:'null'};
   const schema=obj({metadata,paragraphs:{type:'array',minItems:paragraphIds.length,maxItems:paragraphIds.length,items:obj({id:paragraphIds.length?{type:'string',enum:paragraphIds}:{type:'string'},text:{type:'string',minLength:1,maxLength:4000},evidenceIds:refs})}});
-  const correction=await modelJson(prompt.instructions+' Repair only the rejected claims named in this request. Return metadata only when it failed, otherwise null. Return exactly one paragraph per rejected paragraph ID. Preserve the existing heading and argument, correct its evidence citations, and remove or qualify unsupported claims. All other paragraphs are already saved and must not be rewritten.',JSON.stringify({title:job.title,author:job.author,evidence,previousDraft:original,rejectedClaims:claims.filter(c=>failed.includes(c.id)),findings:previous.review}),{name:'book_reader_repair',schema});
+  const correction=await modelJson(prompt.instructions+' Repair only the rejected claims named in this request. Return metadata only when it failed, otherwise null. Return exactly one paragraph per rejected paragraph ID. Keep the existing heading, but narrow or replace an unsupported argument rather than preserving it. Correct its evidence citations and remove or qualify unsupported claims. Return paragraph prose only, without repeating its section heading. Write a finished digest, not a review report: do not narrate what the source supports, what an earlier draft claimed, or how you repaired it; express the narrower claim directly with its appropriate attribution. All other paragraphs are already saved and must not be rewritten.',JSON.stringify({title:job.title,author:job.author,evidence,previousDraft:original,rejectedClaims:claims.filter(c=>failed.includes(c.id)),findings:previous.review}),{name:'book_reader_repair',schema});
   if(!Array.isArray(correction.paragraphs)||correction.paragraphs.length!==paragraphIds.length||new Set(correction.paragraphs.map(p=>p.id)).size!==paragraphIds.length||correction.paragraphs.some(p=>!paragraphIds.includes(p.id)))throw new GenerationReviewError('editorial',original,previous.review);
   draft=structuredClone(original);
   if(failed.includes('metadata')){if(!correction.metadata)throw new GenerationReviewError('editorial',original,previous.review);Object.assign(draft,correction.metadata);}
-  for(const p of correction.paragraphs){const [,section,paragraph]=/^s(\d+)p(\d+)$/.exec(p.id);draft.sections[Number(section)-1].paragraphs[Number(paragraph)-1]={text:p.text,evidenceIds:p.evidenceIds};}
+  for(const p of correction.paragraphs){const [,section,paragraph]=/^s(\d+)p(\d+)$/.exec(p.id);const target=draft.sections[Number(section)-1],lines=p.text.trim().split('\n');while(lines[0]?.trim()===target.heading.trim())lines.shift();target.paragraphs[Number(paragraph)-1]={text:lines.join('\n').trim(),evidenceIds:p.evidenceIds};}
  }else draft=await modelJson(prompt.instructions,JSON.stringify(request),{name:'book_reader',schema:readerSchema(evidence,bounds)});
  try{validateReader(draft,job,evidence);}catch(e){throw new GenerationReviewError('editorial',draft,{issues:[e.message]});}
  const claims=readerClaims(draft,evidence);
- const review=await modelJson(citedFidelityInstructions,JSON.stringify({claims}),{kind:'review',name:'book_reader_review',schema:citedReviewSchema(claims.map(c=>c.id))});
+ // Repair-process commentary is not finished prose, even if its facts are supported.
+ const reviewChatter=/does not support a universal claim|staying within the source.{0,8}s specific scenes|source supports the narrower conclusion|rather than claiming more than they show/i;
+ const presentation=claims.map(c=>({id:c.id,supported:!reviewChatter.test(c.notes),reason:'Write the qualified historical claim directly. Remove commentary about what the source supports or what the draft cannot claim; preserve the supported facts and citations.'}));
+ if(presentation.some(c=>!c.supported))throw new GenerationReviewError('editorial',draft,{supported:false,issues:['Review-process commentary must be rewritten as finished reader-facing prose.'],checks:presentation});
+ const review=await modelJson(readerReviewInstructions,JSON.stringify({claims}),{kind:'review',name:'book_reader_review',schema:citedReviewSchema(claims.map(c=>c.id))});
  try{requireFaithfulSection(review,claims.map(c=>c.id));}catch{throw new GenerationReviewError('editorial',draft,review);}
  return renderReader(draft,job,evidence,{status:'model-checked',method:'paragraph-cited-excerpts-v1',paragraphs:claims.length-1,reviewedAt:new Date().toISOString()});
 }
