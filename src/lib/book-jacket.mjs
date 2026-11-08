@@ -1,10 +1,13 @@
-import {printBook} from './print-study.mjs';
+import {printBook,printStudyEnabled} from './print-study.mjs';
+import {coverPalette} from '../../supabase/functions/_shared/book-cover-design.mjs';
 // Shared public/private jacket markup; all source-provided text is escaped.
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function bookJacketMarkup({title,author,color,coverAsset,loading='lazy',composed=false}) {
- const study=printBook(title,author);
+ const catalogStudy=printBook(title,author);
+ const generatedPrint=printStudyEnabled&&!composed&&typeof coverAsset==='string'&&/\/cover-print-v\d+\.png(?:[?#]|$)/.test(coverAsset);
+ const study=catalogStudy||(generatedPrint?{color:coverPalette({title}).bg,paper:'#eeebdf',category:'Source book'}:null);
  const printTitles={'the-mom-test':'The Mom<br>Test','thinking-fast-and-slow':'Thinking,<br>Fast and Slow','zero-to-one':'Zero<br>to One','the-wisdom-of-crowds':'The Wisdom<br>of Crowds','shoe-dog':'Shoe Dog','invention-a-life':'Invention:<br>A Life','open':'Open'};
- if(study){color=study.color;coverAsset='/print-study/'+study.art;composed=false;}
+ if(study){color=study.color;if(catalogStudy)coverAsset='/print-study/'+catalogStudy.art;composed=false;}
  const cloth=/^#[a-f0-9]{6}$/i.test(color||'')?color:'#304c44';
  const asset=typeof coverAsset==='string'&&(/^(https?:\/\/|\/(?!\/))/.test(coverAsset))?coverAsset:null;
  return `<span class="jacket${study?' jacket--print'+(title.length>18?' jacket--print-long':''):''}${composed?' jacket--composed':''}${title.length>28?' jacket--long':''}${title.length>50?' jacket--very-long':''}" style="--cloth:${cloth}${study?';--print-paper:'+study.paper:''}" aria-hidden="true">

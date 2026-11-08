@@ -1,0 +1,127 @@
+{
+  "recordedAt": "2026-11-08T07:37:12.541Z",
+  "batchSize": 10,
+  "foundersCheckpoint": 29,
+  "jobs": [
+    {
+      "filename": "Apple Success Obsession.pdf",
+      "title": "Insanely Simple",
+      "author": "Ken Segall",
+      "listEntry": 13,
+      "originalBytes": 8594032,
+      "sha256": "b8a04d95953aef1ed772588b29d6c4d3aff9ba379c16803de8ca61b6a9bb07d3",
+      "id": "24ce4be8-a764-4d3e-aa90-ce3448321976",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=24ce4be8-a764-4d3e-aa90-ce3448321976",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "Disneyland Amusement Park History.pdf",
+      "title": "Disney’s Land",
+      "author": "Richard Snow",
+      "listEntry": 15,
+      "originalBytes": 52335470,
+      "sha256": "29aab4923290fc8da0349cb80d6b779577ef7a8ebba4a5a66c92ceb9b82571f2",
+      "id": "65b167ee-c39c-435c-a74e-8ff0a1baeeb8",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=65b167ee-c39c-435c-a74e-8ff0a1baeeb8",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "George Lucas Interviews.pdf",
+      "title": "George Lucas: A Life",
+      "author": "Brian Jay Jones",
+      "listEntry": 17,
+      "originalBytes": 41479728,
+      "sha256": "d4292fb989628418978e169b52fee98b63e8ca4781277ed4420d056ee405709c",
+      "id": "64afb45b-3511-467d-8bd6-afff1bd8290b",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=64afb45b-3511-467d-8bd6-afff1bd8290b",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "How to Make a Few Billion Dollars by Brad Jacobs.pdf",
+      "title": "How to Make a Few Billion Dollars",
+      "author": "Brad Jacobs",
+      "listEntry": 27,
+      "originalBytes": 1368921,
+      "sha256": "8dae3d4c941cce500e9d80b5c7e0adcdc9399cd1267880b5860ba27654c56f6e",
+      "id": "46c93992-e913-4077-b4b3-d4f5d2ffb50b",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=46c93992-e913-4077-b4b3-d4f5d2ffb50b",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "Jesus A Biography from a Believer Paul Johnson.epub",
+      "title": "Jesus: A Biography from a Believer",
+      "author": "Paul Johnson",
+      "listEntry": 28,
+      "originalBytes": 167527,
+      "sha256": "5b870a7af972b754234824c6cecfb362081987f2fafcb603b64ed97d5961280d",
+      "id": "3fd8e2ef-f305-43eb-8927-67c359054715",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=3fd8e2ef-f305-43eb-8927-67c359054715",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "Lessons of History by Durant.pdf",
+      "title": "The Lessons of History",
+      "author": "Will and Ariel Durant",
+      "listEntry": 20,
+      "originalBytes": 6070098,
+      "sha256": "c2778db71a14e59bf94ca4ef28852b014c4a262e9cf3bbfd6aaf5b737b8043a7",
+      "id": "c000cd39-0ef1-4b65-afb8-92e5e7ada42d",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=c000cd39-0ef1-4b65-afb8-92e5e7ada42d",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "The match king  Ivar Kreuger and the financial scandal of the century (Partnoy, Frank) (z-library.sk, 1lib.sk, z-lib.sk).pdf",
+      "title": "The Match King",
+      "author": "Frank Partnoy",
+      "listEntry": 14,
+      "originalBytes": 14754707,
+      "sha256": "a7a526b46fb506d3c094f3c2ba9602f0f98be68247729a276d0922b553c4cba1",
+      "id": "9f3ce006-d8d0-49f8-b725-b65dfb24023a",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=9f3ce006-d8d0-49f8-b725-b65dfb24023a",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "Tycoons War Vanderbilt Invaded Country.pdf",
+      "title": "Tycoon’s War",
+      "author": "Stephen Dando-Collins",
+      "listEntry": 21,
+      "originalBytes": 3969089,
+      "sha256": "600ab280c8974da884c780d10d8f2feba203a68fb86dd81de2d04f27a5d2062e",
+      "id": "d0367f88-3078-440f-b9f1-3747b9c77ef8",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=d0367f88-3078-440f-b9f1-3747b9c77ef8",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "Walt Disney Neal Gabler Z-Library Guide.pdf",
+      "title": "Walt Disney",
+      "author": "Neal Gabler",
+      "listEntry": 16,
+      "originalBytes": 10912024,
+      "sha256": "9ee14c02ec6e79e3499e9e5111d0243f80a6b2e2109849ab5c38a0b3a08a8a76",
+      "id": "d160198b-d4b4-4f11-87fc-86013bf11c51",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=d160198b-d4b4-4f11-87fc-86013bf11c51",
+      "uploadState": "queued"
+    },
+    {
+      "filename": "Wildcatters Texans Oil Money.pdf",
+      "title": "Wildcatters",
+      "author": "Sally Helgesen",
+      "listEntry": 24,
+      "originalBytes": 11339592,
+      "sha256": "c74205b76a435761c84c99e6b4cf561c40a0a88f06bb89c49b73e058b9c39766",
+      "id": "b1400f3a-6316-4068-9417-ea4788a7e605",
+      "reused": false,
+      "url": "https://answerwithbooks.com/books/read/?id=b1400f3a-6316-4068-9417-ea4788a7e605",
+      "uploadState": "queued"
+    }
+  ]
+}

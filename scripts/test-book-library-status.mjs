@@ -26,7 +26,7 @@ test('public and private covers share art direction, title panel, and safe jacke
  const full={title:'An Inquiry into the Nature and Causes of the Wealth of Nations',author:'Adam Smith',oneLiner:'Specialization and exchange.'};
  const excerpt={title:'The Wealth of Nations',author:'Adam Smith',oneLiner:'Specialization and exchange.'};
  assert.equal(imagePrompt(full),imagePrompt(excerpt));assert.deepEqual(coverPalette(full),coverPalette(excerpt));
- assert.match(imagePrompt(full),/large sticker emblem/);assert.match(imagePrompt(full),/upper 56%/);assert.match(imagePrompt(full),/no book title/);
+ assert.match(imagePrompt(full),/grainy editorial screen print/);assert.match(imagePrompt(full),/transparent background/);assert.match(imagePrompt(full),/no book title/);
  const markup=bookJacketMarkup({...full,color:coverPalette(full).bg,coverAsset:'/covers/test.png'});
  for(const part of ['jacket-spine','jacket-art','jacket-type','jacket-title','jacket-author','jacket--very-long'])assert.ok(markup.includes(part));
  assert.match(markup,/Adam Smith/);
@@ -39,4 +39,19 @@ test('reader overview excludes exhaustive notes and agent instructions without d
  const parts=bookReadingSections('---\ntitle: "Example"\n---\n\n## Central argument\n\nA short argument.\n\n## Core lessons\n\n### One\n\nDetailed lesson.\n\n## Key frameworks\n\n### Method\n\nDetailed steps.\n\n## Source and coverage\n\nPrivate references.\n\n## Use this book in an agent\n\nSkill instructions.');
  assert.deepEqual(parts.map(part=>part.title),['Central argument','Core lessons','Key frameworks']);
  assert.equal(readingOverviewWords(parts),3);assert.equal(parts.filter(part=>part.detailed).length,2);assert.match(parts[1].text,/Detailed lesson/);assert.match(parts[2].text,/Detailed steps/);
+});
+
+
+test('new generated print art uses the same cream jacket without replacing existing catalog artwork',async()=>{
+ const {bookJacketMarkup}=await import('../src/lib/book-jacket.mjs');
+ const {imagePrompt,coverImageDefaults,coverPalette}=await import('../supabase/functions/_shared/book-cover-design.mjs');
+ const cover='https://example.com/storage/book/cover-print-v1.png?token=fixture';
+ const markup=bookJacketMarkup({title:'The Match King',author:'Frank Partnoy',color:'#8b4936',coverAsset:cover});
+ assert.ok(markup.includes('--cloth:'+coverPalette({title:'The Match King'}).bg));
+ assert.match(markup,/jacket--print/);assert.match(markup,/--print-paper:#eeebdf/);assert.ok(markup.includes(cover));
+ assert.match(imagePrompt({title:'The Match King'}),/open wooden matchbox/);
+ assert.equal(coverImageDefaults.background,'transparent');assert.equal(coverImageDefaults.size,'1024x1024');
+ const old=bookJacketMarkup({title:'Shoe Dog',author:'Phil Knight',coverAsset:cover});
+ assert.match(old,/shoe-dog-r29.webp/);assert.ok(!old.includes(cover));
+ assert.doesNotMatch(bookJacketMarkup({title:'Other',coverAsset:'/cover-sticker-v3.png'}),/jacket--print/);
 });
