@@ -26,3 +26,12 @@ test('editorial sections bind by ID even when the model returns them out of orde
  const result=await writeReading('Question','short',[source],passages,model);assert.equal(result.sections[0].before,'First context');assert.equal(result.sections[0].startLine,1);assert.equal(result.sections[1].before,'Second context');
  await assert.rejects(writeReading('Question','short',[source],passages,async()=>({introduction:'Intro',conclusion:'End',sections:[{sectionIndex:0,heading:'One',before:'Before',after:'After'},{sectionIndex:0,heading:'Two',before:'Before',after:'After'}]})),/exactly once/);
 });
+
+test('proofreading sees bounded neighboring source without importing it into the excerpt',async()=>{
+ const b={id:'b',source_text:'The speaker was introduced.\nA complete thought.\nThe next scene began.',notes:[]};
+ const refs=await proofreadPassages([b],[{bookId:'b',startLine:2,endLine:2}],async(system,input)=>{
+  const p=JSON.parse(input).passages[0];assert.equal(p.text,'A complete thought.');
+  assert.equal(p.contextBefore,'The speaker was introduced.');assert.equal(p.contextAfter,'The next scene began.');
+  assert.match(system,/edits must target text/);return {edits:[],issues:[]};
+ });assert.equal(applyProofreading('A complete thought.',refs[0].proofreading),'A complete thought.');
+});
