@@ -91,7 +91,7 @@ const jsonLd = [
     <BookAgentDemo />
 
     <section id="source-books" class="home-section home-library">
-      <div class="section-heading"><div><p class="room-eyebrow">Featured books</p><h2>A few good places<br /> to <em>begin.</em></h2></div><a class="room-link" href="/books/">All {books.length} books <span aria-hidden="true">↗</span></a></div>
+      <div class="section-heading"><div><p class="room-eyebrow">Featured books</p><h2>A few good places<br /> to <em>begin.</em></h2></div><a class="room-link" href="/books/"><span data-public-book-count>Explore all books</span> <span aria-hidden="true">↗</span></a></div>
       <div class="library-grid">
         {shelfBooks.map(book => <UploadedBookRow book={book} />)}
       </div>
@@ -129,3 +129,8 @@ const jsonLd = [
   <AddBookDialog />
   <InstallSkillDialog />
 </Base>
+
+<script>
+  import {mountPublicBookCount} from '../lib/catalog-count';
+  mountPublicBookCount();
+</script>
