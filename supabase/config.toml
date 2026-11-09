@@ -12,3 +12,7 @@ verify_jwt = false
 # Service-only embedding worker: POST requires the dedicated runner secret.
 [functions.reading-index]
 verify_jwt = false
+
+# Only the total of ready public books is exposed, without account or source data.
+[functions.library-count]
+verify_jwt = false
