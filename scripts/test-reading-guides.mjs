@@ -59,13 +59,13 @@ test('editorial generation constrains the provider to one section per selected p
 test('ten-minute readings reserve time for context instead of allowing twenty minutes of excerpts',async()=>{
  const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
  const longBook={...book,source_text:Array(1900).fill('word').join(' ')};
- await assert.rejects(writeReading('Question','short',[longBook],[{bookId:book.id,startLine:1,endLine:1}],async()=>{throw Error('The oversized selection must fail before generation.');}),/700 to 1800 original words TOTAL/);
+ await assert.rejects(writeReading('Question','short',[longBook],[{bookId:book.id,startLine:1,endLine:1}],async()=>{throw Error('The oversized selection must fail before generation.');}),/no more than 1800 original words TOTAL/);
 });
 test('reading time includes editorial text as well as original passages',async()=>{
  const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
  const source={...book,source_text:Array(1000).fill('word').join(' ')};
  await assert.rejects(writeReading('Question','short',[source],[{bookId:book.id,startLine:1,endLine:1}],async(_s,input)=>{
-  assert.equal(JSON.parse(input).targetMinutes,10);assert.equal(JSON.parse(input).editorialWordBudget,400);
+  assert.equal(JSON.parse(input).targetMinutes,10);assert.equal(JSON.parse(input).editorialWordBudget,250);
   return {introduction:Array(1500).fill('word').join(' '),sections:[{heading:'Scene',before:'Before',after:'After'}],conclusion:'End'};
  }),/shorten the excerpts and context/);
 });
@@ -137,4 +137,28 @@ for(const kind of ['table of contents','bibliography','index','copyright page'])
 });
 test('a fabricated account in reference matter still fails source review',async()=>{
  await assert.rejects(mapReadingSection({start:1,end:1,text:'1: Index: Factory, 42'},0,modelResponses({summary:'He opened a factory.',scenes:[{title:'Factory',account:'He opened it.',startLine:1,endLine:1}]},{passed:false,reason:'An index entry is not evidence of an event.'})),/failed its source check/);
+});
+
+test('long reading accepts 2339 relevant source words instead of failing or padding',async()=>{
+ const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
+ const source={...book,source_text:Array(2339).fill('word').join(' ')};
+ const draft=await writeReading('How to make yourself easy to help?','long',[source],[{bookId:book.id,startLine:1,endLine:1}],async(_s,input)=>{
+  const request=JSON.parse(input);assert.equal(request.targetMinutes,45);assert.equal(request.editorialWordBudget,585);
+  return {introduction:'Context',sections:[{heading:'Scene',before:'Before',after:'After',interpretation:'Interpretation'}],conclusion:'End'};
+ });
+ const guide=await hydrateReading(draft,[source],hash);assert.equal(guide.originalWords,2339);assert.equal(guide.minutes,12);
+});
+test('longer readings support multiple distinct passages per confirmed book',async()=>{
+ const second={...book,id:'second'};const calls=[];
+ const ranges=[{bookId:book.id,startLine:1,endLine:1},{bookId:book.id,startLine:3,endLine:3},{bookId:second.id,startLine:1,endLine:3}];
+ const result=await selectReading('Question','long',[book,second],async(system,input)=>{calls.push({system,input:JSON.parse(input)});return calls.length===1?{passages:ranges}:{passages:ranges.map((r,candidateIndex)=>({candidateIndex,startLine:r.startLine,endLine:r.endLine}))};},'Prior attempt selected weak matches.');
+ assert.deepEqual(result,ranges);assert.equal(calls[0].input.requestedMinutes,45);assert.equal(calls[0].input.confirmedBookCount,2);assert.equal(calls[0].input.repairFeedback,'Prior attempt selected weak matches.');assert.match(calls[1].system,/ceiling, not a minimum/);
+});
+test('flexible length never accepts an empty guide',async()=>{
+ const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
+ await assert.rejects(writeReading('Question','long',[book],[],async()=>{throw Error('Must not call model');}),/No original passages/);
+});
+test('reading duration includes interpretation as well as excerpts and context',async()=>{
+ const guide=await hydrateReading({introduction:'Intro',conclusion:'End',sections:[{bookId:book.id,startLine:1,endLine:1,heading:'Scene',before:'Before',after:'After',interpretation:Array(400).fill('word').join(' ')}]},[book],hash);
+ assert.equal(guide.minutes,3);
 });
