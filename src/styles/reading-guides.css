@@ -64,3 +64,9 @@
 .guide-passages .guide-purchase-grid .guide-purchase-card p{font-size:14px;line-height:1.6;margin:10px 0 20px}
 .guide-purchase-card a{margin-top:auto;font-size:13px}
 @media(max-width:700px){.guide-purchase-grid{grid-template-columns:1fr}.guide-purchase-card{flex-direction:row;align-items:flex-start;gap:18px}.guide-purchase-card .reading-book-cover{flex-shrink:0;margin:0;width:80px}}
+
+.guide-saved-card[data-guide-state="awaiting_confirmation"]{border-color:#b88b5d}
+.guide-saved-card>a>small.guide-input-label{color:#8a3f20;font-weight:600}
+.guide-input-label::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.guide-input-help{font-size:13px;line-height:1.5;color:var(--color-soft);margin-top:10px}
+.guide-input-action{display:inline-block;font-size:13px;text-decoration:underline;text-underline-offset:3px;margin-top:12px}

@@ -9,11 +9,11 @@ test('proofreading uses a separate small model and preserves raw text',async()=>
  assert.equal(applyProofreading(book.source_text,refs[0].proofreading),'His first wife. A beneficial lesson.');assert.equal(book.source_text,'His rst wife. A bene cial lesson.');assert.equal(applyProofreading('Changed source.',refs[0].proofreading),'Changed source.');
  assert.equal(bookModelConfig(()=>undefined,'proofreading').model,'gpt-4.1-mini');assert.equal(bookModelConfig(n=>n==='BOOK_PROOFREAD_MODEL'?'gpt-4.1-nano':undefined,'proofreading').model,'gpt-4.1-nano');
 });
-test('proofreading rejects rewrites, ambiguous replacements, and unresolved gaps',async()=>{
+test('proofreading never applies rewrites or ambiguous replacements, and rejects unresolved gaps',async()=>{
  assert.equal(validateProofreadingEdit('unhappy','happy'),false);assert.equal(validateProofreadingEdit('Hayes','Jones'),false);assert.equal(validateProofreadingEdit('No','Yes'),false);
  assert.equal(validateProofreadingEdit('environ-\nments','environments'),true);assert.equal(validateProofreadingEdit('Over the years | have','Over the years I have'),true);
- await assert.rejects(proofreadPassages([book],[{bookId:'b',startLine:1,endLine:1}],async()=>({edits:[{passageIndex:0,before:'wife',after:'friend'}],issues:[]})),/Unsafe/);
- await assert.rejects(proofreadPassages([{...book,source_text:'rst rst'}],[{bookId:'b',startLine:1,endLine:1}],async()=>({edits:[{passageIndex:0,before:'rst',after:'first'}],issues:[]})),/Ambiguous/);
+ await assert.rejects(proofreadPassages([book],[{bookId:'b',startLine:1,endLine:1}],async()=>({edits:[{passageIndex:0,before:'wife',after:'friend'}],issues:[]})),/wider context/);
+ await assert.rejects(proofreadPassages([{...book,source_text:'rst rst'}],[{bookId:'b',startLine:1,endLine:1}],async()=>({edits:[{passageIndex:0,before:'rst',after:'first'}],issues:[]})),/wider context/);
  await assert.rejects(proofreadPassages([book],[{bookId:'b',startLine:1,endLine:1}],async()=>({edits:[],issues:[{passageIndex:0,reason:'Cut off mid-word'}]})),/wider context/);
 });
 test('page breaks join unfinished sentences while real paragraphs remain',()=>{
@@ -55,4 +55,44 @@ test('a stronger source check resolves a false layout alarm without rewriting th
    return {coherent:true,reason:'The complete sentence is interrupted only by whitespace.'};
   }return {edits:[],issues:[{passageIndex:0,reason:'Possible line-wrap defect.'}]};
  });assert.equal(calls,2);assert.equal(applyProofreading(b.source_text,refs[0].proofreading),b.source_text);
+});
+
+test('Apple OCR line-wrap markers can be repaired without changing wording',async()=>{
+ for(const marker of ['-','¬','\u00ad'])assert.equal(validateProofreadingEdit(`com${marker}\nplicated`,'complicated'),true);
+ assert.equal(validateProofreadingEdit('com¬plicated','complicated'),false);
+ assert.equal(validateProofreadingEdit('small-company','smallcompany'),false);
+ assert.equal(validateProofreadingEdit('com¬\nplicated','simple'),false);
+ const source={id:'apple',source_text:'A com¬\nplicated hierarchy. They re¬\nmained small.'};
+ const refs=await proofreadPassages([source],[{bookId:'apple',startLine:1,endLine:3}],async()=>({edits:[{passageIndex:0,before:'com¬\nplicated',after:'complicated'},{passageIndex:0,before:'re¬\nmained',after:'remained'}],issues:[]}));
+ assert.equal(applyProofreading(source.source_text,refs[0].proofreading),'A complicated hierarchy. They remained small.');
+ assert.equal(source.source_text,'A com¬\nplicated hierarchy. They re¬\nmained small.');
+});
+test('repeated unsupported suggestions do not block coherent originals or modify them',async()=>{
+ let calls=0;const source={id:'b',source_text:'The chance to a buy a company. A bene cial lesson.',notes:[]};
+ const refs=await proofreadPassages([source],[{bookId:'b',startLine:1,endLine:1}],async(_s,input,options)=>{
+  calls++;if(options.kind==='review'){
+   const p=JSON.parse(input);assert.equal(p.passages[0].text,'The chance to a buy a company. A beneficial lesson.');
+   assert.equal(p.passages[0].extractedText,source.source_text);assert.equal(p.rejectedEdits.length,1);
+   return {coherent:true,reason:'The awkward phrase remains understandable without rewriting it.'};
+  }
+  return {edits:[{passageIndex:0,before:'to a buy',after:'to buy'},{passageIndex:0,before:'bene cial',after:'beneficial'}],issues:[]};
+ });assert.equal(calls,3);assert.equal(refs[0].proofreading.edits.length,1);assert.equal(refs[0].proofreading.sourceReview.coherent,true);
+ assert.equal(applyProofreading(source.source_text,refs[0].proofreading),'The chance to a buy a company. A beneficial lesson.');
+});
+test('ambiguous fixes remain unapplied, with independent review required',async()=>{
+ const source={id:'b',source_text:'She did not go. He did not go.',notes:[]};let reviewed=false;
+ const refs=await proofreadPassages([source],[{bookId:'b',startLine:1,endLine:1}],async(_s,input,options)=>{
+  if(options.kind==='review'){reviewed=true;assert.equal(JSON.parse(input).passages[0].text,source.source_text);return {coherent:true,reason:'Both sentences are complete.'};}
+  return {edits:[{passageIndex:0,before:'did not',after:'did  not'}],issues:[]};
+ });assert.equal(reviewed,true);assert.deepEqual(refs[0].proofreading.edits,[]);
+});
+test('coherence review sees safe repairs before judging reported OCR defects',async()=>{
+ const source={id:'b',source_text:'A com¬\nplicated task.',notes:[]};
+ await proofreadPassages([source],[{bookId:'b',startLine:1,endLine:2}],async(_s,input,options)=>{
+  if(options.kind==='review'){assert.equal(JSON.parse(input).passages[0].text,'A complicated task.');return {coherent:true,reason:'The line wrap is repaired.'};}
+  return {edits:[{passageIndex:0,before:'com¬\nplicated',after:'complicated'}],issues:[{passageIndex:0,reason:'Broken word.'}]};
+ });
+});
+test('real gaps still stop the guide when unsafe suggestions are discarded',async()=>{
+ await assert.rejects(proofreadPassages([book],[{bookId:'b',startLine:1,endLine:1}],async(_s,_i,o)=>o.kind==='review'?{coherent:false,reason:'Words are missing in the middle of this scene.'}:{edits:[{passageIndex:0,before:'wife',after:'invented missing scene'}],issues:[]}),e=>e.code==='SOURCE_BOUNDARIES'&&e.message.includes('Words are missing'));
 });

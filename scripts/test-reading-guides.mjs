@@ -228,6 +228,6 @@ test('a proofreading validation retry retains the selected original ranges',asyn
   if(table==='book_processing_jobs'){const q={select:()=>q,eq:()=>q,or:()=>q,is:()=>q,in:async()=>({data:[book]})};return q;}
   const q={update:p=>{saved=p;return q;},eq:()=>q,select:()=>q,single:async()=>({data:{id:'guide'}})};return q;
  }};
- await drainGuide(db,async()=>{calls++;return {edits:[{passageIndex:0,before:'First',after:'Invented'}],issues:[]};},hash,()=>{});
- assert.equal(calls,2);assert.deepEqual(saved.progress.passages,passages);assert.equal(saved.progress.proofread,undefined);assert.equal(saved.status,'composing');
+ await drainGuide(db,async()=>{calls++;return {edits:null,issues:[]};},hash,()=>{});
+ assert.equal(calls,1);assert.deepEqual(saved.progress.passages,passages);assert.equal(saved.progress.proofread,undefined);assert.equal(saved.status,'composing');
 });

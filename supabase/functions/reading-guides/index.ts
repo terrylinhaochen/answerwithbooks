@@ -67,6 +67,10 @@ Deno.serve(async req=>{
   }
   if(!user)return reply({error:'Sign in to read your guides.'},401);
   const owned=()=>db.from('reading_guides').select('*').eq('user_id',user.id).eq('id',input.id).maybeSingle();
+  if(input.action==='input-status'){
+   const result=await db.from('reading_guides').select('id',{count:'exact'}).eq('user_id',user.id).eq('status','awaiting_confirmation').order('created_at',{ascending:false}).limit(1);
+   const rows=checked(result);return reply({count:result.count||0,guideId:rows[0]?.id||null});
+  }
   if(input.action==='list'){
    const [guideResult,stateResult]=await Promise.all([
     db.from('reading_guides').select('id,question,status,length,book_ids,proposal,error,position,completed,created_at,cover_status,cover_path,cover_design').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100),

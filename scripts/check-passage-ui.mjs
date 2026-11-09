@@ -6,8 +6,8 @@ const user='00000000-0000-4000-8000-000000000001',book='00000000-0000-4000-8000-
 const books=[{id:book,title:'Source for a meaningful question',author:'Example author'},{id:otherBook,title:'Another life to learn from',author:'Another author'}];
 const q='How do I become easier to help?',internalReason='Internal passage analysis: a concrete scene shows how to invite candid advice.',internalConnection='Internal synthesis across the matched passages.';
 const mutations=actions=>actions.filter(x=>['propose','create','confirm','suggest'].includes(x.action));
-async function context({signedIn=false,draft=null,width=390,catalogBooks=books}={}){
- const ctx=await browser.newContext({viewport:{width,height:900}});const actions=[];let stage='awaiting_confirmation';
+async function context({signedIn=false,draft=null,width=390,catalogBooks=books,saved=false,initialStage='awaiting_confirmation',pendingCount=1}={}){
+ const ctx=await browser.newContext({viewport:{width,height:900}});const actions=[];let stage=initialStage,existing=saved;
  await ctx.addInitScript(({signedIn,user,draft})=>{
   if(signedIn){const exp=Math.floor(Date.now()/1000)+3600;const b=x=>btoa(JSON.stringify(x)).replaceAll('=','').replaceAll('+','-').replaceAll('/','_');localStorage.setItem('sb-yozeqanibszoxnowmvsm-auth-token',JSON.stringify({access_token:b({alg:'HS256',typ:'JWT'})+'.'+b({sub:user,exp,role:'authenticated'})+'.synthetic',refresh_token:'synthetic',expires_at:exp,expires_in:3600,token_type:'bearer',user:{id:user,aud:'authenticated',role:'authenticated',email:'fixture@example.invalid'}}));}
   if(draft){localStorage.setItem('awb:guide-review:v1:'+draft.id,JSON.stringify({...draft,savedAt:Date.now()}));localStorage.setItem('awb:pending-guide-review',draft.id);}
@@ -20,18 +20,20 @@ async function context({signedIn=false,draft=null,width=390,catalogBooks=books}=
   else if(url.includes('reader-subscription'))result={active:false,used:0,limit:3};
   else if(url.includes('reading-guides')){
    actions.push(body);
-   if(body.action==='list'||body.action==='public-list')result={guides:[]};
-   else if(['propose','create','confirm'].includes(body.action)){if(body.action!=='propose')stage='composing';result={id:guide};}
+   if(body.action==='input-status')result={count:existing&&stage==='awaiting_confirmation'?pendingCount:0,guideId:existing&&stage==='awaiting_confirmation'?guide:null};
+   else if(body.action==='list')result={guides:existing?[{id:guide,status:stage,question:q,created_at:'2026-11-09T12:00:00Z',cover:{status:'none'}}]:[]};
+   else if(body.action==='public-list')result={guides:[{id:'00000000-0000-4000-8000-000000000099',question:'An existing public reading',created_at:'2026-11-09T12:00:00Z',cover:{status:'pending'}}]};
+   else if(['propose','create','confirm'].includes(body.action)){existing=true;if(body.action!=='propose')stage='composing';result={id:guide};}
    else if(body.action==='get')result={guide:{id:guide,status:stage,question:q,proposal:{books:[books[0]],connection:internalConnection,matches:[{bookId:book,title:books[0].title,reason:internalReason}]}},books:[books[0]]};
   }
   await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(result),headers:{'access-control-allow-origin':'*'}});
  });
  const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
- return {ctx,page,actions,errors};
+ return {ctx,page,actions,errors,setStage:value=>{stage=value;}};
 }
 async function launch(test){
  const {page,actions}=test;
- await page.goto(origin+'/guides/');await page.locator('[data-guide-launcher] textarea').fill(q);
+ await page.goto(origin+'/guides/');await page.locator('[data-public-guide-list] a').waitFor();await page.locator('[data-guide-launcher] textarea').fill(q);
  await page.locator('[data-guide-launcher] button[type=submit]').click();
  await page.locator('[data-guide-question]').waitFor({state:'visible'});
  assert.equal(await page.locator('input[name=book-mode]:checked').count(),0);
@@ -94,6 +96,31 @@ try{
  const e=await context({signedIn:true,draft});await e.page.goto(origin+'/guides/?resume='+draft.id);await review(e.page,'Suggested books');assert.equal(e.actions.filter(x=>x.action==='propose').length,1);assert.equal(e.actions.find(x=>x.action==='propose').requestKey,draft.id);assert.equal(await e.page.locator('input[name=length][value=short]').isChecked(),true);assert.deepEqual(e.errors,[]);await e.ctx.close();
  // An existing recommendation reopens its clean book review without restarting work.
  const f=await context({signedIn:true});await f.page.goto(origin+'/guides/?id='+guide);await review(f.page,'Suggested books');assert.deepEqual(mutations(f.actions),[]);await f.page.locator('[data-close-guide]').click();await f.page.waitForURL(url=>!url.searchParams.has('id'));await f.page.reload();assert.equal(await f.page.locator('[data-guide-dialog]').isVisible(),false);assert.deepEqual(f.errors,[]);await f.ctx.close();
+ // Work that finishes while minimized becomes an explicit input request, across pages.
+ for(const width of [390,1280]){
+  const n=await context({signedIn:true,saved:true,initialStage:'scanning',width});
+  await n.page.goto(origin+'/guides/?id='+guide);await n.page.locator('[data-guide-processing]').waitFor({state:'visible'});
+  await n.page.locator('[data-close-guide]').click();assert.equal(await n.page.locator('[data-guide-input-notice]').isVisible(),false);
+  n.setStage('awaiting_confirmation');
+  await n.page.locator('[data-guide-input-notice]').waitFor({state:'visible',timeout:18000});
+  assert.equal(await n.page.locator('[data-guide-dialog]').isVisible(),false);
+  const saved=n.page.locator('[data-saved-guides] .guide-saved-card');
+  assert.equal(await saved.locator('small.guide-input-label').innerText(),'Requires input');
+  assert.ok(!(await saved.innerText()).includes('Illustrating your cover'));
+  await n.page.goto(origin+'/books/');await n.page.locator('[data-guide-input-notice]').waitFor({state:'visible'});
+  assert.equal(await n.page.locator('[data-guide-input-link]').getAttribute('href'),'/guides/?id='+guide);
+  assert.equal(await n.page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await n.page.locator('[data-guide-input-notice]').screenshot({path:`/private/tmp/awb-input-notice-${width}.png`});
+  await n.page.locator('[data-guide-input-link]').click();await review(n.page,'Suggested books');
+  assert.equal(await n.page.locator('[data-guide-input-notice]').isVisible(),false);
+  await confirm(n,'confirm');await n.page.locator('[data-close-guide]').click();
+  assert.equal(await n.page.locator('[data-guide-input-notice]').isVisible(),false);
+  assert.equal(n.actions.filter(x=>x.action==='confirm').length,1);assert.deepEqual(n.errors,[]);await n.ctx.close();
+ }
+ const multiple=await context({signedIn:true,saved:true,pendingCount:2});await multiple.page.goto(origin+'/books/');await multiple.page.locator('[data-guide-input-notice]').waitFor({state:'visible'});
+ assert.equal(await multiple.page.locator('[data-guide-input-count]').innerText(),'2 guides require input');assert.equal(await multiple.page.locator('[data-guide-input-link]').getAttribute('href'),'/guides/#your-guides');await multiple.ctx.close();
+ const anonymous=await context({saved:true});await anonymous.page.goto(origin+'/books/');assert.equal(await anonymous.page.locator('[data-guide-input-notice]').isVisible(),false);assert.equal(anonymous.actions.some(a=>a.action==='input-status'),false);await anonymous.ctx.close();
+ const failed=await context({signedIn:true,saved:true,initialStage:'failed'});await failed.page.goto(origin+'/guides/');await failed.page.getByText('Could not complete this guide',{exact:true}).waitFor();assert.equal(await failed.page.locator('[data-guide-input-notice]').isVisible(),false);assert.equal(await failed.page.locator('[data-saved-guides] .guide-input-label').count(),0);await failed.ctx.close();
  // Searching filters choices without dropping selections or bypassing the four-book limit.
  const searchBooks=[{title:'Insanely Simple',author:'Ken Segall'},{title:'Learning to See',author:'José Rivera'},{title:'Shoe Dog',author:'Phil Knight'},{title:'Open',author:'Andre Agassi'},{title:'Invention: A Life',author:'James Dyson'}].map((b,i)=>({...b,id:`00000000-0000-4000-8000-00000000002${i}`}));
  for(const width of [390,1280]){
@@ -114,5 +141,5 @@ try{
   await g.page.locator('[data-guide-question] button[type=submit]').click();await g.page.locator('[data-guide-proposal]').waitFor({state:'visible'});
   assert.deepEqual(await g.page.locator('[data-proposal-books] strong').allTextContents(),searchBooks.slice(1).map(b=>b.title));assert.deepEqual(mutations(g.actions),[]);assert.deepEqual(g.errors,[]);await g.ctx.close();
  }
- console.log('PASS explicit mode choice, card-only review, manual selection, title/author search, accent normalization, no-match/clear states, preserved selections and four-book limit, edits, length confirmation, mobile/desktop layouts, auth resume, and saved-review reopening. API responses mocked; no live guide created.');
+ console.log('PASS cross-page Requires input notices, minimized recommendations, confirmation clearing, signed-out privacy, explicit mode choice, card-only review, manual selection, title/author search, accent normalization, no-match/clear states, preserved selections and four-book limit, edits, length confirmation, mobile/desktop layouts, auth resume, and saved-review reopening. API responses mocked; no live guide created.');
 }finally{await browser.close();}
