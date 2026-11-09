@@ -44,5 +44,15 @@ test('invalid proofreading is repaired with exact feedback without changing the 
  });assert.equal(calls,2);assert.equal(applyProofreading(book.source_text,refs[0].proofreading),'His first wife. A bene cial lesson.');
 });
 test('genuine missing source context is not treated as a format retry',async()=>{
- let calls=0;await assert.rejects(()=>proofreadPassages([book],[{bookId:'b',startLine:1,endLine:1}],async()=>{calls++;return {edits:[],issues:[{passageIndex:0,reason:'Sentence is truncated.'}]};}),e=>e.code==='SOURCE_BOUNDARIES');assert.equal(calls,1);
+ let calls=0;await assert.rejects(()=>proofreadPassages([book],[{bookId:'b',startLine:1,endLine:1}],async()=>{calls++;return {edits:[],issues:[{passageIndex:0,reason:'Sentence is truncated.'}]};}),e=>e.code==='SOURCE_BOUNDARIES');assert.equal(calls,2);
+});
+
+test('a stronger source check resolves a false layout alarm without rewriting the original',async()=>{
+ let calls=0;const b={id:'b',source_text:'He shared his\n\nviews.',notes:[]};
+ const refs=await proofreadPassages([b],[{bookId:'b',startLine:1,endLine:3}],async(_s,input,options)=>{
+  calls++;if(options.kind==='review'){
+   assert.equal(options.name,'source_coherence');assert.equal(JSON.parse(input).passages[0].text,b.source_text);
+   return {coherent:true,reason:'The complete sentence is interrupted only by whitespace.'};
+  }return {edits:[],issues:[{passageIndex:0,reason:'Possible line-wrap defect.'}]};
+ });assert.equal(calls,2);assert.equal(applyProofreading(b.source_text,refs[0].proofreading),b.source_text);
 });
