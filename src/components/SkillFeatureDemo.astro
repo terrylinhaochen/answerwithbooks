@@ -32,7 +32,7 @@ const descriptions = {
     <p class="demo-kicker">Your question</p><h3>How do I find something<br />worthwhile doing?</h3>
     <p class="demo-small">A reading through three different lives.</p>
     <div class="demo-sources">{books.map(book => <div><span class="demo-mini-cover"><BookJacket title={book.title} author={book.author} color={book.color} coverAsset={`/print-study/${book.art}`} loading="lazy" /></span><span><strong>{book.title}</strong><small>{book.note}</small></span><span class="demo-check">✓</span></div>)}</div>
-    <div class="demo-time"><span>Reading time</span><div><span>10 min</span><span class="selected">25 min</span><span>45 min</span></div></div>
+    <div class="demo-time"><span>Preferred reading time</span><div><span>10 min</span><span class="selected">25 min</span><span>45 min</span></div></div>
     <div class="demo-confirm">Confirm & create guide <span>→</span></div>
    </div> : <div class="demo-chat">
     <div class="demo-message"><span>You</span><p>My project has stalled. What could I try this week?</p></div>

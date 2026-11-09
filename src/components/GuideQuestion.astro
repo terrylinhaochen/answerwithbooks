@@ -41,7 +41,7 @@ const {modalOnly=false}=Astro.props;
     <section data-guide-proposal hidden class="mt-6 border-t border-line pt-6">
       <p data-proposal-question class="font-serif text-2xl mb-5"></p><h3 class="text-sm text-soft">Suggested books</h3><ul data-proposal-books class="guide-book-shelf mt-4"></ul><p data-proposal-connection class="mt-4 text-soft"></p>
       <button type="button" data-edit-guide-books class="mt-4 text-sm underline">Edit books</button><button type="button" data-edit-suggested-question class="mt-4 ml-5 text-sm underline">Edit question</button>
-      <fieldset class="guide-length-options"><legend class="mb-3 text-sm">Reading time</legend><label><input type="radio" name="length" value="short" /> ~10 minutes</label><label><input type="radio" name="length" value="standard" checked /> ~25 minutes</label><label><input type="radio" name="length" value="long" /> ~45 minutes</label></fieldset>
+      <fieldset class="guide-length-options"><legend class="mb-3 text-sm">Preferred reading time</legend><label><input type="radio" name="length" value="short" /> ~10 minutes</label><label><input type="radio" name="length" value="standard" checked /> ~25 minutes</label><label><input type="radio" name="length" value="long" /> ~45 minutes</label></fieldset><p class="mt-2 text-sm text-soft">We use the books and passages that fit, so your guide may be shorter. Longer readings can explore several passages across your selected books.</p>
       <button type="button" data-confirm-guide class="awb-pill awb-pill-primary">Confirm books →</button>
     </section>
     <section data-guide-ready hidden class="guide-ready-preview">

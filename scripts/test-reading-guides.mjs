@@ -59,13 +59,13 @@ test('editorial generation constrains the provider to one section per selected p
 test('ten-minute readings reserve time for context instead of allowing twenty minutes of excerpts',async()=>{
  const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
  const longBook={...book,source_text:Array(1900).fill('word').join(' ')};
- await assert.rejects(writeReading('Question','short',[longBook],[{bookId:book.id,startLine:1,endLine:1}],async()=>{throw Error('The oversized selection must fail before generation.');}),/700 to 1800 original words TOTAL/);
+ await assert.rejects(writeReading('Question','short',[longBook],[{bookId:book.id,startLine:1,endLine:1}],async()=>{throw Error('The oversized selection must fail before generation.');}),/no more than 1800 original words TOTAL/);
 });
 test('reading time includes editorial text as well as original passages',async()=>{
  const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
  const source={...book,source_text:Array(1000).fill('word').join(' ')};
  await assert.rejects(writeReading('Question','short',[source],[{bookId:book.id,startLine:1,endLine:1}],async(_s,input)=>{
-  assert.equal(JSON.parse(input).targetMinutes,10);assert.equal(JSON.parse(input).editorialWordBudget,400);
+  assert.equal(JSON.parse(input).targetMinutes,10);assert.equal(JSON.parse(input).editorialWordBudget,250);
   return {introduction:Array(1500).fill('word').join(' '),sections:[{heading:'Scene',before:'Before',after:'After'}],conclusion:'End'};
  }),/shorten the excerpts and context/);
 });
@@ -102,7 +102,7 @@ test('a requested book cannot silently disappear from the proposed guide',async(
  await drainGuide(db,modelResponses({bookIds:[book.id],connection:'Only one contributes.',gap:''}),hash,()=>{});assert.equal(saved.status,'gap');assert.deepEqual(saved.book_ids,[]);assert.match(saved.proposal.gap,/every selected book/);
 });
 
-test('final passage refinement keeps every confirmed book',async()=>{await assert.rejects(selectReading('Question','short',[book,{...book,id:'second'}],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]})),/every confirmed book/);});
+test('final passage refinement may omit a confirmed book that does not fit',async()=>{const selected=await selectReading('Question','short',[book,{...book,id:'second'}],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]}));assert.deepEqual(selected,[{bookId:book.id,startLine:1,endLine:2}]);});
 
 test('mapping and review receive the same absolute numbered original lines',async()=>{const inputs=[];const chunk={start:41,end:43,text:'41: First line\n42: Second line\n43: Third line'};await mapReadingSection(chunk,3,async(prompt,input)=>{inputs.push(JSON.parse(input));return inputs.length===1?{summary:'Three lines',scenes:[]}:{passed:true};});assert.equal(inputs[0].text,'41: First line\n42: Second line\n43: Third line');assert.equal(inputs[1].source,inputs[0].text);});
 
@@ -137,4 +137,42 @@ for(const kind of ['table of contents','bibliography','index','copyright page'])
 });
 test('a fabricated account in reference matter still fails source review',async()=>{
  await assert.rejects(mapReadingSection({start:1,end:1,text:'1: Index: Factory, 42'},0,modelResponses({summary:'He opened a factory.',scenes:[{title:'Factory',account:'He opened it.',startLine:1,endLine:1}]},{passed:false,reason:'An index entry is not evidence of an event.'})),/failed its source check/);
+});
+
+test('long reading accepts 2339 relevant source words instead of failing or padding',async()=>{
+ const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
+ const source={...book,source_text:Array(2339).fill('word').join(' ')};
+ const draft=await writeReading('How to make yourself easy to help?','long',[source],[{bookId:book.id,startLine:1,endLine:1}],async(_s,input)=>{
+  const request=JSON.parse(input);assert.equal(request.targetMinutes,45);assert.equal(request.editorialWordBudget,585);
+  return {introduction:'Context',sections:[{heading:'Scene',before:'Before',after:'After',interpretation:'Interpretation'}],conclusion:'End'};
+ });
+ const guide=await hydrateReading(draft,[source],hash);assert.equal(guide.originalWords,2339);assert.equal(guide.minutes,12);
+});
+test('longer readings support multiple distinct passages per confirmed book',async()=>{
+ const second={...book,id:'second'};const calls=[];
+ const ranges=[{bookId:book.id,startLine:1,endLine:1},{bookId:book.id,startLine:3,endLine:3},{bookId:second.id,startLine:1,endLine:3}];
+ const result=await selectReading('Question','long',[book,second],async(system,input)=>{calls.push({system,input:JSON.parse(input)});return calls.length===1?{passages:ranges}:{passages:ranges.map((r,candidateIndex)=>({candidateIndex,startLine:r.startLine,endLine:r.endLine}))};},'Prior attempt selected weak matches.');
+ assert.deepEqual(result,ranges);assert.equal(calls[0].input.requestedMinutes,45);assert.equal(calls[0].input.confirmedBookCount,2);assert.equal(calls[0].input.repairFeedback,'Prior attempt selected weak matches.');assert.match(calls[1].system,/ceiling, not a minimum/);
+});
+test('flexible length never accepts an empty guide',async()=>{
+ const {writeReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
+ await assert.rejects(writeReading('Question','long',[book],[],async()=>{throw Error('Must not call model');}),/No original passages/);
+});
+test('reading duration includes interpretation as well as excerpts and context',async()=>{
+ const guide=await hydrateReading({introduction:'Intro',conclusion:'End',sections:[{bookId:book.id,startLine:1,endLine:1,heading:'Scene',before:'Before',after:'After',interpretation:Array(400).fill('word').join(' ')}]},[book],hash);
+ assert.equal(guide.minutes,3);
+});
+
+test('no relevant originals becomes a truthful gap without retrying generation',async()=>{
+ const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');
+ let saved,calls=0;const job={id:'guide',user_id:'owner',lease_token:'lease',status:'composing',question:'Unrelated question',length:'long',attempts:1,book_ids:[book.id],progress:{}};
+ const db={rpc:async()=>({data:job}),from:table=>{
+  if(table==='book_processing_jobs'){const q={select:()=>q,eq:()=>q,or:()=>q,is:()=>q,in:async()=>({data:[book]})};return q;}
+  const q={update:p=>{saved=p;return q;},eq:()=>q,select:()=>q,single:async()=>({data:{id:'guide'}})};return q;
+ }};
+ await drainGuide(db,async()=>{calls++;return {passages:[]};},hash);
+ assert.equal(calls,1);assert.equal(saved.status,'gap');assert.match(saved.proposal.gap,/could not find relevant passages/);assert.equal(saved.error,null);assert.deepEqual(saved.progress,{});
+});
+test('refinement can report a gap after reading the original candidates',async()=>{
+ await assert.rejects(selectReading('Question','long',[book],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:3}]},{passages:[]})),e=>e.code==='NO_RELEVANT_PASSAGES');
 });
