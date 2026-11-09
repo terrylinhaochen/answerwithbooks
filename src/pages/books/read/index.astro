@@ -6,6 +6,7 @@ import BookPageHeader from '../../../components/BookPageHeader.astro';
 import BookReadingPanel from '../../../components/BookReadingPanel.astro';
 import BookOverview from '../../../components/BookOverview.astro';
 import BookQuestions from '../../../components/BookQuestions.astro';
+import BookPurchase from '../../../components/BookPurchase.astro';
 import CopyBookAction from '../../../components/CopyBookAction.astro';
 import BookDigestPersonalizer from '../../../components/BookDigestPersonalizer.astro';
 import ContentFeedback from '../../../components/ContentFeedback.astro';
@@ -22,6 +23,7 @@ import ContentFeedback from '../../../components/ContentFeedback.astro';
    <BookReadingPanel><div data-book-summary></div></BookReadingPanel>
    <BookQuestions />
    <BookDigestPersonalizer shared />
+   <BookPurchase client />
    <ContentFeedback contentType="book" contentSlug="" contentTitle="" />
   </div>
  </article>
