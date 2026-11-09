@@ -219,3 +219,15 @@ test('a reflective parallel can reach a guide without inventing an action or out
  assert.ok(prompts.at(-1).includes('Do not reject a passage merely because it lacks'));
  assert.ok(prompts.at(-1).includes('Reject ungrounded claims'));
 });
+
+test('a proofreading validation retry retains the selected original ranges',async()=>{
+ const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');let saved,calls=0;
+ const passages=[{bookId:book.id,startLine:1,endLine:2}];
+ const job={id:'guide',user_id:'owner',lease_token:'lease',status:'composing',question:'Question',length:'short',attempts:1,book_ids:[book.id],progress:{passages,candidates:passages}};
+ const db={rpc:async()=>({data:job}),from:table=>{
+  if(table==='book_processing_jobs'){const q={select:()=>q,eq:()=>q,or:()=>q,is:()=>q,in:async()=>({data:[book]})};return q;}
+  const q={update:p=>{saved=p;return q;},eq:()=>q,select:()=>q,single:async()=>({data:{id:'guide'}})};return q;
+ }};
+ await drainGuide(db,async()=>{calls++;return {edits:[{passageIndex:0,before:'First',after:'Invented'}],issues:[]};},hash,()=>{});
+ assert.equal(calls,2);assert.deepEqual(saved.progress.passages,passages);assert.equal(saved.progress.proofread,undefined);assert.equal(saved.status,'composing');
+});

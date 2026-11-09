@@ -54,7 +54,7 @@ export async function drainGuide(db,model,hash,renderCover,options={}){
   else if(job.status==='ready'){patch.cover_status=job.attempts>=2?'failed':'pending';patch.attempts=job.attempts;patch.next_attempt_at=new Date(Date.now()+60000).toISOString();}
   else if(job.status==='composing'&&error?.code==='NO_RELEVANT_PASSAGES'){patch.status='gap';patch.progress={};patch.proposal={bookIds:[],gap:error.message};}
   else {
-  if(job.status==='composing'){const repairs=(job.progress.repairs||0)+1;patch.progress={...(job.progress.candidates?{candidates:job.progress.candidates}:{}),repairs,feedback:error instanceof Error?error.message:'Source review failed.',...((error&&error.selectionDiagnostic)?{selectionDiagnostic:error.selectionDiagnostic}:{})};if(repairs>=3)patch.status='failed';}
+  if(job.status==='composing'){const repairs=(job.progress.repairs||0)+1;patch.progress={...(job.progress.candidates?{candidates:job.progress.candidates}:{}),...(error?.code==='PROOFREAD_VALIDATION'&&job.progress.passages?{passages:job.progress.passages}:{}),repairs,feedback:error instanceof Error?error.message:'Source review failed.',...((error&&error.selectionDiagnostic)?{selectionDiagnostic:error.selectionDiagnostic}:{})};if(repairs>=3)patch.status='failed';}
   patch.attempts=job.attempts;patch.status=patch.status==='failed'||job.attempts>=3?'failed':job.status;patch.error=error instanceof Error?error.message:'Could not prepare the reading.';patch.next_attempt_at=new Date(Date.now()+60000).toISOString();}
  }
  checked(await db.from('reading_guides').update(patch).eq('id',job.id).eq('lease_token',job.lease_token).select('id').single());
