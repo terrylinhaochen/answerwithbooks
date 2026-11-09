@@ -12,7 +12,7 @@ const {modalOnly=false}=Astro.props;
     <form data-guide-launcher>
       <label class="sr-only" for="guide-question">Your question</label>
       <textarea id="guide-question" class="awb-input mt-5 w-full" rows="3" required minlength="3" maxlength="2000" placeholder="When is it time to leave your job and start something?"></textarea>
-      <div class="mt-4 flex flex-wrap items-center gap-4"><button type="submit" class="awb-pill awb-pill-primary">Create guide</button><span class="text-sm text-soft">or</span><button type="button" class="awb-pill" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill <span aria-hidden="true">↗</span></button></div>
+      <div class="mt-4 flex flex-wrap items-center gap-4"><button type="submit" class="awb-pill awb-pill-primary">Create guide</button><button type="button" data-choose-guide-books class="text-sm underline underline-offset-4">Choose my books</button><span class="text-sm text-soft">or</span><button type="button" class="awb-pill" data-open-skill-install aria-haspopup="dialog" aria-controls="skill-install-dialog">Install skill <span aria-hidden="true">↗</span></button></div>
     </form>
   </div>}
   <dialog data-guide-dialog aria-labelledby="guide-dialog-title" class="guide-create-dialog">
@@ -20,12 +20,13 @@ const {modalOnly=false}=Astro.props;
     <form data-guide-question>
       <label for="guide-modal-question" class="block mt-5 text-sm">Your question</label>
       <textarea id="guide-modal-question" class="awb-input mt-2 w-full" rows="3" required minlength="3" maxlength="2000" placeholder="What would you like to explore?"></textarea>
-      <div class="guide-source-picker"><div data-selected-source hidden><p class="guide-field-label">Read from</p><ul data-selected-books class="guide-book-shelf mt-3"></ul></div><p data-book-selection-note class="text-sm text-soft">We’ll suggest books from the library for your question. You can review them before creating your guide.</p>
-        <details data-add-guide-books class="mt-4"><summary class="guide-add-books">Choose books yourself (optional) <span aria-hidden="true">+</span></summary><p class="mt-3 text-sm text-soft">Choose up to four books, or leave this empty for automatic suggestions.</p><div data-guide-book-choices class="guide-book-choices mt-3"></div></details>
+      <fieldset class="guide-length-options"><legend class="mb-3 text-sm">Where should we look?</legend><label><input type="radio" name="book-mode" value="automatic" checked /> Find books for me</label><label><input type="radio" name="book-mode" value="manual" /> Choose my books</label></fieldset>
+      <div class="guide-source-picker"><div data-selected-source hidden><p class="guide-field-label">Read from</p><ul data-selected-books class="guide-book-shelf mt-3"></ul></div><p data-book-selection-note class="text-sm text-soft">We’ll read promising passages across the library, then recommend the books with meaningful matches.</p>
+        <details data-add-guide-books class="mt-4" hidden><summary class="guide-add-books">Choose books <span aria-hidden="true">+</span></summary><p class="mt-3 text-sm text-soft">Choose up to four books. We’ll search only these sources and skip passages that don’t fit.</p><div data-guide-book-choices class="guide-book-choices mt-3"></div></details>
         <button type="button" data-auto-guide-books hidden class="mt-4 text-sm underline underline-offset-4">Suggest books for me instead</button>
         <button type="button" data-guide-upload hidden class="awb-pill mt-4">Add the book’s PDF or EPUB</button>
       </div>
-      <button type="submit" class="awb-pill awb-pill-primary mt-6">Suggest books</button>
+      <button type="submit" class="awb-pill awb-pill-primary mt-6">Find relevant passages</button>
     </form>
     <section data-guide-checking hidden class="guide-request-check" role="status">
       <span class="guide-check-spinner" aria-hidden="true"></span><h3 data-checking-title>Finding books for your question</h3><p data-checking-copy>Looking across the library…</p>
@@ -36,13 +37,13 @@ const {modalOnly=false}=Astro.props;
       <button type="button" class="awb-pill awb-pill-primary" data-access-action data-billing-action="checkout">Subscribe · $24/month →</button><button type="button" data-edit-question class="guide-edit-question">Edit question</button>
     </section>
     <section data-guide-processing hidden class="guide-processing" aria-labelledby="guide-processing-title" aria-busy="true">
-      <div data-processing-cover></div><div class="guide-processing-copy"><p class="awb-eyebrow">In progress</p><h3 id="guide-processing-title" data-processing-title></h3><p data-processing-question class="guide-processing-question"></p><ol class="guide-processing-steps"><li data-guide-step="finding">Read the books</li><li data-guide-step="confirmation">Confirm books &amp; reading length</li><li data-guide-step="composing">Create your reading</li></ol><p class="text-sm text-soft">You can close this window. Processing continues in Your Guides.</p></div>
+      <div data-processing-cover></div><div class="guide-processing-copy"><p class="awb-eyebrow">In progress</p><h3 id="guide-processing-title" data-processing-title></h3><p data-processing-question class="guide-processing-question"></p><ol class="guide-processing-steps"><li data-guide-step="finding">Find and read relevant passages</li><li data-guide-step="confirmation">Confirm books &amp; reading length</li><li data-guide-step="composing">Create your reading</li></ol><p class="text-sm text-soft">You can close this window. Processing continues in Your Guides.</p></div>
     </section>
     <section data-guide-proposal hidden class="mt-6 border-t border-line pt-6">
-      <p data-proposal-question class="font-serif text-2xl mb-5"></p><h3 class="text-sm text-soft">Suggested books</h3><ul data-proposal-books class="guide-book-shelf mt-4"></ul><p data-proposal-connection class="mt-4 text-soft"></p>
+      <p data-proposal-question class="font-serif text-2xl mb-5"></p><h3 data-proposal-label class="text-sm text-soft">Books with relevant passages</h3><ul data-proposal-books class="guide-book-shelf mt-4"></ul><p data-proposal-connection class="mt-4 text-soft"></p><ul data-proposal-evidence class="mt-4 space-y-3 text-sm" hidden></ul>
       <button type="button" data-edit-guide-books class="mt-4 text-sm underline">Edit books</button><button type="button" data-edit-suggested-question class="mt-4 ml-5 text-sm underline">Edit question</button>
       <fieldset class="guide-length-options"><legend class="mb-3 text-sm">Reading length</legend><label><input type="radio" name="length" value="short" /> Short · ~2 passages</label><label><input type="radio" name="length" value="standard" checked /> Medium · ~3 passages</label><label><input type="radio" name="length" value="long" /> Long · 5+ passages</label></fieldset><p class="mt-2 text-sm text-soft">These are aims, not required counts. We include only relevant passages, from one or several books, and skip weak matches.</p>
-      <button type="button" data-confirm-guide class="awb-pill awb-pill-primary">Confirm books →</button>
+      <button type="button" data-confirm-guide class="awb-pill awb-pill-primary">Create guide →</button>
     </section>
     <section data-guide-ready hidden class="guide-ready-preview">
       <div data-ready-cover></div>

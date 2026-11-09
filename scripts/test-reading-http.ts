@@ -89,12 +89,8 @@ const exhausted=await call({action:'propose',question:'One more free question',r
 assert.equal(exhausted.status,402);assert.equal((await exhausted.json()).code,'FREE_GUIDE_LIMIT');assert.equal(rows.length,rowCount);
 console.log('PASS free account proposal accepted; exhausted free tier returns upgrade state without adding a job.');
 
-// Public suggestions do not require auth or create guide records/allowances.
-const beforeSuggestions=rows.length;
-assert.equal((await call({action:'suggest',question:'What is worth doing?'},'invalid')).status,200);
-assert.equal(modelCalls,1);assert.equal(rows.length,beforeSuggestions);
-suggestionAllowed=false;assert.equal((await call({action:'suggest',question:'What is worth doing?'},'invalid')).status,429);assert.equal(modelCalls,1);suggestionAllowed=true;
-assert.equal((await call({action:'suggest',question:'x'},'invalid')).status,400);
+// Retired overview-only suggestions cannot silently bypass the passage-first queue.
+const legacy=await call({action:'suggest',question:'What is worth doing?'},'invalid');assert.equal(legacy.status,409);assert.equal((await legacy.json()).code,'USE_PASSAGE_PROPOSAL');assert.equal(modelCalls,0);
 // Confirmed selections create directly, with auth, availability, quota and idempotency.
 assert.equal((await call({action:'create',question:'What is worth doing?',bookIds:[chosen],requestKey:crypto.randomUUID(),length:'short'},'invalid')).status,401);
 testPlan={active:false,used:0,limit:3};
@@ -103,4 +99,4 @@ const createKey=crypto.randomUUID(),createInput={action:'create',question:'What 
 assert.equal((await call(createInput)).status,202);const direct=rows.find(r=>r.request_key===createKey);assert.equal(direct.status,'composing');assert.deepEqual(direct.book_ids,[chosen]);assert.equal(direct.length,'short');
 const countAfterCreate=rows.length;assert.equal((await call(createInput)).status,200);assert.equal(rows.length,countAfterCreate);
 testPlan.used=3;const capped=await call({...createInput,requestKey:crypto.randomUUID()});assert.equal(capped.status,402);assert.equal((await capped.json()).code,'FREE_GUIDE_LIMIT');
-console.log('PASS public bounded suggestions without a saved job; direct confirmed creation enforces auth, source scope, quota and idempotency.');
+console.log('PASS legacy overview endpoint is retired; direct confirmed creation enforces auth, source scope, quota and idempotency.');

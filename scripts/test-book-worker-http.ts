@@ -245,9 +245,9 @@ console.log('PASS cross-format reuse, owner isolation, completed duplicate prefe
 paidTest=false;sharedFixture=true;failProvider=false;holdProvider=null;Deno.env.set('OPENAI_API_KEY','synthetic-provider-key');Deno.env.set('FIREWORKS_API_KEY','synthetic-fireworks-key');
 for(const saved of jobs){saved.run_state='complete';saved.cover_status='skipped';}
 const sharedJob={...originalReady,id:crypto.randomUUID(),visibility:'public',billing_required:false,options:{mode:'reading'},chunks:[originalReady.chunks[0]],notes:[],overview_notes:[],artifacts:null,cursor:0,status:'processing',run_state:'queued',attempts:0,lease_token:null,lease_until:null,next_attempt_at:new Date(0).toISOString()};jobs.push(sharedJob);
-const sharedCalls=modelCalls;for(let i=0;i<4;i++){const r=await drain();assert.equal(r.status,200,JSON.stringify(r.body));}
+const sharedCalls=modelCalls;for(let i=0;i<5;i++){const r=await drain();assert.equal(r.status,200,JSON.stringify(r.body));}
 assert.equal(sharedJob.status,'ready');assert.equal(sharedJob.run_state,'complete');assert.equal(sharedJob.cover_status,'pending');assert.equal(modelCalls-sharedCalls,6,'Map, editorial digest and orientation each receive a review');
-assert.deepEqual(Object.keys(sharedJob.artifacts).sort(),['book.md','reader/digest.json','reader/digest.md','reader/evidence.json','reading/map.json']);const map=JSON.parse(sharedJob.artifacts['reading/map.json']);assert.equal(map.sections.length,1);assert.equal(map.questions.length,3);assert.equal(sharedJob.source_text,originalReady.source_text);
+assert.deepEqual(Object.keys(sharedJob.artifacts).sort(),['book.md','reader/digest.json','reader/digest.md','reader/evidence.json','reading/map.json','reading/retrieval-index.v1.json']);const map=JSON.parse(sharedJob.artifacts['reading/map.json']);assert.equal(map.sections.length,1);assert.equal(map.questions.length,3);assert.equal(sharedJob.source_text,originalReady.source_text);
 console.log('PASS public mapping, source review, book orientation/questions and cover queue without per-book skill artifacts');
 
 const beforeRefresh=JSON.stringify(sharedJob.artifacts),beforeRefreshCalls=modelCalls;

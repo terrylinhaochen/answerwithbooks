@@ -1,3 +1,5 @@
+import {guideModel,meteredGuideCover} from './guide-meter.mjs';
+import {searchGuideCandidates,candidateWindow} from './guide-retrieval.mjs';
 import {proofreadPassages} from './guide-proofreading.mjs';
 import {planGuideCover,guideCoverVersion,currentGuideCoverDesign} from './guide-cover.mjs';
 import {nominateBooks,proposeReading,selectReading,writeReading,reviewReading,hydrateReading,readingInstructions} from './reading-guides.mjs';
@@ -10,51 +12,49 @@ export async function sourceBooks(db,userId,ids,{savedReading=false}={}){
  if(!savedReading||!userId)query=query.is('archived_at',null);
  return checked(await query.in('id',ids));
 }
-export async function drainGuide(db,model,hash,renderCover){
+export async function drainGuide(db,model,hash,renderCover,options={}){
  const job=checked(await db.rpc('claim_reading_guide'));if(!job?.id)return null;
+ if(options.getEnv)model=guideModel(db,job,options.getEnv);
  const patch={lease_token:null,lease_until:null,updated_at:new Date().toISOString(),attempts:0,error:null};
  try {
   if(job.status==='ready'&&job.cover_status==='pending'){
    if(!job.cover_design){const recent=checked(await db.from('reading_guides').select('cover_design').eq('user_id',job.user_id).not('cover_design','is',null).order('created_at',{ascending:false}).limit(12));patch.cover_design=await planGuideCover(job,recent.map(r=>r.cover_design),model);}
-   else{const design=currentGuideCoverDesign(job.cover_design);patch.cover_design=design;const result=await renderCover(design);const path=`${job.user_id}/reading-guides/${job.id}/cover-${guideCoverVersion}.png`;checked(await db.storage.from('private-books').upload(path,result.bytes,{contentType:'image/png',upsert:true}));patch.cover_path=path;patch.cover_status='ready';patch.cover_usage=result.usage;}
+   else{const design=currentGuideCoverDesign(job.cover_design);patch.cover_design=design;const result=options.getEnv?await meteredGuideCover(db,job,()=>renderCover(design)):await renderCover(design);const path=`${job.user_id}/reading-guides/${job.id}/cover-${guideCoverVersion}.png`;checked(await db.storage.from('private-books').upload(path,result.bytes,{contentType:'image/png',upsert:true}));patch.cover_path=path;patch.cover_status='ready';patch.cover_usage=result.usage;}
   }else if(job.status==='scanning'){
-   const offset=job.progress.offset||0;
-   // Snapshot every eligible source ID once. No lexical or embedding candidate filter.
-   let ids=job.progress.libraryIds;
-   if(!ids){const rows=await allRows(()=>db.from('book_processing_jobs').select('id').or(job.visibility==='public'?'visibility.eq.public':`visibility.eq.public,user_id.eq.${job.user_id}`).is('duplicate_of',null).eq('status','ready').eq('is_current',true).is('archived_at',null).order('id'));ids=rows.map(b=>b.id);}
-   if(offset<ids.length){
-    const books=await sourceBooks(db,job.user_id,ids.slice(offset,offset+1));
-    const candidates=await nominateBooks(job.question,books,model);
-    // Candidate text is deliberately not persisted; read it again from owned editions.
-    patch.progress={...job.progress,libraryIds:ids,offset:offset+1,candidates:[...(job.progress.candidates||[]),...candidates.map(({text,...ref})=>ref)]};
-   }else{patch.status=ids.length?'proposing':'gap';if(!ids.length)patch.proposal={bookIds:[],gap:'Add a biography or memoir to the shared library to begin.'};}
+   const refs=await (options.searchCandidates||searchGuideCandidates)(db,job,model,options.getEnv,job.progress.requiredBookIds||null);
+   const books=await sourceBooks(db,job.user_id,[...new Set(refs.map(r=>r.bookId))]);
+   const candidates=refs.map(r=>candidateWindow(books.find(b=>b.id===r.bookId),r));
+   patch.progress={...job.progress,candidates};patch.status=candidates.length?'proposing':'gap';
+   if(!candidates.length)patch.proposal={bookIds:[],matches:[],gap:'No relevant passages were found. Try another question or choose books yourself.'};
   }else if(job.status==='proposing'){
    const refs=job.progress.candidates||[];
    const books=await sourceBooks(db,job.user_id,[...new Set(refs.map(r=>r.bookId))]);
-   // Reduce large libraries in model-read batches, preserving originals for each decision.
-   let candidates=refs;
-   if(refs.length>6){
-    const batch=refs.slice(0,6), hydrated=await hydrateReading({sections:batch},books,hash);
-    const selected=await compareCandidates(job.question,hydrated.sections,model);
-    patch.progress={...job.progress,candidates:[...refs.slice(6),...selected.map(index=>batch[index])]};
-   }else{
-    const hydrated=await hydrateReading({sections:candidates},books,hash);
-    const proposal=await proposeReading(job.question,hydrated.sections,model);
-    patch.proposal={...proposal,books:books.filter(b=>proposal.bookIds.includes(b.id)).map(b=>({id:b.id,title:b.title,author:b.author}))};patch.book_ids=proposal.bookIds;patch.status=proposal.bookIds.length?'awaiting_confirmation':'gap';patch.progress={};
-   }
+   const hydrated=await hydrateReading({sections:refs},books,hash);
+   const proposal=await proposeReading(job.question,hydrated.sections,model);
+   patch.proposal={...proposal,books:books.filter(b=>proposal.bookIds.includes(b.id)).map(b=>({id:b.id,title:b.title,author:b.author}))};patch.book_ids=proposal.bookIds;patch.status=proposal.bookIds.length?'awaiting_confirmation':'gap';patch.progress={};
   }else if(job.status==='composing'){
    const books=await sourceBooks(db,job.user_id,job.book_ids);if(books.length!==job.book_ids.length)throw Error('A confirmed book is no longer available.');
-   if(!job.progress.passages){patch.progress={...job.progress,passages:await selectReading(job.question,job.length,books,model,job.progress.feedback)};}
+   if(!job.progress.candidates&&!job.progress.passages){
+    const refs=await (options.searchCandidates||searchGuideCandidates)(db,job,model,options.getEnv,job.book_ids);
+    const leads=(job.proposal?.matches||[]).filter(p=>job.book_ids.includes(p.bookId));
+    if(leads.length)await hydrateReading({sections:leads},books,hash);
+    const found=refs.map(r=>candidateWindow(books.find(b=>b.id===r.bookId),r));
+    const candidates=[...leads,...found].filter((r,i,all)=>!all.slice(0,i).some(x=>x.bookId===r.bookId&&x.startLine===r.startLine&&x.endLine===r.endLine));
+    if(!candidates.length){const e=Error('No relevant passages were found in these books. Try another question or choose other books.');e.code='NO_RELEVANT_PASSAGES';throw e;}
+    patch.progress={...job.progress,candidates:candidates.slice(0,8)};
+   }else if(!job.progress.passages){patch.progress={...job.progress,passages:await selectReading(job.question,job.length,books,model,job.progress.feedback,job.progress.candidates)};}
    else if(!job.progress.proofread){patch.progress={...job.progress,passages:await proofreadPassages(books,job.progress.passages,model),proofread:true};}
    else if(!job.progress.draft){patch.progress={...job.progress,draft:await writeReading(job.question,job.length,books,job.progress.passages,model,job.progress.feedback)};}
    else{const composed=await reviewReading(job.question,books,job.progress.draft,model);const hydrated=await hydrateReading(composed,books,hash);
     patch.guide={...hydrated,sections:hydrated.sections.map(({text,...s})=>s),version:1};patch.status='ready';patch.cover_status='pending';patch.book_ids=[...new Set(hydrated.sections.map(s=>s.bookId))];patch.progress={};}
   }
  }catch(error){
-  if(job.status==='ready'){patch.cover_status=job.attempts>=2?'failed':'pending';patch.attempts=job.attempts;patch.next_attempt_at=new Date(Date.now()+60000).toISOString();}
+  if(error?.code==='INDEX_PREPARING'){patch.attempts=0;patch.next_attempt_at=new Date(Date.now()+30000).toISOString();}
+  else if(error?.code==='GUIDE_BUDGET_LIMIT'){patch.error=error.message;patch.attempts=job.attempts;if(job.status==='ready')patch.cover_status='failed';else patch.status='failed';}
+  else if(job.status==='ready'){patch.cover_status=job.attempts>=2?'failed':'pending';patch.attempts=job.attempts;patch.next_attempt_at=new Date(Date.now()+60000).toISOString();}
   else if(job.status==='composing'&&error?.code==='NO_RELEVANT_PASSAGES'){patch.status='gap';patch.progress={};patch.proposal={bookIds:[],gap:error.message};}
   else {
-  if(job.status==='composing'){const repairs=(job.progress.repairs||0)+1;patch.progress={repairs,feedback:error instanceof Error?error.message:'Source review failed.',...((error&&error.selectionDiagnostic)?{selectionDiagnostic:error.selectionDiagnostic}:{})};if(repairs>=3)patch.status='failed';}
+  if(job.status==='composing'){const repairs=(job.progress.repairs||0)+1;patch.progress={...(job.progress.candidates?{candidates:job.progress.candidates}:{}),repairs,feedback:error instanceof Error?error.message:'Source review failed.',...((error&&error.selectionDiagnostic)?{selectionDiagnostic:error.selectionDiagnostic}:{})};if(repairs>=3)patch.status='failed';}
   patch.attempts=job.attempts;patch.status=patch.status==='failed'||job.attempts>=3?'failed':job.status;patch.error=error instanceof Error?error.message:'Could not prepare the reading.';patch.next_attempt_at=new Date(Date.now()+60000).toISOString();}
  }
  checked(await db.from('reading_guides').update(patch).eq('id',job.id).eq('lease_token',job.lease_token).select('id').single());
@@ -80,7 +80,7 @@ export async function answerGuides(db,userId,question,model,hash){
 }
 
 export async function compareCandidates(question,candidates,model){
- const result=await model(readingInstructions+' Read each original scene and choose up to two whose distinct contributions best develop this question. Return {indices:number[]} using zero-based candidate indices. Choose by meaning and evidence, never position. An empty list is appropriate when none contributes.',JSON.stringify({question,candidates}));
- if(!Array.isArray(result.indices)||result.indices.length>2||new Set(result.indices).size!==result.indices.length||result.indices.some(i=>!Number.isInteger(i)||i<0||i>=candidates.length))throw Error('Invalid candidate comparison.');
+ const result=await model(readingInstructions+' Read each original scene and choose up to four whose distinct contributions best develop this question. Return {indices:number[]} using zero-based candidate indices. Choose by the value of the connection, including grounded parallels, contrasts and reflection; do not rank a direct actionable answer above an illuminating indirect passage by default. Choose by meaning and evidence, never position. An empty list is appropriate when none contributes.',JSON.stringify({question,candidates}));
+ if(!Array.isArray(result.indices)||result.indices.length>4||new Set(result.indices).size!==result.indices.length||result.indices.some(i=>!Number.isInteger(i)||i<0||i>=candidates.length))throw Error('Invalid candidate comparison.');
  return result.indices;
 }

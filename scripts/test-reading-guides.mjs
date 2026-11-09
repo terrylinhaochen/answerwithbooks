@@ -8,8 +8,8 @@ const modelResponses=(...responses)=>async()=>responses.shift();
 test('source ranges reproduce exact stored prose and reject invalid boundaries',()=>{assert.equal(sourceSpan(book,{startLine:2,endLine:3}),'Exact words — and punctuation.\nLast line.');for(const ref of [{startLine:0,endLine:2},{startLine:2,endLine:4},{startLine:3,endLine:1},{startLine:1.2,endLine:2}])assert.throws(()=>sourceSpan(book,ref));});
 test('render verifies source hashes and refuses missing editions',async()=>{const g={introduction:'Context',conclusion:'End',sections:[{bookId:'knight',startLine:1,endLine:2}]};const first=await hydrateReading(g,[book],hash);assert.equal(first.sections[0].text,sourceSpan(book,g.sections[0]));await assert.rejects(hydrateReading(first,[{...book,source_text:'Changed.\nExact words — and punctuation.\nLast line.'}],hash),/edition changed/);await assert.rejects(hydrateReading(g,[],hash),/no longer available/);});
 test('candidate choice cannot introduce a book outside the account library',async()=>{await assert.rejects(nominateBooks('A question',[book],modelResponses({candidates:[{bookId:'other-owner',startLine:1,endLine:2}]})),/Unknown candidate/);});
-test('empty model selection produces a truthful gap',async()=>{const gap=await proposeReading('No fitting topic',[],modelResponses({bookIds:[],connection:'',gap:'No supplied life speaks to this.'}));assert.deepEqual(gap.bookIds,[]);});
-test('proposal is bounded by original candidates',async()=>{await assert.rejects(proposeReading('Question',[{bookId:'knight'}],modelResponses({bookIds:['invented'],connection:'x'})),/Invalid proposed/);});
+test('empty model selection produces a truthful gap',async()=>{const gap=await proposeReading('No fitting topic',[],modelResponses({matches:[],connection:'',gap:'No supplied life speaks to this.'}));assert.deepEqual(gap.bookIds,[]);});
+test('proposal is bounded by original candidates',async()=>{await assert.rejects(proposeReading('Question',[{bookId:'knight'}],modelResponses({matches:[{candidateIndex:7,reason:'invented'}],connection:'x'})),/Invalid proposed/);});
 test('a guide cannot silently add an unconfirmed book',async()=>{await assert.rejects(composeReading('Question','short',[book],modelResponses({passages:[{bookId:'outside',startLine:1,endLine:2}]})),/Unconfirmed/);});
 test('overlapping source selections are rejected',async()=>{await assert.rejects(composeReading('Question','short',[book],modelResponses({passages:[{bookId:'knight',startLine:1,endLine:2},{bookId:'knight',startLine:2,endLine:3}]},{passages:[{candidateIndex:0,startLine:1,endLine:2},{candidateIndex:1,startLine:2,endLine:3}]})),/overlap/);});
 test('review failure prevents a generated reading from becoming ready',async()=>{await assert.rejects(composeReading('Question','short',[book],modelResponses({passages:[{bookId:'knight',startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]},{introduction:'Context',sections:[{sectionIndex:0,heading:'Scene',before:'Before',after:'After'}],conclusion:'End'},{passed:false})),/source review/);});
@@ -93,13 +93,13 @@ test('selected-book scan never expands the library and preserves required source
  const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');let saved,readIds;
  const job={id:'guide',user_id:'owner',visibility:'public',lease_token:'lease',status:'scanning',question:'Question',progress:{libraryIds:[book.id],requiredBookIds:[book.id]},attempts:1};
  const db={rpc:async()=>({data:job}),from:table=>{const q={select:()=>q,or:()=>q,eq:()=>q,is:()=>q,in:(_k,ids)=>{readIds=ids;return Promise.resolve({data:[book]});},update:p=>{saved=p;return q;},single:async()=>({data:{id:'guide'}})};return q;}};
- await drainGuide(db,modelResponses({candidates:[{bookId:book.id,startLine:1,endLine:2,contribution:'An experience.'}]}),hash,()=>{});assert.deepEqual(readIds,[book.id]);assert.deepEqual(saved.progress.requiredBookIds,[book.id]);assert.deepEqual(saved.progress.libraryIds,[book.id]);assert.equal(saved.progress.offset,1);
+ await drainGuide(db,modelResponses({candidates:[{bookId:book.id,startLine:1,endLine:2,contribution:'An experience.'}]}),hash,()=>{},{searchCandidates:async(_db,_job,_model,_env,ids)=>{assert.deepEqual(ids,[book.id]);return [{bookId:book.id,startLine:1,endLine:2}];}});assert.deepEqual(readIds,[book.id]);assert.deepEqual(saved.progress.requiredBookIds,[book.id]);assert.deepEqual(saved.progress.libraryIds,[book.id]);assert.equal(saved.status,'proposing');
 });
 test('book suggestions keep relevant books and skip selected books without a match',async()=>{
  const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');let saved;
  const job={id:'guide',user_id:'owner',visibility:'public',lease_token:'lease',status:'proposing',question:'Question',progress:{requiredBookIds:[book.id,'missing'],candidates:[{bookId:book.id,startLine:1,endLine:2}]},attempts:1};
  const db={rpc:async()=>({data:job}),from:()=>{const q={select:()=>q,or:()=>q,eq:()=>q,is:()=>q,in:async()=>({data:[book]}),update:p=>{saved=p;return q;},single:async()=>({data:{id:'guide'}})};return q;}};
- await drainGuide(db,modelResponses({bookIds:[book.id],connection:'Only one contributes.',gap:''}),hash,()=>{});assert.equal(saved.status,'awaiting_confirmation');assert.deepEqual(saved.book_ids,[book.id]);assert.equal(saved.proposal.gap,'');
+ await drainGuide(db,modelResponses({matches:[{candidateIndex:0,reason:'Only this scene contributes.'}],connection:'Only one contributes.',gap:''}),hash,()=>{});assert.equal(saved.status,'awaiting_confirmation');assert.deepEqual(saved.book_ids,[book.id]);assert.equal(saved.proposal.gap,'');
 });
 
 test('final passage refinement may omit a confirmed book that does not fit',async()=>{const selected=await selectReading('Question','short',[book,{...book,id:'second'}],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]}));assert.deepEqual(selected,[{bookId:book.id,startLine:1,endLine:2}]);});
@@ -170,8 +170,8 @@ test('no relevant originals becomes a truthful gap without retrying generation',
   if(table==='book_processing_jobs'){const q={select:()=>q,eq:()=>q,or:()=>q,is:()=>q,in:async()=>({data:[book]})};return q;}
   const q={update:p=>{saved=p;return q;},eq:()=>q,select:()=>q,single:async()=>({data:{id:'guide'}})};return q;
  }};
- await drainGuide(db,async()=>{calls++;return {passages:[]};},hash);
- assert.equal(calls,1);assert.equal(saved.status,'gap');assert.match(saved.proposal.gap,/could not find relevant passages/);assert.equal(saved.error,null);assert.deepEqual(saved.progress,{});
+ await drainGuide(db,async()=>{calls++;return {passages:[]};},hash,()=>{},{searchCandidates:async()=>[]});
+ assert.equal(calls,0);assert.equal(saved.status,'gap');assert.match(saved.proposal.gap,/No relevant passages/);assert.equal(saved.error,null);assert.deepEqual(saved.progress,{});
 });
 test('refinement can report a gap after reading the original candidates',async()=>{
  await assert.rejects(selectReading('Question','long',[book],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:3}]},{passages:[]})),e=>e.code==='NO_RELEVANT_PASSAGES');
@@ -183,11 +183,39 @@ for(const [length,target] of [['short',2],['standard',3],['long',5]])test(`${len
   calls.push({system,input:JSON.parse(input)});
   return calls.length===1?{passages:[{bookId:book.id,startLine:1,endLine:3}]}:{passages:[{candidateIndex:0,startLine:2,endLine:3}]};
  });
- for(const call of calls){assert.equal(call.input.passageTarget,target);assert.match(call.system,/soft target, not a quota or cap/);assert.match(call.system,/Skip weak or unrelated matches/);}
+ for(const call of calls){assert.equal(call.input.passageTarget,target);assert.match(call.system,/soft target, not a quota or cap/);assert.match(call.system,/Skip unrelated material and forced analogies/);}
  assert.deepEqual(selected,[{bookId:book.id,startLine:2,endLine:3}]);
 });
 test('short guides may exceed the soft count when distinct snippets fit',async()=>{
  const refs=[1,2,3].map(line=>({bookId:book.id,startLine:line,endLine:line}));
  const selected=await selectReading('Question','short',[book],modelResponses({passages:refs},{passages:refs.map((r,candidateIndex)=>({candidateIndex,startLine:r.startLine,endLine:r.endLine}))}));
  assert.deepEqual(selected,refs);
+});
+
+test('recommended books are derived from read originals, with retained evidence and no raw text persisted',async()=>{
+ const candidates=[{bookId:'unexpected',title:'An unlikely book',text:'She asked for a specific introduction.',startLine:20,endLine:21,textSha:'edition-hash'}];
+ const result=await proposeReading('How can I ask for help?',candidates,async(prompt,input)=>{assert.match(JSON.parse(input).candidates[0].text,/specific introduction/);return {matches:[{candidateIndex:0,reason:'A small, specific request makes helping possible.'}],connection:'Concrete requests.',gap:''};});
+ assert.deepEqual(result.bookIds,['unexpected']);assert.equal(result.matches[0].textSha,'edition-hash');assert.equal(result.matches[0].startLine,20);assert.equal(result.matches[0].text,undefined);
+ await assert.rejects(()=>proposeReading('Question',candidates,modelResponses({matches:[{candidateIndex:0,reason:'x'},{candidateIndex:0,reason:'x'}],connection:'x'})),/Invalid proposed/);
+ const gap=await proposeReading('Unrelated question',candidates,modelResponses({matches:[],connection:'',gap:'No scene supports this.'}));assert.deepEqual(gap.bookIds,[]);
+});
+test('composition reinspects recommendation evidence and can still reject it',async()=>{
+ let count=0;
+ await assert.rejects(()=>selectReading('Question','short',[book],async(prompt,input)=>{
+  const data=JSON.parse(input);count++;
+  assert.match(data.candidates[0].text,/First line/);return {passages:[]};
+ },null,[{bookId:book.id,startLine:1,endLine:2}]),e=>e.code==='NO_RELEVANT_PASSAGES');
+ assert.equal(count,1);
+});
+
+test('a reflective parallel can reach a guide without inventing an action or outcome',async()=>{
+ const reflection={...book,id:'reflection',title:'Quiet Years',source_text:'I missed the familiar street even when I no longer wanted to return.\nI did not yet know what a new home would mean.'};
+ const prompts=[];
+ const responses=[{passages:[{bookId:reflection.id,startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]},{introduction:'Leaving a role can hold both relief and loss.',sections:[{sectionIndex:0,heading:'Missing what you leave',before:'The narrator describes ambivalence about leaving a familiar place.',after:'This offers a parallel to leaving a job, while home and work are different relationships.',interpretation:'The connection is an analogy, not career advice.'}],conclusion:'A change can be wanted and still carry loss.'},{passed:true}];
+ const result=await composeReading('Why do I miss a job I wanted to leave?','short',[reflection],async(prompt)=>{prompts.push(prompt);return responses.shift();});
+ assert.equal(result.sections.length,1);
+ assert.equal((await hydrateReading(result,[reflection],hash)).sections[0].text,reflection.source_text);
+ assert.ok(prompts.every(prompt=>prompt.includes('an illuminating parallel or rhyme')));
+ assert.ok(prompts.at(-1).includes('Do not reject a passage merely because it lacks'));
+ assert.ok(prompts.at(-1).includes('Reject ungrounded claims'));
 });

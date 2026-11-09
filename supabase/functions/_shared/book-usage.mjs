@@ -1,6 +1,6 @@
 // Standard provider estimates, USD per million tokens, checked 2026-10-08.
 // Customer billing, taxes and embedding charges are separate; images are priced below.
-const rates=[[/^accounts\/fireworks\/models\/glm-5p3$/,[1.4,.26,4.4]],[/^accounts\/fireworks\/models\/glm-5p3-flash$/,[.15,.03,.5]],[/^accounts\/fireworks\/models\/gpt-oss-120b$/,[.15,.015,.6]],[/^gpt-5\.4-mini(?:-|$)/,[.75,.075,4.5]],[/^gpt-5\.4-nano(?:-|$)/,[.2,.02,1.25]],[/^gpt-5\.5(?:-|$)/,[5,.5,30]]];
+const rates=[[/^gpt-5\.4(?:-\d{4}-\d{2}-\d{2})?$/,[2.5,.25,15]],[/^accounts\/fireworks\/models\/glm-5p3$/,[1.4,.26,4.4]],[/^accounts\/fireworks\/models\/glm-5p3-flash$/,[.15,.03,.5]],[/^accounts\/fireworks\/models\/gpt-oss-120b$/,[.15,.015,.6]],[/^gpt-5\.4-mini(?:-|$)/,[.75,.075,4.5]],[/^gpt-5\.4-nano(?:-|$)/,[.2,.02,1.25]],[/^gpt-5\.5(?:-|$)/,[5,.5,30]]];
 export function usageReceipt(rows) {
  let knownUsd=0,imageUsd=0,inputTokens=0,outputTokens=0,cachedInputTokens=0,unknownCalls=0,elapsedProviderMs=0;
  const models=new Set();

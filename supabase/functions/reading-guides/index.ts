@@ -48,27 +48,14 @@ Deno.serve(async req=>{
   if(input.action==='drain'){
    const runner=Deno.env.get('BOOK_QUEUE_RUNNER_SECRET');
    if(!runner||await hash(new TextEncoder().encode(bearer))!==await hash(new TextEncoder().encode(runner)))return reply({error:'Not authorized'},403);
-   const result=await drainGuide(db,createBookModelClient({getEnv:(n:string)=>Deno.env.get(n)}),hash,(design:any)=>generateGuideCover(design,{getEnv:(n:string)=>Deno.env.get(n)}));
+   const result=await drainGuide(db,createBookModelClient({getEnv:(n:string)=>Deno.env.get(n)}),hash,(design:any)=>generateGuideCover(design,{getEnv:(n:string)=>n==='GUIDE_COVER_MODEL'?'gpt-image-1.5':Deno.env.get(n)}),{getEnv:(n:string)=>Deno.env.get(n)});
    checked(await db.rpc('wake_reading_guides',{p_count:1}));return reply(result||{idle:true});
   }
   if(input.action==='public-list'){
    const rows=checked(await db.from('reading_guides').select('id,question,created_at,cover_path,cover_status,cover_design,book_ids').eq('visibility','public').eq('status','ready').order('created_at',{ascending:false}).limit(100));
    return reply({guides:await Promise.all(rows.map(presentGuide))});
   }
-  if(input.action==='suggest'){
-   if(typeof input.question!=='string'||input.question.trim().length<3||input.question.length>2000)return reply({error:'Enter a question between 3 and 2,000 characters.'},400);
-   // Keep only a daily salted digest, never the visitor's IP or question.
-   const ip=(req.headers.get('x-forwarded-for')||req.headers.get('x-real-ip')||'unknown').split(',')[0].trim().slice(0,100);
-   const bucket=await hash(new TextEncoder().encode(`${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}|${new Date().toISOString().slice(0,10)}|${ip}`));
-   if(!checked(await db.rpc('consume_guide_suggestion',{p_bucket:bucket})))return reply({error:'Suggestions are busy. Try again later, or choose books yourself.'},429);
-   const catalog=checked(await db.from('book_processing_jobs').select('id,title,author,artifacts').eq('visibility','public').eq('status','ready').eq('is_current',true).eq('deletion_pending',false).is('archived_at',null).is('duplicate_of',null).order('id').limit(100));
-   let result;
-   try{result=await suggestGuideBooks(input.question.trim(),catalog,createBookModelClient({getEnv:(n:string)=>Deno.env.get(n)}));}
-   catch(error){console.error('guide_suggestion_failed',error instanceof Error?error.message:'Unknown suggestion failure');return reply({error:'Book suggestions are temporarily unavailable. Please retry or choose books yourself.'},503);}
-   const shown=await displayBooks(null,result.bookIds);
-   if(shown.length!==result.bookIds.length)return reply({error:'The library changed. Please try your question again.'},409);
-   return reply({...result,books:result.bookIds.map((id:string)=>shown.find((book:any)=>book.id===id))});
-  }
+  if(input.action==='suggest')return reply({error:'Start a passage-first recommendation with action propose and a requestKey, then poll the saved guide.',code:'USE_PASSAGE_PROPOSAL'},409);
   const user=bearer?await bookUser(db,bearer):null;
   if(input.action==='get'&&uuid(input.id)){
    const shared=checked(await db.from('reading_guides').select('id,question,status,length,book_ids,guide,created_at,cover_path,cover_status,cover_design,visibility').eq('id',input.id).eq('visibility','public').eq('status','ready').maybeSingle());
@@ -132,6 +119,7 @@ Deno.serve(async req=>{
   }
   if(!uuid(input.id))return reply({error:'Invalid guide identity'},400);
   let row=checked(await owned());if(!row&&['context','position','feedback'].includes(input.action))row=checked(await db.from('reading_guides').select('*').eq('id',input.id).eq('visibility','public').eq('status','ready').maybeSingle());if(!row)return reply({error:'Guide not found'},404);
+  if(input.action==='usage'){const rows=checked(await db.from('guide_provider_usage').select('model,stage,state,cost_usd,upper_usd,metric,created_at').eq('guide_id',row.id));return reply({budgetUsd:row.provider_budget_usd,recordedUsd:rows.reduce((n:number,r:any)=>n+Number(r.cost_usd||0),0),unresolvedReservations:rows.filter((r:any)=>r.state!=='settled').length,operations:rows,notice:'Provider estimates, not a customer invoice. Older guides may have incomplete usage.'});}
   if(input.action==='cover')return reply({cover:(await presentGuide(row)).cover});
   if(input.action==='cover-import'){
    if(row.status!=='ready'||row.lease_until&&Date.parse(row.lease_until)>Date.now())return reply({error:'Wait for this guide to finish processing.'},409);
@@ -145,6 +133,7 @@ Deno.serve(async req=>{
   }
   if(input.action==='get'){
    const {progress,lease_token,lease_until,...safe}=row;
+   if(row.status==='scanning'&&Array.isArray(progress?.libraryIds))safe.searchProgress={checked:Math.min(progress.offset||0,progress.libraryIds.length),total:progress.libraryIds.length};
    if(row.status==='ready'){try{safe.guide=await hydrateReading(row.guide,await sourceBooks(db,user.id,row.book_ids,{savedReading:true}),hash);}catch{safe.guide=null;safe.error='A source for this reading is no longer available.';}}
    return reply({guide:await presentGuide(safe),books:await displayBooks(user.id,row.book_ids||[],row.status==='ready')});
   }
