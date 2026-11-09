@@ -27,6 +27,11 @@ export async function mountSharedBook(){
   for(const excerpt of root.querySelectorAll<HTMLButtonElement>('[data-shared-excerpt]')){excerpt.dataset.excerptBook=book.id;excerpt.dataset.excerptTitle=book.title;excerpt.dataset.excerptAuthor=book.author;excerpt.dataset.excerptCover=book.coverUrl||'';excerpt.dataset.excerptColor=book.coverColor||'';excerpt.disabled=false;}
   root.querySelector<HTMLElement>('[data-job-overview]')!.hidden=false;
   root.querySelector('[data-job-one-liner]')!.textContent=book.orientation;
+  root.querySelector('[data-job-purchase-title]')!.textContent=book.title;
+  root.querySelector('[data-job-purchase-author]')!.textContent=`by ${book.author}`;
+  const purchase=root.querySelector<HTMLAnchorElement>('[data-job-amazon]')!;
+  purchase.href='https://www.amazon.com/s?k='+encodeURIComponent(`${book.title} ${book.author}`);
+  purchase.setAttribute('aria-label',`Find ${book.title} on Amazon (opens in a new tab)`);
   root.querySelector('[data-book-summary]')!.replaceChildren(...book.summary.split(/\n\n+/).filter(Boolean).map((block:string)=>/^## /.test(block)?el('h2',block.slice(3).trim()):el('p',block)));
   const words=[book.orientation,book.summary].join(' ').trim().split(/\s+/).filter(Boolean).length;
   root.querySelector('[data-book-meta]')!.textContent=`Book digest · ${words.toLocaleString()} words · ${Math.max(1,Math.ceil(words/200))} min`;
