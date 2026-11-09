@@ -6,7 +6,7 @@ const user='00000000-0000-4000-8000-000000000001',book='00000000-0000-4000-8000-
 const books=[{id:book,title:'Source for a meaningful question',author:'Example author'},{id:otherBook,title:'Another life to learn from',author:'Another author'}];
 const q='How do I become easier to help?',internalReason='Internal passage analysis: a concrete scene shows how to invite candid advice.',internalConnection='Internal synthesis across the matched passages.';
 const mutations=actions=>actions.filter(x=>['propose','create','confirm','suggest'].includes(x.action));
-async function context({signedIn=false,draft=null,width=390}={}){
+async function context({signedIn=false,draft=null,width=390,catalogBooks=books}={}){
  const ctx=await browser.newContext({viewport:{width,height:900}});const actions=[];let stage='awaiting_confirmation';
  await ctx.addInitScript(({signedIn,user,draft})=>{
   if(signedIn){const exp=Math.floor(Date.now()/1000)+3600;const b=x=>btoa(JSON.stringify(x)).replaceAll('=','').replaceAll('+','-').replaceAll('/','_');localStorage.setItem('sb-yozeqanibszoxnowmvsm-auth-token',JSON.stringify({access_token:b({alg:'HS256',typ:'JWT'})+'.'+b({sub:user,exp,role:'authenticated'})+'.synthetic',refresh_token:'synthetic',expires_at:exp,expires_in:3600,token_type:'bearer',user:{id:user,aud:'authenticated',role:'authenticated',email:'fixture@example.invalid'}}));}
@@ -16,7 +16,7 @@ async function context({signedIn=false,draft=null,width=390}={}){
   const request=route.request(),url=request.url();let body={};try{body=request.postDataJSON()||{};}catch{}
   let result={};
   if(url.includes('/auth/'))result={id:user,email:'fixture@example.invalid'};
-  else if(url.includes('shared-library'))result={books,nextOffset:null};
+  else if(url.includes('shared-library'))result={books:catalogBooks,nextOffset:null};
   else if(url.includes('reader-subscription'))result={active:false,used:0,limit:3};
   else if(url.includes('reading-guides')){
    actions.push(body);
@@ -94,5 +94,25 @@ try{
  const e=await context({signedIn:true,draft});await e.page.goto(origin+'/guides/?resume='+draft.id);await review(e.page,'Suggested books');assert.equal(e.actions.filter(x=>x.action==='propose').length,1);assert.equal(e.actions.find(x=>x.action==='propose').requestKey,draft.id);assert.equal(await e.page.locator('input[name=length][value=short]').isChecked(),true);assert.deepEqual(e.errors,[]);await e.ctx.close();
  // An existing recommendation reopens its clean book review without restarting work.
  const f=await context({signedIn:true});await f.page.goto(origin+'/guides/?id='+guide);await review(f.page,'Suggested books');assert.deepEqual(mutations(f.actions),[]);await f.page.locator('[data-close-guide]').click();await f.page.waitForURL(url=>!url.searchParams.has('id'));await f.page.reload();assert.equal(await f.page.locator('[data-guide-dialog]').isVisible(),false);assert.deepEqual(f.errors,[]);await f.ctx.close();
- console.log('PASS explicit mode choice, no premature searches, card-only recommendation review, manual selection, edits, length confirmation, mobile/desktop layouts, auth resume, and saved-review reopening. API responses mocked; no live guide created.');
+ // Searching filters choices without dropping selections or bypassing the four-book limit.
+ const searchBooks=[{title:'Insanely Simple',author:'Ken Segall'},{title:'Learning to See',author:'José Rivera'},{title:'Shoe Dog',author:'Phil Knight'},{title:'Open',author:'Andre Agassi'},{title:'Invention: A Life',author:'James Dyson'}].map((b,i)=>({...b,id:`00000000-0000-4000-8000-00000000002${i}`}));
+ for(const width of [390,1280]){
+  const g=await context({signedIn:true,width,catalogBooks:searchBooks});await launch(g);await g.page.locator('input[name=book-mode][value=manual]').check();
+  const search=g.page.getByRole('searchbox',{name:'Search books'}),choices=g.page.locator('[data-guide-book-choices] input');
+  await choices.first().waitFor();assert.equal(await choices.count(),5);
+  await search.fill('  SIMPLE   segall ');assert.equal(await choices.count(),1);await choices.first().check();
+  await search.press('Enter');assert.equal(await g.page.locator('[data-guide-question]').isVisible(),true);assert.deepEqual(mutations(g.actions),[]);
+  await search.fill('jose');assert.equal(await choices.count(),1);await choices.first().check();
+  await search.fill('no matching book');assert.equal(await choices.count(),0);await g.page.getByText('No books match your search. Try another title or author.',{exact:true}).waitFor();assert.equal(await g.page.locator('[data-selected-books] li').count(),2);
+  await g.page.locator('[data-clear-book-search]').click();assert.equal(await search.inputValue(),'');assert.equal(await search.evaluate(e=>e===document.activeElement),true);assert.equal(await choices.count(),5);assert.equal(await choices.filter({visible:true}).count(),5);
+  assert.equal(await g.page.locator('[data-guide-book-choices] input:checked').count(),2);
+  for(const term of ['knight','agassi']){await search.fill(term);await choices.first().check();}
+  await search.fill('dyson');assert.equal(await choices.first().isDisabled(),true);
+  await g.page.getByRole('button',{name:'Remove Insanely Simple',exact:true}).click();assert.equal(await choices.first().isDisabled(),false);await choices.first().check();
+  await g.page.locator('[data-clear-book-search]').click();assert.equal(await g.page.locator('[data-guide-book-choices] input:checked').count(),4);assert.equal(await choices.first().isDisabled(),true);
+  assert.equal(await g.page.locator('[data-guide-dialog]').evaluate(e=>e.scrollWidth>e.clientWidth),false);
+  await g.page.locator('[data-guide-question] button[type=submit]').click();await g.page.locator('[data-guide-proposal]').waitFor({state:'visible'});
+  assert.deepEqual(await g.page.locator('[data-proposal-books] strong').allTextContents(),searchBooks.slice(1).map(b=>b.title));assert.deepEqual(mutations(g.actions),[]);assert.deepEqual(g.errors,[]);await g.ctx.close();
+ }
+ console.log('PASS explicit mode choice, card-only review, manual selection, title/author search, accent normalization, no-match/clear states, preserved selections and four-book limit, edits, length confirmation, mobile/desktop layouts, auth resume, and saved-review reopening. API responses mocked; no live guide created.');
 }finally{await browser.close();}

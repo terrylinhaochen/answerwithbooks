@@ -77,6 +77,20 @@ export async function mountGuides(){
  const showError=(error:unknown)=>{status.textContent=error instanceof Error?error.message:'Could not complete the request. Please try again.';};
  const reset=()=>{epoch++;clearTimeout(timer);active='';requestKey=crypto.randomUUID();view('form');status.textContent='';login.hidden=true;updateUrl();};
  const saveDraft=()=>{try{sessionStorage.setItem(draftKey,question.value);}catch{}if(launchQuestion)launchQuestion.value=question.value;};
+ const bookSearch=root.querySelector<HTMLInputElement>('[data-guide-book-search]')!,clearSearch=root.querySelector<HTMLButtonElement>('[data-clear-book-search]')!,searchStatus=root.querySelector<HTMLElement>('[data-guide-book-search-status]')!;
+ const searchText=(value:string)=>value.normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+ const drawBookChoices=()=>{
+  const choices=root.querySelector('[data-guide-book-choices]')!;choices.replaceChildren();clearSearch.hidden=!bookSearch.value;
+  if(!catalog){searchStatus.textContent='Loading available books…';return;}
+  const terms=searchText(bookSearch.value).split(/\s+/).filter(Boolean);
+  const matches=catalog.filter(book=>{const text=searchText(`${book.title} ${book.author||''}`);return terms.every(term=>text.includes(term));});
+  searchStatus.textContent=terms.length?`${matches.length} of ${catalog.length} books`:`${catalog.length} ${catalog.length===1?'book':'books'}`;
+  for(const book of matches){const label=el('label','','guide-book-choice'),input=el('input');input.type='checkbox';input.setAttribute('aria-label',`${book.title}${book.author?' · '+book.author:''}`);input.checked=selected.some(b=>b.id===book.id);input.disabled=!input.checked&&selected.length>=4;input.addEventListener('change',()=>{selected=input.checked?[...selected,book]:selected.filter(b=>b.id!==book.id);reset();drawSelection();});const copy=el('span','','guide-book-choice-copy');copy.append(el('strong',book.title),el('small',book.author||''));label.append(bookCover(book),copy,input);choices.append(label);}
+  if(!matches.length)choices.append(el('p',catalog.length?'No books match your search. Try another title or author.':'No original texts are ready yet. Add a book to the shared library.','text-sm text-soft'));
+ };
+ bookSearch.addEventListener('input',drawBookChoices);
+ bookSearch.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.isComposing)event.preventDefault();});
+ clearSearch.addEventListener('click',()=>{bookSearch.value='';drawBookChoices();bookSearch.focus();});
  const drawSelection=()=>{
   root.querySelector<HTMLElement>('[data-guide-source-picker]')!.hidden=bookMode===null;
   root.querySelector<HTMLElement>('[data-selected-source]')!.hidden=!selected.length;
@@ -88,9 +102,7 @@ export async function mountGuides(){
   submit.textContent=bookMode==='manual'?'Review selected books':bookMode==='automatic'?'Get recommendations':'Continue';
   login.textContent=selected.length?'Sign in to create and save your guide →':'Sign in to get suggested books →';
   (root.querySelector('[data-guide-upload]') as HTMLElement).hidden=!unavailable.length;submit.disabled=bookMode===null||!!unavailable.length||(bookMode==='manual'&&!selected.length);
-  const choices=root.querySelector('[data-guide-book-choices]')!;choices.replaceChildren();
-  if(catalog){for(const book of catalog){const label=el('label','','guide-book-choice'),input=el('input');input.type='checkbox';input.setAttribute('aria-label',`${book.title}${book.author?' · '+book.author:''}`);input.checked=selected.some(b=>b.id===book.id);input.disabled=!input.checked&&selected.length>=4;input.addEventListener('change',()=>{selected=input.checked?[...selected,book]:selected.filter(b=>b.id!==book.id);reset();drawSelection();});const copy=el('span','','guide-book-choice-copy');copy.append(el('strong',book.title),el('small',book.author||''));label.append(bookCover(book),copy,input);choices.append(label);}if(!catalog.length)choices.append(el('p','No original texts are ready yet. Add a book to the shared library.','text-sm text-soft'));}
-  else choices.append(el('p','Loading available books…','text-sm text-soft'));
+  drawBookChoices();
  };
  root.querySelectorAll<HTMLInputElement>('input[name=book-mode]').forEach(input=>input.addEventListener('change',async()=>{bookMode=input.value as 'automatic'|'manual';reset();if(bookMode==='automatic')selected=[];drawSelection();if(bookMode==='manual'){root.querySelector<HTMLDetailsElement>('[data-add-guide-books]')!.open=true;try{await loadCatalog();drawSelection();}catch(error){showError(error);}}}));
  const loadCatalog=async()=>{if(catalog)return;const found:GuideBook[]=[];let offset=0;do{const result=await serviceCall('shared-library',{action:'list',offset});found.push(...result.books);if(result.nextOffset==null)break;if(result.nextOffset<=offset)throw Error('Could not load more books.');offset=result.nextOffset;}while(true);catalog=found;};
@@ -199,13 +211,13 @@ export async function mountGuides(){
   }catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('proposal');showError(error);}confirm.disabled=false;}}
  });
  form.addEventListener('submit',event=>{event.preventDefault();void begin();});
- launcher?.addEventListener('submit',event=>{event.preventDefault();reset();bookMode=null;selected=[];(root.querySelector('[data-add-guide-books]') as HTMLDetailsElement).open=false;question.value=launchQuestion!.value;saveDraft();login.hidden=true;drawSelection();open();root.querySelector<HTMLInputElement>('input[name=book-mode]')!.focus();});
- newQuestion.addEventListener('click',()=>{reset();bookMode=null;selected=[];question.value='';saveDraft();drawSelection();question.focus();});
+ launcher?.addEventListener('submit',event=>{event.preventDefault();reset();bookMode=null;selected=[];bookSearch.value='';(root.querySelector('[data-add-guide-books]') as HTMLDetailsElement).open=false;question.value=launchQuestion!.value;saveDraft();login.hidden=true;drawSelection();open();root.querySelector<HTMLInputElement>('input[name=book-mode]')!.focus();});
+ newQuestion.addEventListener('click',()=>{reset();bookMode=null;selected=[];bookSearch.value='';question.value='';saveDraft();drawSelection();question.focus();});
  question.addEventListener('input',()=>{reset();saveDraft();});
  root.querySelector('[data-edit-suggested-question]')!.addEventListener('click',()=>{selected=bookMode==='manual'?[...books]:[];reset();drawSelection();question.focus();});
- root.querySelector('[data-edit-guide-books]')!.addEventListener('click',()=>{bookMode='manual';selected=[...books];reset();drawSelection();(root.querySelector('[data-add-guide-books]') as HTMLDetailsElement).open=true;});
+ root.querySelector('[data-edit-guide-books]')!.addEventListener('click',()=>{bookMode='manual';selected=[...books];bookSearch.value='';reset();drawSelection();(root.querySelector('[data-add-guide-books]') as HTMLDetailsElement).open=true;});
  const openBook=async(seed:{id?:string;title:string;author?:string;coverUrl?:string|null;coverColor?:string;question?:string})=>{
-  reset();bookMode='manual';selected=[{id:seed.id||'',title:seed.title,author:seed.author,coverUrl:seed.coverUrl,coverColor:seed.coverColor}];if(seed.question)question.value=seed.question;open();drawSelection();question.focus();const originalSelection=selected[0];
+  reset();bookMode='manual';selected=[{id:seed.id||'',title:seed.title,author:seed.author,coverUrl:seed.coverUrl,coverColor:seed.coverColor}];bookSearch.value='';if(seed.question)question.value=seed.question;open();drawSelection();question.focus();const originalSelection=selected[0];
   try{await loadCatalog();if(!selected.includes(originalSelection))return;
    if(seed.id){const edition=catalog!.find(b=>b.id===seed.id);if(edition)selected=selected.map(b=>b===originalSelection?edition:b);}
    else{const same=(s:string)=>s.normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]/gu,'');const editions=catalog!.filter(b=>same(b.title)===same(seed.title)&&same(b.author||'')===same(seed.author||''));if(editions.length===1)selected=selected.map(b=>b===originalSelection?editions[0]:b);}
