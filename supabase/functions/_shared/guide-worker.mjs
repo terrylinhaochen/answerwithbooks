@@ -38,8 +38,7 @@ export async function drainGuide(db,model,hash,renderCover){
     patch.progress={...job.progress,candidates:[...refs.slice(6),...selected.map(index=>batch[index])]};
    }else{
     const hydrated=await hydrateReading({sections:candidates},books,hash);
-    let proposal=await proposeReading(job.question,hydrated.sections,model);
-    if(job.progress.requiredBookIds?.some(id=>!proposal.bookIds.includes(id)))proposal={bookIds:[],connection:'',gap:'We could not find passages that answer this question in every selected book. Try a different question or change the books.'};
+    const proposal=await proposeReading(job.question,hydrated.sections,model);
     patch.proposal={...proposal,books:books.filter(b=>proposal.bookIds.includes(b.id)).map(b=>({id:b.id,title:b.title,author:b.author}))};patch.book_ids=proposal.bookIds;patch.status=proposal.bookIds.length?'awaiting_confirmation':'gap';patch.progress={};
    }
   }else if(job.status==='composing'){

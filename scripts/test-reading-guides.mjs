@@ -95,11 +95,11 @@ test('selected-book scan never expands the library and preserves required source
  const db={rpc:async()=>({data:job}),from:table=>{const q={select:()=>q,or:()=>q,eq:()=>q,is:()=>q,in:(_k,ids)=>{readIds=ids;return Promise.resolve({data:[book]});},update:p=>{saved=p;return q;},single:async()=>({data:{id:'guide'}})};return q;}};
  await drainGuide(db,modelResponses({candidates:[{bookId:book.id,startLine:1,endLine:2,contribution:'An experience.'}]}),hash,()=>{});assert.deepEqual(readIds,[book.id]);assert.deepEqual(saved.progress.requiredBookIds,[book.id]);assert.deepEqual(saved.progress.libraryIds,[book.id]);assert.equal(saved.progress.offset,1);
 });
-test('a requested book cannot silently disappear from the proposed guide',async()=>{
+test('book suggestions keep relevant books and skip selected books without a match',async()=>{
  const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');let saved;
  const job={id:'guide',user_id:'owner',visibility:'public',lease_token:'lease',status:'proposing',question:'Question',progress:{requiredBookIds:[book.id,'missing'],candidates:[{bookId:book.id,startLine:1,endLine:2}]},attempts:1};
  const db={rpc:async()=>({data:job}),from:()=>{const q={select:()=>q,or:()=>q,eq:()=>q,is:()=>q,in:async()=>({data:[book]}),update:p=>{saved=p;return q;},single:async()=>({data:{id:'guide'}})};return q;}};
- await drainGuide(db,modelResponses({bookIds:[book.id],connection:'Only one contributes.',gap:''}),hash,()=>{});assert.equal(saved.status,'gap');assert.deepEqual(saved.book_ids,[]);assert.match(saved.proposal.gap,/every selected book/);
+ await drainGuide(db,modelResponses({bookIds:[book.id],connection:'Only one contributes.',gap:''}),hash,()=>{});assert.equal(saved.status,'awaiting_confirmation');assert.deepEqual(saved.book_ids,[book.id]);assert.equal(saved.proposal.gap,'');
 });
 
 test('final passage refinement may omit a confirmed book that does not fit',async()=>{const selected=await selectReading('Question','short',[book,{...book,id:'second'}],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]}));assert.deepEqual(selected,[{bookId:book.id,startLine:1,endLine:2}]);});
@@ -175,4 +175,19 @@ test('no relevant originals becomes a truthful gap without retrying generation',
 });
 test('refinement can report a gap after reading the original candidates',async()=>{
  await assert.rejects(selectReading('Question','long',[book],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:3}]},{passages:[]})),e=>e.code==='NO_RELEVANT_PASSAGES');
+});
+
+for(const [length,target] of [['short',2],['standard',3],['long',5]])test(`${length} uses a soft ${target}-passage target while accepting a single relevant scene`,async()=>{
+ const calls=[];
+ const selected=await selectReading('Question',length,[book],async(system,input)=>{
+  calls.push({system,input:JSON.parse(input)});
+  return calls.length===1?{passages:[{bookId:book.id,startLine:1,endLine:3}]}:{passages:[{candidateIndex:0,startLine:2,endLine:3}]};
+ });
+ for(const call of calls){assert.equal(call.input.passageTarget,target);assert.match(call.system,/soft target, not a quota or cap/);assert.match(call.system,/Skip weak or unrelated matches/);}
+ assert.deepEqual(selected,[{bookId:book.id,startLine:2,endLine:3}]);
+});
+test('short guides may exceed the soft count when distinct snippets fit',async()=>{
+ const refs=[1,2,3].map(line=>({bookId:book.id,startLine:line,endLine:line}));
+ const selected=await selectReading('Question','short',[book],modelResponses({passages:refs},{passages:refs.map((r,candidateIndex)=>({candidateIndex,startLine:r.startLine,endLine:r.endLine}))}));
+ assert.deepEqual(selected,refs);
 });
