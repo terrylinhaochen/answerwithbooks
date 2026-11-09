@@ -22,7 +22,14 @@ const {modalOnly=false}=Astro.props;
       <textarea id="guide-modal-question" class="awb-input mt-2 w-full" rows="3" required minlength="3" maxlength="2000" placeholder="What would you like to explore?"></textarea>
       <fieldset class="guide-length-options guide-book-mode-options"><legend class="mb-3 text-sm">How would you like to choose books?</legend><label><input type="radio" name="book-mode" value="automatic" /> Get recommendations</label><label><input type="radio" name="book-mode" value="manual" /> Choose my books</label></fieldset>
       <div class="guide-source-picker" data-guide-source-picker hidden><div data-selected-source hidden><p class="guide-field-label">Read from</p><ul data-selected-books class="guide-book-shelf mt-3"></ul></div><p data-book-selection-note class="text-sm text-soft"></p>
-        <details data-add-guide-books class="mt-4" hidden><summary class="guide-add-books">Choose books <span aria-hidden="true">+</span></summary><p class="mt-3 text-sm text-soft">Choose up to four books. We’ll search only these sources and skip passages that don’t fit.</p><div data-guide-book-choices class="guide-book-choices mt-3"></div></details>
+        <details data-add-guide-books class="mt-4" hidden>
+          <summary class="guide-add-books">Choose books <span aria-hidden="true">+</span></summary>
+          <p class="mt-3 text-sm text-soft">Choose up to four books. We’ll search only these sources and skip passages that don’t fit.</p>
+          <label for="guide-book-search" class="block mt-4 text-sm">Search books</label>
+          <div class="guide-book-search mt-2"><input id="guide-book-search" data-guide-book-search type="search" class="awb-input w-full" placeholder="Search by title or author" aria-controls="guide-book-choices" autocomplete="off" /><button type="button" data-clear-book-search hidden class="text-sm underline">Clear</button></div>
+          <p data-guide-book-search-status role="status" aria-live="polite" class="mt-3 text-sm text-soft"></p>
+          <div id="guide-book-choices" data-guide-book-choices class="guide-book-choices mt-3"></div>
+        </details>
         <button type="button" data-auto-guide-books hidden class="mt-4 text-sm underline underline-offset-4">Suggest books for me instead</button>
         <button type="button" data-guide-upload hidden class="awb-pill mt-4">Add the book’s PDF or EPUB</button>
       </div>
@@ -73,6 +80,7 @@ const {modalOnly=false}=Astro.props;
  .guide-field-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-soft);margin-bottom:14px}
  .guide-add-books{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:14px;font-weight:600;list-style:none}.guide-add-books::-webkit-details-marker{display:none}
  .guide-add-books span{font-size:21px;font-weight:400}
+ .guide-book-search{display:flex;align-items:center;gap:12px}.guide-book-search input{min-width:0;flex:1}.guide-book-search button{flex-shrink:0}
  .guide-dialog-footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--color-line);font-size:12px;line-height:1.6;color:var(--color-soft)}
  .guide-dialog-footer p:empty{display:none}
  .guide-length-options{margin:24px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.guide-length-options legend{font-size:14px;margin-bottom:12px;color:var(--color-soft)}
