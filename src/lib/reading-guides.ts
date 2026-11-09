@@ -49,10 +49,12 @@ export async function mountGuides(){
  const query=new URLSearchParams(location.search),draftKey='awb:guide-question-draft';
  let resumeId=query.get('resume');
  try{question.value=query.get('question')||sessionStorage.getItem(draftKey)||'';}catch{question.value=query.get('question')||'';}if(launchQuestion)launchQuestion.value=question.value;
+ const stateChanged=()=>document.dispatchEvent(new CustomEvent('awb:guide-state-changed'));
  const open=()=>{if(!dialog.open)dialog.showModal();};
  root.querySelector('[data-close-guide]')!.addEventListener('click',()=>dialog.close());
  // Closing a review keeps its draft, but consumes the explicit open intent.
  dialog.addEventListener('close',()=>{
+  stateChanged();
   query.delete('resume');query.delete('id');
   if(!modalOnly){const url=new URL(location.href);url.searchParams.delete('resume');url.searchParams.delete('id');history.replaceState(null,'',url.pathname+url.search+url.hash);}
  });
@@ -127,15 +129,15 @@ export async function mountGuides(){
   const draft=readGuideDraft();
   if(draft&&!guides.some(guide=>guide.id===draft.guideId)){
    const row=el('article','','guide-saved-card'),link=el('a');link.href=`/guides/?resume=${encodeURIComponent(draft.id)}`;
-   link.append(el('h3',draft.question),el('small','Resume book selection · Saved in this browser'));
+   link.append(el('h3',draft.question),el('small','Requires input · Resume book selection','guide-input-label'));
    const discard=el('button','Discard draft');discard.type='button';discard.addEventListener('click',()=>{clearGuideDraft(draft.id);if(resumeId===draft.id)resumeId=null;void list();});
    row.append(link,discard);target.append(row);
   }
   if(!guides.length&&!target.children.length)target.append(el('p','Your saved guides will appear here.','text-soft'));
-  for(const guide of guides){const row=el('article','','guide-saved-card'),link=el('a');link.href=guide.status==='ready'?`/guides/read/?id=${guide.id}`:`/guides/?id=${guide.id}`;link.append(guideCover(guide.question,guide.cover),el('h3',guide.question));
-   const label=guide.completed?'Finished':({ready:'Continue reading',awaiting_confirmation:'Suggested books ready',scanning:'Finding passages',proposing:'Connecting the passages',composing:'Creating your guide',gap:'No suitable passages found',failed:'Could not complete this guide'} as Record<string,string>)[guide.status]||guide.status;link.append(el('small',label));
+  for(const guide of guides){const needsInput=guide.status==='awaiting_confirmation',row=el('article','','guide-saved-card'),link=el('a');row.dataset.guideState=guide.status;link.href=guide.status==='ready'?`/guides/read/?id=${guide.id}`:`/guides/?id=${guide.id}`;const cover=guideCover(guide.question,guide.cover);if(guide.status!=='ready'&&!guide.cover?.src)cover.querySelector('small')!.textContent=needsInput?'Your books are ready to review':guide.status==='failed'?'Your question and books are saved':guide.status==='gap'?'Try different books':'Finding your reading';link.append(cover,el('h3',guide.question));
+   const label=guide.completed?'Finished':({ready:'Continue reading',awaiting_confirmation:'Requires input',scanning:'Finding passages',proposing:'Connecting the passages',composing:'Creating your guide',gap:'No suitable passages found',failed:'Could not complete this guide'} as Record<string,string>)[guide.status]||guide.status;link.append(el('small',label,needsInput?'guide-input-label':''));if(needsInput)link.append(el('p','Confirm books and reading length to continue.','guide-input-help'),el('span','Review books →','guide-input-action'));
    if(guide.status!=='ready')link.addEventListener('click',event=>{event.preventDefault();reset();active=guide.id;question.value=guide.question;open();updateUrl();void poll(active,epoch);});
-   const remove=el('button',guide.status==='ready'?'Remove from your guides':'Delete');remove.type='button';remove.addEventListener('click',async()=>{remove.disabled=true;try{await guideCall({action:'delete',id:guide.id});if(active===guide.id)reset();await list();}catch(e){open();showError(e);remove.disabled=false;}});row.append(link,remove);target.append(row);
+   const remove=el('button',guide.status==='ready'?'Remove from your guides':'Delete');remove.type='button';remove.addEventListener('click',async()=>{remove.disabled=true;try{await guideCall({action:'delete',id:guide.id});if(active===guide.id)reset();stateChanged();await list();}catch(e){open();showError(e);remove.disabled=false;}});row.append(link,remove);target.append(row);
   }
   if(scrollToSaved){scrollToSaved=false;shelf.scrollIntoView({block:'start'});}
   if(guides.some((g:any)=>g.cover?.status==='pending'||['scanning','proposing','composing'].includes(g.status)))listTimer=setTimeout(()=>list().catch(showError),10000);
@@ -172,7 +174,7 @@ export async function mountGuides(){
     if(guide.cover?.status==='pending')timer=setTimeout(()=>refreshReadyCover(id,guide.question,version),5000);
     void list();void loadPublicGuides();return;
    }
-   if(guide.status==='awaiting_confirmation'){active=id;showReview(books.length?books:guide.proposal.books,!!guide.proposal?.matches?.length);await list();return;}
+   if(guide.status==='awaiting_confirmation'){active=id;showReview(books.length?books:guide.proposal.books,!!guide.proposal?.matches?.length);stateChanged();await list();return;}
    if(['gap','failed'].includes(guide.status)){void loadPlan();view('form');drawSelection();status.textContent=guide.proposal?.gap||guide.error||'Could not complete this guide. Try a new question.';await list();return;}
    showProcessing(guide.status);if(guide.searchProgress)status.textContent=`Looking through the library · ${guide.searchProgress.checked} of ${guide.searchProgress.total} books checked.`;timer=setTimeout(()=>poll(id,version),5000);
   }catch(error){if(version!==epoch)return;showError(error);timer=setTimeout(()=>poll(id,version),15000);}
@@ -207,7 +209,7 @@ export async function mountGuides(){
   try{
    const result=await guideCall(active?{action:'confirm',id:active,length}:{action:'create',question:question.value.trim(),bookIds:books.map(b=>b.id),length,requestKey});
    if(version!==epoch)return;active=result.id;updateUrl();clearGuideDraft(resumeId);resumeId=null;
-   showProcessing('composing');void list();void loadPlan();await poll(active,version);
+   showProcessing('composing');stateChanged();void list();void loadPlan();await poll(active,version);
   }catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('proposal');showError(error);}confirm.disabled=false;}}
  });
  form.addEventListener('submit',event=>{event.preventDefault();void begin();});

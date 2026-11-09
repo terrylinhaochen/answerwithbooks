@@ -39,6 +39,7 @@ globalThis.fetch=async(input:any,init?:RequestInit)=>{const req=new Request(inpu
   const selected=rows.filter(row=>[...url.searchParams].every(([k,v])=>!v.startsWith('eq.')||String(row[k])===v.slice(3)));
   if(req.method==='PATCH'){const patch=await req.json();selected.forEach(r=>Object.assign(r,patch));}
   if(req.method==='DELETE')rows=rows.filter(r=>!selected.includes(r));
+  if(url.searchParams.get('select')==='id'&&req.headers.get('prefer')?.includes('count=exact')){assert.equal(url.searchParams.get('status'),'eq.awaiting_confirmation');assert.ok(url.searchParams.get('user_id'));return new Response(JSON.stringify(selected.slice(0,1).map(r=>({id:r.id}))),{headers:{'Content-Type':'application/json','Content-Range':`0-0/${selected.length}`}});}
   const single=req.headers.get('accept')?.includes('application/vnd.pgrst.object+json');return single?selected.length===1?json(selected[0]):json({code:'PGRST116',details:'The result contains 0 rows'},406):json(selected);
  }throw Error('Unexpected transport: '+req.url);
 };
@@ -49,6 +50,16 @@ assert.equal((await call({action:'get',id},'other')).status,404);
 assert.equal((await call({action:'confirm',id,length:'short'},'other')).status,404);
 assert.equal((await call({action:'delete',id},'other')).status,404);
 assert.equal((await call({action:'list'},'owner','https://evil.invalid')).status,403);
+// Reminders expose only a count and one owned ID; no questions, passages or work starts.
+const inputWakes=wakes,inputReads=bookReads;
+assert.equal((await call({action:'input-status'},'invalid')).status,401);
+assert.equal((await call({action:'input-status'},'owner','https://evil.invalid')).status,403);
+assert.deepEqual(await (await call({action:'input-status'},'other')).json(),{count:0,guideId:null});
+rows.push({id:'other-private',user_id:other,status:'awaiting_confirmation',question:'Private other question'}, {id:'another-pending',user_id:owner,status:'awaiting_confirmation'}, {id:'already-running',user_id:owner,status:'composing'});
+assert.deepEqual(await (await call({action:'input-status'})).json(),{count:2,guideId:id});
+assert.equal(bookReads,inputReads);assert.equal(wakes,inputWakes);assert.equal(modelCalls,0);
+rows=rows.filter(row=>row.id===id);
+console.log('PASS input reminders: owner-only pending count, no source reads, no generation, no private fields.');
 rows[0].book_ids=['book-owned'];
 const safe=await (await call({action:'get',id})).json();assert.equal(safe.guide.lease_token,undefined);assert.equal(safe.guide.progress,undefined);assert.equal(safe.books[0].title,'Owned book');assert.match(safe.books[0].coverUrl,/token=fixture/);assert.equal(safe.books[0].cover_path,undefined);
 assert.equal((await call({action:'confirm',id,length:'arbitrary'})).status,400);
