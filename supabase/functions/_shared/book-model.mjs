@@ -1,7 +1,7 @@
 // Provider boundary shared by the worker and the bounded model evaluation CLI.
 // No prompts, source text, response contents, keys or provider error bodies enter metrics.
 export function bookModelConfig(getEnv, kind = 'generation') {
-  const model = (kind === 'review' && getEnv('BOOK_REVIEW_MODEL')) || getEnv('BOOK_PROCESSING_MODEL') || 'accounts/fireworks/models/glm-5p3-flash';
+  const model = (kind === 'proofreading' && (getEnv('BOOK_PROOFREAD_MODEL') || 'gpt-4.1-mini')) || (kind === 'review' && getEnv('BOOK_REVIEW_MODEL')) || getEnv('BOOK_PROCESSING_MODEL') || 'accounts/fireworks/models/glm-5p3-flash';
   if (!/^(?:accounts\/fireworks\/models\/)?[a-zA-Z0-9][a-zA-Z0-9._:-]{0,95}$/.test(model)) throw new Error('Invalid book processing model configuration.');
   const provider = model.startsWith('accounts/fireworks/models/') ? 'fireworks' : model.startsWith('gemini-') ? 'google' : 'openai';
   const reasoningModel = /^gpt-[5-9](?:[.-]|$)/.test(model) || /^o[1-9](?:[.-]|$)/.test(model);
@@ -15,7 +15,7 @@ export function bookModelConfig(getEnv, kind = 'generation') {
 
 export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_metric) => {}, beforeCall = async (_request) => /** @type {string|null} */ (null), afterCall = async (_operation, _metric) => {}, now = Date.now}) {
   return async function modelJson(system, input, options = {}) {
-    const kind = options.kind === 'review' ? 'review' : 'generation';
+    const kind = options.kind === 'proofreading' ? 'proofreading' : options.kind === 'review' ? 'review' : 'generation';
     const config = bookModelConfig(getEnv, kind);
     const key = getEnv(config.provider === 'fireworks' ? 'FIREWORKS_API_KEY' : config.provider === 'google' ? 'GEMINI_API_KEY' : 'OPENAI_API_KEY');
     if (!key) throw new Error('Book generation is not configured.');

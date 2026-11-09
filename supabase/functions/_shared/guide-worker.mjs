@@ -1,3 +1,4 @@
+import {proofreadPassages} from './guide-proofreading.mjs';
 import {planGuideCover,guideCoverVersion,currentGuideCoverDesign} from './guide-cover.mjs';
 import {nominateBooks,proposeReading,selectReading,writeReading,reviewReading,hydrateReading,readingInstructions} from './reading-guides.mjs';
 export function checked(result){if(result.error)throw Error('Could not access saved reading data.');return result.data;}
@@ -44,6 +45,7 @@ export async function drainGuide(db,model,hash,renderCover){
   }else if(job.status==='composing'){
    const books=await sourceBooks(db,job.user_id,job.book_ids);if(books.length!==job.book_ids.length)throw Error('A confirmed book is no longer available.');
    if(!job.progress.passages){patch.progress={...job.progress,passages:await selectReading(job.question,job.length,books,model,job.progress.feedback)};}
+   else if(!job.progress.proofread){patch.progress={...job.progress,passages:await proofreadPassages(books,job.progress.passages,model),proofread:true};}
    else if(!job.progress.draft){patch.progress={...job.progress,draft:await writeReading(job.question,job.length,books,job.progress.passages,model,job.progress.feedback)};}
    else{const composed=await reviewReading(job.question,books,job.progress.draft,model);const hydrated=await hydrateReading(composed,books,hash);
     patch.guide={...hydrated,sections:hydrated.sections.map(({text,...s})=>s),version:1};patch.status='ready';patch.cover_status='pending';patch.book_ids=[...new Set(hydrated.sections.map(s=>s.bookId))];patch.progress={};}

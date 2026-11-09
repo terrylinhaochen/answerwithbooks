@@ -22,3 +22,9 @@ test('legacy source hashes and line references survive a display repair',async()
  assert.ok(hydrated.sections[0].text.includes('intensifies'));assert.ok(book.source_text.includes('intensi es'));
  await assert.rejects(hydrateReading(guide,[{...book,source_text:book.source_text+' changed'}],hash),/edition changed/);
 });
+
+test('Green edition restores verified fi and fl glyphs without changing other editions',()=>{
+ const sha='fc7fa792e31230ac49c66b5036e9e2a0b620f47773610d77fc3dc32e570be63c';
+ const examples=[[1900,'terrible times. In 1951, he and his rst wife, Judith, were on vacation in','first wife'],[1910,'of exploring scienti cally whether spiritual practices such as prayer or','scientifically'],[1911,'forgiveness might be bene cial. I’m embarrassed to admit it, but my prejudices','beneficial'],[1925,'are re ections of what is happening within us.” Templeton took control of his','reflections'],[1927,'which made me less open to learning from him. But twenty years later, I nd','I find']];
+ for(const [line,text,fixed] of examples){assert.ok(readableSourceText(text,{source_sha:sha},line).includes(fixed));assert.equal(readableSourceText(text,{source_sha:'different'},line),text);}
+});
