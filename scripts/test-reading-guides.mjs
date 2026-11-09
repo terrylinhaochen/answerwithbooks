@@ -102,7 +102,7 @@ test('a requested book cannot silently disappear from the proposed guide',async(
  await drainGuide(db,modelResponses({bookIds:[book.id],connection:'Only one contributes.',gap:''}),hash,()=>{});assert.equal(saved.status,'gap');assert.deepEqual(saved.book_ids,[]);assert.match(saved.proposal.gap,/every selected book/);
 });
 
-test('final passage refinement keeps every confirmed book',async()=>{await assert.rejects(selectReading('Question','short',[book,{...book,id:'second'}],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]})),/every confirmed book/);});
+test('final passage refinement may omit a confirmed book that does not fit',async()=>{const selected=await selectReading('Question','short',[book,{...book,id:'second'}],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]}));assert.deepEqual(selected,[{bookId:book.id,startLine:1,endLine:2}]);});
 
 test('mapping and review receive the same absolute numbered original lines',async()=>{const inputs=[];const chunk={start:41,end:43,text:'41: First line\n42: Second line\n43: Third line'};await mapReadingSection(chunk,3,async(prompt,input)=>{inputs.push(JSON.parse(input));return inputs.length===1?{summary:'Three lines',scenes:[]}:{passed:true};});assert.equal(inputs[0].text,'41: First line\n42: Second line\n43: Third line');assert.equal(inputs[1].source,inputs[0].text);});
 
@@ -161,4 +161,18 @@ test('flexible length never accepts an empty guide',async()=>{
 test('reading duration includes interpretation as well as excerpts and context',async()=>{
  const guide=await hydrateReading({introduction:'Intro',conclusion:'End',sections:[{bookId:book.id,startLine:1,endLine:1,heading:'Scene',before:'Before',after:'After',interpretation:Array(400).fill('word').join(' ')}]},[book],hash);
  assert.equal(guide.minutes,3);
+});
+
+test('no relevant originals becomes a truthful gap without retrying generation',async()=>{
+ const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');
+ let saved,calls=0;const job={id:'guide',user_id:'owner',lease_token:'lease',status:'composing',question:'Unrelated question',length:'long',attempts:1,book_ids:[book.id],progress:{}};
+ const db={rpc:async()=>({data:job}),from:table=>{
+  if(table==='book_processing_jobs'){const q={select:()=>q,eq:()=>q,or:()=>q,is:()=>q,in:async()=>({data:[book]})};return q;}
+  const q={update:p=>{saved=p;return q;},eq:()=>q,select:()=>q,single:async()=>({data:{id:'guide'}})};return q;
+ }};
+ await drainGuide(db,async()=>{calls++;return {passages:[]};},hash);
+ assert.equal(calls,1);assert.equal(saved.status,'gap');assert.match(saved.proposal.gap,/could not find relevant passages/);assert.equal(saved.error,null);assert.deepEqual(saved.progress,{});
+});
+test('refinement can report a gap after reading the original candidates',async()=>{
+ await assert.rejects(selectReading('Question','long',[book],modelResponses({passages:[{bookId:book.id,startLine:1,endLine:3}]},{passages:[]})),e=>e.code==='NO_RELEVANT_PASSAGES');
 });
