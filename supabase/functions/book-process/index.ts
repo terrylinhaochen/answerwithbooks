@@ -1,3 +1,4 @@
+import {buildReadingIndex} from '../_shared/reading-index.mjs';
 import {mapReadingSection,summarizeReadingBook,publishReadingDigest} from '../_shared/reading-guides.mjs';
 import {imagePrompt,coverStyleVersion,coverImageDefaults} from '../_shared/book-cover-design.mjs';
 import {customerBilling,customerUsage,customerPricingModel} from '../_shared/book-billing-public.mjs';
@@ -61,6 +62,9 @@ async function step(job:any,token:string) {
    patch.artifacts=publishReadingDigest(job,job.artifacts);
   }else if(!job.artifacts['reading/map.json']){
    patch.artifacts=await summarizeReadingBook(job,modelJson,hash);
+  }else if(!job.artifacts['reading/retrieval-index.v1.json']){
+   const map=JSON.parse(job.artifacts['reading/map.json']);
+   patch.artifacts={...job.artifacts,'reading/retrieval-index.v1.json':JSON.stringify(await buildReadingIndex(job,map,modelJson,hash))};
   }else{patch.status='ready';patch.run_state='complete';patch.cover_status=job.cover_path?'ready':Deno.env.get('OPENAI_API_KEY')?'pending':'skipped';}
  } else if(job.cursor<job.chunks.length) {
   const batch=await distillSectionBatch({chunks:job.chunks,notes:job.notes,cursor:job.cursor,

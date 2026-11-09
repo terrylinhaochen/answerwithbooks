@@ -17,6 +17,7 @@ export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_me
   return async function modelJson(system, input, options = {}) {
     const kind = options.kind === 'proofreading' ? 'proofreading' : options.kind === 'review' ? 'review' : 'generation';
     const config = bookModelConfig(getEnv, kind);
+    const outputLimit=Number.isInteger(options.maxOutputTokens)&&options.maxOutputTokens>=256&&options.maxOutputTokens<=6000?options.maxOutputTokens:6000;
     const key = getEnv(config.provider === 'fireworks' ? 'FIREWORKS_API_KEY' : config.provider === 'google' ? 'GEMINI_API_KEY' : 'OPENAI_API_KEY');
     if (!key) throw new Error('Book generation is not configured.');
     const started = now();
@@ -26,9 +27,9 @@ export function createBookModelClient({getEnv, fetchImpl = fetch, onUsage = (_me
       const body = {
         model: config.model, messages: [{role: 'system', content: config.provider === 'fireworks' && options.schema ? system+'\nReturn JSON matching this schema: '+JSON.stringify(options.schema) : system}, {role: 'user', content: input}],
         response_format: options.schema ? {type: 'json_schema', json_schema: {name: options.name || 'book_result', strict: true, schema: options.schema}} : {type: 'json_object'},
-        ...(config.provider === 'fireworks' ? {max_tokens:6000,reasoning_effort:config.effort,service_tier:'default',context_length_exceeded_behavior:'error',perf_metrics_in_response:true} : config.provider === 'google' ? {max_tokens: 6000, reasoning_effort: config.effort} : config.reasoningModel ? {max_completion_tokens: 6000, reasoning_effort: config.effort} : {max_tokens: 6000}),
+        ...(config.provider === 'fireworks' ? {max_tokens:outputLimit,reasoning_effort:config.effort,service_tier:'default',context_length_exceeded_behavior:'error',perf_metrics_in_response:true} : config.provider === 'google' ? {max_tokens: outputLimit, reasoning_effort: config.effort} : config.reasoningModel ? {max_completion_tokens: outputLimit, reasoning_effort: config.effort} : {max_tokens: outputLimit}),
       };
-      operation=await beforeCall({kind,model:config.model,inputBound:new TextEncoder().encode(JSON.stringify(body)).length+1024,outputBound:6000});
+      operation=await beforeCall({kind,model:config.model,inputBound:new TextEncoder().encode(JSON.stringify(body)).length+1024,outputBound:outputLimit});
       let response;
       try {response = await fetchImpl(config.provider === 'fireworks' ? 'https://api.fireworks.ai/inference/v1/chat/completions' : config.provider === 'google' ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' : 'https://api.openai.com/v1/chat/completions', {method: 'POST', redirect: 'error', headers: {Authorization: `Bearer ${key}`, 'Content-Type': 'application/json'}, body: JSON.stringify(body), signal: AbortSignal.timeout(60000)});}
       catch {throw new Error('The generation provider could not be reached. Please retry later.');}

@@ -36,3 +36,11 @@ test('same-tab fallback works when localStorage is blocked',()=>{
  const s={local:null,session:storage()},d=saveGuideDraft(value,null,s);
  assert.equal(readGuideDraft(d.id,s).question,value.question);
 });
+
+test('automatic passage search survives sign-in without invented book choices',()=>{
+ const s={local:storage(),session:storage()},draft=saveGuideDraft({...value,mode:'automatic',bookIds:[]},null,s);
+ assert.equal(readGuideDraft(draft.id,{local:s.local,session:storage()}).mode,'automatic');
+ assert.deepEqual(readGuideDraft(draft.id,s).bookIds,[]);
+ assert.throws(()=>saveGuideDraft({...value,bookIds:[]},null,s));
+ assert.ok(guideAuthPaths(`?from=guides&resume=${draft.id}`,s).destination.includes(draft.id));
+});

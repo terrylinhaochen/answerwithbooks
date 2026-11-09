@@ -1,0 +1,14 @@
+project_id = "answerwithbooks"
+
+# Preserve the established production auth contract. These handlers authenticate
+# browser JWTs and scoped CLI credentials themselves; queue operations require
+# the dedicated runner secret. Gateway JWT-only validation rejects those tokens.
+[functions.reading-guides]
+verify_jwt = false
+
+[functions.book-process]
+verify_jwt = false
+
+# Service-only embedding worker: POST requires the dedicated runner secret.
+[functions.reading-index]
+verify_jwt = false
