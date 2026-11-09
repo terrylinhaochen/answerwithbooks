@@ -23,14 +23,38 @@ test('index migration: source grounding, shared/private scopes, invalidation and
  for(const [id,visibility] of [[pub,'public'],[priv,'private']])await db.query('insert into book_processing_jobs(id,user_id,title,author,source_sha,source_text_sha,source_text,visibility,artifacts) values($1,$2,\'Life\',\'Writer\',\'edition\',\'text\',$3,$4,$5)',[id,a,Array.from({length:90},(_,i)=>'Original line '+i+' about helping.').join('\n'),visibility,artifacts]);
  assert.equal((await db.query('select distinct kind from guide_retrieval_entries')).rows.length,4);
  assert.equal((await db.query("select has_table_privilege('anon','guide_retrieval_entries','select') v")).rows[0].v,false);
+ const batchMigration=(await readFile(new URL('../supabase/migrations/20261109081000_guide_index_batch_commit.sql',import.meta.url),'utf8')).replace("(r.value->>'embedding')::extensions.vector(512)","array(select jsonb_array_elements_text((r.value->>'embedding')::jsonb))::double precision[]");await db.exec(batchMigration);
  await db.exec("update guide_retrieval_entries set embedding=array[1.0,0.0]");
  const search=async(user,publicOnly,ids=null)=>(await db.query("select * from search_guide_index($1,'help',array[1.0,0.0],$2,$3)",[user,ids,publicOnly])).rows;
  assert.deepEqual([...new Set((await search(b,true)).map(r=>r.book_id))],[pub]);
  assert.deepEqual([...new Set((await search(b,false)).map(r=>r.book_id))],[pub]);
  assert.equal(new Set((await search(a,false)).map(r=>r.book_id)).size,2);
  assert.equal((await search(a,true,[priv])).length,0);
+ assert.equal((await db.query("select has_function_privilege('anon','complete_guide_index(jsonb)','execute') v")).rows[0].v,false);
  const ids=(await db.query('select id from guide_retrieval_entries where job_id=$1 order by id',[pub])).rows;
  await db.query('update book_processing_jobs set artifacts=artifacts where id=$1',[pub]);assert.deepEqual((await db.query('select id from guide_retrieval_entries where job_id=$1 order by id',[pub])).rows,ids);
  await db.query("update book_processing_jobs set source_sha='revised' where id=$1",[pub]);assert.equal((await db.query('select count(embedding)::int n from guide_retrieval_entries where job_id=$1',[pub])).rows[0].n,0);
  await db.query('update book_processing_jobs set deletion_pending=true where id=$1',[pub]);assert.equal((await search(b,true)).length,0);
+ // Claim at most four atomic batches and reject a superseded worker's writes.
+ await db.exec('delete from guide_retrieval_entries');
+ await db.query("insert into guide_retrieval_entries(job_id,record_key,kind,start_line,end_line,body,source_sha) select $1,'test:'||n,'original',1,1,'Test source','edition' from generate_series(1,320) n",[priv]);
+ const claim=async()=>(await db.query('select * from claim_guide_index()')).rows;
+ const batches=[];for(let i=0;i<4;i++)batches.push(await claim());
+ assert.deepEqual(batches.map(b=>b.length),[64,64,64,64]);assert.equal((await claim()).length,0);
+ assert.ok(batches.every(b=>new Set(b.map(r=>r.lease_token)).size===1));
+ assert.equal(new Set(batches.flat().map(r=>r.id)).size,256);
+ const payload=rows=>rows.map(r=>({id:r.id,lease:r.lease_token,embedding:'[1,0]'}));
+ const complete=async rows=>(await db.query('select complete_guide_index($1::jsonb) n',[JSON.stringify(rows)])).rows[0].n;
+ assert.equal(await complete(payload(batches[0]).map(r=>({...r,lease:a}))),0);
+ assert.equal(await complete(payload(batches[0])),64);
+ assert.equal((await db.query('select count(*)::int n from guide_retrieval_entries where embedding is not null and lease_token is null')).rows[0].n,64);
+ assert.equal(await complete(payload(batches[0])),0);
+ await assert.rejects(()=>complete([...payload(batches[1]),payload(batches[2])[0]]),/INVALID_INDEX_BATCH/);
+ await db.query("update guide_retrieval_entries set lease_until=now()-interval '1 minute' where lease_token=$1",[batches[1][0].lease_token]);
+ const reclaimed=await claim();assert.equal(reclaimed.length,64);
+ const current=(await db.query('select id,lease_token from guide_retrieval_entries where id=any($1::uuid[])',[reclaimed.map(r=>r.id)])).rows;
+ assert.ok(current.every(r=>r.lease_token===reclaimed[0].lease_token));
+ const stale=batches[1].filter(r=>reclaimed.some(n=>n.id===r.id));
+ assert.equal(await complete(payload(stale)),0);
+
 });

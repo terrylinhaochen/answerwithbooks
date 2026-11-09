@@ -11,7 +11,7 @@ Deno.serve(async req=>{
   try{
    const result=await embedTexts(rows.map((r:any)=>r.body),(n:string)=>Deno.env.get(n));
    checked(await db.from('guide_index_usage').update({tokens:result.tokens,cost_usd:result.tokens===null?null:result.tokens*.02/1e6,state:result.tokens===null?'unknown':'settled'}).eq('id',receipt));
-   for(let i=0;i<rows.length;i++)checked(await db.from('guide_retrieval_entries').update({embedding:JSON.stringify(result.vectors[i]),lease_token:null,lease_until:null}).eq('id',rows[i].id).eq('lease_token',rows[i].lease_token));
+   checked(await db.rpc('complete_guide_index',{p_rows:rows.map((r:any,i:number)=>({id:r.id,lease:r.lease_token,embedding:JSON.stringify(result.vectors[i])}))}));
    await db.rpc('wake_guide_index');return Response.json({indexed:rows.length});
   }catch(e){
    for(const row of rows)await db.from('guide_retrieval_entries').update({lease_token:null,lease_until:null,next_attempt_at:new Date(Date.now()+60000).toISOString()}).eq('id',row.id).eq('lease_token',row.lease_token);
