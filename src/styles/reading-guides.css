@@ -53,3 +53,9 @@
 .excerpt-source-author{font-size:13px;color:var(--color-soft)}
 .excerpt-source-location{font-size:11px;line-height:1.5;color:var(--color-soft);margin-top:3px}
 @media(max-width:500px){.excerpt-source-card{gap:12px;padding:14px}.excerpt-source-card .reading-book-cover{width:42px}.excerpt-source-copy strong{font-size:18px}}
+
+.excerpt-source-card{align-items:flex-start}.excerpt-source-card .reading-book-cover{flex-shrink:0}
+.guide-purchase-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
+.guide-purchase-card{min-width:0;padding:20px;border:1px solid var(--color-line);border-radius:14px;background:var(--color-wash)}
+.guide-purchase-card .reading-book-cover{width:80px;margin-bottom:16px}.guide-purchase-card h3{font-family:var(--font-serif);font-size:21px;line-height:1.3}.guide-passages .guide-purchase-card p{font-size:14px;line-height:1.6;margin:10px 0}.guide-purchase-card a{margin-top:12px;font-size:13px}.guide-purchase-overview{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:1000px){.guide-purchase-grid{grid-template-columns:1fr}.guide-purchase-card{display:flex;align-items:flex-start;gap:18px}.guide-purchase-card .reading-book-cover{flex-shrink:0;margin:0;width:64px}}

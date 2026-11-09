@@ -80,7 +80,7 @@ jobs:
       - name: Verify shared library, subscription and guide allowance
         run: |
           npm run test:shared-library
-          node --test scripts/test-book-reader.mjs scripts/test-reading-text.mjs scripts/test-source-stream.mjs
+          node --test scripts/test-book-reader.mjs scripts/test-reading-text.mjs scripts/test-guide-proofreading.mjs scripts/test-source-stream.mjs
           deno check --node-modules-dir=none supabase/functions/shared-library/index.ts supabase/functions/reader-subscription/index.ts supabase/functions/reading-guides/index.ts
           deno run --node-modules-dir=none --allow-env --allow-read scripts/test-shared-http.ts
           deno run --node-modules-dir=none --allow-env --allow-read scripts/test-reader-subscription-http.ts

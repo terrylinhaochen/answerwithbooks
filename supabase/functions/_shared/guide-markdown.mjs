@@ -1,3 +1,4 @@
+import {formatOriginalText} from './reading-format.mjs';
 // A public guide document contains selected passages only, never the book files.
 const heading = text => String(text || '').replace(/[\r\n]+/g,' ').trim();
 export function guideMarkdown(row, guide) {
@@ -7,8 +8,8 @@ export function guideMarkdown(row, guide) {
   '## Introduction',guide.introduction];
  for(const [index,s] of guide.sections.entries()){
   pieces.push(`## Passage ${index+1}: ${heading(s.heading)}`,`Book: ${heading(s.title)}\n\nAuthor: ${heading(s.author)}`,
-   `Source text lines: ${s.startLine}–${s.endLine}`, '### Context',s.before,'### Original passage',
-   s.text.replace(/([^\n])\n(?=[^\n])/g,'$1 ').split('\n').map(line=>'> '+line).join('\n'),
+   `Source text lines: ${s.startLine}–${s.endLine}`, ...(s.bookOverview?['### About the book',s.bookOverview]:[]), '### Context',s.before,'### Original passage',
+   formatOriginalText(s.text).split('\n').map(line=>'> '+line).join('\n'),
    '### Continuation',s.after);
   if(s.interpretation)pieces.push('### Editorial interpretation',s.interpretation);
  }

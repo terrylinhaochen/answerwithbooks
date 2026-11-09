@@ -12,8 +12,8 @@ test('empty model selection produces a truthful gap',async()=>{const gap=await p
 test('proposal is bounded by original candidates',async()=>{await assert.rejects(proposeReading('Question',[{bookId:'knight'}],modelResponses({bookIds:['invented'],connection:'x'})),/Invalid proposed/);});
 test('a guide cannot silently add an unconfirmed book',async()=>{await assert.rejects(composeReading('Question','short',[book],modelResponses({passages:[{bookId:'outside',startLine:1,endLine:2}]})),/Unconfirmed/);});
 test('overlapping source selections are rejected',async()=>{await assert.rejects(composeReading('Question','short',[book],modelResponses({passages:[{bookId:'knight',startLine:1,endLine:2},{bookId:'knight',startLine:2,endLine:3}]},{passages:[{candidateIndex:0,startLine:1,endLine:2},{candidateIndex:1,startLine:2,endLine:3}]})),/overlap/);});
-test('review failure prevents a generated reading from becoming ready',async()=>{await assert.rejects(composeReading('Question','short',[book],modelResponses({passages:[{bookId:'knight',startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]},{introduction:'Context',sections:[{heading:'Scene',before:'Before',after:'After'}],conclusion:'End'},{passed:false})),/source review/);});
-test('successful guide contains references, never model-reconstructed source prose',async()=>{const result=await composeReading('Question','short',[book],modelResponses({passages:[{bookId:'knight',startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]},{introduction:'Context',sections:[{heading:'Scene',before:'Before',after:'After'}],conclusion:'End'},{passed:true}));assert.equal(result.sections[0].text,undefined);assert.equal((await hydrateReading(result,[book],hash)).sections[0].text,sourceSpan(book,{startLine:1,endLine:2}));});
+test('review failure prevents a generated reading from becoming ready',async()=>{await assert.rejects(composeReading('Question','short',[book],modelResponses({passages:[{bookId:'knight',startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]},{introduction:'Context',sections:[{sectionIndex:0,heading:'Scene',before:'Before',after:'After'}],conclusion:'End'},{passed:false})),/source review/);});
+test('successful guide contains references, never model-reconstructed source prose',async()=>{const result=await composeReading('Question','short',[book],modelResponses({passages:[{bookId:'knight',startLine:1,endLine:2}]},{passages:[{candidateIndex:0,startLine:1,endLine:2}]},{introduction:'Context',sections:[{sectionIndex:0,heading:'Scene',before:'Before',after:'After'}],conclusion:'End'},{passed:true}));assert.equal(result.sections[0].text,undefined);assert.equal((await hydrateReading(result,[book],hash)).sections[0].text,sourceSpan(book,{startLine:1,endLine:2}));});
 test('mapped scenes must cite the provided section and pass source review',async()=>{const chunk={start:1,end:3,text:book.source_text};await assert.rejects(mapReadingSection(chunk,0,modelResponses({summary:'A scene',scenes:[{title:'Scene',account:'Event',startLine:0,endLine:3}]})),/coordinates/);await assert.rejects(mapReadingSection(chunk,0,modelResponses({summary:'A scene',scenes:[]},{passed:false})),/source check/);});
 test('library scans paginate past the database default window',async()=>{const {allRows}=await import('../supabase/functions/_shared/guide-worker.mjs');const data=Array.from({length:1201},(_,id)=>({id}));const ranges=[];const result=await allRows(()=>({range:async(start,end)=>{ranges.push([start,end]);return {data:data.slice(start,end+1)};}}));assert.equal(result.length,1201);assert.deepEqual(ranges,[[0,499],[500,999],[1000,1499]]);});
 
@@ -51,7 +51,7 @@ test('editorial generation constrains the provider to one section per selected p
   assert.equal(options.schema.properties.sections.maxItems,1);
   assert.equal(options.schema.additionalProperties,false);
   assert.equal(JSON.parse(input).excerpts[0].sectionIndex,0);
-  return {introduction:'Context',sections:[{heading:'Scene',before:'Before',after:'After',interpretation:''}],conclusion:'End'};
+  return {introduction:'Context',sections:[{sectionIndex:0,heading:'Scene',before:'Before',after:'After',interpretation:''}],conclusion:'End'};
  });
  assert.equal(result.sections.length,1);
 });
@@ -66,7 +66,7 @@ test('reading time includes editorial text as well as original passages',async()
  const source={...book,source_text:Array(1000).fill('word').join(' ')};
  await assert.rejects(writeReading('Question','short',[source],[{bookId:book.id,startLine:1,endLine:1}],async(_s,input)=>{
   assert.equal(JSON.parse(input).targetMinutes,10);assert.equal(JSON.parse(input).editorialWordBudget,250);
-  return {introduction:Array(1500).fill('word').join(' '),sections:[{heading:'Scene',before:'Before',after:'After'}],conclusion:'End'};
+  return {introduction:Array(1500).fill('word').join(' '),sections:[{sectionIndex:0,heading:'Scene',before:'Before',after:'After'}],conclusion:'End'};
  }),/shorten the excerpts and context/);
 });
 
@@ -144,7 +144,7 @@ test('long reading accepts 2339 relevant source words instead of failing or padd
  const source={...book,source_text:Array(2339).fill('word').join(' ')};
  const draft=await writeReading('How to make yourself easy to help?','long',[source],[{bookId:book.id,startLine:1,endLine:1}],async(_s,input)=>{
   const request=JSON.parse(input);assert.equal(request.targetMinutes,45);assert.equal(request.editorialWordBudget,585);
-  return {introduction:'Context',sections:[{heading:'Scene',before:'Before',after:'After',interpretation:'Interpretation'}],conclusion:'End'};
+  return {introduction:'Context',sections:[{sectionIndex:0,heading:'Scene',before:'Before',after:'After',interpretation:'Interpretation'}],conclusion:'End'};
  });
  const guide=await hydrateReading(draft,[source],hash);assert.equal(guide.originalWords,2339);assert.equal(guide.minutes,12);
 });
