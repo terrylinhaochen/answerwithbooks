@@ -50,6 +50,7 @@ const {modalOnly=false}=Astro.props;
       <p data-proposal-question class="font-serif text-2xl mb-5"></p><h3 data-proposal-label class="text-sm text-soft">Suggested books</h3><ul data-proposal-books class="guide-book-shelf mt-4"></ul>
       <button type="button" data-edit-guide-books class="mt-4 text-sm underline">Edit books</button><button type="button" data-edit-suggested-question class="mt-4 ml-5 text-sm underline">Edit question</button>
       <fieldset class="guide-length-options"><legend class="mb-3 text-sm">Reading length</legend><label><input type="radio" name="length" value="short" /> Short · ~2 passages</label><label><input type="radio" name="length" value="standard" checked /> Medium · ~3 passages</label><label><input type="radio" name="length" value="long" /> Long · 5+ passages</label></fieldset><p class="mt-2 text-sm text-soft">The final length may vary. We include only passages that fit your question.</p>
+      <label class="guide-private-toggle"><input type="checkbox" role="switch" name="guide-private" /><span class="guide-switch" aria-hidden="true"></span><span>Private guide <small>Only you can see it</small></span></label>
       <button type="button" data-confirm-guide class="awb-pill awb-pill-primary">Create guide →</button>
     </section>
     <section data-guide-ready hidden class="guide-ready-preview">
@@ -58,7 +59,7 @@ const {modalOnly=false}=Astro.props;
     </section>
     <button type="button" data-new-question hidden class="mt-5 text-sm underline">Ask another question</button>
     <p data-guide-status role="status" aria-live="polite" class="mt-4 text-sm text-soft"></p><a data-guide-login hidden href="/login/?from=guides" class="mt-3 underline">Sign in to create and save your guide →</a>
-    <footer class="guide-dialog-footer"><p>Your question and finished guide will be public.</p><p data-guide-plan></p></footer>
+    <footer class="guide-dialog-footer"><p data-guide-privacy-note>Your question and finished guide will be public.</p><p data-guide-plan></p></footer>
   </dialog>
   <section id="your-guides" data-your-guides hidden class="mt-8 scroll-mt-28"><h2 class="font-serif text-3xl">Your Guides</h2><p class="mt-2 text-sm text-soft">Removing a published guide only hides it from this list. It stays available in All Guides.</p><div data-saved-guides class="guide-saved-grid mt-4"></div></section>
   {!modalOnly && <section id="all-guides" data-public-guides aria-busy="true" aria-labelledby="all-guides-title" class="mt-12 scroll-mt-28"><h2 id="all-guides-title" class="font-serif text-3xl">All guides</h2><div data-public-guide-list class="guide-saved-grid mt-4"><p class="text-soft" role="status">Loading guides…</p></div></section>}
@@ -86,6 +87,10 @@ const {modalOnly=false}=Astro.props;
  .guide-length-options{margin:24px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.guide-length-options legend{font-size:14px;margin-bottom:12px;color:var(--color-soft)}
  .guide-book-mode-options{grid-template-columns:repeat(2,minmax(0,1fr))}
  .guide-length-options label{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 6px;border:1px solid var(--color-line);border-radius:12px;font-size:14px;cursor:pointer}.guide-length-options label:has(input:checked){border-color:var(--color-ink);background:var(--color-wash)}
+ .guide-private-toggle{display:flex;width:fit-content;align-items:center;gap:10px;margin:18px 0 22px;font-size:14px;cursor:pointer}.guide-private-toggle small{margin-left:6px;font-size:12px;color:var(--color-soft)}
+ .guide-private-toggle input{position:absolute;opacity:0;width:1px;height:1px}.guide-switch{position:relative;flex-shrink:0;width:34px;height:20px;border-radius:999px;background:var(--color-line);transition:background .15s}
+ .guide-switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--color-card);box-shadow:0 1px 2px #0003;transition:transform .15s}
+ .guide-private-toggle input:checked+.guide-switch{background:var(--color-ink)}.guide-private-toggle input:checked+.guide-switch::after{transform:translateX(14px)}.guide-private-toggle input:focus-visible+.guide-switch{outline:2px solid var(--color-ink);outline-offset:2px}
  .guide-request-check{text-align:center;padding:54px 16px}.guide-request-check h3{font-family:var(--font-serif);font-size:28px;margin-top:20px}.guide-request-check p{color:var(--color-soft);margin-top:10px;font-size:14px}
  .guide-check-spinner{display:block;width:26px;height:26px;border:2px solid var(--color-line);border-top-color:var(--color-ink);border-radius:50%;margin:auto;animation:guide-spin 1s linear infinite}
  .guide-access-panel{padding:30px 0 8px}.guide-access-panel h3{font-family:var(--font-serif);font-size:32px;line-height:1.15;margin-top:12px}

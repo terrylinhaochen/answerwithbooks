@@ -12,7 +12,7 @@ const stores = () => { let local,session; try { local=window.localStorage; } cat
 export function saveGuideDraft(value, id, storage=stores()) {
  if(!valid(value))throw Error('Please review your question and books before signing in.');
  if(!uuid(id))id=crypto.randomUUID();
- const draft={id,question:value.question,bookIds:value.bookIds,length:value.length,...(value.mode==='automatic'?{mode:'automatic'}:{}),savedAt:Date.now(),...(uuid(value.guideId)?{guideId:value.guideId}:{})};
+ const draft={id,question:value.question,bookIds:value.bookIds,length:value.length,...(value.private===true?{private:true}:{}),...(value.mode==='automatic'?{mode:'automatic'}:{}),savedAt:Date.now(),...(uuid(value.guideId)?{guideId:value.guideId}:{})};
  // Remove expired drafts so browser storage does not become a permanent question history.
  try { for(const key of Object.keys(storage.local))if(key.startsWith(PREFIX)){const old=JSON.parse(get(storage.local,key)||'null');if(!old||Date.now()-old.savedAt>=TTL)remove(storage.local,key);} } catch {}
  const shared=set(storage.local,PREFIX+id,JSON.stringify(draft));

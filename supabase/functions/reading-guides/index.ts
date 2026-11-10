@@ -31,7 +31,7 @@ Deno.serve(async req=>{
   const match=new URL(req.url).pathname.match(/\/reading-guides\/([a-f0-9-]+)\.md$/i);
   const id=match?.[1];if(!uuid(id))return reply({error:'Guide not found.'},404);
   try{
-   const row=checked(await db.from('reading_guides').select('id,question,book_ids,guide').eq('id',id).eq('visibility','public').eq('status','ready').maybeSingle());
+   const row=checked(await db.from('reading_guides').select('id,question,book_ids,guide').eq('id',id).eq('visibility','public').eq('is_private',false).eq('status','ready').maybeSingle());
    if(!row?.guide)return reply({error:'Guide not found.'},404);
    const guide=await hydrateReading(row.guide,await sourceBooks(db,null,row.book_ids),hash);
    return new Response(req.method==='HEAD'?null:guideMarkdown(row,guide),{headers:{...headers,'Content-Type':'text/markdown; charset=utf-8','X-Content-Type-Options':'nosniff','Content-Disposition':'inline'}});
@@ -52,13 +52,14 @@ Deno.serve(async req=>{
    checked(await db.rpc('wake_reading_guides',{p_count:1}));return reply(result||{idle:true});
   }
   if(input.action==='public-list'){
-   const rows=checked(await db.from('reading_guides').select('id,question,created_at,cover_path,cover_status,cover_design,book_ids').eq('visibility','public').eq('status','ready').order('created_at',{ascending:false}).limit(100));
+   const rows=checked(await db.from('reading_guides').select('id,question,created_at,cover_path,cover_status,cover_design,book_ids').eq('visibility','public').eq('is_private',false).eq('status','ready').order('created_at',{ascending:false}).limit(100));
    return reply({guides:await Promise.all(rows.map(presentGuide))});
   }
   if(input.action==='suggest')return reply({error:'Start a passage-first recommendation with action propose and a requestKey, then poll the saved guide.',code:'USE_PASSAGE_PROPOSAL'},409);
   const user=bearer?await bookUser(db,bearer):null;
+  if(input.private!==undefined&&typeof input.private!=='boolean')return reply({error:'Choose whether this guide is public or private.'},400);
   if(input.action==='get'&&uuid(input.id)){
-   const shared=checked(await db.from('reading_guides').select('id,question,status,length,book_ids,guide,created_at,cover_path,cover_status,cover_design,visibility').eq('id',input.id).eq('visibility','public').eq('status','ready').maybeSingle());
+   const shared=checked(await db.from('reading_guides').select('id,question,status,length,book_ids,guide,created_at,cover_path,cover_status,cover_design,visibility').eq('id',input.id).eq('visibility','public').eq('is_private',false).eq('status','ready').maybeSingle());
    if(shared){
     shared.guide=await hydrateReading(shared.guide,await sourceBooks(db,null,shared.book_ids),hash);
     const state=user?checked(await db.from('reader_guide_state').select('position,completed').eq('user_id',user.id).eq('guide_id',shared.id).maybeSingle()):null;
@@ -73,7 +74,7 @@ Deno.serve(async req=>{
   }
   if(input.action==='list'){
    const [guideResult,stateResult]=await Promise.all([
-    db.from('reading_guides').select('id,question,status,length,book_ids,proposal,error,position,completed,created_at,cover_status,cover_path,cover_design').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100),
+    db.from('reading_guides').select('id,question,status,length,book_ids,proposal,error,position,completed,created_at,cover_status,cover_path,cover_design,is_private').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100),
     db.from('reader_guide_state').select('guide_id,hidden,position,completed').eq('user_id',user.id)
    ]);
    const states=new Map(checked(stateResult).map((state:any)=>[state.guide_id,state]));
@@ -93,7 +94,7 @@ Deno.serve(async req=>{
     const available=checked(await db.from('book_processing_jobs').select('id').eq('visibility','public').eq('status','ready').eq('is_current',true).eq('deletion_pending',false).is('archived_at',null).is('duplicate_of',null).in('id',input.bookIds));
     if(available.length!==input.bookIds.length)return reply({error:'A selected book is no longer available. Update your books.'},409);
     if(!checked(await db.rpc('consume_reading_request',{p_user:user.id})))return reply({error:'You have reached today’s reading limit. Please try again later.'},429);
-    const result=await db.from('reading_guides').insert({user_id:user.id,question:input.question.trim(),request_key:input.requestKey,visibility:'public',status:'awaiting_confirmation',book_ids:input.bookIds,proposal:{bookIds:input.bookIds,connection:'Books confirmed by the reader.'},progress:{}}).select('id').single();
+    const result=await db.from('reading_guides').insert({user_id:user.id,question:input.question.trim(),request_key:input.requestKey,visibility:'public',is_private:input.private===true,status:'awaiting_confirmation',book_ids:input.bookIds,proposal:{bookIds:input.bookIds,connection:'Books confirmed by the reader.'},progress:{}}).select('id').single();
     if(result.error?.code==='23505')existing=checked(await db.from('reading_guides').select('id,status').eq('user_id',user.id).eq('request_key',input.requestKey).single());else existing=checked(result);
    }
    const confirmation=await db.rpc('confirm_reader_guide',{p_user:user.id,p_id:existing.id,p_length:input.length});
@@ -117,12 +118,12 @@ Deno.serve(async req=>{
    }
    const permitted=checked(await db.rpc('consume_reading_request',{p_user:user.id}));if(!permitted)return reply({error:'You have reached today’s reading limit. Your saved guides remain available.'},429);
    if(input.action==='answer')return reply(await answerGuides(db,user.id,input.question,createBookModelClient({getEnv:(n:string)=>Deno.env.get(n)}),hash));
-   const result=await db.from('reading_guides').insert({user_id:user.id,question:input.question.trim(),request_key:input.requestKey,visibility:'public',...(input.bookIds?{progress:{libraryIds:input.bookIds,requiredBookIds:input.bookIds}}:{})}).select('id').single();
+   const result=await db.from('reading_guides').insert({user_id:user.id,question:input.question.trim(),request_key:input.requestKey,visibility:'public',is_private:input.private===true,...(input.bookIds?{progress:{libraryIds:input.bookIds,requiredBookIds:input.bookIds}}:{})}).select('id').single();
    if(result.error?.code==='23505')return reply(checked(await db.from('reading_guides').select('id').eq('user_id',user.id).eq('request_key',input.requestKey).single()));
    const guide=checked(result);checked(await db.rpc('wake_reading_guides',{p_count:1}));return reply(guide,202);
   }
   if(!uuid(input.id))return reply({error:'Invalid guide identity'},400);
-  let row=checked(await owned());if(!row&&['context','position','feedback'].includes(input.action))row=checked(await db.from('reading_guides').select('*').eq('id',input.id).eq('visibility','public').eq('status','ready').maybeSingle());if(!row)return reply({error:'Guide not found'},404);
+  let row=checked(await owned());if(!row&&['context','position','feedback'].includes(input.action))row=checked(await db.from('reading_guides').select('*').eq('id',input.id).eq('visibility','public').eq('is_private',false).eq('status','ready').maybeSingle());if(!row)return reply({error:'Guide not found'},404);
   if(input.action==='usage'){const rows=checked(await db.from('guide_provider_usage').select('model,stage,state,cost_usd,upper_usd,metric,created_at').eq('guide_id',row.id));return reply({budgetUsd:row.provider_budget_usd,recordedUsd:rows.reduce((n:number,r:any)=>n+Number(r.cost_usd||0),0),unresolvedReservations:rows.filter((r:any)=>r.state!=='settled').length,operations:rows,notice:'Provider estimates, not a customer invoice. Older guides may have incomplete usage.'});}
   if(input.action==='cover')return reply({cover:(await presentGuide(row)).cover});
   if(input.action==='cover-import'){
@@ -144,6 +145,7 @@ Deno.serve(async req=>{
   if(input.action==='confirm'){
    if(!['short','standard','long'].includes(input.length))return reply({error:'Choose a reading length.'},400);
    if(row.status!=='awaiting_confirmation')return ['composing','ready'].includes(row.status)?reply({id:row.id}):reply({error:'Wait for the suggested books first.'},409);
+   if(typeof input.private==='boolean'&&input.private!==row.is_private)checked(await db.from('reading_guides').update({is_private:input.private}).eq('id',row.id).eq('user_id',user.id).eq('status','awaiting_confirmation'));
    const confirmation=await db.rpc('confirm_reader_guide',{p_user:user.id,p_id:row.id,p_length:input.length});
    if(confirmation.error){
     const message=confirmation.error.message;
@@ -172,7 +174,7 @@ Deno.serve(async req=>{
    const startLine=Math.max(1,section.startLine-30),endLine=Math.min(book.source_text.split('\n').length,section.endLine+30);
    return reply({title:book.title,startLine,endLine,text:sourceSpan(book,{startLine,endLine})});
   }
-  if(input.action==='delete'){if(row.visibility==='public'&&row.status==='ready'){checked(await db.from('reader_guide_state').upsert({user_id:user.id,guide_id:row.id,hidden:true},{onConflict:'user_id,guide_id'}));return reply({deleted:true});}checked(await db.from('reading_guides').delete().eq('id',row.id).eq('user_id',user.id));return reply({deleted:true});}
+  if(input.action==='delete'){if(row.visibility==='public'&&!row.is_private&&row.status==='ready'){checked(await db.from('reader_guide_state').upsert({user_id:user.id,guide_id:row.id,hidden:true},{onConflict:'user_id,guide_id'}));return reply({deleted:true});}checked(await db.from('reading_guides').delete().eq('id',row.id).eq('user_id',user.id));return reply({deleted:true});}
   return reply({error:'Unknown guide action'},400);
  }catch(error){console.error('reading_request_failed',error instanceof Error?error.name:'Error');return reply({error:'Could not complete this reading request. Please try again.'},500);}
 });

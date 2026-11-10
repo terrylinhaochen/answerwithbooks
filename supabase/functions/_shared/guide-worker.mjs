@@ -61,7 +61,7 @@ export async function drainGuide(db,model,hash,renderCover,options={}){
  return {processed:job.id,status:patch.status||job.status};
 }
 export async function answerGuides(db,userId,question,model,hash){
- const rows=await allRows(()=>db.from('reading_guides').select('id,question,guide').or(`visibility.eq.public,user_id.eq.${userId}`).eq('status','ready').order('id'));
+ const rows=await allRows(()=>db.from('reading_guides').select('id,question,guide').or(`and(visibility.eq.public,is_private.eq.false),user_id.eq.${userId}`).eq('status','ready').order('id'));
  const picked=[];
  for(let offset=0;offset<rows.length;offset+=20){
   const batch=rows.slice(offset,offset+20),result=await model(readingInstructions+' Which saved readings help answer this question? Return {ids:string[]}; none if no fit.',JSON.stringify({question,guides:batch.map(g=>({id:g.id,question:g.question,introduction:g.guide.introduction}))}));

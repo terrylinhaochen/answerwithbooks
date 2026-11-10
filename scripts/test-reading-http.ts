@@ -111,3 +111,16 @@ assert.equal((await call(createInput)).status,202);const direct=rows.find(r=>r.r
 const countAfterCreate=rows.length;assert.equal((await call(createInput)).status,200);assert.equal(rows.length,countAfterCreate);
 testPlan.used=3;const capped=await call({...createInput,requestKey:crypto.randomUUID()});assert.equal(capped.status,402);assert.equal((await capped.json()).code,'FREE_GUIDE_LIMIT');
 console.log('PASS legacy overview endpoint is retired; direct confirmed creation enforces auth, source scope, quota and idempotency.');
+testPlan.used=0;
+assert.equal(direct.is_private,false,'guides are public unless the reader opts out');
+assert.equal((await call({...createInput,requestKey:crypto.randomUUID(),private:'yes'})).status,400);
+const privateKey=crypto.randomUUID();assert.equal((await call({...createInput,requestKey:privateKey,private:true})).status,202);
+const hidden=rows.find(r=>r.request_key===privateKey);assert.equal(hidden.is_private,true);assert.equal(hidden.visibility,'public','privacy must not change the source scope');
+Object.assign(hidden,{status:'ready',guide:{sections:[]},cover_status:'none'});Object.assign(direct,{status:'ready',guide:{sections:[]},cover_status:'none'});
+const listed=(await (await call({action:'public-list'},'other')).json()).guides.map((g:any)=>g.id);
+assert.ok(listed.includes(direct.id));assert.ok(!listed.includes(hidden.id),'private guides stay out of All guides');
+for(const action of ['get','position','feedback','context'])assert.equal((await call({action,id:hidden.id,position:0,sectionIndex:0,sentiment:'helpful',comment:''},'other')).status,404,`others cannot ${action} a private guide`);
+hidden.book_ids=[];assert.equal((await call({action:'get',id:hidden.id})).status,200,'the owner can still read it');
+assert.equal((await (await call({action:'list'})).json()).guides.find((g:any)=>g.id===hidden.id).is_private,true);
+assert.equal((await call({action:'delete',id:hidden.id})).status,200);assert.ok(!rows.includes(hidden),'deleting a private guide removes it rather than hiding it');
+console.log('PASS private guides: public by default, opt-in privacy keeps source scope, hidden from other readers and the catalog, owner-only access and deletion.');

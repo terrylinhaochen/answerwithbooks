@@ -135,9 +135,9 @@ export async function mountGuides(){
   }
   if(!guides.length&&!target.children.length)target.append(el('p','Your saved guides will appear here.','text-soft'));
   for(const guide of guides){const needsInput=guide.status==='awaiting_confirmation',row=el('article','','guide-saved-card'),link=el('a');row.dataset.guideState=guide.status;link.href=guide.status==='ready'?`/guides/read/?id=${guide.id}`:`/guides/?id=${guide.id}`;const cover=guideCover(guide.question,guide.cover);if(guide.status!=='ready'&&!guide.cover?.src)cover.querySelector('small')!.textContent=needsInput?'Your books are ready to review':guide.status==='failed'?'Your question and books are saved':guide.status==='gap'?'Try different books':'Finding your reading';link.append(cover,el('h3',guide.question));
-   const label=guide.completed?'Finished':({ready:'Continue reading',awaiting_confirmation:'Requires input',scanning:'Finding passages',proposing:'Connecting the passages',composing:'Creating your guide',gap:'No suitable passages found',failed:'Could not complete this guide'} as Record<string,string>)[guide.status]||guide.status;link.append(el('small',label,needsInput?'guide-input-label':''));if(needsInput)link.append(el('p','Confirm books and reading length to continue.','guide-input-help'),el('span','Review books →','guide-input-action'));
+   const label=guide.completed?'Finished':({ready:'Continue reading',awaiting_confirmation:'Requires input',scanning:'Finding passages',proposing:'Connecting the passages',composing:'Creating your guide',gap:'No suitable passages found',failed:'Could not complete this guide'} as Record<string,string>)[guide.status]||guide.status;link.append(el('small',guide.is_private?`${label} · Private`:label,needsInput?'guide-input-label':''));if(needsInput)link.append(el('p','Confirm books and reading length to continue.','guide-input-help'),el('span','Review books →','guide-input-action'));
    if(guide.status!=='ready')link.addEventListener('click',event=>{event.preventDefault();reset();active=guide.id;question.value=guide.question;open();updateUrl();void poll(active,epoch);});
-   const remove=el('button',guide.status==='ready'?'Remove from your guides':'Delete');remove.type='button';remove.addEventListener('click',async()=>{remove.disabled=true;try{await guideCall({action:'delete',id:guide.id});if(active===guide.id)reset();stateChanged();await list();}catch(e){open();showError(e);remove.disabled=false;}});row.append(link,remove);target.append(row);
+   const remove=el('button',guide.status==='ready'&&!guide.is_private?'Remove from your guides':'Delete');remove.type='button';remove.addEventListener('click',async()=>{remove.disabled=true;try{await guideCall({action:'delete',id:guide.id});if(active===guide.id)reset();stateChanged();await list();}catch(e){open();showError(e);remove.disabled=false;}});row.append(link,remove);target.append(row);
   }
   if(scrollToSaved){scrollToSaved=false;shelf.scrollIntoView({block:'start'});}
   if(guides.some((g:any)=>g.cover?.status==='pending'||['scanning','proposing','composing'].includes(g.status)))listTimer=setTimeout(()=>list().catch(showError),10000);
@@ -198,16 +198,18 @@ export async function mountGuides(){
   try{const result=await guideCall({action:'propose',question:question.value.trim(),requestKey});if(version!==epoch)return;active=result.id;updateUrl();clearGuideDraft(resumeId);resumeId=null;void list();await poll(active,version);}
   catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('form');drawSelection();showError(error);}}}
  };
+ const privacyNote=root.querySelector('[data-guide-privacy-note]');
+ root.querySelectorAll<HTMLInputElement>('input[name=guide-private]').forEach(input=>input.addEventListener('change',()=>{if(privacyNote)privacyNote.textContent=input.checked?'Only you will see your question and finished guide.':'Your question and finished guide will be public.';}));
  confirm.addEventListener('click',async()=>{
   if(confirm.disabled)return;confirm.disabled=true;const version=epoch;
-  const length=root.querySelector<HTMLInputElement>('input[name=length]:checked')!.value;
+  const length=root.querySelector<HTMLInputElement>('input[name=length]:checked')!.value,isPrivate=!!root.querySelector<HTMLInputElement>('input[name=guide-private]')?.checked;
   const {data}=await supabase.auth.getSession();if(version!==epoch)return;owner=data.session?.user.id;
   if(!owner){
-   saveDraft();try{const saved=saveGuideDraft({question:question.value,bookIds:books.map(b=>b.id),length,guideId:active},resumeId);resumeId=saved.id;location.assign(guideAuthPaths(`?from=guides&resume=${saved.id}`)!.login);}catch(error){confirm.disabled=false;showError(error);}return;
+   saveDraft();try{const saved=saveGuideDraft({question:question.value,bookIds:books.map(b=>b.id),length,private:isPrivate,guideId:active},resumeId);resumeId=saved.id;location.assign(guideAuthPaths(`?from=guides&resume=${saved.id}`)!.login);}catch(error){confirm.disabled=false;showError(error);}return;
   }
   view('checking');root.querySelector('[data-checking-title]')!.textContent='Starting your guide';root.querySelector('[data-checking-copy]')!.textContent='Confirming your books and reading time…';status.textContent='';
   try{
-   const result=await guideCall(active?{action:'confirm',id:active,length}:{action:'create',question:question.value.trim(),bookIds:books.map(b=>b.id),length,requestKey});
+   const result=await guideCall(active?{action:'confirm',id:active,length,private:isPrivate}:{action:'create',question:question.value.trim(),bookIds:books.map(b=>b.id),length,private:isPrivate,requestKey});
    if(version!==epoch)return;active=result.id;updateUrl();clearGuideDraft(resumeId);resumeId=null;
    showProcessing('composing');stateChanged();void list();void loadPlan();await poll(active,version);
   }catch(error){if(version===epoch){if(accessError(error))showAccess(error);else{view('proposal');showError(error);}confirm.disabled=false;}}
@@ -246,7 +248,7 @@ export async function mountGuides(){
    if(saved.mode==='automatic'&&!saved.bookIds.length){requestKey=saved.id;bookMode='automatic';selected=[];const length=root.querySelector<HTMLInputElement>(`input[name=length][value="${saved.length}"]`);if(length)length.checked=true;await begin();return;}
    bookMode='manual';await loadCatalog();if(version!==epoch)return;
    const restored=saved.bookIds.map((id:string)=>catalog!.find(book=>book.id===id)).filter(Boolean) as GuideBook[];
-   if(restored.length===saved.bookIds.length){showReview(restored);const length=root.querySelector<HTMLInputElement>(`input[name=length][value="${saved.length}"]`);if(length)length.checked=true;}
+   if(restored.length===saved.bookIds.length){showReview(restored);const length=root.querySelector<HTMLInputElement>(`input[name=length][value="${saved.length}"]`);if(length)length.checked=true;const privacy=root!.querySelector<HTMLInputElement>('input[name=guide-private]');if(privacy){privacy.checked=saved.private===true;privacy.dispatchEvent(new Event('change'));}}
    else{selected=restored;view('form');drawSelection();status.textContent='A selected book is no longer available. Update your suggestions.';}
   }catch{if(version===epoch){view('form');drawSelection();status.textContent='Could not restore your books. Your question is saved; please try again.';}}
  }
@@ -268,7 +270,7 @@ export async function mountReader(){
  root.querySelector('[data-reader-cover]')!.append(guideCover(row.question,row.cover));root.querySelector('[data-guide-introduction]')!.textContent=g.introduction;
  const shelf=root.querySelector('[data-guide-books]')!;for(const book of books){const card=bookCard(book),title=card.querySelector('strong')!,link=el('a',book.title);link.href=`/${book.visibility==='public'?'books/read':'your-book'}/?id=${encodeURIComponent(book.id)}`;link.className='hover:text-accent';if(!book.archived)title.replaceChildren(link);shelf.append(card);}
  const addNav=(title:string,anchorId:string)=>{const anchor=el('a',title);anchor.href=`#${anchorId}`;nav.append(anchor);};addNav('Introduction','introduction');
- root.querySelector<HTMLTextAreaElement>('[data-personalize-prompt]')!.value=buildOriginalGuideReadingPrompt({title:row.question,introduction:g.introduction,sections:g.sections,conclusion:g.conclusion,...(row.visibility==='public'?{url:`${import.meta.env.PUBLIC_SUPABASE_URL}/functions/v1/reading-guides/${encodeURIComponent(row.id)}.md`}:{})});
+ root.querySelector<HTMLTextAreaElement>('[data-personalize-prompt]')!.value=buildOriginalGuideReadingPrompt({title:row.question,introduction:g.introduction,sections:g.sections,conclusion:g.conclusion,...(row.visibility==='public'&&!row.is_private?{url:`${import.meta.env.PUBLIC_SUPABASE_URL}/functions/v1/reading-guides/${encodeURIComponent(row.id)}.md`}:{})});
  const faqs=root.querySelectorAll('[data-guide-faq] details');faqs[0].querySelector('h3')!.textContent=row.question;faqs[0].querySelector('p')!.textContent=g.conclusion;faqs[1].querySelector('p')!.textContent=`This guide draws on original selections from ${books.map((book:GuideBook)=>`${book.title}${book.author ? ` by ${book.author}` : ''}`).join('; ')}. Each excerpt has a source card with its book and original text reference. Open the book from that card to explore further.`;
  const feedback=root.querySelector<HTMLElement>('[data-content-feedback]')!;feedback.dataset.contentSlug=row.id;
  // Related by an actual shared source, not a title or keyword resemblance.
@@ -276,7 +278,7 @@ export async function mountReader(){
   const target=root.querySelector('[data-related-list]')!;for(const item of related){const card=el('article','','awb-card-link p-4'),link=el('a'),heading=el('h3',item.question,'mt-4 font-serif text-xl leading-snug');link.href=`/guides/read/?id=${encodeURIComponent(item.id)}`;link.append(guideCover(item.question,item.cover),heading);card.append(link,el('p',item.proposal?.connection||'Another question explored through these sources.','mt-3 text-sm leading-relaxed text-soft'));target.append(card);}(root.querySelector('[data-related-guides]') as HTMLElement).hidden=false;addNav('Related guides','related-guides');
  }).catch(()=>{});
  let coverTimer:ReturnType<typeof setTimeout>,closed=false;
- const refreshCover=async()=>{try{const response=await guideCall({action:row.visibility==='public'?'get':'cover',id});const cover=response.cover||response.guide.cover;if(closed)return;root.querySelector('[data-reader-cover] > div')?.replaceWith(guideCover(row.question,cover));if(cover.status==='pending')coverTimer=setTimeout(refreshCover,10000);}catch{if(!closed)coverTimer=setTimeout(refreshCover,15000);}};
+ const refreshCover=async()=>{try{const response=await guideCall({action:row.visibility==='public'&&!row.is_private?'get':'cover',id});const cover=response.cover||response.guide.cover;if(closed)return;root.querySelector('[data-reader-cover] > div')?.replaceWith(guideCover(row.question,cover));if(cover.status==='pending')coverTimer=setTimeout(refreshCover,10000);}catch{if(!closed)coverTimer=setTimeout(refreshCover,15000);}};
  if(row.cover?.status==='pending')coverTimer=setTimeout(refreshCover,5000);
  window.addEventListener('pagehide',()=>{closed=true;clearTimeout(coverTimer);});
  const observed:HTMLElement[]=[];
