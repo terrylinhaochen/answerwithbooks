@@ -14,5 +14,9 @@ verify_jwt = false
 verify_jwt = false
 
 # Only the total of ready public books is exposed, without account or source data.
+# The public catalog and book pages are read without signing in; the function checks auth per action.
+[functions.shared-library]
+verify_jwt = false
+
 [functions.library-count]
 verify_jwt = false
