@@ -9,6 +9,15 @@ export async function embedTexts(texts,getEnv,fetchImpl=fetch){
  if(!Array.isArray(vectors)||vectors.length!==texts.length||vectors.some(v=>v.length!==512||v.some(n=>!Number.isFinite(n))))throw Error('Invalid retrieval vectors.');
  return {vectors,tokens:value.usage?.total_tokens??null};
 }
+const indexSchema={type:'object',additionalProperties:false,required:['indices'],properties:{indices:{type:'array',items:{type:'integer'}}}};
+// Keep the model's valid, distinct record numbers (up to 12) and drop invented or repeated ones.
+// An answer with entries but none valid is malformed; an empty list means no plausible match.
+export function shortlistIndices(result,records,message){
+ const raw=Array.isArray(result?.indices)?result.indices:null;if(!raw)throw Error(message);
+ const kept=[...new Set(raw.filter(i=>Number.isInteger(i)&&records[i]))].slice(0,12);
+ if(raw.length&&!kept.length)throw Error(message);
+ return kept;
+}
 export async function searchGuideCandidates(db,job,model,getEnv,bookIds=null){
  const coverage=checked(await db.rpc('guide_index_coverage',{p_user:job.user_id,p_books:bookIds,p_public:job.visibility==='public'}));
  if(coverage?.failed)throw Error('A book search index needs repair. Please try again later.');
@@ -19,9 +28,8 @@ export async function searchGuideCandidates(db,job,model,getEnv,bookIds=null){
  finally{await meter.settle(op,'text-embedding-3-small',metric);}
  const rows=checked(await db.rpc('search_guide_index',{p_user:job.user_id,p_query:job.question,p_embedding:JSON.stringify(embedded.vectors[0]),p_books:bookIds,p_public:job.visibility==='public'}));
  if(!rows.length)return [];
- const result=await model(readingInstructions+' Shortlist promising passages to inspect in their ORIGINAL context. These searchable records are navigation only. Keep uncertain but potentially illuminating parallels, contrasts and reflective experiences. Return {indices:number[]} with up to 12 zero-based indices, preserving diverse perspectives. No fixed similarity threshold and no requirement for actionable advice. Return [] when none has a plausible connection.',JSON.stringify({question:job.question,records:rows.map((r,index)=>({index,bookId:r.book_id,kind:r.kind,account:r.body.slice(0,r.kind==='original'?900:1200)}))}),{name:'passage_shortlist',maxOutputTokens:1200});
- if(!Array.isArray(result.indices)||result.indices.length>12||new Set(result.indices).size!==result.indices.length||result.indices.some(i=>!Number.isInteger(i)||!rows[i]))throw Error('Invalid retrieval shortlist.');
- let selected=result.indices.map(i=>rows[i]);
+ const result=await model(readingInstructions+' Shortlist promising passages to inspect in their ORIGINAL context. These searchable records are navigation only. Keep uncertain but potentially illuminating parallels, contrasts and reflective experiences. Return {indices:number[]} with up to 12 distinct values taken from the records\' index fields, preserving diverse perspectives. No fixed similarity threshold and no requirement for actionable advice. Return {indices:[]} when none has a plausible connection.',JSON.stringify({question:job.question,records:rows.map((r,index)=>({index,bookId:r.book_id,kind:r.kind,account:r.body.slice(0,r.kind==='original'?900:1200)}))}),{name:'passage_shortlist',maxOutputTokens:1200,schema:indexSchema});
+ let selected=shortlistIndices(result,rows,'Invalid retrieval shortlist.').map(i=>rows[i]);
  const parents=selected.filter(r=>r.kind==='chapter'||r.kind==='section');
  if(parents.length){
   const expanded=selected.filter(r=>r.kind==='scene'||r.kind==='original');
@@ -31,9 +39,8 @@ export async function searchGuideCandidates(db,job,model,getEnv,bookIds=null){
   }
   const unique=expanded.filter((r,i,a)=>!a.slice(0,i).some(x=>x.id===r.id));
   if(!unique.length)return [];
-  const narrowed=await model(readingInstructions+' Narrow these source-window and scene records to up to 12 originals worth inspecting. Return {indices:number[]}. Retain distinct direct and indirect connections; omit weak matches. Chapter summaries only located these candidates, and are not themselves original passages.',JSON.stringify({question:job.question,records:unique.map((r,index)=>({index,account:r.body.slice(0,1000)}))}),{name:'chapter_to_passages',maxOutputTokens:1200});
-  if(!Array.isArray(narrowed.indices)||narrowed.indices.length>12||new Set(narrowed.indices).size!==narrowed.indices.length||narrowed.indices.some(i=>!Number.isInteger(i)||!unique[i]))throw Error('Invalid chapter passage shortlist.');
-  selected=narrowed.indices.map(i=>unique[i]);
+  const narrowed=await model(readingInstructions+' Narrow these source-window and scene records to up to 12 originals worth inspecting. Return {indices:number[]} with distinct values taken from the records\' index fields. Retain distinct direct and indirect connections; omit weak matches. Chapter summaries only located these candidates, and are not themselves original passages.',JSON.stringify({question:job.question,records:unique.map((r,index)=>({index,account:r.body.slice(0,1000)}))}),{name:'chapter_to_passages',maxOutputTokens:1200,schema:indexSchema});
+  selected=shortlistIndices(narrowed,unique,'Invalid chapter passage shortlist.').map(i=>unique[i]);
  }
  return selected.map(r=>({bookId:r.book_id,startLine:r.start_line,endLine:r.end_line,recordKind:r.kind}));
 }

@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {PGlite} from '@electric-sql/pglite';
 import {priceUsage,guideMeter} from '../supabase/functions/_shared/guide-meter.mjs';
-import {candidateWindow,compactBookContext,embedTexts,searchGuideCandidates} from '../supabase/functions/_shared/guide-retrieval.mjs';
+import {candidateWindow,compactBookContext,embedTexts,searchGuideCandidates,shortlistIndices} from '../supabase/functions/_shared/guide-retrieval.mjs';
 import {chapterHeadings,buildReadingIndex} from '../supabase/functions/_shared/reading-index.mjs';
 const guide='00000000-0000-4000-8000-000000000001';
 test('atomic reservations retain unknown charges and protect cover budget',async t=>{
@@ -44,4 +44,13 @@ test('chapter boundaries must match actual body headings and pass review',async(
  const headings=chapterHeadings(source);assert.equal(headings.length,2);
  const job={id:'b',title:'Life',source_sha:'sha',source_text:source};const map={sections:[]};
  await assert.rejects(buildReadingIndex(job,map,async()=>({chapters:[{startLine:99,endLine:100,title:'Invented',summary:'Invalid'}]}),async()=> 'sha'),/Ungrounded/);
+});
+test('shortlist keeps valid record numbers from a near-miss answer instead of failing the guide',()=>{
+ const records=['a','b','c'];const m='Invalid retrieval shortlist.';
+ assert.deepEqual(shortlistIndices({indices:[2,0,2,7,-1,1.5]},records,m),[2,0],'duplicates, invented and non-integer numbers are dropped');
+ assert.deepEqual(shortlistIndices({indices:[]},records,m),[],'an empty list means no match');
+ assert.deepEqual(shortlistIndices({indices:Array.from({length:20},(_,i)=>i%3)},records,m),[0,1,2]);
+ assert.equal(shortlistIndices({indices:[...Array(15).keys()]},[...Array(15).keys()],m).length,12,'at most 12');
+ assert.throws(()=>shortlistIndices({indices:[9]},records,m),/Invalid retrieval shortlist/,'only invented numbers is malformed');
+ assert.throws(()=>shortlistIndices([],records,m),/Invalid retrieval shortlist/,'a bare array is malformed');
 });
