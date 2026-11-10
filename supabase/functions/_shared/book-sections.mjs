@@ -4,6 +4,7 @@ export function splitSource(text, headings = []) {
  const lines = text.replace(/\r\n?/g,'\n').split('\n').flatMap(line => line.match(/.{1,1000}/gu) || ['']);
  const boundaries=new Map();
  if(!Array.isArray(headings)||headings.length>limits.maxSourceHeadings)throw new Error('Invalid source structure.');
+ headings=bodyHeadings(headings,lines);
  for(const heading of headings)if(Number.isInteger(heading.line)&&heading.line>=1&&heading.line<=lines.length&&typeof heading.title==='string'&&heading.title===lines[heading.line-1].trim()&&heading.title.length<=200)boundaries.set(heading.line,{title:typeof heading.displayTitle==='string'?heading.displayTitle.slice(0,200):heading.title,method:heading.method==='inferred-roman-title'?heading.method:'upstream-detected'});
  const chapterMap=[...boundaries].sort(([a],[b])=>a-b).map(([start,value],i,all)=>({id:`chapter-${i+1}`,title:value.title,startLine:start,endLine:all[i+1]?.[0]-1||lines.length,method:value.method,verified:false}));
  const minHeadingSection=text.length>300000?Math.max(12000,Math.ceil(text.length/(limits.maxProcessingSections*.8))):0;
@@ -29,6 +30,31 @@ export function splitSource(text, headings = []) {
  }
  return {text:lines.join('\n'),chunks,lineCount:lines.length,chapterMap};
 }
+// A contents page lists chapters as "I: Laying Plans    1" on consecutive lines.
+// Headings found there would make each chapter one line long and leave the body
+// to size-only sections. Move each entry to its opening in the body: a line equal
+// to the entry without its page number, or to its numeral alone ("I", "CHAPTER 3").
+const contentsEntry=/^(.*?\S)(?:\s{2,}|\s*\.{3,}\s*)(\d{1,4})$/;
+const flat=value=>value.replace(/\s+/g,' ').trim().toLowerCase();
+function bodyHeadings(headings,lines){
+ const valid=headings.filter(h=>h&&Number.isInteger(h.line)&&h.line>=1&&h.line<=lines.length&&typeof h.title==='string').sort((a,b)=>a.line-b.line);
+ const listed=new Set();
+ for(let i=0;i<valid.length;){
+  let j=i;while(j<valid.length&&contentsEntry.test(valid[j].title.trim())&&(j===i||valid[j].line-valid[j-1].line<=3))j++;
+  if(j-i>=3)for(let k=i;k<j;k++)listed.add(valid[k]);
+  i=Math.max(j,i+1);
+ }
+ if(!listed.size)return headings;
+ const moved=[];let cursor=Math.max(...[...listed].map(h=>h.line));
+ for(const heading of [...listed].sort((a,b)=>a.line-b.line)){
+  const label=heading.title.trim().match(contentsEntry)[1];
+  const numeral=label.match(/^((?:chapter|part|book)\s+)?([ivxlcdm]+|\d+)\b/i);
+  const names=new Set([flat(label),...(numeral?[flat(numeral[0]),flat(numeral[0])+'.',flat(numeral[0])+':']:[])]);
+  for(let n=cursor;n<lines.length;n++)if(names.has(flat(lines[n]))){moved.push({...heading,line:n+1,title:lines[n].trim(),displayTitle:label.replace(/\s+/g,' ')});cursor=n+1;break;}
+ }
+ return [...headings.filter(h=>!listed.has(h)),...moved];
+}
+
 export function validateSection(data,chunk,index) {
  const nonempty=v=>typeof v==='string'&&v.trim().length>0;
  if(!data||!nonempty(data.summary)||!Array.isArray(data.ideas)||data.ideas.length>8) throw new Error('The model returned incomplete section notes. Retry this section.');

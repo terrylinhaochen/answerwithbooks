@@ -91,3 +91,19 @@ test('failed claims survive as targeted repair feedback without accepting the dr
  },undefined,failure.feedback);
  assert.equal(repaired.note.sourceReview.claimCount,2);
 });
+
+test('contents-page headings move to the chapter openings in the body',()=>{
+ const body=n=>Array.from({length:4},(_,i)=>`Chapter ${n} paragraph ${i} `+'text '.repeat(40)).join('\n');
+ const lines=['Sun Tzu on the Art of War','CONTENTS','I:     Laying Plans             1','','II:    Waging War               5','','III:   Attack by Stratagem      8','','              I',body(1),'              II',body(2),'                III',body(3)];
+ const text=lines.join('\n');const n=text.split('\n');
+ const headings=[3,5,7].map(line=>({line,title:n[line-1].trim()}));
+ const result=splitSource(text,headings);
+ const starts=result.chapterMap.map(ch=>[ch.startLine,ch.title]);
+ const at=word=>n.findIndex((l,i)=>i>=8&&l.trim()===word)+1;
+ assert.deepEqual(starts,[[at('I'),'I: Laying Plans'],[at('II'),'II: Waging War'],[at('III'),'III: Attack by Stratagem']]);
+ assert.equal(result.chunks.length,3);assert.equal(result.chunks[0].start,1,'the preface and contents stay with chapter I');
+ assert.deepEqual(result.chunks.map(c=>c.title),['I: Laying Plans','II: Waging War','III: Attack by Stratagem']);
+ // Two consecutive headings that happen to end in numbers are not a contents page.
+ const plain='Intro\nPart A    1\nalpha\nPart B    2\nbeta';
+ assert.deepEqual(splitSource(plain,[{line:2,title:'Part A    1'},{line:4,title:'Part B    2'}]).chapterMap.map(c=>c.startLine),[2,4]);
+});
