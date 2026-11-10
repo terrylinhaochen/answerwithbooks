@@ -70,3 +70,21 @@
 .guide-input-label::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
 .guide-input-help{font-size:13px;line-height:1.5;color:var(--color-soft);margin-top:10px}
 .guide-input-action{display:inline-block;font-size:13px;text-decoration:underline;text-underline-offset:3px;margin-top:12px}
+/* Your Guides card menu */
+.guide-saved-card{position:relative}
+.guide-card-menu{position:absolute;top:24px;right:24px;z-index:2}
+.guide-card-menu-button{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--color-card);border:1px solid var(--color-line);color:var(--color-ink);box-shadow:0 1px 3px #0000001a;fill:currentColor}
+.guide-card-menu-button:hover,.guide-card-menu-button[aria-expanded="true"]{background:var(--color-wash)}
+.guide-card-menu-button:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px}
+.guide-card-menu-list{position:absolute;top:40px;right:0;min-width:200px;padding:6px;border:1px solid var(--color-line);border-radius:12px;background:var(--color-card);box-shadow:0 10px 30px #17211826}
+.guide-card-menu-list[hidden]{display:none}
+.guide-card-menu-list button{display:block;width:100%;text-align:left;padding:9px 12px;border-radius:8px;font-size:14px}
+.guide-card-menu-list button:hover,.guide-card-menu-list button:focus-visible{background:var(--color-wash);outline:none}
+.guide-card-menu-list button.is-danger{color:#8a3f20;border-top:1px solid var(--color-line);border-radius:0 0 8px 8px;margin-top:4px}
+.guide-card-error{font-size:12px;color:#8a3f20;margin-top:12px}
+.guide-title-dialog{margin:auto;width:min(520px,calc(100vw - 24px));border:1px solid var(--color-line);border-radius:20px;padding:28px;background:var(--color-card);color:var(--color-ink)}
+.guide-title-dialog::backdrop{background:#17211888;backdrop-filter:blur(4px)}
+.guide-title-dialog textarea{resize:vertical;font-size:17px;line-height:1.5}
+.guide-title-dialog [data-guide-title-status]:empty{display:none}
+.guide-title-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+@media(max-width:600px){.guide-title-dialog{padding:20px}.guide-card-menu{top:22px;right:22px}}

@@ -74,7 +74,7 @@ Deno.serve(async req=>{
   }
   if(input.action==='list'){
    const [guideResult,stateResult]=await Promise.all([
-    db.from('reading_guides').select('id,question,status,length,book_ids,proposal,error,position,completed,created_at,cover_status,cover_path,cover_design,is_private').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100),
+    db.from('reading_guides').select('id,question,status,length,book_ids,proposal,error,position,completed,created_at,cover_status,cover_path,cover_design,is_private,visibility').eq('user_id',user.id).order('created_at',{ascending:false}).limit(100),
     db.from('reader_guide_state').select('guide_id,hidden,position,completed').eq('user_id',user.id)
    ]);
    const states=new Map(checked(stateResult).map((state:any)=>[state.guide_id,state]));
@@ -135,6 +135,15 @@ Deno.serve(async req=>{
    if(!saved){await db.storage.from('private-books').remove([path]);return reply({error:'A cover is already being processed. Try again shortly.'},409);}
    if(row.cover_path?.startsWith(`${user.id}/reading-guides/${row.id}/`))await db.storage.from('private-books').remove([row.cover_path]);
    return reply({saved:true});
+  }
+  if(input.action==='update'){
+   // Owner-only edits from the guide menu. Shared fallbacks above never reach here.
+   const patch:Record<string,unknown>={};
+   if(input.question!==undefined){if(typeof input.question!=='string'||input.question.trim().length<3||input.question.length>2000)return reply({error:'Enter a title between 3 and 2,000 characters.'},400);patch.question=input.question.trim();}
+   if(input.private!==undefined){if(row.visibility!=='public')return reply({error:'Guides from your saved books are always private.'},409);patch.is_private=input.private;}
+   if(!Object.keys(patch).length)return reply({error:'Nothing to update.'},400);
+   checked(await db.from('reading_guides').update({...patch,updated_at:new Date().toISOString()}).eq('id',row.id).eq('user_id',user.id));
+   return reply({saved:true,question:patch.question??row.question,is_private:patch.is_private??row.is_private});
   }
   if(input.action==='get'){
    const {progress,lease_token,lease_until,...safe}=row;

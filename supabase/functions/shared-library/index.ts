@@ -5,14 +5,20 @@ const db=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVI
 const check=(r:any)=>{if(r.error)throw Error('Library unavailable');return r.data;};
 const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbooks.com','http://localhost:4321','http://127.0.0.1:4321']);
 const uuid=(v:unknown)=>typeof v==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(v);
-async function present(book:any){
- let coverUrl=null;if(book.cover_status==='ready'&&book.cover_path){coverUrl=check(await db.storage.from('private-books').createSignedUrl(book.cover_path,3600)).signedUrl;}
+async function present(book:any,signed?:Map<string,string|null>,compact=false){
+ let coverUrl=null;if(book.cover_status==='ready'&&book.cover_path){coverUrl=signed?signed.get(book.cover_path)??null:check(await db.storage.from('private-books').createSignedUrl(book.cover_path,3600)).signedUrl;}
  let map:any={};try{map=JSON.parse(book.artifacts?.['reading/map.json']||'{}');}catch{}
  return {id:book.id,title:book.title,author:book.author,status:book.status,run_state:book.run_state,coverUrl,coverColor:coverPalette(book).bg,
  stage:book.status==='ready'?'ready':book.run_state==='failed'?'failed':book.source_import?.state!=='complete'?'extracting':'reading',
- orientation:map.orientation||'',summary:map.summary||'',questions:map.questions||[],
- chapters:(map.sections||[]).map((s:any)=>({title:s.title,sourceRefs:s.sourceRefs})),
+ orientation:map.orientation||'',questions:map.questions||[],
+ ...(compact?{}:{summary:map.summary||'',chapters:(map.sections||[]).map((s:any)=>({title:s.title,sourceRefs:s.sourceRefs}))}),
  progress:{completed:book.cursor||0,total:book.total_sections||0}};
+}
+// One storage round trip for every cover in a list instead of one per book.
+async function presentAll(rows:any[],compact=false){
+ const paths=rows.filter(b=>b.cover_status==='ready'&&b.cover_path).map(b=>b.cover_path),signed=new Map<string,string|null>();
+ if(paths.length)for(const item of check(await db.storage.from('private-books').createSignedUrls(paths,3600)))if(item.path)signed.set(item.path,item.signedUrl||null);
+ return Promise.all(rows.map(row=>present(row,signed,compact)));
 }
 const fields='id,title,author,status,run_state,cover_status,cover_path,artifacts,source_import,cursor,total_sections,duplicate_of';
 Deno.serve(async req=>{
@@ -25,14 +31,21 @@ Deno.serve(async req=>{
  if(input.action==='list'){
   const offset=Number.isSafeInteger(input.offset)&&input.offset>=0?input.offset:0;
   const rows=check(await db.from('book_processing_jobs').select(fields).eq('visibility','public').eq('status','ready').is('duplicate_of',null).order('created_at',{ascending:false}).range(offset,offset+49));
-  return reply({books:await Promise.all(rows.map(present)),nextOffset:rows.length===50?offset+50:null});
+  return reply({books:await presentAll(rows,input.compact===true),nextOffset:rows.length===50?offset+50:null});
  }
  const user=await bookUser(db,bearer);
  if(input.action==='mine'){
   if(!user)return reply({error:'Sign in to view your books.'},401);
   const ids=check(await db.from('reader_books').select('book_id').eq('user_id',user.id));
   if(!ids.length)return reply({books:[]});
-  const rows=check(await db.from('book_processing_jobs').select(fields).eq('visibility','public').in('id',ids.map((r:any)=>r.book_id)).order('created_at',{ascending:false}));return reply({books:await Promise.all(rows.map(present))});
+  const rows=check(await db.from('book_processing_jobs').select(fields).eq('visibility','public').in('id',ids.map((r:any)=>r.book_id)).order('created_at',{ascending:false}));return reply({books:await presentAll(rows,input.compact===true)});
+ }
+ if(input.action==='uploads'){
+  // The uploader's own books that are not in the public catalog yet.
+  if(!user)return reply({error:'Sign in to view your uploads.'},401);
+  const since=new Date(Date.now()-30*24*60*60*1000).toISOString();
+  const rows=check(await db.from('book_processing_jobs').select(fields).eq('user_id',user.id).eq('visibility','public').neq('status','ready').is('duplicate_of',null).is('archived_at',null).eq('deletion_pending',false).gte('created_at',since).order('created_at',{ascending:false}).limit(10));
+  return reply({books:await presentAll(rows,true)});
  }
  if(!uuid(input.id))return reply({error:'Invalid book'},400);
  let row=check(await db.from('book_processing_jobs').select(fields).eq('visibility','public').eq('id',input.id).maybeSingle());

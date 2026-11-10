@@ -28,3 +28,14 @@
 .library-copy h3 { font-family:var(--font-serif); overflow-wrap:anywhere; }
 .library-description { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
 @media(prefers-reduced-motion:reduce){.library-jacket{transition:none}}
+/* An upload that is still processing: same shelf card, visibly in progress. */
+.library-book-processing .library-cover { background: repeating-linear-gradient(-45deg, var(--book-well) 0 14px, color-mix(in srgb, var(--book-well) 82%, #fff) 14px 28px); background-size: 40px 40px; animation: library-processing 1.6s linear infinite; }
+.library-book-processing .library-jacket { opacity: .78; }
+.library-book-processing .room-eyebrow { color: #8a3f20; }
+.library-book-processing .library-copy > p.text-soft { display: flex; align-items: center; gap: 8px; }
+.library-book-processing .library-copy > p.text-soft::before { content: ""; flex-shrink: 0; width: 12px; height: 12px; border: 2px solid var(--color-line); border-top-color: var(--color-ink); border-radius: 50%; animation: library-spin 1s linear infinite; }
+.library-book-processing[data-stage="failed"] .library-cover { animation: none; }
+.library-book-processing[data-stage="failed"] .library-copy > p.text-soft::before { display: none; }
+@keyframes library-processing { to { background-position: 40px 0; } }
+@keyframes library-spin { to { transform: rotate(360deg); } }
+@media(prefers-reduced-motion:reduce){.library-book-processing .library-cover,.library-book-processing .library-copy > p.text-soft::before{animation:none}}

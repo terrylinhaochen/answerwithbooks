@@ -124,3 +124,16 @@ hidden.book_ids=[];assert.equal((await call({action:'get',id:hidden.id})).status
 assert.equal((await (await call({action:'list'})).json()).guides.find((g:any)=>g.id===hidden.id).is_private,true);
 assert.equal((await call({action:'delete',id:hidden.id})).status,200);assert.ok(!rows.includes(hidden),'deleting a private guide removes it rather than hiding it');
 console.log('PASS private guides: public by default, opt-in privacy keeps source scope, hidden from other readers and the catalog, owner-only access and deletion.');
+// Guide menu edits are owner-only and respect source scope.
+const editable=rows.find(r=>r.request_key===createKey);
+assert.equal((await call({action:'update',id:editable.id,question:'A clearer title'},'other')).status,404,'others cannot edit');
+assert.equal((await call({action:'update',id:editable.id,question:'no'})).status,400);
+assert.equal((await call({action:'update',id:editable.id})).status,400,'an empty update is rejected');
+assert.equal((await call({action:'update',id:editable.id,private:'yes'})).status,400);
+const renamed=await (await call({action:'update',id:editable.id,question:'  A clearer title  ',private:true})).json();
+assert.deepEqual(renamed,{saved:true,question:'A clearer title',is_private:true});assert.equal(editable.question,'A clearer title');assert.equal(editable.is_private,true);
+assert.equal((await call({action:'update',id:editable.id,private:false})).status,200);assert.equal(editable.is_private,false);
+const savedBooksGuide={...editable,id:crypto.randomUUID(),request_key:crypto.randomUUID(),visibility:'private',is_private:false};rows.push(savedBooksGuide);
+assert.equal((await call({action:'update',id:savedBooksGuide.id,private:false})).status,409,'saved-book guides stay private');
+assert.equal((await call({action:'update',id:savedBooksGuide.id,question:'Renamed saved guide'})).status,200);
+console.log('PASS guide menu updates: owner-only title and privacy edits, validation, saved-book guides cannot be made public.');

@@ -116,6 +116,37 @@ export async function mountGuides(){
   root.querySelector('[data-guide-step="finding"]')!.textContent=bookMode==='manual'?'Choose your books':'Find books for your question';
   root.querySelectorAll<HTMLElement>('[data-guide-step]').forEach(step=>{const current=stage==='composing'?'composing':'finding';step.dataset.state=step.dataset.guideStep===current?'active':stage==='composing'?'done':'waiting';if(step.dataset.state==='active')step.setAttribute('aria-current','step');else step.removeAttribute('aria-current');});
  };
+ // Your Guides card menu: edit title, change privacy, remove.
+ const titleDialog=root.querySelector<HTMLDialogElement>('[data-guide-title-dialog]'),titleInput=titleDialog?.querySelector<HTMLTextAreaElement>('textarea'),titleStatus=titleDialog?.querySelector<HTMLElement>('[data-guide-title-status]');let editing:any=null;
+ const closeMenus=(except?:Element)=>root.querySelectorAll<HTMLElement>('.guide-card-menu-list').forEach(menu=>{if(menu===except)return;menu.hidden=true;menu.previousElementSibling?.setAttribute('aria-expanded','false');});
+ document.addEventListener('click',event=>{if(!(event.target as Element).closest?.('.guide-card-menu'))closeMenus();});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenus();});
+ titleDialog?.querySelector('[data-guide-title-cancel]')?.addEventListener('click',()=>titleDialog.close());
+ titleDialog?.querySelector('form')?.addEventListener('submit',async event=>{
+  event.preventDefault();if(!editing||!titleInput)return;const save=titleDialog.querySelector<HTMLButtonElement>('[type=submit]')!;const value=titleInput.value.trim();
+  if(value.length<3){titleStatus!.textContent='Enter at least 3 characters.';return;}
+  if(value===editing.question){titleDialog.close();return;}
+  save.disabled=true;titleStatus!.textContent='Saving…';
+  try{await guideCall({action:'update',id:editing.id,question:value});titleDialog.close();stateChanged();await list();}
+  catch(error){titleStatus!.textContent=error instanceof Error?error.message:'Could not save. Please try again.';}
+  finally{save.disabled=false;}
+ });
+ const openTitleEditor=(guide:any)=>{if(!titleDialog||!titleInput)return;editing=guide;titleInput.value=guide.question;titleStatus!.textContent='';titleDialog.showModal();titleInput.focus();titleInput.select();};
+ const guideMenu=(guide:any,row:HTMLElement)=>{
+  const wrap=el('div','','guide-card-menu'),toggle=el('button','','guide-card-menu-button') as HTMLButtonElement,menu=el('div','','guide-card-menu-list');
+  toggle.type='button';toggle.innerHTML='<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="3" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="8" cy="13" r="1.4"/></svg>';
+  toggle.setAttribute('aria-label',`Options for ${guide.question}`);toggle.setAttribute('aria-haspopup','menu');toggle.setAttribute('aria-expanded','false');
+  menu.setAttribute('role','menu');menu.hidden=true;
+  const fail=(error:unknown)=>{row.querySelector('.guide-card-error')?.remove();row.append(el('p',error instanceof Error?error.message:'Could not update this guide.','guide-card-error'));};
+  const action=(label:string,run:()=>unknown,className='')=>{const button=el('button',label,className) as HTMLButtonElement;button.type='button';button.setAttribute('role','menuitem');button.addEventListener('click',async()=>{closeMenus();try{await run();}catch(error){fail(error);}});menu.append(button);};
+  action('Edit title',()=>openTitleEditor(guide));
+  // Guides built from private saved books can never be public.
+  if(guide.visibility!=='private')action(guide.is_private?'Make public':'Make private',async()=>{await guideCall({action:'update',id:guide.id,private:!guide.is_private});stateChanged();await list();});
+  action(guide.status==='ready'&&!guide.is_private?'Remove from your guides':'Delete',async()=>{await guideCall({action:'delete',id:guide.id});if(active===guide.id)reset();stateChanged();await list();},'is-danger');
+  toggle.addEventListener('click',event=>{event.stopPropagation();const opening=menu.hidden;closeMenus(menu);menu.hidden=!opening;toggle.setAttribute('aria-expanded',String(opening));if(opening)menu.querySelector<HTMLButtonElement>('button')?.focus();});
+  menu.addEventListener('keydown',event=>{const items=[...menu.querySelectorAll<HTMLButtonElement>('button')],at=items.indexOf(document.activeElement as HTMLButtonElement);if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();items[(at+(event.key==='ArrowDown'?1:items.length-1))%items.length]?.focus();}if(event.key==='Escape'){closeMenus();toggle.focus();}});
+  wrap.append(toggle,menu);return wrap;
+ };
  const list=async()=>{
   clearTimeout(listTimer);if(!owner||modalOnly)return;const savedLink=root.querySelector<HTMLElement>('[data-open-saved-guides]');if(savedLink)savedLink.hidden=false;const currentOwner=owner,request=++listRequest;
   const shelf=root.querySelector<HTMLElement>('[data-your-guides]')!,target=root.querySelector('[data-saved-guides]')!;shelf.hidden=false;shelf.setAttribute('aria-busy','true');
@@ -137,7 +168,7 @@ export async function mountGuides(){
   for(const guide of guides){const needsInput=guide.status==='awaiting_confirmation',row=el('article','','guide-saved-card'),link=el('a');row.dataset.guideState=guide.status;link.href=guide.status==='ready'?`/guides/read/?id=${guide.id}`:`/guides/?id=${guide.id}`;const cover=guideCover(guide.question,guide.cover);if(guide.status!=='ready'&&!guide.cover?.src)cover.querySelector('small')!.textContent=needsInput?'Your books are ready to review':guide.status==='failed'?'Your question and books are saved':guide.status==='gap'?'Try different books':'Finding your reading';link.append(cover,el('h3',guide.question));
    const label=guide.completed?'Finished':({ready:'Continue reading',awaiting_confirmation:'Requires input',scanning:'Finding passages',proposing:'Connecting the passages',composing:'Creating your guide',gap:'No suitable passages found',failed:'Could not complete this guide'} as Record<string,string>)[guide.status]||guide.status;link.append(el('small',guide.is_private?`${label} · Private`:label,needsInput?'guide-input-label':''));if(needsInput)link.append(el('p','Confirm books and reading length to continue.','guide-input-help'),el('span','Review books →','guide-input-action'));
    if(guide.status!=='ready')link.addEventListener('click',event=>{event.preventDefault();reset();active=guide.id;question.value=guide.question;open();updateUrl();void poll(active,epoch);});
-   const remove=el('button',guide.status==='ready'&&!guide.is_private?'Remove from your guides':'Delete');remove.type='button';remove.addEventListener('click',async()=>{remove.disabled=true;try{await guideCall({action:'delete',id:guide.id});if(active===guide.id)reset();stateChanged();await list();}catch(e){open();showError(e);remove.disabled=false;}});row.append(link,remove);target.append(row);
+   row.append(link,guideMenu(guide,row));target.append(row);
   }
   if(scrollToSaved){scrollToSaved=false;shelf.scrollIntoView({block:'start'});}
   if(guides.some((g:any)=>g.cover?.status==='pending'||['scanning','proposing','composing'].includes(g.status)))listTimer=setTimeout(()=>list().catch(showError),10000);

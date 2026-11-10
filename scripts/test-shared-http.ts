@@ -16,6 +16,11 @@ globalThis.fetch=async(input:any,init?:RequestInit)=>{const req=new Request(inpu
    assert.match(req.headers.get('prefer')||'',/count=exact/);
    return new Response(null,{status:countFailed?500:200,headers:{'Content-Range':`*/${catalogCount}`}});
   }
+  if(url.searchParams.get('status')==='neq.ready'){
+   // The uploader's own in-progress books only.
+   assert.equal(url.searchParams.get('user_id'),`eq.${owner}`);assert.equal(url.searchParams.get('deletion_pending'),'eq.false');assert.equal(url.searchParams.get('archived_at'),'is.null');assert.equal(url.searchParams.get('duplicate_of'),'is.null');assert.match(url.searchParams.get('created_at')||'',/^gte\./);
+   return json([{...book,id:'00000000-0000-4000-8000-000000000004',status:'processing',run_state:'running',cursor:2,total_sections:5}]);
+  }
   if(!url.searchParams.has('id')){assert.equal(url.searchParams.get('status'),'eq.ready');assert.equal(url.searchParams.get('duplicate_of'),'is.null');}
   if(url.searchParams.get('id')==='eq.00000000-0000-4000-8000-000000000003')return json({code:'PGRST116',details:'The result contains 0 rows'},406);
   return single?json(book):json([book]);
@@ -30,6 +35,11 @@ assert.equal((await call({action:'get',id:'00000000-0000-4000-8000-000000000003'
 assert.equal((await call({action:'source',id})).status,401);assert.equal((await call({action:'source',id},'subscriber')).status,402);
 active=true;const text=await (await call({action:'source',id,startLine:5,endLine:7},'subscriber')).json();assert.equal(text.text,'Original source line.\nOriginal source line.\nOriginal source line.');assert.equal(text.startLine,5);assert.equal(text.endLine,7);
 assert.equal((await call({action:'source',id,startLine:1,endLine:501},'subscriber')).status,400);assert.equal((await call({action:'get',id},'subscriber','https://evil.invalid')).status,403);
+const full=(await (await call({action:'list'})).json()).books[0],compact=(await (await call({action:'list',compact:true})).json()).books[0];
+assert.ok('summary' in full&&'chapters' in full);assert.ok(!('summary' in compact)&&!('chapters' in compact),'compact catalog omits long text');assert.equal(compact.orientation,full.orientation);assert.deepEqual(compact.questions,full.questions);
+assert.equal((await call({action:'uploads'})).status,401,'uploads need sign-in');
+const uploads=(await (await call({action:'uploads'},'subscriber')).json()).books;assert.equal(uploads.length,1);assert.equal(uploads[0].stage,'reading');assert.deepEqual(uploads[0].progress,{completed:2,total:5});
+console.log('PASS compact catalog and owner-only processing uploads.');
 await import('../supabase/functions/library-count/index.ts');
 for(const count of [23,51,0]){catalogCount=count;const response=await call({});assert.equal(response.status,200);assert.deepEqual(await response.json(),{count});}
 countFailed=true;assert.equal((await call({})).status,503);countFailed=false;
