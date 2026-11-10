@@ -231,3 +231,27 @@ test('a proofreading validation retry retains the selected original ranges',asyn
  await drainGuide(db,async()=>{calls++;return {edits:null,issues:[]};},hash,()=>{});
  assert.equal(calls,1);assert.deepEqual(saved.progress.passages,passages);assert.equal(saved.progress.proofread,undefined);assert.equal(saved.status,'composing');
 });
+test('a rejected draft names its weak passages; repair keeps approved ones and replaces only within the rules',async()=>{
+ const {reviewReading}=await import('../supabase/functions/_shared/reading-guides.mjs');
+ const three={...book,source_text:'Deirdre painted.\nHelen ran the house.\nLiz gardened.'};
+ const draft={introduction:'i',conclusion:'c',sections:[{bookId:'knight',startLine:1,endLine:1,heading:'a',before:'b',after:'c'},{bookId:'knight',startLine:2,endLine:2,heading:'a',before:'b',after:'c'}]};
+ const log=[];
+ const error=await reviewReading('Q',[three],draft,async()=>({passed:false,reason:'Section 1 is weak.',rejectedSections:[1,1,7]}),log).catch(e=>e);
+ assert.match(error.message,/needs another source review/);
+ assert.deepEqual(error.repair,{keep:[{bookId:'knight',startLine:1,endLine:1}],exclude:[{bookId:'knight',startLine:2,endLine:2}]});
+ assert.equal(log[0].passed,false);assert.equal(log[0].rejected.length,1);
+ const all=await reviewReading('Q',[three],draft,async()=>({passed:false,reason:'Everything is weak.',rejectedSections:[0,1]})).catch(e=>e);assert.equal(all.repair,undefined,'rejecting every passage gives no keep list');
+ let input;
+ const selected=await selectReading('Q','short',[three],async(_s,i)=>{input=JSON.parse(i);return {passages:[{candidateIndex:1,startLine:2,endLine:2},{candidateIndex:2,startLine:3,endLine:3}]};},{reason:'Section 1 is weak.',...error.repair},[{bookId:'knight',startLine:1,endLine:1},{bookId:'knight',startLine:2,endLine:2},{bookId:'knight',startLine:3,endLine:3}]);
+ assert.deepEqual(input.keepPassages,[{bookId:'knight',startLine:1,endLine:1}]);assert.match(input.repairRule,/as directly and strongly/);
+ assert.deepEqual(selected.map(p=>p.startLine).sort(),[1,3],'excluded passage removed even if returned; approved passage restored; replacement kept');
+});
+test('review history survives a failed review and the finished guide',async()=>{
+ const {drainGuide}=await import('../supabase/functions/_shared/guide-worker.mjs');let saved;
+ const draft={introduction:'i',conclusion:'c',sections:[{bookId:'knight',startLine:1,endLine:1,heading:'a',before:'b',after:'c'},{bookId:'knight',startLine:2,endLine:2,heading:'a',before:'b',after:'c'}]};
+ const job={id:'guide',user_id:'owner',visibility:'public',lease_token:'lease',status:'composing',question:'Q',book_ids:['knight'],length:'short',attempts:1,progress:{history:[{at:'t0',stage:'source_review',outcome:'passed',reason:'fine'}],candidates:[{bookId:'knight',startLine:1,endLine:3}],passages:draft.sections,proofread:true,draft}};
+ const db={rpc:async()=>({data:job}),from:()=>{const q={select:()=>q,or:()=>q,eq:()=>q,is:()=>q,in:()=>Promise.resolve({data:[book]}),update:p=>{saved=p;return q;},single:async()=>({data:{id:'guide'}})};return q;}};
+ await drainGuide(db,async()=>({passed:false,reason:'Section 1 is weak.',rejectedSections:[1]}),hash,()=>{});
+ assert.equal(saved.progress.history.length,2);assert.equal(saved.progress.history[1].stage,'reading_review');assert.equal(saved.progress.history[1].outcome,'rejected');assert.equal(saved.progress.history[1].reason,'Section 1 is weak.');
+ assert.deepEqual(saved.progress.feedback.exclude,[{bookId:'knight',startLine:2,endLine:2}]);assert.deepEqual(saved.progress.candidates,job.progress.candidates);
+});

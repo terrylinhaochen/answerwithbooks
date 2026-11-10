@@ -21,6 +21,31 @@ export function runningHeaders(book){
  if(key){if(headerCache.size>50)headerCache.clear();headerCache.set(key,titles);}
  return titles;
 }
+// Some scans pull the closing quote before "said" onto a line of its own, leaving
+// `"But, said Bob Bogle` and a lone `"` nearby. Only books with that signature
+// (20+ lone quote lines) are repaired: the lone marks are blanked and the first
+// speech tag after an unclosed quote on the same line gets its closing mark back.
+// Words are never changed.
+const loneQuote=/^\s*["“”]\s*$/;
+const speechTag=/,(?=\s+(?:(?:he|she|they|I|we)\s+(?:said|says|added|recalled|explained|told)\b|(?:said|says|added|recalled|explained)\b|[A-Z][\w.]*(?:\s+[A-Z][\w.]*){0,2},?\s+(?:said|says|added|recalled|explained)\b))/g;
+const quoteCache=new Map();
+export function displacedQuotes(book){
+ if(typeof book?.source_text!=='string')return false;
+ const key=book.source_sha||book.source_text_sha||book.id;if(key&&quoteCache.has(key))return quoteCache.get(key);
+ let lone=0;for(const line of book.source_text.split('\n'))if(loneQuote.test(line))lone++;
+ if(key){if(quoteCache.size>50)quoteCache.clear();quoteCache.set(key,lone>=20);}
+ return lone>=20;
+}
+export function restoreSpeechQuotes(line){
+ let out='',last=0;
+ for(const m of line.matchAll(speechTag)){
+  const before=line.slice(0,m.index);
+  if((before.match(/"/g)||[]).length%2===1&&!/"\s*$/.test(before)){out+=line.slice(last,m.index)+',"';last=m.index+1;
+   // The restored mark closes the quote; later tags on this line need a new opening quote.
+   const rest=restoreSpeechQuotes(line.slice(last));return out+rest;}
+ }
+ return out+line.slice(last);
+}
 export function readableSourceText(text,book,startLine){
  const repaired=text.split('\n').map((line,index)=>{
   const patch=repairs.find(repair=>book.source_sha===repair.sourceSha)?.patches[String(startLine+index)];
@@ -33,6 +58,8 @@ export function readableSourceText(text,book,startLine){
  }).join('\n');
  const headers=runningHeaders(book);
  // Blank, not delete, so line coordinates stay identical to the stored source.
- const unpaged=headers.size?repaired.split('\n').map(line=>{const h=headerParts(line);return h&&headers.has(h.title)?'':line;}).join('\n'):repaired;
+const quotes=displacedQuotes(book);
+ const unpaged0=headers.size?repaired.split('\n').map(line=>{const h=headerParts(line);return h&&headers.has(h.title)?'':line;}).join('\n'):repaired;
+ const unpaged=quotes?unpaged0.split('\n').map(line=>loneQuote.test(line)?'':restoreSpeechQuotes(line)).join('\n'):unpaged0;
  return unpaged.replace(/[ﬀ-ﬆ]/g,char=>ligatures[char]);
 }

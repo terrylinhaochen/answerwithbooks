@@ -59,10 +59,12 @@ export async function proofreadPassages(books,passages,model){
    if(review.coherent!==true&&dropped.size&&dropped.size<checked.length){
     const kept=checked.filter((_,i)=>!dropped.has(i));
     for(const p of kept)p.proofreading.sourceReview={coherent:true,reason:'Kept after an independent review set aside other excerpts: '+String(review.reason||'').slice(0,600)};
+    kept.review={reason:String(review.reason||''),dropped:[...dropped].map(i=>({bookId:checked[i].bookId,startLine:checked[i].startLine,endLine:checked[i].endLine}))};
     return kept;
    }
    if(review.coherent!==true){const error=Error('Source proofreading needs wider context: '+String(review.reason||'The selected originals contain an unresolved source defect.').slice(0,1500));error.code='SOURCE_BOUNDARIES';throw error;}
    for(const p of checked)p.proofreading.sourceReview={coherent:true,reason:review.reason};
+   checked.review={reason:String(review.reason||''),dropped:[]};
   }
   return checked;
  }

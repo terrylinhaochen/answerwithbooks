@@ -16,6 +16,9 @@ export async function drainGuide(db,model,hash,renderCover,options={}){
  const job=checked(await db.rpc('claim_reading_guide'));if(!job?.id)return null;
  if(options.getEnv)model=guideModel(db,job,options.getEnv);
  const patch={lease_token:null,lease_until:null,updated_at:new Date().toISOString(),attempts:0,error:null};
+ // Every source check and review verdict is kept, so a narrowed guide can be explained later.
+ const history=[...(Array.isArray(job.progress?.history)?job.progress.history:[])];
+ const note=entry=>{history.push({at:new Date().toISOString(),...entry,...(entry.reason!==undefined?{reason:String(entry.reason).slice(0,1500)}:{})});history.splice(0,Math.max(0,history.length-30));};
  try {
   if(job.status==='ready'&&job.cover_status==='pending'){
    if(!job.cover_design){const recent=checked(await db.from('reading_guides').select('cover_design').eq('user_id',job.user_id).not('cover_design','is',null).order('created_at',{ascending:false}).limit(12));patch.cover_design=await planGuideCover(job,recent.map(r=>r.cover_design),model);}
@@ -43,10 +46,10 @@ export async function drainGuide(db,model,hash,renderCover,options={}){
     if(!candidates.length){const e=Error('No relevant passages were found in these books. Try another question or choose other books.');e.code='NO_RELEVANT_PASSAGES';throw e;}
     patch.progress={...job.progress,candidates:candidates.slice(0,8)};
    }else if(!job.progress.passages){patch.progress={...job.progress,passages:await selectReading(job.question,job.length,books,model,job.progress.feedback,job.progress.candidates)};}
-   else if(!job.progress.proofread){patch.progress={...job.progress,passages:await proofreadPassages(books,job.progress.passages,model),proofread:true};}
+   else if(!job.progress.proofread){const passages=await proofreadPassages(books,job.progress.passages,model);if(passages.review)note({stage:'source_review',outcome:passages.review.dropped.length?'kept_some':'passed',reason:passages.review.reason,dropped:passages.review.dropped});patch.progress={...job.progress,passages:[...passages],proofread:true,history};}
    else if(!job.progress.draft){patch.progress={...job.progress,draft:await writeReading(job.question,job.length,books,job.progress.passages,model,job.progress.feedback)};}
-   else{const composed=await reviewReading(job.question,books,job.progress.draft,model);const hydrated=await hydrateReading(composed,books,hash);
-    patch.guide={...hydrated,sections:hydrated.sections.map(({text,...s})=>s),version:1};patch.status='ready';patch.cover_status='pending';patch.book_ids=[...new Set(hydrated.sections.map(s=>s.bookId))];patch.progress={};}
+   else{const log=[];let composed;try{composed=await reviewReading(job.question,books,job.progress.draft,model,log);}finally{for(const entry of log)note({...entry,outcome:entry.passed?'passed':'rejected'});}const hydrated=await hydrateReading(composed,books,hash);
+    patch.guide={...hydrated,sections:hydrated.sections.map(({text,...s})=>s),version:1};patch.status='ready';patch.cover_status='pending';patch.book_ids=[...new Set(hydrated.sections.map(s=>s.bookId))];patch.progress={history};}
   }
  }catch(error){
   if(error?.code==='INDEX_PREPARING'){patch.attempts=0;patch.next_attempt_at=new Date(Date.now()+30000).toISOString();}
@@ -54,7 +57,7 @@ export async function drainGuide(db,model,hash,renderCover,options={}){
   else if(job.status==='ready'){patch.cover_status=job.attempts>=2?'failed':'pending';patch.attempts=job.attempts;patch.next_attempt_at=new Date(Date.now()+60000).toISOString();}
   else if(job.status==='composing'&&error?.code==='NO_RELEVANT_PASSAGES'){patch.status='gap';patch.progress={};patch.proposal={bookIds:[],gap:error.message};}
   else {
-  if(job.status==='composing'){const repairs=(job.progress.repairs||0)+1;patch.progress={...(job.progress.candidates?{candidates:job.progress.candidates}:{}),...(error?.code==='PROOFREAD_VALIDATION'&&job.progress.passages?{passages:job.progress.passages}:{}),repairs,feedback:error instanceof Error?error.message:'Source review failed.',...((error&&error.selectionDiagnostic)?{selectionDiagnostic:error.selectionDiagnostic}:{})};if(repairs>=3)patch.status='failed';}
+  if(job.status==='composing'){const repairs=(job.progress.repairs||0)+1;if(!/^The reading needs another source review/.test(error?.message||''))note({stage:error?.code==='SOURCE_BOUNDARIES'?'source_review':'composing',outcome:'failed',reason:error instanceof Error?error.message:'Source review failed.'});patch.progress={history,...(job.progress.candidates?{candidates:job.progress.candidates}:{}),...(error?.code==='PROOFREAD_VALIDATION'&&job.progress.passages?{passages:job.progress.passages}:{}),repairs,feedback:error?.repair?{reason:error.message,...error.repair}:error instanceof Error?error.message:'Source review failed.',...((error&&error.selectionDiagnostic)?{selectionDiagnostic:error.selectionDiagnostic}:{})};if(repairs>=3)patch.status='failed';}
   patch.attempts=job.attempts;patch.status=patch.status==='failed'||job.attempts>=3?'failed':job.status;patch.error=error instanceof Error?error.message:'Could not prepare the reading.';patch.next_attempt_at=new Date(Date.now()+60000).toISOString();}
  }
  checked(await db.from('reading_guides').update(patch).eq('id',job.id).eq('lease_token',job.lease_token).select('id').single());

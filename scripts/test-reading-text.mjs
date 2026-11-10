@@ -43,3 +43,17 @@ import {runningHeaders} from '../supabase/functions/_shared/reading-text.mjs';
  assert.equal(readableSourceText(page(85),{source_sha:'no-text'},1),page(85),'without the whole book, nothing is guessed');
  console.log('PASS running headers: repeated page headers blanked, contents/index/numeric rows kept, coordinates unchanged');
 }
+import {restoreSpeechQuotes,displacedQuotes} from '../supabase/functions/_shared/reading-text.mjs';
+{
+ // Closing quotes pulled onto their own lines are restored at the speech tag; words never change.
+ assert.equal(restoreSpeechQuotes('own. "Well, you have to take it as it comes, said her article. "You'),'own. "Well, you have to take it as it comes," said her article. "You');
+ assert.equal(restoreSpeechQuotes('"Sam is a pretty common man, Richard W. Hoback, said in an'),'"Sam is a pretty common man," Richard W. Hoback, said in an','quote closes before an appositive name');
+ assert.equal(restoreSpeechQuotes('"Anyhow, I told Sam I\'d give it a try.'),'"Anyhow," I told Sam I\'d give it a try.');
+ assert.equal(restoreSpeechQuotes('"Yes," said Helen, "we usually went.'),'"Yes," said Helen, "we usually went.','an already closed quote is untouched');
+ assert.equal(restoreSpeechQuotes('He was tired, said nobody in particular.'),'He was tired, said nobody in particular.','no open quote, no change');
+ const scan=['"But, said Bob Bogle, "come hell or high water.','  "',...Array(19).fill('             "'),'Plain line.'].join('\n');
+ const book={source_sha:'quote-fixture',source_text:scan};assert.equal(displacedQuotes(book),true);
+ assert.equal(readableSourceText(scan,book,1).split('\n').slice(0,2).join('|'),'"But," said Bob Bogle, "come hell or high water.|','lone quote line blanked');
+ assert.equal(readableSourceText('"But, said Bob.',{source_sha:'clean',source_text:'"But, said Bob.\n"'},1),'"But, said Bob.','books without the scan signature are left alone');
+ console.log('PASS displaced quotes: restored at speech tags, lone marks blanked, only for books with the scan signature');
+}
