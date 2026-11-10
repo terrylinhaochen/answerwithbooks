@@ -28,3 +28,18 @@ test('Green edition restores verified fi and fl glyphs without changing other ed
  const examples=[[1900,'terrible times. In 1951, he and his rst wife, Judith, were on vacation in','first wife'],[1910,'of exploring scienti cally whether spiritual practices such as prayer or','scientifically'],[1911,'forgiveness might be bene cial. I’m embarrassed to admit it, but my prejudices','beneficial'],[1925,'are re ections of what is happening within us.” Templeton took control of his','reflections'],[1927,'which made me less open to learning from him. But twenty years later, I nd','I find']];
  for(const [line,text,fixed] of examples){assert.ok(readableSourceText(text,{source_sha:sha},line).includes(fixed));assert.equal(readableSourceText(text,{source_sha:'different'},line),text);}
 });
+import {runningHeaders} from '../supabase/functions/_shared/reading-text.mjs';
+{
+ // A running header repeated across pages is blanked mid-sentence; coordinates stay the same.
+ const page=n=>`                           "A Hell of an Idea!"                    ${n}`;
+ const source=['Chapter text',page(84),'father-less. Helen did concede that in the variety store days Sam',page(85),'','"probably was more available."',page(86),'Contents','     3.   A Hell of an Idea!          61','12   0   6   0                    0   8   0','13   0   6   0                    0   8   0','14   0   6   0                    0   8   0','     Index                                    319'].join('\n');
+ const book={source_sha:'header-fixture',source_text:source};
+ assert.deepEqual([...runningHeaders(book)],['"A Hell of an Idea!"'],'only a title repeated on 3+ pages counts; numeric rows and one-off lines do not');
+ const lines=source.split('\n');const span=lines.slice(2,6).join('\n');
+ const readable=readableSourceText(span,book,3);
+ assert.equal(readable,'father-less. Helen did concede that in the variety store days Sam\n\n\n"probably was more available."');
+ assert.equal(readable.split('\n').length,span.split('\n').length,'line count unchanged');
+ assert.equal(readableSourceText(lines[8],book,9),lines[8],'a table-of-contents line is kept');
+ assert.equal(readableSourceText(page(85),{source_sha:'no-text'},1),page(85),'without the whole book, nothing is guessed');
+ console.log('PASS running headers: repeated page headers blanked, contents/index/numeric rows kept, coordinates unchanged');
+}

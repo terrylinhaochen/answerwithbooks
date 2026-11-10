@@ -96,3 +96,11 @@ test('coherence review sees safe repairs before judging reported OCR defects',as
 test('real gaps still stop the guide when unsafe suggestions are discarded',async()=>{
  await assert.rejects(proofreadPassages([book],[{bookId:'b',startLine:1,endLine:1}],async(_s,_i,o)=>o.kind==='review'?{coherent:false,reason:'Words are missing in the middle of this scene.'}:{edits:[{passageIndex:0,before:'wife',after:'invented missing scene'}],issues:[]}),e=>e.code==='SOURCE_BOUNDARIES'&&e.message.includes('Words are missing'));
 });
+test('one rejected original is set aside when the other originals are sound',async()=>{
+ const two={id:'t',source_text:'Helen kept the household running.\nWords are [gap] missing here.'};
+ const passages=[{bookId:'t',startLine:1,endLine:1},{bookId:'t',startLine:2,endLine:2}];
+ const kept=await proofreadPassages([two],passages,async(_s,_i,o)=>o.kind==='review'?{coherent:false,reason:'Passage 1 has missing words.',rejectedPassages:[1,1,9]}:{edits:[],issues:[{passageIndex:1,reason:'gap'}]});
+ assert.deepEqual(kept.map(p=>p.startLine),[1]);assert.equal(kept[0].proofreading.sourceReview.coherent,true);
+ await assert.rejects(proofreadPassages([two],passages,async(_s,_i,o)=>o.kind==='review'?{coherent:false,reason:'Both are cut.',rejectedPassages:[0,1]}:{edits:[],issues:[{passageIndex:0,reason:'gap'}]}),e=>e.code==='SOURCE_BOUNDARIES','all rejected still fails');
+ await assert.rejects(proofreadPassages([two],passages,async(_s,_i,o)=>o.kind==='review'?{coherent:false,reason:'Unclear.',rejectedPassages:[]}:{edits:[],issues:[{passageIndex:0,reason:'gap'}]}),e=>e.code==='SOURCE_BOUNDARIES','an unspecific rejection still fails');
+});
