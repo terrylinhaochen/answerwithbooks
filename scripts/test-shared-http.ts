@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 Deno.env.set('SUPABASE_URL','https://shared-test.invalid');Deno.env.set('SUPABASE_SERVICE_ROLE_KEY','fixture');
-const owner='00000000-0000-4000-8000-000000000001',id='00000000-0000-4000-8000-000000000002';let active=false,handler:any,catalogCount=23,countFailed=false;
+const owner='00000000-0000-4000-8000-000000000001',id='00000000-0000-4000-8000-000000000002';let rpcReady=true,active=false,handler:any,catalogCount=23,countFailed=false;
 Deno.serve=((h:any)=>{handler=h;return {} as any;}) as typeof Deno.serve;
 const source='Original source line.\n'.repeat(700),book={id,title:'Shared example',author:'Example writer',status:'ready',run_state:'complete',visibility:'public',user_id:owner,source_text:source,source_sha:'secret-hash',source_import:{state:'complete',originalBytes:100,metadata:{private:'do not expose'}},artifacts:{'reading/map.json':JSON.stringify({orientation:'Who this writer is.',summary:'A book introduction.',questions:[{question:'What matters?',contribution:'A scene.'}],sections:[{title:'A chapter',sourceRefs:[{startLine:1,endLine:40}]}]})}};
 const json=(v:any,status=200)=>new Response(JSON.stringify(v),{status,headers:{'Content-Type':'application/json'}});
 globalThis.fetch=async(input:any,init?:RequestInit)=>{const req=new Request(input,init),url=new URL(req.url);assert.equal(url.hostname,'shared-test.invalid');
  if(url.pathname==='/auth/v1/user')return req.headers.get('authorization')==='Bearer subscriber'?json({id:owner}):json({message:'Unauthorized'},401);
  if(url.pathname==='/rest/v1/rpc/reader_plan')return json({active});
+ if(url.pathname==='/rest/v1/rpc/public_catalog_compact'){const body=await req.json();assert.deepEqual(body,{p_offset:0,p_limit:50});if(!rpcReady)return json({code:'PGRST202',message:'not found'},404);return json([{id,title:book.title,author:book.author,status:'ready',run_state:'complete',cover_status:null,cover_path:null,source_import:{state:'complete'},cursor:book.cursor,total_sections:book.total_sections,duplicate_of:null,orientation:'Who this writer is.',questions:JSON.parse(book.artifacts['reading/map.json']).questions}]);}
  if(url.pathname==='/rest/v1/book_processing_jobs'){
   const single=req.headers.get('accept')?.includes('application/vnd.pgrst.object+json');
   assert.equal(url.searchParams.get('visibility'),'eq.public');
@@ -35,8 +36,9 @@ assert.equal((await call({action:'get',id:'00000000-0000-4000-8000-000000000003'
 assert.equal((await call({action:'source',id})).status,401);assert.equal((await call({action:'source',id},'subscriber')).status,402);
 active=true;const text=await (await call({action:'source',id,startLine:5,endLine:7},'subscriber')).json();assert.equal(text.text,'Original source line.\nOriginal source line.\nOriginal source line.');assert.equal(text.startLine,5);assert.equal(text.endLine,7);
 assert.equal((await call({action:'source',id,startLine:1,endLine:501},'subscriber')).status,400);assert.equal((await call({action:'get',id},'subscriber','https://evil.invalid')).status,403);
+rpcReady=false;const fallback=(await (await call({action:'list',compact:true})).json()).books[0];rpcReady=true;
 const full=(await (await call({action:'list'})).json()).books[0],compact=(await (await call({action:'list',compact:true})).json()).books[0];
-assert.ok('summary' in full&&'chapters' in full);assert.ok(!('summary' in compact)&&!('chapters' in compact),'compact catalog omits long text');assert.equal(compact.orientation,full.orientation);assert.deepEqual(compact.questions,full.questions);
+assert.ok('summary' in full&&'chapters' in full);assert.ok(!('summary' in compact)&&!('chapters' in compact),'compact catalog omits long text');assert.deepEqual(compact,fallback,'database function and fallback give the same card');assert.equal(compact.orientation,full.orientation);assert.deepEqual(compact.questions,full.questions);
 assert.equal((await call({action:'uploads'})).status,401,'uploads need sign-in');
 const uploads=(await (await call({action:'uploads'},'subscriber')).json()).books;assert.equal(uploads.length,1);assert.equal(uploads[0].stage,'reading');assert.deepEqual(uploads[0].progress,{completed:2,total:5});
 console.log('PASS compact catalog and owner-only processing uploads.');

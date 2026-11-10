@@ -7,7 +7,8 @@ const origins=new Set(['https://answerwithbooks.com','https://www.answerwithbook
 const uuid=(v:unknown)=>typeof v==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(v);
 async function present(book:any,signed?:Map<string,string|null>,compact=false){
  let coverUrl=null;if(book.cover_status==='ready'&&book.cover_path){coverUrl=signed?signed.get(book.cover_path)??null:check(await db.storage.from('private-books').createSignedUrl(book.cover_path,3600)).signedUrl;}
- let map:any={};try{map=JSON.parse(book.artifacts?.['reading/map.json']||'{}');}catch{}
+ // Compact catalog rows arrive with orientation and questions already extracted by the database.
+ let map:any={};if(book.orientation!==undefined)map={orientation:book.orientation,questions:book.questions};else try{map=JSON.parse(book.artifacts?.['reading/map.json']||'{}');}catch{}
  return {id:book.id,title:book.title,author:book.author,status:book.status,run_state:book.run_state,coverUrl,coverColor:coverPalette(book).bg,
  stage:book.status==='ready'?'ready':book.run_state==='failed'?'failed':book.source_import?.state!=='complete'?'extracting':'reading',
  orientation:map.orientation||'',questions:map.questions||[],
@@ -30,8 +31,11 @@ Deno.serve(async req=>{
  const bearer=req.headers.get('authorization')?.replace(/^Bearer /i,'')||'';
  if(input.action==='list'){
   const offset=Number.isSafeInteger(input.offset)&&input.offset>=0?input.offset:0;
-  const rows=check(await db.from('book_processing_jobs').select(fields).eq('visibility','public').eq('status','ready').is('duplicate_of',null).order('created_at',{ascending:false}).range(offset,offset+49));
-  return reply({books:await presentAll(rows,input.compact===true),nextOffset:rows.length===50?offset+50:null});
+  let rows:any[]|null=null;
+  // The compact catalog skips the multi-megabyte artifacts column; fall back if the function is not deployed yet.
+  if(input.compact===true){const r=await db.rpc('public_catalog_compact',{p_offset:offset,p_limit:50});if(!r.error)rows=r.data;}
+  rows??=check(await db.from('book_processing_jobs').select(fields).eq('visibility','public').eq('status','ready').is('duplicate_of',null).order('created_at',{ascending:false}).range(offset,offset+49));
+  return reply({books:await presentAll(rows!,input.compact===true),nextOffset:rows.length===50?offset+50:null});
  }
  const user=await bookUser(db,bearer);
  if(input.action==='mine'){
